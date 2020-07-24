@@ -14,39 +14,7 @@ namespace EDI.Infrastructure.Identity
                 var role = new IdentityRole("Administrator");
                 await roleManager.CreateAsync(role);
             }
-
-            roleExist = await roleManager.RoleExistsAsync("General");
-
-            if (!roleExist)
-            {
-                var role = new IdentityRole("General");
-                await roleManager.CreateAsync(role);
-            }
-
-            roleExist = await roleManager.RoleExistsAsync("Admin");
-
-            if (roleExist)
-            {
-                var role = new IdentityRole("Admin");
-                await roleManager.DeleteAsync(role);
-            }
-
-            roleExist = await roleManager.RoleExistsAsync("Manager");
-
-            if (roleExist)
-            {
-                var role = new IdentityRole("Manager");
-                await roleManager.DeleteAsync(role);
-            }
-
-            roleExist = await roleManager.RoleExistsAsync("User");
-
-            if (roleExist)
-            {
-                var role = new IdentityRole("User");
-                await roleManager.DeleteAsync(role);
-            }
-
+            
             var adminuser = await userManager.FindByNameAsync("andrew.renner@phri.ca");
 
             if (adminuser == null)
