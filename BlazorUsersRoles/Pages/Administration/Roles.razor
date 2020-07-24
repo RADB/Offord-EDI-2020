@@ -1,0 +1,300 @@
+﻿@page "/administration/roles"
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Identity;
+@inject RoleManager<IdentityRole> _RoleManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<h3>Administration - Roles</h3>
+<AuthorizeView>
+    <Authorized>
+        @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Role Name</th>
+                        <th>Normalized Name</th>
+                        <th>Concurrency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in ColRoles)
+                    {
+                    <tr>
+                        <td>@role.Id.Substring(0, 5) ...</td>
+                        <td>@role.Name</td>
+                        <td>@role.NormalizedName</td>
+                        <td>@role.ConcurrencyStamp</td>
+                        <td>
+                            <!-- Edit the current role -->
+                            <button class="btn btn-primary"
+                                    @onclick="(() => EditRole(role))">
+                                Edit
+                            </button>
+                            <!-- Delete the current forecast -->
+                            <button class="btn btn-danger"
+                                    @onclick="(() => DeleteRole(role))">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+            @if (ShowPopup)
+            {
+                <!-- This is the popup to create or edit a role -->
+                <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Edit Role</h3>
+                                <!-- Button to close the popup -->
+                                <button type="button" class="close"
+                                        @onclick="ClosePopup">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                            </div>
+                            <!-- Edit form for the current forecast -->
+                            <div class="modal-body">
+                                <!-- Only show Id if not a new user -->
+                                @if (objRole.Id != "")
+                                {
+                                    <p>@objRole.Id</p>
+                                }
+
+                                <input class="form-control" type="text"
+                                       placeholder="Name"
+                                       @bind="objRole.Name" />
+                                <input class="form-control" type="text"
+                                       placeholder="Normalized Name"
+                                       @bind="objRole.NormalizedName" />
+                                
+                                <br /><br />
+                                <!-- Button to save the role -->
+                                <button class="btn btn-primary"
+                                        @onclick="SaveRole">
+                                    Save
+                                </button>
+                                <!-- Only show delete button if not a new record -->
+                                @if (objRole.Id != "")
+                                {
+                                    <!-- Button to delete the role -->
+                                    <button class="btn btn-danger"
+                                            @onclick="DeleteRole">
+                                        Delete
+                                    </button>
+                                }
+                                <br />
+                                <span style="color:red">@strError</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <button class="btn btn-success" @onclick="AddNewRole">Add Role</button>
+        }
+        else
+        {
+            <p>You're not signed in as a user in @ADMINISTRATION_ROLE.</p>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not loggged in.</p>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    string ADMINISTRATION_ROLE = "Administrators";
+    System.Security.Claims.ClaimsPrincipal CurrentUser;
+
+    // Property used to add or edit the currently selected user
+    IdentityUser objUser = new IdentityUser();
+
+    // Property used to add or edit the currently selected user
+    IdentityRole objRole= new IdentityRole();
+
+    // Tracks the selected role for the currently selected user
+    string CurrentUserRole { get; set; } = "Users";
+
+    // Collection to display the existing users
+    List<IdentityRole> ColRoles = new List<IdentityRole>();
+
+
+    // To hold any possible errors
+    string strError = "";
+
+    // To enable showing the Popup
+    bool ShowPopup = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current logged in user
+        CurrentUser = (await authenticationStateTask).User;
+
+        // get the roles
+        GetRoles();
+    }
+
+    public void GetRoles()
+    {
+        // clear any error messages
+        strError = "";
+
+        // Collection to hold roles
+        ColRoles = new List<IdentityRole>();
+
+        // get roles from _RoleManager
+        var role = _RoleManager.Roles.Select(x => new IdentityRole
+        {
+            Id = x.Id,
+            Name = x.Name,
+            NormalizedName = x.NormalizedName,
+            ConcurrencyStamp = x.ConcurrencyStamp
+        }) ;
+
+        foreach (var item in role)
+        {
+            ColRoles.Add(item);
+        }
+    }
+    void AddNewRole()
+    {
+        // Make new user
+        objRole = new IdentityRole();
+
+        // Set Id to blank so we know it is a new record
+        objRole.Id = "";
+
+        // Open the Popup
+        ShowPopup = true;
+    }
+
+
+    async Task SaveRole()
+    {
+        try
+        {
+            // Is this an existing user?
+            if (objRole.Id != "")
+            {
+                // Get the user
+                var role = await _RoleManager.FindByIdAsync(objRole.Id);
+
+                // Update Email
+                role.Name= objRole.Name;
+
+                // Update the user
+                await _RoleManager.UpdateAsync(role);
+            }
+            else
+            {
+                // Insert new role
+
+                var NewRole =
+                    new IdentityRole
+                    {
+                        Name = objRole.Name,
+                        NormalizedName = objRole.NormalizedName
+                    };
+
+                var CreateResult =
+                    await _RoleManager
+                    .CreateAsync(NewRole);
+
+                if (!CreateResult.Succeeded)
+                {
+                    if (CreateResult
+                        .Errors
+                        .FirstOrDefault() != null)
+                    {
+                        strError =
+                            CreateResult
+                            .Errors
+                            .FirstOrDefault()
+                            .Description;
+                    }
+                    else
+                    {
+                        strError = "Create error";
+                    }
+
+                    // Keep the popup opened
+                    return;
+                }
+            }
+
+            // Close the Popup
+            ShowPopup = false;
+
+            // Refresh Users
+            GetRoles();
+        }
+        catch (Exception ex)
+        {
+            strError = ex.GetBaseException().Message;
+        }
+    }
+    async Task EditRole(IdentityRole _IdentityRole)
+    {
+        // Set the selected role
+        // as the current role
+        objRole = _IdentityRole;
+
+        // Get the role
+        var role = await _RoleManager.FindByIdAsync(objRole.Id);
+
+        // Open the Popup
+        ShowPopup = true;
+    }
+
+
+    async Task DeleteRole()
+    {
+        try
+        {
+            // Close the Popup
+            ShowPopup = false;
+
+            // Get the user
+            var role = await _RoleManager.FindByIdAsync(objRole.Id);
+            if (role != null)
+            {
+                // Delete the user
+                await _RoleManager.DeleteAsync(role);
+            }
+
+            // Refresh Roles
+            GetRoles();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    async Task DeleteRole(IdentityRole _IdentityRole)
+    {
+        try
+        {
+            // Delete the role
+            await _RoleManager.DeleteAsync(_IdentityRole);
+
+            // Refresh Roles
+            GetRoles();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    void ClosePopup()
+    {
+        // Close the Popup
+        ShowPopup = false;
+    }
+}
