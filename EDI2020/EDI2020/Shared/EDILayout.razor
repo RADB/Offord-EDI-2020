@@ -1,0 +1,54 @@
+﻿@inherits LayoutComponentBase
+
+<div class="container-fluid" style="border-style:dotted;">
+    <div class="row">
+        <header class="container-fluid">
+            <div class="jumbotron text-center">
+                <div class="edi-header">
+                    <a href="https://edi.offordcentre.com/" target="_blank"><img src="Images/EDI_logo.png"></a><br>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <div class="row">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <div class="main">
+            <div class="top-row px-4">
+                <LoginDisplay />
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
+
+            <div class="content px-4">
+                @Body
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="main">
+            <div class="edi-separator-row">
+                <br />
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <footer class="container-fluid">
+            <div class="jumbotron text-center" style="margin-bottom:0">
+                <div class="edi-footer">
+                    <a href="http://offordcentre.com/" target="_blank"><img src="Images/EDI_logo_offord.png"></a>
+                    <a href="http://hamiltonhealthsciences.ca/" target="_blank"><img src="Images/EDI_logo_HHS.gif"></a>
+                    <a href="http://www.mcmaster.ca/" target="_blank"><img src="Images/EDI_logo_mcmaster.png"></a><br>
+                    <br />
+                    <p class="h5">
+                        © 2020 Early Development Instrument<br />
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>

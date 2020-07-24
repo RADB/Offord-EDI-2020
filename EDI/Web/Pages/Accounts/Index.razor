@@ -1,0 +1,196 @@
+﻿@page "/Accounts/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IAccountService accountService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject UserManager<ApplicationUser> userManager;
+@using Syncfusion.Blazor.Navigations;
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="width:1200px;box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Users</strong>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (accounts == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridAccount" @ref="Grid" DataSource="@accounts" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="AccountItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="UserName" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(AccountItemViewModel.UserName) HeaderText="User" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="40"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.FirstName) HeaderText="First Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="25"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.LastName) HeaderText="Last Name" Width="25"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.Email) HeaderText="Email" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.PhoneNumber) HeaderText="Phone" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.Country) HeaderText="Country" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.Province) HeaderText="Province" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(AccountItemViewModel.RoleName) HeaderText="Role" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<AccountItemViewModel> Grid;
+
+    IEnumerable<AccountItemViewModel> accounts;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var users = await Task.FromResult(identityContext.Users.ToList());
+
+            this.rowid = string.Empty;
+
+            List<AccountItemViewModel> pivm = new List<AccountItemViewModel>();
+
+            foreach (ApplicationUser ppl in users)
+            {
+                var accountitem = new AccountItemViewModel();
+
+                accountitem.Id = ppl.Id;
+                accountitem.FirstName = ppl.FirstName;
+                accountitem.LastName = ppl.LastName;
+                accountitem.Email = ppl.Email;
+                accountitem.EmailConfirmed = ppl.EmailConfirmed;
+                accountitem.NormalizedEmail = ppl.NormalizedEmail;
+                accountitem.PhoneNumber = ppl.PhoneNumber;
+                accountitem.PhoneNumberConfirmed = ppl.PhoneNumberConfirmed;
+                accountitem.UserName = ppl.UserName;
+                accountitem.LockoutEnabled = ppl.LockoutEnabled;
+                accountitem.LockoutEnd = ppl.LockoutEnd;
+                accountitem.Lockout = ppl.LockoutEnabled == true ? "Yes" : "No";
+                accountitem.CountryID = ppl.CountryID;
+                accountitem.ProvinceID = ppl.ProvinceID;
+
+                if (ppl.CountryID.HasValue)
+                {
+                    var country = dbContext.Country.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault();
+                    accountitem.Country = country.Name;
+                }
+
+                if (ppl.ProvinceID.HasValue)
+                {
+                    var province = dbContext.Province.Where(p => p.Id == ppl.ProvinceID.Value).FirstOrDefault();
+                    accountitem.Province = province.Name;
+                }
+
+                var roles = await userManager.GetRolesAsync(ppl);
+
+                if (roles != null && roles.Count > 0)
+                    accountitem.RoleName = roles.First();
+
+                pivm.Add(accountitem);
+            }
+
+            accounts = pivm;
+        }
+    }
+
+    private string rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<AccountItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridAccount_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridAccount_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridAccount_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridAccount_add")
+        {
+            NavigationManager.NavigateTo("./Accounts/new");
+        }
+        if (args.Item.Id == "GridAccount_edit")
+        {
+            NavigationManager.NavigateTo("./Accounts/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridAccount_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await accountService.DeleteAccountAsync(this.rowid);
+
+            var tmp = new List<AccountItemViewModel>();
+            foreach (var item in accounts)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.accounts = tmp;
+            this.rowid = string.Empty;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<AccountItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./accounts/edit/" + this.rowid);
+    }
+}

@@ -1,0 +1,155 @@
+﻿@inject NavigationManager NavigationManager
+@inject IAccountService accountService
+@inject IFormService formService
+@inject ServiceContext dbContext;
+
+<EditForm Model="@AccountModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="UserName">User Name: </label>
+            <input type="text" @bind-value="AccountModel.UserName" class="col-md-7 form-control" placeholder="User Name" disabled />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Password">Password: </label>
+            <input type="password" @bind-value="AccountModel.Password" class="col-md-7 form-control"  placeholder="Password"/>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="ConfirmPassword">Confirm Password: </label>
+            <input type="password" @bind-value="AccountModel.ConfirmPassword" class="col-md-7 form-control" placeholder="Confirm Password" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="FirstName">First Name: </label>
+            <input type="text" @bind-value="AccountModel.FirstName" class="col-md-7 form-control" placeholder="First Name" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="LastName">Last Name</label>
+            <input type="text" @bind-value="AccountModel.LastName" class="col-md-7 form-control" placeholder="Last Name" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Email">Email<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="AccountModel.Email" class="col-md-7 form-control" placeholder="Email" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+            <input type="text" @bind-value="AccountModel.PhoneNumber" class="col-md-7 form-control" placeholder="Phone" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Country">Country: </label>
+            <select class="col-md-7" value="@countryid" @onchange="@(e =>CountryChange(e))">
+                @if (Countries != null)
+                {
+                    @foreach (var option in Countries)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Province">Province: </label>
+            <select class="col-md-7" value="@provinceid" @onchange="@(e =>ProvinceChange(e))">
+                @if (Provinces != null)
+                {
+                    @foreach (var option in Provinces)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public AccountItemViewModel AccountModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public IEnumerable<SelectListItem> Countries { get; set; }
+
+    public IEnumerable<SelectListItem> Provinces { get; set; }
+
+    public string countryid { get; set; }
+
+    public string provinceid { get; set; }
+
+    public string newpassword { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Countries = await accountService.GetCountries();
+
+        if (AccountModel.CountryID.HasValue)
+        {
+            countryid = AccountModel.CountryID.Value.ToString();
+            Provinces = await accountService.GetProvinces(AccountModel.CountryID.Value);
+        }
+        else
+        {
+            var cid = dbContext.Country.Where(p => p.Name == "Canada").Select(p => p.Id).FirstOrDefault();
+            countryid = cid.ToString();
+            AccountModel.CountryID = cid;
+            Provinces = await accountService.GetProvinces(cid);
+        }
+
+
+        if (AccountModel.ProvinceID.HasValue)
+        {
+            provinceid = AccountModel.ProvinceID.Value.ToString();
+        }
+        else
+        {
+            //provinceid = "0";
+            var pid = dbContext.Province.Where(p => p.Name == "Ontario").Select(p => p.Id).FirstOrDefault();
+            AccountModel.ProvinceID = pid;
+            provinceid = pid.ToString();
+        }
+    }
+
+    private async Task CountryChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        provinceid = "0";
+
+        Provinces = await accountService.GetProvinces(0);
+
+        AccountModel.CountryID = null;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            AccountModel.CountryID = ctid;
+            Provinces = await accountService.GetProvinces(ctid);
+        }
+    }
+
+    private void ProvinceChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        AccountModel.ProvinceID = null;
+
+        if (int.TryParse(selectedString, out int itid))
+        {
+            AccountModel.ProvinceID = itid;
+        }
+    }
+}

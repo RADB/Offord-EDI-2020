@@ -1,0 +1,57 @@
+﻿.cf-identity {
+  line-height: 3rem;
+  position: relative;
+  text-align: right;
+}
+
+.cf-identity-section {
+  display: inline-block;
+  width: 100%;
+}
+
+.cf-identity-name {
+  display: inline-block;
+}
+
+.cf-identity-name--upper {
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 768px) {
+  .cf-identity-name {
+    font-size: 0.85rem;
+  }
+}
+
+.cf-identity-image {
+  display: inline-block;
+}
+
+.cf-identity-drop {
+  background: #FFFFFF;
+  height: 10px;
+  width: 10rem;
+  overflow: hidden;
+  padding: .5rem;
+  position: absolute;
+  right: 0;
+  top: 2.5rem;
+  transition: height 0.35s;
+}
+
+.cf-identity:hover .cf-identity-drop {
+  border: 1px solid #EEEEEE;
+  height: 10rem;
+  transition: height 0.35s;
+}
+
+.cf-identity-item {
+  cursor: pointer;
+  transition: color 0.35s;
+}
+
+.cf-identity-item:hover {
+  color: #75b918;
+  transition: color 0.35s;
+}
+

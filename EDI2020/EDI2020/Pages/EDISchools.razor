@@ -1,0 +1,51 @@
+﻿@page "/schools"
+@using EDI2020.DAL.Data
+@using EDI2020.DAL.Models
+
+@inject EDI2020Context edi
+
+<h1>Schools Page</h1>
+
+<h4>Current Sites</h4>
+@if (schools is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Pricipal</th>
+                <th>Province</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var school in schools)
+            {
+                <tr>
+                    <td>@school.StrName</td>
+                    <td>@school.StrCity</td>
+                    <td>@school.StrPrincipal</td>
+                    <td>@school.IntProvince</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+
+
+    private List<School> schools;
+
+    protected override Task OnInitializedAsync()
+    {
+
+        schools = edi.Schools.ToList();
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\ApplicationCore",
+    "\\Infrastructure",
+    "\\Web",
+    "\\Web\\Properties",
+    "\\Web\\wwwroot"
+  ],
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,63 @@
+﻿@page "/Admin/Admins"
+@using EDI2020.DAL.Data
+@using EDI2020.DAL.Models
+
+@inject EDI2020Context edi
+
+<h1>Admins Page</h1>
+
+<AuthorizeView Roles="Administrators" >
+    <Authorized>
+        <h4>Current Admins</h4>
+        @if (admins is null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Access</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var admin in admins)
+                    {
+                        <tr>
+                            <td>@admin.StrName</td>
+                            <td>@admin.StrEmail</td>
+                            <td>@admin.StrPassword</td>
+                            <td>@admin.IntAccess</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        </Authorized>
+
+    <NotAuthorized>
+        <h4>Sorry you are not authorized to view the admins.</h4>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+
+
+
+@code {
+
+    
+    private List<Admin> admins;
+    
+        protected override Task OnInitializedAsync()
+        {   
+            
+            admins = edi.Admins.ToList();
+            return base.OnInitializedAsync();
+        }    
+}

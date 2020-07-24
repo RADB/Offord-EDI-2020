@@ -1,0 +1,9 @@
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\bin\Debug\netstandard2.0\EDI2020.DAL.deps.json
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\bin\Debug\netstandard2.0\EDI2020.DAL.dll
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\obj\Debug\netstandard2.0\EDI2020.DAL.csprojAssemblyReference.cache
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\obj\Debug\netstandard2.0\EDI2020.DAL.AssemblyInfoInputs.cache
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\obj\Debug\netstandard2.0\EDI2020.DAL.AssemblyInfo.cs
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\bin\Debug\netstandard2.0\EDI2020.DAL.pdb
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\obj\Debug\netstandard2.0\EDI2020.DAL.csproj.CoreCompileInputs.cache
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\obj\Debug\netstandard2.0\EDI2020.DAL.dll
+C:\Users\andre\source\repos\EDI2020\EDI2020.DAL\obj\Debug\netstandard2.0\EDI2020.DAL.pdb

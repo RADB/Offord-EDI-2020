@@ -1,0 +1,15 @@
+﻿<form enctype="multipart/form-data" class="form-horizontal">
+    <div class="col-11">
+        <textarea rows="8" cols="60" readonly>@comments</textarea>
+    </div>
+</form>
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    string comments { get; set; }
+
+    protected override void OnInitialized()
+    {
+        comments = Parameters.Get<string>("Comments");
+    }
+}

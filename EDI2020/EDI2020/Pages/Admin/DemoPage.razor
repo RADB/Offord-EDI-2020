@@ -1,0 +1,24 @@
+﻿@page "/Admin/demopage"
+@inject NavigationManager nav
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<h3>DemoPage</h3>
+<button class="alert-warning" @onclick="goHome">Home</button>
+
+<h4>Session Data from Session Test</h4>
+<span style="color:#c00;">@Name</span>
+
+@code {
+    public String Name { get; set; }
+
+    void goHome()
+    {
+        nav.NavigateTo(uri: "/");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Name = await sessionStorage.GetItemAsync<string>("Name");
+    }
+
+}

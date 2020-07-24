@@ -1,0 +1,51 @@
+﻿@page "/sites"
+@using EDI2020.DAL.Data
+@using EDI2020.DAL.Models
+
+@inject EDI2020Context edi
+
+<h1>Sites Page</h1>
+
+<h4>Current Sites</h4>
+@if (sites is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Site ID</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Province</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var site in sites)
+            {
+                <tr>
+                    <td>@site.IntSiteId</td>
+                    <td>@site.StrName</td>
+                    <td>@site.StrCity</td>
+                    <td>@site.IntProvince</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+
+
+    private List<Site> sites;
+
+    protected override Task OnInitializedAsync()
+    {
+
+        sites = edi.Sites.ToList();
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button" @onclick="OnToggleClick">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#"></a>
+    <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" @onclick="OnToggleClick">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div style="display: block;">
+        <h2 style="font-family: Arial;font-weight: bold;background-color: #fff;color: #294980;font-size: 25px;">Early Development Instrument</h2>
+        <h4 style="font-family: Arial;font-weight: bold;background-color: #fff;color: #294980;font-size: 15px;">A Population-Based Measure for Communities</h4>
+
+    </div>
+    
+    <ul class="nav navbar-nav ml-auto">
+        <UserNav />
+    </ul>
+</header>
+
+@code {
+    [Parameter]
+    public EventCallback OnToggleClick { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+    }
+}

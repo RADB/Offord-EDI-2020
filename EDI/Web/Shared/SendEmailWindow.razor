@@ -1,0 +1,196 @@
+﻿@inject IModalService ModalService
+@inject ServiceContext dbContext;
+@using EDI.Web.Extensions;
+@using EDI.ApplicationCore.Models;
+
+    <div class="simple-form" style="width:650px;">
+        @if (!string.IsNullOrEmpty(@Message))
+        {
+            <div class="text-success">@Message</div>
+        }
+
+        @if (!string.IsNullOrEmpty(@ErrorMessage))
+        {
+            <div class="text-danger">@ErrorMessage</div>
+        }
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="from">From: </label>
+            <input type="text" class="col-md-7 col-form-label" value="@from" @onchange="@(e =>FromChange(e))" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="to">To: </label>
+            <input type="text" class="col-md-7 col-form-label" value="@to" @onchange="@(e =>ToChange(e))" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="subject">Subject: </label>
+            <input type="text" class="col-md-7 col-form-label" value="@subject" @onchange="@(e =>SubjectChange(e))" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Description">Message: </label>
+            <div class="input-group col-md-7">
+                <textarea rows="8" cols="60" class="form-control" value="@body" @onchange="@(e =>BodyChange(e))"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="UseAttachment">Attach the invoice as a PDF: </label>
+            <input type="checkbox" value="@useattachment" @onchange="@(e =>UseAttachmentChange(e))" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="SendCopy">Send a copy to self: </label>
+            <input type="checkbox" value="@copytoself" @onchange="@(e =>CopyToSelfChange(e))" />
+        </div>
+        <button @onclick="@SendInvoice" class="btn btn-primary">Send</button>
+        <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+    </div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    EmailModel EmailModel { get; set; }
+
+    public string from { get; set; }
+
+    public string to { get; set; }
+
+    private string subject { get; set; }
+
+    public string body { get; set; }
+
+    public bool useattachment { get; set; }
+
+    public bool copytoself { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmailModel = Parameters.Get<EmailModel>("EmailModel");
+
+        from = EmailModel.From;
+        to = EmailModel.To;
+        subject = EmailModel.Subject;
+        body = EmailModel.Body;
+
+        useattachment = false;
+    }
+
+    private void FromChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        EmailModel.From = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void ToChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        EmailModel.To = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void SubjectChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        EmailModel.Subject = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void BodyChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        EmailModel.Body = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void UseAttachmentChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        EmailModel.UseAttachment = null;
+
+        if (bool.TryParse(selectedString, out bool useattachment))
+        {
+            EmailModel.UseAttachment = useattachment;
+        }
+    }
+
+    private void CopyToSelfChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        EmailModel.SendCopyToSelf = null;
+
+        if (bool.TryParse(selectedString, out bool copytoself))
+        {
+            EmailModel.SendCopyToSelf = copytoself;
+        }
+    }
+
+    private async void SendInvoice()
+    {
+        if (string.IsNullOrEmpty(EmailModel.From))
+        {
+            ErrorMessage = "From is required.";
+            return;
+        }
+
+        if (!ValidateExtension.IsEmailValid(EmailModel.From))
+        {
+            ErrorMessage = "From is invalid email address.";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(EmailModel.To))
+        {
+            ErrorMessage = "To is required.";
+            return;
+        }
+
+        if (!ValidateExtension.IsEmailValid(EmailModel.To))
+        {
+            ErrorMessage = "To is invalid email address.";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(EmailModel.Subject))
+        {
+            ErrorMessage = "Subject is required.";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(EmailModel.Body))
+        {
+            ErrorMessage = "Message is required.";
+            return;
+        }
+
+        ModalService.Close(ModalResult.Ok<EmailModel>(EmailModel));
+    }
+
+    void Reset()
+    {
+        EmailModel = Parameters.Get<EmailModel>("EmailModel");
+
+        from = EmailModel.From;
+        to = EmailModel.To;
+        subject = EmailModel.Subject;
+        body = EmailModel.Body;
+
+        useattachment = true;
+        EmailModel.UseAttachment = useattachment;
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+}

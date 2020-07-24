@@ -1,0 +1,128 @@
+﻿@page "/Accounts/New"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject IAccountService accountService
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="width:700px;box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>New Account</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Form Config" @onclick="Config"><i class="fa fa-cog fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <br />
+            <UserForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />            
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private AccountItemViewModel AccountModel { get; set; } = new AccountItemViewModel();
+
+    UserForm accountform1 = new UserForm();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = accountService.GetDuplicateCount(AccountModel.UserName);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same account has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else if (accountform1.FormEmail.IsRequired && string.IsNullOrEmpty(accountform1.AccountModel.Email))
+        {
+            toastService.ShowError("Email is required.");
+        }
+        else if (accountform1.FormPhone.IsRequired && string.IsNullOrEmpty(accountform1.AccountModel.PhoneNumber))
+        {
+            toastService.ShowError("Phone is required.");
+        }
+        else if (accountform1.FormFirstName.IsRequired && string.IsNullOrEmpty(accountform1.AccountModel.FirstName))
+        {
+            toastService.ShowError("First Name is required.");
+        }
+        else if (accountform1.FormLastName.IsRequired && string.IsNullOrEmpty(accountform1.AccountModel.LastName))
+        {
+            toastService.ShowError("Last Name is required.");
+        }
+        else if (accountform1.FormCountry.IsRequired && (!accountform1.AccountModel.CountryID.HasValue || accountform1.AccountModel.CountryID.Value == 0))
+        {
+            toastService.ShowError("Country is required.");
+        }
+        else if (accountform1.FormProvince.IsRequired && (!accountform1.AccountModel.ProvinceID.HasValue || accountform1.AccountModel.ProvinceID.Value == 0))
+        {
+            toastService.ShowError("Province is required.");
+        }
+        else if (accountform1.FormRole.IsRequired && string.IsNullOrEmpty(accountform1.AccountModel.RoleID))
+        {
+            toastService.ShowError("Role is required.");
+        }
+        else
+        {
+            await accountService.CreateAccountAsync(accountform1.AccountModel);
+
+            Message = "New account added successfully.";
+            toastService.ShowSuccess(Message);
+            AccountModel = new AccountItemViewModel();
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./accounts/index");
+    }
+
+    private async void Reset()
+    {
+        AccountModel = new AccountItemViewModel();
+        StateHasChanged();
+    }
+
+    private void Config()
+    {
+        NavigationManager.NavigateTo("./accounts/FormConfig/0");
+    }
+}

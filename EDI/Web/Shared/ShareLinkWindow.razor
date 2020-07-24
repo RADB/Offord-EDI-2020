@@ -1,0 +1,45 @@
+﻿@inject ICustomerService customerService;
+@inject IModalService ModalService;
+@inject IJSRuntime JsRuntime;
+@using EDI.Web.Extensions;
+@using TextCopy;
+
+<div class="simple-form" style="width:600px;">
+    <br />
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="invoiceurl">Invoice URL: </label>
+        <input type="text" @ref="_url" class="col-md-7 col-form-label" @bind="@link" autofocus />
+    </div>
+    <br />
+    <button @onclick="@CopyLink" class="btn btn-primary">Copy</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    private ElementReference _url;
+
+    private string link { get; set; }
+    private string filename { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        filename = Parameters.Get<string>("FileName");
+
+        link = customerService.GetURLPath() + filename;
+
+        //await _url.Focus(JsRuntime); 
+    }
+
+    private async void CopyLink()
+    {
+        //invoiceService.CopyLink(link);
+        await JsRuntime.InvokeVoidAsync("WriteText", link);
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+}

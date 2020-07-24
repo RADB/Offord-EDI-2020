@@ -1,0 +1,70 @@
+﻿@page "/Login"
+
+    <div class="logincontainer">
+
+        <div class="logincontent">
+
+            <header class="logincontainer-header">
+                <div class="loginnavbar">
+                    <div class="loginnavbar-inner">
+                        <div class="innercontainer">
+                            <a class="brand help-logo" href="/">HELP</a>
+                            <div class="pull-right auth-cont">
+
+                                <a href="/Login/"><i class="icon-lock"></i> Login</a>
+
+                                <div class="logo-box">
+                                    <a class="uw-logo" href="/"></a>
+                                    <a class="hhsc-logo" href="/" style="margin-left:15px;"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <div class="row">
+                <div class="span11 container-body">
+
+                    <div class="row">
+                        <div class="span3 offset4">
+                            <h1 class="auth-lock-icon">Login</h1>
+                            <form class="form-panel span3" method="post" action="./signin">
+
+                                <div class="control-group">
+                                    <label for="id_username">Email address:</label>
+                                    <div class="controls">
+                                        <input type="text" name="username" autofocus="autofocus" class="span3" required="" id="id_username">
+
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label for="id_password">Password:</label>
+                                    <div class="controls">
+                                        <input type="password" name="password" class="span3" autocomplete="off" required="" id="id_password">
+
+                                    </div>
+                                </div>
+                                <div class="form-panel-actions">
+                                    <input type="submit" class="btn btn-success" value="Login">
+                                </div>
+                            </form>
+                            <a class="forgotten-link text-center" href="/accounts/ForgotPassword">Forgotten your password?</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <footer id="page-footer">
+            <p>
+                © Offord Centre for Child Studies | McMaster University & Hamilton Health Sciences, Hamilton ON, Canada | Tel. (905)525-9140 27051
+            </p>
+        </footer>
+    </div>
+
+@code {
+}

@@ -1,0 +1,57 @@
+﻿@page "/sessiontest"
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+
+<h3>SessionTest - Available APIS</h3>
+<ul class="list-group">
+    <li class="list-group-item">asynchronous via ISessionStorageService:</li>
+    <li class="list-group-item">SetItemAsync()</li>
+    <li class="list-group-item">GetItemAsync()</li>
+    <li class="list-group-item">RemoveItemAsync()</li>
+    <li class="list-group-item">ClearAsync()</li>
+    <li class="list-group-item">LengthAsync()</li>
+    <li class="list-group-item">KeyAsync()</li>
+    <li class="list-group-item">ContainsKeyAsync()</li>
+</ul>
+
+<label class="col-form-label">Enter your name here:</label><input type="text" class="form-control" @bind="Name" />
+<br />
+<button class="btn btn-success" @onclick="SaveSession">Save Session</button>&nbsp;
+<button class="btn btn-danger" @onclick="ClearSession">Clear Session</button>
+
+<br />
+<br />
+
+<span style="color:#c00;">@Message</span>
+<br />
+<span style="color:#c00;" @bind-="Message"></span>
+<br />
+
+@code {
+    public String Name { get; set; }
+    public String Message { get; set; }
+    string Message2 = "";
+
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
+    {
+        Name = await sessionStorage.GetItemAsync<string>("Name");
+    }
+
+    public async void SaveSession()
+    {
+        //this will save the session data
+        await sessionStorage.SetItemAsync("Name", Name);
+        Message = "Session Saved";
+        Message2 = "Session Saved";
+    }
+
+    public async void ClearSession()
+    {
+        //this will clear the session data
+        await sessionStorage.ClearAsync();
+        Name = "";
+        Message = "Session Cleared";
+        Message2 = "Session Cleared";
+    }
+}

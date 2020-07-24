@@ -1,0 +1,70 @@
+﻿@using Syncfusion.Blazor.Navigations
+@inject NavigationManager NavigationManager
+
+<SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
+    <ChildContent>
+        <div class="main-menu">
+            <div>
+                <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
+                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="iconCss" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
+                    </TreeViewFieldsSettings>
+                    <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
+                </SfTreeView>
+            </div>
+        </div>
+    </ChildContent>
+</SfSidebar>
+
+@code {
+    SfTreeView<TreeData> TreeView;
+    public SfSidebar Sidebar;
+    public ExpandOnSettings Expand = ExpandOnSettings.Click;
+    Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+    {
+        {"class", "sidebar-treeview" }
+    };
+
+    public class TreeData
+    {
+        public string nodeId { get; set; }
+        public string nodeText { get; set; }
+        public string iconCss { get; set; }
+        public bool hasChild { get; set; }
+        public string pid { get; set; }
+    }
+    private List<TreeData> treedata = new List<TreeData>();
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        treedata.Add(new TreeData { nodeId = "01", nodeText = "Administration", iconCss = "icon-globe icon" });
+        treedata.Add(new TreeData { nodeId = "02", nodeText = "Screens", iconCss = "icon-docs icon" });
+        treedata.Add(new TreeData { nodeId = "03", nodeText = "Maintenance", iconCss = "icon-info icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = "Accounts", iconCss = "icon-list icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Users", iconCss = "icon-people icon", pid = "04" });
+        treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Roles", iconCss = "icon-organization icon", pid = "04" });
+        treedata.Add(new TreeData { nodeId = "04-03", nodeText = "My Profile", iconCss = "icon-user icon", pid = "04" });
+    }
+
+    private void onSelect(NodeSelectEventArgs args)
+    {
+        if (args.NodeData.Id == "04-01")
+        {
+            NavigationManager.NavigateTo("./accounts/index");
+        }
+        else if (args.NodeData.Id == "04-02")
+        {
+            NavigationManager.NavigateTo("./accounts/rolesindex");
+        }
+        else if (args.NodeData.Id == "04-03")
+        {
+            NavigationManager.NavigateTo("./accounts/profile");
+        }
+    }
+
+    private async void onClick(NodeClickEventArgs args)
+    {
+        //List<TreeData> NodeDetails = await this.treeView.GetTreeData(args.Node);
+        //var Element = new[] { args.Node };
+    }
+}

@@ -1,0 +1,72 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+
+<BlazoredModal DisableBackgroundCancel="true" />
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="10"
+                SuccessClass="success-toast-override"
+                SuccessIconClass="fa fa-thumbs-up"
+                ErrorIconClass="fa fa-bug" />
+
+@if (isAuthenticated)
+{
+    <AppHeader OnToggleClick="@OnToggleClick" />
+    <div class="app-body">
+        <SidebarNav @ref="SidebarObject" />
+        <div class="main">
+            <div class="container-fluid">
+                <!-- *PAGE* -->
+                @Body
+                <!-- /*PAGE* -->
+            </div>
+        </div>
+        @*<AsideMenu />*@
+    </div>
+    <footer class="app-footer">
+        <span class="ml-auto">© <a href="http://www.offordcentre.com/readiness/index.html">Offord Centre for Child Studies</a> | McMaster University & Hamilton Health Sciences, Hamilton ON, Canada | Tel. (905)525-9140 27051</span>
+    </footer>
+}
+else
+{
+    @*<div class="login-bg"></div>*@
+    <div class="container-fluid">
+        <!-- *PAGE* -->
+        @Body
+        <!-- /*PAGE* -->
+    </div>
+}
+
+@code{
+    private bool isAuthenticated { get; set; }
+
+    public SidebarNav SidebarObject { get; set; }
+
+    private bool IsInvoiceReport { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        isAuthenticated = user.Identity.IsAuthenticated;
+
+        var url = NavigationManager.Uri;
+
+        if (url.ToLower().Contains("invoiceform") || url.ToLower().Contains("statementform") || url.ToLower().Contains("estimateform"))
+        {
+            IsInvoiceReport = true;
+        }
+        else
+        {
+            IsInvoiceReport = false;
+        }
+    }
+
+    private void OnToggleClick()
+    {
+        this.SidebarObject.Sidebar.Toggle();
+    }
+
+}

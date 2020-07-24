@@ -1,0 +1,49 @@
+﻿@page "/classes"
+@using EDI2020.DAL.Data
+@using EDI2020.DAL.Models
+
+@inject EDI2020Context edi
+
+<h1>Classes Page</h1>
+
+<h4>Current Classes</h4>
+@if (classes is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>class ID</th>                
+                <th>Months</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var teacherclass in classes)
+            {
+                <tr>
+                    <td>@teacherclass.IntClassId</td>                    
+                    <td>@teacherclass.IntMonths</td>
+                    <td>@teacherclass.DtmCreated</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+
+
+    private List<TeacherClass> classes;
+
+    protected override Task OnInitializedAsync()
+    {
+
+        classes = edi.Classes.ToList();
+        return base.OnInitializedAsync();
+    }
+}

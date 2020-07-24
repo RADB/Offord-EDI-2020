@@ -1,0 +1,102 @@
+﻿@page "/accounts/editrole/{Id}"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject IAccountService accountService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime;
+@inject IModalService Modal
+@using Syncfusion.Blazor.Navigations;
+@inject ServiceContext dbContext;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>Edit Role</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <br />
+            <RoleForm @ref="roleform1" RoleModel="@RoleModel" HandleValidSubmit="HandleValidSubmit" />
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private RoleItemViewModel RoleModel { get; set; } = new RoleItemViewModel();
+
+    RoleForm roleform1 = new RoleForm();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            RoleModel = await accountService.GetRoleItem(Id);
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = accountService.GetDuplicateRoleCount(RoleModel.Name, roleform1.RoleModel.Id);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same Role has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            await accountService.UpdateRoleAsync(roleform1.RoleModel);
+
+            Message = "Role updated successfully.";
+
+            toastService.ShowSuccess(Message);
+
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./accounts/rolesindex");
+    }
+
+    private async void Reset()
+    {
+        RoleModel = await accountService.GetRoleItem(Id);
+    }
+}

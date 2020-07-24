@@ -1,0 +1,730 @@
+﻿@page "/accounts/formconfig/{Id}"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Buttons
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject IFormService formService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime;
+@inject IModalService Modal
+@inject ServiceContext dbContext;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="width:700px;box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>User Form Config</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="UserName">User Name: </label>
+                    <div class="input-group col-md-2">
+                        <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="true" Disabled="true"></SfCheckBox>
+                    </div>
+                    <div class="input-group col-md-2">
+                        <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="true" Disabled="true"></SfCheckBox>
+                    </div>
+                    <div class="input-group col-md-2">
+                        <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="true" Disabled="true"></SfCheckBox>
+                    </div>
+                </div>
+                @if (FormFirstName != null)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="FirstName">FirstName: </label>
+                        <div class="input-group col-md-2">
+                            <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="@FormFirstName.IsRequired" @onchange="IsRequiredFirstNameChange"></SfCheckBox>
+                        </div>
+                        @if (FormFirstName.IsRequired)
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormFirstName.IsVisible" Disabled="true"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormFirstName.IsEnabled" Disabled="true"></SfCheckBox>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormFirstName.IsVisible" @onchange="IsVisibleFirstNameChange"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormFirstName.IsEnabled" @onchange="IsEnabledFirstNameChange"></SfCheckBox>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (FormLastName != null)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="LastName">LastName: </label>
+                        <div class="input-group col-md-2">
+                            <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="@FormLastName.IsRequired" @onchange="IsRequiredLastNameChange"></SfCheckBox>
+                        </div>
+                        @if (FormLastName.IsRequired)
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormLastName.IsVisible" Disabled="true"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormLastName.IsEnabled" Disabled="true"></SfCheckBox>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormLastName.IsVisible" @onchange="IsVisibleLastNameChange"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormLastName.IsEnabled" @onchange="IsEnabledLastNameChange"></SfCheckBox>
+                            </div>
+                        }
+                    </div>
+                }
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="Email">Email: </label>
+                    <div class="input-group col-md-2">
+                        <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="true" Disabled="true"></SfCheckBox>
+                    </div>
+                    <div class="input-group col-md-2">
+                        <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="true" Disabled="true"></SfCheckBox>
+                    </div>
+                    <div class="input-group col-md-2">
+                        <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="true" Disabled="true"></SfCheckBox>
+                    </div>
+                </div>
+                @if (FormPhone != null)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+                        <div class="input-group col-md-2">
+                            <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="@FormPhone.IsRequired" @onchange="IsRequiredPhoneChange"></SfCheckBox>
+                        </div>
+                        @if (FormPhone.IsRequired)
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormPhone.IsVisible" Disabled="true"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormPhone.IsEnabled" Disabled="true"></SfCheckBox>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormPhone.IsVisible" @onchange="IsVisiblePhoneChange"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormPhone.IsEnabled" @onchange="IsEnabledPhoneChange"></SfCheckBox>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (FormCountry != null)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Country">Country: </label>
+                        <div class="input-group col-md-2">
+                            <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="@FormCountry.IsRequired" @onchange="IsRequiredCountryChange"></SfCheckBox>
+                        </div>
+                        @if (FormCountry.IsRequired)
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormCountry.IsVisible" Disabled="true"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormCountry.IsEnabled" Disabled="true"></SfCheckBox>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormCountry.IsVisible" @onchange="IsVisibleCountryChange"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormCountry.IsEnabled" @onchange="IsEnabledCountryChange"></SfCheckBox>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (FormProvince != null)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Province">Province: </label>
+                        <div class="input-group col-md-2">
+                            <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="@FormProvince.IsRequired" @onchange="IsRequiredProvinceChange"></SfCheckBox>
+                        </div>
+                        @if (FormProvince.IsRequired)
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormProvince.IsVisible" Disabled="true"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormProvince.IsEnabled" Disabled="true"></SfCheckBox>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormProvince.IsVisible" @onchange="IsVisibleProvinceChange"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormProvince.IsEnabled" @onchange="IsEnabledProvinceChange"></SfCheckBox>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (FormRole != null)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Role">Role: </label>
+                        <div class="input-group col-md-2">
+                            <SfCheckBox Label="Required" LabelPosition="LabelPosition.After" Checked="@FormRole.IsRequired" @onchange="IsRequiredRoleChange"></SfCheckBox>
+                        </div>
+                        @if (FormRole.IsRequired)
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormRole.IsVisible" Disabled="true"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormRole.IsEnabled" Disabled="true"></SfCheckBox>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Visible" LabelPosition="LabelPosition.After" Checked="@FormRole.IsVisible" @onchange="IsVisibleRoleChange"></SfCheckBox>
+                            </div>
+                            <div class="input-group col-md-2">
+                                <SfCheckBox Label="Enabled" LabelPosition="LabelPosition.After" Checked="@FormRole.IsEnabled" @onchange="IsEnabledRoleChange"></SfCheckBox>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="card-footer">
+                <button class="savebutton" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    public FormItemViewModel FormEmail { get; set; }
+    public FormItemViewModel FormPhone { get; set; }
+    public FormItemViewModel FormFirstName { get; set; }
+    public FormItemViewModel FormLastName { get; set; }
+    public FormItemViewModel FormCountry { get; set; }
+    public FormItemViewModel FormProvince { get; set; }
+    public FormItemViewModel FormRole { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            FormEmail = await formService.GetFormItem("AccountForm", "Email", 1);
+            if (FormEmail.Id == 0)
+            {
+                FormEmail.FormName = "AccountForm";
+                FormEmail.FieldName = "Email";
+                FormEmail.IsEnabled = true;
+                FormEmail.IsRequired = true;
+                FormEmail.IsVisible = true;
+                FormEmail.Order = 1;
+            }
+
+            FormPhone = await formService.GetFormItem("AccountForm", "PhoneNumber", 2);
+            if (FormPhone.Id == 0)
+            {
+                FormPhone.FormName = "AccountForm";
+                FormPhone.FieldName = "PhoneNumber";
+                FormPhone.Order = 2;
+            }
+
+            FormFirstName = await formService.GetFormItem("AccountForm", "FirstName", 3);
+            if (FormFirstName.Id == 0)
+            {
+                FormFirstName.FormName = "AccountForm";
+                FormFirstName.FieldName = "FirstName";
+                FormFirstName.Order = 3;
+            }
+
+            FormLastName = await formService.GetFormItem("AccountForm", "LastName", 4);
+            if (FormLastName.Id == 0)
+            {
+                FormLastName.FormName = "AccountForm";
+                FormLastName.FieldName = "LastName";
+                FormLastName.Order = 4;
+            }
+
+            FormCountry = await formService.GetFormItem("AccountForm", "CountryID", 5);
+            if (FormCountry.Id == 0)
+            {
+                FormCountry.FormName = "AccountForm";
+                FormCountry.FieldName = "CountryID";
+                FormCountry.Order = 10;
+            }
+
+            FormProvince = await formService.GetFormItem("AccountForm", "ProvinceID", 6);
+            if (FormProvince.Id == 0)
+            {
+                FormProvince.FormName = "AccountForm";
+                FormProvince.FieldName = "ProvinceID";
+                FormProvince.Order = 11;
+            }
+
+            FormRole = await formService.GetFormItem("AccountForm", "RoleID", 7);
+            if (FormRole.Id == 0)
+            {
+                FormRole.FormName = "AccountForm";
+                FormRole.FieldName = "RoleID";
+                FormRole.Order = 11;
+            }
+        }
+    }
+
+    private async void Save()
+    {
+        if (FormEmail.Id == 0)
+            await formService.CreateFormAsync(FormEmail);
+        else
+            await formService.UpdateFormAsync(FormEmail);
+
+        if (FormPhone.Id == 0)
+            await formService.CreateFormAsync(FormPhone);
+        else
+            await formService.UpdateFormAsync(FormPhone);
+
+        if (FormFirstName.Id == 0)
+            await formService.CreateFormAsync(FormFirstName);
+        else
+            await formService.UpdateFormAsync(FormFirstName);
+
+        if (FormLastName.Id == 0)
+            await formService.CreateFormAsync(FormLastName);
+        else
+            await formService.UpdateFormAsync(FormLastName);
+
+        if (FormCountry.Id == 0)
+            await formService.CreateFormAsync(FormCountry);
+        else
+            await formService.UpdateFormAsync(FormCountry);
+
+        if (FormProvince.Id == 0)
+            await formService.CreateFormAsync(FormProvince);
+        else
+            await formService.UpdateFormAsync(FormProvince);
+
+        if (FormRole.Id == 0)
+            await formService.CreateFormAsync(FormRole);
+        else
+            await formService.UpdateFormAsync(FormRole);
+
+        Message = "Form Configuration updated successfully.";
+
+        toastService.ShowSuccess(Message);
+
+        StateHasChanged();
+    }
+
+    private void Exit()
+    {
+        if (!string.IsNullOrEmpty(this.Id))
+            NavigationManager.NavigateTo("./accounts/edit/" + this.Id);
+        else
+            NavigationManager.NavigateTo("./accounts/new");
+    }
+
+    private async void Reset()
+    {
+        FormEmail = await formService.GetFormItem("AccountForm", "Email", 1);
+        if (FormEmail.Id == 0)
+        {
+            FormEmail.FormName = "AccountForm";
+            FormEmail.FieldName = "Email";
+            FormEmail.IsEnabled = true;
+            FormEmail.IsRequired = true;
+            FormEmail.IsVisible = true;
+            FormEmail.Order = 1;
+        }
+
+        FormPhone = await formService.GetFormItem("AccountForm", "PhoneNumber", 2);
+        if (FormPhone.Id == 0)
+        {
+            FormPhone.FormName = "AccountForm";
+            FormPhone.FieldName = "PhoneNumber";
+            FormPhone.Order = 2;
+        }
+
+        FormFirstName = await formService.GetFormItem("AccountForm", "FirstName", 3);
+        if (FormFirstName.Id == 0)
+        {
+            FormFirstName.FormName = "AccountForm";
+            FormFirstName.FieldName = "FirstName";
+            FormFirstName.Order = 3;
+        }
+
+        FormLastName = await formService.GetFormItem("AccountForm", "LastName", 4);
+        if (FormLastName.Id == 0)
+        {
+            FormLastName.FormName = "AccountForm";
+            FormLastName.FieldName = "LastName";
+            FormLastName.Order = 4;
+        }
+
+        FormCountry = await formService.GetFormItem("AccountForm", "CountryID", 5);
+        if (FormCountry.Id == 0)
+        {
+            FormCountry.FormName = "AccountForm";
+            FormCountry.FieldName = "CountryID";
+            FormCountry.Order = 10;
+        }
+
+        FormProvince = await formService.GetFormItem("AccountForm", "ProvinceID", 6);
+        if (FormProvince.Id == 0)
+        {
+            FormProvince.FormName = "AccountForm";
+            FormProvince.FieldName = "ProvinceID";
+            FormProvince.Order = 11;
+        }
+
+        FormRole = await formService.GetFormItem("AccountForm", "RoleID", 7);
+        if (FormRole.Id == 0)
+        {
+            FormRole.FormName = "AccountForm";
+            FormRole.FieldName = "RoleID";
+            FormRole.Order = 11;
+        }
+
+        StateHasChanged();
+    }
+
+    private void IsRequiredEmailChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormEmail.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormEmail.IsRequired = isrequired;
+
+            if (FormEmail.IsRequired)
+            {
+                FormEmail.IsVisible = true;
+                FormEmail.IsEnabled = true;
+            }
+        }
+    }
+
+    private void IsVisibleEmailChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormEmail.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormEmail.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledEmailChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormEmail.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormEmail.IsEnabled = checkedvalue;
+        }
+    }
+
+    private void IsRequiredPhoneChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormPhone.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormPhone.IsRequired = isrequired;
+
+            if (FormPhone.IsRequired)
+            {
+                FormPhone.IsVisible = true;
+                FormPhone.IsEnabled = true;
+            }
+        }
+    }
+
+    private void IsVisiblePhoneChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormPhone.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormPhone.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledPhoneChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormPhone.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormPhone.IsEnabled = checkedvalue;
+        }
+    }
+    private void IsRequiredFirstNameChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormFirstName.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormFirstName.IsRequired = isrequired;
+
+            if (FormFirstName.IsRequired)
+            {
+                FormFirstName.IsVisible = true;
+                FormFirstName.IsEnabled = true;
+            }
+        }
+    }
+
+    private void IsVisibleFirstNameChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormFirstName.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormFirstName.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledFirstNameChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormFirstName.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormFirstName.IsEnabled = checkedvalue;
+        }
+    }
+    private void IsRequiredLastNameChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormLastName.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormLastName.IsRequired = isrequired;
+
+            if (FormLastName.IsRequired)
+
+
+                FormLastName.IsVisible = true;
+            FormLastName.IsEnabled = true;
+        }
+    }
+    private void IsVisibleLastNameChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormLastName.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormLastName.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledLastNameChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormLastName.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormLastName.IsEnabled = checkedvalue;
+        }
+    }
+
+    private void IsRequiredCountryChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormCountry.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormCountry.IsRequired = isrequired;
+
+            if (FormCountry.IsRequired)
+            {
+                FormCountry.IsVisible = true;
+                FormCountry.IsEnabled = true;
+            }
+        }
+    }
+
+    private void IsVisibleCountryChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormCountry.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormCountry.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledCountryChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormCountry.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormCountry.IsEnabled = checkedvalue;
+        }
+    }
+
+    private void IsRequiredProvinceChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormProvince.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormProvince.IsRequired = isrequired;
+
+            if (FormProvince.IsRequired)
+            {
+                FormProvince.IsVisible = true;
+                FormProvince.IsEnabled = true;
+            }
+        }
+    }
+
+    private void IsVisibleProvinceChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormProvince.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormProvince.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledProvinceChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormProvince.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormProvince.IsEnabled = checkedvalue;
+        }
+    }
+
+    private void IsRequiredRoleChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormRole.IsRequired = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FormRole.IsRequired = isrequired;
+
+            if (FormRole.IsRequired)
+            {
+                FormRole.IsVisible = true;
+                FormRole.IsEnabled = true;
+            }
+        }
+    }
+
+    private void IsVisibleRoleChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormRole.IsVisible = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormRole.IsVisible = checkedvalue;
+        }
+    }
+
+    private void IsEnabledRoleChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FormRole.IsEnabled = false;
+
+        if (bool.TryParse(selectedString, out bool checkedvalue))
+        {
+            FormRole.IsEnabled = checkedvalue;
+        }
+    }
+}

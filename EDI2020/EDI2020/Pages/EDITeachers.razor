@@ -1,0 +1,51 @@
+﻿@page "/teachers"
+@using EDI2020.DAL.Data
+@using EDI2020.DAL.Models
+
+@inject EDI2020Context edi
+
+<h1>Teachers Page</h1>
+
+<h4>Current Teachers</h4>
+@if (teachers is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var teacher in teachers)
+            {
+                <tr>
+                    <td>@teacher.StrName</td>
+                    <td>@teacher.IntAge</td>
+                    <td>@teacher.IntSex</td>
+                    <td>@teacher.StrPassword</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+
+
+    private List<Teacher> teachers;
+
+    protected override Task OnInitializedAsync()
+    {
+
+        teachers = edi.Teachers.ToList();
+        return base.OnInitializedAsync();
+    }
+}

@@ -1,0 +1,30 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/PO
+**/applogs/
+
+# User-specific files
+*.suo
+
+
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+/backup/
+
+/Web/applogs/
+/Web/wwwroot/Upload/2019
+/Web/wwwroot/Download/
+/Web/privatekey.pem
+/Web/logs

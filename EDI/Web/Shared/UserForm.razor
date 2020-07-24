@@ -1,0 +1,446 @@
+﻿@inject NavigationManager NavigationManager
+@inject IAccountService accountService
+@inject IFormService formService
+@inject ServiceContext dbContext;
+
+<EditForm Model="@AccountModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        @if (string.IsNullOrEmpty(AccountModel.Id))
+        {
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="UserName">User Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                <input type="text" @bind-value="AccountModel.UserName" class="col-md-7 form-control" placeholder="User Name" />
+            </div>
+        }
+        else
+        {
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="UserName">User Name: </label>
+                <input type="text" @bind-value="AccountModel.UserName" class="col-md-7 form-control" placeholder="User Name" disabled />
+            </div>
+        }
+
+        @if (FormFirstName != null)
+        {
+            @if (FormFirstName.IsRequired)
+            {
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="FirstName">First Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                    <input type="text" @bind-value="AccountModel.FirstName" class="col-md-7 form-control" placeholder="First Name" />
+                </div>
+            }
+            else
+            {
+                @if (FormFirstName.IsVisible && FormFirstName.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="FirstName">First Name: </label>
+                        <input type="text" @bind-value="AccountModel.FirstName" class="col-md-7 form-control" placeholder="First Name" />
+                    </div>
+                }
+                else if (!FormFirstName.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="FirstName">First Name: </label>
+                        <input type="text" @bind-value="AccountModel.FirstName" class="col-md-7 form-control" placeholder="First Name" disabled />
+                    </div>
+                }
+            }
+        }
+
+        @if (FormLastName != null)
+        {
+            @if (FormLastName.IsRequired)
+            {
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="LastName">Last Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i></label>
+                    <input type="text" @bind-value="AccountModel.LastName" class="col-md-7 form-control" placeholder="Last Name" />
+                </div>
+            }
+            else
+            {
+                @if (FormLastName.IsVisible && FormLastName.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="LastName">Last Name</label>
+                        <input type="text" @bind-value="AccountModel.LastName" class="col-md-7 form-control" placeholder="Last Name" />
+                    </div>
+                }
+                else if (!FormLastName.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="LastName">Last Name</label>
+                        <input type="text" @bind-value="AccountModel.LastName" class="col-md-7 form-control" placeholder="Last Name" disabled />
+                    </div>
+                }
+            }
+        }
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Email">Email<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="AccountModel.Email" class="col-md-7 form-control" placeholder="Email" />
+        </div>
+
+        @if (FormPhone != null)
+        {
+            @if (FormPhone.IsRequired)
+            {
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="Phone">Phone<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                    <input type="text" @bind-value="AccountModel.PhoneNumber" class="col-md-7 form-control" placeholder="Phone" />
+                </div>
+            }
+            else
+            {
+                @if (FormPhone.IsVisible && FormPhone.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+                        <input type="text" @bind-value="AccountModel.PhoneNumber" class="col-md-7 form-control" placeholder="Phone" />
+                    </div>
+                }
+                else if (!FormPhone.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+                        <input type="text" @bind-value="AccountModel.PhoneNumber" class="col-md-7 form-control" placeholder="Phone" disabled />
+                    </div>
+                }
+            }
+        }
+
+        @if (FormCountry != null)
+        {
+            @if (FormCountry.IsRequired)
+            {
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="Country">Country<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                    <select class="col-md-7" value="@countryid" @onchange="@(e =>CountryChange(e))">
+                        @if (Countries != null)
+                        {
+                            @foreach (var option in Countries)
+                            {
+                                <option value="@option.Value">@option.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                @if (FormCountry.IsVisible && FormCountry.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Country">Country: </label>
+                        <select class="col-md-7" value="@countryid" @onchange="@(e =>CountryChange(e))">
+                            @if (Countries != null)
+                            {
+                                @foreach (var option in Countries)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+                else if (!FormCountry.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Country">Country: </label>
+                        <select class="col-md-7" value="@countryid" disabled>
+                            @if (Countries != null)
+                            {
+                                @foreach (var option in Countries)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+            }
+        }
+
+        @if (FormProvince != null)
+        {
+            @if (FormProvince.IsRequired)
+            {
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="Province">Province<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                    <select class="col-md-7" value="@provinceid" @onchange="@(e =>ProvinceChange(e))">
+                        @if (Provinces != null)
+                        {
+                            @foreach (var option in Provinces)
+                            {
+                                <option value="@option.Value">@option.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                @if (FormProvince.IsVisible && FormProvince.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Province">Province: </label>
+                        <select class="col-md-7" value="@provinceid" @onchange="@(e =>ProvinceChange(e))">
+                            @if (Provinces != null)
+                            {
+                                @foreach (var option in Provinces)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+                else if (!FormProvince.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Province">Province: </label>
+                        <select class="col-md-7" value="@provinceid" disabled>
+                            @if (Provinces != null)
+                            {
+                                @foreach (var option in Provinces)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+            }
+        }
+
+
+        @if (FormRole != null)
+        {
+            @if (FormRole.IsRequired)
+            {
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="Role">Role<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                    <select class="col-md-7" value="@roleid" @onchange="@(e =>RoleChange(e))">
+                        @if (Roles != null)
+                        {
+                            @foreach (var option in Roles)
+                            {
+                                <option value="@option.Value">@option.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                @if (FormRole.IsVisible && FormRole.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Role">Role: </label>
+                        <select class="col-md-7" value="@roleid" @onchange="@(e =>RoleChange(e))">
+                            @if (Roles != null)
+                            {
+                                @foreach (var option in Roles)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+                else if (!FormRole.IsEnabled)
+                {
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Role">Role: </label>
+                        <select class="col-md-7" value="@roleid" disabled>
+                            @if (Roles != null)
+                            {
+                                @foreach (var option in Roles)
+                                {
+                                    <option value="@option.Value">@option.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                }
+            }
+        }
+
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public AccountItemViewModel AccountModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public FormItemViewModel FormEmail { get; set; }
+    public FormItemViewModel FormPhone { get; set; }
+    public FormItemViewModel FormFirstName { get; set; }
+    public FormItemViewModel FormLastName { get; set; }
+    public FormItemViewModel FormCountry { get; set; }
+    public FormItemViewModel FormProvince { get; set; }
+    public FormItemViewModel FormRole { get; set; }
+
+    public IEnumerable<SelectListItem> Countries { get; set; }
+
+    public IEnumerable<SelectListItem> Provinces { get; set; }
+
+    public IEnumerable<SelectListItem> Roles { get; set; }
+
+    public string countryid { get; set; }
+
+    public string provinceid { get; set; }
+
+    public string roleid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        FormEmail = await formService.GetFormItem("AccountForm", "Email", 1);
+        if (FormEmail.Id == 0)
+        {
+            FormEmail.FormName = "AccountForm";
+            FormEmail.FieldName = "Email";
+            FormEmail.IsEnabled = true;
+            FormEmail.IsRequired = true;
+            FormEmail.IsVisible = true;
+            FormEmail.Order = 1;
+        }
+
+        FormPhone = await formService.GetFormItem("AccountForm", "PhoneNumber", 2);
+        if (FormPhone.Id == 0)
+        {
+            FormPhone.FormName = "AccountForm";
+            FormPhone.FieldName = "PhoneNumber";
+            FormPhone.Order = 2;
+        }
+
+        FormFirstName = await formService.GetFormItem("AccountForm", "FirstName", 3);
+        if (FormFirstName.Id == 0)
+        {
+            FormFirstName.FormName = "AccountForm";
+            FormFirstName.FieldName = "FirstName";
+            FormFirstName.Order = 3;
+        }
+
+        FormLastName = await formService.GetFormItem("AccountForm", "LastName", 4);
+        if (FormLastName.Id == 0)
+        {
+            FormLastName.FormName = "AccountForm";
+            FormLastName.FieldName = "LastName";
+            FormLastName.Order = 4;
+        }
+
+        FormCountry = await formService.GetFormItem("AccountForm", "CountryID", 5);
+        if (FormCountry.Id == 0)
+        {
+            FormCountry.FormName = "AccountForm";
+            FormCountry.FieldName = "CountryID";
+            FormCountry.Order = 10;
+        }
+
+        FormProvince = await formService.GetFormItem("AccountForm", "ProvinceID", 6);
+        if (FormProvince.Id == 0)
+        {
+            FormProvince.FormName = "AccountForm";
+            FormProvince.FieldName = "ProvinceID";
+            FormProvince.Order = 11;
+        }
+
+        FormRole = await formService.GetFormItem("AccountForm", "RoleID", 7);
+        if (FormRole.Id == 0)
+        {
+            FormRole.FormName = "AccountForm";
+            FormRole.FieldName = "RoleID";
+            FormRole.Order = 11;
+        }
+
+        Roles = await accountService.GetRoles();
+
+        if (!string.IsNullOrEmpty(AccountModel.RoleID))
+        {
+            roleid = AccountModel.RoleID;
+        }
+
+        Countries = await accountService.GetCountries();
+
+        if (AccountModel.CountryID.HasValue)
+        {
+            countryid = AccountModel.CountryID.Value.ToString();
+            Provinces = await accountService.GetProvinces(AccountModel.CountryID.Value);
+        }
+        else
+        {
+            //countryid = "0";
+            //Provinces = await accountService.GetProvinces(0);
+
+            var cid = dbContext.Country.Where(p => p.Name == "Canada").Select(p => p.Id).FirstOrDefault();
+            countryid = cid.ToString();
+            AccountModel.CountryID = cid;
+            Provinces = await accountService.GetProvinces(cid);
+        }
+
+
+        if (AccountModel.ProvinceID.HasValue)
+        {
+            provinceid = AccountModel.ProvinceID.Value.ToString();
+        }
+        else
+        {
+            //provinceid = "0";
+            var pid = dbContext.Province.Where(p => p.Name == "Ontario").Select(p => p.Id).FirstOrDefault();
+            AccountModel.ProvinceID = pid;
+            provinceid = pid.ToString();
+        }
+    }
+
+    private void RoleChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        AccountModel.RoleID = null;
+
+        if (!string.IsNullOrEmpty(selectedString))
+        {
+            AccountModel.RoleID = selectedString;
+        }
+    }
+
+    private async Task CountryChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        provinceid = "0";
+
+        Provinces = await accountService.GetProvinces(0);
+
+        AccountModel.CountryID = null;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            AccountModel.CountryID = ctid;
+            Provinces = await accountService.GetProvinces(ctid);
+        }
+    }
+
+    private void ProvinceChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        AccountModel.ProvinceID = null;
+
+        if (int.TryParse(selectedString, out int itid))
+        {
+            AccountModel.ProvinceID = itid;
+        }
+    }
+}

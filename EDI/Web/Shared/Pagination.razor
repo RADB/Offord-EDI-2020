@@ -1,0 +1,136 @@
+﻿@inject NavigationManager NavigationManager
+
+<nav>
+    <ul class="pagination">
+        <li class="page-item @PaginationInfo.Previous">
+            <a class="page-link" href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(1))"
+               aria-label="First">&lt;&lt;</a>
+        </li>
+        <li class="page-item @PaginationInfo.Previous">
+            <a class="page-link" href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(PaginationInfo.ActualPage - 1))"
+               aria-label="Previous">&lt;</a>
+        </li>
+        @if (PaginationInfo.TotalPages <= 8)
+        {
+            for (int i = 1; i <= PaginationInfo.TotalPages; i++)
+            {
+                if (PaginationInfo.ActualPage == i)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="javascript: void(0);">@((PaginationInfo.ActualPage).ToString())</a>
+                    </li>
+                }
+                else
+                {
+                    int pid = @i;
+                    if (PaginationInfo.ActualPage == 1)
+                    {
+                        <li class="page-item @PaginationInfo.Next">
+                            <a class="page-link"
+                               href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(pid))"
+                               aria-label="Next">@i.ToString()</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item @PaginationInfo.Previous">
+                            <a class="page-link"
+                               href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(pid))"
+                               aria-label="Next">@i.ToString()</a>
+                        </li>
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (PaginationInfo.ActualPage <= 8)
+            {
+                for (int i = 1; i <= 8; i++)
+                {
+                    int pid = @i;
+                    if (PaginationInfo.ActualPage == i)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript: void(0);">@((PaginationInfo.ActualPage).ToString())</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item @PaginationInfo.Next">
+                            <a class="page-link"
+                               href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(pid))"
+                               aria-label="Next">@i.ToString()</a>
+                        </li>
+                    }
+                }
+            }
+            else
+            {
+                int start = PaginationInfo.ActualPage - 7;
+
+                for (int i = start; i <= PaginationInfo.ActualPage; i++)
+                {
+                    int pid = @i;
+                    if (PaginationInfo.ActualPage == i)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" href="#">@((PaginationInfo.ActualPage).ToString())</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item @PaginationInfo.Previous">
+                            <a class="page-link"
+                               href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(pid))"
+                               aria-label="Next">@i.ToString()</a>
+                        </li>
+                    }
+                }
+            }
+        }
+        <li class="page-item @PaginationInfo.Next">
+            <a class="page-link" href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(PaginationInfo.ActualPage + 1))"
+               aria-label="Next">></a>
+        </li>
+        <li class="page-item @PaginationInfo.Next">
+            <a class="page-link" href="javascript: void(0);" @onclick="@(() => OnClick.InvokeAsync(PaginationInfo.TotalPages))"
+               aria-label="Last">>></a>
+        </li>
+    </ul>
+</nav>
+
+@code {
+    [Parameter]
+    public string pagename { get; set; }
+    [Parameter]
+    public int pagesize { get; set; }
+    [Parameter]
+    public string search { get; set; }
+    [Parameter]
+    public string order { get; set; }
+    [Parameter]
+    public string dir { get; set; }
+    [Parameter]
+    public PaginationInfoViewModel PaginationInfo { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnClick { get; set; }
+
+
+    private string firstlink { get; set; }
+    private string lastlink { get; set; }
+    private string prevlink { get; set; }
+    private string nextlink { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        firstlink = "./" + pagename + "/1/" + pagesize + "/" + search + "/" + order + "/" + dir;
+
+        lastlink = "./" + pagename + "/"+ PaginationInfo.TotalPages +"/" + pagesize + "/" + search + "/" + order + "/" + dir;
+
+        prevlink = "./" + pagename + "/" + (PaginationInfo.ActualPage - 1) + "/" + pagesize + "/" + search + "/" + order + "/" + dir;
+
+        nextlink = "./" + pagename + "/" + (PaginationInfo.ActualPage + 1) + "/" + pagesize + "/" + search + "/" + order + "/" + dir;
+    }
+}

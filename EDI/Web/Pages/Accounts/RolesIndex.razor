@@ -1,0 +1,162 @@
+﻿@page "/Accounts/rolesindex"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IAccountService accountService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject UserManager<ApplicationUser> userManager;
+@using Syncfusion.Blazor.Navigations;
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Buttons
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Roles</strong>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (roles == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridRole" @ref="Grid" DataSource="@roles" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="RoleItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="Name" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(RoleItemViewModel.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="40"></GridColumn>
+                            <GridColumn Field=@nameof(RoleItemViewModel.Users) HeaderText="Users" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25"></GridColumn>                            
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<RoleItemViewModel> Grid;
+
+    IEnumerable<RoleItemViewModel> roles;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allroles = await Task.FromResult(identityContext.Roles.ToList());
+
+            this.rowid = string.Empty;
+
+            List<RoleItemViewModel> pivm = new List<RoleItemViewModel>();
+
+            foreach (var ppl in allroles)
+            {
+                var roleitem = new RoleItemViewModel();
+
+                roleitem.Id = ppl.Id;
+                roleitem.Name = ppl.Name;
+                roleitem.Users = identityContext.UserRoles.Where(p => p.RoleId == ppl.Id).Count();               
+
+                pivm.Add(roleitem);
+            }
+
+            roles = pivm;
+        }
+    }
+
+    private string rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<RoleItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridRole_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridRole_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridRole_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridRole_add")
+        {
+            NavigationManager.NavigateTo("./Accounts/newrole");
+        }
+        if (args.Item.Id == "GridRole_edit")
+        {
+            NavigationManager.NavigateTo("./Accounts/editrole/" + this.rowid);
+        }
+        if (args.Item.Id == "GridRole_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await accountService.DeleteRoleAsync(this.rowid);
+
+            var tmp = new List<RoleItemViewModel>();
+            foreach (var item in roles)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.roles = tmp;
+            this.rowid = string.Empty;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<RoleItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./accounts/editrole/" + this.rowid);
+    }
+}
