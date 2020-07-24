@@ -969,6 +969,12 @@ header.logincontainer-header a.help-logo {
     margin: 20px 0 0 0;
 }
 
+@media (max-width: 640px) {
+    .app-header.navbar .navbar-brand {
+        position: absolute;
+    }
+}
+
 .loginnavbar .brand {
     float: left;
     display: block;
@@ -1126,4 +1132,14 @@ form {
 a {
     color: #0088cc;
     text-decoration: none;
+}
+
+.headertitle {
+    display: block;
+}
+
+@media (max-width:991px) {
+    .headertitle {
+        display: none;
+    }
 }
