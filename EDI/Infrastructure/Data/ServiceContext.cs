@@ -19,6 +19,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
         public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
         public virtual DbSet<FormConfigurations> FormConfigurations { get; set; }
+        public virtual DbSet<Site> Site { get; set; }
         public virtual DbSet<CustomerAccess> CustomerAccess { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -206,6 +207,19 @@ namespace EDI.Infrastructure.Data
                 .HasMany(e => e.Customers1)
                 .WithOne(e => e.Province1)
                 .HasForeignKey(e => e.ShippingProvinceID);
+
+
+            modelBuilder.Entity<Site>()
+                .Property(e => e.SiteName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Site>()
+                .Property(e => e.Description)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Site>()
+                .Property(e => e.CoordinatorId)
+                .IsUnicode(false);
         }
     }
 }

@@ -4,14 +4,16 @@ using EDI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EDI.Infrastructure.DaEDI.Migrations
+namespace EDI.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ServiceContext))]
-    partial class ServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20200804193414_SiteModel")]
+    partial class SiteModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -649,23 +651,12 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("SiteId")
                         .HasColumnType("int");
@@ -676,7 +667,7 @@ namespace EDI.Infrastructure.DaEDI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sites","EDI");
+                    b.ToTable("Site");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.SystemConfigurations", b =>

@@ -4,14 +4,16 @@ using EDI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EDI.Infrastructure.DaEDI.Migrations
+namespace EDI.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ServiceContext))]
-    partial class ServiceContextModelSnapshot : ModelSnapshot
+    [Migration("20200804193651_CreatedDateFieldstoSiteModel")]
+    partial class CreatedDateFieldstoSiteModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -676,7 +678,7 @@ namespace EDI.Infrastructure.DaEDI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sites","EDI");
+                    b.ToTable("Site");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.SystemConfigurations", b =>
