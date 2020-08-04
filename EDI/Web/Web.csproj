@@ -56,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\EDI\" />
     <Folder Include="wwwroot\data\" />
     <Folder Include="wwwroot\Download\Invoices\" />
     <Folder Include="wwwroot\Upload\2019\" />

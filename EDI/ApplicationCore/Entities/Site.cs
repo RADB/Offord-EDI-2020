@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EDI.Web.Models.EDI
+namespace EDI.ApplicationCore.Entities
 {
     public partial class Site
     {
