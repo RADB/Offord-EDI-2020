@@ -4,24 +4,21 @@ using System.Collections.Generic;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Site:BaseEntity
+    public partial class School:BaseEntity
     {
-        public Site()
-        {
-            Schools = new HashSet<School>();
-        }
-        public string SiteNumber { get; set; }
-        public string SiteName { get; set; }
+        public string SchoolNumber { get; set; }
+        public string SchoolName { get; set; }
+        public int CountryId { get; set; }
+        public int ProvinceId { get; set; }
+        public int SiteId { get; set; }
+        public string City { get; set; }
+        public bool? Elpschool { get; set; }
         public string Description { get; set; }
-        /// <summary>
-        /// guid from EDI.Identity.dbo.ASPNETUsers
-        /// </summary>
-        public string CoordinatorId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
-        public virtual ICollection<School> Schools { get; set; }
+        public virtual Site Site { get; set; }
     }
 }

@@ -6,12 +6,32 @@
    "IdReplace": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
-   "OutputContextPath": "",
-   "OutputPath": "Entities",
-   "ProjectRootNamespace": "EDI.ApplicationCore",
+   "OutputContextPath": "Data",
+   "OutputPath": null,
+   "ProjectRootNamespace": "EDI.Infrastructure",
    "SelectedHandlebarsLanguage": 0,
-   "SelectedToBeGenerated": 2,
+   "SelectedToBeGenerated": 1,
    "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Country]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[DateDimension]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[FormConfigurations]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[Province]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProvinceType]"
+      },
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Schools]"
@@ -22,7 +42,7 @@
       }
    ],
    "UseDatabaseNames": false,
-   "UseDbContextSplitting": false,
+   "UseDbContextSplitting": true,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseInflector": true,
