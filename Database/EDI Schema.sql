@@ -5,9 +5,7 @@ GO
 CREATE SCHEMA [EDI]
 GO
 
-
-
-/****** Object:  Table [EDI].[Sites]    Script Date: 8/4/2020 2:38:05 PM ******/
+/****** Object:  Table [EDI].[Sites]    Script Date: 8/4/2020 3:04:25 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -19,7 +17,7 @@ CREATE TABLE [EDI].[Sites](
 	[SiteName] [nvarchar](100) NULL,
 	[Description] [nvarchar](max) NULL,
 	[CoordinatorID] [nvarchar](450) NULL,
-	[CreatedDate] [datetime] NULL,
+	[CreatedDate] [datetime] NOT NULL,
  CONSTRAINT [PK_Sites] PRIMARY KEY CLUSTERED 
 (
 	[SiteID] ASC
@@ -27,5 +25,10 @@ CREATE TABLE [EDI].[Sites](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
+ALTER TABLE [EDI].[Sites] ADD  CONSTRAINT [DF_Sites_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'guid from EDI.Identity.dbo.ASPNETUsers' , @level0type=N'SCHEMA',@level0name=N'EDI', @level1type=N'TABLE',@level1name=N'Sites', @level2type=N'COLUMN',@level2name=N'CoordinatorID'
 GO
+
+

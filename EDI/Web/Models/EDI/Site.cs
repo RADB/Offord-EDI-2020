@@ -13,6 +13,6 @@ namespace EDI.Web.Models.EDI
         /// guid from EDI.Identity.dbo.ASPNETUsers
         /// </summary>
         public string CoordinatorId { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
