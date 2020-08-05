@@ -37,9 +37,11 @@
     {
         base.OnInitialized();
 
-        treedata.Add(new TreeData { nodeId = "01", nodeText = "Administration", iconCss = "icon-globe icon" });
+        treedata.Add(new TreeData { nodeId = "01", nodeText = "Administration", iconCss = "icon-globe icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "01-01", nodeText = "Sites", iconCss = "icon-list icon", pid = "01" });
+        treedata.Add(new TreeData { nodeId = "01-02", nodeText = "Schools", iconCss = "icon-organization icon", pid = "01" });
         treedata.Add(new TreeData { nodeId = "02", nodeText = "Screens", iconCss = "icon-docs icon" });
-        treedata.Add(new TreeData { nodeId = "03", nodeText = "Maintenance", iconCss = "icon-info icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "03", nodeText = "Maintenance", iconCss = "icon-info icon" });
         treedata.Add(new TreeData { nodeId = "04", nodeText = "Accounts", iconCss = "icon-list icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Users", iconCss = "icon-people icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Roles", iconCss = "icon-organization icon", pid = "04" });
@@ -48,7 +50,15 @@
 
     private void onSelect(NodeSelectEventArgs args)
     {
-        if (args.NodeData.Id == "04-01")
+        if (args.NodeData.Id == "01-01")
+        {
+            NavigationManager.NavigateTo("./sites/index");
+        }
+        else if (args.NodeData.Id == "01-02")
+        {
+            NavigationManager.NavigateTo("./schools/index");
+        }
+        else if (args.NodeData.Id == "04-01")
         {
             NavigationManager.NavigateTo("./accounts/index");
         }

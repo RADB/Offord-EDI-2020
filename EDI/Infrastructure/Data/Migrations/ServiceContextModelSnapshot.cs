@@ -344,9 +344,6 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int>("ProvinceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProvincesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SchoolName")
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
@@ -361,8 +358,6 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
-
-                    b.HasIndex("ProvincesId");
 
                     b.HasIndex("SiteId");
 
@@ -467,10 +462,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Provinces", "Provinces")
-                        .WithMany("Schools")
-                        .HasForeignKey("ProvincesId");
 
                     b.HasOne("EDI.ApplicationCore.Entities.Sites", "Sites")
                         .WithMany("Schools")

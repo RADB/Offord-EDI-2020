@@ -6,11 +6,6 @@ namespace EDI.ApplicationCore.Entities
 {
     public partial class Provinces : BaseEntity
     {
-        public Provinces()
-        {
-            Schools = new HashSet<Schools>();
-        }
-
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
@@ -38,6 +33,5 @@ namespace EDI.ApplicationCore.Entities
         public virtual Countries Country { get; set; }
 
         public virtual ProvinceType ProvinceType { get; set; }
-        public virtual ICollection<Schools> Schools { get; set; }
     }
 }

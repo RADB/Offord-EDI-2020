@@ -283,6 +283,39 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetUsers()
+        {
+            await LogUsername();
+            Log.Information("GetUsers started by:" + _username);
+
+            try
+            {
+                var users = _accountRepository.ListAllUsers().OrderBy(t => t.FirstName);
+
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                var ordered = users.OrderBy(t => t.FirstName);
+
+                foreach (ApplicationUser user in ordered)
+                {
+                    items.Add(new SelectListItem() { Value = user.Id, Text = user.FirstName + " " + user.LastName});
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetUsers failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
         public int GetDuplicateCount(string email)
         {
             try
@@ -352,75 +385,6 @@ namespace EDI.Web.Services
             catch (Exception ex)
             {
                 Log.Error("UpdateAccountAsync failed:" + ex.Message);
-            }
-        }
-
-        public async Task<IEnumerable<SelectListItem>> GetCountries()
-        {
-            await LogUsername();
-            Log.Information("GetCountries started by:" + _username);
-
-            try
-            {
-                var countries = await _countryRepository.ListAllAsync();
-
-                var items = new List<SelectListItem>
-                {
-                    new SelectListItem() { Value = "0", Text = "Choose One...", Selected = true }
-                };
-                var ordered = countries.OrderBy(t => t.Name);
-
-                foreach (Countries org in ordered)
-                {
-                    items.Add(new SelectListItem() { Value = org.Id.ToString(), Text = org.Name });
-                }
-
-                return items;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("GetCountries failed:" + ex.Message);
-
-                var vm = new List<SelectListItem>();
-
-                return vm;
-            }
-        }
-
-        public async Task<IEnumerable<SelectListItem>> GetProvinces(int countryid)
-        {
-            await LogUsername();
-            Log.Information("GetProvinces started by:" + _username);
-
-            try
-            {
-                var items = new List<SelectListItem>
-                {
-                    new SelectListItem() { Value = "0", Text = "Choose One...", Selected = true }
-                };
-
-                if (countryid > 0)
-                {
-                    var filterSpecification = new ProvinceFilterSpecification(countryid);
-                    var province = await _provinceRepository.ListAsync(filterSpecification);
-
-                    var ordered = province.OrderBy(t => t.Name);
-
-                    foreach (Provinces prov in ordered)
-                    {
-                        items.Add(new SelectListItem() { Value = prov.Id.ToString(), Text = prov.Name });
-                    }
-                }
-
-                return items;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("GetProvinces failed:" + ex.Message);
-
-                var vm = new List<SelectListItem>();
-
-                return vm;
             }
         }
 
@@ -570,7 +534,6 @@ namespace EDI.Web.Services
             {
                 Log.Error("CreateRoleAsync failed:" + ex.Message);
             }
-
         }
     }
 }

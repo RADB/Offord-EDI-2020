@@ -1,0 +1,93 @@
+﻿@page "/Sites/New"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject ISiteService SiteService
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>New Site</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <SiteForm @ref="siteform1" SiteModel="@SiteModel" HandleValidSubmit="HandleValidSubmit" />
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private SiteItemViewModel SiteModel { get; set; } = new SiteItemViewModel();
+
+    SiteForm siteform1 = new SiteForm();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = await SiteService.GetDuplicateCount(SiteModel.SiteNumber);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same Site has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            await SiteService.CreateSiteAsync(siteform1.SiteModel);
+
+            Message = "New Site added successfully.";
+            toastService.ShowSuccess(Message);
+            SiteModel = new SiteItemViewModel();
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./Sites/index");
+    }
+
+    private async void Reset()
+    {
+        SiteModel = new SiteItemViewModel();
+        StateHasChanged();
+    }
+}

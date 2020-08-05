@@ -25,7 +25,5 @@ namespace EDI.ApplicationCore.Entities
         public virtual Sites Sites { get; set; }
 
         public virtual Countries Countries { get; set; }
-
-        public virtual Provinces Provinces { get; set; }
     }
 }

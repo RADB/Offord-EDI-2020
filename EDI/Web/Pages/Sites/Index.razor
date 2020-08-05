@@ -1,0 +1,178 @@
+﻿@page "/Sites/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ISiteService siteService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Sites Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (sites == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridSite" @ref="Grid" DataSource="@sites" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="SiteItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="SiteNumber" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(SiteItemViewModel.SiteNumber) HeaderText="Site #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SiteItemViewModel.SiteName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SiteItemViewModel.Description) HeaderText="Description" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SiteItemViewModel.CoordinatorName) HeaderText="Coordinator" Width="30"></GridColumn>                            
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<SiteItemViewModel> Grid;
+
+    IEnumerable<SiteItemViewModel> sites;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allsites = await Task.FromResult(dbContext.Sites.OrderBy(p => p.SiteNumber).ToList());
+
+            List<SiteItemViewModel> sivm = new List<SiteItemViewModel>();
+
+            foreach (var site in allsites)
+            {
+                var asite = new SiteItemViewModel();
+
+                asite.Id = site.Id;
+                asite.SiteName = site.SiteName;
+                asite.SiteNumber = site.SiteNumber;
+                asite.Description = site.Description;
+                if (!string.IsNullOrEmpty(site.CoordinatorId))
+                {
+                    var account = identityContext.Users.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
+                    asite.CoordinatorName = account.FirstName + " " + account.LastName;
+                }
+
+                sivm.Add(asite);
+            }
+
+            this.rowid = 0;
+
+            sites = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<SiteItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridSite_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridSite_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridSite_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridSite_add")
+        {
+            NavigationManager.NavigateTo("./sites/new");
+            //NewInvoice();
+        }
+        if (args.Item.Id == "GridSite_edit")
+        {
+            NavigationManager.NavigateTo("./sites/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridSite_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            var schools = dbContext.Schools.Where(p => p.SiteId == this.rowid).ToList();
+
+            if (schools != null && schools.Count() > 0)
+            {
+                toastService.ShowError("This item is referenced by school - " + schools.First().SchoolName);
+            }
+            else
+            {
+                await siteService.DeleteSiteAsync(this.rowid);
+
+                var tmp = new List<SiteItemViewModel>();
+                foreach (var item in sites)
+                {
+                    if (item.Id != rowid)
+                        tmp.Add(item);
+                }
+                this.sites = tmp;
+                this.rowid = 0;
+
+                this.Grid.Refresh();
+                StateHasChanged();
+            }
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<SiteItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./sites/edit/" + this.rowid);
+    }
+}

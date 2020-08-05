@@ -1,0 +1,78 @@
+﻿@inject NavigationManager NavigationManager
+@inject ISiteService siteService
+@inject IAccountService accountService
+@inject ServiceContext dbContext;
+
+<EditForm Model="@SiteModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="SiteNumber">Site Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="SiteModel.SiteNumber" class="col-md-7 form-control" placeholder="Site Number" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="SiteName">Site Name: </label>
+            <input type="text" @bind-value="SiteModel.SiteName" class="col-md-7 form-control" placeholder="Name" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Description">Description: </label>
+            <textarea class="col-md-7 col-form-label" rows="8" @bind="SiteModel.Description" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Coordinate">Coordinate: </label>
+            <select class="col-md-7" value="@coordinateid" @onchange="@(e =>CoordinateChange(e))">
+                @if (Coordinates != null)
+                {
+                    @foreach (var option in Coordinates)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public SiteItemViewModel SiteModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public IEnumerable<SelectListItem> Coordinates { get; set; }
+
+    public string coordinateid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Coordinates = await accountService.GetUsers();
+        coordinateid = SiteModel.CoordinatorId;
+
+        if (!string.IsNullOrEmpty(SiteModel.CoordinatorId))
+        {
+            coordinateid = SiteModel.CoordinatorId;
+        }
+    }
+
+    private void CoordinateChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SiteModel.CoordinatorId = null;
+
+        if (!string.IsNullOrEmpty(selectedString))
+        {
+            SiteModel.CoordinatorId = selectedString;
+        }
+    }
+}
