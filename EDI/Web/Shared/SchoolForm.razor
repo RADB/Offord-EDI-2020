@@ -1,1 +1,167 @@
-﻿
+﻿@inject NavigationManager NavigationManager
+@inject ISiteService siteService
+@inject ISchoolService schoolService
+@inject ISharedService sharedService
+@inject ServiceContext dbContext;
+
+<EditForm Model="@SchoolModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="SchoolNumber">School Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="SchoolModel.SchoolNumber" class="col-md-7 form-control" placeholder="School Number" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="SchoolName">School Name: </label>
+            <input type="text" @bind-value="SchoolModel.SchoolName" class="col-md-7 form-control" placeholder="Name" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Country">Country<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@countryid" @onchange="@(e =>CountryChange(e))">
+                @if (Countries != null)
+                {
+                    @foreach (var option in Countries)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Province">Province<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@provinceid" @onchange="@(e =>ProvinceChange(e))">
+                @if (Provinces != null)
+                {
+                    @foreach (var option in Provinces)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="City">City: </label>
+            <input type="text" @bind-value="SchoolModel.City" class="col-md-7 form-control" placeholder="City" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Description">Description: </label>
+            <textarea class="col-md-7 col-form-label" rows="8" @bind="SchoolModel.Description" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Elpschool">Elp School: </label>
+            <input type="checkbox" value="@SchoolModel.Elpschool" @onchange="@(e =>CheckElpschoolChange(e))" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Site">Site<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@siteid" @onchange="@(e =>SiteChange(e))">
+                @if (Sites != null)
+                {
+                    @foreach (var option in Sites)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public SchoolItemViewModel SchoolModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public IEnumerable<SelectListItem> Countries { get; set; }
+
+    public IEnumerable<SelectListItem> Provinces { get; set; }
+
+    public IEnumerable<SelectListItem> Sites { get; set; }
+
+    public string countryid { get; set; }
+
+    public string provinceid { get; set; }
+
+    public string siteid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Sites = await siteService.GetSites();
+        siteid = SchoolModel.SiteId.ToString();
+
+        Countries = await sharedService.GetCountries();
+
+        countryid = SchoolModel.CountryId.ToString();
+        Provinces = await sharedService.GetProvinces(SchoolModel.CountryId);
+
+
+        provinceid = SchoolModel.ProvinceId.ToString();
+    }
+
+    private void SiteChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SchoolModel.SiteId = 0;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            SchoolModel.SiteId = ctid;
+        }
+    }
+
+    private async Task CountryChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        provinceid = "0";
+
+        Provinces = await sharedService.GetProvinces(0);
+
+        SchoolModel.CountryId = 0;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            SchoolModel.CountryId = ctid;
+            Provinces = await sharedService.GetProvinces(ctid);
+        }
+    }
+
+    private void ProvinceChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SchoolModel.ProvinceId = 0;
+
+        if (int.TryParse(selectedString, out int itid))
+        {
+            SchoolModel.ProvinceId = itid;
+        }
+    }
+
+    private void CheckElpschoolChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SchoolModel.Elpschool = null;
+
+        if (bool.TryParse(selectedString, out bool elpschool))
+        {
+            SchoolModel.Elpschool = elpschool;
+        }
+    }
+}

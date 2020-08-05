@@ -10,7 +10,7 @@ namespace EDI.Web.Models
 
         [Required(ErrorMessage = "School Number is required.")]
         [StringLength(3)]
-        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Digits only.")]
+        [RegularExpression(@"^[0-9]+$", ErrorMessage = "School number can only contain numbers.")]
         public string SchoolNumber { get; set; }
         public string SchoolName { get; set; }
         [Required(ErrorMessage = "Country is required.")]

@@ -97,7 +97,13 @@
                 aschool.SiteNumber = site.SiteNumber;
 
                 aschool.CountryId = school.CountryId;
+                var country = dbContext.Countries.Where(p => p.Id == school.CountryId).FirstOrDefault();
+                aschool.Country = country.Name;
+
                 aschool.ProvinceId = school.ProvinceId;
+                var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+                aschool.Province = province.Name;
+
                 aschool.City = school.City;
                 aschool.Elpschool = school.Elpschool;
                 aschool.ElpschoolValue = school.Elpschool.HasValue && school.Elpschool.Value ? "Yes" : "No";
