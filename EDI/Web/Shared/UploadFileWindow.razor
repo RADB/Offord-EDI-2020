@@ -1,5 +1,4 @@
 ﻿@using Syncfusion.Blazor.Inputs
-@inject ICustomerService customerService
 @inject IModalService ModalService
 
 
@@ -40,7 +39,8 @@
         {
             if (DataName == "Customers")
             {
-                ErrorViewModel result = await customerService.UploadCustomerData(file);
+                //ErrorViewModel result = await customerService.UploadCustomerData(file);
+                ErrorViewModel result = new ErrorViewModel();
 
                 if (string.IsNullOrEmpty(result.errormessage))
                 {

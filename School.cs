@@ -20,5 +20,9 @@ namespace EDI.ApplicationCore.Entities
         public string ModifiedBy { get; set; }
 
         public virtual Site Site { get; set; }
+
+        public virtual Country Country { get; set; }
+
+        public virtual Province Province { get; set; }
     }
 }

@@ -4,12 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Province : BaseEntity
+    public partial class Provinces : BaseEntity
     {
-        public Province()
+        public Provinces()
         {
-            Customers = new HashSet<Customers>();
-            Customers1 = new HashSet<Customers>();
+            Schools = new HashSet<Schools>();
         }
 
         [Required]
@@ -36,14 +35,9 @@ namespace EDI.ApplicationCore.Entities
 
         public DateTime ModifiedDate { get; set; }
 
-        public virtual Country Country { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Customers> Customers { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Customers> Customers1 { get; set; }
+        public virtual Countries Country { get; set; }
 
         public virtual ProvinceType ProvinceType { get; set; }
+        public virtual ICollection<Schools> Schools { get; set; }
     }
 }

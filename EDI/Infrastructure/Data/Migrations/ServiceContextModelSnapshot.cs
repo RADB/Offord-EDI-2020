@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace EDI.Infrastructure.DaEDI.Migrations
+namespace EDI.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ServiceContext))]
     partial class ServiceContextModelSnapshot : ModelSnapshot
@@ -19,7 +19,7 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Country", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Countries", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,339 +62,7 @@ namespace EDI.Infrastructure.DaEDI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Country");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Currency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Currency");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.CustomerAccess", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("BillingAddress1")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("BillingAddress2")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("BillingCity")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("BillingCountry")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("BillingCountryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BillingPostal")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("BillingProvince")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("BillingProvinceID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Contact")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Contact1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Contact2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Currency")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<int?>("CurrencyID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeliveryInstructions")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Fax")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<bool?>("HasShippingAddress")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("InternalNotes")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("Mobile")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ShippingAddress1")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("ShippingAddress2")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("ShippingCity")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("ShippingContact")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ShippingCountry")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("ShippingCountryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShippingPhone")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ShippingPostal")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ShippingProvince")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
-
-                    b.Property<int?>("ShippingProvinceID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TollFree")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Website")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CustomerAccess");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Customers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AccountNumber")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("BillingAddress1")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("BillingAddress2")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("BillingCity")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<int?>("BillingCountryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("BillingPostal")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<int?>("BillingProvinceID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Contact1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Contact2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CurrencyID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeliveryInstructions")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Fax")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<bool?>("HasShippingAddress")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("InternalNotes")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("LastSentDate")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Mobile")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("varchar(50)")
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ShippingAddress1")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("ShippingAddress2")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("ShippingCity")
-                        .HasColumnType("varchar(max)")
-                        .IsUnicode(false);
-
-                    b.Property<string>("ShippingContact")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ShippingCountryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ShippingPhone")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("ShippingPostal")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<int?>("ShippingProvinceID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TollFree")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Website")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BillingCountryID");
-
-                    b.HasIndex("BillingProvinceID");
-
-                    b.HasIndex("CurrencyID");
-
-                    b.HasIndex("ShippingCountryID");
-
-                    b.HasIndex("ShippingProvinceID");
-
-                    b.ToTable("Customers");
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.DateDimension", b =>
@@ -557,7 +225,40 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                     b.ToTable("FormConfigurations");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.ProvinceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProvinceType");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Provinces", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -602,43 +303,73 @@ namespace EDI.Infrastructure.DaEDI.Migrations
 
                     b.HasIndex("ProvinceTypeId");
 
-                    b.ToTable("Province");
+                    b.ToTable("Provinces");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.ProvinceType", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Schools", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                    b.Property<string>("City")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<bool?>("Elpschool")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
 
-                    b.Property<DateTime>("ModifiedDate")
+                    b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProvincesId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SchoolName")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<string>("SchoolNumber")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProvinceType");
+                    b.HasIndex("CountryId");
+
+                    b.HasIndex("ProvincesId");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("Schools","EDI");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Site", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Sites", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -650,8 +381,8 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -661,16 +392,17 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                         .IsUnicode(false);
 
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
 
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SiteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SiteName")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<string>("SiteNumber")
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
 
@@ -715,33 +447,10 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                     b.ToTable("SystemConfigurations");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Customers", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Provinces", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Country", "Country")
-                        .WithMany("Customers")
-                        .HasForeignKey("BillingCountryID");
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Province", "Province")
-                        .WithMany("Customers")
-                        .HasForeignKey("BillingProvinceID");
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Currency", "Currency")
-                        .WithMany("Customers")
-                        .HasForeignKey("CurrencyID");
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Country", "Country1")
-                        .WithMany("Customers1")
-                        .HasForeignKey("ShippingCountryID");
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Province", "Province1")
-                        .WithMany("Customers1")
-                        .HasForeignKey("ShippingProvinceID");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
-                {
-                    b.HasOne("EDI.ApplicationCore.Entities.Country", "Country")
-                        .WithMany("Province")
+                    b.HasOne("EDI.ApplicationCore.Entities.Countries", "Country")
+                        .WithMany("Provinces")
                         .HasForeignKey("CountryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -749,6 +458,25 @@ namespace EDI.Infrastructure.DaEDI.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.ProvinceType", "ProvinceType")
                         .WithMany("Province")
                         .HasForeignKey("ProvinceTypeId");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Schools", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Countries", "Countries")
+                        .WithMany("Schools")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Provinces", "Provinces")
+                        .WithMany("Schools")
+                        .HasForeignKey("ProvincesId");
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Sites", "Sites")
+                        .WithMany("Schools")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

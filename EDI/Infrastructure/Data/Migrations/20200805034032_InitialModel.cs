@@ -193,8 +193,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     CreatedBy = table.Column<string>(unicode: false, nullable: true),
                     ModifiedDate = table.Column<DateTime>(nullable: true),
-                    ModifiedBy = table.Column<string>(unicode: false, nullable: true),
-                    ProvincesId = table.Column<int>(nullable: true)
+                    ModifiedBy = table.Column<string>(unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -206,8 +205,8 @@ namespace EDI.Infrastructure.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Schools_Provinces_ProvincesId",
-                        column: x => x.ProvincesId,
+                        name: "FK_Schools_Provinces_ProvinceId",
+                        column: x => x.ProvinceId,
                         principalTable: "Provinces",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -235,9 +234,9 @@ namespace EDI.Infrastructure.Data.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schools_ProvincesId",
+                name: "IX_Schools_ProvinceId",
                 table: "Schools",
-                column: "ProvincesId");
+                column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schools_SiteId",

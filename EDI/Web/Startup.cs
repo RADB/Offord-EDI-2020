@@ -83,7 +83,6 @@ namespace EDI.Web
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IAsyncIdentityRepository), typeof(EfIdentityRepository));
 
-            services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IFormService, FormService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -109,13 +109,13 @@
 
                 if (ppl.CountryID.HasValue)
                 {
-                    var country = dbContext.Country.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault();
+                    var country = dbContext.Countries.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault();
                     accountitem.Country = country.Name;
                 }
 
                 if (ppl.ProvinceID.HasValue)
                 {
-                    var province = dbContext.Province.Where(p => p.Id == ppl.ProvinceID.Value).FirstOrDefault();
+                    var province = dbContext.Provinces.Where(p => p.Id == ppl.ProvinceID.Value).FirstOrDefault();
                     accountitem.Province = province.Name;
                 }
 
