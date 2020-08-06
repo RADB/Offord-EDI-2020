@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Provinces : BaseEntity
+    public partial class Province : BaseEntity
     {
         [Required]
         [StringLength(100)]
@@ -30,7 +30,7 @@ namespace EDI.ApplicationCore.Entities
 
         public DateTime ModifiedDate { get; set; }
 
-        public virtual Countries Country { get; set; }
+        public virtual Country Country { get; set; }
 
         public virtual ProvinceType ProvinceType { get; set; }
     }

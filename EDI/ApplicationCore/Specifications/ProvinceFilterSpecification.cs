@@ -6,7 +6,7 @@ using EDI.ApplicationCore.Entities;
 
 namespace EDI.ApplicationCore.Specifications
 {
-    public class ProvinceFilterSpecification : BaseSpecification<Provinces>
+    public class ProvinceFilterSpecification : BaseSpecification<Province>
     {
         public ProvinceFilterSpecification(int countryid)
             : base(i => i.CountryID == countryid

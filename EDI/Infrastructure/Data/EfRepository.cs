@@ -108,9 +108,9 @@ namespace EDI.Infrastructure.Data
             return datedimension;
         }
 
-        public IReadOnlyList<Sites> ListAllSites()
+        public IReadOnlyList<Site> ListAllSites()
         {
-            return _dbContext.Set<Sites>().ToList();
+            return _dbContext.Set<Site>().ToList();
         }
     }
 }

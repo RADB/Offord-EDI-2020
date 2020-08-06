@@ -27,7 +27,7 @@ namespace EDI.Web.Services
     public class SiteService: ISiteService
     {
         private readonly ILogger<SiteService> _logger;
-        private readonly IAsyncRepository<Sites> _siteRepository;
+        private readonly IAsyncRepository<Site> _siteRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private EDIAppSettings EDIppSettings { get; set; }
@@ -43,7 +43,7 @@ namespace EDI.Web.Services
         public SiteService(
             UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
-            IAsyncRepository<Sites> siteRepository,
+            IAsyncRepository<Site> siteRepository,
             IAsyncIdentityRepository accountRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
@@ -122,7 +122,7 @@ namespace EDI.Web.Services
 
             try
             {
-                var _site = new Sites();
+                var _site = new Site();
 
                 _site.SiteNumber = site.SiteNumber;
                 _site.SiteName = site.SiteName;

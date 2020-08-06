@@ -8,7 +8,7 @@ namespace EDI.ApplicationCore.Entities
     {
         public ProvinceType()
         {
-            Province = new HashSet<Provinces>();
+            Province = new HashSet<Province>();
         }
 
         [Required]
@@ -28,6 +28,6 @@ namespace EDI.ApplicationCore.Entities
         public DateTime ModifiedDate { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Provinces> Province { get; set; }
+        public virtual ICollection<Province> Province { get; set; }
     }
 }

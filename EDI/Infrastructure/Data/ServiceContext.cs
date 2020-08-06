@@ -12,22 +12,22 @@ namespace EDI.Infrastructure.Data
         }
 
         public virtual DbSet<DateDimension> DateDimension { get; set; }
-        public virtual DbSet<Countries> Countries { get; set; }
-        public virtual DbSet<Provinces> Provinces { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
-        public virtual DbSet<Schools> Schools { get; set; }
-        public virtual DbSet<Sites> Sites { get; set; }
+        public virtual DbSet<School> Schools { get; set; }
+        public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
         public virtual DbSet<FormConfigurations> FormConfigurations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Countries>()
+            modelBuilder.Entity<Country>()
                 .HasMany(e => e.Provinces)
                 .WithOne(e => e.Country)
                 .HasForeignKey(e => e.CountryID);
 
-            modelBuilder.Entity<Countries>()
+            modelBuilder.Entity<Country>()
                 .HasMany(e => e.Schools)
                 .WithOne(e => e.Countries)
                 .HasForeignKey(e => e.CountryId);
@@ -89,59 +89,46 @@ namespace EDI.Infrastructure.Data
             //    .HasMany(e => e.Schools)
             //    .WithOne(e => e.Provinces)
             //    .HasForeignKey(e => e.ProvinceId);
+            
+            modelBuilder.Entity<Site>(entity =>
+            {
+                entity.ToTable("Sites", "EDI");
 
-            modelBuilder.Entity<Sites>()
-                .Property(e => e.SiteNumber)
-                .IsUnicode(false);
+                entity.Property(e => e.CoordinatorId).IsUnicode(false);
 
-            modelBuilder.Entity<Sites>()
-                .Property(e => e.SiteName)
-                .IsUnicode(false);
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
 
-            modelBuilder.Entity<Sites>()
-                .Property(e => e.CoordinatorId)
-                .IsUnicode(false);
+                entity.Property(e => e.Description).IsUnicode(false);
 
-            modelBuilder.Entity<Sites>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
-            modelBuilder.Entity<Sites>()
-                .Property(e => e.CreatedBy)
-                .IsUnicode(false);
+                entity.Property(e => e.SiteName).IsUnicode(false);
 
-            modelBuilder.Entity<Sites>()
-                .Property(e => e.ModifiedBy)
-                .IsUnicode(false);
+                entity.Property(e => e.SiteNumber).IsUnicode(false);
 
-            modelBuilder.Entity<Sites>()
-                .HasMany(e => e.Schools)
-                .WithOne(e => e.Sites)
-                .HasForeignKey(e => e.SiteId);
+                entity.HasMany(e => e.Schools).WithOne(e => e.Sites).HasForeignKey(e => e.SiteId);
+            });
 
-            modelBuilder.Entity<Schools>()
-                .Property(e => e.SchoolNumber)
-                .IsUnicode(false);
+             modelBuilder.Entity<School>(entity =>
+            {
+                entity.ToTable("Schools", "EDI");
 
-            modelBuilder.Entity<Schools>()
-                .Property(e => e.SchoolName)
-                .IsUnicode(false);
+                entity.HasIndex(e => e.CountryId);
 
-            modelBuilder.Entity<Schools>()
-                .Property(e => e.City)
-                .IsUnicode(false);
+                entity.HasIndex(e => e.SiteId);
 
-            modelBuilder.Entity<Schools>()
-                .Property(e => e.Description)
-                .IsUnicode(false);
+                entity.Property(e => e.City).IsUnicode(false);
 
-            modelBuilder.Entity<Schools>()
-                .Property(e => e.CreatedBy)
-                .IsUnicode(false);
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
 
-            modelBuilder.Entity<Schools>()
-                .Property(e => e.ModifiedBy)
-                .IsUnicode(false);
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.Property(e => e.SchoolName).IsUnicode(false);
+
+                entity.Property(e => e.SchoolNumber).IsUnicode(false);
+            });
         }
     }
 }

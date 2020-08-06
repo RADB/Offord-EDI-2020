@@ -6,7 +6,7 @@ using EDI.ApplicationCore.Entities;
 
 namespace EDI.ApplicationCore.Specifications
 {
-    public class SchoolFilterSpecification : BaseSpecification<Schools>
+    public class SchoolFilterSpecification : BaseSpecification<School>
     {
         public SchoolFilterSpecification(string schoolnumbder)
             : base(i => i.SchoolNumber.ToLower().Trim() == schoolnumbder.ToLower().Trim())

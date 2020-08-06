@@ -37,8 +37,8 @@ namespace EDI.Web.Services
     {
         private readonly ILogger<AccountService> _logger;
         private readonly IAsyncIdentityRepository _accountRepository;
-        private readonly IAsyncRepository<Countries> _countryRepository;
-        private readonly IAsyncRepository<Provinces> _provinceRepository;
+        private readonly IAsyncRepository<Country> _countryRepository;
+        private readonly IAsyncRepository<Province> _provinceRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -58,8 +58,8 @@ namespace EDI.Web.Services
             ILoggerFactory loggerFactory,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IAsyncRepository<Countries> countryRepository,
-            IAsyncRepository<Provinces> provinceRepository,
+            IAsyncRepository<Country> countryRepository,
+            IAsyncRepository<Province> provinceRepository,
             IAsyncIdentityRepository accountRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,

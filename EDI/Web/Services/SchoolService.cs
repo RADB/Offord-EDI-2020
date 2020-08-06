@@ -23,7 +23,7 @@ namespace EDI.Web.Services
     public class SchoolService: ISchoolService
     {
         private readonly ILogger<SchoolService> _logger;
-        private readonly IAsyncRepository<Schools> _schoolRepository;
+        private readonly IAsyncRepository<School> _schoolRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private EDIAppSettings EDIppSettings { get; set; }
@@ -39,7 +39,7 @@ namespace EDI.Web.Services
         public SchoolService(
             UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
-            IAsyncRepository<Schools> schoolRepository,
+            IAsyncRepository<School> schoolRepository,
             IAsyncIdentityRepository accountRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
@@ -122,7 +122,7 @@ namespace EDI.Web.Services
 
             try
             {
-                var _school = new Schools();
+                var _school = new School();
 
                 _school.SchoolNumber = school.SchoolNumber;
                 _school.SchoolName = school.SchoolName;

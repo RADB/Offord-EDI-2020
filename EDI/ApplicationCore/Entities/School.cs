@@ -6,25 +6,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Sites", Schema = "EDI")]
-    public partial class Sites:BaseEntity
+    [Table("Schools", Schema = "EDI")]
+    public partial class School:BaseEntity
     {
-        public Sites()
-        {
-            Schools = new HashSet<Schools>();
-        }
-        public string SiteNumber { get; set; }
-        public string SiteName { get; set; }
+        public string SchoolNumber { get; set; }
+        public string SchoolName { get; set; }
+        public int CountryId { get; set; }
+        public int ProvinceId { get; set; }
+        public int SiteId { get; set; }
+        public string City { get; set; }
+        public bool? Elpschool { get; set; }
         public string Description { get; set; }
-        /// <summary>
-        /// guid from EDI.Identity.dbo.ASPNETUsers
-        /// </summary>
-        public string CoordinatorId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
 
-        public virtual ICollection<Schools> Schools { get; set; }
+        public virtual Site Sites { get; set; }
+
+        public virtual Country Countries { get; set; }
     }
 }

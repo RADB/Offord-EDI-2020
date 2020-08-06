@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Countries : BaseEntity
+    public partial class Country : BaseEntity
     {
-        public Countries()
+        public Country()
         {
-            Provinces = new HashSet<Provinces>();
-            Schools = new HashSet<Schools>();
+            Provinces = new HashSet<Province>();
+            Schools = new HashSet<School>();
         }
 
         public int ISO3DigitCountry { get; set; }
@@ -39,7 +39,7 @@ namespace EDI.ApplicationCore.Entities
         public string ModifiedBy { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Provinces> Provinces { get; set; }
-        public virtual ICollection<Schools> Schools { get; set; }
+        public virtual ICollection<Province> Provinces { get; set; }
+        public virtual ICollection<School> Schools { get; set; }
     }
 }

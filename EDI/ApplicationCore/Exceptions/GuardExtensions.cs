@@ -6,7 +6,7 @@ namespace Ardalis.GuardClauses
 {
     public static class SiteGuards
     {
-        public static void NullSite(this IGuardClause guardClause, int siteid, Sites sites)
+        public static void NullSite(this IGuardClause guardClause, int siteid, Site sites)
         {
             if (sites == null)
                 throw new SiteNotFoundException(siteid);
@@ -15,7 +15,7 @@ namespace Ardalis.GuardClauses
 
     public static class SchoolGuards
     {
-        public static void NullSchool(this IGuardClause guardClause, int schoolid, Schools schools)
+        public static void NullSchool(this IGuardClause guardClause, int schoolid, School schools)
         {
             if (schools == null)
                 throw new SchoolNotFoundException(schoolid);
