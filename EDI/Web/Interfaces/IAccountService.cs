@@ -23,6 +23,7 @@ namespace EDI.Web.Interfaces
         Task LockAccountAsync(string Id);
         Task<IEnumerable<SelectListItem>> GetRoles();
         Task<IEnumerable<SelectListItem>> GetUsers();
+        Task<IEnumerable<SelectListItem>> GetCoordinators();
         Task<AccountItemViewModel> GetProfile();
         Task CreateRoleAsync(RoleItemViewModel role);
         Task DeleteRoleAsync(string Id);

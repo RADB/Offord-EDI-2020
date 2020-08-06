@@ -50,6 +50,36 @@
                     </AccordionItems>
                 </SfAccordion>
             </div>
+            <br />
+            @if (schools != null)
+            {
+                <div class="col-md-11">
+                    <SfGrid ID="GridInvoice" @ref="Grid" DataSource="@schools" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"Search" })">
+                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>                        
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridColumns>
+                            <GridColumn HeaderText="School #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25">
+                                <Template>
+                                    @{
+                                        var school = (context as SchoolItemViewModel);
+                                        <a target="_blank" href="Schools/Edit/@school.Id">School @school.SchoolNumber</a>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.SchoolName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.Description) HeaderText="Description" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.Country) HeaderText="Country" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.Province) HeaderText="Province" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.City) HeaderText="City" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.SiteNumber) HeaderText="Site" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.ElpschoolValue) HeaderText="Elp School" Width="20"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            }
+            <br />
         </div>
     </div>
 </div>
@@ -64,6 +94,10 @@
 
     SiteForm siteform1 = new SiteForm();
 
+    SfGrid<SchoolItemViewModel> Grid;
+
+    IEnumerable<SchoolItemViewModel> schools;
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -75,7 +109,40 @@
         }
         else
         {
-            SiteModel = await siteService.GetSiteItem(Id);
+            SiteModel = await siteService.GetSiteItem(Id);            
+
+            var allschools = await Task.FromResult(dbContext.Schools.Where(p => p.SiteId == Id).OrderBy(p => p.SchoolNumber).ToList());
+
+            List<SchoolItemViewModel> sivm = new List<SchoolItemViewModel>();
+
+            foreach (var school in allschools)
+            {
+                var aschool = new SchoolItemViewModel();
+
+                aschool.Id = school.Id;
+                aschool.SchoolName = school.SchoolName;
+                aschool.SchoolNumber = school.SchoolNumber;
+                aschool.Description = school.Description;
+
+                var site = dbContext.Sites.Where(p => p.Id == school.SiteId).FirstOrDefault();
+                aschool.SiteNumber = site.SiteNumber;
+
+                aschool.CountryId = school.CountryId;
+                var country = dbContext.Countries.Where(p => p.Id == school.CountryId).FirstOrDefault();
+                aschool.Country = country.Name;
+
+                aschool.ProvinceId = school.ProvinceId;
+                var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+                aschool.Province = province.Name;
+
+                aschool.City = school.City;
+                aschool.Elpschool = school.Elpschool;
+                aschool.ElpschoolValue = school.Elpschool.HasValue && school.Elpschool.Value ? "Yes" : "No";
+
+                sivm.Add(aschool);
+            }
+
+            schools = sivm;
         }
     }
 

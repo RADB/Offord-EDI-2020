@@ -19,7 +19,7 @@ namespace EDI.Infrastructure.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Countries", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,15 +36,18 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("ISO2CountryCode")
                         .IsRequired()
+                        .HasColumnName("ISO2CountryCode")
                         .HasColumnType("nvarchar(2)")
                         .HasMaxLength(2);
 
                     b.Property<string>("ISO3CountryCode")
                         .IsRequired()
+                        .HasColumnName("ISO3CountryCode")
                         .HasColumnType("nvarchar(3)")
                         .HasMaxLength(3);
 
                     b.Property<int>("ISO3DigitCountry")
+                        .HasColumnName("ISO3DigitCountry")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -225,7 +228,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("FormConfigurations");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.ProvinceType", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Language", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -233,32 +236,42 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ModifiedBy")
+                    b.Property<string>("LanguageCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(3)")
+                        .HasMaxLength(3);
 
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("LanguageEnglish")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
+                    b.Property<string>("LanguageFrench")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Sequence")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("ProvinceType");
+                    b.ToTable("Languages","EDI");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Provinces", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -271,6 +284,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("CountryID")
+                        .HasColumnName("CountryID")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -306,7 +320,40 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Provinces");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Schools", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.ProvinceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProvinceType");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,7 +411,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Schools","EDI");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Sites", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Site", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -406,6 +453,48 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Sites","EDI");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.SpecialProblem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Sequence")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SpecialProblemCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(3)")
+                        .HasMaxLength(3);
+
+                    b.Property<string>("SpecialProblemEnglish")
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("SpecialProblemFrench")
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialProblems","EDI");
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.SystemConfigurations", b =>
                 {
                     b.Property<int>("Id")
@@ -442,9 +531,9 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("SystemConfigurations");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Provinces", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Countries", "Country")
+                    b.HasOne("EDI.ApplicationCore.Entities.Country", "Country")
                         .WithMany("Provinces")
                         .HasForeignKey("CountryID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -455,15 +544,15 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasForeignKey("ProvinceTypeId");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Schools", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Countries", "Countries")
+                    b.HasOne("EDI.ApplicationCore.Entities.Country", "Countries")
                         .WithMany("Schools")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EDI.ApplicationCore.Entities.Sites", "Sites")
+                    b.HasOne("EDI.ApplicationCore.Entities.Site", "Sites")
                         .WithMany("Schools")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)

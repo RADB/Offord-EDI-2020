@@ -316,6 +316,55 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetCoordinators()
+        {
+            await LogUsername();
+            Log.Information("GetCoordinators started by:" + _username);
+
+            try
+            {
+                var users = _accountRepository.ListAllUsers().OrderBy(t => t.FirstName);
+
+                var role = _identityContext.Roles.Where(p => p.Name == "Coordinator").FirstOrDefault();
+
+                var coordusers = _identityContext.UserRoles.Where(p => p.RoleId == role.Id).ToList();
+
+                var userlist = new List<ApplicationUser>();
+
+                foreach(var user in users)
+                {
+                    foreach(var coorduser in coordusers)
+                    {
+                        if(user.Id == coorduser.UserId)
+                        {
+                            userlist.Add(user);
+                        }
+                    }
+                }
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                var ordered = userlist.OrderBy(t => t.FirstName);
+
+                foreach (ApplicationUser user in ordered)
+                {
+                    items.Add(new SelectListItem() { Value = user.Id, Text = user.FirstName + " " + user.LastName });
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetCoordinators failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
         public int GetDuplicateCount(string email)
         {
             try
