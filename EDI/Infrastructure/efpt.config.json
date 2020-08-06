@@ -14,7 +14,7 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[Country]"
+         "Name": "[dbo].[Countries]"
       },
       {
          "HasPrimaryKey": true,
@@ -22,15 +22,15 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[FormConfigurations]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[Province]"
+         "Name": "[dbo].[Provinces]"
       },
       {
          "HasPrimaryKey": true,
          "Name": "[dbo].[ProvinceType]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Languages]"
       },
       {
          "HasPrimaryKey": true,
@@ -39,10 +39,14 @@
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Sites]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[SpecialProblems]"
       }
    ],
    "UseDatabaseNames": false,
-   "UseDbContextSplitting": true,
+   "UseDbContextSplitting": false,
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseInflector": true,

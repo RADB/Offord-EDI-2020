@@ -11,16 +11,24 @@
    "ProjectRootNamespace": "EDI.ApplicationCore",
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 2,
-   "Tables": [
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Schools]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Sites]"
-      }
-   ],
+  "Tables": [
+    {
+      "HasPrimaryKey": true,
+      "Name": "[EDI].[Schools]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[EDI].[Sites]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[EDI].[Languages]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[EDI].[SpecialProblems]"
+    }
+  ],
    "UseDatabaseNames": false,
    "UseDbContextSplitting": false,
    "UseFluentApiOnly": true,
