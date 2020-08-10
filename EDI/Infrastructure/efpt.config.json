@@ -30,6 +30,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[dbo].[Years]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI].[Languages]"
       },
       {
@@ -43,6 +47,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[SpecialProblems]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Teachers]"
       }
    ],
    "UseDatabaseNames": false,

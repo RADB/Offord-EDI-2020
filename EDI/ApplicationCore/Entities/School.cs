@@ -9,13 +9,18 @@ namespace EDI.ApplicationCore.Entities
     [Table("Schools", Schema = "EDI")]
     public partial class School:BaseEntity
     {
+        public School()
+        {
+            Teachers = new HashSet<Teacher>();
+        }
         public string SchoolNumber { get; set; }
+        public int? YearId { get; set; }
+
         public string SchoolName { get; set; }
         public int CountryId { get; set; }
         public int ProvinceId { get; set; }
         public int SiteId { get; set; }
         public string City { get; set; }
-        public bool? Elpschool { get; set; }
         public string Description { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
@@ -25,5 +30,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual Site Sites { get; set; }
 
         public virtual Country Countries { get; set; }
+        public virtual ICollection<Teacher> Teachers{ get; set; }
+        public virtual Year Year { get; set; }
     }
 }

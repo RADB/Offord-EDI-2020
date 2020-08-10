@@ -103,7 +103,7 @@ namespace EDI.Web.Services
                 _school.ProvinceId = school.ProvinceId;
                 _school.SiteId = school.SiteId;
                 _school.City = school.City;
-                _school.Elpschool = school.Elpschool;
+               // _school.Elpschool = school.Elpschool;
                 _school.ModifiedDate = DateTime.Now;
                 _school.ModifiedBy = _username;
 
@@ -131,7 +131,7 @@ namespace EDI.Web.Services
                 _school.ProvinceId = school.ProvinceId;
                 _school.SiteId = school.SiteId;
                 _school.City = school.City;
-                _school.Elpschool = school.Elpschool;
+               // _school.Elpschool = school.Elpschool;
                 _school.CreatedDate = DateTime.Now;
                 _school.CreatedBy = _username;
                 _school.ModifiedDate = DateTime.Now;
@@ -165,8 +165,7 @@ namespace EDI.Web.Services
                     CountryId = school.CountryId,
                     ProvinceId = school.ProvinceId,
                     SiteId = school.SiteId,
-                    City = school.City,
-                    Elpschool = school.Elpschool,
+                    City = school.City,                    
                     CreatedDate = school.CreatedDate,
                     CreatedBy = school.CreatedBy,
                     ModifiedDate = school.ModifiedDate,
