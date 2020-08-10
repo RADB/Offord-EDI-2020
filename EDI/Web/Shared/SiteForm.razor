@@ -55,7 +55,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Coordinates = await accountService.GetUsers();
+        Coordinates = await accountService.GetCoordinators();
         coordinateid = SiteModel.CoordinatorId;
 
         if (!string.IsNullOrEmpty(SiteModel.CoordinatorId))

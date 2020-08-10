@@ -14,9 +14,9 @@ namespace EDI.Web.Extensions
                       <body>
                       <p>Dear {0},</p>
                       <p>This email is to confirm that your account for the EDI has been successfully created.</p>", firstName);
-            string callbackUrl = "http://localhost:63970/Accounts/ResetPassword/resetpassword";
+            string callbackUrl = "http://localhost:63971/Accounts/ResetPassword/resetpassword";
             string htmlString2 = $"Please click <a href='{callbackUrl}'>here</a> to reset your password. Your login user name is your current email:" + email;
-            //string htmlString2 = $"<p>Please navigate to <a href='{HtmlEncoder.Default.Encode(link)}'>http://localhost:63970/Accounts/ResetPassword/resetpassword</a> to set your password.</p>";
+            //string htmlString2 = $"<p>Please navigate to <a href='{HtmlEncoder.Default.Encode(link)}'>http://localhost:63971/Accounts/ResetPassword/resetpassword</a> to set your password.</p>";
             string htmlString3 = @"<p>Please let us know if you have any questions or concerns.</p> 
                       <p>Thank you!<br><br>EDI<br />webmaster@e-edi.ca</p>
                       </body>

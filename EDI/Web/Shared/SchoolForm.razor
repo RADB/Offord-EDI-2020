@@ -106,10 +106,26 @@
         Countries = await sharedService.GetCountries();
 
         countryid = SchoolModel.CountryId.ToString();
-        Provinces = await sharedService.GetProvinces(SchoolModel.CountryId);
 
+        if(string.IsNullOrEmpty(countryid) || SchoolModel.CountryId == 0)
+        {
+            var cid = dbContext.Countries.Where(p => p.Name == "Canada").Select(p => p.Id).FirstOrDefault();
+            countryid = cid.ToString();
+
+            Provinces = await sharedService.GetProvinces(cid);
+        }
+        else
+        {
+            Provinces = await sharedService.GetProvinces(SchoolModel.CountryId);
+        }
 
         provinceid = SchoolModel.ProvinceId.ToString();
+
+        if (string.IsNullOrEmpty(provinceid) || SchoolModel.ProvinceId == 0)
+        {
+            var pid = dbContext.Provinces.Where(p => p.Name == "Ontario").Select(p => p.Id).FirstOrDefault();
+            provinceid = pid.ToString();
+        }
     }
 
     private void SiteChange(ChangeEventArgs e)
