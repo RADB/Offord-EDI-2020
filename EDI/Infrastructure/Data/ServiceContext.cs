@@ -230,7 +230,7 @@ namespace EDI.Infrastructure.Data
             {
                 entity.ToTable("Teachers", "EDI");
 
-                entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
+                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 
@@ -269,7 +269,7 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<Year>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
+                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 

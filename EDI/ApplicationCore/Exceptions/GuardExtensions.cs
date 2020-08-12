@@ -21,4 +21,31 @@ namespace Ardalis.GuardClauses
                 throw new SchoolNotFoundException(schoolid);
         }
     }
+
+    public static class YearGuards
+    {
+        public static void NullYear(this IGuardClause guardClause, int yearid, Year years)
+        {
+            if (years == null)
+                throw new YearNotFoundException(yearid);
+        }
+    }
+
+    public static class SpecialProblemGuards
+    {
+        public static void NullSpecialProblem(this IGuardClause guardClause, int spid, SpecialProblem problems)
+        {
+            if (problems == null)
+                throw new SpecialProblemNotFoundException(spid);
+        }
+    }
+
+    public static class LanguageGuards
+    {
+        public static void NullLanguage(this IGuardClause guardClause, int languageid, Language years)
+        {
+            if (years == null)
+                throw new LanguageNotFoundException(languageid);
+        }
+    }
 }
