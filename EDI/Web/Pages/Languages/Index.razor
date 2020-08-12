@@ -1,0 +1,258 @@
+﻿@page "/Languages/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ILanguageService languageService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Languages Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (languages == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridLanguage" @ref="Grid" DataSource="@languages" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="LanguageItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.LanguageCode) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.LanguageEnglish) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.LanguageFrench) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<LanguageItemViewModel> Grid;
+
+    IEnumerable<LanguageItemViewModel> languages;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var alllanguages = await Task.FromResult(dbContext.Languages.OrderBy(p => p.LanguageCode).ToList());
+
+            List<LanguageItemViewModel> sivm = new List<LanguageItemViewModel>();
+
+            foreach (var language in alllanguages)
+            {
+                var alanguage = new LanguageItemViewModel();
+
+                alanguage.Id = language.Id;
+                alanguage.LanguageCode = language.LanguageCode;
+                alanguage.LanguageEnglish = language.LanguageEnglish;
+                alanguage.LanguageFrench = language.LanguageFrench;
+                alanguage.Sequence = language.Sequence;
+
+                sivm.Add(alanguage);
+            }
+
+            this.rowid = 0;
+
+            languages = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<LanguageItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    LanguageItemViewModel LanguageModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridLanguage_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridLanguage_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridLanguage_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridLanguage_add")
+        {
+            LanguageModel = new LanguageItemViewModel();
+            parameters.Add("LanguageModel", LanguageModel);
+
+            Modal.Show<LanguageWindow>("New EDI Language", parameters);
+            Modal.OnClose += NewWindowModalClosed;
+        }
+        if (args.Item.Id == "GridLanguage_edit")
+        {
+            LanguageModel = new LanguageItemViewModel();
+            var rowdata = this.languages.Where(t => t.Id == rowid).FirstOrDefault();
+
+            if (rowdata != null)
+            {
+                LanguageModel.LanguageCode = rowdata.LanguageCode;
+                LanguageModel.LanguageEnglish = rowdata.LanguageEnglish;
+                LanguageModel.LanguageFrench = rowdata.LanguageFrench;
+                LanguageModel.Sequence = rowdata.Sequence;
+                LanguageModel.Id = rowdata.Id;
+                parameters.Add("LanguageModel", LanguageModel);
+
+                Modal.Show<LanguageWindow>("Edit EDI Language", parameters);
+                Modal.OnClose += ExistWindowModalClosed;
+            }
+        }
+        if (args.Item.Id == "GridLanguage_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+
+    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is LanguageItemViewModel)
+        {
+            LanguageModel = (LanguageItemViewModel)modalResult.Data;
+
+            var alllanguages = await Task.FromResult(dbContext.Languages.OrderBy(p => p.LanguageCode).ToList());
+
+            List<LanguageItemViewModel> sivm = new List<LanguageItemViewModel>();
+
+            foreach (var language in alllanguages)
+            {
+                var alanguage = new LanguageItemViewModel();
+
+                alanguage.Id = language.Id;
+                alanguage.LanguageCode = language.LanguageCode;
+                alanguage.LanguageEnglish = language.LanguageEnglish;
+                alanguage.LanguageFrench = language.LanguageFrench;
+                alanguage.Sequence = language.Sequence;
+
+                sivm.Add(alanguage);
+            }
+
+            languages = sivm;
+        }
+        Modal.OnClose -= NewWindowModalClosed;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+        this.rowid = 0;
+    }
+
+    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is LanguageItemViewModel)
+        {
+            LanguageModel = (LanguageItemViewModel)modalResult.Data;
+
+            var tmp = new List<LanguageItemViewModel>();
+
+            foreach (var item in this.languages)
+            {
+                if (item.Id == LanguageModel.Id)
+                {
+                    item.LanguageCode = LanguageModel.LanguageCode;
+                    item.LanguageEnglish = LanguageModel.LanguageEnglish;
+                    item.LanguageFrench = LanguageModel.LanguageFrench;
+                    item.Sequence = LanguageModel.Sequence;
+                }
+                tmp.Add(item);
+            }
+
+            this.languages = tmp;
+        }
+        Modal.OnClose -= ExistWindowModalClosed;
+
+        this.rowid = 0;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await languageService.DeleteLanguageAsync(this.rowid);
+
+            var tmp = new List<LanguageItemViewModel>();
+            foreach (var item in languages)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.languages = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<LanguageItemViewModel> args)
+    {
+        var parameters = new ModalParameters();
+        LanguageModel = new LanguageItemViewModel();
+        var rowdata = this.languages.Where(t => t.Id == rowid).FirstOrDefault();
+
+        if (rowdata != null)
+        {
+            LanguageModel.LanguageCode = rowdata.LanguageCode;
+            LanguageModel.LanguageEnglish = rowdata.LanguageEnglish;
+            LanguageModel.LanguageFrench = rowdata.LanguageFrench;
+            LanguageModel.Sequence = rowdata.Sequence;
+            LanguageModel.Id = rowdata.Id;
+            parameters.Add("LanguageModel", LanguageModel);
+
+            Modal.Show<LanguageWindow>("Edit EDI Language", parameters);
+            Modal.OnClose += ExistWindowModalClosed;
+        }
+    }
+}

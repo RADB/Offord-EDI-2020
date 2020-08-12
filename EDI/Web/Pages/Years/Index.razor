@@ -163,13 +163,14 @@
                 sivm.Add(ayear);
             }
 
-            this.rowid = 0;
-
             years = sivm;
-            this.Grid.Refresh();
-
-            StateHasChanged();
         }
+
+        Modal.OnClose -= NewWindowModalClosed;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+        this.rowid = 0;
     }
 
     void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
@@ -190,13 +191,13 @@
             }
 
             this.years = tmp;
-            Modal.OnClose -= ExistWindowModalClosed;
-
-            this.rowid = 0;
-            this.Grid.Refresh();
-
-            StateHasChanged();
         }
+        Modal.OnClose -= ExistWindowModalClosed;
+
+        this.rowid = 0;
+        this.Grid.Refresh();
+
+        StateHasChanged();
     }
 
     async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)

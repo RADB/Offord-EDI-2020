@@ -1,0 +1,165 @@
+﻿@inject ILanguageService languageService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:450px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="LanguageCode">Language Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@languagecode"  @onchange="@(e =>LanguageCodeChange(e))"/>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="LanguageEnglish">Language English: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@languageenglish"  @onchange="@(e =>LanguageEnglishChange(e))"/>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="LanguageEnglish">Language English: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@languagefrench"  @onchange="@(e =>LanguageFrenchChange(e))"/>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Sequence">Sequence: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@sequence" @onchange="@(e =>SequenceChange(e))" />
+    </div>
+    <button @onclick="@SaveLanguage" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    LanguageItemViewModel LanguageModel { get; set; }
+
+    public string languagecode { get; set; }
+    public string languageenglish { get; set; }
+    public string languagefrench { get; set; }
+
+    public int sequence { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LanguageModel = Parameters.Get<LanguageItemViewModel>("LanguageModel");
+
+        if (LanguageModel.Sequence.HasValue)
+        {
+            sequence = LanguageModel.Sequence.Value;
+        }
+        else
+        {
+            sequence = 0;
+        }
+
+        languagecode = LanguageModel.LanguageCode;
+        languageenglish = LanguageModel.LanguageEnglish;
+        languagefrench = LanguageModel.LanguageFrench;
+    }
+
+    private void SequenceChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LanguageModel.Sequence = null;
+
+        if (int.TryParse(selectedString, out int newvalue))
+        {
+            LanguageModel.Sequence = newvalue;
+        }
+        StateHasChanged();
+    }
+
+    private async void SaveLanguage()
+    {
+        if (string.IsNullOrEmpty(LanguageModel.LanguageCode))
+        {
+            ErrorMessage = "Language Code is required.";
+            return;
+        }
+
+        if (LanguageModel.Id > 0)
+        {
+            var totalItems = await languageService.GetDuplicateCount(LanguageModel.LanguageCode, LanguageModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same Language has already existed.";
+            }
+            else
+            {
+                await languageService.UpdateLanguageAsync(LanguageModel);
+
+                Message = "Language updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await languageService.GetDuplicateCount(LanguageModel.LanguageCode);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same language has already existed.";
+            }
+            else
+            {
+                await languageService.CreateLanguageAsync(LanguageModel);
+
+                Message = "New language added successfully.";
+                LanguageModel = new LanguageItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<LanguageItemViewModel>(LanguageModel));
+    }
+
+    void Reset()
+    {
+        sequence = 0;
+
+        LanguageModel = new LanguageItemViewModel();
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void LanguageCodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LanguageModel.LanguageCode = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void LanguageEnglishChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LanguageModel.LanguageEnglish = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void LanguageFrenchChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LanguageModel.LanguageFrench = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}
