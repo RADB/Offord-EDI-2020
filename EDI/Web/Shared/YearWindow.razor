@@ -1,0 +1,124 @@
+﻿@inject IYearService yearService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:450px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Year">Year: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@year" @onchange="@(e =>YearChange(e))" />
+    </div>
+    <button @onclick="@SaveYear" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    YearItemViewModel YearModel { get; set; }
+
+    public int year { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        YearModel = Parameters.Get<YearItemViewModel>("YearModel");
+
+        if (YearModel.Ediyear.HasValue)
+        {
+            year = YearModel.Ediyear.Value;
+        }
+        else
+        {
+            year = 0;
+        }
+    }
+
+    private void YearChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        YearModel.Ediyear = null;
+
+        if (short.TryParse(selectedString, out short newvalue))
+        {
+            YearModel.Ediyear = newvalue;
+        }
+        StateHasChanged();
+    }
+
+    private async void SaveYear()
+    {
+        if (!YearModel.Ediyear.HasValue || YearModel.Ediyear == 0)
+        {
+            ErrorMessage = "Year is required.";
+            return;
+        }
+
+        if (YearModel.Ediyear.HasValue && (YearModel.Ediyear > 2100 || YearModel.Ediyear < 2000))
+        {
+            ErrorMessage = "EDI year should be within 2000 and 2100.";
+            return;
+        }
+
+        if(YearModel.Id > 0)
+        {
+            var totalItems = await yearService.GetDuplicateCount(YearModel.Ediyear.Value, YearModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same Year has already existed.";
+            }
+            else
+            {
+                await yearService.UpdateYearAsync(YearModel);
+
+                Message = "Year updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await yearService.GetDuplicateCount(YearModel.Ediyear.Value);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same year has already existed.";
+            }
+            else
+            {
+                await yearService.CreateYearAsync(YearModel);
+
+                Message = "New year added successfully.";
+                YearModel = new YearItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<YearItemViewModel>(YearModel));
+    }
+
+    void Reset()
+    {
+        year = 0;
+
+        YearModel = new YearItemViewModel();
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+}

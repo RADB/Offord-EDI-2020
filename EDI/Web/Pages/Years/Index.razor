@@ -1,0 +1,249 @@
+﻿@page "/Years/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IYearService yearService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Years Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (years == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridYear" @ref="Grid" DataSource="@years" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="YearItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(YearItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>                            
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<YearItemViewModel> Grid;
+
+    IEnumerable<YearItemViewModel> years;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allyears = await Task.FromResult(dbContext.Years.OrderBy(p => p.Ediyear).ToList());
+
+            List<YearItemViewModel> sivm = new List<YearItemViewModel>();
+
+            foreach (var year in allyears)
+            {
+                var ayear = new YearItemViewModel();
+
+                ayear.Id = year.Id;
+                ayear.Ediyear = year.Ediyear;
+
+                sivm.Add(ayear);
+            }
+
+            this.rowid = 0;
+
+            years = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<YearItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    YearItemViewModel YearModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridYear_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridYear_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridYear_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridYear_add")
+        {
+            YearModel = new YearItemViewModel();
+            parameters.Add("YearModel", YearModel);
+
+            Modal.Show<YearWindow>("New EDI Year", parameters);
+            Modal.OnClose += NewWindowModalClosed;
+        }
+        if (args.Item.Id == "GridYear_edit")
+        {
+            YearModel = new YearItemViewModel();
+            var rowdata = this.years.Where(t => t.Id == rowid).FirstOrDefault();
+
+            if (rowdata != null)
+            {
+                YearModel.Ediyear = rowdata.Ediyear;
+                YearModel.Id = rowdata.Id;
+                parameters.Add("YearModel", YearModel);
+
+                Modal.Show<YearWindow>("Edit EDI Year", parameters);
+                Modal.OnClose += ExistWindowModalClosed;
+            }
+        }
+        if (args.Item.Id == "GridYear_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+
+    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is YearItemViewModel)
+        {
+            YearModel = (YearItemViewModel)modalResult.Data;
+
+            var allyears = await Task.FromResult(dbContext.Years.OrderBy(p => p.Ediyear).ToList());
+
+            List<YearItemViewModel> sivm = new List<YearItemViewModel>();
+
+            foreach (var year in allyears)
+            {
+                var ayear = new YearItemViewModel();
+
+                ayear.Id = year.Id;
+                ayear.Ediyear = year.Ediyear;
+
+                sivm.Add(ayear);
+            }
+
+            this.rowid = 0;
+
+            years = sivm;
+            this.Grid.Refresh();
+
+            StateHasChanged();
+        }
+    }
+
+    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is YearItemViewModel)
+        {
+            YearModel = (YearItemViewModel)modalResult.Data;
+
+            var tmp = new List<YearItemViewModel>();
+
+            foreach (var item in this.years)
+            {
+                if (item.Id == YearModel.Id)
+                {
+                    item.Ediyear = YearModel.Ediyear;
+                }
+                tmp.Add(item);
+            }
+
+            this.years = tmp;
+            Modal.OnClose -= ExistWindowModalClosed;
+
+            this.rowid = 0;
+            this.Grid.Refresh();
+
+            StateHasChanged();
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            var schools = dbContext.Schools.Where(p => p.YearId == this.rowid).ToList();
+
+            if (schools != null && schools.Count() > 0)
+            {
+                toastService.ShowError("This item is referenced by school - " + schools.First().SchoolName);
+            }
+            else
+            {
+                await yearService.DeleteYearAsync(this.rowid);
+
+                var tmp = new List<YearItemViewModel>();
+                foreach (var item in years)
+                {
+                    if (item.Id != rowid)
+                        tmp.Add(item);
+                }
+                this.years = tmp;
+                this.rowid = 0;
+
+                this.Grid.Refresh();
+                StateHasChanged();
+            }
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<YearItemViewModel> args)
+    {
+        var parameters = new ModalParameters();
+        YearModel = new YearItemViewModel();
+        var rowdata = this.years.Where(t => t.Id == rowid).FirstOrDefault();
+
+        if (rowdata != null)
+        {
+            YearModel.Ediyear = rowdata.Ediyear;
+            YearModel.Id = rowdata.Id;
+            parameters.Add("YearModel", YearModel);
+
+            Modal.Show<YearWindow>("Edit EDI Year", parameters);
+            Modal.OnClose += ExistWindowModalClosed;
+        }
+    }
+}

@@ -42,6 +42,9 @@
         treedata.Add(new TreeData { nodeId = "01-02", nodeText = "Schools", iconCss = "icon-organization icon", pid = "01" });
         treedata.Add(new TreeData { nodeId = "02", nodeText = "Screens", iconCss = "icon-docs icon" });
         treedata.Add(new TreeData { nodeId = "03", nodeText = "Maintenance", iconCss = "icon-info icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "03-01", nodeText = "Languages", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-02", nodeText = "Special Problems", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-03", nodeText = "Years", iconCss = "icon-list icon", pid = "03" });
         treedata.Add(new TreeData { nodeId = "04", nodeText = "Accounts", iconCss = "icon-list icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Users", iconCss = "icon-people icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Roles", iconCss = "icon-organization icon", pid = "04" });
@@ -69,6 +72,18 @@
         else if (args.NodeData.Id == "04-03")
         {
             NavigationManager.NavigateTo("./accounts/profile");
+        }
+        else if (args.NodeData.Id == "03-01")
+        {
+            NavigationManager.NavigateTo("./languages/index");
+        }
+        else if (args.NodeData.Id == "03-02")
+        {
+            NavigationManager.NavigateTo("./specialproblems/index");
+        }
+        else if (args.NodeData.Id == "03-03")
+        {
+            NavigationManager.NavigateTo("./years/index");
         }
     }
 

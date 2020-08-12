@@ -3,7 +3,7 @@ using EDI.ApplicationCore.Entities;
 
 namespace EDI.ApplicationCore.Specifications
 {
-    class YearFilterSpecification : BaseSpecification<Year>
+    public class YearFilterSpecification : BaseSpecification<Year>
     {
         public YearFilterSpecification(int year)
             : base(i => i.Ediyear == year)
