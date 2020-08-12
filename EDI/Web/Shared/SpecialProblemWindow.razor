@@ -1,0 +1,165 @@
+﻿@inject ISpecialProblemService specialProblemService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="SpecialProblemCode">Special Problem Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@specialProblemcode" @onchange="@(e =>SpecialProblemCodeChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="SpecialProblemEnglish">Special Problem English: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@specialProblemenglish" @onchange="@(e =>SpecialProblemEnglishChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="SpecialProblemEnglish">Special Problem French: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@specialProblemfrench" @onchange="@(e =>SpecialProblemFrenchChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Sequence">Sequence: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@sequence" @onchange="@(e =>SequenceChange(e))" />
+    </div>
+    <button @onclick="@SaveSpecialProblem" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    SpecialProblemItemViewModel SpecialProblemModel { get; set; }
+
+    public string specialProblemcode { get; set; }
+    public string specialProblemenglish { get; set; }
+    public string specialProblemfrench { get; set; }
+
+    public int sequence { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SpecialProblemModel = Parameters.Get<SpecialProblemItemViewModel>("SpecialProblemModel");
+
+        if (SpecialProblemModel.Sequence.HasValue)
+        {
+            sequence = SpecialProblemModel.Sequence.Value;
+        }
+        else
+        {
+            sequence = 0;
+        }
+
+        specialProblemcode = SpecialProblemModel.SpecialProblemCode;
+        specialProblemenglish = SpecialProblemModel.SpecialProblemEnglish;
+        specialProblemfrench = SpecialProblemModel.SpecialProblemFrench;
+    }
+
+    private void SequenceChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SpecialProblemModel.Sequence = null;
+
+        if (int.TryParse(selectedString, out int newvalue))
+        {
+            SpecialProblemModel.Sequence = newvalue;
+        }
+        StateHasChanged();
+    }
+
+    private async void SaveSpecialProblem()
+    {
+        if (string.IsNullOrEmpty(SpecialProblemModel.SpecialProblemCode))
+        {
+            ErrorMessage = "SpecialProblem Code is required.";
+            return;
+        }
+
+        if (SpecialProblemModel.Id > 0)
+        {
+            var totalItems = await specialProblemService.GetDuplicateCount(SpecialProblemModel.SpecialProblemCode, SpecialProblemModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same SpecialProblem has already existed.";
+            }
+            else
+            {
+                await specialProblemService.UpdateSpecialProblemAsync(SpecialProblemModel);
+
+                Message = "SpecialProblem updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await specialProblemService.GetDuplicateCount(SpecialProblemModel.SpecialProblemCode);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same specialProblem has already existed.";
+            }
+            else
+            {
+                await specialProblemService.CreateSpecialProblemAsync(SpecialProblemModel);
+
+                Message = "New specialProblem added successfully.";
+                SpecialProblemModel = new SpecialProblemItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<SpecialProblemItemViewModel>(SpecialProblemModel));
+    }
+
+    void Reset()
+    {
+        sequence = 0;
+
+        SpecialProblemModel = new SpecialProblemItemViewModel();
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void SpecialProblemCodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SpecialProblemModel.SpecialProblemCode = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void SpecialProblemEnglishChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SpecialProblemModel.SpecialProblemEnglish = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void SpecialProblemFrenchChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SpecialProblemModel.SpecialProblemFrench = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}
