@@ -100,9 +100,9 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullLanguage(language.Id, _language);
 
-                _language.LanguageCode = language.LanguageCode;
-                _language.LanguageEnglish = language.LanguageEnglish;
-                _language.LanguageFrench = language.LanguageFrench;
+                _language.Code = language.Code;
+                _language.English = language.English;
+                _language.French = language.French;
                 _language.Sequence = language.Sequence;
                 _language.ModifiedDate = DateTime.Now;
                 _language.ModifiedBy = _username;
@@ -124,9 +124,9 @@ namespace EDI.Web.Services
             {
                 var _language = new Language();
 
-                _language.LanguageCode = language.LanguageCode;
-                _language.LanguageEnglish = language.LanguageEnglish;
-                _language.LanguageFrench = language.LanguageFrench;
+                _language.Code = language.Code;
+                _language.English = language.English;
+                _language.French = language.French;
                 _language.Sequence = language.Sequence;
                 _language.CreatedDate = DateTime.Now;
                 _language.CreatedBy = _username;
@@ -155,9 +155,9 @@ namespace EDI.Web.Services
                 var vm = new LanguageItemViewModel()
                 {
                     Id = language.Id,
-                    LanguageCode = language.LanguageCode,
-                    LanguageEnglish = language.LanguageEnglish,
-                    LanguageFrench = language.LanguageFrench,
+                    Code = language.Code,
+                    English = language.English,
+                    French = language.French,
                     Sequence = language.Sequence,
                     CreatedDate = language.CreatedDate,
                     CreatedBy = language.CreatedBy,
@@ -177,14 +177,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string languagecode)
+        public async Task<int> GetDuplicateCount(string Code)
         {
             await LogUsername();
             Log.Information("GetDuplicateCount started by:" + _username);
 
             try
             {
-                var filterSpecification = new LanguageFilterSpecification(languagecode);
+                var filterSpecification = new LanguageFilterSpecification(Code);
 
                 var totalItems = await _languageRepository.CountAsync(filterSpecification);
 
@@ -197,14 +197,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string languagecode, int id)
+        public async Task<int> GetDuplicateCount(string Code, int id)
         {
             await LogUsername();
             Log.Information("GetDuplicateCount started by:" + _username);
 
             try
             {
-                var filterSpecification = new LanguageFilterSpecification(languagecode, id);
+                var filterSpecification = new LanguageFilterSpecification(Code, id);
 
                 var totalItems = await _languageRepository.CountAsync(filterSpecification);
 

@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<LanguageItemViewModel> GetLanguageItem(int languageId);
 
-        Task<int> GetDuplicateCount(string languagecode);
-        Task<int> GetDuplicateCount(string languagecode, int id);
+        Task<int> GetDuplicateCount(string Code);
+        Task<int> GetDuplicateCount(string Code, int id);
     }
 }

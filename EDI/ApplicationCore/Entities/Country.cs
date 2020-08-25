@@ -16,7 +16,8 @@ namespace EDI.ApplicationCore.Entities
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string English { get; set; }
+        public string French { get; set; }
 
         [Required]
         [StringLength(2)]

@@ -108,11 +108,11 @@ namespace EDI.Web.Services
                 {
                     new SelectListItem() { Value = "0", Text = "Choose One...", Selected = true }
                 };
-                var ordered = countries.OrderBy(t => t.Name);
+                var ordered = countries.OrderBy(t => t.English);
 
                 foreach (Country org in ordered)
                 {
-                    items.Add(new SelectListItem() { Value = org.Id.ToString(), Text = org.Name });
+                    items.Add(new SelectListItem() { Value = org.Id.ToString(), Text = org.English });
                 }
 
                 return items;
@@ -144,11 +144,11 @@ namespace EDI.Web.Services
                     var filterSpecification = new ProvinceFilterSpecification(countryid);
                     var province = await _provinceRepository.ListAsync(filterSpecification);
 
-                    var ordered = province.OrderBy(t => t.Name);
+                    var ordered = province.OrderBy(t => t.English);
 
                     foreach (Province prov in ordered)
                     {
-                        items.Add(new SelectListItem() { Value = prov.Id.ToString(), Text = prov.Name });
+                        items.Add(new SelectListItem() { Value = prov.Id.ToString(), Text = prov.English });
                     }
                 }
 

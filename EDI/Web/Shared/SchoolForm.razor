@@ -109,7 +109,7 @@
 
         if(string.IsNullOrEmpty(countryid) || SchoolModel.CountryId == 0)
         {
-            var cid = dbContext.Countries.Where(p => p.Name == "Canada").Select(p => p.Id).FirstOrDefault();
+            var cid = dbContext.Countries.Where(p => p.English == "Canada").Select(p => p.Id).FirstOrDefault();
             countryid = cid.ToString();
 
             Provinces = await sharedService.GetProvinces(cid);
@@ -123,7 +123,7 @@
 
         if (string.IsNullOrEmpty(provinceid) || SchoolModel.ProvinceId == 0)
         {
-            var pid = dbContext.Provinces.Where(p => p.Name == "Ontario").Select(p => p.Id).FirstOrDefault();
+            var pid = dbContext.Provinces.Where(p => p.English == "Ontario").Select(p => p.Id).FirstOrDefault();
             provinceid = pid.ToString();
         }
     }

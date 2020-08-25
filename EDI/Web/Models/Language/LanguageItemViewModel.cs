@@ -8,9 +8,9 @@ namespace EDI.Web.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Language Code is required.")]
-        public string LanguageCode { get; set; }
-        public string LanguageEnglish { get; set; }
-        public string LanguageFrench { get; set; }
+        public string Code { get; set; }
+        public string English { get; set; }
+        public string French { get; set; }
         public int? Sequence { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }

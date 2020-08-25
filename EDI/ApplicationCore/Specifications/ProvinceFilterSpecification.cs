@@ -15,12 +15,12 @@ namespace EDI.ApplicationCore.Specifications
         }
 
         public ProvinceFilterSpecification(int countryid, string name)
-            : base(i => i.CountryID == countryid && i.Name == name)
+            : base(i => i.CountryID == countryid && i.English == name)
         {
         }
 
         public ProvinceFilterSpecification(int countryid, string name, int id)
-            : base(i => i.CountryID == countryid && i.Name == name && i.Id != id)
+            : base(i => i.CountryID == countryid && i.English == name && i.Id != id)
         {
         }
     }

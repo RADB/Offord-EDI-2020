@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\EDI"
+    "\\EDI",
+    "\\EDI\\Web\\Pages\\Sites"
   ],
-  "SelectedNode": "\\EDI\\EDI.sln",
+  "SelectedNode": "\\EDI\\.gitignore",
   "PreviewInSolutionExplorer": false
 }

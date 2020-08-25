@@ -242,17 +242,17 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LanguageCode")
+                    b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(3)")
                         .HasMaxLength(3);
 
-                    b.Property<string>("LanguageEnglish")
+                    b.Property<string>("English")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("LanguageFrench")
+                    b.Property<string>("French")
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
@@ -477,16 +477,16 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int?>("Sequence")
                         .HasColumnType("int");
 
-                    b.Property<string>("SpecialProblemCode")
+                    b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(3)")
                         .HasMaxLength(3);
 
-                    b.Property<string>("SpecialProblemEnglish")
+                    b.Property<string>("English")
                         .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
 
-                    b.Property<string>("SpecialProblemFrench")
+                    b.Property<string>("French")
                         .HasColumnType("nvarchar(150)")
                         .HasMaxLength(150);
 

@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<SpecialProblemItemViewModel> GetSpecialProblemItem(int specialProblemId);
 
-        Task<int> GetDuplicateCount(string specialProblemcode);
-        Task<int> GetDuplicateCount(string specialProblemcode, int id);
+        Task<int> GetDuplicateCount(string Code);
+        Task<int> GetDuplicateCount(string Code, int id);
     }
 }

@@ -14,16 +14,16 @@
         <div class="text-danger">@ErrorMessage</div>
     }
     <div class="form-group row">
-        <label class="col-md-5 col-form-label" for="SpecialProblemCode">Special Problem Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-        <input type="text" class="col-md-6 col-form-label" value="@specialProblemcode" @onchange="@(e =>SpecialProblemCodeChange(e))" />
+        <label class="col-md-5 col-form-label" for="Code">Special Problem Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@Code" @onchange="@(e =>CodeChange(e))" />
     </div>
     <div class="form-group row">
-        <label class="col-md-5 col-form-label" for="SpecialProblemEnglish">Special Problem English: </label>
-        <input type="text" class="col-md-6 col-form-label" value="@specialProblemenglish" @onchange="@(e =>SpecialProblemEnglishChange(e))" />
+        <label class="col-md-5 col-form-label" for="English">Special Problem English: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@English" @onchange="@(e =>EnglishChange(e))" />
     </div>
     <div class="form-group row">
-        <label class="col-md-5 col-form-label" for="SpecialProblemEnglish">Special Problem French: </label>
-        <input type="text" class="col-md-6 col-form-label" value="@specialProblemfrench" @onchange="@(e =>SpecialProblemFrenchChange(e))" />
+        <label class="col-md-5 col-form-label" for="English">Special Problem French: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@French" @onchange="@(e =>FrenchChange(e))" />
     </div>
     <div class="form-group row">
         <label class="col-md-5 col-form-label" for="Sequence">Sequence: </label>
@@ -38,9 +38,9 @@
 
     SpecialProblemItemViewModel SpecialProblemModel { get; set; }
 
-    public string specialProblemcode { get; set; }
-    public string specialProblemenglish { get; set; }
-    public string specialProblemfrench { get; set; }
+    public string Code { get; set; }
+    public string English { get; set; }
+    public string French { get; set; }
 
     public int sequence { get; set; }
 
@@ -60,9 +60,9 @@
             sequence = 0;
         }
 
-        specialProblemcode = SpecialProblemModel.SpecialProblemCode;
-        specialProblemenglish = SpecialProblemModel.SpecialProblemEnglish;
-        specialProblemfrench = SpecialProblemModel.SpecialProblemFrench;
+        Code = SpecialProblemModel.Code;
+        English = SpecialProblemModel.English;
+        French = SpecialProblemModel.French;
     }
 
     private void SequenceChange(ChangeEventArgs e)
@@ -80,7 +80,7 @@
 
     private async void SaveSpecialProblem()
     {
-        if (string.IsNullOrEmpty(SpecialProblemModel.SpecialProblemCode))
+        if (string.IsNullOrEmpty(SpecialProblemModel.Code))
         {
             ErrorMessage = "SpecialProblem Code is required.";
             return;
@@ -88,7 +88,7 @@
 
         if (SpecialProblemModel.Id > 0)
         {
-            var totalItems = await specialProblemService.GetDuplicateCount(SpecialProblemModel.SpecialProblemCode, SpecialProblemModel.Id);
+            var totalItems = await specialProblemService.GetDuplicateCount(SpecialProblemModel.Code, SpecialProblemModel.Id);
 
             if (totalItems > 0)
             {
@@ -105,7 +105,7 @@
         }
         else
         {
-            var totalItems = await specialProblemService.GetDuplicateCount(SpecialProblemModel.SpecialProblemCode);
+            var totalItems = await specialProblemService.GetDuplicateCount(SpecialProblemModel.Code);
 
             if (totalItems > 0)
             {
@@ -136,29 +136,29 @@
         ModalService.Cancel();
     }
 
-    private void SpecialProblemCodeChange(ChangeEventArgs e)
+    private void CodeChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 
-        SpecialProblemModel.SpecialProblemCode = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+        SpecialProblemModel.Code = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
 
         StateHasChanged();
     }
 
-    private void SpecialProblemEnglishChange(ChangeEventArgs e)
+    private void EnglishChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 
-        SpecialProblemModel.SpecialProblemEnglish = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+        SpecialProblemModel.English = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
 
         StateHasChanged();
     }
 
-    private void SpecialProblemFrenchChange(ChangeEventArgs e)
+    private void FrenchChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 
-        SpecialProblemModel.SpecialProblemFrench = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+        SpecialProblemModel.French = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
 
         StateHasChanged();
     }

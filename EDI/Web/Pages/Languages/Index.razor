@@ -34,9 +34,9 @@
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(LanguageItemViewModel.LanguageCode) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(LanguageItemViewModel.LanguageEnglish) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(LanguageItemViewModel.LanguageFrench) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(LanguageItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(LanguageItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                         </GridColumns>
                     </SfGrid>
@@ -71,7 +71,7 @@
         {
             username = user.Identity.Name;
 
-            var alllanguages = await Task.FromResult(dbContext.Languages.OrderBy(p => p.LanguageCode).ToList());
+            var alllanguages = await Task.FromResult(dbContext.Languages.OrderBy(p => p.Code).ToList());
 
             List<LanguageItemViewModel> sivm = new List<LanguageItemViewModel>();
 
@@ -80,9 +80,9 @@
                 var alanguage = new LanguageItemViewModel();
 
                 alanguage.Id = language.Id;
-                alanguage.LanguageCode = language.LanguageCode;
-                alanguage.LanguageEnglish = language.LanguageEnglish;
-                alanguage.LanguageFrench = language.LanguageFrench;
+                alanguage.Code = language.Code;
+                alanguage.English = language.English;
+                alanguage.French = language.French;
                 alanguage.Sequence = language.Sequence;
 
                 sivm.Add(alanguage);
@@ -133,9 +133,9 @@
 
             if (rowdata != null)
             {
-                LanguageModel.LanguageCode = rowdata.LanguageCode;
-                LanguageModel.LanguageEnglish = rowdata.LanguageEnglish;
-                LanguageModel.LanguageFrench = rowdata.LanguageFrench;
+                LanguageModel.Code = rowdata.Code;
+                LanguageModel.English = rowdata.English;
+                LanguageModel.French = rowdata.French;
                 LanguageModel.Sequence = rowdata.Sequence;
                 LanguageModel.Id = rowdata.Id;
                 parameters.Add("LanguageModel", LanguageModel);
@@ -158,7 +158,7 @@
         {
             LanguageModel = (LanguageItemViewModel)modalResult.Data;
 
-            var alllanguages = await Task.FromResult(dbContext.Languages.OrderBy(p => p.LanguageCode).ToList());
+            var alllanguages = await Task.FromResult(dbContext.Languages.OrderBy(p => p.Code).ToList());
 
             List<LanguageItemViewModel> sivm = new List<LanguageItemViewModel>();
 
@@ -167,9 +167,9 @@
                 var alanguage = new LanguageItemViewModel();
 
                 alanguage.Id = language.Id;
-                alanguage.LanguageCode = language.LanguageCode;
-                alanguage.LanguageEnglish = language.LanguageEnglish;
-                alanguage.LanguageFrench = language.LanguageFrench;
+                alanguage.Code = language.Code;
+                alanguage.English = language.English;
+                alanguage.French = language.French;
                 alanguage.Sequence = language.Sequence;
 
                 sivm.Add(alanguage);
@@ -196,9 +196,9 @@
             {
                 if (item.Id == LanguageModel.Id)
                 {
-                    item.LanguageCode = LanguageModel.LanguageCode;
-                    item.LanguageEnglish = LanguageModel.LanguageEnglish;
-                    item.LanguageFrench = LanguageModel.LanguageFrench;
+                    item.Code = LanguageModel.Code;
+                    item.English = LanguageModel.English;
+                    item.French = LanguageModel.French;
                     item.Sequence = LanguageModel.Sequence;
                 }
                 tmp.Add(item);
@@ -244,9 +244,9 @@
 
         if (rowdata != null)
         {
-            LanguageModel.LanguageCode = rowdata.LanguageCode;
-            LanguageModel.LanguageEnglish = rowdata.LanguageEnglish;
-            LanguageModel.LanguageFrench = rowdata.LanguageFrench;
+            LanguageModel.Code = rowdata.Code;
+            LanguageModel.English = rowdata.English;
+            LanguageModel.French = rowdata.French;
             LanguageModel.Sequence = rowdata.Sequence;
             LanguageModel.Id = rowdata.Id;
             parameters.Add("LanguageModel", LanguageModel);

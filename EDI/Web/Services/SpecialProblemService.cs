@@ -100,9 +100,9 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullSpecialProblem(specialProblem.Id, _specialProblem);
 
-                _specialProblem.SpecialProblemCode = specialProblem.SpecialProblemCode;
-                _specialProblem.SpecialProblemEnglish = specialProblem.SpecialProblemEnglish;
-                _specialProblem.SpecialProblemFrench = specialProblem.SpecialProblemFrench;
+                _specialProblem.Code = specialProblem.Code;
+                _specialProblem.English = specialProblem.English;
+                _specialProblem.French = specialProblem.French;
                 _specialProblem.Sequence = specialProblem.Sequence;
                 _specialProblem.ModifiedDate = DateTime.Now;
                 _specialProblem.ModifiedBy = _username;
@@ -124,9 +124,9 @@ namespace EDI.Web.Services
             {
                 var _specialProblem = new SpecialProblem();
 
-                _specialProblem.SpecialProblemCode = specialProblem.SpecialProblemCode;
-                _specialProblem.SpecialProblemEnglish = specialProblem.SpecialProblemEnglish;
-                _specialProblem.SpecialProblemFrench = specialProblem.SpecialProblemFrench;
+                _specialProblem.Code = specialProblem.Code;
+                _specialProblem.English = specialProblem.English;
+                _specialProblem.French = specialProblem.French;
                 _specialProblem.Sequence = specialProblem.Sequence;
                 _specialProblem.CreatedDate = DateTime.Now;
                 _specialProblem.CreatedBy = _username;
@@ -155,9 +155,9 @@ namespace EDI.Web.Services
                 var vm = new SpecialProblemItemViewModel()
                 {
                     Id = specialProblem.Id,
-                    SpecialProblemCode = specialProblem.SpecialProblemCode,
-                    SpecialProblemEnglish = specialProblem.SpecialProblemEnglish,
-                    SpecialProblemFrench = specialProblem.SpecialProblemFrench,
+                    Code = specialProblem.Code,
+                    English = specialProblem.English,
+                    French = specialProblem.French,
                     Sequence = specialProblem.Sequence,
                     CreatedDate = specialProblem.CreatedDate,
                     CreatedBy = specialProblem.CreatedBy,
@@ -177,14 +177,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string specialProblemcode)
+        public async Task<int> GetDuplicateCount(string Code)
         {
             await LogUsername();
             Log.Information("GetDuplicateCount started by:" + _username);
 
             try
             {
-                var filterSpecification = new SpecialProblemFilterSpecification(specialProblemcode);
+                var filterSpecification = new SpecialProblemFilterSpecification(Code);
 
                 var totalItems = await _specialProblemRepository.CountAsync(filterSpecification);
 
@@ -197,14 +197,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string specialProblemcode, int id)
+        public async Task<int> GetDuplicateCount(string Code, int id)
         {
             await LogUsername();
             Log.Information("GetDuplicateCount started by:" + _username);
 
             try
             {
-                var filterSpecification = new SpecialProblemFilterSpecification(specialProblemcode, id);
+                var filterSpecification = new SpecialProblemFilterSpecification(Code, id);
 
                 var totalItems = await _specialProblemRepository.CountAsync(filterSpecification);
 

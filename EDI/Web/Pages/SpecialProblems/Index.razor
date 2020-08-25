@@ -34,9 +34,9 @@
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(SpecialProblemItemViewModel.SpecialProblemCode) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SpecialProblemItemViewModel.SpecialProblemEnglish) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SpecialProblemItemViewModel.SpecialProblemFrench) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SpecialProblemItemViewModel.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SpecialProblemItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SpecialProblemItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SpecialProblemItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                         </GridColumns>
                     </SfGrid>
@@ -71,7 +71,7 @@
         {
             username = user.Identity.Name;
 
-            var allspecialProblems = await Task.FromResult(dbContext.SpecialProblems.OrderBy(p => p.SpecialProblemCode).ToList());
+            var allspecialProblems = await Task.FromResult(dbContext.SpecialProblems.OrderBy(p => p.Code).ToList());
 
             List<SpecialProblemItemViewModel> sivm = new List<SpecialProblemItemViewModel>();
 
@@ -80,9 +80,9 @@
                 var aspecialProblem = new SpecialProblemItemViewModel();
 
                 aspecialProblem.Id = specialProblem.Id;
-                aspecialProblem.SpecialProblemCode = specialProblem.SpecialProblemCode;
-                aspecialProblem.SpecialProblemEnglish = specialProblem.SpecialProblemEnglish;
-                aspecialProblem.SpecialProblemFrench = specialProblem.SpecialProblemFrench;
+                aspecialProblem.Code = specialProblem.Code;
+                aspecialProblem.English = specialProblem.English;
+                aspecialProblem.French = specialProblem.French;
                 aspecialProblem.Sequence = specialProblem.Sequence;
 
                 sivm.Add(aspecialProblem);
@@ -133,9 +133,9 @@
 
             if (rowdata != null)
             {
-                SpecialProblemModel.SpecialProblemCode = rowdata.SpecialProblemCode;
-                SpecialProblemModel.SpecialProblemEnglish = rowdata.SpecialProblemEnglish;
-                SpecialProblemModel.SpecialProblemFrench = rowdata.SpecialProblemFrench;
+                SpecialProblemModel.Code = rowdata.Code;
+                SpecialProblemModel.English = rowdata.English;
+                SpecialProblemModel.French = rowdata.French;
                 SpecialProblemModel.Sequence = rowdata.Sequence;
                 SpecialProblemModel.Id = rowdata.Id;
                 parameters.Add("SpecialProblemModel", SpecialProblemModel);
@@ -158,7 +158,7 @@
         {
             SpecialProblemModel = (SpecialProblemItemViewModel)modalResult.Data;
 
-            var allspecialProblems = await Task.FromResult(dbContext.SpecialProblems.OrderBy(p => p.SpecialProblemCode).ToList());
+            var allspecialProblems = await Task.FromResult(dbContext.SpecialProblems.OrderBy(p => p.Code).ToList());
 
             List<SpecialProblemItemViewModel> sivm = new List<SpecialProblemItemViewModel>();
 
@@ -167,9 +167,9 @@
                 var aspecialProblem = new SpecialProblemItemViewModel();
 
                 aspecialProblem.Id = specialProblem.Id;
-                aspecialProblem.SpecialProblemCode = specialProblem.SpecialProblemCode;
-                aspecialProblem.SpecialProblemEnglish = specialProblem.SpecialProblemEnglish;
-                aspecialProblem.SpecialProblemFrench = specialProblem.SpecialProblemFrench;
+                aspecialProblem.Code = specialProblem.Code;
+                aspecialProblem.English = specialProblem.English;
+                aspecialProblem.French = specialProblem.French;
                 aspecialProblem.Sequence = specialProblem.Sequence;
 
                 sivm.Add(aspecialProblem);
@@ -196,9 +196,9 @@
             {
                 if (item.Id == SpecialProblemModel.Id)
                 {
-                    item.SpecialProblemCode = SpecialProblemModel.SpecialProblemCode;
-                    item.SpecialProblemEnglish = SpecialProblemModel.SpecialProblemEnglish;
-                    item.SpecialProblemFrench = SpecialProblemModel.SpecialProblemFrench;
+                    item.Code = SpecialProblemModel.Code;
+                    item.English = SpecialProblemModel.English;
+                    item.French = SpecialProblemModel.French;
                     item.Sequence = SpecialProblemModel.Sequence;
                 }
                 tmp.Add(item);
@@ -244,9 +244,9 @@
 
         if (rowdata != null)
         {
-            SpecialProblemModel.SpecialProblemCode = rowdata.SpecialProblemCode;
-            SpecialProblemModel.SpecialProblemEnglish = rowdata.SpecialProblemEnglish;
-            SpecialProblemModel.SpecialProblemFrench = rowdata.SpecialProblemFrench;
+            SpecialProblemModel.Code = rowdata.Code;
+            SpecialProblemModel.English = rowdata.English;
+            SpecialProblemModel.French = rowdata.French;
             SpecialProblemModel.Sequence = rowdata.Sequence;
             SpecialProblemModel.Id = rowdata.Id;
             parameters.Add("SpecialProblemModel", SpecialProblemModel);

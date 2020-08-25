@@ -384,7 +384,7 @@
             //countryid = "0";
             //Provinces = await accountService.GetProvinces(0);
 
-            var cid = dbContext.Countries.Where(p => p.Name == "Canada").Select(p => p.Id).FirstOrDefault();
+            var cid = dbContext.Countries.Where(p => p.English == "Canada").Select(p => p.Id).FirstOrDefault();
             countryid = cid.ToString();
             AccountModel.CountryID = cid;
             Provinces = await sharedService.GetProvinces(cid);
@@ -398,7 +398,7 @@
         else
         {
             //provinceid = "0";
-            var pid = dbContext.Provinces.Where(p => p.Name == "Ontario").Select(p => p.Id).FirstOrDefault();
+            var pid = dbContext.Provinces.Where(p => p.English == "Ontario").Select(p => p.Id).FirstOrDefault();
             AccountModel.ProvinceID = pid;
             provinceid = pid.ToString();
         }

@@ -227,9 +227,9 @@ namespace EDI.Web.Services
                     LockoutEnd = account.LockoutEnd,
                     Lockout = account.LockoutEnabled == true ? "Yes" : "No",
                     CountryID = account.CountryID,
-                    Country = account.CountryID.HasValue ? _countryRepository.GetByIdAsync(account.CountryID.Value).Result.Name : string.Empty,
+                    Country = account.CountryID.HasValue ? _countryRepository.GetByIdAsync(account.CountryID.Value).Result.English : string.Empty,
                     ProvinceID = account.ProvinceID,
-                    Province = account.ProvinceID.HasValue ? _provinceRepository.GetByIdAsync(account.ProvinceID.Value).Result.Name : string.Empty
+                    Province = account.ProvinceID.HasValue ? _provinceRepository.GetByIdAsync(account.ProvinceID.Value).Result.English : string.Empty
                 };
 
                 vm.Roles = await GetRoles();

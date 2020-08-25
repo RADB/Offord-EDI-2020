@@ -129,11 +129,11 @@
 
                 aschool.CountryId = school.CountryId;
                 var country = dbContext.Countries.Where(p => p.Id == school.CountryId).FirstOrDefault();
-                aschool.Country = country.Name;
+                aschool.Country = country.English;
 
                 aschool.ProvinceId = school.ProvinceId;
                 var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
-                aschool.Province = province.Name;
+                aschool.Province = province.English;
 
                 aschool.City = school.City;
                 //aschool.Elpschool = school.Elpschool;

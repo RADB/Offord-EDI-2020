@@ -134,9 +134,9 @@ namespace EDI.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LanguageCode = table.Column<string>(maxLength: 3, nullable: false),
-                    LanguageEnglish = table.Column<string>(maxLength: 50, nullable: false),
-                    LanguageFrench = table.Column<string>(maxLength: 50, nullable: true),
+                    Code = table.Column<string>(maxLength: 3, nullable: false),
+                    English = table.Column<string>(maxLength: 50, nullable: false),
+                    French = table.Column<string>(maxLength: 50, nullable: true),
                     Sequence = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     CreatedBy = table.Column<string>(unicode: false, nullable: true),
@@ -176,9 +176,9 @@ namespace EDI.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SpecialProblemCode = table.Column<string>(maxLength: 3, nullable: false),
-                    SpecialProblemEnglish = table.Column<string>(maxLength: 150, nullable: true),
-                    SpecialProblemFrench = table.Column<string>(maxLength: 150, nullable: true),
+                    Code = table.Column<string>(maxLength: 3, nullable: false),
+                    English = table.Column<string>(maxLength: 150, nullable: true),
+                    French = table.Column<string>(maxLength: 150, nullable: true),
                     Sequence = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     CreatedBy = table.Column<string>(unicode: false, nullable: true),

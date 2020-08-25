@@ -9,9 +9,9 @@ namespace EDI.ApplicationCore.Entities
     [Table("SpecialProblems", Schema = "EDI")]
     public partial class SpecialProblem:BaseEntity
     {        
-        public string SpecialProblemCode { get; set; }
-        public string SpecialProblemEnglish { get; set; }
-        public string SpecialProblemFrench { get; set; }
+        public string Code { get; set; }
+        public string English { get; set; }
+        public string French { get; set; }
         public int? Sequence { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }

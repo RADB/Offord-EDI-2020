@@ -9,9 +9,9 @@ namespace EDI.ApplicationCore.Entities
     [Table("Languages", Schema = "EDI")]
     public partial class Language:BaseEntity
     {
-        public string LanguageCode { get; set; }
-        public string LanguageEnglish { get; set; }
-        public string LanguageFrench { get; set; }
+        public string Code { get; set; }
+        public string English { get; set; }
+        public string French { get; set; }
         public int? Sequence { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }

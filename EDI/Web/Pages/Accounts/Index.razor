@@ -110,13 +110,13 @@
                 if (ppl.CountryID.HasValue)
                 {
                     var country = dbContext.Countries.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault();
-                    accountitem.Country = country.Name;
+                    accountitem.Country = country.English;
                 }
 
                 if (ppl.ProvinceID.HasValue)
                 {
                     var province = dbContext.Provinces.Where(p => p.Id == ppl.ProvinceID.Value).FirstOrDefault();
-                    accountitem.Province = province.Name;
+                    accountitem.Province = province.English;
                 }
 
                 var roles = await userManager.GetRolesAsync(ppl);
