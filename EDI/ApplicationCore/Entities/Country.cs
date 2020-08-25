@@ -11,8 +11,10 @@ namespace EDI.ApplicationCore.Entities
             Provinces = new HashSet<Province>();
             Schools = new HashSet<School>();
         }
-
-        public int ISO3DigitCountry { get; set; }
+        /// <summary>
+        /// ISO3DigitCountry
+        /// </summary>
+        public int Code { get; set; }
 
         [Required]
         [StringLength(100)]

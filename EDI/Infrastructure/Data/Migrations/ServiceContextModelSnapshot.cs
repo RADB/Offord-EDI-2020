@@ -46,8 +46,8 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(3)")
                         .HasMaxLength(3);
 
-                    b.Property<int>("ISO3DigitCountry")
-                        .HasColumnName("ISO3DigitCountry")
+                    b.Property<int>("Code")
+                        .HasColumnName("Code")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")

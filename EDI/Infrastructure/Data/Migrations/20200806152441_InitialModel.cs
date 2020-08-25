@@ -16,7 +16,7 @@ namespace EDI.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ISO3DigitCountry = table.Column<int>(nullable: false),
+                    Code = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     ISO2CountryCode = table.Column<string>(maxLength: 2, nullable: false),
                     ISO3CountryCode = table.Column<string>(maxLength: 3, nullable: false),

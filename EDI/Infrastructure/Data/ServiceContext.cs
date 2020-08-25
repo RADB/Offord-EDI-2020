@@ -98,7 +98,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ISO3CountryCode).IsRequired().HasColumnName("ISO3CountryCode").HasMaxLength(3);
 
-                entity.Property(e => e.ISO3DigitCountry).HasColumnName("ISO3DigitCountry");
+                entity.Property(e => e.Code).HasColumnName("Code");
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256);
 
