@@ -1,0 +1,279 @@
+﻿@page "/Provinces/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IProvinceService provinceService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Provinces</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (provinces == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridProvince" @ref="Grid" DataSource="@provinces" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ProvinceItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="Country" Direction="SortDirection.Ascending"></GridSortColumn>
+                                <GridSortColumn Field="English" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(ProvinceItemViewModel.Country) HeaderText="Country" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceItemViewModel.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<ProvinceItemViewModel> Grid;
+
+    IEnumerable<ProvinceItemViewModel> provinces;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var countryidusa = dbContext.Countries.Where(p => p.English == "United States").FirstOrDefault().Id;
+            var countryidcad = dbContext.Countries.Where(p => p.English == "Canada").FirstOrDefault().Id;
+            var countryidbarb = dbContext.Countries.Where(p => p.English == "Barbados").FirstOrDefault().Id;
+            var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+
+            List<ProvinceItemViewModel> sivm = new List<ProvinceItemViewModel>();
+
+            foreach (var province in allprovinces)
+            {
+                var aprovince = new ProvinceItemViewModel();
+
+                aprovince.Id = province.Id;
+                aprovince.Code = province.Code;
+                aprovince.English = province.English;
+                aprovince.French = province.French;
+                aprovince.CountryID = province.CountryID;
+
+                var country = dbContext.Countries.Where(p => p.Id == province.CountryID).FirstOrDefault();
+                aprovince.Country = country.English;
+
+                sivm.Add(aprovince);
+            }
+
+            this.rowid = 0;
+
+            provinces = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<ProvinceItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    ProvinceItemViewModel ProvinceModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridProvince_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridProvince_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridProvince_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridProvince_add")
+        {
+            ProvinceModel = new ProvinceItemViewModel();
+            parameters.Add("ProvinceModel", ProvinceModel);
+
+            Modal.Show<ProvinceWindow>("New EDI Province", parameters);
+            Modal.OnClose += NewWindowModalClosed;
+        }
+        if (args.Item.Id == "GridProvince_edit")
+        {
+            ProvinceModel = new ProvinceItemViewModel();
+            var rowdata = this.provinces.Where(t => t.Id == rowid).FirstOrDefault();
+
+            if (rowdata != null)
+            {
+                ProvinceModel.Code = rowdata.Code;
+                ProvinceModel.English = rowdata.English;
+                ProvinceModel.French = rowdata.French;
+                ProvinceModel.CountryID = rowdata.CountryID;
+                ProvinceModel.Country = rowdata.Country;
+                ProvinceModel.Id = rowdata.Id;
+                parameters.Add("ProvinceModel", ProvinceModel);
+
+                Modal.Show<ProvinceWindow>("Edit Province", parameters);
+                Modal.OnClose += ExistWindowModalClosed;
+            }
+        }
+        if (args.Item.Id == "GridProvince_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+
+    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is ProvinceItemViewModel)
+        {
+            ProvinceModel = (ProvinceItemViewModel)modalResult.Data;
+
+            var countryidusa = dbContext.Countries.Where(p => p.English == "United States").FirstOrDefault().Id;
+            var countryidcad = dbContext.Countries.Where(p => p.English == "Canada").FirstOrDefault().Id;
+            var countryidbarb = dbContext.Countries.Where(p => p.English == "Barbados").FirstOrDefault().Id;
+            var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+
+            List<ProvinceItemViewModel> sivm = new List<ProvinceItemViewModel>();
+
+            foreach (var province in allprovinces)
+            {
+                var aprovince = new ProvinceItemViewModel();
+
+                aprovince.Id = province.Id;
+                aprovince.Code = province.Code;
+                aprovince.English = province.English;
+                aprovince.French = province.French;
+                aprovince.CountryID = province.CountryID;
+
+                var country = dbContext.Countries.Where(p => p.Id == province.CountryID).FirstOrDefault();
+                aprovince.Country = country.English;
+
+                sivm.Add(aprovince);
+            }
+
+            provinces = sivm;
+        }
+        Modal.OnClose -= NewWindowModalClosed;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+        this.rowid = 0;
+    }
+
+    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is ProvinceItemViewModel)
+        {
+            ProvinceModel = (ProvinceItemViewModel)modalResult.Data;
+
+            var tmp = new List<ProvinceItemViewModel>();
+
+            foreach (var item in this.provinces)
+            {
+                if (item.Id == ProvinceModel.Id)
+                {
+                    item.Code = ProvinceModel.Code;
+                    item.English = ProvinceModel.English;
+                    item.French = ProvinceModel.French;
+                    item.CountryID = ProvinceModel.CountryID;
+                    item.Country = ProvinceModel.Country;
+                }
+                tmp.Add(item);
+            }
+
+            this.provinces = tmp;
+        }
+        Modal.OnClose -= ExistWindowModalClosed;
+
+        this.rowid = 0;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await provinceService.DeleteProvinceAsync(this.rowid);
+
+            var tmp = new List<ProvinceItemViewModel>();
+            foreach (var item in provinces)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.provinces = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<ProvinceItemViewModel> args)
+    {
+        var parameters = new ModalParameters();
+        ProvinceModel = new ProvinceItemViewModel();
+        var rowdata = this.provinces.Where(t => t.Id == rowid).FirstOrDefault();
+
+        if (rowdata != null)
+        {
+            ProvinceModel.Code = rowdata.Code;
+            ProvinceModel.English = rowdata.English;
+            ProvinceModel.French = rowdata.French;
+            ProvinceModel.Country = rowdata.Country;
+            ProvinceModel.CountryID = rowdata.CountryID;
+            ProvinceModel.Id = rowdata.Id;
+            parameters.Add("ProvinceModel", ProvinceModel);
+
+            Modal.Show<ProvinceWindow>("Edit Province", parameters);
+            Modal.OnClose += ExistWindowModalClosed;
+        }
+    }
+}

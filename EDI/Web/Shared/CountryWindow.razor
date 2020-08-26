@@ -1,0 +1,177 @@
+﻿@inject ICountryService countryService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Code">Country Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@Code" @onchange="@(e =>CodeChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">Country English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@English" @onchange="@(e =>EnglishChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">Country French<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@French" @onchange="@(e =>FrenchChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="ISO2CountryCode">ISO2 Country Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@iso2CountryCode" @onchange="@(e =>ISO2CountryCodeChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="ISO3CountryCode">ISO3 Country Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@iso3CountryCode" @onchange="@(e =>ISO3CountryCodeChange(e))" />
+    </div>
+    <button @onclick="@SaveCountry" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    CountryItemViewModel CountryModel { get; set; }
+
+    public int Code { get; set; }
+    public string English { get; set; }
+    public string French { get; set; }
+
+    public string iso2CountryCode { get; set; }
+
+    public string iso3CountryCode { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CountryModel = Parameters.Get<CountryItemViewModel>("CountryModel");
+
+        Code = CountryModel.Code;
+        English = CountryModel.English;
+        French = CountryModel.French;
+        iso2CountryCode = CountryModel.ISO2CountryCode;
+        iso3CountryCode = CountryModel.ISO3CountryCode;
+    }
+
+    private async void SaveCountry()
+    {
+        if (CountryModel.Code == 0)
+        {
+            ErrorMessage = "Country Code is required.";
+            return;
+        }
+
+        if (CountryModel.Id > 0)
+        {
+            var totalItems = await countryService.GetDuplicateCount(CountryModel.Code, CountryModel.English, CountryModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same Country has already existed.";
+            }
+            else
+            {
+                await countryService.UpdateCountryAsync(CountryModel);
+
+                Message = "Country updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await countryService.GetDuplicateCount(CountryModel.Code, CountryModel.English);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same country has already existed.";
+            }
+            else
+            {
+                await countryService.CreateCountryAsync(CountryModel);
+
+                Message = "New country added successfully.";
+                CountryModel = new CountryItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<CountryItemViewModel>(CountryModel));
+    }
+
+    void Reset()
+    {
+        CountryModel = new CountryItemViewModel();
+
+        Code = CountryModel.Code;
+        English = CountryModel.English;
+        French = CountryModel.French;
+        iso2CountryCode = CountryModel.ISO2CountryCode;
+        iso3CountryCode = CountryModel.ISO3CountryCode;
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void CodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+        CountryModel.Code = 0;
+
+        if (int.TryParse(selectedString, out int newcode))
+        {
+            CountryModel.Code = newcode;
+
+            StateHasChanged();
+        }
+    }
+
+    private void EnglishChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        CountryModel.English = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void FrenchChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        CountryModel.French = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void ISO2CountryCodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        CountryModel.ISO2CountryCode = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void ISO3CountryCodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        CountryModel.ISO3CountryCode = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}

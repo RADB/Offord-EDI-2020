@@ -26,6 +26,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Code")
+                        .HasColumnName("Code")
+                        .HasColumnType("int");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
@@ -33,6 +37,16 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("English")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("French")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("ISO2CountryCode")
                         .IsRequired()
@@ -46,10 +60,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(3)")
                         .HasMaxLength(3);
 
-                    b.Property<int>("Code")
-                        .HasColumnName("Code")
-                        .HasColumnType("int");
-
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(256)")
@@ -57,11 +67,6 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
 
                     b.HasKey("Id");
 
@@ -235,17 +240,17 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(3)")
+                        .HasMaxLength(3);
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
 
                     b.Property<string>("English")
                         .IsRequired()
@@ -295,6 +300,16 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("English")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("French")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(64)")
@@ -302,11 +317,6 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
 
                     b.Property<int?>("ProvinceTypeId")
                         .HasColumnType("int");
@@ -378,9 +388,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
 
-                    b.Property<bool?>("Elpschool")
-                        .HasColumnType("bit");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
@@ -402,11 +409,18 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int>("SiteId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int")
+                        .HasComment("Year of the EDI implementation");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
                     b.HasIndex("SiteId");
+
+                    b.HasIndex("YearId");
 
                     b.ToTable("Schools","EDI");
                 });
@@ -448,7 +462,14 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
 
+                    b.Property<int?>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int")
+                        .HasComment("Year of the EDI implementation");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("YearId");
 
                     b.ToTable("Sites","EDI");
                 });
@@ -460,12 +481,25 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(3)")
+                        .HasMaxLength(3);
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("varchar(max)")
                         .IsUnicode(false);
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("English")
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("French")
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("varchar(max)")
@@ -476,19 +510,6 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<int?>("Sequence")
                         .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
-
-                    b.Property<string>("English")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<string>("French")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
 
                     b.HasKey("Id");
 
@@ -531,6 +552,204 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("SystemConfigurations");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte?>("Age")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte?>("EducationBachelorDegree")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationBachelorEducationDegree")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationMastersCourses")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationMastersDegree")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationOther")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("EducationOtherComment")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<byte?>("EducationPhd")
+                        .HasColumnName("EducationPHD")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationPhdcourses")
+                        .HasColumnName("EducationPHDCourses")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationPostBachelorCertificate")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationPostBachelorCourses")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationSomeCoursesBachelors")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationTeachingCertificate")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<short?>("ExperienceAtClassInMonths")
+                        .HasColumnType("smallint");
+
+                    b.Property<short?>("ExperienceGradeInMonths")
+                        .HasColumnType("smallint");
+
+                    b.Property<short?>("ExperienceInMonths")
+                        .HasColumnType("smallint");
+
+                    b.Property<short?>("ExperienceSchoolInMonths")
+                        .HasColumnType("smallint");
+
+                    b.Property<byte?>("FirstTimeCompletingEdi")
+                        .HasColumnName("FirstTimeCompletingEDI")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("Gender")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GuideNotUsedDidntHave")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GuideNotUsedFamiliar")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GuideNotUsedNoTime")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GuideNotUsedNotHelpful")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GuideOther")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("GuideOtherComment")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<byte?>("GuideUsedHelpful")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GuideUsedNotHelpful")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(20)")
+                        .HasComment("English or French")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(14)")
+                        .HasMaxLength(14);
+
+                    b.Property<byte?>("PreviouslyAttendedTeacherTraining")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("SchoolId")
+                        .HasColumnName("SchoolID")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("StudentCount")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("TeacherName")
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<byte?>("TeacherTrainingForThisImplementation")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TeacherTrainingUsefulness")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TimesAttendedTeacherTraining")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TimesCompletedEdi")
+                        .HasColumnName("TimesCompletedEDI")
+                        .HasColumnType("tinyint")
+                        .HasComment("1-4 or more");
+
+                    b.Property<string>("UserId")
+                        .HasColumnName("UserID")
+                        .HasColumnType("nvarchar(40)")
+                        .HasComment("Links to user in EDI.Identity database")
+                        .HasMaxLength(40);
+
+                    b.Property<int?>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int")
+                        .HasComment("Year of the EDI implementation");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Teachers","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Year", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short?>("Ediyear")
+                        .HasColumnName("EDIYear")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Years","dbo");
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
                 {
                     b.HasOne("EDI.ApplicationCore.Entities.Country", "Country")
@@ -557,6 +776,32 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("Schools")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Schools");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Site", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("Sites")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Sites");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Teacher", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.School", "School")
+                        .WithMany("Teachers")
+                        .HasForeignKey("SchoolId")
+                        .HasConstraintName("FK_Teachers_Schools");
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("Teachers")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Teachers");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,146 @@
+﻿@inject IProvinceService provinceService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="country">Country: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@country" disabled />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Code">Province Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@Code" @onchange="@(e =>CodeChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">Province English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@English" @onchange="@(e =>EnglishChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">Province French<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@French" @onchange="@(e =>FrenchChange(e))" />
+    </div>
+    <button @onclick="@SaveProvince" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    ProvinceItemViewModel ProvinceModel { get; set; }
+
+    public string Code { get; set; }
+    public string English { get; set; }
+    public string French { get; set; }
+
+    public string country { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ProvinceModel = Parameters.Get<ProvinceItemViewModel>("ProvinceModel");
+
+        Code = ProvinceModel.Code;
+        English = ProvinceModel.English;
+        French = ProvinceModel.French;
+        country = ProvinceModel.Country;
+    }
+
+    private async void SaveProvince()
+    {
+        if (string.IsNullOrEmpty(ProvinceModel.Code))
+        {
+            ErrorMessage = "Province Code is required.";
+            return;
+        }
+
+        if (ProvinceModel.Id > 0)
+        {
+            var totalItems = await provinceService.GetDuplicateCount(ProvinceModel.CountryID, ProvinceModel.English, ProvinceModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same Province has already existed.";
+            }
+            else
+            {
+                await provinceService.UpdateProvinceAsync(ProvinceModel);
+
+                Message = "Province updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await provinceService.GetDuplicateCount(ProvinceModel.CountryID, ProvinceModel.English);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same province has already existed.";
+            }
+            else
+            {
+                await provinceService.CreateProvinceAsync(ProvinceModel);
+
+                Message = "New province added successfully.";
+                ProvinceModel = new ProvinceItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<ProvinceItemViewModel>(ProvinceModel));
+    }
+
+    void Reset()
+    {
+        ProvinceModel = new ProvinceItemViewModel();
+
+        Code = ProvinceModel.Code;
+        English = ProvinceModel.English;
+        French = ProvinceModel.French;
+        country = ProvinceModel.Country;
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void CodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+        ProvinceModel.Code = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void EnglishChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceModel.English = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void FrenchChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceModel.French = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}

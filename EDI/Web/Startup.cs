@@ -89,6 +89,8 @@ namespace EDI.Web
             services.AddScoped<ISchoolService, SchoolService>();
             services.AddScoped<IYearService, YearService>();
             services.AddScoped<ILanguageService, LanguageService>();
+            services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<IProvinceService, ProvinceService>();
             services.AddScoped<ISpecialProblemService, SpecialProblemService>();
             services.AddScoped<ISharedService, SharedService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

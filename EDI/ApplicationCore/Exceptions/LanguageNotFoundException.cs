@@ -6,7 +6,7 @@ namespace EDI.ApplicationCore.Exceptions
 {
     class LanguageNotFoundException : Exception
     {
-        public LanguageNotFoundException(int languageid) : base($"No School found with ID: {languageid}")
+        public LanguageNotFoundException(int languageid) : base($"No Language found with ID: {languageid}")
         {
         }
 

@@ -48,4 +48,22 @@ namespace Ardalis.GuardClauses
                 throw new LanguageNotFoundException(languageid);
         }
     }
+
+    public static class CountryGuards
+    {
+        public static void NullCountry(this IGuardClause guardClause, int countryid, Country countries)
+        {
+            if (countries == null)
+                throw new CountryNotFoundException(countryid);
+        }
+    }
+
+    public static class ProvinceGuards
+    {
+        public static void NullProvince(this IGuardClause guardClause, int provinceid, Province provinces)
+        {
+            if (provinces == null)
+                throw new ProvinceNotFoundException(provinceid);
+        }
+    }
 }

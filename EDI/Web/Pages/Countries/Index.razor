@@ -1,0 +1,264 @@
+﻿@page "/Countries/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ICountryService countryService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Countries</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (countrys == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridCountry" @ref="Grid" DataSource="@countrys" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="CountryItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(CountryItemViewModel.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(CountryItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(CountryItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(CountryItemViewModel.ISO2CountryCode) HeaderText="ISO2 Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(CountryItemViewModel.ISO3CountryCode) HeaderText="ISO3 Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<CountryItemViewModel> Grid;
+
+    IEnumerable<CountryItemViewModel> countrys;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allcountrys = await Task.FromResult(dbContext.Countries.OrderBy(p => p.Code).ToList());
+
+            List<CountryItemViewModel> sivm = new List<CountryItemViewModel>();
+
+            foreach (var country in allcountrys)
+            {
+                var acountry = new CountryItemViewModel();
+
+                acountry.Id = country.Id;
+                acountry.Code = country.Code;
+                acountry.English = country.English;
+                acountry.French = country.French;
+                acountry.ISO2CountryCode = country.ISO2CountryCode;
+                acountry.ISO3CountryCode = country.ISO3CountryCode;
+
+                sivm.Add(acountry);
+            }
+
+            this.rowid = 0;
+
+            countrys = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<CountryItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    CountryItemViewModel CountryModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridCountry_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridCountry_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridCountry_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridCountry_add")
+        {
+            CountryModel = new CountryItemViewModel();
+            parameters.Add("CountryModel", CountryModel);
+
+            Modal.Show<CountryWindow>("New EDI Country", parameters);
+            Modal.OnClose += NewWindowModalClosed;
+        }
+        if (args.Item.Id == "GridCountry_edit")
+        {
+            CountryModel = new CountryItemViewModel();
+            var rowdata = this.countrys.Where(t => t.Id == rowid).FirstOrDefault();
+
+            if (rowdata != null)
+            {
+                CountryModel.Code = rowdata.Code;
+                CountryModel.English = rowdata.English;
+                CountryModel.French = rowdata.French;
+                CountryModel.ISO2CountryCode = rowdata.ISO2CountryCode;
+                CountryModel.ISO3CountryCode = rowdata.ISO3CountryCode;
+                CountryModel.Id = rowdata.Id;
+                parameters.Add("CountryModel", CountryModel);
+
+                Modal.Show<CountryWindow>("Edit Country", parameters);
+                Modal.OnClose += ExistWindowModalClosed;
+            }
+        }
+        if (args.Item.Id == "GridCountry_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+
+    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is CountryItemViewModel)
+        {
+            CountryModel = (CountryItemViewModel)modalResult.Data;
+
+            var allcountrys = await Task.FromResult(dbContext.Countries.OrderBy(p => p.Code).ToList());
+
+            List<CountryItemViewModel> sivm = new List<CountryItemViewModel>();
+
+            foreach (var country in allcountrys)
+            {
+                var acountry = new CountryItemViewModel();
+
+                acountry.Id = country.Id;
+                acountry.Code = country.Code;
+                acountry.English = country.English;
+                acountry.French = country.French;
+                acountry.ISO2CountryCode = country.ISO2CountryCode;
+                acountry.ISO3CountryCode = country.ISO3CountryCode;
+
+                sivm.Add(acountry);
+            }
+
+            countrys = sivm;
+        }
+        Modal.OnClose -= NewWindowModalClosed;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+        this.rowid = 0;
+    }
+
+    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is CountryItemViewModel)
+        {
+            CountryModel = (CountryItemViewModel)modalResult.Data;
+
+            var tmp = new List<CountryItemViewModel>();
+
+            foreach (var item in this.countrys)
+            {
+                if (item.Id == CountryModel.Id)
+                {
+                    item.Code = CountryModel.Code;
+                    item.English = CountryModel.English;
+                    item.French = CountryModel.French;
+                    item.ISO2CountryCode = CountryModel.ISO2CountryCode;
+                    item.ISO3CountryCode = CountryModel.ISO3CountryCode;
+                }
+                tmp.Add(item);
+            }
+
+            this.countrys = tmp;
+        }
+        Modal.OnClose -= ExistWindowModalClosed;
+
+        this.rowid = 0;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await countryService.DeleteCountryAsync(this.rowid);
+
+            var tmp = new List<CountryItemViewModel>();
+            foreach (var item in countrys)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.countrys = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<CountryItemViewModel> args)
+    {
+        var parameters = new ModalParameters();
+        CountryModel = new CountryItemViewModel();
+        var rowdata = this.countrys.Where(t => t.Id == rowid).FirstOrDefault();
+
+        if (rowdata != null)
+        {
+            CountryModel.Code = rowdata.Code;
+            CountryModel.English = rowdata.English;
+            CountryModel.French = rowdata.French;
+            CountryModel.ISO2CountryCode = rowdata.ISO2CountryCode;
+            CountryModel.ISO3CountryCode = rowdata.ISO3CountryCode;
+            CountryModel.Id = rowdata.Id;
+            parameters.Add("CountryModel", CountryModel);
+
+            Modal.Show<CountryWindow>("Edit Country", parameters);
+            Modal.OnClose += ExistWindowModalClosed;
+        }
+    }
+}
