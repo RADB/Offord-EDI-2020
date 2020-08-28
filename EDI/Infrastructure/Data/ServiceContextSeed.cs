@@ -209,13 +209,13 @@ namespace EDI.Infrastructure.Data
                     await ServiceContext.SaveChangesAsync();
                 }
 
-                if (!ServiceContext.SystemConfigurations.Any())
-                {
-                    ServiceContext.SystemConfigurations.AddRange(
-                        GetPreconfiguredSystemConfigurations());
+                //if (!ServiceContext.SystemConfigurations.Any())
+                //{
+                //    ServiceContext.SystemConfigurations.AddRange(
+                //        GetPreconfiguredSystemConfigurations());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
             }
             catch (Exception ex)
             {
