@@ -84,6 +84,7 @@ namespace EDI.Web
             services.AddScoped(typeof(IAsyncIdentityRepository), typeof(EfIdentityRepository));
 
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IFormService, FormService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISchoolService, SchoolService>();

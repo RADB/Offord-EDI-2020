@@ -1,0 +1,138 @@
+﻿@inject IConfigurationService configurationService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    @if (ConfigurationModel.Id > 0)
+    {
+        <div class="form-group row">
+            <label class="col-md-5 col-form-label" for="FieldName">Field Name: </label>
+            <input type="text" class="col-md-6 col-form-label" value="@FieldName" disabled />
+        </div>
+    }
+    else
+    {
+        <div class="form-group row">
+            <label class="col-md-5 col-form-label" for="FieldName">Field Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" class="col-md-6 col-form-label" value="@FieldName" @onchange="@(e =>FieldNameChange(e))" />
+        </div>
+    }
+
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="FieldName">Field Value<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@FieldValue" @onchange="@(e =>FieldValueChange(e))" />
+    </div>
+    <button @onclick="@SaveConfiguration" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    ConfigurationItemViewModel ConfigurationModel { get; set; }
+
+    public string FieldName { get; set; }
+    public string FieldValue { get; set; }
+
+    public string iso2ConfigurationCode { get; set; }
+
+    public string iso3ConfigurationCode { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ConfigurationModel = Parameters.Get<ConfigurationItemViewModel>("ConfigurationModel");
+
+        FieldName = ConfigurationModel.FieldName;
+        FieldValue = ConfigurationModel.FieldValue;
+    }
+
+    private async void SaveConfiguration()
+    {
+        if (string.IsNullOrEmpty(ConfigurationModel.FieldName))
+        {
+            ErrorMessage = "Field Name is required.";
+            return;
+        }
+
+        if (ConfigurationModel.Id > 0)
+        {
+            var totalItems = await configurationService.GetDuplicateCount(ConfigurationModel.FieldName, ConfigurationModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same Configuration has already existed.";
+            }
+            else
+            {
+                await configurationService.UpdateConfigurationAsync(ConfigurationModel);
+
+                Message = "Configuration updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await configurationService.GetDuplicateCount(ConfigurationModel.FieldName);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same configuration has already existed.";
+            }
+            else
+            {
+                await configurationService.CreateConfigurationAsync(ConfigurationModel);
+
+                Message = "New configuration added successfully.";
+                ConfigurationModel = new ConfigurationItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<ConfigurationItemViewModel>(ConfigurationModel));
+    }
+
+    void Reset()
+    {
+        ConfigurationModel = new ConfigurationItemViewModel();
+        
+        FieldName = ConfigurationModel.FieldName;
+        FieldValue = ConfigurationModel.FieldValue;
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void FieldNameChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ConfigurationModel.FieldName = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void FieldValueChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ConfigurationModel.FieldValue = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}

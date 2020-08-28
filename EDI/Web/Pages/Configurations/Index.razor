@@ -1,0 +1,246 @@
+﻿@page "/Configurations/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IConfigurationService configurationService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>System Configurations</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (configurations == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridConfiguration" @ref="Grid" DataSource="@configurations" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ConfigurationItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(ConfigurationItemViewModel.FieldName) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(ConfigurationItemViewModel.FieldValue) HeaderText="Value" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="40"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<ConfigurationItemViewModel> Grid;
+
+    IEnumerable<ConfigurationItemViewModel> configurations;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allconfigurations = await Task.FromResult(dbContext.SystemConfigurations.OrderBy(p => p.FieldName).ToList());
+
+            List<ConfigurationItemViewModel> sivm = new List<ConfigurationItemViewModel>();
+
+            foreach (var configuration in allconfigurations)
+            {
+                var aconfiguration = new ConfigurationItemViewModel();
+
+                aconfiguration.Id = configuration.Id;
+                aconfiguration.FieldName = configuration.FieldName;
+                aconfiguration.FieldValue = configuration.FieldValue;
+
+                sivm.Add(aconfiguration);
+            }
+
+            this.rowid = 0;
+
+            configurations = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<ConfigurationItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    ConfigurationItemViewModel ConfigurationModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridConfiguration_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridConfiguration_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridConfiguration_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridConfiguration_add")
+        {
+            ConfigurationModel = new ConfigurationItemViewModel();
+            parameters.Add("ConfigurationModel", ConfigurationModel);
+
+            Modal.Show<ConfigurationWindow>("New Configuration", parameters);
+            Modal.OnClose += NewWindowModalClosed;
+        }
+        if (args.Item.Id == "GridConfiguration_edit")
+        {
+            ConfigurationModel = new ConfigurationItemViewModel();
+            var rowdata = this.configurations.Where(t => t.Id == rowid).FirstOrDefault();
+
+            if (rowdata != null)
+            {
+                ConfigurationModel.FieldName = rowdata.FieldName;
+                ConfigurationModel.FieldValue = rowdata.FieldValue;
+                ConfigurationModel.Id = rowdata.Id;
+                parameters.Add("ConfigurationModel", ConfigurationModel);
+
+                Modal.Show<ConfigurationWindow>("Edit Configuration", parameters);
+                Modal.OnClose += ExistWindowModalClosed;
+            }
+        }
+        if (args.Item.Id == "GridConfiguration_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+
+    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is ConfigurationItemViewModel)
+        {
+            ConfigurationModel = (ConfigurationItemViewModel)modalResult.Data;
+
+            var allconfigurations = await Task.FromResult(dbContext.SystemConfigurations.OrderBy(p => p.FieldName).ToList());
+
+            List<ConfigurationItemViewModel> sivm = new List<ConfigurationItemViewModel>();
+
+            foreach (var configuration in allconfigurations)
+            {
+                var aconfiguration = new ConfigurationItemViewModel();
+
+                aconfiguration.Id = configuration.Id;
+                aconfiguration.FieldName = configuration.FieldName;
+                aconfiguration.FieldValue = configuration.FieldValue;
+
+                sivm.Add(aconfiguration);
+            }
+
+            configurations = sivm;
+        }
+        Modal.OnClose -= NewWindowModalClosed;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+        this.rowid = 0;
+    }
+
+    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is ConfigurationItemViewModel)
+        {
+            ConfigurationModel = (ConfigurationItemViewModel)modalResult.Data;
+
+            var tmp = new List<ConfigurationItemViewModel>();
+
+            foreach (var item in this.configurations)
+            {
+                if (item.Id == ConfigurationModel.Id)
+                {
+                    item.FieldName = ConfigurationModel.FieldName;
+                    item.FieldValue = ConfigurationModel.FieldValue;
+                }
+                tmp.Add(item);
+            }
+
+            this.configurations = tmp;
+        }
+        Modal.OnClose -= ExistWindowModalClosed;
+
+        this.rowid = 0;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await configurationService.DeleteConfigurationAsync(this.rowid);
+
+            var tmp = new List<ConfigurationItemViewModel>();
+            foreach (var item in configurations)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.configurations = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<ConfigurationItemViewModel> args)
+    {
+        var parameters = new ModalParameters();
+        ConfigurationModel = new ConfigurationItemViewModel();
+        var rowdata = this.configurations.Where(t => t.Id == rowid).FirstOrDefault();
+
+        if (rowdata != null)
+        {
+            ConfigurationModel.FieldName = rowdata.FieldName;
+            ConfigurationModel.FieldValue = rowdata.FieldValue;
+            ConfigurationModel.Id = rowdata.Id;
+            parameters.Add("ConfigurationModel", ConfigurationModel);
+
+            Modal.Show<ConfigurationWindow>("Edit Configuration", parameters);
+            Modal.OnClose += ExistWindowModalClosed;
+        }
+    }
+}

@@ -66,4 +66,13 @@ namespace Ardalis.GuardClauses
                 throw new ProvinceNotFoundException(provinceid);
         }
     }
+
+    public static class ConfigurationGuards
+    {
+        public static void NullConfiguration(this IGuardClause guardClause, int configid, SystemConfigurations configs)
+        {
+            if (configs == null)
+                throw new ConfigurationNotFoundException(configid);
+        }
+    }
 }
