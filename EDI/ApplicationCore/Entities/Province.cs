@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace EDI.ApplicationCore.Entities
 {
+    [Table("Provinces", Schema = "LUData")]
     public partial class Province : BaseEntity
     {
         [Required]

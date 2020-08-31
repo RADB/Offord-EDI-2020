@@ -14,28 +14,28 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[Countries]"
+         "Name": "[LUData].[Countries]"
       },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[DateDimension]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[Provinces]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[ProvinceType]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[dbo].[Years]"
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Languages]"
-      },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[LUData].[DateDimension]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[LUData].[Provinces]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[LUData].[ProvinceType]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[LUData].[Years]"
+    },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[LUData].[Languages]"
+    },
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Schools]"
@@ -44,10 +44,10 @@
          "HasPrimaryKey": true,
          "Name": "[EDI].[Sites]"
       },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[SpecialProblems]"
-      },
+    {
+      "HasPrimaryKey": true,
+      "Name": "[LUData].[SpecialProblems]"
+    },
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Teachers]"

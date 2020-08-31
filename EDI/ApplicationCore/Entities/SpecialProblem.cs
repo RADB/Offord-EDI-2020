@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("SpecialProblems", Schema = "EDI")]
+    [Table("SpecialProblems", Schema = "LUData")]
     public partial class SpecialProblem:BaseEntity
     {        
         public string Code { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Years", Schema = "dbo")]
+    [Table("Years", Schema = "LUData")]
     public partial class Year:BaseEntity
     {
         public Year()

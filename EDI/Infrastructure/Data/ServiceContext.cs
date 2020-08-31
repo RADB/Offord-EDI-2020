@@ -90,7 +90,7 @@ namespace EDI.Infrastructure.Data
             //    .HasForeignKey(e => e.ProvinceId);
             modelBuilder.Entity<Country>(entity =>
             {
-                entity.ToTable("Countries");
+                entity.ToTable("Countries", "LUData");
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256);
 
@@ -111,7 +111,7 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<Province>(entity =>
             {
-                entity.ToTable("Provinces");
+                entity.ToTable("Provinces", "LUData");
 
                 entity.HasIndex(e => e.CountryID);
 
@@ -136,7 +136,7 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<ProvinceType>(entity =>
             {
-                entity.ToTable("ProvinceType");
+                entity.ToTable("ProvinceType","LUData");
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(64);
 
@@ -198,7 +198,7 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<Language>(entity =>
             {
-                entity.ToTable("Languages", "EDI");
+                entity.ToTable("Languages", "LUData");
 
                 //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
 
@@ -215,7 +215,7 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<SpecialProblem>(entity =>
             {
-                entity.ToTable("SpecialProblems", "EDI");
+                entity.ToTable("SpecialProblems", "LUData");
 
                 //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
 
@@ -273,6 +273,7 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<Year>(entity =>
             {
+                entity.ToTable("Years", "LUData");
                 //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);

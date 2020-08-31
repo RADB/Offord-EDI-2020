@@ -14,11 +14,11 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[Years]"
+         "Name": "[LUData].[Years]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Languages]"
+         "Name": "[LUData].[Languages]"
       },
       {
          "HasPrimaryKey": true,
@@ -30,7 +30,7 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[SpecialProblems]"
+         "Name": "[LUData].[SpecialProblems]"
       },
       {
          "HasPrimaryKey": true,
