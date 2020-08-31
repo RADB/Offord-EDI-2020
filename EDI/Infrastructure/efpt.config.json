@@ -2,8 +2,6 @@
    "ContextClassName": "EDIServiceContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
-   "DoNotCombineNamespace": false,
-   "IdReplace": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": "Data",
@@ -14,28 +12,8 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Countries]"
+         "Name": "[EDI].[Coordinators]"
       },
-    {
-      "HasPrimaryKey": true,
-      "Name": "[LUData].[DateDimension]"
-    },
-    {
-      "HasPrimaryKey": true,
-      "Name": "[LUData].[Provinces]"
-    },
-    {
-      "HasPrimaryKey": true,
-      "Name": "[LUData].[ProvinceType]"
-    },
-    {
-      "HasPrimaryKey": true,
-      "Name": "[LUData].[Years]"
-    },
-    {
-      "HasPrimaryKey": true,
-      "Name": "[LUData].[Languages]"
-    },
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Schools]"
@@ -44,13 +22,33 @@
          "HasPrimaryKey": true,
          "Name": "[EDI].[Sites]"
       },
-    {
-      "HasPrimaryKey": true,
-      "Name": "[LUData].[SpecialProblems]"
-    },
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Teachers]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Countries]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Languages]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Provinces]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[ProvinceType]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[SpecialProblems]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Years]"
       }
    ],
    "UseDatabaseNames": false,
@@ -59,5 +57,7 @@
    "UseHandleBars": false,
    "UseInflector": true,
    "UseLegacyPluralizer": false,
-   "UseSpatial": false
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
 }

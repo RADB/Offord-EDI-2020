@@ -14,6 +14,7 @@ namespace EDI.ApplicationCore.Entities
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
             Teachers = new HashSet<Teacher>();
+            Coordinators = new HashSet<Coordinator>();
         }
 
         public short? Ediyear { get; set; }
@@ -25,5 +26,6 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
+        public virtual ICollection<Coordinator> Coordinators{ get; set; }
     }
 }
