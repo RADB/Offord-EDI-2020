@@ -141,7 +141,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasOne(d => d.ProvinceTypes).WithMany(p => p.Province).HasForeignKey(d => d.ProvinceTypeId);
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Provinces).HasForeignKey(e => e.ProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Schools_Provinces");
-                entity.HasMany(e => e.FileImports).WithOne(e => e.Provinces).HasForeignKey(e => e.SchoolProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_FileImports_Provinces");
+                entity.HasMany(e => e.FileImports).WithOne(e => e.Provinces).HasForeignKey(e => e.SchoolProvinceId).HasConstraintName("FK_FileImports_Provinces");
             });
 
             modelBuilder.Entity<ProvinceType>(entity =>
