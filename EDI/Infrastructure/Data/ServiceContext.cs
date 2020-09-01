@@ -17,8 +17,12 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
         public virtual DbSet<SpecialProblem> SpecialProblems { get; set; }
-
         public virtual DbSet<Year> Years { get; set; }
+
+        /* Staging Data*/
+        public virtual DbSet<FileImport> FileImports { get; set; }
+
+        /*Configuration Data*/
         public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
         public virtual DbSet<FormConfigurations> FormConfigurations { get; set; }
 
@@ -137,6 +141,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasOne(d => d.ProvinceTypes).WithMany(p => p.Province).HasForeignKey(d => d.ProvinceTypeId);
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Provinces).HasForeignKey(e => e.ProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Schools_Provinces");
+                entity.HasMany(e => e.FileImports).WithOne(e => e.Provinces).HasForeignKey(e => e.SchoolProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_FileImports_Provinces");
             });
 
             modelBuilder.Entity<ProvinceType>(entity =>
@@ -349,6 +354,41 @@ namespace EDI.Infrastructure.Data
                 // From Countries model
                 //entity.HasMany(e => e.Schools).WithOne(e => e.Countries).HasForeignKey(e => e.CountryId);
                 //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
+            });
+
+            modelBuilder.Entity<FileImport>(entity =>
+            {
+                entity.ToTable("FileImports", "Staging");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ChildDob).HasColumnName("ChildDOB").HasColumnType("smalldatetime");
+
+                entity.Property(e => e.ChildEdiid).HasColumnName("ChildEDIID").HasMaxLength(15);
+
+                entity.Property(e => e.ChildPostalCodeZip).HasMaxLength(10);
+
+                entity.Property(e => e.CoordinatorEmail).HasMaxLength(100);
+
+                entity.Property(e => e.CoordinatorName).HasMaxLength(100);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.FileName).HasMaxLength(256);
+
+                entity.Property(e => e.GenderId).HasColumnName("GenderID");
+
+                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.Property(e => e.SchoolProvinceId).HasColumnName("SchoolProvinceID");
+
+                entity.Property(e => e.TeacherEmail).HasMaxLength(100);
+
+                entity.Property(e => e.TeacherName).HasMaxLength(100);
+
+                entity.HasOne(d => d.Genders).WithMany(p => p.FileImports).HasForeignKey(d => d.GenderId).HasConstraintName("FK_FileImports_Gender");
             });
         }
     }

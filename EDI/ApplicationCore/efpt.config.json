@@ -57,6 +57,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[LUData].[Years]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[Staging].[FileImport]"
       }
    ],
    "UseDatabaseNames": false,

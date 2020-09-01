@@ -12,6 +12,7 @@ namespace EDI.ApplicationCore.Entities
         public Gender()
         {
             Children = new HashSet<Child>();
+            FileImports = new HashSet<FileImport>();
         }
         
         public string Code { get; set; }
@@ -20,5 +21,6 @@ namespace EDI.ApplicationCore.Entities
         public int? Sequence { get; set; }
 
         public virtual ICollection<Child> Children { get; set; }
+        public virtual ICollection<FileImport> FileImports { get; set; }
     }
 }

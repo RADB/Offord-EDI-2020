@@ -10,6 +10,7 @@ namespace EDI.ApplicationCore.Entities
         public Province()
         {            
             Schools = new HashSet<School>();
+            FileImports = new HashSet<FileImport>();
         }
         [Required]
         [StringLength(100)]
@@ -28,5 +29,6 @@ namespace EDI.ApplicationCore.Entities
 
         public virtual ProvinceType ProvinceTypes { get; set; }
         public virtual ICollection<School> Schools { get; set; }
+        public virtual ICollection<FileImport> FileImports { get; set; }
     }
 }
