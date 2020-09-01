@@ -162,9 +162,9 @@ namespace EDI.Web.Services
                     French = country.French,
                     ISO2CountryCode = country.ISO2CountryCode,
                     ISO3CountryCode = country.ISO3CountryCode,
-                    CreatedDate = country.CreatedDate.Value,
+                    CreatedDate = country.CreatedDate,
                     CreatedBy = country.CreatedBy,
-                    ModifiedDate = country.ModifiedDate.Value,
+                    ModifiedDate = country.ModifiedDate,
                     ModifiedBy = country.ModifiedBy
                 };
 

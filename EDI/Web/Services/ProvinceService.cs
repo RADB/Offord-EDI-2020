@@ -159,9 +159,9 @@ namespace EDI.Web.Services
                     English = province.English,
                     French = province.French,
                     CountryID = province.CountryID,
-                    CreatedDate = province.CreatedDate.Value,
+                    CreatedDate = province.CreatedDate,
                     CreatedBy = province.CreatedBy,
-                    ModifiedDate = province.ModifiedDate.Value,
+                    ModifiedDate = province.ModifiedDate,
                     ModifiedBy = province.ModifiedBy
                 };
 
