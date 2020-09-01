@@ -5,8 +5,7 @@ using System.Collections.Generic;
 namespace EDI.ApplicationCore.Entities
 {
     public partial class Child:BaseEntity
-    {
-        public int Id { get; set; }
+    {        
         public string Ediid { get; set; }
         public string LocalId { get; set; }
         /// <summary>
