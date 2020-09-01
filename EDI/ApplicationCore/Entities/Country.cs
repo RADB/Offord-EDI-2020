@@ -31,8 +31,6 @@ namespace EDI.ApplicationCore.Entities
         [StringLength(3)]
         public string ISO3CountryCode { get; set; }
 
-        
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Province> Provinces { get; set; }
         public virtual ICollection<School> Schools { get; set; }

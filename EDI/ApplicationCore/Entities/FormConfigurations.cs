@@ -17,6 +17,5 @@ namespace EDI.ApplicationCore.Entities
         public bool IsVisible { get; set; }
 
         public bool IsEnabled { get; set; }
-
     }
 }
