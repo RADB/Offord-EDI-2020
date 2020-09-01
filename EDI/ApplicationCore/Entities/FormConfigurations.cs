@@ -17,15 +17,5 @@ namespace EDI.ApplicationCore.Entities
         public bool IsVisible { get; set; }
 
         public bool IsEnabled { get; set; }
-
-        [StringLength(50)]
-        public string CreatedBy { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        [StringLength(50)]
-        public string ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
     }
 }

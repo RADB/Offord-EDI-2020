@@ -277,13 +277,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CoordinatorName).HasMaxLength(100);
 
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
                 entity.Property(e => e.Description).IsUnicode(false);
 
                 entity.Property(e => e.Email).HasMaxLength(100);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(14);
 

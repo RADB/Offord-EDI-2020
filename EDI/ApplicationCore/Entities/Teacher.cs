@@ -61,10 +61,6 @@ namespace EDI.ApplicationCore.Entities
         /// English or French
         /// </summary>
         public string LanguageCompleted { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
 
         public virtual School School { get; set; }
         public virtual Year Year { get; set; }
