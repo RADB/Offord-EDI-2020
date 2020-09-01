@@ -13,24 +13,23 @@ namespace EDI.ApplicationCore.Entities
         {
             Teachers = new HashSet<Teacher>();
         }
-        public string SchoolNumber { get; set; }
-        public int? YearId { get; set; }
 
+        public string SchoolNumber { get; set; }
+        /// <summary>
+        /// Year of the EDI implementation
+        /// </summary>
+        public int? YearId { get; set; }
         public string SchoolName { get; set; }
         public int CountryId { get; set; }
         public int ProvinceId { get; set; }
         public int SiteId { get; set; }
         public string City { get; set; }
         public string Description { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
-
-        public virtual Site Sites { get; set; }
 
         public virtual Country Countries { get; set; }
-        public virtual ICollection<Teacher> Teachers{ get; set; }
-        public virtual Year Year { get; set; }
+        public virtual Province Provinces { get; set; }
+        public virtual Site Sites { get; set; }
+        public virtual Year Years { get; set; }
+        public virtual ICollection<Teacher> Teachers { get; set; }
     }
 }

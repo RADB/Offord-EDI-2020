@@ -9,10 +9,15 @@ namespace EDI.ApplicationCore.Entities
     [Table("Teachers", Schema = "EDI")]
     public partial class Teacher:BaseEntity
     {
+        public Teacher()
+        {
+            Children = new HashSet<Child>();
+        }
         /// <summary>
         /// Links to user in EDI.Identity database
         /// </summary>
         public string UserId { get; set; }
+        public string TeacherNumber { get; set; }
         /// <summary>
         /// Year of the EDI implementation
         /// </summary>
@@ -61,12 +66,9 @@ namespace EDI.ApplicationCore.Entities
         /// English or French
         /// </summary>
         public string LanguageCompleted { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
 
-        public virtual School School { get; set; }
-        public virtual Year Year { get; set; }
+        public virtual School Schools { get; set; }
+        public virtual Year Years { get; set; }
+        public virtual ICollection<Child> Children { get; set; }
     }
 }

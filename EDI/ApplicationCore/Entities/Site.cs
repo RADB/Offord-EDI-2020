@@ -22,12 +22,8 @@ namespace EDI.ApplicationCore.Entities
         /// guid from EDI.Identity.dbo.ASPNETUsers
         /// </summary>
         public string CoordinatorId { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
 
         public virtual ICollection<School> Schools { get; set; }
-        public virtual Year Year { get; set; }
+        public virtual Year Years { get; set; }
     }
 }

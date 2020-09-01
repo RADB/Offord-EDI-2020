@@ -6,12 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Languages", Schema = "LUData")]
-    public partial class Language:BaseEntity
+    [Table("Gender", Schema = "LUData")]
+    public partial class Gender:BaseEntity
     {
+        public Gender()
+        {
+            Children = new HashSet<Child>();
+        }
+        
         public string Code { get; set; }
         public string English { get; set; }
         public string French { get; set; }
         public int? Sequence { get; set; }
+
+        public virtual ICollection<Child> Children { get; set; }
     }
 }

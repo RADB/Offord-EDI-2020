@@ -11,21 +11,19 @@ namespace EDI.ApplicationCore.Entities
     {
         public Year()
         {
+            Children = new HashSet<Child>();
+            Coordinators = new HashSet<Coordinator>();
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
             Teachers = new HashSet<Teacher>();
-            Coordinators = new HashSet<Coordinator>();
         }
 
         public short? Ediyear { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
 
+        public virtual ICollection<Child> Children { get; set; }
+        public virtual ICollection<Coordinator> Coordinators { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
-        public virtual ICollection<Coordinator> Coordinators{ get; set; }
     }
 }

@@ -12,6 +12,10 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
+         "Name": "[EDI].[Children]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI].[Coordinators]"
       },
       {
@@ -29,6 +33,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[LUData].[Countries]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Gender]"
       },
       {
          "HasPrimaryKey": true,

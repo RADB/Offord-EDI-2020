@@ -7,6 +7,10 @@ namespace EDI.ApplicationCore.Entities
     [Table("Provinces", Schema = "LUData")]
     public partial class Province : BaseEntity
     {
+        public Province()
+        {            
+            Schools = new HashSet<School>();
+        }
         [Required]
         [StringLength(100)]
         public string English { get; set; }
@@ -20,20 +24,9 @@ namespace EDI.ApplicationCore.Entities
 
         public int? ProvinceTypeId { get; set; }
 
-        [Required]
-        [StringLength(64)]
-        public string CreatedBy { get; set; }
+        public virtual Country Countries { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
-        [Required]
-        [StringLength(64)]
-        public string ModifiedBy { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
-
-        public virtual Country Country { get; set; }
-
-        public virtual ProvinceType ProvinceType { get; set; }
+        public virtual ProvinceType ProvinceTypes { get; set; }
+        public virtual ICollection<School> Schools { get; set; }
     }
 }
