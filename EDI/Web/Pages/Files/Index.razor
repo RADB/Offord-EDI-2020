@@ -1,0 +1,209 @@
+﻿@page "/Files/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ISharedService sharedService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Files Import</strong>
+                <div class="pull-right">
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Import Data" @onclick="UploadFile"><i class="fa fa-file-excel fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (files == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" TValue="FileItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(FileItemViewModel.FileName) HeaderText="File" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.SiteName) HeaderText="Site" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.CoordinatorName) HeaderText="Coordinator" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.CoordinatorEmail) HeaderText="Coordinator Email" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.SchoolName) HeaderText="School" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.Province) HeaderText="Province" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.TeacherName) HeaderText="Teacher" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.TeacherEmail) HeaderText="Teacher Email" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.LocalId) HeaderText="Child's Local ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.ClassTime) HeaderText="Class_tm" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.Gender) HeaderText="Gender" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.ChildDob) HeaderText="DOB" Format="yyyy-MM-dd" Type="ColumnType.Date" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.ChildPostalCodeZip) HeaderText="Postal" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(FileItemViewModel.ChildEdiid) HeaderText="EDI_ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<FileItemViewModel> Grid;
+
+    IEnumerable<FileItemViewModel> files;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allfiles = await Task.FromResult(dbContext.FileImports.OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+
+            List<FileItemViewModel> sivm = new List<FileItemViewModel>();
+
+            foreach (var file in allfiles)
+            {
+                var afile = new FileItemViewModel();
+
+                afile.Id = file.Id;
+                afile.FileName = file.FileName;
+                afile.SiteName = file.SiteName;
+                afile.CoordinatorName = file.CoordinatorName;
+                afile.CoordinatorEmail = file.CoordinatorEmail;
+                afile.SchoolName = file.SchoolName;
+                afile.SchoolProvinceId = file.SchoolProvinceId;
+                afile.Province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English;
+                afile.TeacherName = file.TeacherName;
+                afile.TeacherEmail = file.TeacherEmail;
+                afile.LocalId = file.LocalId;
+                afile.ClassTime = file.ClassTime;
+                afile.GenderId = file.GenderId;
+                afile.Gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English;
+                afile.ChildDob = file.ChildDob;
+                afile.ChildPostalCodeZip = file.ChildPostalCodeZip;
+                afile.ChildEdiid = file.ChildEdiid;
+
+                sivm.Add(afile);
+            }
+
+            this.rowid = 0;
+
+            files = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<FileItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    FileItemViewModel FileModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridFile_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridFile_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridFile_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+    }
+
+    private void UploadFile()
+    {
+        var parameters = new ModalParameters();
+
+        parameters.Add("DataName", "Files");
+
+        Modal.Show<UploadFileWindow>("Upload File data: ", parameters);
+        Modal.OnClose += UploadWindowModalClosed;
+    }
+
+    private async void UploadWindowModalClosed(ModalResult modalResult)
+    {
+        if (modalResult.Data is ErrorViewModel)
+        {
+            var result = (ErrorViewModel)modalResult.Data;
+
+            if (!string.IsNullOrEmpty(result.message))
+            {
+                toastService.ShowSuccess(result.message);
+            }
+            else if (!string.IsNullOrEmpty(result.errormessage))
+            {
+                toastService.ShowError(result.errormessage);
+            }
+
+            var allfiles = await Task.FromResult(dbContext.FileImports.OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+
+            List<FileItemViewModel> sivm = new List<FileItemViewModel>();
+
+            foreach (var file in allfiles)
+            {
+                var afile = new FileItemViewModel();
+
+                afile.Id = file.Id;
+                afile.FileName = file.FileName;
+                afile.SiteName = file.SiteName;
+                afile.CoordinatorName = file.CoordinatorName;
+                afile.CoordinatorEmail = file.CoordinatorEmail;
+                afile.SchoolName = file.SchoolName;
+                afile.SchoolProvinceId = file.SchoolProvinceId;
+                afile.Province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English;
+                afile.TeacherName = file.TeacherName;
+                afile.TeacherEmail = file.TeacherEmail;
+                afile.LocalId = file.LocalId;
+                afile.ClassTime = file.ClassTime;
+                afile.GenderId = file.GenderId;
+                afile.Gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English;
+                afile.ChildDob = file.ChildDob;
+                afile.ChildPostalCodeZip = file.ChildPostalCodeZip;
+                afile.ChildEdiid = file.ChildEdiid;
+
+                sivm.Add(afile);
+            }
+
+            this.rowid = 0;
+
+            files = sivm;
+
+            this.Grid.Refresh();
+        }
+        Modal.OnClose -= UploadWindowModalClosed;
+
+        StateHasChanged();
+    }
+}

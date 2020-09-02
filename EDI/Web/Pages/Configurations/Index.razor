@@ -15,9 +15,6 @@
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
                 <strong>System Configurations</strong>
-                <div class="pull-right">
-                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Import Data" @onclick="UploadFile"><i class="fa fa-file-excel fa-1x whiteiconcolor"></i></button>
-                </div>
             </div>
             <div class="card-body">
                 <div class="row"></div>
@@ -242,35 +239,5 @@
             Modal.Show<ConfigurationWindow>("Edit Configuration", parameters);
             Modal.OnClose += ExistWindowModalClosed;
         }
-    }
-
-    private void UploadFile()
-    {
-        var parameters = new ModalParameters();
-
-        parameters.Add("DataName", "Files");
-
-        Modal.Show<UploadFileWindow>("Upload File data: ", parameters);
-        Modal.OnClose += UploadWindowModalClosed;
-    }
-
-    private async void UploadWindowModalClosed(ModalResult modalResult)
-    {
-        if (modalResult.Data is ErrorViewModel)
-        {
-            var result = (ErrorViewModel)modalResult.Data;
-
-            if (!string.IsNullOrEmpty(result.message))
-            {
-                toastService.ShowSuccess(result.message);
-            }
-            else if (!string.IsNullOrEmpty(result.errormessage))
-            {
-                toastService.ShowError(result.errormessage);
-            }
-        }
-        Modal.OnClose -= UploadWindowModalClosed;
-
-        StateHasChanged();
     }
 }
