@@ -293,6 +293,27 @@ namespace EDI.Web.Services
                                 }
 
                                 //skip gender now
+                                var gender = row.Cells[9]?.CalculatedValue.Trim();
+
+                                if (string.IsNullOrEmpty(gender))
+                                {
+                                    _file.GenderId = null;
+                                }
+                                else
+                                {
+                                    int genderid = 0;
+                                    if(gender == "M")
+                                    {
+                                        genderid = _dbContext.Genders.Where(p => p.English == "Male").FirstOrDefault().Id;
+                                    }
+                                    else
+                                    {
+                                        genderid = _dbContext.Genders.Where(p => p.English == "Female").FirstOrDefault().Id;
+                                    }
+
+                                    _file.GenderId = genderid;
+                                }
+
 
                                 var dob = row.Cells[10]?.CalculatedValue.Trim();
 
