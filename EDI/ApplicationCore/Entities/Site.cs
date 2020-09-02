@@ -24,6 +24,6 @@ namespace EDI.ApplicationCore.Entities
         public string CoordinatorId { get; set; }
 
         public virtual ICollection<School> Schools { get; set; }
-        public virtual Year Years { get; set; }
+        public virtual Year Year { get; set; }
     }
 }

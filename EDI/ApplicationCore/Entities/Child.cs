@@ -17,8 +17,8 @@ namespace EDI.ApplicationCore.Entities
         public DateTime? Dob { get; set; }
         public string PostalCodeZip { get; set; }
 
-        public virtual Gender Genders { get; set; }
-        public virtual Teacher Teachers { get; set; }
-        public virtual Year Years { get; set; }
+        public virtual Gender Gender { get; set; }
+        public virtual Teacher Teacher { get; set; }
+        public virtual Year Year { get; set; }
     }
 }

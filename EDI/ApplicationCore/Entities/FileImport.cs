@@ -22,8 +22,8 @@ namespace EDI.ApplicationCore.Entities
         public DateTime? ChildDob { get; set; }
         public string ChildPostalCodeZip { get; set; }
         public string ChildEdiid { get; set; }
-        public virtual Gender Genders { get; set; }
-        public virtual Province Provinces { get; set; }
+        public virtual Gender Gender { get; set; }
+        public virtual Province Province { get; set; }
 
     }
 }
