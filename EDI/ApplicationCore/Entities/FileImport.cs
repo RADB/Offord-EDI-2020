@@ -22,8 +22,10 @@ namespace EDI.ApplicationCore.Entities
         public DateTime? ChildDob { get; set; }
         public string ChildPostalCodeZip { get; set; }
         public string ChildEdiid { get; set; }
+        public int? FileImportStatusId { get; set; }
         public virtual Gender Gender { get; set; }
-        public virtual Province Province { get; set; }
+        public virtual Province SchoolProvince { get; set; }
+        public virtual FileImportStatus FileImportStatus { get; set; }
 
     }
 }
