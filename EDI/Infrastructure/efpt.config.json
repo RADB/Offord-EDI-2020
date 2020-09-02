@@ -40,6 +40,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[LUData].[FileImportStatus]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[LUData].[Gender]"
       },
       {

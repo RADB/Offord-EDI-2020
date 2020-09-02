@@ -15,7 +15,7 @@ namespace EDI.ApplicationCore.Entities
         /// Year of the EDI implementation
         /// </summary>
         public int? YearId { get; set; }
-        public byte? Gender { get; set; }
+        public int? GenderId { get; set; }
         public byte? Age { get; set; }
         public byte? StudentCount { get; set; }
         public byte? FirstTimeCompletingEdi { get; set; }
@@ -54,7 +54,7 @@ namespace EDI.ApplicationCore.Entities
         /// <summary>
         /// English or French
         /// </summary>
-
+        public virtual Gender Gender { get; set; }
         public virtual Teacher Teacher { get; set; }
         public virtual Year Year { get; set; }
     }

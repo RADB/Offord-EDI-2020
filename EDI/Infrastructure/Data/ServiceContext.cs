@@ -12,6 +12,7 @@ namespace EDI.Infrastructure.Data
         /*Lookup Data*/
         public virtual DbSet<DateDimension> DateDimension { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
@@ -324,6 +325,21 @@ namespace EDI.Infrastructure.Data
                 entity.HasOne(d => d.Year).WithMany(p => p.Children).HasForeignKey(d => d.YearId).HasConstraintName("FK_Children_Years");
             });
 
+            modelBuilder.Entity<FileImportStatus>(entity =>
+            {
+                entity.ToTable("FileImportStatus", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+            });
+
             modelBuilder.Entity<Year>(entity =>
             {
                 entity.ToTable("Years", "LUData");
@@ -369,6 +385,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 
+                entity.Property(e => e.FileImportStatusId).HasColumnName("FileImportStatusID");
+
                 entity.Property(e => e.FileName).HasMaxLength(256);
 
                 entity.Property(e => e.GenderId).HasColumnName("GenderID");
@@ -384,6 +402,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.TeacherName).HasMaxLength(100);
 
                 entity.HasOne(d => d.Gender).WithMany(p => p.FileImports).HasForeignKey(d => d.GenderId).HasConstraintName("FK_FileImports_Gender");
+                entity.HasOne(d => d.FileImportStatus).WithMany(p => p.FileImports).HasForeignKey(d => d.FileImportStatusId).HasConstraintName("FK_FileImports_FileImportStatus");
             });
 
             modelBuilder.Entity<TeacherParticipationForm>(entity =>
@@ -400,6 +419,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.FirstTimeCompletingEdi).HasColumnName("FirstTimeCompletingEDI");
 
+                entity.Property(e => e.GenderId).HasColumnName("GenderID");
+
                 entity.Property(e => e.GuideOtherComment).HasMaxLength(255);
 
                 entity.Property(e => e.LanguageCompleted).HasMaxLength(20).HasComment("English or French");
@@ -413,8 +434,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
                 entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
+                entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
 
-                
             });
         }
     }
