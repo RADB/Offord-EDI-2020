@@ -30,6 +30,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Data;
+using Syncfusion.XlsIO;
 
 namespace EDI.Web.Services
 {
@@ -39,6 +40,7 @@ namespace EDI.Web.Services
         private readonly IAsyncIdentityRepository _accountRepository;
         private readonly IAsyncRepository<Country> _countryRepository;
         private readonly IAsyncRepository<Province> _provinceRepository;
+        private readonly IAsyncRepository<FileImport> _fileRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -60,6 +62,7 @@ namespace EDI.Web.Services
             RoleManager<IdentityRole> roleManager,
             IAsyncRepository<Country> countryRepository,
             IAsyncRepository<Province> provinceRepository,
+            IAsyncRepository<FileImport> fileRepository,
             IAsyncIdentityRepository accountRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
@@ -75,6 +78,7 @@ namespace EDI.Web.Services
             _roleManager = roleManager;
             _countryRepository = countryRepository;
             _provinceRepository = provinceRepository;
+            _fileRepository = fileRepository;
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
@@ -161,6 +165,191 @@ namespace EDI.Web.Services
                 var vm = new List<SelectListItem>();
 
                 return vm;
+            }
+        }
+
+        public async Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file)
+        {
+            await LogUsername();
+            Log.Information("UploadFileData started by:" + _username);
+            ErrorViewModel error = new ErrorViewModel();
+
+            string errormessage = string.Empty;
+            string message = string.Empty;
+
+            try
+            {
+                if (file.FileInfo.Size > 0)
+                {
+                    string folderName = "Upload";
+                    string webRootPath = _hostingEnvironment.ContentRootPath + @"\wwwroot";
+                    string newPath = Path.Combine(webRootPath, folderName);
+
+                    if (!Directory.Exists(newPath))
+                    {
+                        Directory.CreateDirectory(newPath);
+                    }
+
+                    string fullPath = Path.Combine(newPath, "Customers.xlsx");
+
+                    var comlumHeadrs = new string[]
+                    {
+                        "Site",
+                        "Coordinator",
+                        "Coordinator Email",
+                        "School Name",
+                        "School Province",
+                        "Teacher Name",
+                        "Teacher Email",
+                        "Child's Local ID",
+                        "Class_tm",
+                        "Gender",
+                        "DOB",
+                        "Postal Code",
+                        "EDI_ID"
+                    };
+
+                    using (Stream fileStream = file.Stream)
+                    {
+                        using (ExcelEngine excelEngine = new ExcelEngine())
+                        {
+                            // set the stream position to zero
+                            fileStream.Position = 0;
+
+                            Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream, ExcelOpenType.Automatic, ExcelParseOptions.Default); ;
+
+                            //Get the first worksheet in the workbook into IWorksheet
+                            IWorksheet worksheet = workbook.Worksheets[0];
+
+                            IRange firstrow = worksheet.Rows[0];
+
+                            int cellCount = firstrow.LastColumn;
+
+                            for (int j = 0; j < cellCount; j++)
+                            {
+                                if (j > 12)
+                                    break;
+
+                                var cell = firstrow.Cells[j];
+                                if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != comlumHeadrs[j].Trim().ToLower())
+                                {
+                                    errormessage = "This Excel file is invalid";
+
+                                    error.message = message;
+                                    error.errormessage = errormessage;
+                                    return error;
+                                }
+                            }
+
+                            await _fileRepository.DeleteAllFileImports();
+                            await _fileRepository.ReseedFileImports();
+
+                            int firstRow = worksheet.UsedRange.Row;
+                            int lastRow = worksheet.UsedRange.LastRow;
+
+                            for (int i = firstRow; i < lastRow; i++) //Read Excel File
+                            {
+                                IRange row = worksheet.Rows[i];
+                                if (row == null) continue;
+                                if (row.IsBlank) continue;
+
+
+                                var site = row.Cells[0]?.CalculatedValue.Trim();
+
+                                var _file = new FileImport();
+
+                                _file.FileName = file.FileInfo.Name;
+                                _file.SiteName = site;
+                                _file.CoordinatorName = row.Cells[1]?.CalculatedValue.Trim();
+                                _file.CoordinatorEmail = row.Cells[2]?.CalculatedValue.Trim();
+                                _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
+
+                                var province = row.Cells[4]?.CalculatedValue.Trim();
+                                if (string.IsNullOrEmpty(province))
+                                {
+                                    _file.SchoolProvinceId = null;
+                                }
+                                else
+                                {
+                                    //if (currency == "CAD")
+                                    //    currency = "CAD - Canadian dollar";
+
+                                    //var currencyid = _dbContext.Currency.Where(p => p.Name == currency).Select(p => p.Id).FirstOrDefault();
+
+                                    _file.SchoolProvinceId =int.Parse(province);
+                                }
+                                _file.TeacherName = row.Cells[5]?.CalculatedValue.Trim();
+                                _file.TeacherEmail = row.Cells[6]?.CalculatedValue.Trim();
+                                _file.LocalId = row.Cells[7]?.CalculatedValue.Trim();
+                                var classtime = row.Cells[8]?.CalculatedValue.Trim();
+
+                                if (string.IsNullOrEmpty(classtime))
+                                {
+                                    _file.ClassTime = null;
+                                }
+                                else
+                                {
+                                    _file.ClassTime = byte.Parse(classtime);
+                                }
+
+                                //skip gender now
+
+                                var dob = row.Cells[10]?.CalculatedValue.Trim();
+
+                                if (string.IsNullOrEmpty(dob))
+                                {
+                                    _file.ChildDob = null;
+                                }
+                                else
+                                {
+                                    _file.ChildDob = DateTime.Parse(dob);
+                                }
+
+                                _file.ChildPostalCodeZip = row.Cells[11]?.CalculatedValue.Trim();
+                                _file.ChildEdiid = row.Cells[12]?.CalculatedValue.Trim();
+
+                                _file.ModifiedDate = DateTime.Now;
+                                _file.ModifiedBy = _username;
+
+                                _file.CreatedDate = DateTime.Now;
+                                _file.CreatedBy = _username;
+
+                                await _fileRepository.AddAsync(_file);
+
+                                error.message = "file has been imported successfully.";
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(error.errormessage))
+                        {
+                            if (File.Exists(fullPath))
+                            {
+                                File.Delete(fullPath);
+                            }
+
+                            FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                            file.Stream.WriteTo(filestream);
+                            filestream.Close();
+                            file.Stream.Close();
+                        }
+                    }
+                }
+                else
+                {
+                    errormessage = "The file is invalid!";
+                }
+
+                return error;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("UploadFileData failed:" + ex.Message);
+
+                errormessage = "File imports failed. Please check the log file for more information.";
+
+                error.message = message;
+                error.errormessage = errormessage;
+                return error;
             }
         }
     }

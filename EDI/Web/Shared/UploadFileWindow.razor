@@ -1,4 +1,5 @@
 ﻿@using Syncfusion.Blazor.Inputs
+@inject ISharedService sharedService
 @inject IModalService ModalService
 
 
@@ -37,10 +38,9 @@
     {
         foreach (var file in args.Files)
         {
-            if (DataName == "Customers")
+            if (DataName == "Files")
             {
-                //ErrorViewModel result = await customerService.UploadCustomerData(file);
-                ErrorViewModel result = new ErrorViewModel();
+                ErrorViewModel result = await sharedService.UploadFileData(file);
 
                 if (string.IsNullOrEmpty(result.errormessage))
                 {

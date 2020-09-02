@@ -112,5 +112,15 @@ namespace EDI.Infrastructure.Data
         {
             return _dbContext.Set<Site>().ToList();
         }
+
+        public async Task DeleteAllFileImports()
+        {
+            await _dbContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE [Staging].[FileImports]");
+        }
+
+        public async Task ReseedFileImports()
+        {
+            await _dbContext.Database.ExecuteSqlCommandAsync("DBCC CHECKIDENT ([staging.FileImports], RESEED, 0)");
+        }
     }
 }

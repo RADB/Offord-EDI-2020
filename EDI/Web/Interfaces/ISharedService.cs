@@ -11,5 +11,6 @@ namespace EDI.Web.Interfaces
     {
         Task<IEnumerable<SelectListItem>> GetCountries();
         Task<IEnumerable<SelectListItem>> GetProvinces(int countryid);
+        Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
     }
 }
