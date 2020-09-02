@@ -32,11 +32,15 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI_Forms].[TeacherParticipation]"
+         "Name": "[EDI_Forms].[TeacherParticipationForms]"
       },
       {
          "HasPrimaryKey": true,
          "Name": "[LUData].[Countries]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[FileImportStatus]"
       },
       {
          "HasPrimaryKey": true,

@@ -6,23 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Gender", Schema = "LUData")]
-    public partial class Gender:BaseEntity
+    [Table("FileImportStatus", Schema = "LUData")]
+    public partial class FileImportStatus:BaseEntity
     {
-        public Gender()
+        public FileImportStatus()
         {
-            Children = new HashSet<Child>();
             FileImports = new HashSet<FileImport>();
-            TeacherParticipationForms = new HashSet<TeacherParticipationForm>();
         }
-        
+
         public string Code { get; set; }
         public string English { get; set; }
         public string French { get; set; }
         public int? Sequence { get; set; }
 
-        public virtual ICollection<Child> Children { get; set; }
         public virtual ICollection<FileImport> FileImports { get; set; }
-        public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms{ get; set; }
     }
 }
