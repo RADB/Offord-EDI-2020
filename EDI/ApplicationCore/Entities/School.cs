@@ -26,10 +26,10 @@ namespace EDI.ApplicationCore.Entities
         public string City { get; set; }
         public string Description { get; set; }
 
-        public virtual Country Countries { get; set; }
-        public virtual Province Provinces { get; set; }
-        public virtual Site Sites { get; set; }
-        public virtual Year Years { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual Province Province { get; set; }
+        public virtual Site Site { get; set; }
+        public virtual Year Year { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
     }
 }

@@ -25,9 +25,9 @@ namespace EDI.ApplicationCore.Entities
 
         public int? ProvinceTypeId { get; set; }
 
-        public virtual Country Countries { get; set; }
+        public virtual Country Country { get; set; }
 
-        public virtual ProvinceType ProvinceTypes { get; set; }
+        public virtual ProvinceType ProvinceType { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<FileImport> FileImports { get; set; }
     }
