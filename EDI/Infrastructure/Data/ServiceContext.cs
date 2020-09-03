@@ -13,7 +13,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<DateDimension> DateDimension { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
-        public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<Genders> Genders { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
@@ -340,7 +340,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
-            modelBuilder.Entity<Gender>(entity =>
+            modelBuilder.Entity<Genders>(entity =>
             {
                 entity.ToTable("Genders", "LUData");
 

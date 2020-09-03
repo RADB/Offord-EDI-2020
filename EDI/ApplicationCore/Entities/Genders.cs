@@ -7,9 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EDI.ApplicationCore.Entities
 {
     [Table("Genders", Schema = "LUData")]
-    public partial class Gender:BaseEntity
+    public partial class Genders:BaseEntity
     {
-        public Gender()
+        public Genders()
         {
             Children = new HashSet<Child>();
             FileImports = new HashSet<FileImport>();
