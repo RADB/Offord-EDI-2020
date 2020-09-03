@@ -371,8 +371,6 @@ namespace EDI.Infrastructure.Data
             {
                 entity.ToTable("FileImports", "Staging");
 
-                entity.Property(e => e.Id).HasColumnName("ID");
-
                 entity.Property(e => e.ChildDob).HasColumnName("ChildDOB").HasColumnType("smalldatetime");
 
                 entity.Property(e => e.ChildEdiid).HasColumnName("ChildEDIID").HasMaxLength(15);
