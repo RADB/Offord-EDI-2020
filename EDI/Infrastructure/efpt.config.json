@@ -44,7 +44,7 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Gender]"
+         "Name": "[LUData].[Genders]"
       },
       {
          "HasPrimaryKey": true,

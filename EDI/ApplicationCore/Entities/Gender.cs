@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Gender", Schema = "LUData")]
+    [Table("Genders", Schema = "LUData")]
     public partial class Gender:BaseEntity
     {
         public Gender()

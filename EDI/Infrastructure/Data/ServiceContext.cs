@@ -340,6 +340,21 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
+            modelBuilder.Entity<Gender>(entity =>
+            {
+                entity.ToTable("Genders", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+            });
+
             modelBuilder.Entity<Year>(entity =>
             {
                 entity.ToTable("Years", "LUData");
