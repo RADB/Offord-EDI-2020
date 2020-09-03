@@ -22,6 +22,8 @@ namespace EDI.Web.Models
         public DateTime? ChildDob { get; set; }
         public string ChildPostalCodeZip { get; set; }
         public string ChildEdiid { get; set; }
+        public int? FileImportStatusId { get; set; }
+        public string FileImportStatus { get; set; }
 
         [StringLength(50)]
         public string CreatedBy { get; set; }

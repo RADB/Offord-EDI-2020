@@ -291,8 +291,7 @@ namespace EDI.Web.Services
                                 {
                                     _file.ClassTime = byte.Parse(classtime);
                                 }
-
-                                //skip gender now
+                                
                                 var gender = row.Cells[9]?.CalculatedValue.Trim();
 
                                 if (string.IsNullOrEmpty(gender))
@@ -328,6 +327,12 @@ namespace EDI.Web.Services
 
                                 _file.ChildPostalCodeZip = row.Cells[11]?.CalculatedValue.Trim();
                                 _file.ChildEdiid = row.Cells[12]?.CalculatedValue.Trim();
+
+
+                                int statusid = 0;
+                                statusid = _dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault().Id;
+
+                                _file.FileImportStatusId = statusid;
 
                                 _file.ModifiedDate = DateTime.Now;
                                 _file.ModifiedBy = _username;
