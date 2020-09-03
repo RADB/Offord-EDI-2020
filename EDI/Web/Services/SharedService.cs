@@ -241,8 +241,8 @@ namespace EDI.Web.Services
                                 }
                             }
 
-                            await _fileRepository.DeleteAllFileImports();
-                            await _fileRepository.ReseedFileImports();
+                            //await _fileRepository.DeleteAllFileImports();
+                            //await _fileRepository.ReseedFileImports();
 
                             int firstRow = worksheet.UsedRange.Row;
                             int lastRow = worksheet.UsedRange.LastRow;
