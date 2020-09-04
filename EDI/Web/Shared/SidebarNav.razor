@@ -40,19 +40,29 @@
         treedata.Add(new TreeData { nodeId = "01", nodeText = "Administration", iconCss = "icon-globe icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "01-01", nodeText = "Sites", iconCss = "icon-list icon", pid = "01" });
         treedata.Add(new TreeData { nodeId = "01-02", nodeText = "Schools", iconCss = "icon-organization icon", pid = "01" });
+        treedata.Add(new TreeData { nodeId = "01-03", nodeText = "Teachers", iconCss = "icon-organization icon", pid = "01" });
+        treedata.Add(new TreeData { nodeId = "01-04", nodeText = "Children", iconCss = "icon-organization icon", pid = "01" });
+        treedata.Add(new TreeData { nodeId = "01-05", nodeText = "Coordinator-Sites", iconCss = "icon-organization icon", pid = "01" });
         treedata.Add(new TreeData { nodeId = "02", nodeText = "Screens", iconCss = "icon-docs icon" });
         treedata.Add(new TreeData { nodeId = "03", nodeText = "Maintenance", iconCss = "icon-info icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "03-01", nodeText = "Languages", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-02", nodeText = "Special Problems", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-03", nodeText = "Years", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-04", nodeText = "Countries", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-05", nodeText = "Provinces", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-06", nodeText = "Configurations", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-07", nodeText = "Files", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-01", nodeText = "Configuration", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-02", nodeText = "Data Import", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-03", nodeText = "Countries", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-04", nodeText = "File Import Status", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-05", nodeText = "Genders", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-06", nodeText = "Languages", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-07", nodeText = "Provinces", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-08", nodeText = "Province Types", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-09", nodeText = "Special Problems", iconCss = "icon-list icon", pid = "03" });
+        treedata.Add(new TreeData { nodeId = "03-10", nodeText = "Years", iconCss = "icon-list icon", pid = "03" });
         treedata.Add(new TreeData { nodeId = "04", nodeText = "Accounts", iconCss = "icon-list icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Users", iconCss = "icon-people icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Roles", iconCss = "icon-organization icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-03", nodeText = "My Profile", iconCss = "icon-user icon", pid = "04" });
+        treedata.Add(new TreeData { nodeId = "05", nodeText = "Resources", iconCss = "icon-list icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "05-01", nodeText = "Guide", iconCss = "icon-people icon", pid = "05" });
+        treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Links", iconCss = "icon-people icon", pid = "05" });
+        treedata.Add(new TreeData { nodeId = "05-03", nodeText = "Reports", iconCss = "icon-people icon", pid = "05" });
     }
 
     private void onSelect(NodeSelectEventArgs args)
@@ -79,32 +89,35 @@
         }
         else if (args.NodeData.Id == "03-01")
         {
-            NavigationManager.NavigateTo("./languages/index");
+            NavigationManager.NavigateTo("./configurations/index");
         }
         else if (args.NodeData.Id == "03-02")
         {
-            NavigationManager.NavigateTo("./specialproblems/index");
+            NavigationManager.NavigateTo("./Data Import/index");
         }
         else if (args.NodeData.Id == "03-03")
         {
-            NavigationManager.NavigateTo("./years/index");
-        }
-        else if (args.NodeData.Id == "03-04")
-        {
             NavigationManager.NavigateTo("./countries/index");
-        }
-        else if (args.NodeData.Id == "03-05")
-        {
-            NavigationManager.NavigateTo("./provinces/index");
         }
         else if (args.NodeData.Id == "03-06")
         {
-            NavigationManager.NavigateTo("./configurations/index");
+            NavigationManager.NavigateTo("./languages/index");
         }
         else if (args.NodeData.Id == "03-07")
         {
-            NavigationManager.NavigateTo("./files/index");
+            NavigationManager.NavigateTo("./provinces/index");
         }
+        else if (args.NodeData.Id == "03-09")
+        {
+            NavigationManager.NavigateTo("./specialproblems/index");
+        }
+        else if (args.NodeData.Id == "03-10")
+        {
+            NavigationManager.NavigateTo("./years/index");
+        }
+
+
+
     }
 
     private async void onClick(NodeClickEventArgs args)
