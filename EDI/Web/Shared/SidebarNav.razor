@@ -47,15 +47,16 @@
         treedata.Add(new TreeData { nodeId = "03", nodeText = "Maintenance", iconCss = "icon-info icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "03-01", nodeText = "Configuration", iconCss = "icon-list icon", pid = "03" });
         treedata.Add(new TreeData { nodeId = "03-02", nodeText = "Data Import", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-03", nodeText = "Countries", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-04", nodeText = "File Import Status", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-05", nodeText = "Genders", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-06", nodeText = "Languages", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-07", nodeText = "Provinces", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-08", nodeText = "Province Types", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-09", nodeText = "Special Problems", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "03-10", nodeText = "Years", iconCss = "icon-list icon", pid = "03" });
-        treedata.Add(new TreeData { nodeId = "04", nodeText = "Accounts", iconCss = "icon-list icon", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "03-03", nodeText = "Lookup Data", iconCss = "icon-list icon", pid = "03", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "03-04", nodeText = "Countries", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-05", nodeText = "File Import Status", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-06", nodeText = "Genders", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-07", nodeText = "Languages", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-08", nodeText = "Provinces", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-09", nodeText = "Province Types", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-10", nodeText = "Special Problems", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "03-11", nodeText = "Years", iconCss = "icon-list icon", pid = "03-03" });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = "Accounts", iconCss = "icon-list icon", hasChild = true});
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Users", iconCss = "icon-people icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Roles", iconCss = "icon-organization icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-03", nodeText = "My Profile", iconCss = "icon-user icon", pid = "04" });
@@ -95,23 +96,23 @@
         {
             NavigationManager.NavigateTo("./Data Import/index");
         }
-        else if (args.NodeData.Id == "03-03")
+        else if (args.NodeData.Id == "03-04")
         {
             NavigationManager.NavigateTo("./countries/index");
         }
-        else if (args.NodeData.Id == "03-06")
+        else if (args.NodeData.Id == "03-07")
         {
             NavigationManager.NavigateTo("./languages/index");
         }
-        else if (args.NodeData.Id == "03-07")
+        else if (args.NodeData.Id == "03-08")
         {
             NavigationManager.NavigateTo("./provinces/index");
         }
-        else if (args.NodeData.Id == "03-09")
+        else if (args.NodeData.Id == "03-10")
         {
             NavigationManager.NavigateTo("./specialproblems/index");
         }
-        else if (args.NodeData.Id == "03-10")
+        else if (args.NodeData.Id == "03-11")
         {
             NavigationManager.NavigateTo("./years/index");
         }
