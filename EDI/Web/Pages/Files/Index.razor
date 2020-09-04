@@ -1,6 +1,7 @@
 ﻿@page "/Files/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Inputs
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ISharedService sharedService;
@@ -15,11 +16,26 @@
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
                 <strong>Files Import</strong>
-                <div class="pull-right">
-                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Import Data" @onclick="UploadFile"><i class="fa fa-file-excel fa-1x whiteiconcolor"></i></button>
-                </div>
             </div>
             <div class="card-body">
+                @if (!string.IsNullOrEmpty(@Message))
+                {
+                    <div class="text-success">@Message</div><br /><br />
+                }
+
+                @if (!string.IsNullOrEmpty(@ErrorMessage))
+                {
+                    <div class="text-danger">@ErrorMessage</div><br /><br />
+                }
+                @if (ShowFileupload)
+                {
+                    <div class="info">
+                        <button type="button" class="closeFileupload" @onclick="CloseUpload"><span aria-hidden="true">&times;</span></button>
+                        <SfUploader AllowedExtensions=".xlsx" AutoUpload="false" Multiple="false">
+                            <UploaderEvents ValueChange="OnChange"></UploaderEvents>
+                        </SfUploader><br />
+                    </div>
+                }
                 <div class="row"></div>
                 <br />
                 @if (files == null)
@@ -28,7 +44,7 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "FileImport","ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" TValue="FileItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -68,6 +84,8 @@
 
     private string username { get; set; }
 
+    private bool ShowFileupload { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -81,9 +99,11 @@
         {
             username = user.Identity.Name;
 
+            ShowFileupload = false;
+
             var status = dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault();
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p=> p.FileImportStatusId == status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
             List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
@@ -144,9 +164,90 @@
         {
             this.Grid.CsvExport();
         }
+        if (args.Item.Id == "GridFile_FileImport")
+        {
+            UploadFile();
+        }
     }
 
+    IFileListEntry file;
+
     private void UploadFile()
+    {
+        ShowFileupload = true;
+    }
+
+    private async void OnChange(UploadChangeEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            ErrorViewModel result = await sharedService.UploadFileData(file);
+
+            if (string.IsNullOrEmpty(result.errormessage))
+            {
+                result.message = "Data uploaded successfully.";
+
+                toastService.ShowSuccess(result.message);
+
+                var status = dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault();
+
+                var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+
+                List<FileItemViewModel> sivm = new List<FileItemViewModel>();
+
+                foreach (var nfile in allfiles)
+                {
+                    var afile = new FileItemViewModel();
+
+                    afile.Id = nfile.Id;
+                    afile.FileName = nfile.FileName;
+                    afile.SiteName = nfile.SiteName;
+                    afile.CoordinatorName = nfile.CoordinatorName;
+                    afile.CoordinatorEmail = nfile.CoordinatorEmail;
+                    afile.SchoolName = nfile.SchoolName;
+                    afile.SchoolProvinceId = nfile.SchoolProvinceId;
+                    var province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault();
+                    afile.Province = province != null ? dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English : string.Empty;
+                    afile.TeacherName = nfile.TeacherName;
+                    afile.TeacherEmail = nfile.TeacherEmail;
+                    afile.LocalId = nfile.LocalId;
+                    afile.ClassTime = nfile.ClassTime;
+                    afile.GenderId = nfile.GenderId;
+                    var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
+                    afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
+                    afile.ChildDob = nfile.ChildDob;
+                    afile.ChildPostalCodeZip = nfile.ChildPostalCodeZip;
+                    afile.ChildEdiid = nfile.ChildEdiid;
+
+                    sivm.Add(afile);
+                }
+
+                this.rowid = 0;
+
+                files = sivm;
+
+                this.Grid.Refresh();
+
+            }
+            else
+            {
+                ErrorMessage = result.errormessage;
+                toastService.ShowError(result.errormessage);
+            }
+        }
+    }
+
+
+
+    private void CloseUpload()
+    {
+        ShowFileupload = false;
+    }
+
+
+
+
+    private void UploadFile1()
     {
         var parameters = new ModalParameters();
 

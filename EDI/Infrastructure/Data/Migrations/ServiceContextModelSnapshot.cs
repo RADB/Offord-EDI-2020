@@ -499,7 +499,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("FormConfigurations");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Gender", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Genders", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -507,26 +507,32 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(3)")
+                        .HasMaxLength(3);
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("English")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
                     b.Property<string>("French")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
@@ -536,7 +542,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gender","LUData");
+                    b.ToTable("Genders","LUData");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Language", b =>
@@ -1136,7 +1142,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Child", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
+                    b.HasOne("EDI.ApplicationCore.Entities.Genders", "Gender")
                         .WithMany("Children")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_Children_Gender");
@@ -1167,7 +1173,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasForeignKey("FileImportStatusId")
                         .HasConstraintName("FK_FileImports_FileImportStatus");
 
-                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
+                    b.HasOne("EDI.ApplicationCore.Entities.Genders", "Gender")
                         .WithMany("FileImports")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_FileImports_Gender");
@@ -1240,7 +1246,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherParticipationForm", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
+                    b.HasOne("EDI.ApplicationCore.Entities.Genders", "Gender")
                         .WithMany("TeacherParticipationForms")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_TeacherParticipationForms_Gender");
