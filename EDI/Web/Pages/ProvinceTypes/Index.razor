@@ -1,0 +1,106 @@
+﻿@page "/ProvinceTypes/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Inputs
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ISharedService sharedService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Province Types</strong>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(@Message))
+                {
+                    <div class="text-success">@Message</div><br /><br />
+                }
+
+                @if (!string.IsNullOrEmpty(@ErrorMessage))
+                {
+                    <div class="text-danger">@ErrorMessage</div><br /><br />
+                }
+                <div class="row"></div>
+                <br />
+                @if (files == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true">
+                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents RowSelected="RowSelect" TValue="ProvinceType"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(ProvinceType.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<ProvinceType> Grid;
+
+    IEnumerable<ProvinceType> files;
+
+    private string username { get; set; }
+
+    private bool ShowFileupload { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allfiles = await Task.FromResult(dbContext.ProvinceType.OrderBy(p => p.Name).ToList());
+
+            List<ProvinceType> sivm = new List<ProvinceType>();
+
+            foreach (var file in allfiles)
+            {
+                var afile = new ProvinceType();
+
+                afile.Id = file.Id;
+                afile.Name = file.Name;
+
+                sivm.Add(afile);
+            }
+
+            this.rowid = 0;
+
+            files = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<ProvinceType> args)
+    {
+        rowid = args.Data.Id;
+    }
+}
