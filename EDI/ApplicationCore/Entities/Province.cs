@@ -20,6 +20,7 @@ namespace EDI.ApplicationCore.Entities
         [Required]
         [StringLength(50)]
         public string Code { get; set; }
+        public byte? EDICode { get; set; }
 
         public int CountryID { get; set; }
 

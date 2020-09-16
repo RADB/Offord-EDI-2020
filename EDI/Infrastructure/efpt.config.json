@@ -2,11 +2,13 @@
    "ContextClassName": "EDIServiceContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": "Data",
    "OutputPath": null,
    "ProjectRootNamespace": "EDI.Infrastructure",
+   "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 1,
    "Tables": [
@@ -29,6 +31,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Teachers]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI_Forms].[TeacherFeedbackForms]"
       },
       {
          "HasPrimaryKey": true,

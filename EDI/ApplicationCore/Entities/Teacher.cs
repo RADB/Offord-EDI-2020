@@ -12,7 +12,8 @@ namespace EDI.ApplicationCore.Entities
         public Teacher()
         {
             Children = new HashSet<Child>();
-            TeacherParticipationForms = new HashSet<TeacherParticipationForm>();
+            TeacherFeedbackForms = new HashSet<TeacherFeedbackForm>(); 
+            TeacherParticipationForms = new HashSet<TeacherParticipationForm>();            
         }
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual School School { get; set; }
         public virtual Year Year { get; set; }
         public virtual ICollection<Child> Children { get; set; }
+        public virtual ICollection<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }
         public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms { get; set; }
     }
 }
