@@ -9,6 +9,10 @@ namespace EDI.ApplicationCore.Entities
     [Table("Coordinators", Schema = "EDI")]
     public partial class Coordinator:BaseEntity
     {
+        public Coordinator()
+        {
+            Sites = new HashSet<Site>();
+        }
         public string UserId { get; set; }
         /// <summary>
         /// Year of the EDI implementation
@@ -18,7 +22,7 @@ namespace EDI.ApplicationCore.Entities
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string Description { get; set; }
-
+        public virtual ICollection<Site> Sites { get; set; }
         public virtual Year Year { get; set; }
     }
 }

@@ -269,6 +269,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(64);
 
+                entity.Property(e => e.EDICode);
+
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(64);
 
                 entity.Property(e => e.English).IsRequired().HasMaxLength(100);
@@ -347,6 +349,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
+                entity.HasOne(e => e.Coordinator).WithMany(p => p.Sites).HasForeignKey(e => e.CoordinatorId).HasConstraintName("FK_Sites_Coordinators");                
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
             });
         
@@ -397,13 +400,7 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
                      
-           
-           
-
-
-            
-
-          
+       
             modelBuilder.Entity<TeacherFeedbackForm>(entity =>
             {
                 entity.ToTable("TeacherFeedbackForms", "EDI_Forms");
