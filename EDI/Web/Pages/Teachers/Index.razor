@@ -1,0 +1,175 @@
+﻿@page "/Teachers/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ITeacherService teacherService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Teachers Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (teachers == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridTeacher" @ref="Grid" DataSource="@teachers" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="TeacherItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="TeacherName" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.TeacherNumber) HeaderText="Teacher #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.TeacherName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.SchoolName) HeaderText="School" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.Email) HeaderText="Email" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.PhoneNumber) HeaderText="Phone" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<TeacherItemViewModel> Grid;
+
+    IEnumerable<TeacherItemViewModel> teachers;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allteachers = await Task.FromResult(dbContext.Teachers.OrderBy(p => p.TeacherNumber).ToList());
+
+            List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
+
+            foreach (var teacher in allteachers)
+            {
+                var ateacher = new TeacherItemViewModel();
+
+                ateacher.Id = teacher.Id;
+                ateacher.TeacherName = teacher.TeacherName;
+                ateacher.TeacherNumber = teacher.TeacherNumber;
+                ateacher.Email = teacher.Email;
+                ateacher.PhoneNumber = teacher.PhoneNumber;
+                ateacher.YearId = teacher.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
+                ateacher.Ediyear = year.Ediyear;
+
+                ateacher.SchoolId = teacher.SchoolId;
+                var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
+                ateacher.SchoolName = school.SchoolName;
+                ateacher.SchoolNumber = school.SchoolNumber;
+
+                sivm.Add(ateacher);
+            }
+
+            this.rowid = 0;
+            teachers = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<TeacherItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridTeacher_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridTeacher_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridTeacher_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridTeacher_add")
+        {
+            NavigationManager.NavigateTo("./teachers/new");
+            //NewInvoice();
+        }
+        if (args.Item.Id == "GridTeacher_edit")
+        {
+            NavigationManager.NavigateTo("./teachers/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridTeacher_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await teacherService.DeleteTeacherAsync(this.rowid);
+
+            var tmp = new List<TeacherItemViewModel>();
+            foreach (var item in teachers)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.teachers = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<TeacherItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./teachers/edit/" + this.rowid);
+    }
+}

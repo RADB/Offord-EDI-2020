@@ -75,4 +75,22 @@ namespace Ardalis.GuardClauses
                 throw new ConfigurationNotFoundException(configid);
         }
     }
+
+    public static class ChildGuards
+    {
+        public static void NullChild(this IGuardClause guardClause, int childid, Child children)
+        {
+            if (children == null)
+                throw new ChildNotFoundException(childid);
+        }
+    }
+
+    public static class TeacherGuards
+    {
+        public static void NullTeacher(this IGuardClause guardClause, int teacherid, Teacher teachers)
+        {
+            if (teachers == null)
+                throw new TeacherNotFoundException(teacherid);
+        }
+    }
 }

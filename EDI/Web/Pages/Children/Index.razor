@@ -1,0 +1,179 @@
+﻿@page "/Children/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IChildService childService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Children Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (children == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="Ediid" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText="EDI_ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText="Child's Local ID" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText="teacher" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText="Gender" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Dob) Type="ColumnType.Date" HeaderText="Date of Birth" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText="Postal/Zip" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<ChildItemViewModel> Grid;
+
+    IEnumerable<ChildItemViewModel> children;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
+
+            List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();
+
+            foreach (var child in allchildren)
+            {
+                var achild = new ChildItemViewModel();
+
+                achild.Id = child.Id;
+                achild.Ediid = child.Ediid;
+                achild.LocalId = child.LocalId;
+                achild.Dob = child.Dob;
+                achild.PostalCodeZip = child.PostalCodeZip;
+                achild.YearId = child.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == child.YearId).FirstOrDefault();
+                achild.Ediyear = year.Ediyear;
+
+                achild.GenderId = child.GenderId;
+                var gender = dbContext.Genders.Where(p => p.Id == child.GenderId).FirstOrDefault();
+                achild.Gender = gender.English;
+
+                achild.TeacherId = child.TeacherId;
+                var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
+                achild.TeacherName = teacher.TeacherName;
+
+                sivm.Add(achild);
+            }
+
+            this.rowid = 0;
+            children = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<ChildItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridChild_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridChild_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridChild_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridChild_add")
+        {
+            NavigationManager.NavigateTo("./children/new");
+            //NewInvoice();
+        }
+        if (args.Item.Id == "GridChild_edit")
+        {
+            NavigationManager.NavigateTo("./children/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridChild_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await childService.DeleteChildAsync(this.rowid);
+
+            var tmp = new List<ChildItemViewModel>();
+            foreach (var item in children)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.children = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<ChildItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./children/edit/" + this.rowid);
+    }
+}

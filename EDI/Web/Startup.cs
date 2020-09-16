@@ -94,6 +94,8 @@ namespace EDI.Web
             services.AddScoped<IProvinceService, ProvinceService>();
             services.AddScoped<ISpecialProblemService, SpecialProblemService>();
             services.AddScoped<ISharedService, SharedService>();
+            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IChildService, ChildService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
 
