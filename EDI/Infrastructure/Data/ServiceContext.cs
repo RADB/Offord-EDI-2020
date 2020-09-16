@@ -10,8 +10,9 @@ namespace EDI.Infrastructure.Data
         {
         }
         /*Lookup Data*/
-        public virtual DbSet<DateDimension> DateDimension { get; set; }
+
         public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<DateDimension> DateDimension { get; set; }
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
         public virtual DbSet<Genders> Genders { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
@@ -24,17 +25,21 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<FileImport> FileImports { get; set; }
 
         /*Configuration Data*/
-        public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
         public virtual DbSet<FormConfigurations> FormConfigurations { get; set; }
+        public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
+
 
         /*EDI Data*/
+        public virtual DbSet<Child> Children { get; set; }
+        public virtual DbSet<Coordinator> Coordinators { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
-        public virtual DbSet<Coordinator> Coordinators { get; set; }
-        public virtual DbSet<Child> Children { get; set; }
+        
+        
 
         /*EDI Form Data*/
+        public virtual DbSet<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }
         public virtual DbSet<TeacherParticipationForm> TeacherParticipationForms { get; set; }
 
 
@@ -100,6 +105,52 @@ namespace EDI.Infrastructure.Data
             //    .HasMany(e => e.Schools)
             //    .WithOne(e => e.Provinces)
             //    .HasForeignKey(e => e.ProvinceId);
+
+            modelBuilder.Entity<Child>(entity =>
+            {
+                entity.ToTable("Children", "EDI");
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Ediid).HasColumnName("EDIID").HasMaxLength(15);
+
+                entity.Property(e => e.GenderId).HasColumnName("GenderID");
+
+                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.Property(e => e.PostalCodeZip).HasMaxLength(10);
+
+                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+
+                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+
+                entity.HasOne(d => d.Gender).WithMany(p => p.Children).HasForeignKey(d => d.GenderId).HasConstraintName("FK_Children_Gender");
+
+                entity.HasOne(d => d.Teacher).WithMany(p => p.Children).HasForeignKey(d => d.TeacherId).HasConstraintName("FK_Children_Teachers");
+
+                entity.HasOne(d => d.Year).WithMany(p => p.Children).HasForeignKey(d => d.YearId).HasConstraintName("FK_Children_Years");
+            });
+
+            modelBuilder.Entity<Coordinator>(entity =>
+            {
+                entity.ToTable("Coordinators", "EDI");
+
+                entity.Property(e => e.CoordinatorName).HasMaxLength(100);
+
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.Email).HasMaxLength(100);
+
+                entity.Property(e => e.PhoneNumber).HasMaxLength(14);
+
+                entity.Property(e => e.UserId).HasColumnName("UserID").HasMaxLength(40);
+
+                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+            });
             modelBuilder.Entity<Country>(entity =>
             {
                 entity.ToTable("Countries", "LUData");
@@ -119,6 +170,89 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.French).IsRequired().HasMaxLength(100);
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Country).HasForeignKey(e => e.CountryId);
+            });
+            modelBuilder.Entity<FileImport>(entity =>
+            {
+                entity.ToTable("FileImports", "Staging");
+
+                entity.Property(e => e.ChildDob).HasColumnName("ChildDOB").HasColumnType("smalldatetime");
+
+                entity.Property(e => e.ChildEdiid).HasColumnName("ChildEDIID").HasMaxLength(15);
+
+                entity.Property(e => e.ChildPostalCodeZip).HasMaxLength(10);
+
+                entity.Property(e => e.CoordinatorEmail).HasMaxLength(100);
+
+                entity.Property(e => e.CoordinatorName).HasMaxLength(100);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.FileImportStatusId).HasColumnName("FileImportStatusID");
+
+                entity.Property(e => e.FileName).HasMaxLength(256);
+
+                entity.Property(e => e.GenderId).HasColumnName("GenderID");
+
+                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.Property(e => e.SchoolProvinceId).HasColumnName("SchoolProvinceID");
+
+                entity.Property(e => e.TeacherEmail).HasMaxLength(100);
+
+                entity.Property(e => e.TeacherName).HasMaxLength(100);
+
+                entity.HasOne(d => d.Gender).WithMany(p => p.FileImports).HasForeignKey(d => d.GenderId).HasConstraintName("FK_FileImports_Gender");
+                entity.HasOne(d => d.FileImportStatus).WithMany(p => p.FileImports).HasForeignKey(d => d.FileImportStatusId).HasConstraintName("FK_FileImports_FileImportStatus");
+            });
+
+            modelBuilder.Entity<FileImportStatus>(entity =>
+            {
+                entity.ToTable("FileImportStatus", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Genders>(entity =>
+            {
+                entity.ToTable("Genders", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+            });
+
+
+            modelBuilder.Entity<Language>(entity =>
+            {
+                entity.ToTable("Languages", "LUData");
+
+                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.English).IsRequired().HasMaxLength(50);
+
+                entity.Property(e => e.French).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -160,6 +294,37 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
             });
 
+            modelBuilder.Entity<School>(entity =>
+            {
+                entity.ToTable("Schools", "EDI");
+
+                entity.HasIndex(e => e.CountryId);
+
+                entity.HasIndex(e => e.SiteId);
+
+                entity.HasIndex(e => e.YearId);
+
+                entity.Property(e => e.City).IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.Description).IsUnicode(false);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.Property(e => e.SchoolName).IsUnicode(false);
+
+                entity.Property(e => e.SchoolNumber).IsUnicode(false);
+                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+
+
+                //entity.HasOne(d => d.Year).WithMany(p => p.Schools).HasForeignKey(d => d.YearId).HasConstraintName("FK_Schools_Years");
+                //can be done in this table definition or in foreign key - from here one --> many | from there many --> one
+                //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);
+
+                //entity.HasOne(d => d.Sites).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId);
+            }); 
+            
             modelBuilder.Entity<Site>(entity =>
             {
                 entity.ToTable("Sites", "EDI");
@@ -184,55 +349,7 @@ namespace EDI.Infrastructure.Data
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
             });
-
-             modelBuilder.Entity<School>(entity =>
-            {
-                entity.ToTable("Schools", "EDI");
-
-                entity.HasIndex(e => e.CountryId);
-
-                entity.HasIndex(e => e.SiteId);
-
-                entity.HasIndex(e => e.YearId);
-
-                entity.Property(e => e.City).IsUnicode(false);
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.Description).IsUnicode(false);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.Property(e => e.SchoolName).IsUnicode(false);
-
-                entity.Property(e => e.SchoolNumber).IsUnicode(false);
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
-                
-
-                //entity.HasOne(d => d.Year).WithMany(p => p.Schools).HasForeignKey(d => d.YearId).HasConstraintName("FK_Schools_Years");
-                //can be done in this table definition or in foreign key - from here one --> many | from there many --> one
-                //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);
-
-                //entity.HasOne(d => d.Sites).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId);
-            });
-
-            modelBuilder.Entity<Language>(entity =>
-            {
-                entity.ToTable("Languages", "LUData");
-
-                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.English).IsRequired().HasMaxLength(50);
-
-                entity.Property(e => e.French).HasMaxLength(50);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-            });
-
+        
             modelBuilder.Entity<SpecialProblem>(entity =>
             {
                 entity.ToTable("SpecialProblems", "LUData");
@@ -249,6 +366,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.French).HasMaxLength(150);
             });
+
 
             modelBuilder.Entity<Teacher>(entity =>
             {
@@ -279,143 +397,38 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
                      
-            modelBuilder.Entity<Coordinator>(entity =>
+           
+           
+
+
+            
+
+          
+            modelBuilder.Entity<TeacherFeedbackForm>(entity =>
             {
-                entity.ToTable("Coordinators", "EDI");
-
-                entity.Property(e => e.CoordinatorName).HasMaxLength(100);
-
-                entity.Property(e => e.Description).IsUnicode(false);
-
-                entity.Property(e => e.Email).HasMaxLength(100);
-
-                entity.Property(e => e.PhoneNumber).HasMaxLength(14);
-
-                entity.Property(e => e.UserId).HasColumnName("UserID").HasMaxLength(40);
-
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");                
-            });
-
-            modelBuilder.Entity<Child>(entity =>
-            {
-                entity.ToTable("Children", "EDI");
+                entity.ToTable("TeacherFeedbackForms", "EDI_Forms");
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 
-                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
+                entity.Property(e => e.FirstTimeCompletingEdi).HasColumnName("FirstTimeCompletingEDI");
 
-                entity.Property(e => e.Ediid).HasColumnName("EDIID").HasMaxLength(15);
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(20).HasComment("English or French");
 
-                entity.Property(e => e.GenderId).HasColumnName("GenderID");
+                entity.Property(e => e.MaterialsOtherSpecify).HasMaxLength(250);
 
-                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
+                entity.Property(e => e.MaterialsPastEdi).HasColumnName("MaterialsPastEDI");
+
+                entity.Property(e => e.MaterialsPpt).HasColumnName("MaterialsPPT");
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.Property(e => e.PostalCodeZip).HasMaxLength(10);
 
                 entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Gender).WithMany(p => p.Children).HasForeignKey(d => d.GenderId).HasConstraintName("FK_Children_Gender");
+                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherFeedbackForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherFeedback_Teachers");
 
-                entity.HasOne(d => d.Teacher).WithMany(p => p.Children).HasForeignKey(d => d.TeacherId).HasConstraintName("FK_Children_Teachers");
-
-                entity.HasOne(d => d.Year).WithMany(p => p.Children).HasForeignKey(d => d.YearId).HasConstraintName("FK_Children_Years");
-            });
-
-            modelBuilder.Entity<FileImportStatus>(entity =>
-            {
-                entity.ToTable("FileImportStatus", "LUData");
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.English).HasMaxLength(150);
-
-                entity.Property(e => e.French).HasMaxLength(150);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Genders>(entity =>
-            {
-                entity.ToTable("Genders", "LUData");
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.English).HasMaxLength(150);
-
-                entity.Property(e => e.French).HasMaxLength(150);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Year>(entity =>
-            {
-                entity.ToTable("Years", "LUData");
-                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.Ediyear).HasColumnName("EDIYear");
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.HasMany(e => e.Sites).WithOne(d => d.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Sites");
-                entity.HasMany(e => e.Schools).WithOne(d => d.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Schools");
-                entity.HasMany(e => e.Teachers).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Teachers");
-                entity.HasMany(e => e.Coordinators).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Coordinators");
-                entity.HasMany(e => e.Children).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Children");
-                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
-
-                //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
-                //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
-
-                // example - how to write the relationship 
-                // From Countries model
-                //entity.HasMany(e => e.Schools).WithOne(e => e.Countries).HasForeignKey(e => e.CountryId);
-                //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
-            });
-
-            modelBuilder.Entity<FileImport>(entity =>
-            {
-                entity.ToTable("FileImports", "Staging");
-
-                entity.Property(e => e.ChildDob).HasColumnName("ChildDOB").HasColumnType("smalldatetime");
-
-                entity.Property(e => e.ChildEdiid).HasColumnName("ChildEDIID").HasMaxLength(15);
-
-                entity.Property(e => e.ChildPostalCodeZip).HasMaxLength(10);
-
-                entity.Property(e => e.CoordinatorEmail).HasMaxLength(100);
-
-                entity.Property(e => e.CoordinatorName).HasMaxLength(100);
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.FileImportStatusId).HasColumnName("FileImportStatusID");
-
-                entity.Property(e => e.FileName).HasMaxLength(256);
-
-                entity.Property(e => e.GenderId).HasColumnName("GenderID");
-
-                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.Property(e => e.SchoolProvinceId).HasColumnName("SchoolProvinceID");
-
-                entity.Property(e => e.TeacherEmail).HasMaxLength(100);
-
-                entity.Property(e => e.TeacherName).HasMaxLength(100);
-
-                entity.HasOne(d => d.Gender).WithMany(p => p.FileImports).HasForeignKey(d => d.GenderId).HasConstraintName("FK_FileImports_Gender");
-                entity.HasOne(d => d.FileImportStatus).WithMany(p => p.FileImports).HasForeignKey(d => d.FileImportStatusId).HasConstraintName("FK_FileImports_FileImportStatus");
+               // entity.HasOne(d => d.Year).WithMany(p => p.TeacherFeedbackForms).HasForeignKey(d => d.YearId).HasConstraintName("FK_TeacherFeedback_Years");
             });
 
             modelBuilder.Entity<TeacherParticipationForm>(entity =>
@@ -450,6 +463,35 @@ namespace EDI.Infrastructure.Data
                 entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
 
             });
+
+            modelBuilder.Entity<Year>(entity =>
+            {
+                entity.ToTable("Years", "LUData");
+                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.Ediyear).HasColumnName("EDIYear");
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.HasMany(e => e.Sites).WithOne(d => d.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Sites");
+                entity.HasMany(e => e.Schools).WithOne(d => d.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Schools");
+                entity.HasMany(e => e.Teachers).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Teachers");
+                entity.HasMany(e => e.Coordinators).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Coordinators");
+                entity.HasMany(e => e.Children).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Children");
+                entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherFeedbackForms");
+                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
+
+                //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
+                //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
+
+                // example - how to write the relationship 
+                // From Countries model
+                //entity.HasMany(e => e.Schools).WithOne(e => e.Countries).HasForeignKey(e => e.CountryId);
+                //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
+            });
+
         }
     }
 }

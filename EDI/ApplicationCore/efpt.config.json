@@ -2,11 +2,13 @@
    "ContextClassName": "EDIServiceContext",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
    "IncludeConnectionString": false,
    "ModelNamespace": null,
    "OutputContextPath": "",
    "OutputPath": "Entities",
    "ProjectRootNamespace": "EDI.ApplicationCore",
+   "Schemas": null,
    "SelectedHandlebarsLanguage": 0,
    "SelectedToBeGenerated": 2,
    "Tables": [
@@ -32,6 +34,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[EDI_Forms].[TeacherFeedbackForms]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI_Forms].[TeacherParticipationForms]"
       },
       {
@@ -44,7 +50,7 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Gender]"
+         "Name": "[LUData].[Genders]"
       },
       {
          "HasPrimaryKey": true,
