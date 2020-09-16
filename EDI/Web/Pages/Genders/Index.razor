@@ -37,13 +37,13 @@
                 {
                     <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true">
                         <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
-                        <GridEvents RowSelected="RowSelect" TValue="Genders"></GridEvents>
+                        <GridEvents RowSelected="RowSelect" TValue="Gender"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(Genders.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(Genders.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(Genders.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(Gender.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(Gender.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(Gender.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -58,9 +58,9 @@
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
-    SfGrid<Genders> Grid;
+    SfGrid<Gender> Grid;
 
-    IEnumerable<Genders> files;
+    IEnumerable<Gender> files;
 
     private string username { get; set; }
 
@@ -81,11 +81,11 @@
 
             var allfiles = await Task.FromResult(dbContext.Genders.OrderBy(p => p.English).ToList());
 
-            List<Genders> sivm = new List<Genders>();
+            List<Gender> sivm = new List<Gender>();
 
             foreach (var file in allfiles)
             {
-                var afile = new Genders();
+                var afile = new Gender();
 
                 afile.Id = file.Id;
                 afile.English = file.English;
@@ -103,7 +103,7 @@
 
     private int rowid { get; set; }
 
-    private void RowSelect(RowSelectEventArgs<Genders> args)
+    private void RowSelect(RowSelectEventArgs<Gender> args)
     {
         rowid = args.Data.Id;
     }

@@ -14,7 +14,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<DateDimension> DateDimension { get; set; }
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
-        public virtual DbSet<Genders> Genders { get; set; }
+        public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
@@ -150,6 +150,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.UserId).HasColumnName("UserID").HasMaxLength(40);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+
+                entity.HasMany(e => e.Sites).WithOne(d => d.Coordinator).HasForeignKey(d => d.YearId).HasConstraintName("FK_Coordinators_Sites");
             });
             modelBuilder.Entity<Country>(entity =>
             {
@@ -222,7 +224,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
-            modelBuilder.Entity<Genders>(entity =>
+            modelBuilder.Entity<Gender>(entity =>
             {
                 entity.ToTable("Genders", "LUData");
 
@@ -349,7 +351,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(e => e.Coordinator).WithMany(p => p.Sites).HasForeignKey(e => e.CoordinatorId).HasConstraintName("FK_Sites_Coordinators");                
+                
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
             });
         
