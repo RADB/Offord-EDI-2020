@@ -21,7 +21,7 @@ namespace EDI.ApplicationCore.Entities
         /// <summary>
         /// guid from EDI.Identity.dbo.ASPNETUsers
         /// </summary>
-        public string CoordinatorId { get; set; }
+        public int CoordinatorId { get; set; }
         
         public virtual ICollection<School> Schools { get; set; }
         public virtual Coordinator Coordinator { get; set; }

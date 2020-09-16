@@ -88,11 +88,11 @@
                 asite.SiteName = site.SiteName;
                 asite.SiteNumber = site.SiteNumber;
                 asite.Description = site.Description;
-                if (!string.IsNullOrEmpty(site.CoordinatorId))
-                {
-                    var account = identityContext.Users.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
-                    asite.CoordinatorName = account.FirstName + " " + account.LastName;
-                }
+                //if (!string.IsNullOrEmpty(site.CoordinatorId))
+                //{
+                //    var account = identityContext.Users.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
+                //    asite.CoordinatorName = account.FirstName + " " + account.LastName;
+                //}
 
                 sivm.Add(asite);
             }

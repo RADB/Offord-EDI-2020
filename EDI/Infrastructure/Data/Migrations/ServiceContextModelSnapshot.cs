@@ -616,6 +616,9 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte?>("EDICode")
+                        .HasColumnType("tinyint");
+
                     b.Property<string>("English")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -754,8 +757,8 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CoordinatorId")
-                        .HasColumnType("varchar(max)")
+                    b.Property<int>("CoordinatorId")
+                        .HasColumnType("int")
                         .IsUnicode(false);
 
                     b.Property<string>("CreatedBy")
@@ -794,6 +797,8 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasComment("Year of the EDI implementation");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoordinatorId");
 
                     b.HasIndex("YearId");
 
@@ -947,6 +952,130 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasIndex("YearId");
 
                     b.ToTable("Teachers","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherFeedbackForm", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CommentsFeedback")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte?>("CompletedPaperVersion")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ContentClearlyPresented")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ContentQualityPresentations")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ContentRelevant")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ContentUsefulnessOfHandouts")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte?>("FirstTimeCompletingEdi")
+                        .HasColumnName("FirstTimeCompletingEDI")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("FirstTraining")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(20)")
+                        .HasComment("English or French")
+                        .HasMaxLength(20);
+
+                    b.Property<byte?>("MaterialsGuestSpeaker")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("MaterialsHistory")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("MaterialsOther")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("MaterialsOtherSpecify")
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<byte?>("MaterialsPastEdi")
+                        .HasColumnName("MaterialsPastEDI")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("MaterialsPpt")
+                        .HasColumnName("MaterialsPPT")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("MaterialsTimeToStart")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("MaterialsTrainingInComputerLab")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("MaterialsVideo")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MostBeneficial")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte?>("OverallAssessment")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ProcessDiscussion")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ProcessInteration")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ProcessOrganization")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ProcessQuestions")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnName("TeacherID")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("VersionPreferred")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int")
+                        .HasComment("Year of the EDI implementation");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("TeacherFeedbackForms","EDI_Forms");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherParticipationForm", b =>
@@ -1225,6 +1354,13 @@ namespace EDI.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Site", b =>
                 {
+                    b.HasOne("EDI.ApplicationCore.Entities.Coordinator", "Coordinator")
+                        .WithMany("Sites")
+                        .HasForeignKey("CoordinatorId")
+                        .HasConstraintName("FK_Sites_Coordinators")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
                         .WithMany("Sites")
                         .HasForeignKey("YearId")
@@ -1242,6 +1378,20 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("Teachers")
                         .HasForeignKey("YearId")
                         .HasConstraintName("FK_Years_Teachers");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherFeedbackForm", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
+                        .WithMany("TeacherFeedbackForms")
+                        .HasForeignKey("TeacherId")
+                        .HasConstraintName("FK_TeacherFeedback_Teachers")
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("TeacherFeedbackForms")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_TeacherFeedbackForms");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherParticipationForm", b =>
