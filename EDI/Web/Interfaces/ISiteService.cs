@@ -19,6 +19,5 @@ namespace EDI.Web.Interfaces
 
         Task<int> GetDuplicateCount(string sitenumber);
         Task<int> GetDuplicateCount(string sitenumber, int id);
-        Task<IEnumerable<SelectListItem>> GetSites();
     }
 }

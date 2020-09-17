@@ -19,6 +19,11 @@ namespace EDI.ApplicationCore.Interfaces
         Task<int> CountViewAsync(ISpecification<T> spec);
         DateDimension GetDateDimension(DateTime date);
         IReadOnlyList<Site> ListAllSites();
+        IReadOnlyList<Coordinator> ListAllCoordinators();
+        IReadOnlyList<Year> ListAllYears();
+        IReadOnlyList<Gender> ListAllGenders();
+        IReadOnlyList<School> ListAllSchools();
+        IReadOnlyList<Teacher> ListAllTeachers();
         Task DeleteAllFileImports();
         Task ReseedFileImports();
     }

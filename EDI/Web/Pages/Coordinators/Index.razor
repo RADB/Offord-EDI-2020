@@ -1,0 +1,179 @@
+﻿@page "/Coordinators/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ICoordinatorService coordinatorService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Coordinators Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (coordinators == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridCoordinator" @ref="Grid" DataSource="@coordinators" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="CoordinatorItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="CoordinatorName" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(CoordinatorItemViewModel.CoordinatorName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(CoordinatorItemViewModel.Email) HeaderText="Email" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(CoordinatorItemViewModel.PhoneNumber) HeaderText="Phone" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(CoordinatorItemViewModel.Description) HeaderText="Description" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<CoordinatorItemViewModel> Grid;
+
+    IEnumerable<CoordinatorItemViewModel> coordinators;
+
+    private string username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            username = user.Identity.Name;
+
+            var allcoordinators = await Task.FromResult(dbContext.Coordinators.OrderBy(p => p.CoordinatorName).ToList());
+
+            List<CoordinatorItemViewModel> sivm = new List<CoordinatorItemViewModel>();
+
+            foreach (var coordinator in allcoordinators)
+            {
+                var acoordinator = new CoordinatorItemViewModel();
+
+                acoordinator.Id = coordinator.Id;
+                acoordinator.CoordinatorName = coordinator.CoordinatorName;
+                acoordinator.Email = coordinator.Email;
+                acoordinator.Description = coordinator.Description;
+                acoordinator.PhoneNumber = coordinator.PhoneNumber;
+                acoordinator.YearId = coordinator.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == coordinator.YearId).FirstOrDefault();
+                acoordinator.Ediyear = year!= null ? year.Ediyear : null;
+
+                sivm.Add(acoordinator);
+            }
+
+            this.rowid = 0;
+
+            coordinators = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<CoordinatorItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridCoordinator_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridCoordinator_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridCoordinator_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridCoordinator_add")
+        {
+            NavigationManager.NavigateTo("./coordinators/new");
+            //NewInvoice();
+        }
+        if (args.Item.Id == "GridCoordinator_edit")
+        {
+            NavigationManager.NavigateTo("./coordinators/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridCoordinator_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            var sites = dbContext.Sites.Where(p => p.CoordinatorId == this.rowid).ToList();
+
+            if (sites != null && sites.Count() > 0)
+            {
+                toastService.ShowError("This item is referenced by site - " + sites.First().SiteName);
+            }
+            else
+            {
+                await coordinatorService.DeleteCoordinatorAsync(this.rowid);
+
+                var tmp = new List<CoordinatorItemViewModel>();
+                foreach (var item in coordinators)
+                {
+                    if (item.Id != rowid)
+                        tmp.Add(item);
+                }
+                this.coordinators = tmp;
+                this.rowid = 0;
+
+                this.Grid.Refresh();
+                StateHasChanged();
+            }
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<CoordinatorItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./coordinators/edit/" + this.rowid);
+    }
+}

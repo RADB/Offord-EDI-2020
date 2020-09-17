@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavigationManager
 @inject ISiteService siteService
+@inject ISharedService sharedService
 @inject IAccountService accountService
 @inject ServiceContext dbContext;
 
@@ -35,6 +36,19 @@
                 }
             </select>
         </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Year">Year: </label>
+            <select class="col-md-7" value="@yearid" @onchange="@(e =>YearChange(e))">
+                @if (Years != null)
+                {
+                    @foreach (var option in Years)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
     </div>
     <div class="card-footer">
         <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
@@ -53,26 +67,40 @@
 
     public string coordinateid { get; set; }
 
+    public IEnumerable<SelectListItem> Years { get; set; }
+
+    public string yearid { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        Coordinates = await accountService.GetCoordinators();
-        coordinateid = SiteModel.CoordinatorId;
+        Coordinates = await sharedService.GetCoordinators();
+        coordinateid = SiteModel.CoordinatorId.ToString();
 
-        if (!string.IsNullOrEmpty(SiteModel.CoordinatorId))
-        {
-            coordinateid = SiteModel.CoordinatorId;
-        }
+        Years = await sharedService.GetYears();
+        yearid = SiteModel.YearId.HasValue ? SiteModel.YearId.ToString() : string.Empty;
     }
 
     private void CoordinateChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 
-        SiteModel.CoordinatorId = null;
+        SiteModel.CoordinatorId = 0;
 
-        if (!string.IsNullOrEmpty(selectedString))
+        if (int.TryParse(selectedString, out int newcoordinatorid))
         {
-            SiteModel.CoordinatorId = selectedString;
+            SiteModel.CoordinatorId = newcoordinatorid;
+        }
+    }
+
+    private void YearChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SiteModel.YearId = 0;
+
+        if (int.TryParse(selectedString, out int newyearid))
+        {
+            SiteModel.YearId = newyearid;
         }
     }
 }

@@ -499,7 +499,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("FormConfigurations");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.Genders", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Gender", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1271,7 +1271,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Child", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Genders", "Gender")
+                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
                         .WithMany("Children")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_Children_Gender");
@@ -1302,7 +1302,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasForeignKey("FileImportStatusId")
                         .HasConstraintName("FK_FileImports_FileImportStatus");
 
-                    b.HasOne("EDI.ApplicationCore.Entities.Genders", "Gender")
+                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
                         .WithMany("FileImports")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_FileImports_Gender");
@@ -1343,6 +1343,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Site", "Site")
                         .WithMany("Schools")
                         .HasForeignKey("SiteId")
+                        .HasConstraintName("FK_Schools_Sites")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1357,7 +1358,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Coordinator", "Coordinator")
                         .WithMany("Sites")
                         .HasForeignKey("CoordinatorId")
-                        .HasConstraintName("FK_Sites_Coordinators")
+                        .HasConstraintName("FK_Coordinators_Sites")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1396,7 +1397,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherParticipationForm", b =>
                 {
-                    b.HasOne("EDI.ApplicationCore.Entities.Genders", "Gender")
+                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
                         .WithMany("TeacherParticipationForms")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_TeacherParticipationForms_Gender");

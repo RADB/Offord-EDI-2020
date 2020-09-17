@@ -100,7 +100,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Sites = await siteService.GetSites();
+        Sites = await sharedService.GetSites();
         siteid = SchoolModel.SiteId.ToString();
 
         Countries = await sharedService.GetCountries();

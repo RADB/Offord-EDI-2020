@@ -103,7 +103,8 @@ namespace EDI.Web.Services
                 _site.SiteNumber = site.SiteNumber;
                 _site.SiteName = site.SiteName;
                 _site.Description = site.Description;
-                //_site.CoordinatorId = site.CoordinatorId;
+                _site.CoordinatorId = site.CoordinatorId;
+                _site.YearId = site.YearId;
                 _site.ModifiedDate = DateTime.Now;
                 _site.ModifiedBy = _username;
 
@@ -127,7 +128,8 @@ namespace EDI.Web.Services
                 _site.SiteNumber = site.SiteNumber;
                 _site.SiteName = site.SiteName;
                 _site.Description = site.Description;
-                //_site.CoordinatorId = site.CoordinatorId;
+                _site.CoordinatorId = site.CoordinatorId;
+                _site.YearId = site.YearId;
                 _site.CreatedDate = DateTime.Now;
                 _site.CreatedBy = _username;
                 _site.ModifiedDate = DateTime.Now;
@@ -158,7 +160,8 @@ namespace EDI.Web.Services
                     SiteNumber = site.SiteNumber,
                     SiteName = site.SiteName,
                     Description = site.Description,
-                    //CoordinatorId = site.CoordinatorId,
+                    CoordinatorId = site.CoordinatorId,
+                    YearId = site.YearId,
                     CreatedDate = site.CreatedDate,
                     CreatedBy = site.CreatedBy,
                     ModifiedDate = site.ModifiedDate,
@@ -214,37 +217,6 @@ namespace EDI.Web.Services
             {
                 Log.Error("GetDuplicateCount failed:" + ex.Message);
                 return -1;
-            }
-        }
-
-        public async Task<IEnumerable<SelectListItem>> GetSites()
-        {
-            await LogUsername();
-            Log.Information("GetSites started by:" + _username);
-
-            try
-            {
-                var sites = _siteRepository.ListAllSites().OrderBy(t=> t.SiteNumber);
-
-                var items = new List<SelectListItem>
-                {
-                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
-                };
-
-                foreach (var site in sites)
-                {
-                    items.Add(new SelectListItem() { Value = site.Id.ToString(), Text = site.SiteNumber});
-                }
-
-                return items;
-            }
-            catch (Exception ex)
-            {
-                Log.Error("GetSites failed:" + ex.Message);
-
-                var vm = new List<SelectListItem>();
-
-                return vm;
             }
         }
     }

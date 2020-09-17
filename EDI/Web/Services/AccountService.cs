@@ -212,6 +212,18 @@ namespace EDI.Web.Services
             {
                 var account = await _accountRepository.GetByIdAsync(accountId);
 
+                string countryname = string.Empty;
+                string provincename = string.Empty;
+
+                if (account.CountryID.HasValue)
+                {
+                    countryname = _dbContext.Countries.Where(p => p.Id == account.CountryID.Value).FirstOrDefault().English;
+                }
+                if (account.ProvinceID.HasValue)
+                {
+                    provincename = _dbContext.Provinces.Where(p => p.Id == account.ProvinceID.Value).FirstOrDefault().English;
+                }
+
                 var vm = new AccountItemViewModel()
                 {
                     Id = account.Id,
@@ -227,9 +239,9 @@ namespace EDI.Web.Services
                     LockoutEnd = account.LockoutEnd,
                     Lockout = account.LockoutEnabled == true ? "Yes" : "No",
                     CountryID = account.CountryID,
-                    Country = account.CountryID.HasValue ? _countryRepository.GetByIdAsync(account.CountryID.Value).Result.English : string.Empty,
+                    Country = countryname,
                     ProvinceID = account.ProvinceID,
-                    Province = account.ProvinceID.HasValue ? _provinceRepository.GetByIdAsync(account.ProvinceID.Value).Result.English : string.Empty
+                    Province = provincename
                 };
 
                 vm.Roles = await GetRoles();

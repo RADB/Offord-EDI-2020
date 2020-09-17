@@ -93,4 +93,13 @@ namespace Ardalis.GuardClauses
                 throw new TeacherNotFoundException(teacherid);
         }
     }
+
+    public static class CoordinatorGuards
+    {
+        public static void NullCoordinator(this IGuardClause guardClause, int coordinatorid, Coordinator coordinators)
+        {
+            if (coordinators == null)
+                throw new CoordinatorNotFoundException(coordinatorid);
+        }
+    }
 }

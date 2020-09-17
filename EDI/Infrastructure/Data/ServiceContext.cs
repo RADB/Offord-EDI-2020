@@ -151,7 +151,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasMany(e => e.Sites).WithOne(d => d.Coordinator).HasForeignKey(d => d.YearId).HasConstraintName("FK_Coordinators_Sites");
+                entity.HasMany(e => e.Sites).WithOne(d => d.Coordinator).HasForeignKey(d => d.CoordinatorId).HasConstraintName("FK_Coordinators_Sites");
             });
             modelBuilder.Entity<Country>(entity =>
             {
@@ -320,6 +320,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.SchoolNumber).IsUnicode(false);
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+
+                entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
 
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Schools).HasForeignKey(d => d.YearId).HasConstraintName("FK_Schools_Years");

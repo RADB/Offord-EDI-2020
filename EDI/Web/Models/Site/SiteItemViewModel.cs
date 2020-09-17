@@ -16,8 +16,10 @@ namespace EDI.Web.Models
         public string SiteName { get; set; }
 
         public string Description { get; set; }
-        public string CoordinatorId { get; set; }
+        public int CoordinatorId { get; set; }
         public string CoordinatorName { get; set; }
+        public int? YearId { get; set; }
+        public short? Ediyear { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

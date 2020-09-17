@@ -113,6 +113,32 @@ namespace EDI.Infrastructure.Data
             return _dbContext.Set<Site>().ToList();
         }
 
+        public IReadOnlyList<Coordinator> ListAllCoordinators()
+        {
+            return _dbContext.Set<Coordinator>().ToList();
+        }
+
+        public IReadOnlyList<Year> ListAllYears()
+        {
+            return _dbContext.Set<Year>().ToList();
+        }
+
+        public IReadOnlyList<Gender> ListAllGenders()
+        {
+            return _dbContext.Set<Gender>().ToList();
+        }
+
+        public IReadOnlyList<School> ListAllSchools()
+        {
+            return _dbContext.Set<School>().ToList();
+        }
+
+        public IReadOnlyList<Teacher> ListAllTeachers()
+        {
+            return _dbContext.Set<Teacher>().ToList();
+        }
+
+
         public async Task DeleteAllFileImports()
         {
             await _dbContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE [Staging].[FileImports]");
