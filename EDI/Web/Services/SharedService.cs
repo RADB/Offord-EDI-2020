@@ -609,8 +609,7 @@ namespace EDI.Web.Services
                 optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
                 using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
                 {
-                    var statusid = servicecontext.FileImportStatuses.Where(p => p.English == "Imported").First().Id;
-                    var alldata = servicecontext.FileImports.Where(p => p.FileImportStatusId == statusid).ToList();
+                    var alldata = _fileRepository.ListImportedData();
 
                     var processstatusid = servicecontext.FileImportStatuses.Where(p => p.English == "Processed").First().Id;
 

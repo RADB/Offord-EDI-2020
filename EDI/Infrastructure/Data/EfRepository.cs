@@ -138,6 +138,12 @@ namespace EDI.Infrastructure.Data
             return _dbContext.Set<Teacher>().ToList();
         }
 
+        public IReadOnlyList<FileImport> ListImportedData()
+        {
+            var statusid = _dbContext.FileImportStatuses.Where(p => p.English == "Imported").First().Id;
+            return _dbContext.Set<FileImport>().Where(p => p.FileImportStatusId == statusid).ToList();
+        }
+
 
         public async Task DeleteAllFileImports()
         {
