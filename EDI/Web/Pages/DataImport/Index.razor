@@ -82,12 +82,10 @@
                                 <GridColumn Field=@nameof(FileItemViewModel.SiteName) HeaderText="Site" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.CoordinatorName) HeaderText="Coordinator" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.CoordinatorEmail) HeaderText="Coordinator Email" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.SchoolName) HeaderText="School" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.Province) HeaderText="Province" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FileItemViewModel.SchoolName) HeaderText="School" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>                                
                                 <GridColumn Field=@nameof(FileItemViewModel.TeacherName) HeaderText="Teacher" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.TeacherEmail) HeaderText="Teacher Email" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.LocalId) HeaderText="Child's Local ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.ClassTime) HeaderText="Class_tm" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FileItemViewModel.LocalId) HeaderText="Child's Local ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>                                
                                 <GridColumn Field=@nameof(FileItemViewModel.Gender) HeaderText="Gender" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.ChildDob) HeaderText="DOB" Format="yyyy-MM-dd" Type="ColumnType.Date" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.ChildPostalCodeZip) HeaderText="Postal" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
@@ -148,13 +146,13 @@
                 afile.CoordinatorName = file.CoordinatorName;
                 afile.CoordinatorEmail = file.CoordinatorEmail;
                 afile.SchoolName = file.SchoolName;
-                afile.SchoolProvinceId = file.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? province.English : string.Empty;
+                //afile.SchoolProvinceId = file.SchoolProvinceId;
+                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                //afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = file.TeacherName;
                 afile.TeacherEmail = file.TeacherEmail;
                 afile.LocalId = file.LocalId;
-                afile.ClassTime = file.ClassTime;
+                //afile.ClassTime = file.ClassTime;
                 afile.GenderId = file.GenderId;
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
@@ -202,13 +200,13 @@
                 afile.CoordinatorName = file.CoordinatorName;
                 afile.CoordinatorEmail = file.CoordinatorEmail;
                 afile.SchoolName = file.SchoolName;
-                afile.SchoolProvinceId = file.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? province.English : string.Empty;
+                //afile.SchoolProvinceId = file.SchoolProvinceId;
+                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                //afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = file.TeacherName;
                 afile.TeacherEmail = file.TeacherEmail;
                 afile.LocalId = file.LocalId;
-                afile.ClassTime = file.ClassTime;
+                //afile.ClassTime = file.ClassTime;
                 afile.GenderId = file.GenderId;
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
@@ -275,13 +273,13 @@
                 afile.CoordinatorName = nfile.CoordinatorName;
                 afile.CoordinatorEmail = nfile.CoordinatorEmail;
                 afile.SchoolName = nfile.SchoolName;
-                afile.SchoolProvinceId = nfile.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? province.English : string.Empty;
+                //afile.SchoolProvinceId = nfile.SchoolProvinceId;
+                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                //afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = nfile.TeacherName;
                 afile.TeacherEmail = nfile.TeacherEmail;
                 afile.LocalId = nfile.LocalId;
-                afile.ClassTime = nfile.ClassTime;
+                //afile.ClassTime = nfile.ClassTime;
                 afile.GenderId = nfile.GenderId;
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
@@ -381,13 +379,13 @@
                 afile.CoordinatorName = file.CoordinatorName;
                 afile.CoordinatorEmail = file.CoordinatorEmail;
                 afile.SchoolName = file.SchoolName;
-                afile.SchoolProvinceId = file.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? province.English : string.Empty;
+                //afile.SchoolProvinceId = file.SchoolProvinceId;
+                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                //afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = file.TeacherName;
                 afile.TeacherEmail = file.TeacherEmail;
                 afile.LocalId = file.LocalId;
-                afile.ClassTime = file.ClassTime;
+                //afile.ClassTime = file.ClassTime;
                 afile.GenderId = file.GenderId;
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;

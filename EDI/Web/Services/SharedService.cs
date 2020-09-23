@@ -406,11 +406,11 @@ namespace EDI.Web.Services
                         "Coordinator",
                         "Coordinator Email",
                         "School Name",
-                        "School Province",
+//                        "School Province",
                         "Teacher Name",
                         "Teacher Email",
                         "Child's Local ID",
-                        "Class_tm",
+//                        "Class_tm",
                         "Gender",
                         "DOB",
                         "Postal Code",
@@ -435,7 +435,7 @@ namespace EDI.Web.Services
 
                             for (int j = 0; j < cellCount; j++)
                             {
-                                if (j > 12)
+                                if (j > 10)
                                     break;
 
                                 var cell = firstrow.Cells[j];
@@ -476,7 +476,7 @@ namespace EDI.Web.Services
                                     _file.CoordinatorEmail = row.Cells[2]?.CalculatedValue.Trim();
                                     _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
 
-                                    var province = row.Cells[4]?.CalculatedValue.Trim();
+                                    /*var province = row.Cells[4]?.CalculatedValue.Trim();
                                     if (string.IsNullOrEmpty(province))
                                     {
                                         _file.SchoolProvinceId = null;
@@ -489,11 +489,11 @@ namespace EDI.Web.Services
                                         //var currencyid = servicecontext.Currency.Where(p => p.Name == currency).Select(p => p.Id).FirstOrDefault();
 
                                         _file.SchoolProvinceId = int.Parse(province);
-                                    }
-                                    _file.TeacherName = row.Cells[5]?.CalculatedValue.Trim();
-                                    _file.TeacherEmail = row.Cells[6]?.CalculatedValue.Trim();
-                                    _file.LocalId = row.Cells[7]?.CalculatedValue.Trim();
-                                    var classtime = row.Cells[8]?.CalculatedValue.Trim();
+                                    }*/
+                                    _file.TeacherName = row.Cells[4]?.CalculatedValue.Trim();
+                                    _file.TeacherEmail = row.Cells[5]?.CalculatedValue.Trim();
+                                    _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
+                                    /*var classtime = row.Cells[8]?.CalculatedValue.Trim();
 
                                     if (string.IsNullOrEmpty(classtime))
                                     {
@@ -503,8 +503,8 @@ namespace EDI.Web.Services
                                     {
                                         _file.ClassTime = byte.Parse(classtime);
                                     }
-
-                                    var gender = row.Cells[9]?.CalculatedValue.Trim();
+                                    */
+                                    var gender = row.Cells[7]?.CalculatedValue.Trim();
 
                                     if (string.IsNullOrEmpty(gender))
                                     {
@@ -526,7 +526,7 @@ namespace EDI.Web.Services
                                     }
 
 
-                                    var dob = row.Cells[10]?.CalculatedValue.Trim();
+                                    var dob = row.Cells[8]?.CalculatedValue.Trim();
 
                                     if (string.IsNullOrEmpty(dob))
                                     {
@@ -537,8 +537,8 @@ namespace EDI.Web.Services
                                         _file.ChildDob = DateTime.Parse(dob);
                                     }
 
-                                    _file.ChildPostalCodeZip = row.Cells[11]?.CalculatedValue.Trim();
-                                    _file.ChildEdiid = row.Cells[12]?.CalculatedValue.Trim();
+                                    _file.ChildPostalCodeZip = row.Cells[9]?.CalculatedValue.Trim();
+                                    _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
 
 
                                     int statusid = 0;

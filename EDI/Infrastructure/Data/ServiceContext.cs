@@ -199,7 +199,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
-                entity.Property(e => e.SchoolProvinceId).HasColumnName("SchoolProvinceID");
+                //entity.Property(e => e.SchoolProvinceId).HasColumnName("SchoolProvinceID");
 
                 entity.Property(e => e.TeacherEmail).HasMaxLength(100);
 
@@ -284,7 +284,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasOne(d => d.ProvinceType).WithMany(p => p.Provinces).HasForeignKey(d => d.ProvinceTypeId);
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Province).HasForeignKey(e => e.ProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Schools_Provinces");
-                entity.HasMany(e => e.FileImports).WithOne(e => e.SchoolProvince).HasForeignKey(e => e.SchoolProvinceId).HasConstraintName("FK_FileImports_Provinces");
+                //entity.HasMany(e => e.FileImports).WithOne(e => e.SchoolProvince).HasForeignKey(e => e.SchoolProvinceId).HasConstraintName("FK_FileImports_Provinces");
             });
 
             modelBuilder.Entity<ProvinceType>(entity =>

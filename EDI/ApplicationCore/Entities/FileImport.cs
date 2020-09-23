@@ -13,11 +13,11 @@ namespace EDI.ApplicationCore.Entities
         public string CoordinatorName { get; set; }
         public string CoordinatorEmail { get; set; }
         public string SchoolName { get; set; }
-        public int? SchoolProvinceId { get; set; }
+        //public int? SchoolProvinceId { get; set; }
         public string TeacherName { get; set; }
         public string TeacherEmail { get; set; }
         public string LocalId { get; set; }
-        public byte? ClassTime { get; set; }
+        //public byte? ClassTime { get; set; }
         public int? GenderId { get; set; }
         public DateTime? ChildDob { get; set; }
         public string ChildPostalCodeZip { get; set; }
