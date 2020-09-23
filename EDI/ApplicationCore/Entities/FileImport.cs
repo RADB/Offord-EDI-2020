@@ -24,7 +24,7 @@ namespace EDI.ApplicationCore.Entities
         public string ChildEdiid { get; set; }
         public int? FileImportStatusId { get; set; }
         public virtual Gender Gender { get; set; }
-        public virtual Province SchoolProvince { get; set; }
+        //public virtual Province SchoolProvince { get; set; }
         public virtual FileImportStatus FileImportStatus { get; set; }
 
     }
