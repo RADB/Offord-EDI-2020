@@ -14,6 +14,7 @@ namespace EDI.Web.Models
         [Required]
         [StringLength(50)]
         public string Code { get; set; }
+        public byte? EDICode { get; set; }
 
         public int CountryID { get; set; }
         public string Country { get; set; }

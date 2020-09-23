@@ -22,11 +22,15 @@
         <input type="text" class="col-md-6 col-form-label" value="@Code" @onchange="@(e =>CodeChange(e))" />
     </div>
     <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="EDICode">EDI Code<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@EDICode" @onchange="@(e =>EDICodeChange(e))" />
+    </div>
+    <div class="form-group row">
         <label class="col-md-5 col-form-label" for="English">Province English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
         <input type="text" class="col-md-6 col-form-label" value="@English" @onchange="@(e =>EnglishChange(e))" />
     </div>
     <div class="form-group row">
-        <label class="col-md-5 col-form-label" for="English">Province French<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <label class="col-md-5 col-form-label" for="French">Province French: </label>
         <input type="text" class="col-md-6 col-form-label" value="@French" @onchange="@(e =>FrenchChange(e))" />
     </div>
     <button @onclick="@SaveProvince" class="btn btn-primary">Submit</button>
@@ -39,6 +43,7 @@
     ProvinceItemViewModel ProvinceModel { get; set; }
 
     public string Code { get; set; }
+    public byte? EDICode { get; set; }
     public string English { get; set; }
     public string French { get; set; }
 
@@ -52,6 +57,7 @@
         ProvinceModel = Parameters.Get<ProvinceItemViewModel>("ProvinceModel");
 
         Code = ProvinceModel.Code;
+        EDICode = ProvinceModel.EDICode;
         English = ProvinceModel.English;
         French = ProvinceModel.French;
         country = ProvinceModel.Country;
@@ -124,6 +130,19 @@
         ProvinceModel.Code = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
 
         StateHasChanged();
+    }
+
+    private void EDICodeChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+        ProvinceModel.EDICode = null;
+
+        if (byte.TryParse(selectedString, out byte newvalue))
+        {
+            ProvinceModel.EDICode = newvalue;
+
+            StateHasChanged();
+        }
     }
 
     private void EnglishChange(ChangeEventArgs e)

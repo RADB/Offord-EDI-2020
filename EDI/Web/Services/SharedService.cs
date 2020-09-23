@@ -841,21 +841,30 @@ namespace EDI.Web.Services
                                             _school.SchoolNumber = schoolnumber;
                                             _school.SchoolName = data.SchoolName;
 
-                                            var provinceidstring = data.ChildEdiid.Substring(2, 2);
-                                            var provinceid = int.Parse(provinceidstring);
-                                            var countryid = servicecontext.Provinces.Where(p => p.Id == provinceid).FirstOrDefault().CountryID;
+                                            var provinceedicodestring = data.ChildEdiid.Substring(2, 2);
+                                            var provinceedicode = int.Parse(provinceedicodestring);
+                                            var countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().CountryID;
+                                            var provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
 
-                                            _school.CountryId = countryid;
-                                            _school.ProvinceId = provinceid;
-                                            _school.SiteId = siteid;
-                                            _school.CreatedDate = DateTime.Now;
-                                            _school.CreatedBy = _username;
-                                            _school.ModifiedDate = DateTime.Now;
-                                            _school.ModifiedBy = _username;
+                                            if(provinceid == 0)
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": Province is required.");
+                                                haserror = true;
+                                            }
+                                            else
+                                            {
+                                                _school.CountryId = countryid;
+                                                _school.ProvinceId = provinceid;
+                                                _school.SiteId = siteid;
+                                                _school.CreatedDate = DateTime.Now;
+                                                _school.CreatedBy = _username;
+                                                _school.ModifiedDate = DateTime.Now;
+                                                _school.ModifiedBy = _username;
 
-                                            await _schoolRepository.AddAsync(_school);
-                                            schoolid = _school.Id;
-                                            totalschools++;
+                                                await _schoolRepository.AddAsync(_school);
+                                                schoolid = _school.Id;
+                                                totalschools++;
+                                            }                                            
                                         }
                                         catch (Exception ex)
                                         {

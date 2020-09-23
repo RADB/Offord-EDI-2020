@@ -101,6 +101,7 @@ namespace EDI.Web.Services
                 Guard.Against.NullProvince(province.Id, _province);
 
                 _province.Code = province.Code;
+                _province.EDICode = province.EDICode;
                 _province.English = province.English;
                 _province.French = province.French;
                 _province.CountryID = province.CountryID;
@@ -125,6 +126,7 @@ namespace EDI.Web.Services
                 var _province = new Province();
 
                 _province.Code = province.Code;
+                _province.EDICode = province.EDICode;
                 _province.English = province.English;
                 _province.French = province.French;
                 _province.CountryID = province.CountryID;
@@ -156,6 +158,7 @@ namespace EDI.Web.Services
                 {
                     Id = province.Id,
                     Code = province.Code,
+                    EDICode = province.EDICode,
                     English = province.English,
                     French = province.French,
                     CountryID = province.CountryID,

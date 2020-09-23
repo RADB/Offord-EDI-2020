@@ -1279,7 +1279,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
                         .WithMany("Children")
                         .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_Children_Teachers");
+                        .HasConstraintName("FK_Children_Teachers")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
                         .WithMany("Children")
@@ -1373,7 +1374,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.School", "School")
                         .WithMany("Teachers")
                         .HasForeignKey("SchoolId")
-                        .HasConstraintName("FK_Teachers_Schools");
+                        .HasConstraintName("FK_Teachers_Schools")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
                         .WithMany("Teachers")

@@ -151,7 +151,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasMany(e => e.Sites).WithOne(d => d.Coordinator).HasForeignKey(d => d.CoordinatorId).HasConstraintName("FK_Coordinators_Sites");
+                entity.HasMany(e => e.Sites).WithOne(d => d.Coordinator).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.CoordinatorId).HasConstraintName("FK_Coordinators_Sites");
             });
             modelBuilder.Entity<Country>(entity =>
             {
@@ -321,8 +321,12 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.SchoolNumber).IsUnicode(false);
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
+                entity.HasOne(d => d.Site)
+                        .WithMany(p => p.Schools)
+                        .HasForeignKey(d => d.SiteId)
+                        .HasConstraintName("FK_Schools_Sites");
 
+                entity.HasMany(e => e.Teachers).WithOne(e => e.School).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SchoolId);
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Schools).HasForeignKey(d => d.YearId).HasConstraintName("FK_Schools_Years");
                 //can be done in this table definition or in foreign key - from here one --> many | from there many --> one
@@ -349,7 +353,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.SiteNumber).IsUnicode(false);
 
-                entity.HasMany(e => e.Schools).WithOne(e => e.Site).HasForeignKey(e => e.SiteId);
+                entity.HasMany(e => e.Schools).WithOne(e => e.Site).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SiteId);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
@@ -400,6 +404,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
                 entity.HasOne(d => d.School).WithMany(p => p.Teachers).HasForeignKey(d => d.SchoolId).HasConstraintName("FK_Teachers_Schools");
+
+                entity.HasMany(e => e.Children).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
