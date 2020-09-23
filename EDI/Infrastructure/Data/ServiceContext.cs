@@ -403,6 +403,10 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasMany(e => e.Children).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
 
+                entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
+
+                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
+
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
                      
@@ -429,7 +433,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherFeedbackForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherFeedback_Teachers");
+                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherFeedbackForms).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherFeedback_Teachers");
 
                // entity.HasOne(d => d.Year).WithMany(p => p.TeacherFeedbackForms).HasForeignKey(d => d.YearId).HasConstraintName("FK_TeacherFeedback_Years");
             });
@@ -462,7 +466,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
+                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
                 entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
 
             });
@@ -478,7 +482,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
-                entity.HasMany(e => e.Sites).WithOne(d => d.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Sites");
+                entity.HasMany(e => e.Sites).WithOne(d => d.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Sites");
                 entity.HasMany(e => e.Schools).WithOne(d => d.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Schools");
                 entity.HasMany(e => e.Teachers).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Teachers");
                 entity.HasMany(e => e.Coordinators).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Coordinators");

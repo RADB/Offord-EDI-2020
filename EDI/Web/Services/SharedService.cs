@@ -49,6 +49,8 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<School> _schoolRepository;
         private readonly IAsyncRepository<Teacher> _teacherRepository;
         private readonly IAsyncRepository<Child> _childRepository;
+        private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
+        private readonly IAsyncRepository<TeacherParticipationForm> _participationRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -78,6 +80,8 @@ namespace EDI.Web.Services
             IAsyncRepository<School> schoolRepository,
             IAsyncRepository<Teacher> teacherRepository,
             IAsyncRepository<Child> childRepository,
+            IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
+            IAsyncRepository<TeacherParticipationForm> participationRepository,
             IAsyncIdentityRepository accountRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
@@ -102,6 +106,8 @@ namespace EDI.Web.Services
             _schoolRepository = schoolRepository;
             _teacherRepository = teacherRepository;
             _childRepository = childRepository;
+            _feedbackRepository = feedbackRepository;
+            _participationRepository = participationRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _dbContext = dbContext;
@@ -830,7 +836,7 @@ namespace EDI.Web.Services
                                 {
                                     string schoolnumber = data.ChildEdiid.Substring(7, 3);
 
-                                    var school = servicecontext.Schools.Where(p => p.SchoolNumber == schoolnumber && p.SchoolName == data.SchoolName).FirstOrDefault();
+                                    var school = servicecontext.Schools.Where(p => p.SiteId == siteid && p.SchoolNumber == schoolnumber && p.SchoolName == data.SchoolName).FirstOrDefault();
 
                                     if (school == null)
                                     {
@@ -958,6 +964,26 @@ namespace EDI.Web.Services
                                                 await _teacherRepository.AddAsync(_teacher);
                                                 teacherid = _teacher.Id;
                                                 totalteachers++;
+
+                                                var _teacherFeedbackForms = new TeacherFeedbackForm();
+                                                _teacherFeedbackForms.TeacherId = teacherid;
+                                                _teacherFeedbackForms.YearId = yearid;
+                                                _teacherFeedbackForms.CreatedDate = DateTime.Now;
+                                                _teacherFeedbackForms.CreatedBy = _username;
+                                                _teacherFeedbackForms.ModifiedDate = DateTime.Now;
+                                                _teacherFeedbackForms.ModifiedBy = _username;
+
+                                                await _feedbackRepository.AddAsync(_teacherFeedbackForms);
+
+                                                var _teacherParticipationForms = new TeacherParticipationForm();
+                                                _teacherParticipationForms.TeacherId = teacherid;
+                                                _teacherParticipationForms.YearId = yearid;
+                                                _teacherParticipationForms.CreatedDate = DateTime.Now;
+                                                _teacherParticipationForms.CreatedBy = _username;
+                                                _teacherParticipationForms.ModifiedDate = DateTime.Now;
+                                                _teacherParticipationForms.ModifiedBy = _username;
+
+                                                await _participationRepository.AddAsync(_teacherParticipationForms);
                                             }
                                             catch (Exception ex)
                                             {

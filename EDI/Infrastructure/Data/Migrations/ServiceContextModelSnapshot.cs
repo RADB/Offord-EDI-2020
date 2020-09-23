@@ -1352,7 +1352,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
                         .WithMany("Sites")
                         .HasForeignKey("YearId")
-                        .HasConstraintName("FK_Years_Sites");
+                        .HasConstraintName("FK_Years_Sites")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Teacher", b =>
