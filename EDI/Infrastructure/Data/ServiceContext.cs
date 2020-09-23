@@ -101,10 +101,6 @@ namespace EDI.Infrastructure.Data
                 .Property(e => e.ModifiedBy)
                 .IsUnicode(false);
 
-            //modelBuilder.Entity<Provinces>()
-            //    .HasMany(e => e.Schools)
-            //    .WithOne(e => e.Provinces)
-            //    .HasForeignKey(e => e.ProvinceId);
 
             modelBuilder.Entity<Child>(entity =>
             {

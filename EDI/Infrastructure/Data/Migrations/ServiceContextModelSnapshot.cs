@@ -328,9 +328,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<byte?>("ClassTime")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("CoordinatorEmail")
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
@@ -377,10 +374,6 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("SchoolName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SchoolProvinceId")
-                        .HasColumnName("SchoolProvinceID")
-                        .HasColumnType("int");
-
                     b.Property<string>("SiteName")
                         .HasColumnType("nvarchar(max)");
 
@@ -397,8 +390,6 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasIndex("FileImportStatusId");
 
                     b.HasIndex("GenderId");
-
-                    b.HasIndex("SchoolProvinceId");
 
                     b.ToTable("FileImports","Staging");
                 });
@@ -1307,11 +1298,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("FileImports")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_FileImports_Gender");
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Province", "SchoolProvince")
-                        .WithMany("FileImports")
-                        .HasForeignKey("SchoolProvinceId")
-                        .HasConstraintName("FK_FileImports_Provinces");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
