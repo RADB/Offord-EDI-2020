@@ -42,6 +42,7 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.Country) HeaderText="Country" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceItemViewModel.EDICode) HeaderText="EDI Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                         </GridColumns>
@@ -90,6 +91,7 @@
 
                 aprovince.Id = province.Id;
                 aprovince.Code = province.Code;
+                aprovince.EDICode = province.EDICode;
                 aprovince.English = province.English;
                 aprovince.French = province.French;
                 aprovince.CountryID = province.CountryID;
@@ -146,6 +148,7 @@
             if (rowdata != null)
             {
                 ProvinceModel.Code = rowdata.Code;
+                ProvinceModel.EDICode = rowdata.EDICode;
                 ProvinceModel.English = rowdata.English;
                 ProvinceModel.French = rowdata.French;
                 ProvinceModel.CountryID = rowdata.CountryID;
@@ -184,6 +187,7 @@
 
                 aprovince.Id = province.Id;
                 aprovince.Code = province.Code;
+                aprovince.EDICode = province.EDICode;
                 aprovince.English = province.English;
                 aprovince.French = province.French;
                 aprovince.CountryID = province.CountryID;
@@ -216,6 +220,7 @@
                 if (item.Id == ProvinceModel.Id)
                 {
                     item.Code = ProvinceModel.Code;
+                    item.EDICode = ProvinceModel.EDICode;
                     item.English = ProvinceModel.English;
                     item.French = ProvinceModel.French;
                     item.CountryID = ProvinceModel.CountryID;
@@ -265,6 +270,7 @@
         if (rowdata != null)
         {
             ProvinceModel.Code = rowdata.Code;
+            ProvinceModel.EDICode = rowdata.EDICode;
             ProvinceModel.English = rowdata.English;
             ProvinceModel.French = rowdata.French;
             ProvinceModel.Country = rowdata.Country;

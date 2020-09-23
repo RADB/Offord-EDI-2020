@@ -144,28 +144,19 @@
     {
         if (!modalResult.Cancelled)
         {
-            var schools = dbContext.Schools.Where(p => p.SiteId == this.rowid).ToList();
+            await siteService.DeleteSiteAsync(this.rowid);
 
-            if (schools != null && schools.Count() > 0)
+            var tmp = new List<SiteItemViewModel>();
+            foreach (var item in sites)
             {
-                toastService.ShowError("This item is referenced by school - " + schools.First().SchoolName);
+                if (item.Id != rowid)
+                    tmp.Add(item);
             }
-            else
-            {
-                await siteService.DeleteSiteAsync(this.rowid);
+            this.sites = tmp;
+            this.rowid = 0;
 
-                var tmp = new List<SiteItemViewModel>();
-                foreach (var item in sites)
-                {
-                    if (item.Id != rowid)
-                        tmp.Add(item);
-                }
-                this.sites = tmp;
-                this.rowid = 0;
-
-                this.Grid.Refresh();
-                StateHasChanged();
-            }
+            this.Grid.Refresh();
+            StateHasChanged();
         }
 
         Modal.OnClose -= ConfirmDeleteModalClosed;

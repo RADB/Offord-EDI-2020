@@ -149,8 +149,8 @@
                 afile.CoordinatorEmail = file.CoordinatorEmail;
                 afile.SchoolName = file.SchoolName;
                 afile.SchoolProvinceId = file.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English : string.Empty;
+                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = file.TeacherName;
                 afile.TeacherEmail = file.TeacherEmail;
                 afile.LocalId = file.LocalId;
@@ -203,8 +203,8 @@
                 afile.CoordinatorEmail = file.CoordinatorEmail;
                 afile.SchoolName = file.SchoolName;
                 afile.SchoolProvinceId = file.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English : string.Empty;
+                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = file.TeacherName;
                 afile.TeacherEmail = file.TeacherEmail;
                 afile.LocalId = file.LocalId;
@@ -276,8 +276,8 @@
                 afile.CoordinatorEmail = nfile.CoordinatorEmail;
                 afile.SchoolName = nfile.SchoolName;
                 afile.SchoolProvinceId = nfile.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English : string.Empty;
+                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = nfile.TeacherName;
                 afile.TeacherEmail = nfile.TeacherEmail;
                 afile.LocalId = nfile.LocalId;
@@ -382,8 +382,8 @@
                 afile.CoordinatorEmail = file.CoordinatorEmail;
                 afile.SchoolName = file.SchoolName;
                 afile.SchoolProvinceId = file.SchoolProvinceId;
-                var province = dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault();
-                afile.Province = province != null ? dbContext.Provinces.Where(p => p.Id == afile.SchoolProvinceId).FirstOrDefault().English : string.Empty;
+                var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                afile.Province = province != null ? province.English : string.Empty;
                 afile.TeacherName = file.TeacherName;
                 afile.TeacherEmail = file.TeacherEmail;
                 afile.LocalId = file.LocalId;
