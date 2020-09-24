@@ -37,6 +37,7 @@
     {
         base.OnInitialized();
 
+        treedata.Add(new TreeData { nodeId = "06", nodeText = "Dashboard", iconCss = "icon-graph icon" });
         treedata.Add(new TreeData { nodeId = "01", nodeText = "Administration", iconCss = "icon-globe icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "01-01", nodeText = "Sites", iconCss = "icon-map icon", pid = "01" });
         treedata.Add(new TreeData { nodeId = "01-02", nodeText = "Schools", iconCss = "icon-home icon", pid = "01" });
@@ -65,7 +66,7 @@
         treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Links", iconCss = "icon-link icon", pid = "05" });
         treedata.Add(new TreeData { nodeId = "05-03", nodeText = "Reports", iconCss = "icon-chart icon", pid = "05" });
         treedata.Add(new TreeData { nodeId = "05-04", nodeText = "Documents", iconCss = "icon-folder-alt icon", pid = "05"});
-        
+
     }
 
     private void onSelect(NodeSelectEventArgs args)
@@ -142,9 +143,10 @@
         {
             NavigationManager.NavigateTo("./years/index");
         }
-
-
-
+        else if (args.NodeData.Id == "06")
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
     }
 
     private async void onClick(NodeClickEventArgs args)

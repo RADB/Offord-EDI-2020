@@ -14,7 +14,14 @@
 {
     <AppHeader OnToggleClick="@OnToggleClick" />
     <div class="app-body">
-        <SidebarNav @ref="SidebarObject" />
+        @if (IsAdmin)
+        {
+            <SidebarNav @ref="SidebarObject" />
+        }
+        else if (IsTeacher)
+        {
+            <TeacherSidebarNav @ref="TeacherSidebarObject" />
+        }
         <div class="main">
             <div class="container-fluid">
                 <!-- *PAGE* -->
@@ -42,8 +49,11 @@ else
     private bool isAuthenticated { get; set; }
 
     public SidebarNav SidebarObject { get; set; }
+    public TeacherSidebarNav TeacherSidebarObject { get; set; }
 
-    private bool IsInvoiceReport { get; set; }
+    private bool IsAdmin { get; set; }
+    private bool IsTeacher { get; set; }
+    private bool IsCoordinator { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,13 +64,17 @@ else
 
         var url = NavigationManager.Uri;
 
-        if (url.ToLower().Contains("invoiceform") || url.ToLower().Contains("statementform") || url.ToLower().Contains("estimateform"))
+        @if (user.IsInRole("Administrator"))
         {
-            IsInvoiceReport = true;
+            IsAdmin = true;
+        }
+        else if (user.IsInRole("Teacher"))
+        {
+            IsTeacher = true;
         }
         else
         {
-            IsInvoiceReport = false;
+            IsCoordinator = true;
         }
     }
 
@@ -68,5 +82,4 @@ else
     {
         this.SidebarObject.Sidebar.Toggle();
     }
-
 }

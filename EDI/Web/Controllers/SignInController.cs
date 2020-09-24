@@ -48,7 +48,7 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    return Redirect("./sites/index");
+                    return Redirect("./Dashboard/index");
                 }
             }
             catch (Exception ex)

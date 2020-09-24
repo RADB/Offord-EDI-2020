@@ -1,0 +1,63 @@
+﻿@page "/Dashboard/index"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Dashboard</strong>
+            </div>
+            <div class="card-body">
+                @if (IsAdmin)
+                {
+                    <h3>Dashboard for Administrator</h3>
+                }
+                else if (IsTeacher)
+                {
+                    <h3>Dashboard for Teacher</h3>
+                }
+                else
+                {
+                    <h3>Dashboard for Coordinator</h3>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+
+
+    private bool IsAdmin { get; set; }
+    private bool IsTeacher { get; set; }
+    private bool IsCoordinator { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            @if (user.IsInRole("Administrator"))
+            {
+                IsAdmin = true;
+            }
+            else if (user.IsInRole("Teacher"))
+            {
+                IsTeacher = true;
+            }
+            else
+            {
+                IsCoordinator = true;
+            }
+        }
+    }
+}
