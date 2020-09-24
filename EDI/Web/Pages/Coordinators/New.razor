@@ -58,6 +58,10 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+        else if (!user.IsInRole("Administrator"))
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
     }
 
     private async void HandleValidSubmit()

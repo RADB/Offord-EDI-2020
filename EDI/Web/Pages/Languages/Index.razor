@@ -67,6 +67,10 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+        else if (!user.IsInRole("Administrator"))
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
         else
         {
             username = user.Identity.Name;

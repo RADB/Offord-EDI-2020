@@ -22,6 +22,10 @@
         {
             <TeacherSidebarNav @ref="TeacherSidebarObject" />
         }
+        else
+        {
+            <CoordinatorSidebarNav @ref="CoordinatorSidebarObject" />
+        }
         <div class="main">
             <div class="container-fluid">
                 <!-- *PAGE* -->
@@ -50,6 +54,7 @@ else
 
     public SidebarNav SidebarObject { get; set; }
     public TeacherSidebarNav TeacherSidebarObject { get; set; }
+    public CoordinatorSidebarNav CoordinatorSidebarObject { get; set; }
 
     private bool IsAdmin { get; set; }
     private bool IsTeacher { get; set; }

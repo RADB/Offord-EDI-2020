@@ -107,9 +107,13 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+        else if (!user.IsInRole("Administrator"))
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
         else
         {
-            SiteModel = await siteService.GetSiteItem(Id);            
+            SiteModel = await siteService.GetSiteItem(Id);
 
             var allschools = await Task.FromResult(dbContext.Schools.Where(p => p.SiteId == Id).OrderBy(p => p.SchoolNumber).ToList());
 

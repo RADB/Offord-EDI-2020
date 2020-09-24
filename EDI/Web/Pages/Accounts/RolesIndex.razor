@@ -72,6 +72,10 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+        else if (!user.IsInRole("Administrator"))
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
         else
         {
             username = user.Identity.Name;
@@ -88,7 +92,7 @@
 
                 roleitem.Id = ppl.Id;
                 roleitem.Name = ppl.Name;
-                roleitem.Users = identityContext.UserRoles.Where(p => p.RoleId == ppl.Id).Count();               
+                roleitem.Users = identityContext.UserRoles.Where(p => p.RoleId == ppl.Id).Count();
 
                 pivm.Add(roleitem);
             }

@@ -75,6 +75,10 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+        else if (!user.IsInRole("Administrator"))
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
         else
         {
             CoordinatorModel = await coordinatorService.GetCoordinatorItem(Id);
