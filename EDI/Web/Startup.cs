@@ -162,7 +162,7 @@ namespace EDI.Web
                     }
                 });
 
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjQxMTE0QDMxMzgyZTMxMmUzMGwwMW0zRWRiRDhKdjFOVWE0QUpldFFNQ2cxNzA2ZmsyVHl1dHFwVEt4OGs9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIyMjQzQDMxMzgyZTMyMmUzMG1aWllxb0tyN3paWGNGK2NZejZXVVl1WXFINzl6Y0FiWnBCTnJTcVJ6MjA9");
 
             if (env.IsDevelopment())
             {
