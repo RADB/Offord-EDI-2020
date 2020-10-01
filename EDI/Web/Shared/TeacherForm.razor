@@ -1,0 +1,164 @@
+﻿@inject NavigationManager NavigationManager
+@inject ITeacherService teacherService
+@inject ISharedService sharedService
+@inject IAccountService accountService
+@inject ServiceContext dbContext;
+
+<EditForm Model="@TeacherModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="TeacherNumber">Teacher Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="TeacherModel.TeacherNumber" class="col-md-7 form-control" placeholder="Teacher Number" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Name">Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="TeacherModel.TeacherName" class="col-md-7 form-control" placeholder="Name" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Teachers">User ID: </label>
+            <select class="col-md-7" value="@userid" @onchange="@(e =>UserChange(e))">
+                @if (Users != null)
+                {
+                    @foreach (var option in Users)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Email">Email<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="TeacherModel.Email" class="col-md-7 form-control" placeholder="Email" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+            <input type="text" @bind-value="TeacherModel.PhoneNumber" class="col-md-7 form-control" placeholder="Phone" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Site">Site<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@siteid" @onchange="@(e =>SiteChange(e))">
+                @if (Sites != null)
+                {
+                    @foreach (var option in Sites)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Year">Year: </label>
+            <select class="col-md-7" value="@yearid" @onchange="@(e =>YearChange(e))">
+                @if (Years != null)
+                {
+                    @foreach (var option in Years)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public TeacherItemViewModel TeacherModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public IEnumerable<SelectListItem> Users { get; set; }
+
+    public string userid { get; set; }
+
+    public IEnumerable<SelectListItem> Sites { get; set; }
+
+    public IEnumerable<SelectListItem> Schools { get; set; }
+
+    public IEnumerable<SelectListItem> Years { get; set; }
+
+    public string yearid { get; set; }
+
+    public string siteid { get; set; }
+
+    public string schoolid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Users = await accountService.GetTeachers();
+
+        if (!string.IsNullOrEmpty(TeacherModel.UserId))
+        {
+            userid = TeacherModel.UserId;
+        }
+
+        Sites = await sharedService.GetSites();
+        siteid = TeacherModel.SiteId.ToString();
+
+        if (TeacherModel.SiteId > 0)
+        {
+            Schools = await sharedService.GetSchools(TeacherModel.SiteId);
+        }
+
+        schoolid = TeacherModel.SchoolId.ToString();
+
+
+        Years = await sharedService.GetYears();
+        yearid = TeacherModel.YearId.HasValue ? TeacherModel.YearId.ToString() : string.Empty;
+    }
+
+    private void UserChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        TeacherModel.UserId = null;
+
+        if (!string.IsNullOrEmpty(selectedString))
+        {
+            TeacherModel.UserId = selectedString;
+        }
+    }
+
+    private void YearChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        TeacherModel.YearId = 0;
+
+        if (int.TryParse(selectedString, out int newyearid))
+        {
+            TeacherModel.YearId = newyearid;
+        }
+    }
+
+    private async Task SiteChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        schoolid = "0";
+
+        Schools = await sharedService.GetSchools(0);
+
+        TeacherModel.SiteId = 0;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            TeacherModel.SiteId = ctid;
+            Schools = await sharedService.GetSchools(ctid);
+        }
+    }
+}

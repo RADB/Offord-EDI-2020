@@ -102,6 +102,7 @@ namespace EDI.Web.Services
                 _school.CountryId = school.CountryId;
                 _school.ProvinceId = school.ProvinceId;
                 _school.SiteId = school.SiteId;
+                _school.YearId = school.YearId;
                 _school.City = school.City;
                // _school.Elpschool = school.Elpschool;
                 _school.ModifiedDate = DateTime.Now;
@@ -130,6 +131,7 @@ namespace EDI.Web.Services
                 _school.CountryId = school.CountryId;
                 _school.ProvinceId = school.ProvinceId;
                 _school.SiteId = school.SiteId;
+                _school.YearId = school.YearId;
                 _school.City = school.City;
                // _school.Elpschool = school.Elpschool;
                 _school.CreatedDate = DateTime.Now;
@@ -165,6 +167,7 @@ namespace EDI.Web.Services
                     CountryId = school.CountryId,
                     ProvinceId = school.ProvinceId,
                     SiteId = school.SiteId,
+                    YearId = school.YearId,
                     City = school.City,                    
                     CreatedDate = school.CreatedDate,
                     CreatedBy = school.CreatedBy,
@@ -184,14 +187,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string schoolnumber)
+        public async Task<int> GetDuplicateCount(int siteid, string schoolnumber)
         {
             await LogUsername();
             Log.Information("GetDuplicateCount started by:" + _username);
 
             try
             {
-                var filterSpecification = new SchoolFilterSpecification(schoolnumber);
+                var filterSpecification = new SchoolFilterSpecification(siteid, schoolnumber);
 
                 var totalItems = await _schoolRepository.CountAsync(filterSpecification);
 
@@ -204,14 +207,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string schoolnumber, int id)
+        public async Task<int> GetDuplicateCount(int siteid, string schoolnumber, int id)
         {
             await LogUsername();
             Log.Information("GetDuplicateCount started by:" + _username);
 
             try
             {
-                var filterSpecification = new SchoolFilterSpecification(schoolnumber, id);
+                var filterSpecification = new SchoolFilterSpecification(siteid, schoolnumber, id);
 
                 var totalItems = await _schoolRepository.CountAsync(filterSpecification);
 

@@ -70,7 +70,7 @@ namespace EDI.Web.Controllers
                 }
                 else
                 {
-                    string folderName = @"Data\Files\Unknown";
+                    string folderName = @"Data\Files\Others";
                     //string webRootPath = this.basePath + @"\wwwroot";
                     newPath = Path.Combine(this.basePath, folderName);
                 }
@@ -79,9 +79,68 @@ namespace EDI.Web.Controllers
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
+
+                //DirectoryInfo di = Directory.CreateDirectory(newPath);
+                //di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
             }
 
             this.operation.RootFolder(newPath);
+
+            string[] filesindirectory = Directory.GetDirectories(newPath);
+            if (rolename == "Administrator")
+            {
+                foreach (string subdir in filesindirectory)
+                {
+                    DirectoryInfo di = new DirectoryInfo(subdir); 
+                    di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
+                }
+            }
+            else if (rolename == "Coordinator")
+            {
+                foreach (string subdir in filesindirectory)
+                {
+                    DirectoryInfo di = new DirectoryInfo(subdir);
+                    di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                }
+
+                List<int> provinces = new List<int>();
+                var coordinate = _dbContext.Coordinators.Where(c => c.UserId == user.Id).FirstOrDefault();
+
+                if(coordinate != null)
+                {
+                    var sites = _dbContext.Sites.Where(s => s.CoordinatorId == coordinate.Id).ToList();
+
+                    foreach(var site in sites)
+                    {
+                        var provinceids = _dbContext.Schools.Where(s => s.SiteId == site.Id).Select(s => s.ProvinceId).ToList();
+
+                        foreach(var pid in provinceids)
+                        {
+                            provinces.Add(pid);
+                        }
+                    }
+
+                    var distinctprovinces = provinces.Distinct();
+
+                    foreach(var pid in distinctprovinces)
+                    {
+                        var province = _dbContext.Provinces.Where(p => p.Id == pid).FirstOrDefault();
+
+                        string folderName = @"Data\Files\" + province.English;
+                        string subfolder = Path.Combine(this.basePath, folderName);
+
+                        if (!Directory.Exists(subfolder))
+                        {
+                            Directory.CreateDirectory(subfolder);
+                        }
+                        else
+                        {
+                            DirectoryInfo di = new DirectoryInfo(subfolder);
+                            di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
+                        }
+                    }
+                }                
+            }
         }
 
         // Processing the File Manager operations

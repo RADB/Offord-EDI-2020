@@ -15,7 +15,7 @@ namespace EDI.Web.Interfaces
         Task<IEnumerable<SelectListItem>> GetCoordinators();
         Task<IEnumerable<SelectListItem>> GetYears();
         Task<IEnumerable<SelectListItem>> GetGenders();
-        Task<IEnumerable<SelectListItem>> GetSchools();
+        Task<IEnumerable<SelectListItem>> GetSchools(int siteid);
         Task<IEnumerable<SelectListItem>> GetTeachers();
         Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
         Task<ErrorViewModel> ProcessFileData();

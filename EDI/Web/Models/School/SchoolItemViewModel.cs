@@ -19,6 +19,9 @@ namespace EDI.Web.Models
         public int ProvinceId { get; set; }
         [Required(ErrorMessage = "Site is required.")]
         public int SiteId { get; set; }
+        [Required(ErrorMessage = "Year is required.")]
+        public int? YearId { get; set; }
+        public short? Ediyear { get; set; }
         public string Country { get; set; }
         public string Province { get; set; }
         public string City { get; set; }

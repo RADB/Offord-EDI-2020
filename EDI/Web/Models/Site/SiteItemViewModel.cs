@@ -18,6 +18,7 @@ namespace EDI.Web.Models
         public string Description { get; set; }
         public int CoordinatorId { get; set; }
         public string CoordinatorName { get; set; }
+        [Required(ErrorMessage = "Year is required.")]
         public int? YearId { get; set; }
         public short? Ediyear { get; set; }
         public DateTime? CreatedDate { get; set; }

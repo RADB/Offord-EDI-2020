@@ -7,7 +7,9 @@ namespace EDI.Web.Models
     {
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "User is required.")]
         public string UserId { get; set; }
+        [Required(ErrorMessage = "Year is required.")]
         public int? YearId { get; set; }
         public short? Ediyear { get; set; }
         public string CoordinatorName { get; set; }

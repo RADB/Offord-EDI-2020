@@ -8,13 +8,18 @@ namespace EDI.ApplicationCore.Specifications
 {
     public class SchoolFilterSpecification : BaseSpecification<School>
     {
-        public SchoolFilterSpecification(string schoolnumbder)
-            : base(i => i.SchoolNumber.ToLower().Trim() == schoolnumbder.ToLower().Trim())
+        public SchoolFilterSpecification(int siteid)
+            : base(i => i.SiteId == siteid)
         {
         }
 
-        public SchoolFilterSpecification(string schoolnumbder, int id)
-            : base(i => i.SchoolNumber.ToLower().Trim() == schoolnumbder.ToLower().Trim() && i.Id != id)
+        public SchoolFilterSpecification(int siteid, string schoolnumbder)
+            : base(i =>i.SiteId == siteid && i.SchoolNumber.ToLower().Trim() == schoolnumbder.ToLower().Trim())
+        {
+        }
+
+        public SchoolFilterSpecification(int siteid, string schoolnumbder, int id)
+            : base(i => i.SiteId == siteid && i.SchoolNumber.ToLower().Trim() == schoolnumbder.ToLower().Trim() && i.Id != id)
         {
         }
     }

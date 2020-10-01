@@ -8,13 +8,13 @@ namespace EDI.ApplicationCore.Specifications
 {
     public class TeacherFilterSpecification : BaseSpecification<Teacher>
     {
-        public TeacherFilterSpecification(string teachernumber)
-            : base(i => i.TeacherNumber.ToLower().Trim() == teachernumber.ToLower().Trim())
+        public TeacherFilterSpecification(string teachername, string email)
+            : base(i => i.TeacherName.ToLower().Trim() == teachername.ToLower().Trim() && i.Email.ToLower().Trim() == email.ToLower().Trim())
         {
         }
 
-        public TeacherFilterSpecification(string teachernumber, int id)
-            : base(i => i.TeacherNumber.ToLower().Trim() == teachernumber.ToLower().Trim() && i.Id != id)
+        public TeacherFilterSpecification(string teachername, string email, int id)
+            : base(i => i.TeacherName.ToLower().Trim() == teachername.ToLower().Trim() && i.Email.ToLower().Trim() == email.ToLower().Trim() && i.Id != id)
         {
         }
     }

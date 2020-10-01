@@ -320,23 +320,29 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetSchools()
+        public async Task<IEnumerable<SelectListItem>> GetSchools(int siteid)
         {
             await LogUsername();
             Log.Information("GetSchools started by:" + _username);
 
             try
             {
-                var schools = _schoolRepository.ListAllSchools().OrderBy(t => t.SchoolName);
-
                 var items = new List<SelectListItem>
                 {
-                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                    new SelectListItem() { Value = "0", Text = "Choose One...", Selected = true }
                 };
 
-                foreach (var school in schools)
+                if (siteid > 0)
                 {
-                    items.Add(new SelectListItem() { Value = school.Id.ToString(), Text = school.SchoolName });
+                    var filterSpecification = new SchoolFilterSpecification(siteid);
+                    var school = await _schoolRepository.ListAsync(filterSpecification);
+
+                    var ordered = school.OrderBy(t => t.SchoolName);
+
+                    foreach (School sch in ordered)
+                    {
+                        items.Add(new SelectListItem() { Value = sch.Id.ToString(), Text = sch.SchoolName });
+                    }
                 }
 
                 return items;

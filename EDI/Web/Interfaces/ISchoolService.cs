@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<SchoolItemViewModel> GetSchoolItem(int schoolId);
 
-        Task<int> GetDuplicateCount(string schoolnumber);
-        Task<int> GetDuplicateCount(string schoolnumber, int id);
+        Task<int> GetDuplicateCount(int siteid, string schoolnumber);
+        Task<int> GetDuplicateCount(int siteid, string schoolnumber, int id);
     }
 }

@@ -24,6 +24,7 @@ namespace EDI.Web.Interfaces
         Task<IEnumerable<SelectListItem>> GetRoles();
         Task<IEnumerable<SelectListItem>> GetUsers();
         Task<IEnumerable<SelectListItem>> GetCoordinators();
+        Task<IEnumerable<SelectListItem>> GetTeachers();
         Task<AccountItemViewModel> GetProfile();
         Task CreateRoleAsync(RoleItemViewModel role);
         Task DeleteRoleAsync(string Id);

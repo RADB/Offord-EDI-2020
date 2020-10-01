@@ -377,6 +377,55 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task<IEnumerable<SelectListItem>> GetTeachers()
+        {
+            await LogUsername();
+            Log.Information("GetTeachers started by:" + _username);
+
+            try
+            {
+                var users = _accountRepository.ListAllUsers().OrderBy(t => t.FirstName);
+
+                var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+
+                var teacherusers = _identityContext.UserRoles.Where(p => p.RoleId == role.Id).ToList();
+
+                var userlist = new List<ApplicationUser>();
+
+                foreach (var user in users)
+                {
+                    foreach (var teacheruser in teacherusers)
+                    {
+                        if (user.Id == teacheruser.UserId)
+                        {
+                            userlist.Add(user);
+                        }
+                    }
+                }
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                var ordered = userlist.OrderBy(t => t.FirstName);
+
+                foreach (ApplicationUser user in ordered)
+                {
+                    items.Add(new SelectListItem() { Value = user.Id, Text = user.FirstName + " " + user.LastName });
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetTeachers failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
         public int GetDuplicateCount(string email)
         {
             try
