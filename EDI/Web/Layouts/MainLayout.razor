@@ -85,6 +85,17 @@ else
 
     private void OnToggleClick()
     {
-        this.SidebarObject.Sidebar.Toggle();
+        if (IsAdmin)
+        {
+            this.SidebarObject.Sidebar.Toggle();
+        }
+        else if (IsTeacher)
+        {
+            this.TeacherSidebarObject.Sidebar.Toggle();
+        }
+        else
+        {
+            this.CoordinatorSidebarObject.Sidebar.Toggle();
+        }
     }
 }

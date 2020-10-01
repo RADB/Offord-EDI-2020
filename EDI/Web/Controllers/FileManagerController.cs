@@ -61,27 +61,37 @@ namespace EDI.Web.Controllers
             }
             else if (rolename == "Teacher")
             {
-                if (user.ProvinceID.HasValue)
+                var teacher = _dbContext.Teachers.Where(c => c.UserId == user.Id).FirstOrDefault();
+
+                if (teacher != null)
                 {
-                    var province = _dbContext.Provinces.Where(p => p.Id == user.ProvinceID).FirstOrDefault();
+                    var school = _dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
+
+                    var province = _dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
 
                     string folderName = @"Data\Files\" + province.English;
-                    newPath = Path.Combine(this.basePath, folderName);                    
+                    newPath = Path.Combine(this.basePath, folderName);
                 }
                 else
                 {
-                    string folderName = @"Data\Files\Others";
-                    //string webRootPath = this.basePath + @"\wwwroot";
-                    newPath = Path.Combine(this.basePath, folderName);
+                    if (user.ProvinceID.HasValue)
+                    {
+                        var province = _dbContext.Provinces.Where(p => p.Id == user.ProvinceID).FirstOrDefault();
+
+                        string folderName = @"Data\Files\" + province.English;
+                        newPath = Path.Combine(this.basePath, folderName);
+                    }
+                    else
+                    {
+                        string folderName = @"Data\Files\Others";
+                        newPath = Path.Combine(this.basePath, folderName);
+                    }
                 }
             }
 
             if (!Directory.Exists(newPath))
             {
                 Directory.CreateDirectory(newPath);
-
-                //DirectoryInfo di = Directory.CreateDirectory(newPath);
-                //di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
             }
 
             this.operation.RootFolder(newPath);
