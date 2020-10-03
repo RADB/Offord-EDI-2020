@@ -1,11 +1,15 @@
-﻿@page "/Coordinators/New"
+﻿@page "/teachers/edit/{Id:int}"
+@using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Navigations;
 @using EDI.Web.Extensions;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
-@inject ICoordinatorService CoordinatorService
-@inject IModalService Modal
+@inject ITeacherService teacherService
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime;
+@inject IModalService Modal;
+@inject ServiceContext dbContext;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -22,32 +26,45 @@
         @ErrorMessage
     </div>
 }
-
 <br />
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-10">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
-                <strong>New Coordinator</strong>
+                <strong>Edit Teacher</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
                     <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
                 </div>
             </div>
-            <CoordinatorForm @ref="coordinatorform1" CoordinatorModel="@CoordinatorModel" HandleValidSubmit="HandleValidSubmit" />
+            <br />
+            <div class="col-md-7">
+                <SfAccordion>
+                    <AccordionItems>
+                        <AccordionItem Header="Details" Expanded="true">
+                            <ContentTemplate>
+                                <TeacherForm @ref="teacherform1" TeacherModel="@TeacherModel" HandleValidSubmit="HandleValidSubmit" />
+                            </ContentTemplate>
+                        </AccordionItem>
+                    </AccordionItems>
+                </SfAccordion>
+            </div>
         </div>
-
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
-    private CoordinatorItemViewModel CoordinatorModel { get; set; } = new CoordinatorItemViewModel();
+    private TeacherItemViewModel TeacherModel { get; set; } = new TeacherItemViewModel();
 
-    CoordinatorForm coordinatorform1 = new CoordinatorForm();
+    TeacherForm teacherform1 = new TeacherForm();
+
+    SfGrid<SchoolItemViewModel> Grid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -62,25 +79,36 @@
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
+        else
+        {
+            TeacherModel = await teacherService.GetTeacherItem(Id);
+        }
     }
 
     private async void HandleValidSubmit()
     {
-        if (string.IsNullOrEmpty(CoordinatorModel.Email))
+        if (string.IsNullOrEmpty(TeacherModel.Email))
         {
             ErrorMessage = "Email is required.";
             toastService.ShowError(ErrorMessage);
             return;
         }
 
-        if (string.IsNullOrEmpty(CoordinatorModel.CoordinatorName))
+        if (string.IsNullOrEmpty(TeacherModel.TeacherName))
         {
             ErrorMessage = "Name is invalid.";
             toastService.ShowError(ErrorMessage);
             return;
         }
 
-        if (!ValidateExtension.IsEmailValid(CoordinatorModel.Email))
+        if (string.IsNullOrEmpty(TeacherModel.UserId))
+        {
+            ErrorMessage = "User ID is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        if (!ValidateExtension.IsEmailValid(TeacherModel.Email))
         {
             ErrorMessage = "Email is invalid.";
             toastService.ShowError(ErrorMessage);
@@ -88,32 +116,32 @@
         }
 
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await CoordinatorService.GetDuplicateCount(CoordinatorModel.CoordinatorName, CoordinatorModel.Email);
+        var totalItems = await teacherService.GetDuplicateCount(teacherform1.TeacherModel.TeacherName, teacherform1.TeacherModel.Email, teacherform1.TeacherModel.Id);
 
         if (totalItems > 0)
         {
-            ErrorMessage = "The same Coordinator has already existed.";
+            ErrorMessage = "The same Teacher has already existed.";
             toastService.ShowError(ErrorMessage);
         }
         else
         {
-            await CoordinatorService.CreateCoordinatorAsync(coordinatorform1.CoordinatorModel);
+            await teacherService.UpdateTeacherAsync(teacherform1.TeacherModel);
 
-            Message = "New Coordinator added successfully.";
+            Message = "Teacher updated successfully.";
+
             toastService.ShowSuccess(Message);
-            CoordinatorModel = new CoordinatorItemViewModel();
+
             StateHasChanged();
         }
     }
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./Coordinators/index");
+        NavigationManager.NavigateTo("./teachers/index");
     }
 
     private async void Reset()
     {
-        CoordinatorModel = new CoordinatorItemViewModel();
-        StateHasChanged();
+        TeacherModel = await teacherService.GetTeacherItem(Id);
     }
 }

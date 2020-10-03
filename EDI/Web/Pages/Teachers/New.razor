@@ -1,9 +1,9 @@
-﻿@page "/Coordinators/New"
+﻿@page "/Teachers/New"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Extensions;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
-@inject ICoordinatorService CoordinatorService
+@inject ITeacherService TeacherService
 @inject IModalService Modal
 @inject NavigationManager NavigationManager
 
@@ -29,13 +29,13 @@
     <div class="col-md-6">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
-                <strong>New Coordinator</strong>
+                <strong>New Teacher</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
                     <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
                 </div>
             </div>
-            <CoordinatorForm @ref="coordinatorform1" CoordinatorModel="@CoordinatorModel" HandleValidSubmit="HandleValidSubmit" />
+            <TeacherForm @ref="teacherform1" TeacherModel="@TeacherModel" HandleValidSubmit="HandleValidSubmit" />
         </div>
 
     </div>
@@ -45,9 +45,9 @@
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
-    private CoordinatorItemViewModel CoordinatorModel { get; set; } = new CoordinatorItemViewModel();
+    private TeacherItemViewModel TeacherModel { get; set; } = new TeacherItemViewModel();
 
-    CoordinatorForm coordinatorform1 = new CoordinatorForm();
+    TeacherForm teacherform1 = new TeacherForm();
 
     protected override async Task OnInitializedAsync()
     {
@@ -66,21 +66,21 @@
 
     private async void HandleValidSubmit()
     {
-        if (string.IsNullOrEmpty(CoordinatorModel.Email))
+        if (string.IsNullOrEmpty(TeacherModel.Email))
         {
             ErrorMessage = "Email is required.";
             toastService.ShowError(ErrorMessage);
             return;
         }
 
-        if (string.IsNullOrEmpty(CoordinatorModel.CoordinatorName))
+        if (string.IsNullOrEmpty(TeacherModel.TeacherName))
         {
             ErrorMessage = "Name is invalid.";
             toastService.ShowError(ErrorMessage);
             return;
         }
 
-        if (!ValidateExtension.IsEmailValid(CoordinatorModel.Email))
+        if (!ValidateExtension.IsEmailValid(TeacherModel.Email))
         {
             ErrorMessage = "Email is invalid.";
             toastService.ShowError(ErrorMessage);
@@ -88,32 +88,32 @@
         }
 
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await CoordinatorService.GetDuplicateCount(CoordinatorModel.CoordinatorName, CoordinatorModel.Email);
+        var totalItems = await TeacherService.GetDuplicateCount(TeacherModel.TeacherName, TeacherModel.Email);
 
         if (totalItems > 0)
         {
-            ErrorMessage = "The same Coordinator has already existed.";
+            ErrorMessage = "The same Teacher has already existed.";
             toastService.ShowError(ErrorMessage);
         }
         else
         {
-            await CoordinatorService.CreateCoordinatorAsync(coordinatorform1.CoordinatorModel);
+            await TeacherService.CreateTeacherAsync(teacherform1.TeacherModel);
 
-            Message = "New Coordinator added successfully.";
+            Message = "New Teacher added successfully.";
             toastService.ShowSuccess(Message);
-            CoordinatorModel = new CoordinatorItemViewModel();
+            TeacherModel = new TeacherItemViewModel();
             StateHasChanged();
         }
     }
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./Coordinators/index");
+        NavigationManager.NavigateTo("./Teachers/index");
     }
 
     private async void Reset()
     {
-        CoordinatorModel = new CoordinatorItemViewModel();
+        TeacherModel = new TeacherItemViewModel();
         StateHasChanged();
     }
 }

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Syncfusion.Blazor.Data;
 using System.Linq;
+using EDI.Infrastructure.Data;
 
 namespace EDI.Web.Services
 {
@@ -33,6 +34,9 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
+        private readonly ServiceContext _dbContext;
+        private readonly AppIdentityDbContext _identityContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         private string _username { get; set; }
 
@@ -48,6 +52,8 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ServiceContext dbContext,
+            AppIdentityDbContext identityContext,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<CoordinatorService>();
@@ -56,6 +62,9 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userManager = userManager;
+            _dbContext = dbContext;
+            _identityContext = identityContext;
             EDIppSettings = settings.Value;
         }
 
@@ -100,7 +109,7 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullCoordinator(coordinator.Id, _coordinator);
 
-                _coordinator.UserId = coordinator.UserId;
+                //_coordinator.UserId = coordinator.UserId;
                 _coordinator.CoordinatorName = coordinator.CoordinatorName;
                 _coordinator.Description = coordinator.Description;
                 _coordinator.YearId = coordinator.YearId;
@@ -126,7 +135,43 @@ namespace EDI.Web.Services
             {
                 var _coordinator = new Coordinator();
 
-                _coordinator.UserId = coordinator.UserId;
+                var user = _identityContext.Users.Where(p => p.UserName == coordinator.Email).FirstOrDefault();
+                string userid = string.Empty;
+
+                if (user == null)
+                {
+                    try
+                    {
+                        string[] names = coordinator.CoordinatorName.Split(' ');
+                        string firstname = names[0];
+                        string lastname = names[1];
+
+                        var newuser = new ApplicationUser
+                        {
+                            UserName = coordinator.Email,
+                            Email = coordinator.Email,
+                            FirstName = firstname,
+                            LastName = lastname
+                        };
+                        var result = await _userManager.CreateAsync(newuser);
+
+                        var role = _identityContext.Roles.Where(p => p.Name == "Coordinator").FirstOrDefault();
+
+                        await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                        userid = newuser.Id;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("CreateCoordinatorAsync failed:" + ex.Message);
+                    }
+                }
+                else
+                {
+                    userid = user.Id;
+                }
+
+                _coordinator.UserId = userid;
                 _coordinator.CoordinatorName = coordinator.CoordinatorName;
                 _coordinator.Description = coordinator.Description;
                 _coordinator.YearId = coordinator.YearId;

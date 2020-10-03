@@ -17,6 +17,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
+using EDI.Infrastructure.Data;
+using System.Linq;
 
 namespace EDI.Web.Services
 {
@@ -29,6 +31,9 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
+        private readonly ServiceContext _dbContext;
+        private readonly AppIdentityDbContext _identityContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         private string _username { get; set; }
 
@@ -44,6 +49,8 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ServiceContext dbContext,
+            AppIdentityDbContext identityContext,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<TeacherService>();
@@ -51,6 +58,9 @@ namespace EDI.Web.Services
             _teacherRepository = teacherRepository;
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
+            _userManager = userManager;
+            _dbContext = dbContext;
+            _identityContext = identityContext;
             _authenticationStateProvider = authenticationStateProvider;
             EDIppSettings = settings.Value;
         }
@@ -122,6 +132,43 @@ namespace EDI.Web.Services
             {
                 var _teacher = new Teacher();
 
+                var user = _identityContext.Users.Where(p => p.UserName == teacher.Email).FirstOrDefault();
+                string userid = string.Empty;
+
+                if (user == null)
+                {
+                    try
+                    {
+                        string[] names = teacher.TeacherName.Split(' ');
+                        string firstname = names[0];
+                        string lastname = names[1];
+
+                        var newuser = new ApplicationUser
+                        {
+                            UserName = teacher.Email,
+                            Email = teacher.Email,
+                            FirstName = firstname,
+                            LastName = lastname
+                        };
+                        var result = await _userManager.CreateAsync(newuser);
+
+                        var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+
+                        await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                        userid = newuser.Id;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error("CreateTeacherAsync failed:" + ex.Message);
+                    }
+                }
+                else
+                {
+                    userid = user.Id;
+                }
+
+                _teacher.UserId = userid;
                 _teacher.TeacherNumber = teacher.TeacherNumber;
                 _teacher.SchoolId = teacher.SchoolId;
                 _teacher.YearId = teacher.YearId;
@@ -155,8 +202,10 @@ namespace EDI.Web.Services
                 var vm = new TeacherItemViewModel()
                 {
                     Id = teacher.Id,
+                    UserId = teacher.UserId,
                     TeacherNumber = teacher.TeacherNumber,
                     SchoolId = teacher.SchoolId,
+                    SiteId = _dbContext.Schools.Where(s => s.Id == teacher.SchoolId).Select(s=>s.SiteId).FirstOrDefault(),
                     YearId = teacher.YearId,
                     TeacherName = teacher.TeacherName,
                     Email = teacher.Email,

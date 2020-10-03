@@ -15,19 +15,6 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Coordinates">User ID: </label>
-            <select class="col-md-7" value="@userid" @onchange="@(e =>UserChange(e))">
-                @if (Users != null)
-                {
-                    @foreach (var option in Users)
-                    {
-                        <option value="@option.Value">@option.Text</option>
-                    }
-                }
-            </select>
-        </div>
-
-        <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Email">Email<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
             <input type="text" @bind-value="CoordinatorModel.Email" class="col-md-7 form-control" placeholder="Email" />
         </div>
@@ -43,7 +30,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Year">Year: </label>
+            <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
             <select class="col-md-7" value="@yearid" @onchange="@(e =>YearChange(e))">
                 @if (Years != null)
                 {
@@ -68,37 +55,14 @@
     [Parameter]
     public EventCallback HandleValidSubmit { get; set; }
 
-    public IEnumerable<SelectListItem> Users { get; set; }
-
-    public string userid { get; set; }
-
     public IEnumerable<SelectListItem> Years { get; set; }
 
     public string yearid { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Users = await accountService.GetCoordinators();
-
-        if (!string.IsNullOrEmpty(CoordinatorModel.UserId))
-        {
-            userid = CoordinatorModel.UserId;
-        }
-
         Years = await sharedService.GetYears();
         yearid = CoordinatorModel.YearId.HasValue ? CoordinatorModel.YearId.ToString() : string.Empty;
-    }
-
-    private void UserChange(ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
-
-        CoordinatorModel.UserId = null;
-
-        if (!string.IsNullOrEmpty(selectedString))
-        {
-            CoordinatorModel.UserId = selectedString;
-        }
     }
 
     private void YearChange(ChangeEventArgs e)
