@@ -101,9 +101,9 @@
             return;
         }
 
-        if (string.IsNullOrEmpty(TeacherModel.UserId))
+        if (!TeacherModel.SchoolId.HasValue)
         {
-            ErrorMessage = "User ID is required.";
+            ErrorMessage = "School is required.";
             toastService.ShowError(ErrorMessage);
             return;
         }
@@ -118,9 +118,16 @@
         //Console.WriteLine("OnValidSubmit");
         var totalItems = await teacherService.GetDuplicateCount(teacherform1.TeacherModel.TeacherName, teacherform1.TeacherModel.Email, teacherform1.TeacherModel.Id);
 
+        var totalItems2 = await teacherService.GetDuplicateCount(TeacherModel.SchoolId.Value, TeacherModel.TeacherNumber, teacherform1.TeacherModel.Id);
+
         if (totalItems > 0)
         {
-            ErrorMessage = "The same Teacher has already existed.";
+            ErrorMessage = "The teacher with the same name and email has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else if (totalItems2 > 0)
+        {
+            ErrorMessage = "The teacher with the same teacher number has already existed.";
             toastService.ShowError(ErrorMessage);
         }
         else

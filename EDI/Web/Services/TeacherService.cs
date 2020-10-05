@@ -228,6 +228,46 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task<int> GetDuplicateCount(int schoolid, string teachernumber)
+        {
+            await LogUsername();
+            Log.Information("GetDuplicateCount started by:" + _username);
+
+            try
+            {
+                var filterSpecification = new TeacherFilterSpecification(schoolid, teachernumber);
+
+                var totalItems = await _teacherRepository.CountAsync(filterSpecification);
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                return -1;
+            }
+        }
+
+        public async Task<int> GetDuplicateCount(int schoolid, string teachernumber, int id)
+        {
+            await LogUsername();
+            Log.Information("GetDuplicateCount started by:" + _username);
+
+            try
+            {
+                var filterSpecification = new TeacherFilterSpecification(schoolid, teachernumber, id);
+
+                var totalItems = await _teacherRepository.CountAsync(filterSpecification);
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                return -1;
+            }
+        }
+
         public async Task<int> GetDuplicateCount(string teachername, string email)
         {
             await LogUsername();

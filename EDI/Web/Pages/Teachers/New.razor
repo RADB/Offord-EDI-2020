@@ -80,6 +80,13 @@
             return;
         }
 
+        if (!TeacherModel.SchoolId.HasValue)
+        {
+            ErrorMessage = "School is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
         if (!ValidateExtension.IsEmailValid(TeacherModel.Email))
         {
             ErrorMessage = "Email is invalid.";
@@ -90,9 +97,16 @@
         //Console.WriteLine("OnValidSubmit");
         var totalItems = await TeacherService.GetDuplicateCount(TeacherModel.TeacherName, TeacherModel.Email);
 
+        var totalItems2 = await TeacherService.GetDuplicateCount(TeacherModel.SchoolId.Value, TeacherModel.TeacherNumber);
+
         if (totalItems > 0)
         {
-            ErrorMessage = "The same Teacher has already existed.";
+            ErrorMessage = "The teacher with the same name and email has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else if (totalItems2 > 0)
+        {
+            ErrorMessage = "The teacher with the same teacher number has already existed.";
             toastService.ShowError(ErrorMessage);
         }
         else
