@@ -2109,8 +2109,9 @@ namespace EDI.Infrastructure.Data
         {
             return new List<SystemConfigurations>()
             {
-                new SystemConfigurations() { FieldName = "Host", FieldValue = @"https://romedev.lab.phri.ca/purchaseorders/", CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
-                new SystemConfigurations() { FieldName = "InvoiceURL", FieldValue = @"https://romedev.lab.phri.ca/purchaseorders/download/invoices/", CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now }
+                new SystemConfigurations() { FieldName = "ClassTime", FieldValue = @"9", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now},
+                new SystemConfigurations() { FieldName = "Owner", FieldValue = @"© <a href=""http://www.offordcentre.com/readiness/index.html"">Offord Centre for Child Studies</a>", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Footer", FieldValue = @"McMaster University & Hamilton Health Sciences, Hamilton ON, Canada | Tel. (905)525-9140 27051", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
             }.OrderBy(t => t.FieldName);
         }
     }
