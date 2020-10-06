@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
+@inject ServiceContext dbContext;
 
 <div class="row">
     <div class="col-md-12">
@@ -20,7 +21,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Sites</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">10</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@sites</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-sitemap fa-3x text-primary"></i>
@@ -36,7 +37,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Schools</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">10</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@schools</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-school fa-3x text-secondary"></i>
@@ -52,7 +53,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Teachers</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">25</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@teachers</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-chalkboard-teacher fa-3x  text-success"></i>
@@ -68,7 +69,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Children</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">100</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@children</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-child fa-3x  text-warning"></i>
@@ -84,7 +85,7 @@
                             <div class="col-xl-12 col-md-6 mb-4">
                                 <div class="card shadow mb-4">
                                     <div class="card-header">
-                                        <strong>EDI Questionnaires</strong>                                        
+                                        <strong>EDI Questionnaires</strong>
                                     </div>
                                     <div class="card-body">
                                         <h4 class="small font-weight-bold">Not Started <span class="float-right">5%</span></h4>
@@ -102,30 +103,30 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
-                </div>
-                        }
-                        else if (IsTeacher)
-                        {
-                        <div class="card-header">
-                            <strong>Dashboard for Teacher</strong>
-                        </div>
-                        <div class="card-body">
-                        </div>
-                        }
-                        else
-                        {
-                        <div class="card-header">
-                            <strong>Dashboard for Coordinator</strong>
-                        </div>
-                        <div class="card-body">
-                        </div>
-                        }
-
                     </div>
                 </div>
-            </div>
+            }
+            else if (IsTeacher)
+            {
+                <div class="card-header">
+                    <strong>Dashboard for Teacher</strong>
+                </div>
+                <div class="card-body">
+                </div>
+            }
+            else
+            {
+                <div class="card-header">
+                    <strong>Dashboard for Coordinator</strong>
+                </div>
+                <div class="card-body">
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
 
 @code {
 
@@ -133,6 +134,11 @@
     private bool IsAdmin { get; set; }
     private bool IsTeacher { get; set; }
     private bool IsCoordinator { get; set; }
+
+    private int sites { get; set; }
+    private int schools { get; set; }
+    private int teachers { get; set; }
+    private int children { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -148,6 +154,11 @@
             @if (user.IsInRole("Administrator"))
             {
                 IsAdmin = true;
+
+                sites = dbContext.Sites.Count();
+                schools = dbContext.Schools.Count();
+                teachers = dbContext.Teachers.Count();
+                children = dbContext.Children.Count();
             }
             else if (user.IsInRole("Teacher"))
             {
