@@ -98,6 +98,7 @@ namespace EDI.Web.Services
 
                 _child.Ediid = child.Ediid;
                 _child.LocalId = child.LocalId;
+                _child.ChildNumber = child.ChildNumber;
                 _child.YearId = child.YearId;
                 _child.TeacherId = child.TeacherId;
                 _child.GenderId = child.GenderId;
@@ -125,6 +126,7 @@ namespace EDI.Web.Services
 
                 _child.Ediid = child.Ediid;
                 _child.LocalId = child.LocalId;
+                _child.ChildNumber = child.ChildNumber;
                 _child.YearId = child.YearId;
                 _child.TeacherId = child.TeacherId;
                 _child.GenderId = child.GenderId;
@@ -159,6 +161,7 @@ namespace EDI.Web.Services
                     Id = child.Id,
                     Ediid = child.Ediid,
                     LocalId = child.LocalId,
+                    ChildNumber = child.ChildNumber,
                     YearId = child.YearId,
                     TeacherId = child.TeacherId,
                     GenderId = child.GenderId,

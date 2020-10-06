@@ -19,6 +19,7 @@ namespace EDI.ApplicationCore.Entities
         public int? GenderId { get; set; }
         public DateTime? Dob { get; set; }
         public string PostalCodeZip { get; set; }
+        public string ChildNumber { get; set; }
 
         public virtual Gender Gender { get; set; }
         public virtual Teacher Teacher { get; set; }

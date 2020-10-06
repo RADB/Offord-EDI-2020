@@ -26,6 +26,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ChildNumber")
+                        .HasColumnType("nvarchar(15)")
+                        .HasMaxLength(15);
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")

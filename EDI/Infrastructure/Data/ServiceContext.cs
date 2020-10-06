@@ -120,6 +120,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.PostalCodeZip).HasMaxLength(10);
 
+                entity.Property(e => e.ChildNumber).HasMaxLength(15);
+
                 entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");

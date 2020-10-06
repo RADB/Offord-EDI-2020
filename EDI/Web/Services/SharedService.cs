@@ -357,25 +357,30 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetTeachers()
+        public async Task<IEnumerable<SelectListItem>> GetTeachers(int schoolid)
         {
             await LogUsername();
             Log.Information("GetTeachers started by:" + _username);
 
             try
             {
-                var teachers = _teacherRepository.ListAllTeachers().OrderBy(t => t.TeacherName);
-
                 var items = new List<SelectListItem>
                 {
                     new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
-                };
-
-                foreach (var teacher in teachers)
+                }; 
+                
+                if (schoolid > 0)
                 {
-                    items.Add(new SelectListItem() { Value = teacher.Id.ToString(), Text = teacher.TeacherName });
-                }
+                    var filterSpecification = new TeacherFilterSpecification(schoolid);
+                    var teachers = await _teacherRepository.ListAsync(filterSpecification);
 
+                    var ordered = teachers.OrderBy(t => t.TeacherName);
+
+                    foreach (Teacher item in ordered)
+                    {
+                        items.Add(new SelectListItem() { Value = item.Id.ToString(), Text = item.TeacherName });
+                    }
+                }
                 return items;
             }
             catch (Exception ex)
@@ -1028,10 +1033,12 @@ namespace EDI.Web.Services
                                     {
                                         try
                                         {
+                                            string childnumber = data.ChildEdiid.Substring(13, 2);
                                             var _child = new Child();
 
                                             _child.Ediid = data.ChildEdiid;
                                             _child.LocalId = data.LocalId;
+                                            _child.ChildNumber = childnumber;
                                             _child.YearId = yearid;
                                             _child.TeacherId = teacherid;
                                             _child.GenderId = data.GenderId;

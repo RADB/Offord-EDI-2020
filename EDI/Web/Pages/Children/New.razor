@@ -1,0 +1,104 @@
+﻿@page "/Children/New"
+@using Microsoft.AspNetCore.Components.Authorization
+@using EDI.Web.Extensions;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject IChildService ChildService
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>New Child</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <ChildForm @ref="childform1" ChildModel="@ChildModel" HandleValidSubmit="HandleValidSubmit" />
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private ChildItemViewModel ChildModel { get; set; } = new ChildItemViewModel();
+
+    ChildForm childform1 = new ChildForm();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!user.IsInRole("Administrator"))
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        if (string.IsNullOrEmpty(ChildModel.Ediid))
+        {
+            ErrorMessage = "Edi ID is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        var totalItems = await ChildService.GetDuplicateCount(ChildModel.Ediid);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The child with the same EDI ID has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            await ChildService.CreateChildAsync(childform1.ChildModel);
+
+            Message = "New Child added successfully.";
+            toastService.ShowSuccess(Message);
+            ChildModel = new ChildItemViewModel();
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./Children/index");
+    }
+
+    private async void Reset()
+    {
+        ChildModel = new ChildItemViewModel();
+        StateHasChanged();
+    }
+}

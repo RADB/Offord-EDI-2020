@@ -1,0 +1,365 @@
+﻿@inject NavigationManager NavigationManager
+@inject IChildService childService
+@inject ISharedService sharedService
+@inject IAccountService accountService
+@inject ServiceContext dbContext;
+
+<EditForm Model="@ChildModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Ediid">EDI ID: </label>
+            <input type="text" @bind-value="ChildModel.Ediid" class="col-md-7 form-control" disabled />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="LocalId">Local ID: </label>
+            <input type="text" @bind-value="ChildModel.LocalId" class="col-md-7 form-control" placeholder="Local ID" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="DOB">Date of Birth<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <Input type="date" value="@dob" format-value="YYYY-MM-DD" class="col-md-7 form-control" @onchange="@(e =>DOBChange(e))" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="PostalCodeZip">Postal / Zip: </label>
+            <input type="text" @bind-value="ChildModel.PostalCodeZip" class="col-md-7 form-control" placeholder="Postal/Zip" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Gender">Gender: </label>
+            <select class="col-md-7" value="@genderid" @onchange="@(e =>GenderChange(e))">
+                @if (Genders != null)
+                {
+                    @foreach (var option in Genders)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Site">Site<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@siteid" @onchange="@(e =>SiteChange(e))">
+                @if (Sites != null)
+                {
+                    @foreach (var option in Sites)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="School">School<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@schoolid" @onchange="@(e =>SchoolChange(e))">
+                @if (Schools != null)
+                {
+                    @foreach (var option in Schools)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Teacher">Teacher<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@teacherid" @onchange="@(e =>TeacherChange(e))">
+                @if (Teachers != null)
+                {
+                    @foreach (var option in Teachers)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-7" value="@yearid" @onchange="@(e =>YearChange(e))">
+                @if (Years != null)
+                {
+                    @foreach (var option in Years)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public ChildItemViewModel ChildModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    private string dob { get; set; }
+
+    public IEnumerable<SelectListItem> Sites { get; set; }
+
+    public IEnumerable<SelectListItem> Schools { get; set; }
+
+    public IEnumerable<SelectListItem> Teachers { get; set; }
+
+    public IEnumerable<SelectListItem> Years { get; set; }
+
+    public IEnumerable<SelectListItem> Genders { get; set; }
+
+    public string yearid { get; set; }
+
+    public string genderid { get; set; }
+
+    public string siteid { get; set; }
+
+    public string schoolid { get; set; }
+
+    public string teacherid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(ChildModel.TeacherId.HasValue)
+        {
+            var teacher = dbContext.Teachers.Where(p => p.Id == ChildModel.TeacherId).FirstOrDefault();
+            var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
+            var site = dbContext.Sites.Where(p => p.Id == school.SiteId).FirstOrDefault();
+
+            ChildModel.SiteId = site.Id;
+            ChildModel.SiteNumber = site.SiteNumber;
+            ChildModel.SchoolId = school.Id;
+            ChildModel.SchoolNumber = school.SchoolNumber;
+            ChildModel.TeacherNumber = teacher.TeacherNumber;
+
+            Sites = await sharedService.GetSites();
+            siteid = ChildModel.SiteId.ToString();
+
+            Schools = await sharedService.GetSchools(ChildModel.SiteId);
+            schoolid = ChildModel.SchoolId.ToString();
+
+            Teachers = await sharedService.GetTeachers(ChildModel.SchoolId.Value);
+            teacherid = ChildModel.TeacherId.ToString();
+
+            Years = await sharedService.GetYears();
+            yearid = ChildModel.YearId.HasValue ? ChildModel.YearId.ToString() : string.Empty;
+            var year = dbContext.Years.Where(p => p.Id == ChildModel.YearId).FirstOrDefault();
+            ChildModel.Ediyear = year.Ediyear;
+            ChildModel.EdiyearString = year.Ediyear.ToString().Substring(2);
+
+            Genders = await sharedService.GetGenders();
+            genderid = ChildModel.GenderId.HasValue ? ChildModel.GenderId.ToString() : string.Empty;
+
+            dob = ChildModel.Dob.Value.ToString("yyyy-MM-dd");
+        }
+        else
+        {
+            Sites = await sharedService.GetSites();
+            Years = await sharedService.GetYears();
+            Genders = await sharedService.GetGenders();
+        }
+    }
+
+    private void YearChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ChildModel.YearId = null;
+
+        if (int.TryParse(selectedString, out int newyearid))
+        {
+            ChildModel.YearId = newyearid;
+            var year = dbContext.Years.Where(p => p.Id == ChildModel.YearId).FirstOrDefault();
+            ChildModel.Ediyear = year.Ediyear;
+            ChildModel.EdiyearString = year.Ediyear.ToString().Substring(2);
+
+            GenerateEDIID();
+            StateHasChanged();
+        }
+    }
+
+    private void GenderChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ChildModel.GenderId = null;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            ChildModel.GenderId = newid;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SiteChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ChildModel.Ediid = null;
+
+        schoolid = "0";
+        teacherid = "0";
+
+        Schools = await sharedService.GetSchools(0);
+        Teachers = await sharedService.GetTeachers(0);
+
+        ChildModel.SiteId = 0;
+        ChildModel.SiteNumber = null;
+        ChildModel.SchoolId = 0;
+        ChildModel.SchoolNumber = null;
+        ChildModel.TeacherId = 0;
+        ChildModel.TeacherNumber = null;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            ChildModel.SiteId = ctid;
+            var site = dbContext.Sites.Where(p => p.Id == ctid).FirstOrDefault();
+            ChildModel.SiteNumber = site.SiteNumber;
+
+            Schools = await sharedService.GetSchools(ctid);
+            StateHasChanged();
+        }
+    }
+
+    private async Task SchoolChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ChildModel.Ediid = null;
+
+        teacherid = "0";
+        Teachers = await sharedService.GetTeachers(0);
+
+        ChildModel.SchoolId = 0;
+        ChildModel.SchoolNumber = null;
+        ChildModel.TeacherId = 0;
+        ChildModel.TeacherNumber = null;
+
+        if (int.TryParse(selectedString, out int itid))
+        {
+            ChildModel.SchoolId = itid;
+            var school = dbContext.Schools.Where(p => p.Id == itid).FirstOrDefault();
+            ChildModel.SchoolNumber = school.SchoolNumber;
+
+            Teachers = await sharedService.GetTeachers(itid);
+
+            var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+            ChildModel.EDICode = province.EDICode;
+            ChildModel.EdiCodeString = ChildModel.EDICode < 10 ? "0" + province.EDICode.ToString() : province.EDICode.ToString();
+
+            StateHasChanged();
+        }
+    }
+
+    private void TeacherChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ChildModel.Ediid = null;
+
+        ChildModel.TeacherId = 0;
+
+        if (int.TryParse(selectedString, out int itid))
+        {
+            ChildModel.TeacherId = itid;
+
+            var teacher = dbContext.Teachers.Where(p => p.Id == itid).FirstOrDefault();
+            ChildModel.TeacherNumber = teacher.TeacherNumber;
+
+            GenerateEDIID();
+            StateHasChanged();
+        }
+    }
+
+    private void DOBChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ChildModel.Dob = null;
+
+        if (DateTime.TryParse(selectedString, out DateTime newdate))
+        {
+            ChildModel.Dob = newdate;
+            StateHasChanged();
+        }
+    }
+
+    private void GenerateEDIID()
+    {
+        if (!string.IsNullOrEmpty(ChildModel.EdiyearString) &&
+                !string.IsNullOrEmpty(ChildModel.EdiCodeString) &&
+                !string.IsNullOrEmpty(ChildModel.SiteNumber) &&
+                !string.IsNullOrEmpty(ChildModel.SchoolNumber) &&
+                !string.IsNullOrEmpty(ChildModel.TeacherNumber))
+        {
+            var classtime = dbContext.SystemConfigurations.Where(p => p.FieldName == "ClassTime").Select(p=>p.FieldValue).FirstOrDefault();
+
+            var childnumberstring = string.Empty;
+
+            var originalchild = dbContext.Children.Where(p => p.Id == ChildModel.Id).FirstOrDefault();
+
+
+            if (originalchild.TeacherId != ChildModel.TeacherId)
+            {
+                var childnumbers = dbContext.Children.Where(c => c.TeacherId == ChildModel.TeacherId).Select(c => c.ChildNumber).ToList();
+
+                List<int> newnumbers = new List<int>();
+
+                foreach(var childnumber in childnumbers)
+                {
+                    var number = int.Parse(childnumber);
+                    newnumbers.Add(number);
+                }
+
+                if (newnumbers.Count() > 0)
+                {
+                    newnumbers.Sort((a, b) => b.CompareTo(a));
+                }
+
+                var biggestnumber = newnumbers.Count() > 0 ? newnumbers.First() + 1 : 1;
+
+                if (biggestnumber < 10)
+                    childnumberstring = "0" + biggestnumber.ToString();
+                else
+                    childnumberstring = biggestnumber.ToString();
+
+                ChildModel.ChildNumber = childnumberstring;
+            }
+            else
+            {
+                childnumberstring = originalchild.ChildNumber;
+                ChildModel.ChildNumber = childnumberstring;
+            }
+
+            var ediid = ChildModel.EdiyearString +
+                                        ChildModel.EdiCodeString +
+                                        ChildModel.SiteNumber +
+                                        ChildModel.SchoolNumber +
+                                        ChildModel.TeacherNumber +
+                                        classtime +
+                                        childnumberstring;
+
+            if(string.IsNullOrEmpty(ChildModel.Ediid) || ChildModel.Ediid != ediid)
+            {
+                ChildModel.Ediid = ediid;
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            ChildModel.Ediid = null;
+            StateHasChanged();
+        }
+    }
+}
