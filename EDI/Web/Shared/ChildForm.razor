@@ -309,14 +309,13 @@
 
             var originalchild = dbContext.Children.Where(p => p.Id == ChildModel.Id).FirstOrDefault();
 
-
-            if (originalchild.TeacherId != ChildModel.TeacherId)
+            if (originalchild == null || originalchild.TeacherId != ChildModel.TeacherId)
             {
                 var childnumbers = dbContext.Children.Where(c => c.TeacherId == ChildModel.TeacherId).Select(c => c.ChildNumber).ToList();
 
                 List<int> newnumbers = new List<int>();
 
-                foreach(var childnumber in childnumbers)
+                foreach (var childnumber in childnumbers)
                 {
                     var number = int.Parse(childnumber);
                     newnumbers.Add(number);
@@ -343,12 +342,12 @@
             }
 
             var ediid = ChildModel.EdiyearString +
-                                        ChildModel.EdiCodeString +
-                                        ChildModel.SiteNumber +
-                                        ChildModel.SchoolNumber +
-                                        ChildModel.TeacherNumber +
-                                        classtime +
-                                        childnumberstring;
+                                    ChildModel.EdiCodeString +
+                                    ChildModel.SiteNumber +
+                                    ChildModel.SchoolNumber +
+                                    ChildModel.TeacherNumber +
+                                    classtime +
+                                    childnumberstring;
 
             if(string.IsNullOrEmpty(ChildModel.Ediid) || ChildModel.Ediid != ediid)
             {
