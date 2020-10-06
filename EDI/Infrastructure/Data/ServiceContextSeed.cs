@@ -2116,7 +2116,12 @@ namespace EDI.Infrastructure.Data
                 new SystemConfigurations() { FieldName = "UseIconic Icons", FieldValue = @"https://useiconic.com/icons/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
                 new SystemConfigurations() { FieldName = "SimpleLine Icons - In Use", FieldValue = @"https://simplelineicons.github.io/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
                 new SystemConfigurations() { FieldName = "Fontawesome Icons", FieldValue = @"https://fontawesome.com/icons?d=gallery&m=free", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
-                new SystemConfigurations() { FieldName = "IconMonster Icons", FieldValue = @"https://iconmonstr.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
+                new SystemConfigurations() { FieldName = "IconMonster Icons", FieldValue = @"https://iconmonstr.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Material Icons", FieldValue = @"https://material.io/resources/icons/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Unicons Icons", FieldValue = @"https://iconscout.com/unicons", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Fabric Icons", FieldValue = @"https://uifabricicons.azurewebsites.net/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
+                
+                
                 
 
             }.OrderBy(t => t.FieldName);
