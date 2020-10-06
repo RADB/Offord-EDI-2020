@@ -2111,7 +2111,14 @@ namespace EDI.Infrastructure.Data
             {
                 new SystemConfigurations() { FieldName = "ClassTime", FieldValue = @"9", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now},
                 new SystemConfigurations() { FieldName = "Owner", FieldValue = @"© <a href=""http://www.offordcentre.com/readiness/index.html"">Offord Centre for Child Studies</a>", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
-                new SystemConfigurations() { FieldName = "Footer", FieldValue = @"McMaster University & Hamilton Health Sciences, Hamilton ON, Canada | Tel. (905)525-9140 27051", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
+                new SystemConfigurations() { FieldName = "Footer", FieldValue = @"McMaster University & Hamilton Health Sciences, Hamilton ON, Canada | Tel. (905)525-9140 27051", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Bootstrap Icons", FieldValue = @"https://icons.getbootstrap.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "UseIconic Icons", FieldValue = @"https://useiconic.com/icons/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "SimpleLine Icons - In Use", FieldValue = @"https://simplelineicons.github.io/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Fontawesome Icons", FieldValue = @"https://fontawesome.com/icons?d=gallery&m=free", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "IconMonster Icons", FieldValue = @"https://iconmonstr.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
+                
+
             }.OrderBy(t => t.FieldName);
         }
     }
