@@ -3,6 +3,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
 
 <div class="row">
     <div class="col-md-12">
@@ -307,7 +308,9 @@
             else if (user.IsInRole("Teacher"))
             {
                 IsTeacher = true;
-                children = dbContext.Children.Count();
+                var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
+                var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
+                children = dbContext.Children.Where(c=> c.TeacherId == teacher.Id).Count();
             }
             else
             {
