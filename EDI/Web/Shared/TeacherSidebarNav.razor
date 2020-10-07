@@ -5,10 +5,28 @@
     <ChildContent>
         <div class="main-menu">
             <div>
+                <!-- removed  IconCss="iconCss" HasChildren="hasChild" ParentID="pid" from Treeview field settings
+    removed NodeClicked="onClick" from TreeviewEvents-->
                 <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="iconCss" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
+                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata">
                     </TreeViewFieldsSettings>
-                    <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
+                    <TreeViewEvents TValue="TreeData" NodeSelected="onSelect"></TreeViewEvents>
+                    <TreeViewTemplates>
+                        <NodeTemplate>
+                            @{
+                                var item = (context as TreeData);
+                                if (item.icon.ToString() == "question_answer icon")
+                                    // use material icon for FAQ
+                                { <i class="material-icons-outlined icon">question_answer</i>}
+
+                                else
+                                    // use base icons for other 
+                                {<i class="@item.icon"></i>}
+
+                                <span class="nodeText">@item.nodeText</span>
+                            }
+                        </NodeTemplate>
+                    </TreeViewTemplates>
                 </SfTreeView>
             </div>
         </div>
@@ -28,7 +46,7 @@
     {
         public string nodeId { get; set; }
         public string nodeText { get; set; }
-        public string iconCss { get; set; }
+        public string icon { get; set; }
         public bool hasChild { get; set; }
         public string pid { get; set; }
     }
@@ -37,38 +55,40 @@
     {
         base.OnInitialized();
 
-        treedata.Add(new TreeData { nodeId = "06", nodeText = "Dashboard", iconCss = "icon-graph icon" });
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "Resources", iconCss = "icon-book-open icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "05-01", nodeText = "Guide", iconCss = "icon-notebook icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Links", iconCss = "icon-link icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-03", nodeText = "Reports", iconCss = "icon-chart icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-04", nodeText = "Documents", iconCss = "icon-folder-alt icon", pid = "05" });
+        treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph icon" });
+        treedata.Add(new TreeData { nodeId = "02", nodeText = "Class List", icon = "icon-people icon" });
+        treedata.Add(new TreeData { nodeId = "03", nodeText = "Resources", icon = "icon-folder-alt icon" });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = "Links", icon = "icon-link icon"});
+        treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer icon" });
+
 
     }
 
     private void onSelect(NodeSelectEventArgs args)
     {
-        if (args.NodeData.Id == "06")
+        if (args.NodeData.Id == "01")
         {
             NavigationManager.NavigateTo("./Dashboard/index");
         }
-        else if (args.NodeData.Id == "05-01")  
+        else if (args.NodeData.Id == "02")
         {
-            NavigationManager.NavigateTo("./guide/index");
+            NavigationManager.NavigateTo("./children/index");
         }
-        else if (args.NodeData.Id == "05-02")
-        {
-            NavigationManager.NavigateTo("./links/index");
-        }
-        else if (args.NodeData.Id == "05-03") 
-        {
-            NavigationManager.NavigateTo("./reports/index");
-        }
-        else if (args.NodeData.Id == "05-04")
+        else if (args.NodeData.Id == "03")
         {
             NavigationManager.NavigateTo("./documents/index");
         }
+        else if (args.NodeData.Id == "04")
+        {
+            NavigationManager.NavigateTo("./links/index");
+        }
+        else if (args.NodeData.Id == "05")
+        {
+            NavigationManager.NavigateTo("./faq/index");
+        }
+
     }
+
 
     private async void onClick(NodeClickEventArgs args)
     {
@@ -76,3 +96,29 @@
         //var Element = new[] { args.Node };
     }
 }
+<style>
+    .main-treeview.e-treeview .e-fullrow {
+        height: 125px;
+    }
+    .main-treeview.e-treeview .e-text-content {
+        height: 125px;
+    }
+    .main-treeview.e-treeview .e-list-text {
+        line-height: normal;
+    }
+    .icon {
+        /*float: left;       
+        box-sizing: content-box;
+        height: 48px;
+        width: 48px;
+        */
+        font-size: 36px;
+        padding: 11px 16px 11px 0;
+        color: grey;
+    }
+
+    .nodeText {
+        font-size: 20px;
+    }
+
+</style>
