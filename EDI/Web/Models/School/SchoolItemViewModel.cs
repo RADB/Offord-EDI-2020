@@ -29,6 +29,7 @@ namespace EDI.Web.Models
         public string ElpschoolValue { get; set; }
         public string Description { get; set; }
         public string SiteNumber { get; set; }
+        public int Teachers { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

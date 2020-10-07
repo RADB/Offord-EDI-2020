@@ -50,6 +50,37 @@
                     </AccordionItems>
                 </SfAccordion>
             </div>
+            <br />
+            @if (teachers != null)
+            {
+                <div class="col-md-11">
+                    <SfGrid ID="GridTeacher" @ref="Grid" DataSource="@teachers" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Search" })">
+                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="TeacherName" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn HeaderText="Teacher #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25">
+                                <Template>
+                                    @{
+                                        var teacher = (context as TeacherItemViewModel);
+                                        <a target="_blank" href="Teachers/Edit/@teacher.Id">@teacher.TeacherNumber</a>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.TeacherName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.SchoolName) HeaderText="School" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.Email) HeaderText="Email" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherItemViewModel.PhoneNumber) HeaderText="Phone" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -63,6 +94,10 @@
     private SchoolItemViewModel SchoolModel { get; set; } = new SchoolItemViewModel();
 
     SchoolForm schoolform1 = new SchoolForm();
+
+    SfGrid<TeacherItemViewModel> Grid;
+
+    IEnumerable<TeacherItemViewModel> teachers;
 
     protected override async Task OnInitializedAsync()
     {
@@ -80,6 +115,33 @@
         else
         {
             SchoolModel = await schoolService.GetSchoolItem(Id);
+
+            var allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == Id).OrderBy(p => p.TeacherNumber).ToList());
+
+            List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
+
+            foreach (var teacher in allteachers)
+            {
+                var ateacher = new TeacherItemViewModel();
+
+                ateacher.Id = teacher.Id;
+                ateacher.TeacherName = teacher.TeacherName;
+                ateacher.TeacherNumber = teacher.TeacherNumber;
+                ateacher.Email = teacher.Email;
+                ateacher.PhoneNumber = teacher.PhoneNumber;
+                ateacher.YearId = teacher.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
+                ateacher.Ediyear = year.Ediyear;
+
+                ateacher.SchoolId = teacher.SchoolId;
+                var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
+                ateacher.SchoolName = school.SchoolName;
+                ateacher.SchoolNumber = school.SchoolNumber;
+
+                sivm.Add(ateacher);
+            }
+            teachers = sivm;
         }
     }
 

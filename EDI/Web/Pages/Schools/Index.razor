@@ -41,6 +41,7 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(SchoolItemViewModel.SchoolNumber) HeaderText="School #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SchoolItemViewModel.SchoolName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SchoolItemViewModel.Teachers) HeaderText="# of Teachers" Width="15"></GridColumn>
                             <GridColumn Field=@nameof(SchoolItemViewModel.Description) HeaderText="Description" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SchoolItemViewModel.Country) HeaderText="Country" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SchoolItemViewModel.Province) HeaderText="Province" Width="30"></GridColumn>
@@ -96,6 +97,7 @@
                 aschool.Id = school.Id;
                 aschool.SchoolName = school.SchoolName;
                 aschool.SchoolNumber = school.SchoolNumber;
+                aschool.Teachers = dbContext.Teachers.Where(p => p.SchoolId == school.Id).Count();
                 aschool.Description = school.Description;
 
                 var site = dbContext.Sites.Where(p => p.Id == school.SiteId).FirstOrDefault();

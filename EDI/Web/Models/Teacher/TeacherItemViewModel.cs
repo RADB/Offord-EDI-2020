@@ -26,6 +26,7 @@ namespace EDI.Web.Models
         [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public int Children { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

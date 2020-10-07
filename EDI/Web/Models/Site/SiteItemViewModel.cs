@@ -21,6 +21,7 @@ namespace EDI.Web.Models
         [Required(ErrorMessage = "Year is required.")]
         public int? YearId { get; set; }
         public short? Ediyear { get; set; }
+        public int Schools { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
