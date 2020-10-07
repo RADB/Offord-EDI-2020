@@ -206,7 +206,7 @@
 
                         <!-- EDI Questionnaires Status -->
                         <div class="row">
-                            <div class="col-xl-12 col-lg-6 col-md-6 mb-4">
+                            <div class="col-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header">
                                         <div class="row">
@@ -248,10 +248,19 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <i class="fa fa-square fa-3x" style="font-size:60px;color:red"></i><h4 class="small font-weight-bold">Teacher Participation Questionaire</h4>
-                                                <br />
-                                                <i i class="fa fa-check-square fa-3x" style="font-size:60px;color:green"></i><h4 class="small font-weight-bold">Teacher Training Feedback Questionaire</h4>
+                                            <div class="col-1 text-center">
+                                                <i class="far fa-square fa-2x" style="color:red"></i>
+                                            </div>
+                                            <div class="col-11">
+                                                <h4 class="small font-weight-bold p-2">Teacher Participation Questionaire</h4>
+                                            </div>
+                                        </div>
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col-1 text-center">
+                                                <i i class="far fa-check-square fa-2x" style="color:green"></i>
+                                            </div>
+                                            <div class="col-11">
+                                                <h4 class="small font-weight-bold align-middle p-2">Teacher Training Feedback Questionaire</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -311,6 +320,7 @@
                 var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
                 var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
                 children = dbContext.Children.Where(c=> c.TeacherId == teacher.Id).Count();
+                //children = teacher.Children.Count();
             }
             else
             {
