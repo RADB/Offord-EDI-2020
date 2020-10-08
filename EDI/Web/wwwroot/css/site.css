@@ -1167,13 +1167,7 @@ a {
 }
 
 .icon {
-    /*float: left;       
-        box-sizing: content-box;
-        height: 48px;
-        width: 48px;
-        */
     font-size: 36px;
-    padding: 11px 26px 11px 0;
     color: grey;
 }
 
