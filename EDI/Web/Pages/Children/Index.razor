@@ -46,6 +46,29 @@
                             <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText="Gender" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Dob) Type="ColumnType.Date" HeaderText="Date of Birth" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText="Postal/Zip" Width="30"></GridColumn>
+                            <GridColumn HeaderText="Status" Width="15">
+                                <Template>
+                                    @{
+                                        <h6>In Progress</h6>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="% Complete" Width="25">
+                                <Template>
+                                    @{
+                                        var comm = (context as ChildItemViewModel);
+
+                                        Random rnd = new Random();
+                                        int per = rnd.Next(1, 99);
+                                        decimal progress = Convert.ToDecimal(per) / 100;
+                                        <div id="myProgress" class="pbar">
+                                            <div id="myBar" style="width:@per%" class="bar">
+                                                <div id="label" class="barlabel">@per % </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </Template>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -75,7 +98,7 @@
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (user.IsInRole("Coordinator"))
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
@@ -84,6 +107,13 @@
             username = user.Identity.Name;
 
             var allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
+
+            if (user.IsInRole("Teacher"))
+            {
+                var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
+                var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
+                allchildren = await Task.FromResult(dbContext.Children.Where(c=>c.TeacherId == teacher.Id).OrderBy(p => p.Ediid).ToList());
+            }
 
             List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();
 
