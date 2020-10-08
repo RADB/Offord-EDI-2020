@@ -75,7 +75,7 @@
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (user.IsInRole("Coordinator"))
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
