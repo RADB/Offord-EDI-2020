@@ -7,7 +7,7 @@
             <div>
                 <!-- removed  IconCss="iconCss" HasChildren="hasChild" ParentID="pid" from Treeview field settings
     removed NodeClicked="onClick" from TreeviewEvents-->
-                <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
+                <SfTreeView CssClass="main-teachertreeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
                     <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata">
                     </TreeViewFieldsSettings>
                     <TreeViewEvents TValue="TreeData" NodeSelected="onSelect"></TreeViewEvents>
@@ -88,37 +88,4 @@
         }
 
     }
-
-
-    private async void onClick(NodeClickEventArgs args)
-    {
-        //List<TreeData> NodeDetails = await this.treeView.GetTreeData(args.Node);
-        //var Element = new[] { args.Node };
-    }
 }
-<style>
-    .main-treeview.e-treeview .e-fullrow {
-        height: 125px;
-    }
-    .main-treeview.e-treeview .e-text-content {
-        height: 125px;
-    }
-    .main-treeview.e-treeview .e-list-text {
-        line-height: normal;
-    }
-    .icon {
-        /*float: left;       
-        box-sizing: content-box;
-        height: 48px;
-        width: 48px;
-        */
-        font-size: 36px;
-        padding: 11px 16px 11px 0;
-        color: grey;
-    }
-
-    .nodeText {
-        font-size: 20px;
-    }
-
-</style>

@@ -1153,3 +1153,40 @@ a {
     text-shadow: 0 1px 0 #fff;
     opacity: .5;
 }
+
+.main-teachertreeview.e-treeview .e-fullrow {
+    height: 125px;
+}
+
+.main-teachertreeview.e-treeview .e-text-content {
+    height: 125px;
+}
+
+.main-teachertreeview.e-treeview .e-list-text {
+    line-height: normal;
+}
+
+.icon {
+    /*float: left;       
+        box-sizing: content-box;
+        height: 48px;
+        width: 48px;
+        */
+    font-size: 36px;
+    padding: 11px 26px 11px 0;
+    color: grey;
+}
+
+.nodeText {
+    padding-top: 16px;
+    font-size: 20px;
+}
+
+.e-sidebar.e-left.e-open {
+    padding-left: 0px;
+}
+
+.e-treeview .e-list-item.e-active > .e-fullrow {
+    background-color: #00b8ff;
+    border-color: #007bff;
+}
