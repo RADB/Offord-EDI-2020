@@ -55,11 +55,10 @@
                                 <GridColumn HeaderText="% Complete" Width="25">
                                     <Template>
                                         @{
-                                            int per = mathService.GetRandomPercent(1, 99);
-
+                                            var comm = (context as ChildItemViewModel);
                                             <div id="myProgress" class="pbar">
-                                                <div id="myBar" style="width:@per%" class="bar">
-                                                    <div id="label" class="barlabel">@per % </div>
+                                                <div id="myBar" style="width:@comm.Progress%" class="bar">
+                                                    <div id="label" class="barlabel">@comm.Progress % </div>
                                                 </div>
                                             </div>
                                         }
@@ -142,6 +141,8 @@
                 achild.TeacherId = child.TeacherId;
                 var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
                 achild.TeacherName = teacher.TeacherName;
+
+                achild.Progress = mathService.GetRandomPercent(1, 99);
 
                 sivm.Add(achild);
             }
