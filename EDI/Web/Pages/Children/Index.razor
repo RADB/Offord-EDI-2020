@@ -20,8 +20,6 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="row"></div>
-                <br />
                 @if (children == null)
                 {
                     <p><em>Loading...</em></p>
@@ -91,7 +89,6 @@
     IEnumerable<ChildItemViewModel> children;
 
     private string username { get; set; }
-    private List<Child> allchildren {get; set;}
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,12 +113,9 @@
             TeacherID = teacher.Id;
         }
 
-        if (TeacherID == 0)
-        {
-            // no id specified - get all teachers
-            allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
-        }
-        else
+        var allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
+
+        if (TeacherID > 0)        
         {
             // SchoolId specified - get all teachers at school
             allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == TeacherID).OrderBy(p => p.Ediid).ToList());

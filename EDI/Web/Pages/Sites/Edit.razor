@@ -39,7 +39,7 @@
                 </div>
             </div>
             <br />
-            <div class="col-md-7">
+            <div class="col-md-7" style="margin-left: 24px;">
                 <SfAccordion>
                     <AccordionItems>
                         <AccordionItem Header="Details" Expanded="true">
@@ -50,34 +50,9 @@
                     </AccordionItems>
                 </SfAccordion>
             </div>
-            <br />
-            @if (schools != null)
-            {
-                <div class="col-md-11">
-                    <SfGrid ID="GridInvoice" @ref="Grid" DataSource="@schools" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"Search" })">
-                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>                        
-                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
-                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                        <GridColumns>
-                            <GridColumn HeaderText="School #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25">
-                                <Template>
-                                    @{
-                                        var school = (context as SchoolItemViewModel);
-                                        <a target="_blank" href="Schools/Edit/@school.Id">School @school.SchoolNumber</a>
-                                    }
-                                </Template>
-                            </GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.SchoolName) HeaderText="Name" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.Description) HeaderText="Description" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.Country) HeaderText="Country" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.Province) HeaderText="Province" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.City) HeaderText="City" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.SiteNumber) HeaderText="Site" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.ElpschoolValue) HeaderText="ELP" Width="20"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
-                </div>
-            }
+            <div class="col-md-12">
+                <EDI.Web.Pages.Schools.Index SiteID=@Id Header="Schools at Site"></EDI.Web.Pages.Schools.Index>
+            </div>            
             <br />
         </div>
     </div>

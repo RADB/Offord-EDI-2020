@@ -14,14 +14,12 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <strong>Schools Management</strong>
+                <strong>@Header</strong>
                 <div class="pull-right">
 
                 </div>
             </div>
             <div class="card-body">
-                <div class="row"></div>
-                <br />
                 @if (schools == null)
                 {
                     <p><em>Loading...</em></p>
@@ -60,6 +58,11 @@
 </div>
 
 @code {
+    [Parameter]
+    public int SiteID { get; set; } = 0;
+    [Parameter]
+    public string Header{ get; set; } = "School Management";
+
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -87,6 +90,12 @@
             username = user.Identity.Name;
 
             var allschools = await Task.FromResult(dbContext.Schools.OrderBy(p => p.SchoolNumber).ToList());
+
+            if (SiteID > 0)
+            {
+                // SchoolId specified - get all teachers at school
+                allschools = await Task.FromResult(dbContext.Schools.Where(p => p.SiteId == SiteID).OrderBy(p => p.SchoolNumber).ToList());
+            }
 
             List<SchoolItemViewModel> sivm = new List<SchoolItemViewModel>();
 
