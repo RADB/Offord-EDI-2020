@@ -32,6 +32,7 @@ namespace EDI.Web.Models
         public DateTime? Dob { get; set; }
         public string PostalCodeZip { get; set; }
         public string ChildNumber { get; set; }
+        public int? Progress { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

@@ -55,13 +55,10 @@
                                 <Template>
                                     @{
                                         var comm = (context as ChildItemViewModel);
-
-                                        Random rnd = new Random();
-                                        int per = rnd.Next(1, 99);
-                                        decimal progress = Convert.ToDecimal(per) / 100;
+                                                                                
                                         <div id="myProgress" class="pbar">
-                                            <div id="myBar" style="width:@per%" class="bar">
-                                                <div id="label" class="barlabel">@per % </div>
+                                            <div id="myBar" style="width:@comm.Progress%" class="bar">
+                                                <div id="label" class="barlabel">@comm.Progress % </div>
                                             </div>
                                         </div>
                                     }
@@ -115,7 +112,7 @@
 
         var allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
 
-        if (TeacherID > 0)        
+        if (TeacherID > 0)
         {
             // SchoolId specified - get all teachers at school
             allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == TeacherID).OrderBy(p => p.Ediid).ToList());
@@ -144,6 +141,10 @@
             achild.TeacherId = child.TeacherId;
             var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
             achild.TeacherName = teacher.TeacherName;
+
+            Random rnd = new Random();
+            int per = rnd.Next(1, 99);
+            achild.Progress = per;
 
             sivm.Add(achild);
         }
