@@ -131,7 +131,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(ChildModel.TeacherId.HasValue)
+        Sites = await sharedService.GetSites();
+        Years = await sharedService.GetYears();
+        Genders = await sharedService.GetGenders();
+
+        if (ChildModel.TeacherId.HasValue)
         {
             var teacher = dbContext.Teachers.Where(p => p.Id == ChildModel.TeacherId).FirstOrDefault();
             var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
@@ -143,7 +147,6 @@
             ChildModel.SchoolNumber = school.SchoolNumber;
             ChildModel.TeacherNumber = teacher.TeacherNumber;
 
-            Sites = await sharedService.GetSites();
             siteid = ChildModel.SiteId.ToString();
 
             Schools = await sharedService.GetSchools(ChildModel.SiteId);
@@ -152,22 +155,36 @@
             Teachers = await sharedService.GetTeachers(ChildModel.SchoolId.Value);
             teacherid = ChildModel.TeacherId.ToString();
 
-            Years = await sharedService.GetYears();
-            yearid = ChildModel.YearId.HasValue ? ChildModel.YearId.ToString() : string.Empty;
-            var year = dbContext.Years.Where(p => p.Id == ChildModel.YearId).FirstOrDefault();
-            ChildModel.Ediyear = year.Ediyear;
-            ChildModel.EdiyearString = year.Ediyear.ToString().Substring(2);
+            var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+            ChildModel.EDICode = province.EDICode;
+            ChildModel.EdiCodeString = ChildModel.EDICode < 10 ? "0" + province.EDICode.ToString() : province.EDICode.ToString();
 
-            Genders = await sharedService.GetGenders();
-            genderid = ChildModel.GenderId.HasValue ? ChildModel.GenderId.ToString() : string.Empty;
+            if (ChildModel.Id > 0)
+            {
+                yearid = ChildModel.YearId.HasValue ? ChildModel.YearId.ToString() : string.Empty;
 
-            dob = ChildModel.Dob.Value.ToString("yyyy-MM-dd");
-        }
-        else
-        {
-            Sites = await sharedService.GetSites();
-            Years = await sharedService.GetYears();
-            Genders = await sharedService.GetGenders();
+                var year = dbContext.Years.Where(p => p.Id == ChildModel.YearId).FirstOrDefault();
+                ChildModel.Ediyear = year.Ediyear;
+                ChildModel.EdiyearString = year.Ediyear.ToString().Substring(2);
+
+                genderid = ChildModel.GenderId.HasValue ? ChildModel.GenderId.ToString() : string.Empty;
+
+                dob = ChildModel.Dob.Value.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                var year = dbContext.Years.Where(p => p.Ediyear == DateTime.Now.Year).FirstOrDefault();
+
+                yearid = year.Id.ToString();
+                ChildModel.YearId = year.Id;
+                ChildModel.Ediyear = year.Ediyear;
+                ChildModel.EdiyearString = year.Ediyear.ToString().Substring(2);
+
+                genderid = string.Empty;
+                dob = string.Empty;
+
+                GenerateEDIID();
+            }
         }
     }
 
@@ -317,8 +334,11 @@
 
                 foreach (var childnumber in childnumbers)
                 {
-                    var number = int.Parse(childnumber);
-                    newnumbers.Add(number);
+                    if(!string.IsNullOrEmpty(childnumber))
+                    {
+                        var number = int.Parse(childnumber);
+                        newnumbers.Add(number);
+                    }
                 }
 
                 if (newnumbers.Count() > 0)

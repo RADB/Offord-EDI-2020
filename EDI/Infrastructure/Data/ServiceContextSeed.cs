@@ -15,6 +15,14 @@ namespace EDI.Infrastructure.Data
             int retryForAvailability = retry.Value;
             try
             {
+                if(ServiceContext.Years.Where(y =>y.Ediyear == DateTime.Now.Year).FirstOrDefault() == null)
+                {
+                    ServiceContext.Years.AddRange(
+                        GetPreconfiguredYear());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
                 if (!ServiceContext.Countries.Any())
                 {
                     ServiceContext.Countries.AddRange(
@@ -227,6 +235,14 @@ namespace EDI.Infrastructure.Data
                     await SeedAsync(ServiceContext, loggerFactory, retryForAvailability);
                 }
             }
+        }
+
+        static IEnumerable<Year> GetPreconfiguredYear()
+        {
+            return new List<Year>()
+            {
+                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
+            };
         }
 
         static IEnumerable<Country> GetPreconfiguredAllCountries()
@@ -2120,8 +2136,7 @@ namespace EDI.Infrastructure.Data
                 new SystemConfigurations() { FieldName = "Material Icons", FieldValue = @"https://material.io/resources/icons/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
                 new SystemConfigurations() { FieldName = "Unicons Icons", FieldValue = @"https://iconscout.com/unicons", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
                 new SystemConfigurations() { FieldName = "Fabric Icons", FieldValue = @"https://uifabricicons.azurewebsites.net/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
-                new SystemConfigurations() { FieldName = "Feather Icons", FieldValue = @"https://feathericons.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
-                
+                new SystemConfigurations() { FieldName = "Feather Icons", FieldValue = @"https://feathericons.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }            
                 
                 
                 

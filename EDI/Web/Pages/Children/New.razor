@@ -6,6 +6,8 @@
 @inject IChildService ChildService
 @inject IModalService Modal
 @inject NavigationManager NavigationManager
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -61,6 +63,12 @@
         else if (user.IsInRole("Coordinator"))
         {
             NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else if (user.IsInRole("Teacher"))
+        {
+            var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
+            var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
+            ChildModel.TeacherId = teacher.Id;
         }
     }
 
