@@ -94,11 +94,8 @@
                 asite.Schools = dbContext.Schools.Where(p => p.SiteId == site.Id).Count();
                 asite.SiteNumber = site.SiteNumber;
                 asite.Description = site.Description;
-                //if (!string.IsNullOrEmpty(site.CoordinatorId))
-                //{
-                //    var account = identityContext.Users.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
-                //    asite.CoordinatorName = account.FirstName + " " + account.LastName;
-                //}
+                var coordinator = dbContext.Coordinators.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
+                asite.CoordinatorName = coordinator.CoordinatorName;
 
                 sivm.Add(asite);
             }

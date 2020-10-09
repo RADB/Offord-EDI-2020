@@ -873,6 +873,7 @@ namespace EDI.Web.Services
                                                 _school.CountryId = countryid;
                                                 _school.ProvinceId = provinceid;
                                                 _school.SiteId = siteid;
+                                                _school.YearId = yearid;
                                                 _school.CreatedDate = DateTime.Now;
                                                 _school.CreatedBy = _username;
                                                 _school.ModifiedDate = DateTime.Now;
