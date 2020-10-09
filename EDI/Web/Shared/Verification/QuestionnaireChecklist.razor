@@ -1,0 +1,36 @@
+﻿<div class="row no-gutters align-items-center">
+    <div class="col-1 text-center">
+        <i i class="@iconCSS" style="color:@color"></i>
+    </div>
+    <div class="col-11">
+        <NavLink class="small font-weight-bold align-middle p-2" href="@URL">@QuestionnaireName</NavLink>        
+    </div>
+</div>
+
+@code {
+    //Teacher Participation Questionaire
+    [Parameter]
+    public bool IsComplete { get; set; } = false;
+    [Parameter]
+    public string URL { get; set; }
+    [Parameter]
+    public string QuestionnaireName { get; set; }
+
+    private string iconCSS = "";
+    private string color = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsComplete)
+        {
+            iconCSS = "far fa-check-square fa-2x";
+            color = "green";
+        }
+        else
+        {
+            iconCSS = "far fa-square fa-2x";
+            color = "red";
+        }
+    }
+}

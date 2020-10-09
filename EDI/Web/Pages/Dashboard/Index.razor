@@ -1,6 +1,7 @@
 ﻿@page "/Dashboard/index"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.BusinessIntelligence
+@using EDI.Web.Shared.Verification
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
@@ -84,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- EDI Questionnaires Status -->
                         <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" />
 
@@ -121,7 +122,7 @@
                             </div>
                         </div>
 
-                        
+
                         <!-- EDI Questionnaires Status -->
                         <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" />
 
@@ -137,22 +138,8 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-1 text-center">
-                                                <i class="far fa-square fa-2x" style="color:red"></i>
-                                            </div>
-                                            <div class="col-11">
-                                                <h4 class="small font-weight-bold p-2" title="Make this a hyperlink to the survey">Teacher Participation Questionaire</h4>
-                                            </div>
-                                        </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col-1 text-center">
-                                                <i i class="far fa-check-square fa-2x" style="color:green"></i>
-                                            </div>
-                                            <div class="col-11">
-                                                <h4 class="small font-weight-bold align-middle p-2" title="Make this a hyperlink to the survey">Teacher Training Feedback Questionaire</h4>
-                                            </div>
-                                        </div>
+                                        <QuestionnaireChecklist IsComplete=false QuestionnaireName="Teacher Participation Questionaire" URL="/Dashboard/Index" />
+                                        <QuestionnaireChecklist IsComplete=true QuestionnaireName="Teacher Training Feedback Questionaire" URL="/Dashboard/Index" />                                        
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +196,7 @@
                 IsTeacher = true;
                 var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
                 var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
-                children = dbContext.Children.Where(c=> c.TeacherId == teacher.Id).Count();
+                children = dbContext.Children.Where(c => c.TeacherId == teacher.Id).Count();
                 //children = teacher.Children.Count();
             }
             else
