@@ -51,7 +51,7 @@
                 </SfAccordion>
             </div>
             <div class="col-md-12">
-                <EDI.Web.Pages.Children.Index TeacherID=@Id Header="Children in Class"></EDI.Web.Pages.Children.Index>
+                <EDI.Web.Pages.Children.Index TeacherID=@Id Header="Children in Class" AllowDelete=false AllowEdit=false></EDI.Web.Pages.Children.Index>
             </div>
         </div>
     </div>
@@ -86,36 +86,7 @@
         }
         else
         {
-            TeacherModel = await teacherService.GetTeacherItem(Id);
-            /* var allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == Id).OrderBy(p => p.Ediid).ToList());
-
-             List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();
-
-             foreach (var child in allchildren)
-             {
-                 var achild = new ChildItemViewModel();
-
-                 achild.Id = child.Id;
-                 achild.Ediid = child.Ediid;
-                 achild.LocalId = child.LocalId;
-                 achild.Dob = child.Dob;
-                 achild.PostalCodeZip = child.PostalCodeZip;
-                 achild.YearId = child.YearId;
-
-                 var year = dbContext.Years.Where(p => p.Id == child.YearId).FirstOrDefault();
-                 achild.Ediyear = year.Ediyear;
-
-                 achild.GenderId = child.GenderId;
-                 var gender = dbContext.Genders.Where(p => p.Id == child.GenderId).FirstOrDefault();
-                 achild.Gender = gender.English;
-
-                 achild.TeacherId = child.TeacherId;
-                 var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
-                 achild.TeacherName = teacher.TeacherName;
-
-                 sivm.Add(achild);
-             }
-             children = sivm;*/            
+            TeacherModel = await teacherService.GetTeacherItem(Id);                     
         }
     }
 

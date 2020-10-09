@@ -28,7 +28,7 @@
                     else
                     {
                         <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                            <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
                             <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
                             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                             <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
@@ -77,6 +77,11 @@
         public int TeacherID { get; set; } = 0;
         [Parameter]
         public string Header { get; set; } = "Class Management";
+        [Parameter]
+        public bool AllowDelete{ get; set; }  = true;
+        [Parameter]
+        public bool AllowEdit { get; set; } = true;
+
 
         private string Message { get; set; }
         private string ErrorMessage { get; set; }

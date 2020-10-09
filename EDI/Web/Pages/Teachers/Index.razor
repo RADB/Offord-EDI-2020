@@ -27,7 +27,7 @@
                 else
                 {
                     <SfGrid ID="GridTeacher" @ref="Grid" DataSource="@teachers" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="TeacherItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
@@ -59,6 +59,10 @@
     public int SchoolID { get; set; } = 0;
     [Parameter]
     public string Header{ get; set; } = "Teacher Management";
+    [Parameter]
+    public bool AllowDelete { get; set; } = true;
+    [Parameter]
+    public bool AllowEdit { get; set; } = true;
 
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
@@ -88,7 +92,7 @@
 
             var allteachers = await Task.FromResult(dbContext.Teachers.OrderBy(p => p.TeacherNumber).ToList());
 
-            if (SchoolID > 0)            
+            if (SchoolID > 0)
             {
                 allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == SchoolID).OrderBy(p => p.TeacherNumber).ToList());
             }

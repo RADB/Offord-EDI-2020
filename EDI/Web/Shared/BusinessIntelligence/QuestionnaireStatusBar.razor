@@ -32,14 +32,14 @@
 </div>
 
 @code {
-        [Parameter]
-        public int Total { get; set; } = 0;
-        [Parameter]
-        public int Complete { get; set; } = 0;
-        [Parameter]
-        public int Inprogress { get; set; } = 0;
-        [Parameter]
-        public string Header { get; set; } = "Questionnaire Status Bar - Set the header property to change me";
+    [Parameter]
+    public int Total { get; set; } = 0;
+    [Parameter]
+    public int Complete { get; set; } = 0;
+    [Parameter]
+    public int Inprogress { get; set; } = 0;
+    [Parameter]
+    public string Header { get; set; } = "Questionnaire Status Bar - Set the header property to change me";
 
 
     private int CompletePercent { get; set; }
@@ -52,7 +52,10 @@
             Complete = MathService.GetRandomNumber(1, Total);
 
         if (Inprogress == 0)
-            Inprogress = MathService.GetRandomNumber(1, Total - Complete);
+        {
+            if (Total - Complete > 0)                
+                Inprogress = MathService.GetRandomNumber(1, Total - Complete);
+        }
 
         CompletePercent = MathService.GetPercent(Complete, Total);
         InprogressPercent = MathService.GetPercent(Inprogress, Total);
