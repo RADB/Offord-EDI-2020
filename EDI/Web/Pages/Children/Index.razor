@@ -113,6 +113,8 @@
                 var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
                 var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
                 TeacherID = teacher.Id;
+                AllowEdit = false;
+                AllowDelete = false;
             }
 
             var allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
