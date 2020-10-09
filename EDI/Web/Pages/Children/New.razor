@@ -69,6 +69,11 @@
             var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
             var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
             ChildModel.TeacherId = teacher.Id;
+            ChildModel.IsAdmin = false;
+        }
+        else
+        {
+            ChildModel.IsAdmin = true;
         }
     }
 
