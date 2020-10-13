@@ -116,7 +116,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task CreateSiteAsync(SiteItemViewModel site)
+        public async Task<int> CreateSiteAsync(SiteItemViewModel site)
         {
             await LogUsername();
             Log.Information("CreateSiteAsync started by:" + _username);
@@ -136,10 +136,12 @@ namespace EDI.Web.Services
                 _site.ModifiedBy = _username;
 
                 await _siteRepository.AddAsync(_site);
+                return _site.Id;
             }
             catch (Exception ex)
             {
                 Log.Error("CreateSiteAsync failed:" + ex.Message);
+                return 0;
             }
         }
 

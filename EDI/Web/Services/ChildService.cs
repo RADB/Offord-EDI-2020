@@ -115,7 +115,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task CreateChildAsync(ChildItemViewModel child)
+        public async Task<int> CreateChildAsync(ChildItemViewModel child)
         {
             await LogUsername();
             Log.Information("CreateChildAsync started by:" + _username);
@@ -138,10 +138,12 @@ namespace EDI.Web.Services
                 _child.ModifiedBy = _username;
 
                 await _childRepository.AddAsync(_child);
+                return _child.Id;
             }
             catch (Exception ex)
             {
                 Log.Error("CreateChildAsync failed:" + ex.Message);
+                return 0;
             }
         }
 

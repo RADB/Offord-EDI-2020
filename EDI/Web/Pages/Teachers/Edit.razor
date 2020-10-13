@@ -35,6 +35,7 @@
                 <strong>Edit Teacher</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
                     <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
                 </div>
             </div>
@@ -86,7 +87,7 @@
         }
         else
         {
-            TeacherModel = await teacherService.GetTeacherItem(Id);                     
+            TeacherModel = await teacherService.GetTeacherItem(Id);
         }
     }
 
@@ -155,5 +156,10 @@
     private async void Reset()
     {
         TeacherModel = await teacherService.GetTeacherItem(Id);
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./teachers/new");
     }
 }

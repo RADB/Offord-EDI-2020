@@ -13,7 +13,7 @@ namespace EDI.Web.Interfaces
 
         Task UpdateTeacherAsync(TeacherItemViewModel teacher);
 
-        Task CreateTeacherAsync(TeacherItemViewModel teacher);
+        Task<int> CreateTeacherAsync(TeacherItemViewModel teacher);
 
         Task<TeacherItemViewModel> GetTeacherItem(int teacherId);
         Task<int> GetDuplicateCount(int schoolid, string teachernumber);

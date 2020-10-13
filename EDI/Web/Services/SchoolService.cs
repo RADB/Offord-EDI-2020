@@ -116,7 +116,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task CreateSchoolAsync(SchoolItemViewModel school)
+        public async Task<int> CreateSchoolAsync(SchoolItemViewModel school)
         {
             await LogUsername();
             Log.Information("CreateSchoolAsync started by:" + _username);
@@ -140,10 +140,12 @@ namespace EDI.Web.Services
                 _school.ModifiedBy = _username;
 
                 await _schoolRepository.AddAsync(_school);
+                return _school.Id;
             }
             catch (Exception ex)
             {
                 Log.Error("CreateSchoolAsync failed:" + ex.Message);
+                return 0;
             }
         }
 

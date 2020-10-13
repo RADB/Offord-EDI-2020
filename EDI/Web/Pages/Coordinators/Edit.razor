@@ -29,17 +29,18 @@
 <br />
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-7">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
                 <strong>Edit Coordinator</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
                     <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
                 </div>
             </div>
             <br />
-            <div class="col-md-7">
+            <div class="col-md-11">
                 <SfAccordion>
                     <AccordionItems>
                         <AccordionItem Header="Details" Expanded="true">
@@ -143,5 +144,10 @@
     private async void Reset()
     {
         CoordinatorModel = await coordinatorService.GetCoordinatorItem(Id);
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./coordinators/new");
     }
 }

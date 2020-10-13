@@ -13,7 +13,7 @@ namespace EDI.Web.Interfaces
 
         Task UpdateSiteAsync(SiteItemViewModel site);
 
-        Task CreateSiteAsync(SiteItemViewModel site);
+        Task<int> CreateSiteAsync(SiteItemViewModel site);
 
         Task<SiteItemViewModel> GetSiteItem(int siteId);
 

@@ -13,7 +13,7 @@ namespace EDI.Web.Interfaces
 
         Task UpdateCoordinatorAsync(CoordinatorItemViewModel coordinator);
 
-        Task CreateCoordinatorAsync(CoordinatorItemViewModel coordinator);
+        Task<int> CreateCoordinatorAsync(CoordinatorItemViewModel coordinator);
 
         Task<CoordinatorItemViewModel> GetCoordinatorItem(int coordinatorId);
 

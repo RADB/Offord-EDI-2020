@@ -75,12 +75,11 @@
         }
         else
         {
-            await SchoolService.CreateSchoolAsync(schoolform1.SchoolModel);
+            int id = await SchoolService.CreateSchoolAsync(schoolform1.SchoolModel);
 
             Message = "New School added successfully.";
             toastService.ShowSuccess(Message);
-            SchoolModel = new SchoolItemViewModel();
-            StateHasChanged();
+            NavigationManager.NavigateTo("./Schools/edit/" + id);
         }
     }
 

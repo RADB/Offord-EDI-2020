@@ -111,12 +111,11 @@
         }
         else
         {
-            await TeacherService.CreateTeacherAsync(teacherform1.TeacherModel);
+            int id = await TeacherService.CreateTeacherAsync(teacherform1.TeacherModel);
 
             Message = "New Teacher added successfully.";
             toastService.ShowSuccess(Message);
-            TeacherModel = new TeacherItemViewModel();
-            StateHasChanged();
+            NavigationManager.NavigateTo("./teachers/edit/" + id);
         }
     }
 

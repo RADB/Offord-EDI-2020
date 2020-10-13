@@ -75,12 +75,11 @@
         }
         else
         {
-            await SiteService.CreateSiteAsync(siteform1.SiteModel);
+            int id = await SiteService.CreateSiteAsync(siteform1.SiteModel);
 
             Message = "New Site added successfully.";
             toastService.ShowSuccess(Message);
-            SiteModel = new SiteItemViewModel();
-            StateHasChanged();
+            NavigationManager.NavigateTo("./Sites/edit/" + id);
         }
     }
 

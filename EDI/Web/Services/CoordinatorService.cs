@@ -126,7 +126,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task CreateCoordinatorAsync(CoordinatorItemViewModel coordinator)
+        public async Task<int> CreateCoordinatorAsync(CoordinatorItemViewModel coordinator)
         {
             await LogUsername();
             Log.Information("CreateCoordinatorAsync started by:" + _username);
@@ -183,10 +183,12 @@ namespace EDI.Web.Services
                 _coordinator.ModifiedBy = _username;
 
                 await _coordinatorRepository.AddAsync(_coordinator);
+                return _coordinator.Id;
             }
             catch (Exception ex)
             {
                 Log.Error("CreateCoordinatorAsync failed:" + ex.Message);
+                return 0;
             }
         }
 

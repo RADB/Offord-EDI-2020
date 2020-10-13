@@ -95,12 +95,12 @@
         }
         else
         {
-            await ChildService.CreateChildAsync(childform1.ChildModel);
+            int id = await ChildService.CreateChildAsync(childform1.ChildModel);
 
             Message = "New Child added successfully.";
             toastService.ShowSuccess(Message);
             ChildModel = new ChildItemViewModel();
-            StateHasChanged();
+            NavigationManager.NavigateTo("./Children/edit/"+ id);
         }
     }
 

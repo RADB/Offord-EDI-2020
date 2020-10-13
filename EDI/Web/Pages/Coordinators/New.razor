@@ -97,12 +97,12 @@
         }
         else
         {
-            await CoordinatorService.CreateCoordinatorAsync(coordinatorform1.CoordinatorModel);
+            int id = await CoordinatorService.CreateCoordinatorAsync(coordinatorform1.CoordinatorModel);
 
             Message = "New Coordinator added successfully.";
             toastService.ShowSuccess(Message);
-            CoordinatorModel = new CoordinatorItemViewModel();
-            StateHasChanged();
+
+            NavigationManager.NavigateTo("./Coordinators/edit/" + id);
         }
     }
 

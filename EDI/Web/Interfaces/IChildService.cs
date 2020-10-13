@@ -13,7 +13,7 @@ namespace EDI.Web.Interfaces
 
         Task UpdateChildAsync(ChildItemViewModel child);
 
-        Task CreateChildAsync(ChildItemViewModel child);
+        Task<int> CreateChildAsync(ChildItemViewModel child);
 
         Task<ChildItemViewModel> GetChildItem(int childId);
 

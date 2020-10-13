@@ -13,7 +13,7 @@ namespace EDI.Web.Interfaces
 
         Task UpdateSchoolAsync(SchoolItemViewModel school);
 
-        Task CreateSchoolAsync(SchoolItemViewModel school);
+        Task<int> CreateSchoolAsync(SchoolItemViewModel school);
 
         Task<SchoolItemViewModel> GetSchoolItem(int schoolId);
 

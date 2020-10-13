@@ -123,7 +123,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task CreateTeacherAsync(TeacherItemViewModel teacher)
+        public async Task<int> CreateTeacherAsync(TeacherItemViewModel teacher)
         {
             await LogUsername();
             Log.Information("CreateTeacherAsync started by:" + _username);
@@ -181,10 +181,12 @@ namespace EDI.Web.Services
                 _teacher.ModifiedBy = _username;
 
                 await _teacherRepository.AddAsync(_teacher);
+                return _teacher.Id;
             }
             catch (Exception ex)
             {
                 Log.Error("CreateTeacherAsync failed:" + ex.Message);
+                return 0;
             }
         }
 
