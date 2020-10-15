@@ -1,0 +1,82 @@
+﻿@page "/SampleQuestions/index"
+@using Microsoft.AspNetCore.Components.Authorization
+@using EDI.Web.Shared.Questions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            @if (IsAdmin)
+            {
+                <div class="card-header">
+                    <strong>Sample for Administrator</strong>
+                </div>
+                <div class="card-body">
+                </div>
+            }
+            else if (IsTeacher)
+            {
+                <div class="card-header">
+                    <strong>Sample Questions for Teacher</strong>
+                </div>
+
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <TextArea QuestionText="Test Question" DataValue="This is the textarea answer. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." DataColumn="Test"></TextArea>
+
+                        <Text QuestionText="Please complete the text question." DataValue="This is the text answer." DataColumn="Test"></Text>
+
+                        <RadioButtons QuestionText="Please complete the options question?"></RadioButtons>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card-header">
+                    <strong>Sample for Coordinator</strong>
+                </div>
+                <div class="card-body">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    // look to move this to a session variable and carry throughout the session
+    private bool IsAdmin { get; set; }
+    private bool IsTeacher { get; set; }
+    private bool IsCoordinator { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            @if (user.IsInRole("Administrator"))
+            {
+                IsAdmin = true;
+
+
+            }
+            else if (user.IsInRole("Teacher"))
+            {
+                IsTeacher = true;
+
+            }
+            else
+            {
+                IsCoordinator = true;
+            }
+        }
+    }
+}
