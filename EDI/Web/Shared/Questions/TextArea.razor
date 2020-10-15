@@ -1,0 +1,18 @@
+﻿@inherits QuestionBase
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="col-12">
+                    <h4>@QuestionText</h4>
+                    <textarea name=@DataColumn id=@DataColumn rows="4" style="width:100%; max-width: 100%;resize:none;">@DataValue</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    //<InputTextArea name=@DataColumn id=@DataColumn rows="4" style="width:100%; max-width: 100%;resize:none;">@DataValue</InputTextArea>
+}
