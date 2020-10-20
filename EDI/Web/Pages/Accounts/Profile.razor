@@ -10,6 +10,7 @@
 @using Syncfusion.Blazor.Navigations;
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
+@inject AppIdentityDbContext identityContext;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -75,6 +76,30 @@
         Message = "Profile updated successfully.";
 
         toastService.ShowSuccess(Message);
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
+        UserSettings.FirstName = user1.FirstName;
+        UserSettings.LastName = user1.LastName;
+        UserSettings.Email = user1.Email;
+        UserSettings.IsAdmin = false;
+        UserSettings.IsCoordinator = false;
+        UserSettings.IsTeacher = false;
+
+        @if (user.IsInRole("Administrator"))
+        {
+            UserSettings.IsAdmin = true;
+        }
+        else if (user.IsInRole("Teacher"))
+        {
+            UserSettings.IsTeacher = true;
+        }
+        else
+        {
+            UserSettings.IsCoordinator = true;
+        }
 
         StateHasChanged();
     }
