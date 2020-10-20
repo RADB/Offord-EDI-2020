@@ -33,8 +33,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -48,6 +47,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<ConfigurationService>();
@@ -56,24 +56,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteConfigurationAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteConfigurationAsync started by:" + _username);
+            
+            Log.Information("DeleteConfigurationAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -91,8 +81,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateConfigurationAsync(ConfigurationItemViewModel configuration)
         {
-            await LogUsername();
-            Log.Information("UpdateConfigurationAsync started by:" + _username);
+            
+            Log.Information("UpdateConfigurationAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -102,7 +92,7 @@ namespace EDI.Web.Services
 
                 _configuration.FieldValue = configuration.FieldValue;
                 _configuration.ModifiedDate = DateTime.Now;
-                _configuration.ModifiedBy = _username;
+                _configuration.ModifiedBy = _userSettings.UserName;
 
                 await _configurationRepository.UpdateAsync(_configuration);
             }
@@ -114,8 +104,8 @@ namespace EDI.Web.Services
 
         public async Task CreateConfigurationAsync(ConfigurationItemViewModel configuration)
         {
-            await LogUsername();
-            Log.Information("CreateConfigurationAsync started by:" + _username);
+            
+            Log.Information("CreateConfigurationAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -124,9 +114,9 @@ namespace EDI.Web.Services
                 _configuration.FieldName = configuration.FieldName;
                 _configuration.FieldValue = configuration.FieldValue;
                 _configuration.CreatedDate = DateTime.Now;
-                _configuration.CreatedBy = _username;
+                _configuration.CreatedBy = _userSettings.UserName;
                 _configuration.ModifiedDate = DateTime.Now;
-                _configuration.ModifiedBy = _username;
+                _configuration.ModifiedBy = _userSettings.UserName;
 
                 await _configurationRepository.AddAsync(_configuration);
             }
@@ -138,8 +128,8 @@ namespace EDI.Web.Services
 
         public async Task<ConfigurationItemViewModel> GetConfigurationItem(int configurationId)
         {
-            await LogUsername();
-            Log.Information("GetConfigurationItem started by:" + _username);
+            
+            Log.Information("GetConfigurationItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -172,8 +162,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string name)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -192,8 +182,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string name, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

@@ -48,8 +48,7 @@ namespace EDI.Web.Services
         private readonly AppIdentityDbContext _identityContext;
         private IHostEnvironment _hostingEnvironment;
         private readonly IEmailSender _emailSender;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -67,6 +66,7 @@ namespace EDI.Web.Services
             AuthenticationStateProvider authenticationStateProvider,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<AccountService>();
@@ -81,24 +81,13 @@ namespace EDI.Web.Services
             _dbContext = dbContext;
             _identityContext = identityContext;
             _emailSender = emailSender;
+            _userSettings = UserSettings;
             POAppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
-        }
+        }        
 
         public async Task CreateAccountAsync(AccountItemViewModel account)
         {
-            await LogUsername();
-            Log.Information("CreateAccountAsync started by:" + _username);
+            Log.Information("CreateAccountAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -148,8 +137,7 @@ namespace EDI.Web.Services
 
         public async Task DeleteAccountAsync(string Id)
         {
-            await LogUsername();
-            Log.Information("DeleteAccountAsync started by:" + _username);
+            Log.Information("DeleteAccountAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -165,8 +153,7 @@ namespace EDI.Web.Services
 
         public async Task UnlockAccountAsync(string Id)
         {
-            await LogUsername();
-            Log.Information("UnlockAccountAsync started by:" + _username);
+            Log.Information("UnlockAccountAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -185,8 +172,7 @@ namespace EDI.Web.Services
 
         public async Task LockAccountAsync(string Id)
         {
-            await LogUsername();
-            Log.Information("LockAccountAsync started by:" + _username);
+            Log.Information("LockAccountAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -205,8 +191,7 @@ namespace EDI.Web.Services
 
         public async Task<AccountItemViewModel> GetAccountItem(string accountId)
         {
-            await LogUsername();
-            Log.Information("GetAccountItem started by:" + _username);
+            Log.Information("GetAccountItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -264,8 +249,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetRoles()
         {
-            await LogUsername();
-            Log.Information("GetRoles started by:" + _username);
+            
+            Log.Information("GetRoles started by:" + _userSettings.UserName);
 
             try
             {
@@ -297,8 +282,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetUsers()
         {
-            await LogUsername();
-            Log.Information("GetUsers started by:" + _username);
+            
+            Log.Information("GetUsers started by:" + _userSettings.UserName);
 
             try
             {
@@ -330,8 +315,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetCoordinators()
         {
-            await LogUsername();
-            Log.Information("GetCoordinators started by:" + _username);
+            
+            Log.Information("GetCoordinators started by:" + _userSettings.UserName);
 
             try
             {
@@ -379,8 +364,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetTeachers()
         {
-            await LogUsername();
-            Log.Information("GetTeachers started by:" + _username);
+            
+            Log.Information("GetTeachers started by:" + _userSettings.UserName);
 
             try
             {
@@ -460,8 +445,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateAccountAsync(AccountItemViewModel account)
         {
-            await LogUsername();
-            Log.Information("UpdateAccountAsync started by:" + _username);
+            
+            Log.Information("UpdateAccountAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -500,12 +485,12 @@ namespace EDI.Web.Services
 
         public async Task<AccountItemViewModel> GetProfile()
         {
-            await LogUsername();
-            Log.Information("GetProfile started by:" + _username);
+            
+            Log.Information("GetProfile started by:" + _userSettings.UserName);
 
             try
             {
-                var account = _identityContext.Users.Where(p=> p.UserName == _username).FirstOrDefault();
+                var account = _identityContext.Users.Where(p=> p.UserName == _userSettings.UserName).FirstOrDefault();
 
                 var vm = new AccountItemViewModel()
                 {
@@ -536,8 +521,8 @@ namespace EDI.Web.Services
 
         public async Task DeleteRoleAsync(string Id)
         {
-            await LogUsername();
-            Log.Information("DeleteRoleAsync started by:" + _username);
+            
+            Log.Information("DeleteRoleAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -584,8 +569,8 @@ namespace EDI.Web.Services
         }
         public async Task UpdateRoleAsync(RoleItemViewModel role)
         {
-            await LogUsername();
-            Log.Information("UpdateRoleAsync started by:" + _username);
+            
+            Log.Information("UpdateRoleAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -602,8 +587,8 @@ namespace EDI.Web.Services
         }
         public async Task<RoleItemViewModel> GetRoleItem(string roleid)
         {
-            await LogUsername();
-            Log.Information("GetRoleItem started by:" + _username);
+            
+            Log.Information("GetRoleItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -629,8 +614,8 @@ namespace EDI.Web.Services
 
         public async Task CreateRoleAsync(RoleItemViewModel role)
         {
-            await LogUsername();
-            Log.Information("CreateRoleAsync started by:" + _username);
+            
+            Log.Information("CreateRoleAsync started by:" + _userSettings.UserName);
 
             try
             {

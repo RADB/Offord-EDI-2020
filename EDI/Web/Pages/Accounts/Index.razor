@@ -14,6 +14,7 @@
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Buttons
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -71,20 +72,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if(!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
+            username = UserSettings.UserName;
 
             var users = await Task.FromResult(identityContext.Users.ToList());
 

@@ -9,6 +9,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -45,7 +46,7 @@
                             <GridColumn Field=@nameof(SchoolItemViewModel.Province) HeaderText="Province" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SchoolItemViewModel.City) HeaderText="City" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SchoolItemViewModel.SiteNumber) HeaderText="Site" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(SchoolItemViewModel.Ediyear) HeaderText="Year" Width="10"></GridColumn>                            
+                            <GridColumn Field=@nameof(SchoolItemViewModel.Ediyear) HeaderText="Year" Width="10"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -60,7 +61,7 @@
     [Parameter]
     public int SiteID { get; set; } = 0;
     [Parameter]
-    public string Header{ get; set; } = "School Management";
+    public string Header { get; set; } = "School Management";
     [Parameter]
     public bool AllowDelete { get; set; } = true;
     [Parameter]
@@ -73,25 +74,18 @@
 
     IEnumerable<SchoolItemViewModel> schools;
 
-    private string username { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
-
             var allschools = await Task.FromResult(dbContext.Schools.OrderBy(p => p.SchoolNumber).ToList());
 
             if (SiteID > 0)
@@ -126,7 +120,7 @@
 
                 aschool.YearId = school.YearId;
                 var year = dbContext.Years.Where(p => p.Id == school.YearId).FirstOrDefault();
-                if(year != null && year.Ediyear.HasValue)
+                if (year != null && year.Ediyear.HasValue)
                     aschool.Ediyear = year.Ediyear.Value;
 
                 sivm.Add(aschool);

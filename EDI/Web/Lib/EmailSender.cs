@@ -15,16 +15,19 @@ namespace EDI.Web.Lib
     public class EmailSender : IEmailSender
     {
         private EDIAppSettings POAppSettings { get; set; }
+        private UserSettings _userSettings { get; set; }
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private readonly AppIdentityDbContext _dbIdentityContext;
 
         public EmailSender(
             AuthenticationStateProvider authenticationStateProvider,
             AppIdentityDbContext dbIdentityContext,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             POAppSettings = settings.Value;
             _dbIdentityContext = dbIdentityContext;
+            _userSettings = UserSettings;
             _authenticationStateProvider = authenticationStateProvider;
         }
 
@@ -45,12 +48,8 @@ namespace EDI.Web.Lib
                 if(EmailModel.UseAttachment.HasValue && EmailModel.UseAttachment.Value)
                     mailMessage.Attachments.Add(new Attachment(EmailModel.Attachment));
                 if(EmailModel.SendCopyToSelf.HasValue && EmailModel.SendCopyToSelf.Value)
-                {
-                    var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-                    var user = authState.User;
-
-                    var currentuser = _dbIdentityContext.Users.Where(p => p.DisplayName == user.Identity.Name).FirstOrDefault();
-                    mailMessage.Bcc.Add(currentuser.Email); 
+                {                   
+                    mailMessage.Bcc.Add(_userSettings.Email); 
                 }
                 using (var smtpClient = new SmtpClient(POAppSettings.EmailHost))
                 {

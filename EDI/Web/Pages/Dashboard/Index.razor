@@ -9,6 +9,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IMathService MathService;
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -147,16 +148,16 @@
                         </div>
                     </div>
                 </div>
-                }
-                else
-                {
+            }
+            else
+            {
                 <div class="card-header">
                     <strong>Dashboard for Coordinator</strong>
                 </div>
                 <div class="card-body">
                 </div>
-                }
-            </div>
+            }
+        </div>
     </div>
 </div>
 
@@ -174,16 +175,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
         else
         {
-            @if (user.IsInRole("Administrator"))
+            @if (UserSettings.IsAdmin)
             {
                 IsAdmin = true;
 
@@ -192,11 +190,10 @@
                 teachers = dbContext.Teachers.Count();
                 children = dbContext.Children.Count();
             }
-            else if (user.IsInRole("Teacher"))
+            else if (UserSettings.IsTeacher)
             {
                 IsTeacher = true;
-                var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
-                var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
+                var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
                 children = dbContext.Children.Where(c => c.TeacherId == teacher.Id).Count();
                 //children = teacher.Children.Count();
             }

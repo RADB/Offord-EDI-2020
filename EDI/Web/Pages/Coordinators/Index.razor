@@ -9,6 +9,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -62,25 +63,18 @@
 
     IEnumerable<CoordinatorItemViewModel> coordinators;
 
-    private string username { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
-
             var allcoordinators = await Task.FromResult(dbContext.Coordinators.OrderBy(p => p.CoordinatorName).ToList());
 
             List<CoordinatorItemViewModel> sivm = new List<CoordinatorItemViewModel>();
@@ -97,7 +91,7 @@
                 acoordinator.YearId = coordinator.YearId;
 
                 var year = dbContext.Years.Where(p => p.Id == coordinator.YearId).FirstOrDefault();
-                acoordinator.Ediyear = year!= null ? year.Ediyear : null;
+                acoordinator.Ediyear = year != null ? year.Ediyear : null;
 
                 sivm.Add(acoordinator);
             }

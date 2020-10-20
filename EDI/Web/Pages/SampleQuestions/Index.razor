@@ -3,6 +3,7 @@
 @using EDI.Web.Shared.Questions
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -53,22 +54,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
         else
         {
-            @if (user.IsInRole("Administrator"))
+            @if (UserSettings.IsAdmin)
             {
                 IsAdmin = true;
 
 
             }
-            else if (user.IsInRole("Teacher"))
+            else if (UserSettings.IsTeacher)
             {
                 IsTeacher = true;
 

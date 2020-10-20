@@ -30,8 +30,7 @@ namespace EDI.Web.Services
         private EDIAppSettings POAppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -44,6 +43,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<FormService>();
@@ -52,24 +52,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             POAppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteFormAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteFormAsync started by:" + _username);
+            
+            Log.Information("DeleteFormAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -85,8 +75,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateFormAsync(FormItemViewModel form)
         {
-            await LogUsername();
-            Log.Information("UpdateFormAsync started by:" + _username);
+            
+            Log.Information("UpdateFormAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -99,7 +89,7 @@ namespace EDI.Web.Services
                 _form.IsEnabled = form.IsEnabled;
                 _form.IsVisible = form.IsVisible;
                 _form.ModifiedDate = DateTime.Now;
-                _form.ModifiedBy = _username;
+                _form.ModifiedBy = _userSettings.UserName;
 
                 await _formRepository.UpdateAsync(_form);
             }
@@ -111,8 +101,8 @@ namespace EDI.Web.Services
 
         public async Task CreateFormAsync(FormItemViewModel form)
         {
-            await LogUsername();
-            Log.Information("CreateFormAsync started by:" + _username);
+            
+            Log.Information("CreateFormAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -125,9 +115,9 @@ namespace EDI.Web.Services
                 _form.IsEnabled = form.IsEnabled;
                 _form.IsVisible = form.IsVisible;
                 _form.CreatedDate = DateTime.Now;
-                _form.CreatedBy = _username;
+                _form.CreatedBy = _userSettings.UserName;
                 _form.ModifiedDate = DateTime.Now;
-                _form.ModifiedBy = _username;
+                _form.ModifiedBy = _userSettings.UserName;
 
                 await _formRepository.AddAsync(_form);
             }
@@ -139,8 +129,8 @@ namespace EDI.Web.Services
 
         public async Task<FormItemViewModel> GetFormItem(string formname, string fieldname, int order)
         {
-            await LogUsername();
-            Log.Information("GetFormItem started by:" + _username);
+            
+            Log.Information("GetFormItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -158,9 +148,9 @@ namespace EDI.Web.Services
                     IsEnabled = true,
                     IsVisible = true,
                     CreatedDate = DateTime.Now,
-                    CreatedBy = _username,
+                    CreatedBy = _userSettings.UserName,
                     ModifiedDate = DateTime.Now,
-                    ModifiedBy = _username
+                    ModifiedBy = _userSettings.UserName
                 };
 
                 if (items != null && items.Count() > 0)

@@ -9,6 +9,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -62,25 +63,18 @@
 
     IEnumerable<SiteItemViewModel> sites;
 
-    private string username { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
-
             var allsites = await Task.FromResult(dbContext.Sites.OrderBy(p => p.SiteNumber).ToList());
 
             List<SiteItemViewModel> sivm = new List<SiteItemViewModel>();

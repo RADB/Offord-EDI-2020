@@ -8,6 +8,7 @@
 @inject NavigationManager NavigationManager
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
+@inject UserSettings UserSettings;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -53,21 +54,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (user.IsInRole("Coordinator"))
+        else if (UserSettings.IsCoordinator)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
-        else if (user.IsInRole("Teacher"))
+        else if (UserSettings.IsTeacher)
         {
-            var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
-            var teacher = dbContext.Teachers.Where(t => t.UserId == user1.Id).FirstOrDefault();
+            var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
             ChildModel.TeacherId = teacher.Id;
             ChildModel.IsAdmin = false;
         }
@@ -100,7 +97,7 @@
             Message = "New Child added successfully.";
             toastService.ShowSuccess(Message);
             ChildModel = new ChildItemViewModel();
-            NavigationManager.NavigateTo("./Children/edit/"+ id);
+            NavigationManager.NavigateTo("./Children/edit/" + id);
         }
     }
 

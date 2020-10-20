@@ -33,8 +33,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -48,6 +47,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<LanguageService>();
@@ -56,24 +56,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteLanguageAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteLanguageAsync started by:" + _username);
+            
+            Log.Information("DeleteLanguageAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -91,8 +81,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateLanguageAsync(LanguageItemViewModel language)
         {
-            await LogUsername();
-            Log.Information("UpdateLanguageAsync started by:" + _username);
+            
+            Log.Information("UpdateLanguageAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -105,7 +95,7 @@ namespace EDI.Web.Services
                 _language.French = language.French;
                 _language.Sequence = language.Sequence;
                 _language.ModifiedDate = DateTime.Now;
-                _language.ModifiedBy = _username;
+                _language.ModifiedBy = _userSettings.UserName;
 
                 await _languageRepository.UpdateAsync(_language);
             }
@@ -117,8 +107,8 @@ namespace EDI.Web.Services
 
         public async Task CreateLanguageAsync(LanguageItemViewModel language)
         {
-            await LogUsername();
-            Log.Information("CreateLanguageAsync started by:" + _username);
+            
+            Log.Information("CreateLanguageAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -129,9 +119,9 @@ namespace EDI.Web.Services
                 _language.French = language.French;
                 _language.Sequence = language.Sequence;
                 _language.CreatedDate = DateTime.Now;
-                _language.CreatedBy = _username;
+                _language.CreatedBy = _userSettings.UserName;
                 _language.ModifiedDate = DateTime.Now;
-                _language.ModifiedBy = _username;
+                _language.ModifiedBy = _userSettings.UserName;
 
                 await _languageRepository.AddAsync(_language);
             }
@@ -143,8 +133,8 @@ namespace EDI.Web.Services
 
         public async Task<LanguageItemViewModel> GetLanguageItem(int languageId)
         {
-            await LogUsername();
-            Log.Information("GetLanguageItem started by:" + _username);
+            
+            Log.Information("GetLanguageItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -179,8 +169,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string Code)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -199,8 +189,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string Code, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

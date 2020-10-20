@@ -12,15 +12,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using EDI.Infrastructure.Interfaces;
 using Serilog;
-using EDI.Web.Lib;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
-using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Syncfusion.Blazor.Data;
-using System.Linq;
 
 namespace EDI.Web.Services
 {
@@ -33,8 +27,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -48,6 +41,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<SpecialProblemService>();
@@ -56,24 +50,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteSpecialProblemAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteSpecialProblemAsync started by:" + _username);
+            
+            Log.Information("DeleteSpecialProblemAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -91,8 +75,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateSpecialProblemAsync(SpecialProblemItemViewModel specialProblem)
         {
-            await LogUsername();
-            Log.Information("UpdateSpecialProblemAsync started by:" + _username);
+            
+            Log.Information("UpdateSpecialProblemAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -105,7 +89,7 @@ namespace EDI.Web.Services
                 _specialProblem.French = specialProblem.French;
                 _specialProblem.Sequence = specialProblem.Sequence;
                 _specialProblem.ModifiedDate = DateTime.Now;
-                _specialProblem.ModifiedBy = _username;
+                _specialProblem.ModifiedBy = _userSettings.UserName;
 
                 await _specialProblemRepository.UpdateAsync(_specialProblem);
             }
@@ -117,8 +101,8 @@ namespace EDI.Web.Services
 
         public async Task CreateSpecialProblemAsync(SpecialProblemItemViewModel specialProblem)
         {
-            await LogUsername();
-            Log.Information("CreateSpecialProblemAsync started by:" + _username);
+            
+            Log.Information("CreateSpecialProblemAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -129,9 +113,9 @@ namespace EDI.Web.Services
                 _specialProblem.French = specialProblem.French;
                 _specialProblem.Sequence = specialProblem.Sequence;
                 _specialProblem.CreatedDate = DateTime.Now;
-                _specialProblem.CreatedBy = _username;
+                _specialProblem.CreatedBy = _userSettings.UserName;
                 _specialProblem.ModifiedDate = DateTime.Now;
-                _specialProblem.ModifiedBy = _username;
+                _specialProblem.ModifiedBy = _userSettings.UserName;
 
                 await _specialProblemRepository.AddAsync(_specialProblem);
             }
@@ -143,8 +127,8 @@ namespace EDI.Web.Services
 
         public async Task<SpecialProblemItemViewModel> GetSpecialProblemItem(int specialProblemId)
         {
-            await LogUsername();
-            Log.Information("GetSpecialProblemItem started by:" + _username);
+            
+            Log.Information("GetSpecialProblemItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -179,8 +163,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string Code)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -199,8 +183,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string Code, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

@@ -10,6 +10,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-5">
@@ -60,27 +61,20 @@
 
     IEnumerable<ProvinceType> files;
 
-    private string username { get; set; }
-
     private bool ShowFileupload { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
-
             var allfiles = await Task.FromResult(dbContext.ProvinceType.OrderBy(p => p.Name).ToList());
 
             List<ProvinceType> sivm = new List<ProvinceType>();

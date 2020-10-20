@@ -12,6 +12,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-12">
@@ -82,10 +83,10 @@
                                 <GridColumn Field=@nameof(FileItemViewModel.SiteName) HeaderText="Site" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.CoordinatorName) HeaderText="Coordinator" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.CoordinatorEmail) HeaderText="Coordinator Email" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.SchoolName) HeaderText="School" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>                                
+                                <GridColumn Field=@nameof(FileItemViewModel.SchoolName) HeaderText="School" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.TeacherName) HeaderText="Teacher" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.TeacherEmail) HeaderText="Teacher Email" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.LocalId) HeaderText="Child's Local ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>                                
+                                <GridColumn Field=@nameof(FileItemViewModel.LocalId) HeaderText="Child's Local ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.Gender) HeaderText="Gender" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.ChildDob) HeaderText="DOB" Format="yyyy-MM-dd" Type="ColumnType.Date" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.ChildPostalCodeZip) HeaderText="Postal" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
@@ -117,8 +118,6 @@
     SfGrid<FileItemViewModel> Grid;
 
     IEnumerable<FileItemViewModel> files;
-
-    private string username { get; set; }
 
     private bool ShowFileupload { get; set; }
 
@@ -171,21 +170,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
-
             ShowFileupload = false;
 
             var status = dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault();

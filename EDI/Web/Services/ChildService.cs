@@ -29,8 +29,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -44,6 +43,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<ChildService>();
@@ -52,24 +52,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteChildAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteChildAsync started by:" + _username);
+            
+            Log.Information("DeleteChildAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -87,8 +77,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateChildAsync(ChildItemViewModel child)
         {
-            await LogUsername();
-            Log.Information("UpdateChildAsync started by:" + _username);
+            
+            Log.Information("UpdateChildAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -105,7 +95,7 @@ namespace EDI.Web.Services
                 _child.Dob = child.Dob;
                 _child.PostalCodeZip = child.PostalCodeZip;
                 _child.ModifiedDate = DateTime.Now;
-                _child.ModifiedBy = _username;
+                _child.ModifiedBy = _userSettings.UserName;
 
                 await _childRepository.UpdateAsync(_child);
             }
@@ -117,8 +107,8 @@ namespace EDI.Web.Services
 
         public async Task<int> CreateChildAsync(ChildItemViewModel child)
         {
-            await LogUsername();
-            Log.Information("CreateChildAsync started by:" + _username);
+            
+            Log.Information("CreateChildAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -133,9 +123,9 @@ namespace EDI.Web.Services
                 _child.Dob = child.Dob;
                 _child.PostalCodeZip = child.PostalCodeZip;
                 _child.CreatedDate = DateTime.Now;
-                _child.CreatedBy = _username;
+                _child.CreatedBy = _userSettings.UserName;
                 _child.ModifiedDate = DateTime.Now;
-                _child.ModifiedBy = _username;
+                _child.ModifiedBy = _userSettings.UserName;
 
                 await _childRepository.AddAsync(_child);
                 return _child.Id;
@@ -149,8 +139,8 @@ namespace EDI.Web.Services
 
         public async Task<ChildItemViewModel> GetChildItem(int childId)
         {
-            await LogUsername();
-            Log.Information("GetChildItem started by:" + _username);
+            
+            Log.Information("GetChildItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -189,8 +179,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string ediid)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -209,8 +199,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string ediid, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

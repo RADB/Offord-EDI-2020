@@ -9,6 +9,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-8">
@@ -63,25 +64,18 @@
 
     IEnumerable<ProvinceItemViewModel> provinces;
 
-    private string username { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
-
             var countryidusa = dbContext.Countries.Where(p => p.English == "United States").FirstOrDefault().Id;
             var countryidcad = dbContext.Countries.Where(p => p.English == "Canada").FirstOrDefault().Id;
             var countryidbarb = dbContext.Countries.Where(p => p.English == "Barbados").FirstOrDefault().Id;

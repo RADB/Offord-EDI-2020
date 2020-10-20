@@ -10,6 +10,7 @@
 @inject IJSRuntime JsRuntime;
 @inject IModalService Modal;
 @inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -52,106 +53,103 @@
                 </SfAccordion>
             </div>
             <div class="col-md-12">
-                <EDI.Web.Pages.Teachers.Index SchoolID=@Id Header="Teachers at School" AllowDelete=false AllowEdit=false ></EDI.Web.Pages.Teachers.Index>
+                <EDI.Web.Pages.Teachers.Index SchoolID=@Id Header="Teachers at School" AllowDelete=false AllowEdit=false></EDI.Web.Pages.Teachers.Index>
             </div>
         </div>
-        </div>
     </div>
+</div>
 
-    @code {
-        [Parameter]
-        public int Id { get; set; }
-        private string Message { get; set; }
-        private string ErrorMessage { get; set; }
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
 
-        private SchoolItemViewModel SchoolModel { get; set; } = new SchoolItemViewModel();
+    private SchoolItemViewModel SchoolModel { get; set; } = new SchoolItemViewModel();
 
-        SchoolForm schoolform1 = new SchoolForm();
+    SchoolForm schoolform1 = new SchoolForm();
 
-        SfGrid<TeacherItemViewModel> Grid;
+    SfGrid<TeacherItemViewModel> Grid;
 
-        IEnumerable<TeacherItemViewModel> teachers;
+    IEnumerable<TeacherItemViewModel> teachers;
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (!user.Identity.IsAuthenticated)
-            {
-                NavigationManager.NavigateTo("./login");
-            }
-            else if (!user.IsInRole("Administrator"))
-            {
-                NavigationManager.NavigateTo("./dashboard/index");
-            }
-            else
-            {
-                SchoolModel = await schoolService.GetSchoolItem(Id);
-
-                /*var allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == Id).OrderBy(p => p.TeacherNumber).ToList());
-
-                List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
-
-                foreach (var teacher in allteachers)
-                {
-                    var ateacher = new TeacherItemViewModel();
-
-                    ateacher.Id = teacher.Id;
-                    ateacher.TeacherName = teacher.TeacherName;
-                    ateacher.TeacherNumber = teacher.TeacherNumber;
-                    ateacher.Email = teacher.Email;
-                    ateacher.PhoneNumber = teacher.PhoneNumber;
-                    ateacher.YearId = teacher.YearId;
-
-                    var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
-                    ateacher.Ediyear = year.Ediyear;
-
-                    ateacher.SchoolId = teacher.SchoolId;
-                    var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
-                    ateacher.SchoolName = school.SchoolName;
-                    ateacher.SchoolNumber = school.SchoolNumber;
-
-                    sivm.Add(ateacher);
-                }
-                teachers = sivm;*/
-            }
+            NavigationManager.NavigateTo("./login");
         }
-
-        private async void HandleValidSubmit()
+        else if (!UserSettings.IsAdmin)
         {
-            //Console.WriteLine("OnValidSubmit");
-            var totalItems = await schoolService.GetDuplicateCount(SchoolModel.SiteId, SchoolModel.SchoolNumber, schoolform1.SchoolModel.Id);
-
-            if (totalItems > 0)
-            {
-                ErrorMessage = "The same School has already existed.";
-                toastService.ShowError(ErrorMessage);
-            }
-            else
-            {
-                await schoolService.UpdateSchoolAsync(schoolform1.SchoolModel);
-
-                Message = "School updated successfully.";
-
-                toastService.ShowSuccess(Message);
-
-                StateHasChanged();
-            }
+            NavigationManager.NavigateTo("./dashboard/index");
         }
-
-        private void Exit()
-        {
-            NavigationManager.NavigateTo("./schools/index");
-        }
-
-        private async void Reset()
+        else
         {
             SchoolModel = await schoolService.GetSchoolItem(Id);
-        }
 
-        private void Add()
-        {
-            NavigationManager.NavigateTo("./schools/new");
+            /*var allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == Id).OrderBy(p => p.TeacherNumber).ToList());
+
+            List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
+
+            foreach (var teacher in allteachers)
+            {
+                var ateacher = new TeacherItemViewModel();
+
+                ateacher.Id = teacher.Id;
+                ateacher.TeacherName = teacher.TeacherName;
+                ateacher.TeacherNumber = teacher.TeacherNumber;
+                ateacher.Email = teacher.Email;
+                ateacher.PhoneNumber = teacher.PhoneNumber;
+                ateacher.YearId = teacher.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
+                ateacher.Ediyear = year.Ediyear;
+
+                ateacher.SchoolId = teacher.SchoolId;
+                var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
+                ateacher.SchoolName = school.SchoolName;
+                ateacher.SchoolNumber = school.SchoolNumber;
+
+                sivm.Add(ateacher);
+            }
+            teachers = sivm;*/
         }
     }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = await schoolService.GetDuplicateCount(SchoolModel.SiteId, SchoolModel.SchoolNumber, schoolform1.SchoolModel.Id);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same School has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            await schoolService.UpdateSchoolAsync(schoolform1.SchoolModel);
+
+            Message = "School updated successfully.";
+
+            toastService.ShowSuccess(Message);
+
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./schools/index");
+    }
+
+    private async void Reset()
+    {
+        SchoolModel = await schoolService.GetSchoolItem(Id);
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./schools/new");
+    }
+}

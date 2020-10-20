@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject AppIdentityDbContext identityContext;
 
 <BlazoredModal DisableBackgroundCancel="true" />
 <BlazoredToasts Position="ToastPosition.BottomRight"
@@ -67,19 +69,41 @@ else
 
         isAuthenticated = user.Identity.IsAuthenticated;
 
-        var url = NavigationManager.Uri;
+        if (user.Identity.IsAuthenticated)
+        {
+            var url = NavigationManager.Uri;
 
-        @if (user.IsInRole("Administrator"))
-        {
-            IsAdmin = true;
-        }
-        else if (user.IsInRole("Teacher"))
-        {
-            IsTeacher = true;
+            UserSettings.UserName = user.Identity.Name;
+            UserSettings.IsAuthenticated = true;
+
+            var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
+            UserSettings.UserID = user1.Id;
+            UserSettings.FirstName = user1.FirstName;
+            UserSettings.LastName = user1.LastName;
+            UserSettings.IsAdmin = false;
+            UserSettings.IsCoordinator = false;
+            UserSettings.IsTeacher = false;
+
+            @if (user.IsInRole("Administrator"))
+            {
+                UserSettings.IsAdmin = true;
+                IsAdmin = true;
+            }
+            else if (user.IsInRole("Teacher"))
+            {
+                UserSettings.IsTeacher = true;
+                IsTeacher = true;
+            }
+            else
+            {
+                UserSettings.IsCoordinator = true;
+                IsCoordinator = true;
+            }
         }
         else
         {
-            IsCoordinator = true;
+            UserSettings.IsAuthenticated = false;
+            NavigationManager.NavigateTo("./login");
         }
     }
 

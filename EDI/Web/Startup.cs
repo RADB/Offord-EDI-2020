@@ -98,6 +98,7 @@ namespace EDI.Web
             services.AddScoped<IChildService, ChildService>();
             services.AddScoped<IMathService, MathService>();
             services.AddScoped<ICoordinatorService, CoordinatorService>();
+            services.AddScoped<UserSettings>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
 

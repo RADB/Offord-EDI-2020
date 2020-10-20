@@ -60,8 +60,7 @@ namespace EDI.Web.Services
         private readonly AppIdentityDbContext _identityContext;
         private IHostEnvironment _hostingEnvironment;
         private readonly IEmailSender _emailSender;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -89,6 +88,7 @@ namespace EDI.Web.Services
             AuthenticationStateProvider authenticationStateProvider,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<AccountService>();
@@ -113,24 +113,14 @@ namespace EDI.Web.Services
             _dbContext = dbContext;
             _identityContext = identityContext;
             _emailSender = emailSender;
+            _userSettings = UserSettings;
             POAppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetCountries()
         {
-            await LogUsername();
-            Log.Information("GetCountries started by:" + _username);
+            
+            Log.Information("GetCountries started by:" + _userSettings.UserName);
 
             try
             {
@@ -161,8 +151,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetProvinces(int countryid)
         {
-            await LogUsername();
-            Log.Information("GetProvinces started by:" + _username);
+            
+            Log.Information("GetProvinces started by:" + _userSettings.UserName);
 
             try
             {
@@ -198,8 +188,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetSites()
         {
-            await LogUsername();
-            Log.Information("GetSites started by:" + _username);
+            
+            Log.Information("GetSites started by:" + _userSettings.UserName);
 
             try
             {
@@ -229,8 +219,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetCoordinators()
         {
-            await LogUsername();
-            Log.Information("GetCoordinators started by:" + _username);
+            
+            Log.Information("GetCoordinators started by:" + _userSettings.UserName);
 
             try
             {
@@ -260,8 +250,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetYears()
         {
-            await LogUsername();
-            Log.Information("GetYears started by:" + _username);
+            
+            Log.Information("GetYears started by:" + _userSettings.UserName);
 
             try
             {
@@ -291,8 +281,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetGenders()
         {
-            await LogUsername();
-            Log.Information("GetGenders started by:" + _username);
+            
+            Log.Information("GetGenders started by:" + _userSettings.UserName);
 
             try
             {
@@ -322,8 +312,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetSchools(int siteid)
         {
-            await LogUsername();
-            Log.Information("GetSchools started by:" + _username);
+            
+            Log.Information("GetSchools started by:" + _userSettings.UserName);
 
             try
             {
@@ -359,8 +349,8 @@ namespace EDI.Web.Services
 
         public async Task<IEnumerable<SelectListItem>> GetTeachers(int schoolid)
         {
-            await LogUsername();
-            Log.Information("GetTeachers started by:" + _username);
+            
+            Log.Information("GetTeachers started by:" + _userSettings.UserName);
 
             try
             {
@@ -395,8 +385,8 @@ namespace EDI.Web.Services
 
         public async Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file)
         {
-            await LogUsername();
-            Log.Information("UploadFileData started by:" + _username);
+            
+            Log.Information("UploadFileData started by:" + _userSettings.UserName);
             ErrorViewModel error = new ErrorViewModel();
 
             string errormessage = string.Empty;
@@ -564,10 +554,10 @@ namespace EDI.Web.Services
                                     _file.FileImportStatusId = statusid;
 
                                     _file.ModifiedDate = DateTime.Now;
-                                    _file.ModifiedBy = _username;
+                                    _file.ModifiedBy = _userSettings.UserName;
 
                                     _file.CreatedDate = DateTime.Now;
-                                    _file.CreatedBy = _username;
+                                    _file.CreatedBy = _userSettings.UserName;
 
                                     await _fileRepository.AddAsync(_file);
 
@@ -611,8 +601,8 @@ namespace EDI.Web.Services
 
         public async Task<ErrorViewModel> ProcessFileData()
         {
-            await LogUsername();
-            Log.Information("UploadFileData started by:" + _username);
+            
+            Log.Information("UploadFileData started by:" + _userSettings.UserName);
             ErrorViewModel error = new ErrorViewModel();
 
             string errormessage = string.Empty;
@@ -677,9 +667,9 @@ namespace EDI.Web.Services
 
                                     _year.Ediyear = ediyear;
                                     _year.CreatedDate = DateTime.Now;
-                                    _year.CreatedBy = _username;
+                                    _year.CreatedBy = _userSettings.UserName;
                                     _year.ModifiedDate = DateTime.Now;
-                                    _year.ModifiedBy = _username;
+                                    _year.ModifiedBy = _userSettings.UserName;
 
                                     await _yearRepository.AddAsync(_year);
 
@@ -759,9 +749,9 @@ namespace EDI.Web.Services
                                             _coordinator.Email = data.CoordinatorEmail;
                                             _coordinator.YearId = yearid;
                                             _coordinator.CreatedDate = DateTime.Now;
-                                            _coordinator.CreatedBy = _username;
+                                            _coordinator.CreatedBy = _userSettings.UserName;
                                             _coordinator.ModifiedDate = DateTime.Now;
-                                            _coordinator.ModifiedBy = _username;
+                                            _coordinator.ModifiedBy = _userSettings.UserName;
 
                                             await _coordinatorRepository.AddAsync(_coordinator);
                                             coordinatorid = _coordinator.Id;
@@ -812,9 +802,9 @@ namespace EDI.Web.Services
                                             _site.CoordinatorId = coordinatorid;
                                             _site.YearId = yearid;
                                             _site.CreatedDate = DateTime.Now;
-                                            _site.CreatedBy = _username;
+                                            _site.CreatedBy = _userSettings.UserName;
                                             _site.ModifiedDate = DateTime.Now;
-                                            _site.ModifiedBy = _username;
+                                            _site.ModifiedBy = _userSettings.UserName;
 
                                             await _siteRepository.AddAsync(_site);
                                             siteid = _site.Id;
@@ -875,9 +865,9 @@ namespace EDI.Web.Services
                                                 _school.SiteId = siteid;
                                                 _school.YearId = yearid;
                                                 _school.CreatedDate = DateTime.Now;
-                                                _school.CreatedBy = _username;
+                                                _school.CreatedBy = _userSettings.UserName;
                                                 _school.ModifiedDate = DateTime.Now;
-                                                _school.ModifiedBy = _username;
+                                                _school.ModifiedBy = _userSettings.UserName;
 
                                                 await _schoolRepository.AddAsync(_school);
                                                 schoolid = _school.Id;
@@ -969,9 +959,9 @@ namespace EDI.Web.Services
                                                 _teacher.SchoolId = schoolid;
                                                 _teacher.YearId = yearid;
                                                 _teacher.CreatedDate = DateTime.Now;
-                                                _teacher.CreatedBy = _username;
+                                                _teacher.CreatedBy = _userSettings.UserName;
                                                 _teacher.ModifiedDate = DateTime.Now;
-                                                _teacher.ModifiedBy = _username;
+                                                _teacher.ModifiedBy = _userSettings.UserName;
 
                                                 await _teacherRepository.AddAsync(_teacher);
                                                 teacherid = _teacher.Id;
@@ -981,9 +971,9 @@ namespace EDI.Web.Services
                                                 _teacherFeedbackForms.TeacherId = teacherid;
                                                 _teacherFeedbackForms.YearId = yearid;
                                                 _teacherFeedbackForms.CreatedDate = DateTime.Now;
-                                                _teacherFeedbackForms.CreatedBy = _username;
+                                                _teacherFeedbackForms.CreatedBy = _userSettings.UserName;
                                                 _teacherFeedbackForms.ModifiedDate = DateTime.Now;
-                                                _teacherFeedbackForms.ModifiedBy = _username;
+                                                _teacherFeedbackForms.ModifiedBy = _userSettings.UserName;
 
                                                 await _feedbackRepository.AddAsync(_teacherFeedbackForms);
 
@@ -991,9 +981,9 @@ namespace EDI.Web.Services
                                                 _teacherParticipationForms.TeacherId = teacherid;
                                                 _teacherParticipationForms.YearId = yearid;
                                                 _teacherParticipationForms.CreatedDate = DateTime.Now;
-                                                _teacherParticipationForms.CreatedBy = _username;
+                                                _teacherParticipationForms.CreatedBy = _userSettings.UserName;
                                                 _teacherParticipationForms.ModifiedDate = DateTime.Now;
-                                                _teacherParticipationForms.ModifiedBy = _username;
+                                                _teacherParticipationForms.ModifiedBy = _userSettings.UserName;
 
                                                 await _participationRepository.AddAsync(_teacherParticipationForms);
                                             }
@@ -1046,9 +1036,9 @@ namespace EDI.Web.Services
                                             _child.Dob = data.ChildDob;
                                             _child.PostalCodeZip = data.ChildPostalCodeZip;
                                             _child.CreatedDate = DateTime.Now;
-                                            _child.CreatedBy = _username;
+                                            _child.CreatedBy = _userSettings.UserName;
                                             _child.ModifiedDate = DateTime.Now;
-                                            _child.ModifiedBy = _username;
+                                            _child.ModifiedBy = _userSettings.UserName;
 
                                             await _childRepository.AddAsync(_child);
 
@@ -1078,7 +1068,7 @@ namespace EDI.Web.Services
                         {
                             data.FileImportStatusId = processstatusid;
                             data.ModifiedDate = DateTime.Now;
-                            data.ModifiedBy = _username;
+                            data.ModifiedBy = _userSettings.UserName;
 
                             await _fileRepository.UpdateAsync(data);
                         }

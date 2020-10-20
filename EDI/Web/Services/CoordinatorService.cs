@@ -37,8 +37,7 @@ namespace EDI.Web.Services
         private readonly ServiceContext _dbContext;
         private readonly AppIdentityDbContext _identityContext;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -54,6 +53,7 @@ namespace EDI.Web.Services
             AuthenticationStateProvider authenticationStateProvider,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<CoordinatorService>();
@@ -65,24 +65,14 @@ namespace EDI.Web.Services
             _userManager = userManager;
             _dbContext = dbContext;
             _identityContext = identityContext;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteCoordinatorAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteCoordinatorAsync started by:" + _username);
+            
+            Log.Information("DeleteCoordinatorAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -100,8 +90,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateCoordinatorAsync(CoordinatorItemViewModel coordinator)
         {
-            await LogUsername();
-            Log.Information("UpdateCoordinatorAsync started by:" + _username);
+            
+            Log.Information("UpdateCoordinatorAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -116,7 +106,7 @@ namespace EDI.Web.Services
                 _coordinator.Email = coordinator.Email;
                 _coordinator.PhoneNumber = coordinator.PhoneNumber;
                 _coordinator.ModifiedDate = DateTime.Now;
-                _coordinator.ModifiedBy = _username;
+                _coordinator.ModifiedBy = _userSettings.UserName;
 
                 await _coordinatorRepository.UpdateAsync(_coordinator);
             }
@@ -128,8 +118,8 @@ namespace EDI.Web.Services
 
         public async Task<int> CreateCoordinatorAsync(CoordinatorItemViewModel coordinator)
         {
-            await LogUsername();
-            Log.Information("CreateCoordinatorAsync started by:" + _username);
+            
+            Log.Information("CreateCoordinatorAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -178,9 +168,9 @@ namespace EDI.Web.Services
                 _coordinator.Email = coordinator.Email;
                 _coordinator.PhoneNumber = coordinator.PhoneNumber;
                 _coordinator.CreatedDate = DateTime.Now;
-                _coordinator.CreatedBy = _username;
+                _coordinator.CreatedBy = _userSettings.UserName;
                 _coordinator.ModifiedDate = DateTime.Now;
-                _coordinator.ModifiedBy = _username;
+                _coordinator.ModifiedBy = _userSettings.UserName;
 
                 await _coordinatorRepository.AddAsync(_coordinator);
                 return _coordinator.Id;
@@ -194,8 +184,8 @@ namespace EDI.Web.Services
 
         public async Task<CoordinatorItemViewModel> GetCoordinatorItem(int coordinatorId)
         {
-            await LogUsername();
-            Log.Information("GetCoordinatorItem started by:" + _username);
+            
+            Log.Information("GetCoordinatorItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -232,8 +222,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string name, string email)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -252,8 +242,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(string name, string email, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

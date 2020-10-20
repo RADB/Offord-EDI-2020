@@ -33,8 +33,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -48,6 +47,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<CountryService>();
@@ -56,24 +56,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteCountryAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteCountryAsync started by:" + _username);
+            
+            Log.Information("DeleteCountryAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -91,8 +81,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateCountryAsync(CountryItemViewModel country)
         {
-            await LogUsername();
-            Log.Information("UpdateCountryAsync started by:" + _username);
+            
+            Log.Information("UpdateCountryAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -106,7 +96,7 @@ namespace EDI.Web.Services
                 _country.ISO2CountryCode = country.ISO2CountryCode;
                 _country.ISO3CountryCode = country.ISO3CountryCode;
                 _country.ModifiedDate = DateTime.Now;
-                _country.ModifiedBy = _username;
+                _country.ModifiedBy = _userSettings.UserName;
 
                 await _countryRepository.UpdateAsync(_country);
             }
@@ -118,8 +108,8 @@ namespace EDI.Web.Services
 
         public async Task CreateCountryAsync(CountryItemViewModel country)
         {
-            await LogUsername();
-            Log.Information("CreateCountryAsync started by:" + _username);
+            
+            Log.Information("CreateCountryAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -131,9 +121,9 @@ namespace EDI.Web.Services
                 _country.ISO2CountryCode = country.ISO2CountryCode;
                 _country.ISO3CountryCode = country.ISO3CountryCode;
                 _country.CreatedDate = DateTime.Now;
-                _country.CreatedBy = _username;
+                _country.CreatedBy = _userSettings.UserName;
                 _country.ModifiedDate = DateTime.Now;
-                _country.ModifiedBy = _username;
+                _country.ModifiedBy = _userSettings.UserName;
 
                 await _countryRepository.AddAsync(_country);
             }
@@ -145,8 +135,8 @@ namespace EDI.Web.Services
 
         public async Task<CountryItemViewModel> GetCountryItem(int countryId)
         {
-            await LogUsername();
-            Log.Information("GetCountryItem started by:" + _username);
+            
+            Log.Information("GetCountryItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -182,8 +172,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(int Code, string name)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -202,8 +192,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(int Code, string name, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

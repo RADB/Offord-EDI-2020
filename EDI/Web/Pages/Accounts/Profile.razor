@@ -9,6 +9,7 @@
 @inject IModalService Modal
 @using Syncfusion.Blazor.Navigations;
 @inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -33,7 +34,7 @@
             <div class="card-header">
                 <strong>My Profile</strong>
                 <div class="pull-right">
-                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>      
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
                 </div>
             </div>
             <br />
@@ -53,14 +54,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }

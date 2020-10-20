@@ -29,8 +29,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -44,6 +43,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<SchoolService>();
@@ -52,24 +52,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteSchoolAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteSchoolAsync started by:" + _username);
+            
+            Log.Information("DeleteSchoolAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -87,8 +77,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateSchoolAsync(SchoolItemViewModel school)
         {
-            await LogUsername();
-            Log.Information("UpdateSchoolAsync started by:" + _username);
+            
+            Log.Information("UpdateSchoolAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -106,7 +96,7 @@ namespace EDI.Web.Services
                 _school.City = school.City;
                // _school.Elpschool = school.Elpschool;
                 _school.ModifiedDate = DateTime.Now;
-                _school.ModifiedBy = _username;
+                _school.ModifiedBy = _userSettings.UserName;
 
                 await _schoolRepository.UpdateAsync(_school);
             }
@@ -118,8 +108,8 @@ namespace EDI.Web.Services
 
         public async Task<int> CreateSchoolAsync(SchoolItemViewModel school)
         {
-            await LogUsername();
-            Log.Information("CreateSchoolAsync started by:" + _username);
+            
+            Log.Information("CreateSchoolAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -135,9 +125,9 @@ namespace EDI.Web.Services
                 _school.City = school.City;
                // _school.Elpschool = school.Elpschool;
                 _school.CreatedDate = DateTime.Now;
-                _school.CreatedBy = _username;
+                _school.CreatedBy = _userSettings.UserName;
                 _school.ModifiedDate = DateTime.Now;
-                _school.ModifiedBy = _username;
+                _school.ModifiedBy = _userSettings.UserName;
 
                 await _schoolRepository.AddAsync(_school);
                 return _school.Id;
@@ -151,8 +141,8 @@ namespace EDI.Web.Services
 
         public async Task<SchoolItemViewModel> GetSchoolItem(int schoolId)
         {
-            await LogUsername();
-            Log.Information("GetSchoolItem started by:" + _username);
+            
+            Log.Information("GetSchoolItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -191,8 +181,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(int siteid, string schoolnumber)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -211,8 +201,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(int siteid, string schoolnumber, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

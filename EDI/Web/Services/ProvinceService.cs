@@ -33,8 +33,7 @@ namespace EDI.Web.Services
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
-
-        private string _username { get; set; }
+        private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -48,6 +47,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<ProvinceService>();
@@ -56,24 +56,14 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _userSettings = UserSettings;
             EDIppSettings = settings.Value;
-        }
-
-        private async Task LogUsername()
-        {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
-                _username = user.Identity.Name;
-            else
-                _username = string.Empty;
         }
 
         public async Task DeleteProvinceAsync(int Id)
         {
-            await LogUsername();
-            Log.Information("DeleteProvinceAsync started by:" + _username);
+            
+            Log.Information("DeleteProvinceAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -91,8 +81,8 @@ namespace EDI.Web.Services
 
         public async Task UpdateProvinceAsync(ProvinceItemViewModel province)
         {
-            await LogUsername();
-            Log.Information("UpdateProvinceAsync started by:" + _username);
+            
+            Log.Information("UpdateProvinceAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -106,7 +96,7 @@ namespace EDI.Web.Services
                 _province.French = province.French;
                 _province.CountryID = province.CountryID;
                 _province.ModifiedDate = DateTime.Now;
-                _province.ModifiedBy = _username;
+                _province.ModifiedBy = _userSettings.UserName;
 
                 await _provinceRepository.UpdateAsync(_province);
             }
@@ -118,8 +108,8 @@ namespace EDI.Web.Services
 
         public async Task CreateProvinceAsync(ProvinceItemViewModel province)
         {
-            await LogUsername();
-            Log.Information("CreateProvinceAsync started by:" + _username);
+            
+            Log.Information("CreateProvinceAsync started by:" + _userSettings.UserName);
 
             try
             {
@@ -131,9 +121,9 @@ namespace EDI.Web.Services
                 _province.French = province.French;
                 _province.CountryID = province.CountryID;
                 _province.CreatedDate = DateTime.Now;
-                _province.CreatedBy = _username;
+                _province.CreatedBy = _userSettings.UserName;
                 _province.ModifiedDate = DateTime.Now;
-                _province.ModifiedBy = _username;
+                _province.ModifiedBy = _userSettings.UserName;
 
                 await _provinceRepository.AddAsync(_province);
             }
@@ -145,8 +135,8 @@ namespace EDI.Web.Services
 
         public async Task<ProvinceItemViewModel> GetProvinceItem(int provinceId)
         {
-            await LogUsername();
-            Log.Information("GetProvinceItem started by:" + _username);
+            
+            Log.Information("GetProvinceItem started by:" + _userSettings.UserName);
 
             try
             {
@@ -182,8 +172,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(int countryid, string name)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {
@@ -202,8 +192,8 @@ namespace EDI.Web.Services
 
         public async Task<int> GetDuplicateCount(int countryid, string name, int id)
         {
-            await LogUsername();
-            Log.Information("GetDuplicateCount started by:" + _username);
+            
+            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
 
             try
             {

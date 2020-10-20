@@ -10,6 +10,7 @@
 @inject IJSRuntime JsRuntime;
 @inject IModalService Modal;
 @inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -70,14 +71,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (user.IsInRole("Coordinator"))
+        else if (UserSettings.IsCoordinator)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }

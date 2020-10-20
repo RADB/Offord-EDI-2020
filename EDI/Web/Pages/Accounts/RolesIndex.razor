@@ -14,6 +14,7 @@
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Buttons
 @inject IModalService Modal
+@inject UserSettings UserSettings;
 
 <div class="row">
     <div class="col-md-7">
@@ -42,7 +43,7 @@
                         </GridSortSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(RoleItemViewModel.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="40"></GridColumn>
-                            <GridColumn Field=@nameof(RoleItemViewModel.Users) HeaderText="Users" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25"></GridColumn>                            
+                            <GridColumn Field=@nameof(RoleItemViewModel.Users) HeaderText="Users" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -65,20 +66,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
+        if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!user.IsInRole("Administrator"))
+        else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {
-            username = user.Identity.Name;
+            username = UserSettings.UserName;
 
             var allroles = await Task.FromResult(identityContext.Roles.ToList());
 
