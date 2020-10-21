@@ -2,6 +2,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
+@using Syncfusion.Blazor.Buttons
 
 <header class="app-header navbar">
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none mr-auto" type="button" @onclick="OnToggleClick">
@@ -16,7 +17,14 @@
         <h4 style="font-family: Arial;font-weight: bold;background-color: #fff;color: #294980;font-size: 15px;">A Population-Based Measure for Communities</h4>
 
     </div>
-
+    @if (UserSettings.IsTeacher)
+    {
+    <div class="float-right">
+    
+        <!--Check English or French -->    
+        <SfSwitch CssClass="handle-text" @bind-Checked="@isEnglish"></SfSwitch>
+    </div>
+    }
     <ul class="nav navbar-nav ml-auto">
         <UserNav />
     </ul>
@@ -25,6 +33,8 @@
 @code {
     [Parameter]
     public EventCallback OnToggleClick { get; set; }
+
+    public Boolean isEnglish { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {

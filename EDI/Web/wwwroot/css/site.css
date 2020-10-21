@@ -1193,3 +1193,16 @@ a {
 .numberbox{
     max-width: 250px;
 }
+
+/* syncfusion toggle switch */
+.e-switch-wrapper.handle-text .e-switch-inner:before {
+    content: "French";
+    color: #ffc107; /* warning */   
+    left: 3px;
+}
+
+.e-switch-wrapper.handle-text .e-switch-inner:after {
+    content: "English";
+    right: 5px;
+    color: #17a2b8; /* info */
+}
