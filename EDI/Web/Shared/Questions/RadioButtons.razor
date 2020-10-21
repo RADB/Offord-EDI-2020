@@ -10,11 +10,11 @@
                         <h4>@QuestionText</h4>
                         @foreach (var item in new string[] { "Andrew", "Bryan", "Ashlynn" })
                         {
-                            <SfRadioButton name="Dev" Checked=@(DataValue.Equals(item, StringComparison.OrdinalIgnoreCase)) @onchange="RadioSelection" Label=@item Value=@item></SfRadioButton>
+                            <SfRadioButton name="Dev" Checked=@(StringValue.Equals(item, StringComparison.OrdinalIgnoreCase)) @onchange="RadioSelection" Label=@item Value=@item></SfRadioButton>
                         }
                     </div>                    
                     <div>
-                        <label>Selected Value is @DataValue</label>
+                        <label>Selected Value is @StringValue</label>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
 
     private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
-        DataValue = args.Value.ToString();
+        StringValue = args.Value.ToString();
     }
 }
 

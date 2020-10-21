@@ -24,11 +24,17 @@
 
                 <div class="card-body">
                     <div class="container-fluid">
-                        <TextArea QuestionText="Test Question" DataValue="This is the textarea answer. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." DataColumn="Test"></TextArea>
+                        <TextArea QuestionText="Test Question" StringValue="This is the textarea answer. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." DataColumn="Test"></TextArea>
 
-                        <Text QuestionText="Please complete the text question." DataValue="This is the text answer." DataColumn="Test"></Text>
+                        <Text QuestionText="Please complete the text question." StringValue="This is the text answer." DataColumn="Test"></Text>
 
                         <RadioButtons QuestionText="Please complete the options question?"></RadioButtons>
+
+                        <DatePicker QuestionText="What is the child's Date of Birth?" StringValue="2011-01-08"></DatePicker>
+
+                        <NumberBox QuestionText="How many years have you been teaching?" IntValue=11 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBox>
+
+                        <NumberBox QuestionText="How many days of school did the child miss?" DblValue=3.5 DataTypeString="Double" NumberFormat="n1" NumberStep=0.5></NumberBox>
                     </div>
                 </div>
             }

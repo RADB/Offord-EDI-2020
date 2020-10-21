@@ -1,0 +1,36 @@
+﻿@inherits QuestionBase
+@using Syncfusion.Blazor.Inputs
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="col-12">
+                    <h4>@QuestionText</h4>
+                    <div id="NumberBox" class="numberbox">
+                        @if (DataTypeString == "Int32")
+                        {
+                            <SfNumericTextBox TValue="Int32?" Value=@IntValue Format="@NumberFormat" Step=@Convert.ToInt32(NumberStep)></SfNumericTextBox>
+                        }
+                        else if (DataTypeString == "Double")
+                        {
+                            <SfNumericTextBox TValue="Double?" Value=@DblValue Format="@NumberFormat" Step=@NumberStep></SfNumericTextBox>
+                        }
+                    </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] // Number format n#- number #decimals, c currency, p percent  
+    public String NumberFormat { get; set; } = "n0";
+
+    [Parameter] // Number Box Counter
+    public Double NumberStep { get; set; } = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }}

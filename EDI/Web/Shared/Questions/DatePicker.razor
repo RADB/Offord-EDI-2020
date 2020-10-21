@@ -1,0 +1,27 @@
+﻿@inherits QuestionBase
+@using Syncfusion.Blazor.Calendars
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="col-12">
+                    <h4>@QuestionText</h4>
+                        <div id="datepicker-control" class="datepicker">
+                            <SfDatePicker Value="@DateValue" TValue="DateTime?" Placeholder="@QuestionText" Format="yyyy-MM-dd"></SfDatePicker>
+                        </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public DateTime DateValue { get; set; } = DateTime.Now;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DateValue = Convert.ToDateTime(StringValue);
+    }
+}

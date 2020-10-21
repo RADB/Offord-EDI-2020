@@ -10,6 +10,20 @@
     [Parameter] // column to store responses
     public string DataColumn { get; set; } = "";
 
-    [Parameter] // current value
-    public string DataValue { get; set; } = "";
+    [Parameter] // string value
+    public string StringValue { get; set; } = "";
+
+    [Parameter] // integer value
+    public Int32 IntValue { get; set; } = 0;
+
+    [Parameter] // double value
+    public double DblValue { get; set; } = 0.00;
+
+    [Parameter] // Data Type String
+    public String DataTypeString { get; set; } = "Int32";
+   
+
+    //[Parameter] // Data Type
+    //public System.Type DataType { get; set; } = typeof(String);
+
 }

@@ -2136,10 +2136,12 @@ namespace EDI.Infrastructure.Data
                 new SystemConfigurations() { FieldName = "Material Icons", FieldValue = @"https://material.io/resources/icons/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
                 new SystemConfigurations() { FieldName = "Unicons Icons", FieldValue = @"https://iconscout.com/unicons", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
                 new SystemConfigurations() { FieldName = "Fabric Icons", FieldValue = @"https://uifabricicons.azurewebsites.net/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
-                new SystemConfigurations() { FieldName = "Feather Icons", FieldValue = @"https://feathericons.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }            
-                
-                
-                
+                new SystemConfigurations() { FieldName = "Feather Icons", FieldValue = @"https://feathericons.com/", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "Year", FieldValue = @"2020", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now },
+                new SystemConfigurations() { FieldName = "DateFormat", FieldValue = @"yyyy-MM-dd", CreatedBy ="rennera", CreatedDate= DateTime.Now, ModifiedBy = "rennera", ModifiedDate = DateTime.Now }
+
+
+
 
             }.OrderBy(t => t.FieldName);
         }

@@ -24,5 +24,7 @@ namespace EDI.Web.Models
         public bool IsTeacher { get; set; }
 
         public bool IsCoordinator { get; set; }
+
+        public string Language { get; set; }
     }
 }

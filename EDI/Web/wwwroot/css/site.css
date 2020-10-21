@@ -1184,3 +1184,12 @@ a {
     background-color: #00b8ff;
     border-color: #007bff;
 }
+
+/* Styles for syncfusion form controls - AR*/
+.datepicker {
+    max-width:250px;    
+}
+
+.numberbox{
+    max-width: 250px;
+}
