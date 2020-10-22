@@ -630,5 +630,24 @@ namespace EDI.Web.Services
                 Log.Error("CreateRoleAsync failed:" + ex.Message);
             }
         }
+
+        public async Task UpdateUserLanguageAsync(UserSettings user)
+        {
+
+            Log.Information("UpdateUserLanguageAsync started by:" + _userSettings.UserName);
+
+            try
+            {
+                var _account = await _accountRepository.GetByIdAsync(user.UserID);
+
+                _account.Language = user.Language;
+
+                await _userManager.UpdateAsync(_account);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("UpdateUserLanguageAsync failed:" + ex.Message);
+            }
+        }
     }
 }

@@ -1,10 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Buttons
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
+@inject IAccountService accountService;
 
 @if (!string.IsNullOrEmpty(username))
 {
+    <li class="nav-item d-md-down-none" style="padding-right:20px; font-size: 20px;">
+        @if (UserSettings.IsTeacher)
+        {
+            <div class="float-right">
+
+                <!--Check English or French -->
+                <SfSwitch CssClass="handle-text" @bind-Checked="@isFrench" ValueChange="OnEnglishChange"></SfSwitch>
+            </div>
+        }
+    </li>
     <li class="nav-item d-md-down-none" style="padding-right:20px; font-size: 20px;">
         <div class="cf-identity-name">@username</div>
     </li>
@@ -19,6 +31,7 @@
 @code {
     private string username { get; set; }
 
+    private Boolean isFrench { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,6 +42,30 @@
         else
         {
             username = UserSettings.UserName;
+
+            if (UserSettings.Language == "English")
+                isFrench = false;
+            else
+                isFrench = true;
         }
+    }
+
+    private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            UserSettings.Language = "French";
+        else
+            UserSettings.Language = "English";
+
+        await accountService.UpdateUserLanguageAsync(UserSettings);
+
+        var url = NavigationManager.Uri;
+        int length = url.LastIndexOf("/");
+        string suburl = url.Substring(0, length);
+        Random random = new Random();
+        NavigationManager.NavigateTo(suburl + "/" + random.Next(1, 1000), true);
+
+
+        StateHasChanged();
     }
 }

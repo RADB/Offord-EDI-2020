@@ -14,5 +14,7 @@ namespace EDI.Infrastructure.Identity
         public int? CountryID { get; set; }
 
         public int? ProvinceID { get; set; }
+
+        public string Language { get; set; }
     }
 }

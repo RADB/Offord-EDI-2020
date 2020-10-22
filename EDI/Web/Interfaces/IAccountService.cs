@@ -32,5 +32,6 @@ namespace EDI.Web.Interfaces
         int GetDuplicateRoleCount(string name, string roleid);
         Task UpdateRoleAsync(RoleItemViewModel role);
         Task<RoleItemViewModel> GetRoleItem(string roleid);
+        Task UpdateUserLanguageAsync(UserSettings user);
     }
 }

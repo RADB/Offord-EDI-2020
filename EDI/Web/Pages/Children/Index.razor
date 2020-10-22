@@ -1,4 +1,4 @@
-﻿@page "/Children/index"
+﻿@page "/Children/index/{ChangeNumber:int}"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -84,6 +84,10 @@
     public bool AllowEdit { get; set; } = true;
 
 
+    [Parameter]
+    public int? ChangeNumber { get; set; } = 0;
+
+
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -100,6 +104,11 @@
         else if (UserSettings.IsCoordinator)
         {
             NavigationManager.NavigateTo("./dashboard/index");
+        }
+
+        if (UserSettings.Language == "French")
+        {
+            Header = "Gestion de classe";
         }
 
         if (UserSettings.IsTeacher)
@@ -151,6 +160,18 @@
         children = sivm;
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (UserSettings.Language == "French")
+        {
+            Header = "Gestion de classe";
+        }
+        else
+        {
+            Header = "Class Management";
+        }
+        StateHasChanged();
+    }
 
     private int rowid { get; set; }
 

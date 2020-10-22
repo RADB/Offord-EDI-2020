@@ -1197,12 +1197,21 @@ a {
 /* syncfusion toggle switch */
 .e-switch-wrapper.handle-text .e-switch-inner:before {
     content: "French";
-    color: #ffc107; /* warning */   
+    color: #ffc107; /* warning */
     left: 3px;
+    width: 42px;
+    height: 24px;
 }
 
 .e-switch-wrapper.handle-text .e-switch-inner:after {
     content: "English";
     right: 5px;
     color: #17a2b8; /* info */
+    width: 42px;
+    height: 24px;
+}
+
+.e-switch-wrapper, .e-css.e-switch-wrapper {
+    height: 36px;
+    width: 108px;
 }

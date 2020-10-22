@@ -1,12 +1,13 @@
 ﻿@using Syncfusion.Blazor.Navigations
 @inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
 
 <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
     <ChildContent>
         <div class="main-menu">
             <div>
                 <!-- removed  IconCss="iconCss" HasChildren="hasChild" ParentID="pid" from Treeview field settings
-    removed NodeClicked="onClick" from TreeviewEvents-->
+                removed NodeClicked="onClick" from TreeviewEvents-->
                 <SfTreeView CssClass="main-teachertreeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
                     <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata">
                     </TreeViewFieldsSettings>
@@ -16,11 +17,11 @@
                             @{
                                 var item = (context as TreeData);
                                 if (item.icon.ToString() == "question_answer icon")
-                                    // use material icon for FAQ
+                                // use material icon for FAQ
                                 { <i class="material-icons-outlined icon">question_answer</i>}
 
                                 else
-                                    // use base icons for other 
+                                // use base icons for other
                                 {<i class="@item.icon"></i>}
 
                                 <span class="nodeText">@item.nodeText</span>
@@ -38,7 +39,7 @@
     public SfSidebar Sidebar;
     public ExpandOnSettings Expand = ExpandOnSettings.Click;
     Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
         {"class", "sidebar-treeview" }
     };
 
@@ -55,12 +56,24 @@
     {
         base.OnInitialized();
         // default uses simple-line-icons, can use material or fontawesome or fabric
-        treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph icon" });
-        treedata.Add(new TreeData { nodeId = "02", nodeText = "Class List", icon = "icon-people icon" });
-        treedata.Add(new TreeData { nodeId = "03", nodeText = "Resources", icon = "icon-folder-alt icon" });
-        treedata.Add(new TreeData { nodeId = "04", nodeText = "Links", icon = "icon-link icon"});
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer icon" });
-        treedata.Add(new TreeData { nodeId = "06", nodeText = "Questions", icon = "icon-list icon" });
+        if (UserSettings.Language == "French")
+        {
+            treedata.Add(new TreeData { nodeId = "01", nodeText = "Tableau de bord", icon = "icon-graph icon" });
+            treedata.Add(new TreeData { nodeId = "02", nodeText = "Liste des classes", icon = "icon-people icon" });
+            treedata.Add(new TreeData { nodeId = "03", nodeText = "Ressources", icon = "icon-folder-alt icon" });
+            treedata.Add(new TreeData { nodeId = "04", nodeText = "Liens", icon = "icon-link icon" });
+            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer icon" });
+            treedata.Add(new TreeData { nodeId = "06", nodeText = "Des questions", icon = "icon-list icon" });
+        }
+        else
+        {
+            treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph icon" });
+            treedata.Add(new TreeData { nodeId = "02", nodeText = "Class List", icon = "icon-people icon" });
+            treedata.Add(new TreeData { nodeId = "03", nodeText = "Resources", icon = "icon-folder-alt icon" });
+            treedata.Add(new TreeData { nodeId = "04", nodeText = "Links", icon = "icon-link icon" });
+            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer icon" });
+            treedata.Add(new TreeData { nodeId = "06", nodeText = "Questions", icon = "icon-list icon" });
+        }
     }
 
     private void onSelect(NodeSelectEventArgs args)
@@ -71,7 +84,7 @@
         }
         else if (args.NodeData.Id == "02")
         {
-            NavigationManager.NavigateTo("./children/index");
+            NavigationManager.NavigateTo("./children/index/0");
         }
         else if (args.NodeData.Id == "03")
         {
