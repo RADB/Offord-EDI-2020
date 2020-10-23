@@ -13,7 +13,7 @@
             <div class="float-right">
 
                 <!--Check English or French -->
-                <SfSwitch CssClass="handle-text" @bind-Checked="@isFrench" ValueChange="OnEnglishChange"></SfSwitch>
+                <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="OnEnglishChange"></SfSwitch>
             </div>
         }
     </li>
@@ -60,11 +60,7 @@
         await accountService.UpdateUserLanguageAsync(UserSettings);
 
         var url = NavigationManager.Uri;
-        int length = url.LastIndexOf("/");
-        string suburl = url.Substring(0, length);
-        Random random = new Random();
-        NavigationManager.NavigateTo(suburl + "/" + random.Next(1, 1000), true);
-
+        NavigationManager.NavigateTo(url, true);
 
         StateHasChanged();
     }

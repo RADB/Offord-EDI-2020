@@ -1,4 +1,4 @@
-﻿@page "/Children/index/{ChangeNumber:int}"
+﻿@page "/Children/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -83,11 +83,6 @@
     [Parameter]
     public bool AllowEdit { get; set; } = true;
 
-
-    [Parameter]
-    public int? ChangeNumber { get; set; } = 0;
-
-
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -158,19 +153,6 @@
 
         this.rowid = 0;
         children = sivm;
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (UserSettings.Language == "French")
-        {
-            Header = "Gestion de classe";
-        }
-        else
-        {
-            Header = "Class Management";
-        }
-        StateHasChanged();
     }
 
     private int rowid { get; set; }
