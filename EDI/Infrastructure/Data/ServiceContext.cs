@@ -32,6 +32,8 @@ namespace EDI.Infrastructure.Data
         /*EDI Data*/
         public virtual DbSet<Child> Children { get; set; }
         public virtual DbSet<Coordinator> Coordinators { get; set; }
+        public virtual DbSet<Faq> Faqs { get; set; }
+        public virtual DbSet<Link> Links { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
@@ -171,6 +173,28 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Country).HasForeignKey(e => e.CountryId);
             });
+
+            modelBuilder.Entity<Faq>(entity =>
+            {
+                entity.ToTable("FAQ", "EDI");
+
+                entity.Property(e => e.Answer).HasMaxLength(4000);
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.IsAdministratorFaq).HasColumnName("IsAdministratorFAQ");
+
+                entity.Property(e => e.IsCoordinatorFaq).HasColumnName("IsCoordinatorFAQ");
+
+                entity.Property(e => e.IsTeacherFaq).HasColumnName("IsTeacherFAQ");
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.Question).HasMaxLength(4000);
+
+                entity.Property(e => e.YearId).HasColumnName("YearID");
+            });
+
             modelBuilder.Entity<FileImport>(entity =>
             {
                 entity.ToTable("FileImports", "Staging");
@@ -253,6 +277,23 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.French).HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Link>(entity =>
+            {
+                entity.ToTable("Links", "EDI");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.Description).HasMaxLength(400);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.Name).HasMaxLength(255);
+
+                entity.Property(e => e.Url).HasColumnName("URL").HasMaxLength(255);
+
+                entity.Property(e => e.YearId).HasColumnName("YearID");
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -491,7 +532,8 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.Children).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Children");
                 entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherFeedbackForms");
                 entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
-
+                entity.HasMany(e => e.Links).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Links");
+                entity.HasMany(e => e.Faqs).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
 
