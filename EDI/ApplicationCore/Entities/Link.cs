@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Link
-    {
-        public int Id { get; set; }
+    public partial class Link:BaseEntity
+    {        
         public int YearId { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
@@ -15,10 +14,6 @@ namespace EDI.ApplicationCore.Entities
         public bool? IsAdminLink { get; set; }
         public bool? IsCoordinatorLink { get; set; }
         public short Sequence { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
 
         public virtual Year Year { get; set; }
     }

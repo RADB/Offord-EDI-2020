@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Faq
+    public partial class Faq:BaseEntity
     {
-        public int Id { get; set; }
         public int YearId { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
@@ -14,10 +13,6 @@ namespace EDI.ApplicationCore.Entities
         public bool? IsAdministratorFaq { get; set; }
         public bool? IsCoordinatorFaq { get; set; }
         public short Sequence { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
 
         public virtual Year Year { get; set; }
     }
