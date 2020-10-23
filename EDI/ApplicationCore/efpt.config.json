@@ -22,6 +22,14 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[EDI].[FAQ]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Links]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI].[Schools]"
       },
       {
