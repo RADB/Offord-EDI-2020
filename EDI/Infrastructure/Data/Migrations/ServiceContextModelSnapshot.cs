@@ -312,6 +312,65 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("DateDimension");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Faq", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("IsAdministratorFaq")
+                        .HasColumnName("IsAdministratorFAQ")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsCoordinatorFaq")
+                        .HasColumnName("IsCoordinatorFAQ")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsTeacherFaq")
+                        .HasColumnName("IsTeacherFAQ")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Question")
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
+
+                    b.Property<short>("Sequence")
+                        .HasColumnType("smallint");
+
+                    b.Property<int>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("FAQ","EDI");
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.FileImport", b =>
                 {
                     b.Property<int>("Id")
@@ -585,6 +644,67 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Languages","LUData");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Link", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(400)")
+                        .HasMaxLength(400);
+
+                    b.Property<bool?>("IsAdminLink")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsCoordinatorLink")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsTeacherLink")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<short>("Sequence")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Url")
+                        .HasColumnName("URL")
+                        .HasColumnType("nvarchar(255)")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Links","EDI");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.MenuConfigurations", b =>
@@ -1363,6 +1483,16 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasConstraintName("FK_Years_Coordinators");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Faq", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("Faqs")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_FAQ")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.FileImport", b =>
                 {
                     b.HasOne("EDI.ApplicationCore.Entities.FileImportStatus", "FileImportStatus")
@@ -1374,6 +1504,16 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("FileImports")
                         .HasForeignKey("GenderId")
                         .HasConstraintName("FK_FileImports_Gender");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.Link", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("Links")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Links")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>

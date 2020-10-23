@@ -2361,7 +2361,7 @@ namespace EDI.Infrastructure.Data
         {
             return new List<MenuConfigurations>()
             {
-                new MenuConfigurations() { NodeId = "01", English = "Dashboard", French = "Tableau de bord", URL= "", IconCss = "", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, DisplayOrder = 1, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new MenuConfigurations() { NodeId = "01", English = "Dashboard", French = "Tableau de bord", URL= "./sites/index", IconCss = "icon-graph icon", ForAdmin = true, ForCoordinator= false, ForTeacher= true, IsVisible= true, HasChild=false, PID= null, DisplayOrder = 1, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
                 new MenuConfigurations() { NodeId = "02", English = "Female", French = "Femelle",  IconCss = "", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, DisplayOrder = 2, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
 
             };
