@@ -23,6 +23,38 @@ namespace EDI.Infrastructure.Data
                     await ServiceContext.SaveChangesAsync();
                 }
 
+                if (!ServiceContext.SpecialProblems.Any())
+                {
+                    ServiceContext.SpecialProblems.AddRange(
+                        GetPreconfiguredSpecialProblem());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
+                if (!ServiceContext.Languages.Any())
+                {
+                    ServiceContext.Languages.AddRange(
+                        GetPreconfiguredLanguage());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
+                if (!ServiceContext.Genders.Any())
+                {
+                    ServiceContext.Genders.AddRange(
+                        GetPreconfiguredGender());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
+                if (!ServiceContext.FileImportStatuses.Any())
+                {
+                    ServiceContext.FileImportStatuses.AddRange(
+                        GetPreconfiguredFileImportStatus());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
                 if (!ServiceContext.Countries.Any())
                 {
                     ServiceContext.Countries.AddRange(
@@ -662,14 +694,14 @@ namespace EDI.Infrastructure.Data
                 return new List<Province>()
                 {
                     new Province() { English = "Alberta", French = "", Code = "AB", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
-                    new Province() { English = "British Columbia", French = "", Code = "BC", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
+                    new Province() { English = "British Columbia", French = "", EDICode= 99, Code = "BC", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
                     new Province() { English = "Manitoba", French = "", Code = "MB", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
                     new Province() { English = "New Brunswick", French = "", Code = "NB", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
                     new Province() { English = "Newfoundland and Labrador", French = "", Code = "NL", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
                     new Province() { English = "Northwest Territories", French = "", Code = "NT", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
                     new Province() { English = "Nova Scotia", French = "", Code = "NS", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
                     new Province() { English = "Nunavut", French = "", Code = "NU", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
-                    new Province() { English = "Ontario", French = "", Code = "ON", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                    new Province() { English = "Ontario", French = "", EDICode = 1, Code = "ON", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
                     new Province() { English = "Prince Edward Island", French = "", Code = "PE", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
                     new Province() { English = "Quebec", French = "", Code = "QC", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
                     new Province() { English = "Saskatchewan", French = "", Code = "SK", CountryID = countryid, ProvinceTypeId = provincetypeid, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now },
@@ -2144,6 +2176,195 @@ namespace EDI.Infrastructure.Data
 
 
             }.OrderBy(t => t.FieldName);
+        }
+
+        static IEnumerable<SpecialProblem> GetPreconfiguredSpecialProblem()
+        {
+            return new List<SpecialProblem>()
+            {
+                new SpecialProblem() { Code = "1", English = "Acquired Brain Injury", French= "Lésion cérébrale acquise", Sequence = 1, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "2", English = "ADHD", French= "Trouble déficitaire de l'attention ", Sequence = 2, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "5", English = "Autism Spectrum Disorder (ASD includes Autism, Asperger Syndrome, Pervasive Developmental Disorder not specified)", French= "Trouble du spectre de l'autisme (TSA) – comprend l'autisme, le syndrome d'Asperger, le trouble envahissant du développement non spécifié (TEDNS)", Sequence = 5, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "6", English = "Asthma", French= "Asthme", Sequence = 6, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "9", English = "Down Syndrome/other genetic", French= "Syndrome de Down/autre trouble génétique", Sequence = 22, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "10", English = "Developmentally Delayed/Global delay", French= "Retard du développement/retard global de développement", Sequence = 24, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "11", English = "Diabetes", French= "Diabète", Sequence = 21, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "12", English = "Epilepsy/Seizures", French= "Épilepsie", Sequence = 30, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "13", English = "Fetal Alcohol Spectrum Disorder (FASD) or Alcohol-Related Neurodevelopmental Disorder (ARND)", French= "Ensemble des troubles causés par l'alcoolisation fœtale (ETCAF) ou trouble neurologique du développement lié à l'alcool (TNDLA)", Sequence = 31, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "14", English = "Heart problems/stroke", French= "Troubles cardiaques/accident cérébrovasculaire ", Sequence = 32, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "15", English = "Intellectual delay (mild or moderate)", French= "Retard mental (léger ou moyen)", Sequence = 33, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "18", English = "Anxiety", French= "Anxiété", Sequence = 3, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "19", English = "Depression", French= "Dépression", Sequence = 20, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "20", English = "Oppositional defiant disorder/Conduct Disorder", French= "Trouble oppositionnel avec provocation/trouble des conduites ", Sequence = 42, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "22", English = "Cerebral palsy", French= "Paralysie cérébrale", Sequence = 11, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "23", English = "Juvenile Rheumatoid  Arthritis", French= "Arthrite chronique juvénile", Sequence = 34, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "24", English = "Muscular dystrophies", French= "Dystrophie musculaire", Sequence = 40, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "25", English = "Spina Bifida", French= "Spina-bifida", Sequence = 48, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "26", English = "Obesity", French= "Obésité", Sequence = 41, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "28", English = "Apraxia", French= "Apraxie", Sequence = 4, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "29", English = "Cleft palette/lip", French= "Fente palatine ou labiale", Sequence = 12, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "30", English = "Receptive or Expressive language", French= "Langage dans son versant réceptif/expression orale du langage ", Sequence = 45, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "31", English = "Selective Mutism", French= "Mutisme sélectif", Sequence = 47, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "33", English = "Other, not listed", French= "Autre, ne figurant pas sur la liste ", Sequence = 94, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "34", English = "Other Mental Health Disorders", French= "Autres troubles de santé mentale ", Sequence = 90, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "35", English = "Rett’s Disorder, Childhood Disintegrative Disorder [CDD]", French= "Syndrome de Rett, trouble désintégratif de l'enfance (TDE) ", Sequence = 46, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "36", English = "Other Speech & Language Disorders", French= "Autre trouble de la parole et du langage ", Sequence = 93, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "37", English = "Blind/Visually Impaired", French= "Cécité/déficience visuelle ", Sequence = 7, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "38", English = "Deaf/Hard of Hearing ", French= "Surdité/déficience auditive  ", Sequence = 23, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "39", English = "Other Sensory", French= "Autre trouble sensoriel ", Sequence = 92, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "40", English = "Mitochondrial disease", French= "Maladie mitochondriale", Sequence = 39, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "41", English = "Other Motor Impairment", French= "Autre déficience motrice", Sequence = 91, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "42", English = "Cystic Fibrosis (CF)", French= "Fibrose kystique", Sequence = 13, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "43", English = "Phenylketonuria (PKU) /other metabolic", French= "Phénylcétonurie/autre trouble métabolique", Sequence = 43, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "50", English = "Tourette Syndrome", French= "Syndrome de Tourette", Sequence = 50, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "51", English = "Learning disorders (reading, writing, math)", French= "Troubles d’apprentissage (lecture, écriture, mathématiques)", Sequence = 38, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new SpecialProblem() { Code = "52", English = "Cancer/Leukemia/Brain Tumour", French= "Cancer/leucémie/tumeur cérébrale", Sequence = 10, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<Language> GetPreconfiguredLanguage()
+        {
+            return new List<Language>()
+            {
+                new Language() { Code = "0", English = "Unknown", French = "Inconnu",  Sequence = 15, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "10", English = "Afrikaans", French = "Afrikaans",  Sequence = 20, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "20", English = "Albanian", French = "Albanais",  Sequence = 25, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "25", English = "Amharic", French = "Amharique",  Sequence = 30, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "30", English = "Arabic", French = "Arabe",  Sequence = 35, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "40", English = "Armenian", French = "Arménien",  Sequence = 40, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "42", English = "Ashanti", French = "Asante",  Sequence = 45, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "45", English = "Assyrian", French = "Assyrien",  Sequence = 50, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "50", English = "Azeri", French = "Azéri",  Sequence = 55, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "60", English = "Bengali", French = "Bengalais",  Sequence = 60, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "70", English = "Bihari", French = "Bihari",  Sequence = 65, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "80", English = "Bulgarian", French = "Bulgare",  Sequence = 70, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "90", English = "Burmese", French = "Birman",  Sequence = 75, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "100", English = "Cantonese", French = "Cantonais",  Sequence = 80, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "105", English = "Chiu Chow", French = "Chiu Chow",  Sequence = 85, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "108", English = "Cree", French = "Crie",  Sequence = 90, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "110", English = "Czech", French = "Tchèque",  Sequence = 95, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "120", English = "Danish", French = "Danois",  Sequence = 100, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "125", English = "Dari", French = "Dari",  Sequence = 105, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "130", English = "Dutch/Flemish", French = "Hollandais/flamand",  Sequence = 110, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "135", English = "Egyptian", French = "Égyptien",  Sequence = 115, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "140", English = "English", French = "Anglais",  Sequence = 120, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "150", English = "Estonian", French = "Estonien",  Sequence = 125, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "155", English = "Ethiopian", French = "Éthiopien",  Sequence = 130, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "160", English = "Finnish", French = "Finlandais",  Sequence = 145, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "170", English = "French", French = "Français",  Sequence = 150, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "175", English = "Fukienese", French = "Fou-kien",  Sequence = 155, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "180", English = "Gaelic", French = "Gaélique",  Sequence = 160, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "190", English = "German", French = "Allemand",  Sequence = 165, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "200", English = "Greek", French = "Grec",  Sequence = 175, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "210", English = "Gujarati", French = "Gujarati",  Sequence = 180, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "215", English = "Hakka", French = "Hakka",  Sequence = 185, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "220", English = "Hebrew", French = "Hébreu",  Sequence = 190, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "230", English = "Hindi", French = "Hindi",  Sequence = 195, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "240", English = "Hindustani", French = "Hindustani",  Sequence = 200, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "245", English = "Hok Chiu", French = "Hok Chiu",  Sequence = 205, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "250", English = "Hungarian", French = "Hongrois",  Sequence = 210, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "260", English = "Icelandic", French = "Islandais",  Sequence = 215, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "270", English = "Ilocano", French = "Ilocano",  Sequence = 220, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "275", English = "Indigenous (North American)", French = "Autochtones (Amérique du Nord)",  Sequence = 225, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "280", English = "Indigenous (South American)", French = "Autochtones (Amérique du Sud)",  Sequence = 230, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "285", English = "Inuktitut", French = "Inuktitut",  Sequence = 240, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "290", English = "Italian", French = "Italien",  Sequence = 245, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "295", English = "Jaffna", French = "Jaffna",  Sequence = 250, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "300", English = "Japanese", French = "Japonais",  Sequence = 255, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "310", English = "Katchi", French = "Katchi",  Sequence = 270, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "320", English = "Kannada", French = "Canara",  Sequence = 260, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "330", English = "Kashmiri", French = "Kashméré",  Sequence = 265, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "335", English = "Khmer", French = "Kampuchéen",  Sequence = 275, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "340", English = "Korean", French = "Coréen",  Sequence = 290, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "345", English = "Lao", French = "Lao",  Sequence = 300, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "350", English = "Latvian", French = "Lettonien",  Sequence = 305, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "355", English = "Lebanese", French = "Libanais",  Sequence = 310, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "360", English = "Lithuanian", French = "Lithuanien",  Sequence = 320, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "370", English = "Macedonian", French = "Macédonien",  Sequence = 325, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "375", English = "Malayalam", French = "Malayalam",  Sequence = 330, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "380", English = "Indonesian/Malay", French = "Indonésien/malais",  Sequence = 235, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "400", English = "Mandarin", French = "Mandarin",  Sequence = 335, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "410", English = "Marathi", French = "Marathi",  Sequence = 345, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "415", English = "Mohawk", French = "Mohawk",  Sequence = 355, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "420", English = "Norwegian", French = "Norvégien",  Sequence = 360, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "422", English = "Ojibway", French = "Ojibway",  Sequence = 365, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "425", English = "Pashto/Pushtu", French = "Afhgan/Pachtou",  Sequence = 370, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "430", English = "Farsi/Persian", French = "Parsi/Persan",  Sequence = 135, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "440", English = "Polish", French = "Polonais",  Sequence = 380, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "450", English = "Portuguese", French = "Portugais",  Sequence = 385, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "460", English = "Punjabi", French = "Punjabi",  Sequence = 390, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "480", English = "Romanian", French = "Roumain",  Sequence = 395, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "490", English = "Russian", French = "Russe",  Sequence = 400, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "495", English = "Serbian", French = "Serbe",  Sequence = 405, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "500", English = "Serbo-Croatian", French = "Serbo-croate",  Sequence = 410, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "505", English = "Sindhi", French = "Sindhi",  Sequence = 415, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "510", English = "Singhalese", French = "Cinghalais",  Sequence = 420, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "520", English = "Slovak", French = "Slovaque",  Sequence = 425, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "530", English = "Slovenian", French = "Slovène",  Sequence = 430, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "535", English = "Somali", French = "Somalien",  Sequence = 435, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "540", English = "Spanish", French = "Espagnol",  Sequence = 440, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "550", English = "Swahili", French = "Swahili",  Sequence = 445, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "560", English = "SwLudatash", French = "Suédois",  Sequence = 450, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "570", English = "Filipino/Tagalog", French = "Philippin/tagalog",  Sequence = 140, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "580", English = "Tamil", French = "Tamoul",  Sequence = 455, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "600", English = "Thai", French = "Thai",  Sequence = 460, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "610", English = "Tigrinia", French = "Tigrigna",  Sequence = 465, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "620", English = "Turkish", French = "Turque",  Sequence = 470, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "630", English = "Twi", French = "Twi",  Sequence = 475, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "640", English = "Ukrainian", French = "Ukrainien",  Sequence = 480, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "650", English = "Urdu", French = "Urdu",  Sequence = 485, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "660", English = "Vietnamese", French = "Vietnamien",  Sequence = 490, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "670", English = "Welsh", French = "Gallois",  Sequence = 495, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "680", English = "Patois/Creole", French = "Patois/créole",  Sequence = 375, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "685", English = "Xhosa", French = "Xhosa",  Sequence = 505, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "690", English = "Yiddish", French = "Yiddish",  Sequence = 510, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "700", English = "Yoruba", French = "Yoruba",  Sequence = 515, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "710", English = "Other", French = "Autre",  Sequence = 520, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "720", English = "Other Chinese", French = "Autre langue chinoise",  Sequence = 525, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "730", English = "Other African", French = "Autre langue africaine",  Sequence = 530, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "740", English = "Other Indian (Asia)", French = "Autre langue indienne (Asie)",  Sequence = 535, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "750", English = "Other Asian", French = "Autre langue asiatique",  Sequence = 540, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "760", English = "Other European", French = "Autre langue européenne",  Sequence = 545, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "365", English = "Lingala", French = "Lingala",  Sequence = 315, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "195", English = "Grebo", French = "Grebo",  Sequence = 170, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "342", English = "Kurdish", French = "Kurde",  Sequence = 295, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "315", English = "Kirundi", French = "Kirundi",  Sequence = 285, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "325", English = "Kinyarwanda", French = "Kinyarwanda",  Sequence = 280, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "378", English = "Manding", French = "Mandingues",  Sequence = 340, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "675", English = "Wolastoqiyik (Maliseet) ", French = "Wolastoqiyik (Maliseet) ",  Sequence = 500, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "412", English = "mi'kmaq", French = "mi'kmaq",  Sequence = 350, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "170", English = "French", French = "Français",  Sequence = 10, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Language() { Code = "140", English = "English", French = "Anglais",  Sequence = 5, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<Gender> GetPreconfiguredGender()
+        {
+            return new List<Gender>()
+            {
+                new Gender() { Code = "1", English = "Male", French = "Mâle",  Sequence = 1, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new Gender() { Code = "2", English = "Female", French = "Femelle",  Sequence = 2, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
+
+            };
+        }
+
+        static IEnumerable<FileImportStatus> GetPreconfiguredFileImportStatus()
+        {
+            return new List<FileImportStatus>()
+            {
+                new FileImportStatus() { Code = "1", English = "Imported", French = "Importé",  Sequence = 1, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<MenuConfigurations> GetPreconfiguredMenuConfigurations()
+        {
+            return new List<MenuConfigurations>()
+            {
+                new MenuConfigurations() { NodeId = "01", English = "Dashboard", French = "Tableau de bord", URL= "", IconCss = "", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, DisplayOrder = 1, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now},
+                new MenuConfigurations() { NodeId = "02", English = "Female", French = "Femelle",  IconCss = "", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, DisplayOrder = 2, CreatedBy ="dengb", CreatedDate= DateTime.Now, ModifiedBy = "dengb", ModifiedDate = DateTime.Now}
+
+            };
         }
     }
 }

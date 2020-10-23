@@ -587,6 +587,78 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Languages","LUData");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.MenuConfigurations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("English")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<bool>("ForAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ForCoordinator")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ForTeacher")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("French")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<bool>("HasChild")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IconCss")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<bool>("IsVisible")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NodeId")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<string>("PID")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.Property<string>("URL")
+                        .HasColumnType("varchar(max)")
+                        .IsUnicode(false);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MenuConfigurations");
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
                 {
                     b.Property<int>("Id")

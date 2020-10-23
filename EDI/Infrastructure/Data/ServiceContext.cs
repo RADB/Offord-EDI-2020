@@ -27,6 +27,7 @@ namespace EDI.Infrastructure.Data
         /*Configuration Data*/
         public virtual DbSet<FormConfigurations> FormConfigurations { get; set; }
         public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
+        public virtual DbSet<MenuConfigurations> MenuConfigurations { get; set; }
 
 
         /*EDI Data*/
@@ -101,6 +102,37 @@ namespace EDI.Infrastructure.Data
                 .Property(e => e.ModifiedBy)
                 .IsUnicode(false);
 
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.NodeId)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.English)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.French)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.IconCss)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.URL)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.PID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.CreatedBy)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<MenuConfigurations>()
+                .Property(e => e.ModifiedBy)
+                .IsUnicode(false);
 
             modelBuilder.Entity<Child>(entity =>
             {
