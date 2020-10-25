@@ -85,11 +85,24 @@
 
         yearid = FaqModel.YearId.ToString();
 
-        isadmin = FaqModel.IsAdministratorFaq.HasValue && FaqModel.IsAdministratorFaq.Value ? true : false;
+        if (UserSettings.IsCoordinator)
+        {
+            if(!FaqModel.IsCoordinatorFaq.HasValue)
+                FaqModel.IsCoordinatorFaq = true;
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            if(!FaqModel.IsTeacherFaq.HasValue)
+                FaqModel.IsTeacherFaq = true;
+        }
+        else
+        {
+            isadmin = FaqModel.IsAdministratorFaq.HasValue && FaqModel.IsAdministratorFaq.Value ? true : false;
 
-        iscoordinator = FaqModel.IsCoordinatorFaq.HasValue && FaqModel.IsCoordinatorFaq.Value ? true : false;
+            iscoordinator = FaqModel.IsCoordinatorFaq.HasValue && FaqModel.IsCoordinatorFaq.Value ? true : false;
 
-        isteacher = FaqModel.IsTeacherFaq.HasValue && FaqModel.IsTeacherFaq.Value ? true : false;
+            isteacher = FaqModel.IsTeacherFaq.HasValue && FaqModel.IsTeacherFaq.Value ? true : false;
+        }
     }
 
     private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)

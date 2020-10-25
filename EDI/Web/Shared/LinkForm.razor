@@ -89,11 +89,24 @@
 
         yearid = LinkModel.YearId.ToString();
 
-        isadmin = LinkModel.IsAdminLink.HasValue && LinkModel.IsAdminLink.Value ? true : false;
+        if (UserSettings.IsCoordinator)
+        {
+            if(!LinkModel.IsCoordinatorLink.HasValue)
+                LinkModel.IsCoordinatorLink = true;
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            if(!LinkModel.IsTeacherLink.HasValue)
+                LinkModel.IsTeacherLink = true;
+        }
+        else
+        {
+            isadmin = LinkModel.IsAdminLink.HasValue && LinkModel.IsAdminLink.Value ? true : false;
 
-        iscoordinator = LinkModel.IsCoordinatorLink.HasValue && LinkModel.IsCoordinatorLink.Value ? true : false;
+            iscoordinator = LinkModel.IsCoordinatorLink.HasValue && LinkModel.IsCoordinatorLink.Value ? true : false;
 
-        isteacher = LinkModel.IsTeacherLink.HasValue && LinkModel.IsTeacherLink.Value ? true : false;
+            isteacher = LinkModel.IsTeacherLink.HasValue && LinkModel.IsTeacherLink.Value ? true : false;
+        }
     }
 
     private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
