@@ -3,6 +3,7 @@
 @inject ISharedService sharedService
 @inject IAccountService accountService
 @inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
 @using Syncfusion.Blazor.Buttons
 
 <EditForm Model="@FaqModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
@@ -18,18 +19,21 @@
             <label class="col-md-4 col-form-label" for="Answer">Answer: </label>
             <textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Answer" />
         </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="IsAdministratorFaq">Admin Faq: </label>
-            <SfCheckBox Checked="@isadmin" @onchange="IsAdministratorFaqChange"></SfCheckBox>
-        </div> 
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="IsCoordinatorFaq">Coordinator Faq: </label>
-            <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorFaqChange"></SfCheckBox>
-        </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="IsTeacherFaq">Teacher Faq: </label>
-            <SfCheckBox Checked="@isteacher" @onchange="IsTeacherFaqChange"></SfCheckBox>
-        </div>
+        @if (UserSettings.IsAdmin)
+        {
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsAdministratorFaq">Admin Faq: </label>
+                <SfCheckBox Checked="@isadmin" @onchange="IsAdministratorFaqChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsCoordinatorFaq">Coordinator Faq: </label>
+                <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorFaqChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsTeacherFaq">Teacher Faq: </label>
+                <SfCheckBox Checked="@isteacher" @onchange="IsTeacherFaqChange"></SfCheckBox>
+            </div>
+        }
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Sequence">Sequence: </label>
             <input type="number" class="col-md-3 col-form-label" @bind="FaqModel.Sequence" />

@@ -29,26 +29,49 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridFaq" @ref="Grid" DataSource="@faqs" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
-                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="FaqItemViewModel"></GridEvents>
-                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
-                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                        <GridSortSettings>
-                            <GridSortColumns>
-                                <GridSortColumn Field="Question" Direction="SortDirection.Ascending"></GridSortColumn>
-                            </GridSortColumns>
-                        </GridSortSettings>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(FaqItemViewModel.Question) HeaderText="Question" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(FaqItemViewModel.Answer) HeaderText="Answer" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(FaqItemViewModel.IsAdministratorFaqFormatted) HeaderText="Admin Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(FaqItemViewModel.IsCoordinatorFaqFormatted) HeaderText="Coordinator Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(FaqItemViewModel.IsTeacherFaqFormatted) HeaderText="Teacher Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(FaqItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
+                    @if (UserSettings.IsAdmin)
+                    {
+                        <SfGrid ID="GridFaq" @ref="Grid" DataSource="@faqs" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                            <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="FaqItemViewModel"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                            <GridSortSettings>
+                                <GridSortColumns>
+                                    <GridSortColumn Field="Question" Direction="SortDirection.Ascending"></GridSortColumn>
+                                </GridSortColumns>
+                            </GridSortSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Question) HeaderText="Question" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Answer) HeaderText="Answer" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.IsAdministratorFaqFormatted) HeaderText="Admin Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.IsCoordinatorFaqFormatted) HeaderText="Coordinator Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.IsTeacherFaqFormatted) HeaderText="Teacher Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                                <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                    else
+                    {
+                        <SfGrid ID="GridFaq" @ref="Grid" DataSource="@faqs" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                            <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="FaqItemViewModel"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                            <GridSortSettings>
+                                <GridSortColumns>
+                                    <GridSortColumn Field="Question" Direction="SortDirection.Ascending"></GridSortColumn>
+                                </GridSortColumns>
+                            </GridSortSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Question) HeaderText="Question" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Answer) HeaderText="Answer" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                                <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
                 }
 
             </div>
@@ -78,6 +101,15 @@
         else
         {
             var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Question).ToList());
+
+            if (UserSettings.IsCoordinator)
+            {
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Question).ToList());
+            }
+            else
+            {
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Question).ToList());
+            }
 
             List<FaqItemViewModel> sivm = new List<FaqItemViewModel>();
 

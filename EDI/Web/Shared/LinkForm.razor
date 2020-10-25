@@ -3,6 +3,7 @@
 @inject ISharedService sharedService
 @inject IAccountService accountService
 @inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
 @using Syncfusion.Blazor.Buttons
 
 <EditForm Model="@LinkModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
@@ -22,18 +23,21 @@
             <label class="col-md-4 col-form-label" for="Description">Description: </label>
             <textarea class="col-md-7 col-form-label" rows="8" @bind="LinkModel.Description" />
         </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="IsAdministratorLink">Admin Link: </label>
-            <SfCheckBox Checked="@isadmin" @onchange="IsAdminLinkChange"></SfCheckBox>
-        </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="IsCoordinatorLink">Coordinator Link: </label>
-            <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorLinkChange"></SfCheckBox>
-        </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="IsTeacherLink">Teacher Link: </label>
-            <SfCheckBox Checked="@isteacher" @onchange="IsTeacherLinkChange"></SfCheckBox>
-        </div>
+        @if (UserSettings.IsAdmin)
+        {
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsAdministratorLink">Admin Link: </label>
+                <SfCheckBox Checked="@isadmin" @onchange="IsAdminLinkChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsCoordinatorLink">Coordinator Link: </label>
+                <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorLinkChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsTeacherLink">Teacher Link: </label>
+                <SfCheckBox Checked="@isteacher" @onchange="IsTeacherLinkChange"></SfCheckBox>
+            </div>
+        }
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Sequence">Sequence: </label>
             <input type="number" class="col-md-3 col-form-label" @bind="LinkModel.Sequence" />
