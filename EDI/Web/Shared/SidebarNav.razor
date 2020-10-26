@@ -42,7 +42,7 @@
         treedata.Add(new TreeData { nodeId = "02-01", nodeText = "Sites", iconCss = "icon-map icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-02", nodeText = "Schools", iconCss = "icon-home icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-03", nodeText = "Teachers", iconCss = "icon-graduation icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-04", nodeText = "Children", iconCss = "icon-people icon", pid = "02" });
+        treedata.Add(new TreeData { nodeId = "02-04", nodeText = "Class List", iconCss = "icon-people icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-05", nodeText = "Coordinator-Sites", iconCss = "icon-organization icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "03", nodeText = "Screens", iconCss = "icon-docs icon" });
         treedata.Add(new TreeData { nodeId = "04", nodeText = "Maintenance", iconCss = "icon-briefcase icon", hasChild = true });
@@ -66,6 +66,8 @@
         treedata.Add(new TreeData { nodeId = "06-02", nodeText = "Links", iconCss = "icon-link icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "06-03", nodeText = "Reports", iconCss = "icon-chart icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "06-04", nodeText = "Documents", iconCss = "icon-folder-alt icon", pid = "06" });
+        treedata.Add(new TreeData { nodeId = "07", nodeText = "FAQ", iconCss = "question_answer icon" });
+        treedata.Add(new TreeData { nodeId = "08", nodeText = "Questions", iconCss = "icon-list icon" });
 
     }
 
@@ -143,6 +145,10 @@
         {
             NavigationManager.NavigateTo("./years/index");
         }
+        else if (args.NodeData.Id == "06-02")
+        {
+            NavigationManager.NavigateTo("./links/index");
+        }
         else if (args.NodeData.Id == "06-04")
         {
             NavigationManager.NavigateTo("./documents/index");
@@ -150,6 +156,10 @@
         else if (args.NodeData.Id == "01")
         {
             NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else if (args.NodeData.Id == "07")
+        {
+            NavigationManager.NavigateTo("./faq/index");
         }
     }
 

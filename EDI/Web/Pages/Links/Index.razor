@@ -1,5 +1,203 @@
-﻿<h3>Index</h3>
+﻿@page "/Links/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ILinkService linkService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+@inject UserSettings UserSettings;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Links Management</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (links == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    @if (UserSettings.IsAdmin)
+                    {
+                        <SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                            <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="LinkItemViewModel"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                            <GridSortSettings>
+                                <GridSortColumns>
+                                    <GridSortColumn Field="Name" Direction="SortDirection.Ascending"></GridSortColumn>
+                                </GridSortColumns>
+                            </GridSortSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(LinkItemViewModel.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.Url) HeaderText="Url" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.IsAdminLinkFormatted) HeaderText="Admin Link" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.IsCoordinatorLinkFormatted) HeaderText="Coordinator Link" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.IsTeacherLinkFormatted) HeaderText="Teacher Link" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                                <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                    else
+                    {
+                        <SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                            <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="LinkItemViewModel"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                            <GridSortSettings>
+                                <GridSortColumns>
+                                    <GridSortColumn Field="Name" Direction="SortDirection.Ascending"></GridSortColumn>
+                                </GridSortColumns>
+                            </GridSortSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(LinkItemViewModel.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.Url) HeaderText="Url" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(LinkItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                                <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
 
 @code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
 
+    SfGrid<LinkItemViewModel> Grid;
+
+    IEnumerable<LinkItemViewModel> links;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            var alllinks = await Task.FromResult(dbContext.Links.OrderBy(p => p.Name).ToList());
+
+            if (UserSettings.IsCoordinator)
+            {
+                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Name).ToList());
+            }
+            else
+            {
+                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Name).ToList());
+            }
+
+            List<LinkItemViewModel> sivm = new List<LinkItemViewModel>();
+
+            foreach (var link in alllinks)
+            {
+                var alink = new LinkItemViewModel();
+
+                alink.Id = link.Id;
+                alink.Name = link.Name;
+                alink.Url = link.Url;
+                alink.Description = link.Description;
+                alink.IsAdminLink = link.IsAdminLink;
+                alink.IsAdminLinkFormatted = link.IsAdminLink.HasValue && link.IsAdminLink.Value ? "Yes" : "No";
+                alink.IsCoordinatorLink = link.IsCoordinatorLink;
+                alink.IsCoordinatorLinkFormatted = link.IsCoordinatorLink.HasValue && link.IsCoordinatorLink.Value ? "Yes" : "No";
+                alink.IsTeacherLink = link.IsTeacherLink;
+                alink.IsTeacherLinkFormatted = link.IsTeacherLink.HasValue && link.IsTeacherLink.Value ? "Yes" : "No";
+                alink.Sequence = link.Sequence;
+                alink.YearId = link.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == link.YearId).FirstOrDefault();
+                alink.Ediyear = year != null ? year.Ediyear : null;
+
+                sivm.Add(alink);
+            }
+
+            this.rowid = 0;
+
+            links = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<LinkItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridLink_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridLink_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridLink_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridLink_add")
+        {
+            NavigationManager.NavigateTo("./links/new");
+            //NewInvoice();
+        }
+        if (args.Item.Id == "GridLink_edit")
+        {
+            NavigationManager.NavigateTo("./links/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridLink_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await linkService.DeleteLinkAsync(this.rowid);
+
+            var tmp = new List<LinkItemViewModel>();
+            foreach (var item in links)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.links = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<LinkItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./links/edit/" + this.rowid);
+    }
 }

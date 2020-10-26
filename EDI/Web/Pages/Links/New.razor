@@ -1,0 +1,90 @@
+﻿@page "/Links/New"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject ILinkService LinkService
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+
+<br />
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>New Link</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <LinkForm @ref="linkform1" LinkModel="@LinkModel" HandleValidSubmit="HandleValidSubmit" />
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private LinkItemViewModel LinkModel { get; set; } = new LinkItemViewModel();
+
+    LinkForm linkform1 = new LinkForm();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = await LinkService.GetDuplicateCount(LinkModel.Url);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same Link has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            int id = await LinkService.CreateLinkAsync(linkform1.LinkModel);
+
+            Message = "New Link added successfully.";
+            toastService.ShowSuccess(Message);
+            NavigationManager.NavigateTo("./Links/edit/" + id);
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./Links/index");
+    }
+
+    private async void Reset()
+    {
+        LinkModel = new LinkItemViewModel();
+        StateHasChanged();
+    }
+}

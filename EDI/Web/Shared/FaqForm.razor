@@ -1,0 +1,155 @@
+﻿@inject NavigationManager NavigationManager
+@inject IFaqService faqService
+@inject ISharedService sharedService
+@inject IAccountService accountService
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+@using Syncfusion.Blazor.Buttons
+
+<EditForm Model="@FaqModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Question">Question<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Question" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Answer">Answer: </label>
+            <textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Answer" />
+        </div>
+        @if (UserSettings.IsAdmin)
+        {
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsAdministratorFaq">Admin Faq: </label>
+                <SfCheckBox Checked="@isadmin" @onchange="IsAdministratorFaqChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsCoordinatorFaq">Coordinator Faq: </label>
+                <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorFaqChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsTeacherFaq">Teacher Faq: </label>
+                <SfCheckBox Checked="@isteacher" @onchange="IsTeacherFaqChange"></SfCheckBox>
+            </div>
+        }
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Sequence">Sequence: </label>
+            <input type="number" class="col-md-3 col-form-label" @bind="FaqModel.Sequence" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
+                @if (Years != null)
+                {
+                    @foreach (var option in Years)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public FaqItemViewModel FaqModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public IEnumerable<SelectListItem> Coordinates { get; set; }
+
+    public string coordinateid { get; set; }
+
+    public IEnumerable<SelectListItem> Years { get; set; }
+
+    public string yearid { get; set; }
+
+    public bool isadmin { get; set; }
+
+    public bool iscoordinator { get; set; }
+
+    public bool isteacher { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Years = await sharedService.GetYears();
+
+        yearid = FaqModel.YearId.ToString();
+
+        if (UserSettings.IsCoordinator)
+        {
+            if(!FaqModel.IsCoordinatorFaq.HasValue)
+                FaqModel.IsCoordinatorFaq = true;
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            if(!FaqModel.IsTeacherFaq.HasValue)
+                FaqModel.IsTeacherFaq = true;
+        }
+        else
+        {
+            isadmin = FaqModel.IsAdministratorFaq.HasValue && FaqModel.IsAdministratorFaq.Value ? true : false;
+
+            iscoordinator = FaqModel.IsCoordinatorFaq.HasValue && FaqModel.IsCoordinatorFaq.Value ? true : false;
+
+            isteacher = FaqModel.IsTeacherFaq.HasValue && FaqModel.IsTeacherFaq.Value ? true : false;
+        }
+    }
+
+    private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FaqModel.YearId = 0;
+
+        if (int.TryParse(selectedString, out int newyearid))
+        {
+            FaqModel.YearId = newyearid;
+        }
+    }
+
+    private void IsAdministratorFaqChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FaqModel.IsAdministratorFaq = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FaqModel.IsAdministratorFaq = isrequired;
+        }
+    }
+
+    private void IsCoordinatorFaqChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FaqModel.IsCoordinatorFaq = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FaqModel.IsCoordinatorFaq = isrequired;
+        }
+    }
+
+    private void IsTeacherFaqChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        FaqModel.IsTeacherFaq = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            FaqModel.IsTeacherFaq = isrequired;
+        }
+    }
+}

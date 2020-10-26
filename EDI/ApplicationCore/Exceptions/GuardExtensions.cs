@@ -102,4 +102,22 @@ namespace Ardalis.GuardClauses
                 throw new CoordinatorNotFoundException(coordinatorid);
         }
     }
+
+    public static class LinkGuards
+    {
+        public static void NullLink(this IGuardClause guardClause, int linkid, Link link)
+        {
+            if (link == null)
+                throw new LinkNotFoundException(linkid);
+        }
+    }
+
+    public static class FaqGuards
+    {
+        public static void NullFaq(this IGuardClause guardClause, int faqid, Faq faq)
+        {
+            if (faq == null)
+                throw new FaqNotFoundException(faqid);
+        }
+    }
 }

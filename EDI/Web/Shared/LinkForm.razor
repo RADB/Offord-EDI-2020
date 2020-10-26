@@ -1,0 +1,159 @@
+﻿@inject NavigationManager NavigationManager
+@inject ILinkService linkService
+@inject ISharedService sharedService
+@inject IAccountService accountService
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+@using Syncfusion.Blazor.Buttons
+
+<EditForm Model="@LinkModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Name">Link Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" class="col-md-7 col-form-label" @bind="LinkModel.Name" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="URL">URL<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" class="col-md-7 col-form-label" @bind="LinkModel.Url" />
+        </div>
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Description">Description: </label>
+            <textarea class="col-md-7 col-form-label" rows="8" @bind="LinkModel.Description" />
+        </div>
+        @if (UserSettings.IsAdmin)
+        {
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsAdministratorLink">Admin Link: </label>
+                <SfCheckBox Checked="@isadmin" @onchange="IsAdminLinkChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsCoordinatorLink">Coordinator Link: </label>
+                <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorLinkChange"></SfCheckBox>
+            </div>
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="IsTeacherLink">Teacher Link: </label>
+                <SfCheckBox Checked="@isteacher" @onchange="IsTeacherLinkChange"></SfCheckBox>
+            </div>
+        }
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Sequence">Sequence: </label>
+            <input type="number" class="col-md-3 col-form-label" @bind="LinkModel.Sequence" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
+                @if (Years != null)
+                {
+                    @foreach (var option in Years)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public LinkItemViewModel LinkModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public IEnumerable<SelectListItem> Coordinates { get; set; }
+
+    public string coordinateid { get; set; }
+
+    public IEnumerable<SelectListItem> Years { get; set; }
+
+    public string yearid { get; set; }
+
+    public bool isadmin { get; set; }
+
+    public bool iscoordinator { get; set; }
+
+    public bool isteacher { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Years = await sharedService.GetYears();
+
+        yearid = LinkModel.YearId.ToString();
+
+        if (UserSettings.IsCoordinator)
+        {
+            if(!LinkModel.IsCoordinatorLink.HasValue)
+                LinkModel.IsCoordinatorLink = true;
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            if(!LinkModel.IsTeacherLink.HasValue)
+                LinkModel.IsTeacherLink = true;
+        }
+        else
+        {
+            isadmin = LinkModel.IsAdminLink.HasValue && LinkModel.IsAdminLink.Value ? true : false;
+
+            iscoordinator = LinkModel.IsCoordinatorLink.HasValue && LinkModel.IsCoordinatorLink.Value ? true : false;
+
+            isteacher = LinkModel.IsTeacherLink.HasValue && LinkModel.IsTeacherLink.Value ? true : false;
+        }
+    }
+
+    private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LinkModel.YearId = 0;
+
+        if (int.TryParse(selectedString, out int newyearid))
+        {
+            LinkModel.YearId = newyearid;
+        }
+    }
+
+    private void IsAdminLinkChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LinkModel.IsAdminLink = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            LinkModel.IsAdminLink = isrequired;
+        }
+    }
+
+    private void IsCoordinatorLinkChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LinkModel.IsCoordinatorLink = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            LinkModel.IsCoordinatorLink = isrequired;
+        }
+    }
+
+    private void IsTeacherLinkChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LinkModel.IsTeacherLink = false;
+
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            LinkModel.IsTeacherLink = isrequired;
+        }
+    }
+}

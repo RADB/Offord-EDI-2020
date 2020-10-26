@@ -564,8 +564,8 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.Children).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Children");
                 entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherFeedbackForms");
                 entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
-                entity.HasMany(e => e.Links).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Links");
-                entity.HasMany(e => e.Faqs).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
+                entity.HasMany(e => e.Links).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Links");
+                entity.HasMany(e => e.Faqs).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
 
