@@ -110,7 +110,7 @@
         {
             var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
             TeacherID = teacher.Id;
-            AllowEdit = false;
+            AllowEdit = true;
             AllowDelete = false;
         }
 
