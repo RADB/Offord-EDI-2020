@@ -60,12 +60,12 @@
         treedata.Add(new TreeData { nodeId = "02-03", nodeText = "Teachers", icon = "icon-graduation icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-04", nodeText = "Class List", icon = "icon-people icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-05", nodeText = "Coordinator-Sites", icon = "icon-organization icon", pid = "02" });
+        treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" });
+        treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "03", nodeText = "Screens", icon = "icon-docs icon" });
         treedata.Add(new TreeData { nodeId = "04", nodeText = "Maintenance", icon = "icon-briefcase icon", hasChild = true });
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Configuration", icon = "icon-settings icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Data Import", icon = "icon-cloud-upload icon", pid = "04" });
-        treedata.Add(new TreeData { nodeId = "04-03", nodeText = "FAQ", icon = "question_answer icon", pid = "04" });
-        treedata.Add(new TreeData { nodeId = "04-04", nodeText = "Links", icon = "icon-link icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-05", nodeText = "Lookup Data", icon = "icon-list icon", pid = "04", hasChild = true });
         treedata.Add(new TreeData { nodeId = "04-06", nodeText = "Countries", icon = "icon-flag icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-07", nodeText = "File Import Status", icon = "icon-list icon", pid = "04-05" });
@@ -83,6 +83,8 @@
         treedata.Add(new TreeData { nodeId = "06-01", nodeText = "Guide", icon = "icon-notebook icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "06-03", nodeText = "Reports", icon = "icon-chart icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "06-04", nodeText = "Documents", icon = "icon-folder-alt icon", pid = "06" });
+        treedata.Add(new TreeData { nodeId = "06-05", nodeText = "FAQ", icon = "question_answer icon", pid = "06" });
+        treedata.Add(new TreeData { nodeId = "06-06", nodeText = "Links", icon = "icon-link icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "08", nodeText = "Questions", icon = "icon-list icon" });
 
     }
@@ -109,6 +111,14 @@
         {
             NavigationManager.NavigateTo("./coordinators/index");
         }
+        else if (args.NodeData.Id == "02-06")
+        {
+            NavigationManager.NavigateTo("./faq/index");
+        }
+        else if (args.NodeData.Id == "02-07")
+        {
+            NavigationManager.NavigateTo("./links/index");
+        }
         else if (args.NodeData.Id == "05-01")
         {
             NavigationManager.NavigateTo("./accounts/index");
@@ -128,14 +138,6 @@
         else if (args.NodeData.Id == "04-02")
         {
             NavigationManager.NavigateTo("./DataImport/index/0");
-        }
-        else if (args.NodeData.Id == "04-03")
-        {
-            NavigationManager.NavigateTo("./faq/index");
-        }
-        else if (args.NodeData.Id == "04-04")
-        {
-            NavigationManager.NavigateTo("./links/index");
         }
         else if (args.NodeData.Id == "04-06")
         {
@@ -172,6 +174,14 @@
         else if (args.NodeData.Id == "06-04")
         {
             NavigationManager.NavigateTo("./documents/index");
+        }
+        else if (args.NodeData.Id == "06-05")
+        {
+            NavigationManager.NavigateTo("./faq/admin");
+        }
+        else if (args.NodeData.Id == "06-06")
+        {
+            NavigationManager.NavigateTo("./links/admin");
         }
         else if (args.NodeData.Id == "01")
         {

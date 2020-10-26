@@ -1,14 +1,33 @@
 ﻿@using Syncfusion.Blazor.Navigations
 @inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
 
 <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
     <ChildContent>
         <div class="main-menu">
             <div>
-                <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="iconCss" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
-                    </TreeViewFieldsSettings>
-                    <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
+                <!--<SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
+        <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="icon" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
+        </TreeViewFieldsSettings>-->
+                <SfTreeView CssClass="main-teachertreeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
+                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata"></TreeViewFieldsSettings>
+                        <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
+                        <TreeViewTemplates>
+                            <NodeTemplate>
+                                @{
+                                    var item = (context as TreeData);
+                                    if (item.icon.ToString() == "question_answer teachericon")
+                                    // use material icon for FAQ
+                                    { <i class="material-icons-outlined teachericon">question_answer</i>}
+
+                                    else
+                                    // use base icons for other
+                                    {<i class="@item.icon"></i>}
+
+                                    <span class="nodeText">@item.nodeText</span>
+                                }
+                            </NodeTemplate>
+                        </TreeViewTemplates>
                 </SfTreeView>
             </div>
         </div>
@@ -28,7 +47,7 @@
     {
         public string nodeId { get; set; }
         public string nodeText { get; set; }
-        public string iconCss { get; set; }
+        public string icon { get; set; }
         public bool hasChild { get; set; }
         public string pid { get; set; }
     }
@@ -36,37 +55,52 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-        treedata.Add(new TreeData { nodeId = "06", nodeText = "Dashboard", iconCss = "icon-graph icon" });
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "Resources", iconCss = "icon-book-open icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "05-01", nodeText = "Guide", iconCss = "icon-notebook icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Links", iconCss = "icon-link icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-03", nodeText = "Reports", iconCss = "icon-chart icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-04", nodeText = "Documents", iconCss = "icon-folder-alt icon", pid = "05" });
-
+        // default uses simple-line-icons, can use material or fontawesome or fabric
+        if (UserSettings.Language == "French")
+        {
+            treedata.Add(new TreeData { nodeId = "01", nodeText = "Tableau de bord", icon = "icon-graph teachericon" });
+            treedata.Add(new TreeData { nodeId = "02", nodeText = "Liste des classes", icon = "icon-people teachericon" });
+            treedata.Add(new TreeData { nodeId = "03", nodeText = "Ressources", icon = "icon-folder-alt teachericon" });
+            treedata.Add(new TreeData { nodeId = "04", nodeText = "Liens", icon = "icon-link teachericon" });
+            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer teachericon" });
+            treedata.Add(new TreeData { nodeId = "06", nodeText = "Des questions", icon = "icon-list teachericon" });
+        }
+        else
+        {
+            treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph teachericon" });
+            treedata.Add(new TreeData { nodeId = "02", nodeText = "Class List", icon = "icon-people teachericon" });
+            treedata.Add(new TreeData { nodeId = "03", nodeText = "Resources", icon = "icon-folder-alt teachericon" });
+            treedata.Add(new TreeData { nodeId = "04", nodeText = "Links", icon = "icon-link teachericon" });
+            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer teachericon" });
+            treedata.Add(new TreeData { nodeId = "06", nodeText = "Questions", icon = "icon-list teachericon" });
+        }
     }
 
     private void onSelect(NodeSelectEventArgs args)
     {
-        if (args.NodeData.Id == "06")
+        if (args.NodeData.Id == "01")
         {
-            NavigationManager.NavigateTo("./Dashboard");
+            NavigationManager.NavigateTo("./Dashboard/index");
         }
-        else if (args.NodeData.Id == "05-01")
+        else if (args.NodeData.Id == "02")
         {
-            NavigationManager.NavigateTo("./guide/index");
+            NavigationManager.NavigateTo("./children/index");
         }
-        else if (args.NodeData.Id == "05-02")
+        else if (args.NodeData.Id == "03")
+        {
+            NavigationManager.NavigateTo("./documents/index");
+        }
+        else if (args.NodeData.Id == "04")
         {
             NavigationManager.NavigateTo("./links/index");
         }
-        else if (args.NodeData.Id == "05-03")
+        else if (args.NodeData.Id == "05")
         {
-            NavigationManager.NavigateTo("./reports/index");
+            NavigationManager.NavigateTo("./faq/index");
         }
-        else if (args.NodeData.Id == "05-04")
+        else if (args.NodeData.Id == "06")
         {
-            NavigationManager.NavigateTo("./documents/index");
+            NavigationManager.NavigateTo("./SampleQuestions/index");
         }
     }
 
