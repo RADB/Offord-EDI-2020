@@ -1,6 +1,7 @@
 ﻿@page "/Links/Admin"
 @inject ServiceContext edi;
-@using EDI.ApplicationCore.Entities 
+@inject UserSettings UserSettings;
+@using EDI.ApplicationCore.Entities
 
 <div class="row">
     <div class="col-md-12">
@@ -11,10 +12,7 @@
             <div class="card-body">
                 <div class="container-fluid">
                     <AuthorizeView Roles="Administrator">
-                        <Authorized>
-                            <EDI.Web.Shared.Link Name="Google" URL="http://www.google.ca" Description="The best search engine on the planet."></EDI.Web.Shared.Link>
-                            <EDI.Web.Shared.Link Name="Bing" URL="http://www.bing.ca" Description="The second best search engine on the planet."></EDI.Web.Shared.Link>
-                            <EDI.Web.Shared.Link Name="Renner" URL="http://www.renner.ca" Description="My personal page."></EDI.Web.Shared.Link>
+                        <Authorized>                            
                             @foreach (var link in Links)
                             {
                                 <EDI.Web.Shared.Link Name="@link.Name" URL="@link.Url" Description="@link.Description"></EDI.Web.Shared.Link>
@@ -34,12 +32,24 @@
 @code
 {
     private List<EDI.ApplicationCore.Entities.Link> Links;
-    
+
     protected override Task OnInitializedAsync()
     {
-
-        Links = edi.Links.ToList();
-       
+        if (UserSettings.IsAdmin)
+        {
+            //get the list of links ordered by sequence for admins
+            Links = edi.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            //get the list of links ordered by sequence for teachers
+            Links = edi.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Sequence).ToList();
+        }
+        else if (UserSettings.IsCoordinator)
+        {
+            //get the list of links ordered by sequence for coordinators
+            Links = edi.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList();
+        }
         return base.OnInitializedAsync();
     }
 }

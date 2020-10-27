@@ -95,17 +95,17 @@
         }
         else
         {
-            var alllinks = await Task.FromResult(dbContext.Links.OrderBy(p => p.Name).ToList());
+            var alllinks = await Task.FromResult(dbContext.Links.OrderBy(p => p.Sequence).ToList());
 
             if (UserSettings.IsCoordinator)
             {
-                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Name).ToList());
+                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList());
             }
-            else
+            else if (UserSettings.IsTeacher)
             {
-                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Name).ToList());
+                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Sequence).ToList());
             }
-
+            
             List<LinkItemViewModel> sivm = new List<LinkItemViewModel>();
 
             foreach (var link in alllinks)
