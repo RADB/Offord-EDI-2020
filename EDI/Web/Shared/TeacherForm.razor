@@ -107,6 +107,11 @@
 
 
         Years = await sharedService.GetYears();
+
+        if (TeacherModel.YearId == 0 && Years.Count() == 2)
+        {
+            TeacherModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
         yearid = TeacherModel.YearId.HasValue ? TeacherModel.YearId.ToString() : string.Empty;
     }
 

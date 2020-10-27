@@ -62,6 +62,11 @@
     protected override async Task OnInitializedAsync()
     {
         Years = await sharedService.GetYears();
+
+        if (CoordinatorModel.YearId == 0 && Years.Count() == 2)
+        {
+            CoordinatorModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
         yearid = CoordinatorModel.YearId.HasValue ? CoordinatorModel.YearId.ToString() : string.Empty;
     }
 

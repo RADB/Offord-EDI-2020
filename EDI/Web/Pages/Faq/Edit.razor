@@ -84,6 +84,13 @@
 
     private async void HandleValidSubmit()
     {
+        if (FaqModel.YearId == 0)
+        {
+            ErrorMessage = "Year is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
         //Console.WriteLine("OnValidSubmit");
         var totalItems = await faqService.GetDuplicateCount(FaqModel.Question, faqform1.FaqModel.Id);
 

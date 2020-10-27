@@ -191,6 +191,12 @@
     {
         Sites = await sharedService.GetSites();
         Years = await sharedService.GetYears();
+
+        if (ChildModel.YearId == 0 && Years.Count() == 2)
+        {
+            ChildModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
+
         Genders = await sharedService.GetGenders();
 
         if (ChildModel.TeacherId.HasValue)
