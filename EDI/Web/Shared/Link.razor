@@ -3,8 +3,12 @@
         <h3 class="card-title"><a href="@url1" class="card-link" title="@linkobj.Description" target="_blank">@linkobj.Name</a></h3>
         <h4 class="card-subtitle text-success">@linkobj.Url</h4>
         <div class="card-text">@linkobj.Description</div><br />
-        <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="OnEditClick"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-        <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="OnDeleteClick"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="OnEditClick"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="OnDeleteClick"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+            </Authorized>
+        </AuthorizeView>
     </div>
 </div>
 

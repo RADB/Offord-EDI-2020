@@ -18,9 +18,13 @@
             <div class="card-header">
                 <div class="row">
                     <h2>FREQUENTLY ASKED QUESTIONS</h2>
-                    <div class="float-right" style="margin-left:20px;">
-                        <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
-                    </div>
+                    <AuthorizeView Roles="Administrator">
+                        <Authorized>
+                            <div class="float-right" style="margin-left:20px;">
+                                <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>                
             </div>
             <div class="card-body">
@@ -39,8 +43,12 @@
                                                     <AccordionItem Header=@faq.Question Expanded="true">
                                                         <ContentTemplate>
                                                             @faq.Answer <br /><br />
-                                                            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-                                                            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                            <AuthorizeView Roles="Administrator">
+                                                                <Authorized Context="EditDelete">
+                                                                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                                                                    <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                                </Authorized>
+                                                            </AuthorizeView>
                                                         </ContentTemplate>
                                                     </AccordionItem>
                                                 </AccordionItems>
@@ -72,10 +80,6 @@
         if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
-        }
-        else if (!UserSettings.IsAdmin)
-        {
-            NavigationManager.NavigateTo("./dashboard/index");
         }
         else
         {

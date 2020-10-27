@@ -12,9 +12,13 @@
             <div class="card-header">
                 <div class="row">
                     <h2>LINKS</h2>
-                    <div class="float-right" style="margin-left:20px;">
-                        <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
-                    </div>
+                    <AuthorizeView Roles="Administrator">
+                        <Authorized>
+                            <div class="float-right" style="margin-left:20px;">
+                                <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
                 </div>
             </div>
             <div class="card-body">
@@ -46,7 +50,8 @@
         if (UserSettings.IsAdmin)
         {
             //get the list of links ordered by sequence for admins
-            Links = edi.Links.OrderBy(p => p.Sequence).ToList();
+            //Links = edi.Links.OrderBy(p => p.Sequence).ToList();            
+            Links = edi.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
         }
         else if (UserSettings.IsTeacher)
         {
