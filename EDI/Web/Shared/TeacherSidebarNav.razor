@@ -16,9 +16,9 @@
                         <NodeTemplate>
                             @{
                                 var item = (context as TreeData);
-                                if (item.icon.ToString() == "question_answer icon")
+                                if (item.icon.ToString() == "question_answer teachericon")
                                 // use material icon for FAQ
-                                { <i class="material-icons-outlined icon">question_answer</i>}
+                                { <i class="material-icons-outlined teachericon">question_answer</i>}
 
                                 else
                                 // use base icons for other
@@ -58,21 +58,21 @@
         // default uses simple-line-icons, can use material or fontawesome or fabric
         if (UserSettings.Language == "French")
         {
-            treedata.Add(new TreeData { nodeId = "01", nodeText = "Tableau de bord", icon = "icon-graph icon" });
-            treedata.Add(new TreeData { nodeId = "02", nodeText = "Liste des classes", icon = "icon-people icon" });
-            treedata.Add(new TreeData { nodeId = "03", nodeText = "Ressources", icon = "icon-folder-alt icon" });
-            treedata.Add(new TreeData { nodeId = "04", nodeText = "Liens", icon = "icon-link icon" });
-            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer icon" });
-            treedata.Add(new TreeData { nodeId = "06", nodeText = "Des questions", icon = "icon-list icon" });
+            treedata.Add(new TreeData { nodeId = "01", nodeText = "Tableau de bord", icon = "icon-graph teachericon" });
+            treedata.Add(new TreeData { nodeId = "02", nodeText = "Liste des classes", icon = "icon-people teachericon" });
+            treedata.Add(new TreeData { nodeId = "03", nodeText = "Ressources", icon = "icon-folder-alt teachericon" });
+            treedata.Add(new TreeData { nodeId = "04", nodeText = "Liens", icon = "icon-link teachericon" });
+            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer teachericon" });
+            treedata.Add(new TreeData { nodeId = "06", nodeText = "Des questions", icon = "icon-list teachericon" });
         }
         else
         {
-            treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph icon" });
-            treedata.Add(new TreeData { nodeId = "02", nodeText = "Class List", icon = "icon-people icon" });
-            treedata.Add(new TreeData { nodeId = "03", nodeText = "Resources", icon = "icon-folder-alt icon" });
-            treedata.Add(new TreeData { nodeId = "04", nodeText = "Links", icon = "icon-link icon" });
-            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer icon" });
-            treedata.Add(new TreeData { nodeId = "06", nodeText = "Questions", icon = "icon-list icon" });
+            treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph teachericon" });
+            treedata.Add(new TreeData { nodeId = "02", nodeText = "Class List", icon = "icon-people teachericon" });
+            treedata.Add(new TreeData { nodeId = "03", nodeText = "Resources", icon = "icon-folder-alt teachericon" });
+            treedata.Add(new TreeData { nodeId = "04", nodeText = "Links", icon = "icon-link teachericon" });
+            treedata.Add(new TreeData { nodeId = "05", nodeText = "FAQ", icon = "question_answer teachericon" });
+            treedata.Add(new TreeData { nodeId = "06", nodeText = "Questions", icon = "icon-list teachericon" });
         }
     }
 
