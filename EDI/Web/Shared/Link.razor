@@ -1,0 +1,22 @@
+﻿<div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><a href="@URL" class="card-link" title="@Description">@Name</a></h5>
+        <h6 class="card-subtitle text-success">@URL</h6>
+        <div class="card-text small">@Description</div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = "Link Name";
+    [Parameter]
+    public string URL { get; set; } = "http://google.ca";
+    [Parameter]
+    public string Description { get; set; } = "This is the descritpion field.";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+}

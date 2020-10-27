@@ -1,0 +1,45 @@
+﻿@page "/Links/Admin"
+@inject ServiceContext edi;
+@using EDI.ApplicationCore.Entities 
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Links</strong>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <AuthorizeView Roles="Administrator">
+                        <Authorized>
+                            <EDI.Web.Shared.Link Name="Google" URL="http://www.google.ca" Description="The best search engine on the planet."></EDI.Web.Shared.Link>
+                            <EDI.Web.Shared.Link Name="Bing" URL="http://www.bing.ca" Description="The second best search engine on the planet."></EDI.Web.Shared.Link>
+                            <EDI.Web.Shared.Link Name="Renner" URL="http://www.renner.ca" Description="My personal page."></EDI.Web.Shared.Link>
+                            @foreach (var link in Links)
+                            {
+                                <EDI.Web.Shared.Link Name="@link.Name" URL="@link.Url" Description="@link.Description"></EDI.Web.Shared.Link>
+                            }
+                        </Authorized>
+                        <NotAuthorized>
+                            Nothing to see here!
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    private List<EDI.ApplicationCore.Entities.Link> Links;
+    
+    protected override Task OnInitializedAsync()
+    {
+
+        Links = edi.Links.ToList();
+       
+        return base.OnInitializedAsync();
+    }
+}
