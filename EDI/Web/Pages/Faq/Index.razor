@@ -31,32 +31,30 @@
                 <div class="container-fluid">
                     <AuthorizeView Roles="Administrator, Teacher, Coordinator">
                         <Authorized>
+
                             @if (faqs != null)
                             {
-                                @foreach (var faq in faqs)
-                                {
-                                    <ul style="list-style-type:none;">
-                                        <li>
-                                            <SfAccordion>
-                                                <AccordionItems>
+                                <SfAccordion ExpandMode="ExpandMode.Single">
+                                    <AccordionItems>
+                                        @foreach (var faq in faqs)
+                                        {
 
-                                                    <AccordionItem Header=@faq.Question Expanded="true">
-                                                        <ContentTemplate>
-                                                            @faq.Answer <br /><br />
-                                                            <AuthorizeView Roles="Administrator">
-                                                                <Authorized Context="EditDelete">
-                                                                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-                                                                    <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
-                                                                </Authorized>
-                                                            </AuthorizeView>
-                                                        </ContentTemplate>
-                                                    </AccordionItem>
-                                                </AccordionItems>
-                                            </SfAccordion>
-                                        </li>
-                                    </ul>
+                                            <AccordionItem Header="@faq.Question">
+                                                <ContentTemplate>
+                                                    @faq.Answer
+                                                    <br />
+                                                    <AuthorizeView Roles="Administrator">
+                                                        <Authorized Context="EditDelete">
+                                                            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                                                            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                        </Authorized>
+                                                    </AuthorizeView>
+                                                </ContentTemplate>
+                                            </AccordionItem>
 
-                                }
+                                        }
+                                    </AccordionItems>
+                                </SfAccordion>
                             }
                         </Authorized>
                         <NotAuthorized>
