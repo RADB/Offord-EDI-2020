@@ -11,7 +11,7 @@
             </div>
             <div class="card-body">
                 <div class="container-fluid">
-                    <AuthorizeView Roles="Administrator">
+                    <AuthorizeView Roles="Administrator, Teacher, Coordinator">
                         <Authorized>                            
                             @foreach (var link in Links)
                             {
