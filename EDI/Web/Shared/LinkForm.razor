@@ -87,6 +87,11 @@
     {
         Years = await sharedService.GetYears();
 
+        if (LinkModel.YearId == 0 && Years.Count() == 2)
+        {
+            LinkModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
+
         yearid = LinkModel.YearId.ToString();
 
         if (UserSettings.IsCoordinator)
