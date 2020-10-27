@@ -1,21 +1,29 @@
-﻿@page "/Links/Admin"
+﻿@page "/Links/Admin";
+@using EDI.ApplicationCore.Entities;
 @inject ServiceContext edi;
 @inject UserSettings UserSettings;
-@using EDI.ApplicationCore.Entities
+@inject ILinkService linkService;
+@inject NavigationManager NavigationManager;
+@inject IModalService Modal;
 
 <div class="row">
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <strong>Links</strong>
+                <div class="row">
+                    <h2>LINKS</h2>
+                    <div class="float-right" style="margin-left:20px;">
+                        <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="container-fluid">
                     <AuthorizeView Roles="Administrator, Teacher, Coordinator">
-                        <Authorized>                            
+                        <Authorized>
                             @foreach (var link in Links)
                             {
-                                <EDI.Web.Shared.Link Name="@link.Name" URL="@link.Url" Description="@link.Description"></EDI.Web.Shared.Link>
+                                <EDI.Web.Shared.Link linkobj="@link" OnDeleteClick="(e => Delete(link.Id))" OnEditClick="(e => Edit(link.Id))"></EDI.Web.Shared.Link>
                             }
                         </Authorized>
                         <NotAuthorized>
@@ -38,7 +46,7 @@
         if (UserSettings.IsAdmin)
         {
             //get the list of links ordered by sequence for admins
-            Links = edi.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
+            Links = edi.Links.OrderBy(p => p.Sequence).ToList();
         }
         else if (UserSettings.IsTeacher)
         {
@@ -51,5 +59,44 @@
             Links = edi.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList();
         }
         return base.OnInitializedAsync();
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./links/new");
+    }
+
+    private void Edit(int id)
+    {
+        NavigationManager.NavigateTo("./links/edit/" + id);
+    }
+
+    private int linkid { get; set; }
+
+    private void Delete(int id)
+    {
+        linkid = id;
+        Modal.Show<ConfirmDelete>("Confirm Delete");
+        Modal.OnClose += ConfirmDeleteModalClosed;
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await linkService.DeleteLinkAsync(this.linkid);
+
+            var tmp = new List<EDI.ApplicationCore.Entities.Link>();
+            foreach (var item in Links)
+            {
+                if (item.Id != linkid)
+                    tmp.Add(item);
+            }
+            this.Links = tmp;
+            this.linkid = 0;
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 }

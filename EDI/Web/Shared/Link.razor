@@ -1,22 +1,28 @@
 ﻿<div class="card">
     <div class="card-body">
-        <h5 class="card-title"><a href="@URL" class="card-link" title="@Description">@Name</a></h5>
-        <h6 class="card-subtitle text-success">@URL</h6>
-        <div class="card-text small">@Description</div>
+        <h3 class="card-title"><a href="@url1" class="card-link" title="@linkobj.Description" target="_blank">@linkobj.Name</a></h3>
+        <h4 class="card-subtitle text-success">@linkobj.Url</h4>
+        <div class="card-text">@linkobj.Description</div><br />
+        <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="OnEditClick"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+        <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="OnDeleteClick"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
     </div>
 </div>
 
 @code {
     [Parameter]
-    public string Name { get; set; } = "Link Name";
+    public EDI.ApplicationCore.Entities.Link linkobj { get; set; }
     [Parameter]
-    public string URL { get; set; } = "http://google.ca";
+    public EventCallback OnDeleteClick { get; set; }
     [Parameter]
-    public string Description { get; set; } = "This is the descritpion field.";
+    public EventCallback OnEditClick { get; set; }
 
+    private string url1 { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-
+        if (!@linkobj.Url.StartsWith("http"))
+            url1 = "http://" + @linkobj.Url;
+        else
+            url1 = @linkobj.Url;
     }
 }

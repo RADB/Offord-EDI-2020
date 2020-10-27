@@ -13,7 +13,7 @@
 @inject UserSettings UserSettings;
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
                 <div class="row">
@@ -23,32 +23,39 @@
                     </div>
                 </div>                
             </div>
-            <br />
-            <div class="col-md-8" style="margin-left: 24px;">
-                @if (faqs != null)
-                {
-                    @foreach (var faq in faqs)
-                    {
-                        <ul style="list-style-type:none;">
-                            <li>
-                                <SfAccordion>
-                                    <AccordionItems>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <AuthorizeView Roles="Administrator, Teacher, Coordinator">
+                        <Authorized>
+                            @if (faqs != null)
+                            {
+                                @foreach (var faq in faqs)
+                                {
+                                    <ul style="list-style-type:none;">
+                                        <li>
+                                            <SfAccordion>
+                                                <AccordionItems>
 
-                                        <AccordionItem Header=@faq.Question  Expanded="true" >
-                                            <ContentTemplate>
-                                                @faq.Answer <br /><br />
-                                                <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-                                                <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
-                                            </ContentTemplate>
-                                        </AccordionItem>
-                                    </AccordionItems>
-                                </SfAccordion>
-                            </li>
-                        </ul>
+                                                    <AccordionItem Header=@faq.Question Expanded="true">
+                                                        <ContentTemplate>
+                                                            @faq.Answer <br /><br />
+                                                            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                                                            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                        </ContentTemplate>
+                                                    </AccordionItem>
+                                                </AccordionItems>
+                                            </SfAccordion>
+                                        </li>
+                                    </ul>
 
-                    }
-                }
-
+                                }
+                            }
+                        </Authorized>
+                        <NotAuthorized>
+                            No data available!
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
             </div>
         </div>
     </div>
@@ -126,7 +133,7 @@
     private void Delete(int id)
     {
         faqid = id;
-        Modal.Show<ConfirmDeleteFaq>("Confirm Delete");
+        Modal.Show<ConfirmDelete>("Confirm Delete");
         Modal.OnClose += ConfirmDeleteModalClosed;
     }
 
