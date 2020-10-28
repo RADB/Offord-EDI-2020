@@ -5,6 +5,7 @@
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.RichTextEditor
 
 <EditForm Model="@FaqModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
     <div class="card-body">
@@ -13,11 +14,12 @@
 
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Question">Question<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-            <textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Question" />
+            <textarea class="col-md-7 col-form-label" rows="3" @bind="FaqModel.Question" />
         </div>
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Answer">Answer: </label>
-            <textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Answer" />
+            @*<textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Answer" />*@
+            <SfRichTextEditor @ref="RteObj" @bind-Value="FaqModel.Answer" />
         </div>
         @if (UserSettings.IsAdmin)
         {
@@ -79,25 +81,27 @@
 
     public bool isteacher { get; set; }
 
+    SfRichTextEditor RteObj;
+
     protected override async Task OnInitializedAsync()
     {
         Years = await sharedService.GetYears();
 
         if (FaqModel.YearId == 0 && Years.Count() == 2)
         {
-            FaqModel.YearId = int.Parse(Years.Where(t=>!string.IsNullOrEmpty(t.Value)).First().Value);
+            FaqModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
         }
 
         yearid = FaqModel.YearId.ToString();
 
         if (UserSettings.IsCoordinator)
         {
-            if(!FaqModel.IsCoordinatorFaq.HasValue)
+            if (!FaqModel.IsCoordinatorFaq.HasValue)
                 FaqModel.IsCoordinatorFaq = true;
         }
         else if (UserSettings.IsTeacher)
         {
-            if(!FaqModel.IsTeacherFaq.HasValue)
+            if (!FaqModel.IsTeacherFaq.HasValue)
                 FaqModel.IsTeacherFaq = true;
         }
         else

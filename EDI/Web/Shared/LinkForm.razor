@@ -5,6 +5,7 @@
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.RichTextEditor
 
 <EditForm Model="@LinkModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
     <div class="card-body">
@@ -21,7 +22,7 @@
         </div>
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Description">Description: </label>
-            <textarea class="col-md-7 col-form-label" rows="8" @bind="LinkModel.Description" />
+            <SfRichTextEditor @ref="RteObj" @bind-Value="LinkModel.Description" />
         </div>
         @if (UserSettings.IsAdmin)
         {
@@ -83,6 +84,8 @@
 
     public bool isteacher { get; set; }
 
+    SfRichTextEditor RteObj;
+
     protected override async Task OnInitializedAsync()
     {
         Years = await sharedService.GetYears();
@@ -96,12 +99,12 @@
 
         if (UserSettings.IsCoordinator)
         {
-            if(!LinkModel.IsCoordinatorLink.HasValue)
+            if (!LinkModel.IsCoordinatorLink.HasValue)
                 LinkModel.IsCoordinatorLink = true;
         }
         else if (UserSettings.IsTeacher)
         {
-            if(!LinkModel.IsTeacherLink.HasValue)
+            if (!LinkModel.IsTeacherLink.HasValue)
                 LinkModel.IsTeacherLink = true;
         }
         else
