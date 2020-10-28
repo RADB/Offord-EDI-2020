@@ -1,5 +1,5 @@
 ﻿@page "/faq"
-@page "/faq/edit/{Id:int}"
+@page "/faq/edit/{Id:int}/{Sender}"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Navigations;
@@ -59,6 +59,8 @@
 @code {
     [Parameter]
     public int Id { get; set; }
+    [Parameter]
+    public string Sender { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -113,7 +115,10 @@
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./faq/index");
+        if (Sender == "admin")
+            NavigationManager.NavigateTo("./faq/admin");
+        else
+            NavigationManager.NavigateTo("./faq/index");
     }
 
     private async void Reset()
@@ -123,6 +128,6 @@
 
     private void Add()
     {
-        NavigationManager.NavigateTo("./faq/new");
+        NavigationManager.NavigateTo("./faq/new/" + Sender);
     }
 }

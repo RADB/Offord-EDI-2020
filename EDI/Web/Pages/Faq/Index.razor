@@ -1,7 +1,6 @@
 ﻿@page "/Faq/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
-@using Syncfusion.Blazor.Navigations;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IFaqService faqService;
@@ -14,55 +13,49 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <div class="row">
-                    <h2>FREQUENTLY ASKED QUESTIONS</h2>
-                    <AuthorizeView Roles="Administrator">
-                        <Authorized>
-                            <div class="float-right" style="margin-left:20px;">
-                                <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
-                            </div>
-                        </Authorized>
-                    </AuthorizeView>
-                </div>                
-            </div>
-            <div class="card-body">
-                <div class="container-fluid">
-                    <AuthorizeView Roles="Administrator, Teacher, Coordinator">
-                        <Authorized>
+                <strong>Faqs Management</strong>
+                <div class="pull-right">
 
-                            @if (faqs != null)
-                            {
-                                <SfAccordion ExpandMode="ExpandMode.Single">
-                                    <AccordionItems>
-                                        @foreach (var faq in faqs)
-                                        {
-
-                                            <AccordionItem Header="@faq.Question">
-                                                <ContentTemplate>
-                                                    @faq.Answer
-                                                    <br />
-                                                    <AuthorizeView Roles="Administrator">
-                                                        <Authorized Context="EditDelete">
-                                                            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-                                                            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
-                                                        </Authorized>
-                                                    </AuthorizeView>
-                                                </ContentTemplate>
-                                            </AccordionItem>
-
-                                        }
-                                    </AccordionItems>
-                                </SfAccordion>
-                            }
-                        </Authorized>
-                        <NotAuthorized>
-                            No data available!
-                        </NotAuthorized>
-                    </AuthorizeView>
                 </div>
             </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (faqs == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    @if (UserSettings.IsAdmin)
+                    {
+                        <SfGrid ID="GridFaq" @ref="Grid" DataSource="@faqs" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                            <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="FaqItemViewModel"></GridEvents>
+                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                            <GridSortSettings>
+                                <GridSortColumns>
+                                    <GridSortColumn Field="Question" Direction="SortDirection.Ascending"></GridSortColumn>
+                                </GridSortColumns>
+                            </GridSortSettings>
+                            <GridColumns>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Question) HeaderText="Question" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Answer) HeaderText="Answer" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.IsAdministratorFaqFormatted) HeaderText="Admin Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.IsCoordinatorFaqFormatted) HeaderText="Coordinator Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.IsTeacherFaqFormatted) HeaderText="Teacher Faq" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FaqItemViewModel.Sequence) HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                                <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            </GridColumns>
+                        </SfGrid>
+                    }
+                }
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -70,6 +63,8 @@
 @code {
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+
+    SfGrid<FaqItemViewModel> Grid;
 
     IEnumerable<FaqItemViewModel> faqs;
 
@@ -79,6 +74,10 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
         else
         {
             var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Question).ToList());
@@ -87,7 +86,7 @@
             {
                 allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Question).ToList());
             }
-            else if(UserSettings.IsTeacher)
+            else if (UserSettings.IsTeacher)
             {
                 allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Question).ToList());
             }
@@ -116,57 +115,73 @@
                 sivm.Add(afaq);
             }
 
+            this.rowid = 0;
+
             faqs = sivm;
         }
     }
 
-    private void Add()
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<FaqItemViewModel> args)
     {
-        NavigationManager.NavigateTo("./faq/new");
+        rowid = args.Data.Id;
     }
 
-    private void Edit(int id)
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
-        NavigationManager.NavigateTo("./faq/edit/" + id);
-    }
-
-    private int faqid { get; set; }
-
-    private void Delete(int id)
-    {
-        faqid = id;
-        Modal.Show<ConfirmDelete>("Confirm Delete");
-        Modal.OnClose += ConfirmDeleteModalClosed;
+        if (args.Item.Id == "GridFaq_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridFaq_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridFaq_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridFaq_add")
+        {
+            NavigationManager.NavigateTo("./faq/new/index");
+            //NewInvoice();
+        }
+        if (args.Item.Id == "GridFaq_edit")
+        {
+            NavigationManager.NavigateTo("./faq/edit/" + this.rowid + "/index");
+        }
+        if (args.Item.Id == "GridFaq_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
     }
 
     async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
     {
         if (!modalResult.Cancelled)
         {
-            await faqService.DeleteFaqAsync(this.faqid);
+            await faqService.DeleteFaqAsync(this.rowid);
 
             var tmp = new List<FaqItemViewModel>();
             foreach (var item in faqs)
             {
-                if (item.Id != faqid)
+                if (item.Id != rowid)
                     tmp.Add(item);
             }
             this.faqs = tmp;
-            this.faqid = 0;
+            this.rowid = 0;
 
+            this.Grid.Refresh();
             StateHasChanged();
         }
 
         Modal.OnClose -= ConfirmDeleteModalClosed;
     }
-}
 
-<style>
-    .e-acrdn-header-content
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<FaqItemViewModel> args)
     {
-        font-size: xx-large !important;
+        NavigationManager.NavigateTo("./faq/edit/" + this.rowid + "/index");
     }
-    .e-acrdn-content {
-        font-size: x-large !important;
-    }
-</style>
+}

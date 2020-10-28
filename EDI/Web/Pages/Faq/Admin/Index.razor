@@ -1,0 +1,172 @@
+﻿@page "/Faq/Admin"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Navigations;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IFaqService faqService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+@inject UserSettings UserSettings;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <div class="row">
+                    <h2>FREQUENTLY ASKED QUESTIONS</h2>
+                    <AuthorizeView Roles="Administrator">
+                        <Authorized>
+                            <div class="float-right" style="margin-left:20px;">
+                                <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                            </div>
+                        </Authorized>
+                    </AuthorizeView>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <AuthorizeView Roles="Administrator, Teacher, Coordinator">
+                        <Authorized>
+
+                            @if (faqs != null)
+                            {
+                                <SfAccordion ExpandMode="ExpandMode.Single">
+                                    <AccordionItems>
+                                        @foreach (var faq in faqs)
+                                        {
+
+                                            <AccordionItem Header="@faq.Question">
+                                                <ContentTemplate>
+                                                    @faq.Answer
+                                                    <br />
+                                                    <AuthorizeView Roles="Administrator">
+                                                        <Authorized Context="EditDelete">
+                                                            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                                                            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                        </Authorized>
+                                                    </AuthorizeView>
+                                                </ContentTemplate>
+                                            </AccordionItem>
+
+                                        }
+                                    </AccordionItems>
+                                </SfAccordion>
+                            }
+                        </Authorized>
+                        <NotAuthorized>
+                            No data available!
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    IEnumerable<FaqItemViewModel> faqs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Question).ToList());
+
+            if (UserSettings.IsCoordinator)
+            {
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Question).ToList());
+            }
+            else if (UserSettings.IsTeacher)
+            {
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Question).ToList());
+            }
+
+            List<FaqItemViewModel> sivm = new List<FaqItemViewModel>();
+
+            foreach (var faq in allfaqs)
+            {
+                var afaq = new FaqItemViewModel();
+
+                afaq.Id = faq.Id;
+                afaq.Question = faq.Question;
+                afaq.Answer = faq.Answer;
+                afaq.IsAdministratorFaq = faq.IsAdministratorFaq;
+                afaq.IsAdministratorFaqFormatted = faq.IsAdministratorFaq.HasValue && faq.IsAdministratorFaq.Value ? "Yes" : "No";
+                afaq.IsCoordinatorFaq = faq.IsCoordinatorFaq;
+                afaq.IsCoordinatorFaqFormatted = faq.IsCoordinatorFaq.HasValue && faq.IsCoordinatorFaq.Value ? "Yes" : "No";
+                afaq.IsTeacherFaq = faq.IsTeacherFaq;
+                afaq.IsTeacherFaqFormatted = faq.IsTeacherFaq.HasValue && faq.IsTeacherFaq.Value ? "Yes" : "No";
+                afaq.Sequence = faq.Sequence;
+                afaq.YearId = faq.YearId;
+
+                var year = dbContext.Years.Where(p => p.Id == faq.YearId).FirstOrDefault();
+                afaq.Ediyear = year != null ? year.Ediyear : null;
+
+                sivm.Add(afaq);
+            }
+
+            faqs = sivm;
+        }
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./faq/new/admin");
+    }
+
+    private void Edit(int id)
+    {
+        NavigationManager.NavigateTo("./faq/edit/" + id + "/admin");
+    }
+
+    private int faqid { get; set; }
+
+    private void Delete(int id)
+    {
+        faqid = id;
+        Modal.Show<ConfirmDelete>("Confirm Delete");
+        Modal.OnClose += ConfirmDeleteModalClosed;
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await faqService.DeleteFaqAsync(this.faqid);
+
+            var tmp = new List<FaqItemViewModel>();
+            foreach (var item in faqs)
+            {
+                if (item.Id != faqid)
+                    tmp.Add(item);
+            }
+            this.faqs = tmp;
+            this.faqid = 0;
+
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+}
+
+<style>
+    .e-acrdn-header-content {
+        font-size: large !important;
+    }
+
+    .e-acrdn-content {
+        font-size: large !important;
+    }
+</style>

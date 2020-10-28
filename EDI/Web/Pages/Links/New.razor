@@ -1,4 +1,4 @@
-﻿@page "/Links/New"
+﻿@page "/Links/New/{Sender}"
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
@@ -42,6 +42,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public string Sender { get; set; }
+
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -73,13 +76,16 @@
 
             Message = "New Link added successfully.";
             toastService.ShowSuccess(Message);
-            NavigationManager.NavigateTo("./Links/edit/" + id);
+            NavigationManager.NavigateTo("./Links/edit/" + id + "/" + Sender);
         }
     }
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./Links/admin");
+        if (Sender == "admin")
+            NavigationManager.NavigateTo("./links/admin");
+        else
+            NavigationManager.NavigateTo("./links/index");
     }
 
     private async void Reset()

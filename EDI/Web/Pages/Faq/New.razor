@@ -1,4 +1,4 @@
-﻿@page "/Faq/New"
+﻿@page "/Faq/New/{Sender}"
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
@@ -42,6 +42,8 @@
 </div>
 
 @code {
+    [Parameter]
+    public string Sender { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -54,10 +56,6 @@
         if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
-        }
-        else if (UserSettings.IsCoordinator)
-        {
-            NavigationManager.NavigateTo("./dashboard/index");
         }
     }
 
@@ -84,13 +82,16 @@
 
             Message = "New Faq added successfully.";
             toastService.ShowSuccess(Message);
-            NavigationManager.NavigateTo("./Faq/edit/" + id);
+            NavigationManager.NavigateTo("./Faq/edit/" + id + "/" + Sender);
         }
     }
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./Faq/index");
+        if (Sender == "admin")
+            NavigationManager.NavigateTo("./Faq/admin");
+        else
+            NavigationManager.NavigateTo("./Faq/index");
     }
 
     private async void Reset()

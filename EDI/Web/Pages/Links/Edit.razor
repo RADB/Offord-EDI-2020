@@ -1,5 +1,5 @@
 ﻿@page "/links"
-@page "/links/edit/{Id:int}"
+@page "/links/edit/{Id:int}/{Sender}"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Navigations;
@@ -59,6 +59,9 @@
 @code {
     [Parameter]
     public int Id { get; set; }
+    [Parameter]
+    public string Sender { get; set; }
+
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -102,7 +105,10 @@
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./links/admin");
+        if(Sender== "admin")
+            NavigationManager.NavigateTo("./links/admin");
+        else
+            NavigationManager.NavigateTo("./links/index");
     }
 
     private async void Reset()
@@ -112,6 +118,6 @@
 
     private void Add()
     {
-        NavigationManager.NavigateTo("./links/new");
+        NavigationManager.NavigateTo("./links/new/"+Sender);
     }
 }
