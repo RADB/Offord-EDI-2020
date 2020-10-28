@@ -93,6 +93,7 @@
         }
         else
         {
+            linkform1.LinkModel.Description = linkform1.rte.BindValue;
             await linkService.UpdateLinkAsync(linkform1.LinkModel);
 
             Message = "Link updated successfully.";

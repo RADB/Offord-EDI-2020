@@ -72,6 +72,7 @@
         }
         else
         {
+            linkform1.LinkModel.Description = linkform1.rte.BindValue;
             int id = await LinkService.CreateLinkAsync(linkform1.LinkModel);
 
             Message = "New Link added successfully.";

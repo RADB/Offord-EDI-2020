@@ -78,6 +78,7 @@
         }
         else
         {
+            faqform1.FaqModel.Answer = faqform1.rte.BindValue;
             int id = await FaqService.CreateFaqAsync(faqform1.FaqModel);
 
             Message = "New Faq added successfully.";

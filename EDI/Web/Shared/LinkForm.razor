@@ -21,10 +21,7 @@
             <input type="text" class="col-md-7 col-form-label" @bind="LinkModel.Url" />
         </div>
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Description">Description: </label>            
-            <SfRichTextEditor @ref="RteObj" @bind-Value="LinkModel.Description">
-                <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@tools"></RichTextEditorToolbarSettings>
-            </SfRichTextEditor>
+            <RichTextEditor @ref="rte" BindValue="@LinkModel.Description"/>
         </div>
         @if (UserSettings.IsAdmin)
         {
@@ -98,6 +95,8 @@
         "CreateLink", "Image", "|", "ClearFormat",
         "SourceCode", "|", "Undo", "Redo"
     };
+
+    public RichTextEditor rte = new RichTextEditor();
     // End RichText Editor
 
     protected override async Task OnInitializedAsync()

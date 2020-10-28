@@ -18,10 +18,7 @@
         </div>
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Answer">Answer: </label>
-            @*<textarea class="col-md-7 col-form-label" rows="8" @bind="FaqModel.Answer" />*@
-        <SfRichTextEditor @ref="RteObj" @bind-Value="FaqModel.Answer">
-            <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@tools"></RichTextEditorToolbarSettings>
-        </SfRichTextEditor>           
+            <RichTextEditor @ref="rte" BindValue="@FaqModel.Answer" />
         </div>
         @if (UserSettings.IsAdmin)
         {
@@ -81,6 +78,8 @@
         "CreateLink", "Image", "|", "ClearFormat",
         "SourceCode", "|", "Undo", "Redo"
     };
+
+    public RichTextEditor rte = new RichTextEditor();
     // End RichText Editor
 
     public IEnumerable<SelectListItem> Coordinates { get; set; }
@@ -96,8 +95,6 @@
     public bool iscoordinator { get; set; }
 
     public bool isteacher { get; set; }
-
-
 
     protected override async Task OnInitializedAsync()
     {

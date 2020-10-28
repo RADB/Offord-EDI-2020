@@ -103,6 +103,7 @@
         }
         else
         {
+            faqform1.FaqModel.Answer = faqform1.rte.BindValue;
             await faqService.UpdateFaqAsync(faqform1.FaqModel);
 
             Message = "Faq updated successfully.";
