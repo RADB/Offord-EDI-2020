@@ -11,6 +11,7 @@
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
 @inject UserSettings UserSettings;
+@using Microsoft.AspNetCore.Html
 
 <div class="row">
     <div class="col-md-12">
@@ -41,7 +42,7 @@
 
                                             <AccordionItem Header="@faq.Question">
                                                 <ContentTemplate>
-                                                    @faq.Answer
+                                                    @((MarkupString)faq.Answer)
                                                     <br />
                                                     <AuthorizeView Roles="Administrator">
                                                         <Authorized Context="EditDelete">

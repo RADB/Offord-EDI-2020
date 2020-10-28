@@ -1,0 +1,24 @@
+﻿@using Syncfusion.Blazor.RichTextEditor
+
+<SfRichTextEditor @ref="RteObj" @bind-Value="@BindValue">
+    <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@tools"></RichTextEditorToolbarSettings>
+</SfRichTextEditor>
+
+@code {
+    // i couldnt get this to work - it wouldnt bind to the object
+    [Parameter]
+    public string BindValue { get; set; }
+
+    SfRichTextEditor RteObj;
+
+    public static object[] tools = new object[]{
+        "Bold", "Italic", "Underline", "StrikeThrough",
+        "FontName", "FontSize", "FontColor", "BackgroundColor",
+        "LowerCase", "UpperCase", "|",
+        "Formats", "Alignments", "OrderedList", "UnorderedList",
+        "Outdent", "Indent", "|", "CreateTable",
+        "CreateLink", "Image", "|", "ClearFormat",
+        "SourceCode", "|", "Undo", "Redo"
+    };
+}
+
