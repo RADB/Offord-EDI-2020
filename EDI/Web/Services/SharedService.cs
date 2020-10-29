@@ -1317,5 +1317,19 @@ namespace EDI.Web.Services
             else
                 return english;
         }
+
+        public string GetImagePath()
+        {
+            string folderName = "UploadImages";
+            string webRootPath = _hostingEnvironment.ContentRootPath + @"\wwwroot";
+            string newPath = Path.Combine(webRootPath, folderName);
+
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+
+            return folderName;
+        }
     }
 }

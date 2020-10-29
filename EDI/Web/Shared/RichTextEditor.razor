@@ -1,6 +1,10 @@
 ﻿@using Syncfusion.Blazor.RichTextEditor
+@inject ISharedService sharedService
+@inject NavigationManager NavigationManager
 
 <SfRichTextEditor @ref="RteObj" @bind-Value="@BindValue">
+    <RichTextEditorImageSettings SaveUrl="api/Image" Path=@Path></RichTextEditorImageSettings>
+    <RichTextEditorEvents OnImageUploadSuccess="@onSuccess"> </RichTextEditorEvents>
     <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@tools"></RichTextEditorToolbarSettings>
 </SfRichTextEditor>
 
@@ -9,7 +13,11 @@
     [Parameter]
     public string BindValue { get; set; }
 
+    public string Path { get; set; }
+
     SfRichTextEditor RteObj;
+
+    public string[] header { get; set; }
 
     public static object[] tools = new object[]{
         "Bold", "Italic", "Underline", "StrikeThrough",
@@ -20,5 +28,18 @@
         "CreateLink", "Image", "|", "ClearFormat",
         "SourceCode", "|", "Undo", "Redo"
     };
+
+    private void onSuccess(ImageSuccessEventArgs args)
+    {
+        var headers = args.Response.Headers.ToString();
+        header = headers.Split("name: ");
+        header = header[1].Split("\r");
+        args.File.Name = header[0];
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Path = NavigationManager.BaseUri + sharedService.GetImagePath() + "/";
+    }
 }
 
