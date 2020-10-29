@@ -62,6 +62,7 @@ namespace EDI.Web.Services
         private IHostEnvironment _hostingEnvironment;
         private readonly IEmailSender _emailSender;
         private UserSettings _userSettings { get; set; }
+        private LanguageSettings _languageSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -91,6 +92,7 @@ namespace EDI.Web.Services
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
             UserSettings UserSettings,
+            LanguageSettings languageSettings,
             IOptions<EDIAppSettings> settings)
         {
             _logger = loggerFactory.CreateLogger<AccountService>();
@@ -117,6 +119,7 @@ namespace EDI.Web.Services
             _identityContext = identityContext;
             _emailSender = emailSender;
             _userSettings = UserSettings;
+            _languageSettings = languageSettings;
             POAppSettings = settings.Value;
         }
 
@@ -1299,6 +1302,20 @@ namespace EDI.Web.Services
                 error.errormessage = errormessage;
                 return error;
             }
+        }
+
+        public string GetTranslate(string english)
+        {
+            if (_userSettings.Language == "French")
+            {
+                var translate = _languageSettings.Translations.Where(e => e.English == english).FirstOrDefault();
+                if (translate == null || string.IsNullOrEmpty(translate.French))
+                    return english;
+                else
+                    return translate.French;
+            }
+            else
+                return english;
         }
     }
 }

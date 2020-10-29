@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
 @inject LanguageSettings LanguageSettings;
+@inject ISharedService sharedService;
 
 <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
     <ChildContent>
@@ -40,7 +41,7 @@
     public SfSidebar Sidebar;
     public ExpandOnSettings Expand = ExpandOnSettings.Click;
     Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
-    {
+{
         {"class", "sidebar-treeview" }
     };
 
@@ -57,26 +58,12 @@
     {
         base.OnInitialized();
         // default uses simple-line-icons, can use material or fontawesome or fabric
-        treedata.Add(new TreeData { nodeId = "01", nodeText = GetTranslate("Dashboard"), icon = "icon-graph teachericon" });
-        treedata.Add(new TreeData { nodeId = "02", nodeText = GetTranslate("Class List"), icon = "icon-people teachericon" });
-        treedata.Add(new TreeData { nodeId = "03", nodeText = GetTranslate("Resources"), icon = "icon-folder-alt teachericon" });
-        treedata.Add(new TreeData { nodeId = "04", nodeText = GetTranslate("Links"), icon = "icon-link teachericon" });
-        treedata.Add(new TreeData { nodeId = "05", nodeText = GetTranslate("FAQ"), icon = "question_answer teachericon" });
-        treedata.Add(new TreeData { nodeId = "06", nodeText = GetTranslate("Questions"), icon = "icon-list teachericon" });
-    }
-
-    private string GetTranslate(string english)
-    {
-        if (UserSettings.Language == "French")
-        {
-            var translate = LanguageSettings.Translations.Where(e => e.English == english).FirstOrDefault();
-            if (translate == null || string.IsNullOrEmpty(translate.French))
-                return english;
-            else
-                return translate.French;
-        }
-        else
-            return english;
+        treedata.Add(new TreeData { nodeId = "01", nodeText = sharedService.GetTranslate("Dashboard"), icon = "icon-graph teachericon" });
+        treedata.Add(new TreeData { nodeId = "02", nodeText = sharedService.GetTranslate("Class List"), icon = "icon-people teachericon" });
+        treedata.Add(new TreeData { nodeId = "03", nodeText = sharedService.GetTranslate("Resources"), icon = "icon-folder-alt teachericon" });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = sharedService.GetTranslate("Links"), icon = "icon-link teachericon" });
+        treedata.Add(new TreeData { nodeId = "05", nodeText = sharedService.GetTranslate("FAQ"), icon = "question_answer teachericon" });
+        treedata.Add(new TreeData { nodeId = "06", nodeText = sharedService.GetTranslate("Questions"), icon = "icon-list teachericon" });
     }
 
     private void onSelect(NodeSelectEventArgs args)

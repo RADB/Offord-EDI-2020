@@ -20,5 +20,6 @@ namespace EDI.Web.Interfaces
         Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
         Task<ErrorViewModel> ProcessFileData();
         Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
+        string GetTranslate(string english);
     }
 }
