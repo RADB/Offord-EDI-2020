@@ -20,6 +20,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
         public virtual DbSet<SpecialProblem> SpecialProblems { get; set; }
         public virtual DbSet<Year> Years { get; set; }
+        public virtual DbSet<Translation> Translations { get; set; }
 
         /* Staging Data*/
         public virtual DbSet<FileImport> FileImports { get; set; }
@@ -289,6 +290,19 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.English).HasMaxLength(150);
 
                 entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Translation>(entity =>
+            {
+                entity.ToTable("Translations", "LUData");
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).IsRequired().HasMaxLength(50);
+
+                entity.Property(e => e.French).HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });

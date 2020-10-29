@@ -1,0 +1,330 @@
+﻿@page "/Translations/index/{ChangeNumber:int}"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Spinner
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ITranslationService translationService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+@inject UserSettings UserSettings;
+@inject ISharedService sharedService;
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Translations</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                @if (ShowFileupload)
+                {
+                    <div class="info">
+                        <button type="button" class="closeFileupload" @onclick="CloseUpload"><span aria-hidden="true">&times;</span></button>
+                        <SfUploader AllowedExtensions=".xlsx" AutoUpload="false" Multiple="false">
+                            <UploaderEvents ValueChange="OnChange"></UploaderEvents>
+                        </SfUploader><br />
+                    </div>
+                }
+                @if (translations == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridTranslation" @ref="Grid" DataSource="@translations" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete","Excel Import", "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="TranslationItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="English" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(TranslationItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TranslationItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    [Parameter]
+    public int? ChangeNumber { get; set; }
+
+    SfGrid<TranslationItemViewModel> Grid;
+
+    IEnumerable<TranslationItemViewModel> translations;
+
+    IEnumerable<FileItemViewModel> files;
+
+    private bool ShowFileupload { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        ShowFileupload = false;
+
+        var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
+
+        List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
+
+        foreach (var translation in alltranslations)
+        {
+            var atranslation = new TranslationItemViewModel();
+
+            atranslation.Id = translation.Id;
+            atranslation.English = translation.English;
+            atranslation.French = translation.French;
+
+            sivm.Add(atranslation);
+        }
+
+        this.rowid = 0;
+
+        translations = sivm;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            ShowFileupload = false;
+
+            var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
+
+            List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
+
+            foreach (var translation in alltranslations)
+            {
+                var atranslation = new TranslationItemViewModel();
+
+                atranslation.Id = translation.Id;
+                atranslation.English = translation.English;
+                atranslation.French = translation.French;
+
+                sivm.Add(atranslation);
+            }
+
+            this.rowid = 0;
+
+            translations = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<TranslationItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    TranslationItemViewModel TranslationModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridTranslation_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridTranslation_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridTranslation_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridTranslation_Excel Import")
+        {
+            UploadFile();
+        }
+        if (args.Item.Id == "GridTranslation_add")
+        {
+            TranslationModel = new TranslationItemViewModel();
+            parameters.Add("TranslationModel", TranslationModel);
+
+            Modal.Show<TranslationWindow>("New EDI Translation", parameters);
+            Modal.OnClose += NewWindowModalClosed;
+        }
+        if (args.Item.Id == "GridTranslation_edit")
+        {
+            TranslationModel = new TranslationItemViewModel();
+            var rowdata = this.translations.Where(t => t.Id == rowid).FirstOrDefault();
+
+            if (rowdata != null)
+            {
+                TranslationModel.English = rowdata.English;
+                TranslationModel.French = rowdata.French;
+                TranslationModel.Id = rowdata.Id;
+                parameters.Add("TranslationModel", TranslationModel);
+
+                Modal.Show<TranslationWindow>("Edit EDI Translation", parameters);
+                Modal.OnClose += ExistWindowModalClosed;
+            }
+        }
+        if (args.Item.Id == "GridTranslation_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+
+    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is TranslationItemViewModel)
+        {
+            TranslationModel = (TranslationItemViewModel)modalResult.Data;
+
+            var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
+
+            List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
+
+            foreach (var translation in alltranslations)
+            {
+                var atranslation = new TranslationItemViewModel();
+
+                atranslation.Id = translation.Id;
+                atranslation.English = translation.English;
+                atranslation.French = translation.French;
+
+                sivm.Add(atranslation);
+            }
+
+            translations = sivm;
+        }
+        Modal.OnClose -= NewWindowModalClosed;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+        this.rowid = 0;
+    }
+
+    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is TranslationItemViewModel)
+        {
+            TranslationModel = (TranslationItemViewModel)modalResult.Data;
+
+            var tmp = new List<TranslationItemViewModel>();
+
+            foreach (var item in this.translations)
+            {
+                if (item.Id == TranslationModel.Id)
+                {
+                    item.English = TranslationModel.English;
+                    item.French = TranslationModel.French;
+                }
+                tmp.Add(item);
+            }
+
+            this.translations = tmp;
+        }
+        Modal.OnClose -= ExistWindowModalClosed;
+
+        this.rowid = 0;
+        this.Grid.Refresh();
+
+        StateHasChanged();
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await translationService.DeleteTranslationAsync(this.rowid);
+
+            var tmp = new List<TranslationItemViewModel>();
+            foreach (var item in translations)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.translations = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<TranslationItemViewModel> args)
+    {
+        var parameters = new ModalParameters();
+        TranslationModel = new TranslationItemViewModel();
+        var rowdata = this.translations.Where(t => t.Id == rowid).FirstOrDefault();
+
+        if (rowdata != null)
+        {
+            TranslationModel.English = rowdata.English;
+            TranslationModel.French = rowdata.French;
+            TranslationModel.Id = rowdata.Id;
+            parameters.Add("TranslationModel", TranslationModel);
+
+            Modal.Show<TranslationWindow>("Edit EDI Translation", parameters);
+            Modal.OnClose += ExistWindowModalClosed;
+        }
+    }
+
+    private void CloseUpload()
+    {
+        ShowFileupload = false;
+    }
+
+    private void UploadFile()
+    {
+        ShowFileupload = true;
+    }
+
+    private async void OnChange(UploadChangeEventArgs args)
+    {
+        foreach (var file in args.Files)
+        {
+            ErrorViewModel result = await sharedService.UploadTranslationData(file);
+
+            if (string.IsNullOrEmpty(result.errormessage))
+            {
+                result.message = "Data uploaded successfully.";
+
+                toastService.ShowSuccess(result.message);
+
+                Random random = new Random();
+                NavigationManager.NavigateTo("./Translations/index/" + random.Next(1, 1000));
+
+            }
+            else
+            {
+                ErrorMessage = result.errormessage;
+                toastService.ShowError(result.errormessage);
+            }
+        }
+    }
+}

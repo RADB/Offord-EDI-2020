@@ -3,7 +3,9 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
+@inject LanguageSettings LanguageSettings;
 @inject AppIdentityDbContext identityContext;
+@inject ServiceContext dbContext;
 
 <BlazoredModal DisableBackgroundCancel="true" />
 <BlazoredToasts Position="ToastPosition.BottomRight"
@@ -94,6 +96,23 @@ else
             {
                 UserSettings.IsTeacher = true;
                 IsTeacher = true;
+
+                var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
+
+                List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
+
+                foreach (var translation in alltranslations)
+                {
+                    var atranslation = new TranslationItemViewModel();
+
+                    atranslation.Id = translation.Id;
+                    atranslation.English = translation.English;
+                    atranslation.French = translation.French;
+
+                    sivm.Add(atranslation);
+                }
+
+                LanguageSettings.Translations = sivm;
             }
             else
             {

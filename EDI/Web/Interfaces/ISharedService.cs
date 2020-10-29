@@ -19,5 +19,6 @@ namespace EDI.Web.Interfaces
         Task<IEnumerable<SelectListItem>> GetTeachers(int schoolid);
         Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
         Task<ErrorViewModel> ProcessFileData();
+        Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
     }
 }

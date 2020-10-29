@@ -1,0 +1,122 @@
+﻿@inject ITranslationService translationService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">English: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@English" @onchange="@(e =>EnglishChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">French: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@French" @onchange="@(e =>FrenchChange(e))" />
+    </div>
+    <button @onclick="@SaveTranslation" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    TranslationItemViewModel TranslationModel { get; set; }
+    public string English { get; set; }
+    public string French { get; set; }
+
+    public int sequence { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TranslationModel = Parameters.Get<TranslationItemViewModel>("TranslationModel");
+        English = TranslationModel.English;
+        French = TranslationModel.French;
+    }
+
+    private async void SaveTranslation()
+    {
+        if (string.IsNullOrEmpty(TranslationModel.English))
+        {
+            ErrorMessage = "English is required.";
+            return;
+        }
+
+        if (TranslationModel.Id > 0)
+        {
+            var totalItems = await translationService.GetDuplicateCount(TranslationModel.English, TranslationModel.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same English has already existed.";
+            }
+            else
+            {
+                await translationService.UpdateTranslationAsync(TranslationModel);
+
+                Message = "Translation updated successfully.";
+
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            var totalItems = await translationService.GetDuplicateCount(TranslationModel.English);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The same English has already existed.";
+            }
+            else
+            {
+                await translationService.CreateTranslationAsync(TranslationModel);
+
+                Message = "New translation added successfully.";
+                TranslationModel = new TranslationItemViewModel();
+                StateHasChanged();
+            }
+        }
+
+        ModalService.Close(ModalResult.Ok<TranslationItemViewModel>(TranslationModel));
+    }
+
+    void Reset()
+    {
+        sequence = 0;
+
+        TranslationModel = new TranslationItemViewModel();
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void EnglishChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        TranslationModel.English = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void FrenchChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        TranslationModel.French = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}

@@ -75,6 +75,7 @@
         treedata.Add(new TreeData { nodeId = "04-11", nodeText = "Province Types", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-12", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Years", icon = "icon-calendar icon", pid = "04-05" });
+        treedata.Add(new TreeData { nodeId = "04-14", nodeText = "Translations", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "05", nodeText = "Accounts", icon = "icon-list icon", hasChild = true});
         treedata.Add(new TreeData { nodeId = "05-01", nodeText = "Users", icon = "icon-people icon", pid = "05" });
         treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Roles", icon = "icon-organization icon", pid = "05" });
@@ -170,6 +171,10 @@
         else if (args.NodeData.Id == "04-13")
         {
             NavigationManager.NavigateTo("./years/index");
+        }
+        else if (args.NodeData.Id == "04-14")
+        {
+            NavigationManager.NavigateTo("./translations/index/0");
         }
         else if (args.NodeData.Id == "06-04")
         {

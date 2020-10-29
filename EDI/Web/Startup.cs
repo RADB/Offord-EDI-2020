@@ -100,7 +100,9 @@ namespace EDI.Web
             services.AddScoped<ILinkService, LinkService>();
             services.AddScoped<IFaqService, FaqService>();
             services.AddScoped<ICoordinatorService, CoordinatorService>();
+            services.AddScoped<ITranslationService, TranslationService>();
             services.AddScoped<UserSettings>();
+            services.AddScoped<LanguageSettings>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
 

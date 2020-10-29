@@ -42,9 +42,9 @@ namespace Ardalis.GuardClauses
 
     public static class LanguageGuards
     {
-        public static void NullLanguage(this IGuardClause guardClause, int languageid, Language years)
+        public static void NullLanguage(this IGuardClause guardClause, int languageid, Language languages)
         {
-            if (years == null)
+            if (languages == null)
                 throw new LanguageNotFoundException(languageid);
         }
     }
@@ -118,6 +118,15 @@ namespace Ardalis.GuardClauses
         {
             if (faq == null)
                 throw new FaqNotFoundException(faqid);
+        }
+    }
+
+    public static class TranslationGuards
+    {
+        public static void NullTranslation(this IGuardClause guardClause, int translationid, Translation words)
+        {
+            if (words == null)
+                throw new TranslationNotFoundException(translationid);
         }
     }
 }
