@@ -80,15 +80,15 @@
         }
         else
         {
-            var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Question).ToList());
+            var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Sequence).ToList());
 
             if (UserSettings.IsCoordinator)
             {
-                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Question).ToList());
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Sequence).ToList());
             }
             else if (UserSettings.IsTeacher)
             {
-                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Question).ToList());
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Sequence).ToList());
             }
 
             List<FaqItemViewModel> sivm = new List<FaqItemViewModel>();
