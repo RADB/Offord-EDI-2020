@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Spinner
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
@@ -39,7 +41,7 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridTranslation" @ref="Grid" DataSource="@translations" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete","Excel Import", "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <SfGrid ID="GridTranslation" @ref="Grid" DataSource="@translations" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="TranslationItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -76,6 +78,8 @@
     IEnumerable<FileItemViewModel> files;
 
     private bool ShowFileupload { get; set; }
+
+    private List<Object> Toolbaritems = new List<Object>() { new ItemModel() { Text = "Add", TooltipText = "Add New", PrefixIcon = "e-add", Id = "Add" }, new ItemModel() { Text = "Edit", TooltipText = "Edit", PrefixIcon = "e-edit", Id = "Edit" }, "Delete", new ItemModel() { Text = "Excel Import", TooltipText = "Import", PrefixIcon = "e-excelexport", Id = "ExcelExport" }, "ExcelExport", "Search" };
 
     protected override async Task OnParametersSetAsync()
     {
@@ -160,11 +164,11 @@
         {
             this.Grid.CsvExport();
         }
-        if (args.Item.Id == "GridTranslation_Excel Import")
+        if (args.Item.Id == "ExcelExport")
         {
             UploadFile();
         }
-        if (args.Item.Id == "GridTranslation_add")
+        if (args.Item.Id == "Add")
         {
             TranslationModel = new TranslationItemViewModel();
             parameters.Add("TranslationModel", TranslationModel);
@@ -172,7 +176,7 @@
             Modal.Show<TranslationWindow>("New EDI Translation", parameters);
             Modal.OnClose += NewWindowModalClosed;
         }
-        if (args.Item.Id == "GridTranslation_edit")
+        if (args.Item.Id == "Edit")
         {
             TranslationModel = new TranslationItemViewModel();
             var rowdata = this.translations.Where(t => t.Id == rowid).FirstOrDefault();

@@ -1,6 +1,8 @@
 ﻿@page "/Countries/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ICountryService countryService;
@@ -29,7 +31,7 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridCountry" @ref="Grid" DataSource="@countrys" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <SfGrid ID="GridCountry" @ref="Grid" DataSource="@countrys" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="CountryItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -57,6 +59,8 @@
     SfGrid<CountryItemViewModel> Grid;
 
     IEnumerable<CountryItemViewModel> countrys;
+
+    private List<Object> Toolbaritems = new List<Object>() { new ItemModel() { Text = "Add", TooltipText = "Add New", PrefixIcon = "e-add", Id = "Add" }, new ItemModel() { Text = "Edit", TooltipText = "Edit", PrefixIcon = "e-edit", Id = "Edit" }, "Delete", "ExcelExport", "Search" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,7 +122,7 @@
         {
             this.Grid.CsvExport();
         }
-        if (args.Item.Id == "GridCountry_add")
+        if (args.Item.Id == "Add")
         {
             CountryModel = new CountryItemViewModel();
             parameters.Add("CountryModel", CountryModel);
@@ -126,7 +130,7 @@
             Modal.Show<CountryWindow>("New EDI Country", parameters);
             Modal.OnClose += NewWindowModalClosed;
         }
-        if (args.Item.Id == "GridCountry_edit")
+        if (args.Item.Id == "Edit")
         {
             CountryModel = new CountryItemViewModel();
             var rowdata = this.countrys.Where(t => t.Id == rowid).FirstOrDefault();

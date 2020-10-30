@@ -1,6 +1,8 @@
 ﻿@page "/Provinces/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IProvinceService provinceService;
@@ -29,7 +31,7 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridProvince" @ref="Grid" DataSource="@provinces" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <SfGrid ID="GridProvince" @ref="Grid" DataSource="@provinces" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ProvinceItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -63,6 +65,8 @@
     SfGrid<ProvinceItemViewModel> Grid;
 
     IEnumerable<ProvinceItemViewModel> provinces;
+
+    private List<Object> Toolbaritems = new List<Object>() { new ItemModel() { Text = "Add", TooltipText = "Add New", PrefixIcon = "e-add", Id = "Add" }, new ItemModel() { Text = "Edit", TooltipText = "Edit", PrefixIcon = "e-edit", Id = "Edit" }, "Delete", "ExcelExport", "Search" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -130,7 +134,7 @@
         {
             this.Grid.CsvExport();
         }
-        if (args.Item.Id == "GridProvince_add")
+        if (args.Item.Id == "Add")
         {
             ProvinceModel = new ProvinceItemViewModel();
             parameters.Add("ProvinceModel", ProvinceModel);
@@ -138,7 +142,7 @@
             Modal.Show<ProvinceWindow>("New EDI Province", parameters);
             Modal.OnClose += NewWindowModalClosed;
         }
-        if (args.Item.Id == "GridProvince_edit")
+        if (args.Item.Id == "Edit")
         {
             ProvinceModel = new ProvinceItemViewModel();
             var rowdata = this.provinces.Where(t => t.Id == rowid).FirstOrDefault();

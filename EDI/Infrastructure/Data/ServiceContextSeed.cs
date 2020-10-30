@@ -2356,23 +2356,5 @@ namespace EDI.Infrastructure.Data
                 new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
-
-        static IEnumerable<MenuConfigurations> GetPreconfiguredMenuConfigurations()
-        {
-            return new List<MenuConfigurations>()
-            {
-                new MenuConfigurations() { NodeId = "01", English = "Dashboard", French = "Tableau de bord", URL= "./dashboard/index", IconCss = "icon-graph icon", ForAdmin = true, ForCoordinator= false, ForTeacher= true, IsVisible= true, HasChild=false, PID= null, DisplayOrder = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "02", English = "Administration", French = "Administration", IconCss = "icon-globe icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=true, PID= null, DisplayOrder = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "02-01", English = "Sites", French = "Des sites", URL= "./sites/index", IconCss = "icon-map icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, PID= "02", DisplayOrder = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "02-02", English = "Schools", French = "Écoles", URL= "./schools/index", IconCss = "icon-home icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, PID= "02", DisplayOrder = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "02-03", English = "Teachers", French = "Enseignants", URL= "./teachers/index", IconCss = "icon-graduation icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, PID= "02", DisplayOrder = 5, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "02-04", English = "Class List", French = "Liste des classes", URL= "./Children/index", IconCss = "icon-people icon", ForAdmin = true, ForCoordinator= false, ForTeacher= true, IsVisible= true, HasChild=false, PID= "02", DisplayOrder = 6, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "02-05", English = "Coordinator-Sites", French = "Coordonnateur-Sites", URL= "./coordinators/index", IconCss = "icon-organization icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, PID= "02", DisplayOrder = 7, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "03", English = "Screens", French = "Écrans", URL= "./Screens/index", IconCss = "icon-docs icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, PID= null, DisplayOrder = 8, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "04", English = "Maintenance", French = "Entretien", IconCss = "icon-briefcase icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=true, PID= null, DisplayOrder = 9, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new MenuConfigurations() { NodeId = "04-01", English = "Configuration", French = "Configuration", URL= "./Configuration/index", IconCss = "icon-settings icon", ForAdmin = true, ForCoordinator= false, ForTeacher= false, IsVisible= true, HasChild=false, PID= "04", DisplayOrder = 10, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-
-            };
-        }
     }
 }

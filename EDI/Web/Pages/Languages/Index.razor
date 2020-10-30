@@ -1,6 +1,8 @@
 ﻿@page "/Languages/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ILanguageService languageService;
@@ -29,7 +31,7 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridLanguage" @ref="Grid" DataSource="@languages" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <SfGrid ID="GridLanguage" @ref="Grid" DataSource="@languages" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="LanguageItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -56,6 +58,8 @@
     SfGrid<LanguageItemViewModel> Grid;
 
     IEnumerable<LanguageItemViewModel> languages;
+
+    private List<Object> Toolbaritems = new List<Object>() { new ItemModel() { Text = "Add", TooltipText = "Add New", PrefixIcon = "e-add", Id = "Add" }, new ItemModel() { Text = "Edit", TooltipText = "Edit", PrefixIcon = "e-edit", Id = "Edit" }, "Delete", "ExcelExport", "Search" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,7 +120,7 @@
         {
             this.Grid.CsvExport();
         }
-        if (args.Item.Id == "GridLanguage_add")
+        if (args.Item.Id == "Add")
         {
             LanguageModel = new LanguageItemViewModel();
             parameters.Add("LanguageModel", LanguageModel);
@@ -124,7 +128,7 @@
             Modal.Show<LanguageWindow>("New EDI Language", parameters);
             Modal.OnClose += NewWindowModalClosed;
         }
-        if (args.Item.Id == "GridLanguage_edit")
+        if (args.Item.Id == "Edit")
         {
             LanguageModel = new LanguageItemViewModel();
             var rowdata = this.languages.Where(t => t.Id == rowid).FirstOrDefault();
