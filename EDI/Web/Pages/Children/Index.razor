@@ -4,6 +4,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IChildService childService;
+@inject ISharedService sharedService;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
@@ -16,7 +17,7 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <strong>@Header</strong>
+                <strong>@Translate(@Header)</strong>
                 <div class="pull-right">
 
                 </div>
@@ -28,7 +29,7 @@
                 }
                 else
                 {
-                    <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -39,21 +40,21 @@
                             </GridSortColumns>
                         </GridSortSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText="EDI_ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText="Child's Local ID" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText="teacher" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText="Gender" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText="Date of Birth" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText="Postal/Zip" Width="30"></GridColumn>
-                            <GridColumn HeaderText="Status" Width="15">
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText=@Translate("EDI_ID") TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText=@Translate("Child's Local ID") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText=@Translate("Year") Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText=@Translate("Teacher") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
+                            <GridColumn HeaderText=@Translate("Status") Width="15">
                                 <Template>
                                     @{
-                                        <h6>In Progress</h6>
+                                        <h6>@Translate("In Progress")</h6>
                                     }
                                 </Template>
                             </GridColumn>
-                            <GridColumn HeaderText="% Complete" Width="25">
+                            <GridColumn HeaderText=@Translate("% Complete") Width="25">
                                 <Template>
                                     @{
                                         var comm = (context as ChildItemViewModel);
@@ -99,11 +100,6 @@
         else if (UserSettings.IsCoordinator)
         {
             NavigationManager.NavigateTo("./dashboard/index");
-        }
-
-        if (UserSettings.Language == "French")
-        {
-            Header = "Gestion de classe";
         }
 
         if (UserSettings.IsTeacher)
@@ -153,6 +149,11 @@
 
         this.rowid = 0;
         children = sivm;
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 
     private int rowid { get; set; }

@@ -300,9 +300,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 
-                entity.Property(e => e.English).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.English).IsRequired().IsUnicode(false);
 
-                entity.Property(e => e.French).HasMaxLength(50);
+                entity.Property(e => e.French).IsUnicode(false);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
