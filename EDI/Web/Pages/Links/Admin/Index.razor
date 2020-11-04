@@ -5,13 +5,14 @@
 @inject ILinkService linkService;
 @inject NavigationManager NavigationManager;
 @inject IModalService Modal;
+@inject ISharedService sharedService;
 
 <div class="row">
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
                 <div class="row">
-                    <h2>LINKS</h2>
+                    <h2>@Translate("Links")</h2>
                     <AuthorizeView Roles="Administrator">
                         <Authorized>
                             <div class="float-right" style="margin-left:20px;">
@@ -50,7 +51,7 @@
         if (UserSettings.IsAdmin)
         {
             //get the list of links ordered by sequence for admins
-            //Links = edi.Links.OrderBy(p => p.Sequence).ToList();            
+            //Links = edi.Links.OrderBy(p => p.Sequence).ToList();
             Links = edi.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
         }
         else if (UserSettings.IsTeacher)
@@ -103,5 +104,10 @@
         }
 
         Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

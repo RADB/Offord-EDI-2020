@@ -11,6 +11,7 @@
 @inject IModalService Modal;
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -33,7 +34,7 @@
     <div class="col-md-6">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
-                <strong>Edit Child</strong>
+                <strong>@Translate("Edit Child")</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
                     <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
@@ -124,7 +125,12 @@
     }
 
     private void Add()
-    { 
+    {
         NavigationManager.NavigateTo("./children/new");
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

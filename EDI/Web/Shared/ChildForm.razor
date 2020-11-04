@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="DOB">Date of Birth<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <label class="col-md-4 col-form-label" for="DOB">@Translate("Date of Birth")<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
             <Input type="date" value="@dob" format-value="YYYY-MM-DD" class="col-md-7 form-control" @onchange="@(e =>DOBChange(e))" />
         </div>
 
@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Gender">Gender: </label>
+            <label class="col-md-4 col-form-label" for="Gender">@Translate("Gender"): </label>
             <select class="col-md-7" value="@genderid" @onchange="@(e =>GenderChange(e))">
                 @if (Genders != null)
                 {
@@ -45,7 +45,7 @@
         @if (@ChildModel.IsAdmin.HasValue && @ChildModel.IsAdmin.Value)
         {
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Site">Site<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                <label class="col-md-4 col-form-label" for="Site">@Translate("Site")<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
                 <select class="col-md-7" value="@siteid" @onchange="@(e =>SiteChange(e))">
                     @if (Sites != null)
                     {
@@ -58,7 +58,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="School">School<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                <label class="col-md-4 col-form-label" for="School">@Translate("School")<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
                 <select class="col-md-7" value="@schoolid" @onchange="@(e =>SchoolChange(e))">
                     @if (Schools != null)
                     {
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Teacher">Teacher<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                <label class="col-md-4 col-form-label" for="Teacher">@Translate("Teacher")<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
                 <select class="col-md-7" value="@teacherid" @onchange="@(e =>TeacherChange(e))">
                     @if (Teachers != null)
                     {
@@ -84,7 +84,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                <label class="col-md-4 col-form-label" for="Year">@Translate("Year")<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
                 <select class="col-md-7" value="@yearid" @onchange="@(e =>YearChange(e))">
                     @if (Years != null)
                     {
@@ -99,7 +99,7 @@
         else
         {
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Site">Site: </label>
+                <label class="col-md-4 col-form-label" for="Site">@Translate("Site"): </label>
                 <select class="col-md-7" value="@siteid" disabled>
                     @if (Sites != null)
                     {
@@ -112,7 +112,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="School">School: </label>
+                <label class="col-md-4 col-form-label" for="School">@Translate("School"): </label>
                 <select class="col-md-7" value="@schoolid" disabled>
                     @if (Schools != null)
                     {
@@ -125,7 +125,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Teacher">Teacher: </label>
+                <label class="col-md-4 col-form-label" for="Teacher">@Translate("Teacher"): </label>
                 <select class="col-md-7" value="@teacherid" disabled>
                     @if (Teachers != null)
                     {
@@ -138,7 +138,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Year">Year: </label>
+                <label class="col-md-4 col-form-label" for="Year">@Translate("Year"): </label>
                 <select class="col-md-7" value="@yearid" disabled>
                     @if (Years != null)
                     {
@@ -444,5 +444,10 @@
             ChildModel.Ediid = null;
             StateHasChanged();
         }
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

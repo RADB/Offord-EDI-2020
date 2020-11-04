@@ -177,16 +177,16 @@
         {
             this.Grid.CsvExport();
         }
-        if (args.Item.Id == "GridChild_add")
+        if (args.Item.Id == "GridChild_add" || args.Item.Id == "GridChild_Ajouter")
         {
             NavigationManager.NavigateTo("./children/new");
             //NewInvoice();
         }
-        if (args.Item.Id == "GridChild_edit")
+        if (args.Item.Id == "GridChild_edit" || args.Item.Id == "GridChild_Éditer")
         {
             NavigationManager.NavigateTo("./children/edit/" + this.rowid);
         }
-        if (args.Item.Id == "GridChild_delete")
+        if (args.Item.Id == "GridChild_delete" || args.Item.Id == "GridChild_Supprimer")
         {
             Modal.Show<ConfirmDelete>("Confirm Delete");
             Modal.OnClose += ConfirmDeleteModalClosed;

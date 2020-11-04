@@ -4,6 +4,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 
 <div class="row">
     <div class="col-md-12">
@@ -19,7 +20,7 @@
             else if (IsTeacher)
             {
                 <div class="card-header">
-                    <strong>Sample Questions for Teacher</strong>
+                    <strong>@Translate("Sample Questions for Teacher")</strong>
                 </div>
 
                 <div class="card-body">
@@ -84,5 +85,10 @@
                 IsCoordinator = true;
             }
         }
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }
