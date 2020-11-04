@@ -16,11 +16,13 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
+        public virtual DbSet<LookupSet> LookupSets { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
         public virtual DbSet<SpecialProblem> SpecialProblems { get; set; }
-        public virtual DbSet<Year> Years { get; set; }
         public virtual DbSet<Translation> Translations { get; set; }
+        public virtual DbSet<Year> Years { get; set; }
+        
 
         /* Staging Data*/
         public virtual DbSet<FileImport> FileImports { get; set; }
@@ -294,19 +296,6 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
-            modelBuilder.Entity<Translation>(entity =>
-            {
-                entity.ToTable("Translations", "LUData");
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.English).IsRequired().HasMaxLength(50);
-
-                entity.Property(e => e.French).HasMaxLength(50);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-            });
-
 
             modelBuilder.Entity<Language>(entity =>
             {
@@ -340,6 +329,25 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.Url).HasColumnName("URL").HasMaxLength(255);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
+            });
+
+            modelBuilder.Entity<LookupSet>(entity =>
+            {
+                entity.ToTable("LookupSets", "LUData");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.English).IsRequired().HasMaxLength(140);
+
+                entity.Property(e => e.French).HasMaxLength(140);
+
+                entity.Property(e => e.LookupId).HasColumnName("LookupID");
+
+                entity.Property(e => e.LookupName).HasMaxLength(40);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.YearId).HasColumnName("YearID");                
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -559,6 +567,16 @@ namespace EDI.Infrastructure.Data
                 entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
 
             });
+            modelBuilder.Entity<Translation>(entity =>
+            {
+                entity.ToTable("Translations", "LUData");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.English).IsRequired();
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+            });
 
             modelBuilder.Entity<Year>(entity =>
             {
@@ -580,6 +598,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
                 entity.HasMany(e => e.Links).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Links");
                 entity.HasMany(e => e.Faqs).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
+                entity.HasMany(e => e.LookupSets).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSets");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
 

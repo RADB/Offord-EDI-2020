@@ -66,6 +66,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[LUData].[LookupSets]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[LUData].[Provinces]"
       },
       {
@@ -75,6 +79,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[LUData].[SpecialProblems]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Translations]"
       },
       {
          "HasPrimaryKey": true,
