@@ -9,6 +9,7 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -32,7 +33,7 @@
     <div class="col-md-6">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
-                <strong>New Child</strong>
+                <strong>@Translate("New Child")</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
                     <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
@@ -110,5 +111,10 @@
     {
         ChildModel = new ChildItemViewModel();
         StateHasChanged();
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

@@ -10,6 +10,7 @@
 @inject AppIdentityDbContext identityContext;
 @inject IMathService MathService;
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 
 <div class="row">
     <div class="col-md-12">
@@ -102,8 +103,8 @@
             else if (IsTeacher)
             {
                 <div class="card-header">
-                    <strong>Dashboard for Teacher</strong>
-                </div>
+                    <strong>@Translate("Dashboard for Teacher")</strong>
+            </div>
                 <div class="card-body">
                     <div class="container-fluid">
                         <div class="row">
@@ -112,7 +113,7 @@
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Children</div>
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">@Translate("Children")</div>
                                                 <div class="h3 mb-0 font-weight-bold text-gray-800">@children</div>
                                             </div>
                                             <div class="col-auto">
@@ -126,7 +127,7 @@
 
 
                         <!-- EDI Questionnaires Status -->
-                        <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" />
+                        <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" />
 
                         <!-- Teacher Questionnaires Status -->
                         <div class="row">
@@ -135,13 +136,13 @@
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <strong>Teacher Questionnaires</strong>
-                                            </div>
+                                                <strong>@Translate("Teacher Questionnaires")</strong>
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <QuestionnaireChecklist IsComplete=false QuestionnaireName="Teacher Participation Questionaire" URL="/Dashboard/Index" />
-                                        <QuestionnaireChecklist IsComplete=true QuestionnaireName="Teacher Training Feedback Questionaire" URL="/Dashboard/Index" />
+                                        <QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Participation Questionaire") URL="/Dashboard/Index" />
+                                        <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Training Feedback Questionaire") URL="/Dashboard/Index" />
                                     </div>
                                 </div>
                             </div>
@@ -202,5 +203,10 @@
                 IsCoordinator = true;
             }
         }
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

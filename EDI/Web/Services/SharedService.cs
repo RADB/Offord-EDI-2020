@@ -1306,16 +1306,21 @@ namespace EDI.Web.Services
 
         public string GetTranslate(string english)
         {
-            if (_userSettings.Language == "French")
-            {
-                var translate = _languageSettings.Translations.Where(e => e.English == english).FirstOrDefault();
-                if (translate == null || string.IsNullOrEmpty(translate.French))
-                    return english;
-                else
-                    return translate.French;
-            }
+            if (string.IsNullOrEmpty(english))
+                return string.Empty;
             else
-                return english;
+            {
+                if (_userSettings.Language == "French")
+                {
+                    var translate = _languageSettings.Translations.Where(e => e.English == english).FirstOrDefault();
+                    if (translate == null || string.IsNullOrEmpty(translate.French))
+                        return english;
+                    else
+                        return translate.French;
+                }
+                else
+                    return english;
+            }            
         }
 
         public string GetImagePath()
