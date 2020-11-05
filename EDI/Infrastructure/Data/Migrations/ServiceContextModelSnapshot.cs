@@ -707,6 +707,65 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Links","EDI");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.LookupSet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("English")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(140)")
+                        .HasMaxLength(140);
+
+                    b.Property<string>("French")
+                        .HasColumnType("nvarchar(140)")
+                        .HasMaxLength(140);
+
+                    b.Property<byte?>("LookupId")
+                        .HasColumnName("LookupID")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LookupName")
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<short>("Sequence")
+                        .HasColumnType("smallint");
+
+                    b.Property<byte>("Value")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("LookupSets","LUData");
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.MenuConfigurations", b =>
                 {
                     b.Property<int>("Id")
@@ -1440,12 +1499,10 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("English")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("French")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
@@ -1551,6 +1608,16 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("Links")
                         .HasForeignKey("YearId")
                         .HasConstraintName("FK_Years_Links")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.LookupSet", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("LookupSets")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_LookupSets")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

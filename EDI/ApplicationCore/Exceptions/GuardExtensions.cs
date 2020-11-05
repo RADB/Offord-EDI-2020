@@ -129,4 +129,13 @@ namespace Ardalis.GuardClauses
                 throw new TranslationNotFoundException(translationid);
         }
     }
+
+    public static class LookupSetGuards
+    {
+        public static void NullLookupSet(this IGuardClause guardClause, int lookupSetid, LookupSet lookupSet)
+        {
+            if (lookupSet == null)
+                throw new LookupSetNotFoundException(lookupSetid);
+        }
+    }
 }

@@ -1,0 +1,234 @@
+﻿@inject ILookupSetService lookupSetService
+@inject ISharedService sharedService
+@inject IModalService ModalService
+@inject ServiceContext dbContext;
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Value">Lookup ID<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@lookupid" @onchange="@(e =>LookupIdChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Code">Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@Name" @onchange="@(e =>NameChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@English" @onchange="@(e =>EnglishChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="English">French: </label>
+        <input type="text" class="col-md-6 col-form-label" value="@French" @onchange="@(e =>FrenchChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Value">Value<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@value" @onchange="@(e =>ValueChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Sequence">Sequence<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="number" class="col-md-6 col-form-label" value="@sequence" @onchange="@(e =>SequenceChange(e))" />
+    </div>
+    <div class="form-group row">
+        <label class="col-md-5 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
+            @if (Years != null)
+            {
+                @foreach (var option in Years)
+                {
+                    <option value="@option.Value">@option.Text</option>
+                }
+            }
+        </select>
+    </div>
+    <button @onclick="@SaveLookupSet" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    LookupSetItemViewModel LookupSetModel { get; set; }
+
+    public string Name { get; set; }
+    public string English { get; set; }
+    public string French { get; set; }
+
+    public int lookupid { get; set; }
+    public int value { get; set; }
+    public int sequence { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    public IEnumerable<SelectListItem> Years { get; set; }
+
+    public string yearid { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LookupSetModel = Parameters.Get<LookupSetItemViewModel>("LookupSetModel");
+
+        Years = await sharedService.GetYears();
+
+        if (LookupSetModel.YearId == 0 && Years.Count() == 2)
+        {
+            LookupSetModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
+
+        yearid = LookupSetModel.YearId.ToString();
+
+        sequence = LookupSetModel.Sequence;
+        value = LookupSetModel.Value;
+        lookupid = LookupSetModel.LookupId.HasValue ? LookupSetModel.LookupId.Value : 0;
+
+        Name = LookupSetModel.LookupName;
+        English = LookupSetModel.English;
+        French = LookupSetModel.French;
+    }
+
+    private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.YearId = 0;
+
+        if (int.TryParse(selectedString, out int newyearid))
+        {
+            LookupSetModel.YearId = newyearid;
+        }
+    }
+
+    private void SequenceChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.Sequence = 0;
+
+        if (short.TryParse(selectedString, out short newvalue))
+        {
+            LookupSetModel.Sequence = newvalue;
+        }
+        StateHasChanged();
+    }
+
+    private void ValueChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.Value = 0;
+
+        if (byte.TryParse(selectedString, out byte newvalue))
+        {
+            LookupSetModel.Value = newvalue;
+        }
+        StateHasChanged();
+    }
+
+    private void LookupIdChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.LookupId = 0;
+
+        if (byte.TryParse(selectedString, out byte newvalue))
+        {
+            LookupSetModel.LookupId = newvalue;
+        }
+        StateHasChanged();
+    }
+
+    private async void SaveLookupSet()
+    {
+        if (string.IsNullOrEmpty(LookupSetModel.LookupName))
+        {
+            ErrorMessage = "Name is required.";
+            return;
+        }
+
+        if (string.IsNullOrEmpty(LookupSetModel.English))
+        {
+            ErrorMessage = "English is required.";
+            return;
+        }
+
+        if(LookupSetModel.LookupId == 0)
+        {
+            ErrorMessage = "LookupId must be bigger than 0.";
+            return;
+        }
+
+        if (LookupSetModel.Sequence == 0)
+        {
+            ErrorMessage = "Sequence must be bigger than 0.";
+            return;
+        }
+
+        if (LookupSetModel.Id > 0)
+        {
+            await lookupSetService.UpdateLookupSetAsync(LookupSetModel);
+
+            Message = "LookupSet updated successfully.";
+
+            StateHasChanged();
+        }
+        else
+        {
+            await lookupSetService.CreateLookupSetAsync(LookupSetModel);
+
+            Message = "New lookupSet added successfully.";
+            LookupSetModel = new LookupSetItemViewModel();
+            StateHasChanged();
+        }
+
+        ModalService.Close(ModalResult.Ok<LookupSetItemViewModel>(LookupSetModel));
+    }
+
+    void Reset()
+    {
+        sequence = 0;
+
+        LookupSetModel = new LookupSetItemViewModel();
+    }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    private void NameChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.LookupName = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void EnglishChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.English = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+
+    private void FrenchChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LookupSetModel.French = string.IsNullOrEmpty(selectedString) ? null : selectedString.Trim();
+
+        StateHasChanged();
+    }
+}
