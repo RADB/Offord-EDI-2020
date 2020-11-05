@@ -11,11 +11,13 @@ namespace EDI.ApplicationCore.Entities
     {
         public Year()
         {
+            // add lookupdata to the years
             Children = new HashSet<Child>();
             Coordinators = new HashSet<Coordinator>();
             Faqs = new HashSet<Faq>();
             Links = new HashSet<Link>();
             LookupSets = new HashSet<LookupSet>();
+            LookupSetOptions = new HashSet<LookupSetOption>();
             NewsFeeds = new HashSet<NewsFeed>();
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
@@ -30,6 +32,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<Faq> Faqs { get; set; }
         public virtual ICollection<Link> Links { get; set; }
         public virtual ICollection<LookupSet> LookupSets { get; set; }
+        public virtual ICollection<LookupSetOption> LookupSetOptions { get; set; }
         public virtual ICollection<NewsFeed> NewsFeeds { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }

@@ -3,21 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Links", Schema = "EDI")]
-    public partial class Link:BaseEntity
-    {        
+    [Table("LookupSetOptions", Schema = "LUData")]
+    public partial class LookupSetOption:BaseEntity
+    {       
         public int YearId { get; set; }
-        public string Name { get; set; }
-        public string Url { get; set; }
-        public string Description { get; set; }
-        public bool? IsTeacherLink { get; set; }
-        public bool? IsAdminLink { get; set; }
-        public bool? IsCoordinatorLink { get; set; }
+        public int LookupId { get; set; }
+        public string English { get; set; }
+        public string French { get; set; }
+        public byte Value { get; set; }
         public short Sequence { get; set; }
 
+        public virtual LookupSet LookupSet { get; set; }
         public virtual Year Year { get; set; }
     }
 }

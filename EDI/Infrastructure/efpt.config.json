@@ -70,6 +70,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[LUData].[LookupSetOptions]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[LUData].[LookupSets]"
       },
       {

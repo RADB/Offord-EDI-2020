@@ -14,10 +14,6 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[EDI.NewsFeed]"
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Children]"
       },
       {
@@ -31,6 +27,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Links]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[NewsFeed]"
       },
       {
          "HasPrimaryKey": true,
@@ -67,6 +67,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[LUData].[Languages]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[LookupSetOptions]"
       },
       {
          "HasPrimaryKey": true,

@@ -17,6 +17,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<LookupSet> LookupSets { get; set; }
+        public virtual DbSet<LookupSetOption> LookupSetOptions { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
         public virtual DbSet<SpecialProblem> SpecialProblems { get; set; }
@@ -338,17 +339,30 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
+                entity.Property(e => e.LookupName).IsRequired().HasMaxLength(40);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.YearId).HasColumnName("YearID");
+            });
+
+            modelBuilder.Entity<LookupSetOption>(entity =>
+            {
+                entity.ToTable("LookupSetOptions", "LUData");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
                 entity.Property(e => e.English).IsRequired().HasMaxLength(140);
 
                 entity.Property(e => e.French).HasMaxLength(140);
 
                 entity.Property(e => e.LookupId).HasColumnName("LookupID");
 
-                entity.Property(e => e.LookupName).HasMaxLength(40);
-
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.YearId).HasColumnName("YearID");                
+                entity.Property(e => e.YearId).HasColumnName("YearID");
+
+                entity.HasOne(d => d.LookupSet).WithMany(p => p.LookupSetOptions).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSetOptions_LookupSets");
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -601,6 +615,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.NewsFeeds).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_NewsFeeds");
                 entity.HasMany(e => e.Faqs).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
                 entity.HasMany(e => e.LookupSets).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSets");
+                entity.HasMany(e => e.LookupSetOptions).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSetOptions");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
 
