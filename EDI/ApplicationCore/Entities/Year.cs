@@ -16,6 +16,7 @@ namespace EDI.ApplicationCore.Entities
             Faqs = new HashSet<Faq>();
             Links = new HashSet<Link>();
             LookupSets = new HashSet<LookupSet>();
+            NewsFeeds = new HashSet<NewsFeed>();
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
             TeacherFeedbackForms = new HashSet<TeacherFeedbackForm>();
@@ -29,6 +30,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<Faq> Faqs { get; set; }
         public virtual ICollection<Link> Links { get; set; }
         public virtual ICollection<LookupSet> LookupSets { get; set; }
+        public virtual ICollection<NewsFeed> NewsFeeds { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
         public virtual ICollection<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }

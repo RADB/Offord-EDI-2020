@@ -38,6 +38,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Coordinator> Coordinators { get; set; }
         public virtual DbSet<Faq> Faqs { get; set; }
         public virtual DbSet<Link> Links { get; set; }
+        public virtual DbSet<NewsFeed> NewsFeeds { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
@@ -597,6 +598,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherFeedbackForms");
                 entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
                 entity.HasMany(e => e.Links).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Links");
+                entity.HasMany(e => e.NewsFeeds).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_NewsFeeds");
                 entity.HasMany(e => e.Faqs).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
                 entity.HasMany(e => e.LookupSets).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSets");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
