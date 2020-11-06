@@ -90,7 +90,7 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Orientation]"
+         "Name": "[LUData].[Orientations]"
       },
       {
          "HasPrimaryKey": true,

@@ -382,7 +382,7 @@ namespace EDI.Infrastructure.Data
             });
             modelBuilder.Entity<Orientation>(entity =>
             {
-                entity.ToTable("Orientation", "LUData");
+                entity.ToTable("Orientations", "LUData");
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
