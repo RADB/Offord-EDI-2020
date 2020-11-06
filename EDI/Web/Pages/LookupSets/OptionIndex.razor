@@ -45,8 +45,7 @@
                             <GridColumn Field=@nameof(LookupSetOptionItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(LookupSetOptionItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(LookupSetOptionItemViewModel.Value) Type="ColumnType.Number" HeaderText="Value" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(LookupSetOptionItemViewModel.Sequence) Type="ColumnType.Number" HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(LookupSetOptionItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(LookupSetOptionItemViewModel.Sequence) Type="ColumnType.Number" HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>                            
                         </GridColumns>
                     </SfGrid>
                 }
@@ -102,10 +101,10 @@
                 alookupSetOption.French = lookupSetOption.French;
                 alookupSetOption.Value = lookupSetOption.Value;
                 alookupSetOption.Sequence = lookupSetOption.Sequence;
-                alookupSetOption.YearId = lookupSetOption.YearId;
+                /*alookupSetOption.YearId = lookupSetOption.YearId;
 
                 var year = dbContext.Years.Where(p => p.Id == alookupSetOption.YearId).FirstOrDefault();
-                alookupSetOption.Ediyear = year != null ? year.Ediyear : null;
+                alookupSetOption.Ediyear = year != null ? year.Ediyear : null;*/
 
                 sivm.Add(alookupSetOption);
             }
@@ -197,10 +196,10 @@
                 alookupSetOption.French = lookupSetOption.French;
                 alookupSetOption.Value = lookupSetOption.Value;
                 alookupSetOption.Sequence = lookupSetOption.Sequence;
-                alookupSetOption.YearId = lookupSetOption.YearId;
+                /*alookupSetOption.YearId = lookupSetOption.YearId;
 
                 var year = dbContext.Years.Where(p => p.Id == alookupSetOption.YearId).FirstOrDefault();
-                alookupSetOption.Ediyear = year != null ? year.Ediyear : null;
+                alookupSetOption.Ediyear = year != null ? year.Ediyear : null;*/
 
                 sivm.Add(alookupSetOption);
             }
@@ -231,10 +230,10 @@
                     item.French = LookupSetOptionModel.French;
                     item.Value = LookupSetOptionModel.Value;
                     item.Sequence = LookupSetOptionModel.Sequence;
-                    item.YearId = LookupSetOptionModel.YearId;
+                    /*item.YearId = LookupSetOptionModel.YearId;
 
                     var year = dbContext.Years.Where(p => p.Id == item.YearId).FirstOrDefault();
-                    item.Ediyear = year != null ? year.Ediyear : null;
+                    item.Ediyear = year != null ? year.Ediyear : null;*/
                 }
                 tmp.Add(item);
             }

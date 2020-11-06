@@ -30,18 +30,7 @@
         <label class="col-md-5 col-form-label" for="Sequence">Sequence<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
         <input type="number" class="col-md-6 col-form-label" value="@sequence" @onchange="@(e =>SequenceChange(e))" />
     </div>
-    <div class="form-group row">
-        <label class="col-md-5 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-        <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
-            @if (Years != null)
-            {
-                @foreach (var option in Years)
-                {
-                    <option value="@option.Value">@option.Text</option>
-                }
-            }
-        </select>
-    </div>
+    
     <button @onclick="@SaveLookupSetOption" class="btn btn-primary">Submit</button>
     <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
 </div>

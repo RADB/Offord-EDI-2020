@@ -17,7 +17,7 @@ namespace EDI.Web.Models
         public short Sequence { get; set; }
         [Required(ErrorMessage = "Year is required.")]
         public int YearId { get; set; }
-        public short? Ediyear { get; set; }
+        //public short? Ediyear { get; set; }
         public string EdiyearString { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }

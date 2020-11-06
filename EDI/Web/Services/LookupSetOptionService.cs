@@ -95,7 +95,7 @@ namespace EDI.Web.Services
                 _lookupSet.French = lookupSet.French;
                 _lookupSet.Value = lookupSet.Value;
                 _lookupSet.Sequence = lookupSet.Sequence;
-                _lookupSet.YearId = lookupSet.YearId;
+                //_lookupSet.YearId = lookupSet.YearId;
                 _lookupSet.ModifiedDate = DateTime.Now;
                 _lookupSet.ModifiedBy = _userSettings.UserName;
 
@@ -121,7 +121,7 @@ namespace EDI.Web.Services
                 _lookupSet.French = lookupSet.French;
                 _lookupSet.Value = lookupSet.Value;
                 _lookupSet.Sequence = lookupSet.Sequence;
-                _lookupSet.YearId = lookupSet.YearId;
+               // _lookupSet.YearId = lookupSet.YearId;
                 _lookupSet.CreatedDate = DateTime.Now;
                 _lookupSet.CreatedBy = _userSettings.UserName;
                 _lookupSet.ModifiedDate = DateTime.Now;
@@ -154,7 +154,7 @@ namespace EDI.Web.Services
                     French = lookupSet.French,
                     Value = lookupSet.Value,
                     Sequence = lookupSet.Sequence,
-                    YearId = lookupSet.YearId,
+                    //YearId = lookupSet.YearId,
                     CreatedDate = lookupSet.CreatedDate,
                     CreatedBy = lookupSet.CreatedBy,
                     ModifiedDate = lookupSet.ModifiedDate,

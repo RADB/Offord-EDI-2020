@@ -376,7 +376,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.YearId).HasColumnName("YearID");
+                //entity.Property(e => e.YearId).HasColumnName("YearID");
 
                 entity.HasOne(d => d.LookupSet).WithMany(p => p.LookupSetOptions).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSetOptions_LookupSets");
             });
