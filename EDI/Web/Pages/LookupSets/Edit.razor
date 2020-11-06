@@ -1,11 +1,10 @@
-﻿@page "/sites"
-@page "/sites/edit/{Id:int}"
+﻿@page "/lookupSets/edit/{Id:int}"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Navigations;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
-@inject ISiteService siteService
+@inject ILookupSetService lookupSetService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime;
 @inject IModalService Modal;
@@ -33,7 +32,7 @@
     <div class="col-md-10">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
-                <strong>Edit Site</strong>
+                <strong>Edit LookupSet</strong>
                 <div class="pull-right">
                     <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
                     <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
@@ -46,14 +45,14 @@
                     <AccordionItems>
                         <AccordionItem Header="Details" Expanded="true">
                             <ContentTemplate>
-                                <SiteForm @ref="siteform1" SiteModel="@SiteModel" HandleValidSubmit="HandleValidSubmit" />
+                                <LookupSetForm @ref="lookupSetform1" LookupSetModel="@LookupSetModel" HandleValidSubmit="HandleValidSubmit" />
                             </ContentTemplate>
                         </AccordionItem>
                     </AccordionItems>
                 </SfAccordion>
             </div>
             <div class="col-md-12">
-                <EDI.Web.Pages.Schools.Index SiteID=@Id Header="Schools at Site" AllowDelete=false AllowEdit=false></EDI.Web.Pages.Schools.Index>
+                <EDI.Web.Pages.LookupSets.OptionIndex LookupSetId=@Id Header="LookupSet Options" AllowDelete=true AllowEdit=true></EDI.Web.Pages.LookupSets.OptionIndex>
             </div>
             <br />
         </div>
@@ -66,11 +65,11 @@
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
-    private SiteItemViewModel SiteModel { get; set; } = new SiteItemViewModel();
+    private LookupSetItemViewModel LookupSetModel { get; set; } = new LookupSetItemViewModel();
 
-    SiteForm siteform1 = new SiteForm();
+    LookupSetForm lookupSetform1 = new LookupSetForm();
 
-    SfGrid<SchoolItemViewModel> Grid;
+    SfGrid<LookupSetOptionItemViewModel> Grid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -84,44 +83,33 @@
         }
         else
         {
-            SiteModel = await siteService.GetSiteItem(Id);
+            LookupSetModel = await lookupSetService.GetLookupSetItem(Id);
         }
     }
 
     private async void HandleValidSubmit()
     {
-        //Console.WriteLine("OnValidSubmit");
-        var totalItems = await siteService.GetDuplicateCount(SiteModel.SiteNumber, siteform1.SiteModel.Id);
+        await lookupSetService.UpdateLookupSetAsync(lookupSetform1.LookupSetModel);
 
-        if (totalItems > 0)
-        {
-            ErrorMessage = "The same Site has already existed.";
-            toastService.ShowError(ErrorMessage);
-        }
-        else
-        {
-            await siteService.UpdateSiteAsync(siteform1.SiteModel);
+        Message = "LookupSet updated successfully.";
 
-            Message = "Site updated successfully.";
+        toastService.ShowSuccess(Message);
 
-            toastService.ShowSuccess(Message);
-
-            StateHasChanged();
-        }
+        StateHasChanged();
     }
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./sites/index");
+        NavigationManager.NavigateTo("./lookupSets/index");
     }
 
     private async void Reset()
     {
-        SiteModel = await siteService.GetSiteItem(Id);
+        LookupSetModel = await lookupSetService.GetLookupSetItem(Id);
     }
 
     private void Add()
     {
-        NavigationManager.NavigateTo("./sites/new");
+        NavigationManager.NavigateTo("./lookupSets/new");
     }
 }

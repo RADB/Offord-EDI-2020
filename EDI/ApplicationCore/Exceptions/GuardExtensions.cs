@@ -138,4 +138,12 @@ namespace Ardalis.GuardClauses
                 throw new LookupSetNotFoundException(lookupSetid);
         }
     }
+    public static class LookupSetOptionGuards
+    {
+        public static void NullLookupSetOption(this IGuardClause guardClause, int lookupSetOptionid, LookupSetOption lookupSetOption)
+        {
+            if (lookupSetOption == null)
+                throw new LookupSetOptionNotFoundException(lookupSetOptionid);
+        }
+    }
 }

@@ -6,7 +6,7 @@ namespace EDI.ApplicationCore.Exceptions
 {
     class LookupSetNotFoundException : Exception
     {
-        public LookupSetNotFoundException(int languageid) : base($"No LookupSet found with ID: {languageid}")
+        public LookupSetNotFoundException(int lookupsetid) : base($"No LookupSet found with ID: {lookupsetid}")
         {
         }
 

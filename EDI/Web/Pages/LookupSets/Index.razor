@@ -17,7 +17,7 @@
     <div class="col-md-10">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <strong>LookupSets Management</strong>
+                <strong>@Header</strong>
                 <div class="pull-right">
 
                 </div>
@@ -32,22 +32,17 @@
                 else
                 {
                     <SfGrid ID="GridLookupSet" @ref="Grid" DataSource="@lookupSets" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
-                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="LookupSetItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSortSettings>
                             <GridSortColumns>
-                                <GridSortColumn Field="LookupId" Direction="SortDirection.Ascending"></GridSortColumn>
+                                <GridSortColumn Field="LookupName" Direction="SortDirection.Ascending"></GridSortColumn>
                             </GridSortColumns>
                         </GridSortSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(LookupSetItemViewModel.LookupId) HeaderText="Lookup ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(LookupSetItemViewModel.LookupName) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(LookupSetItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(LookupSetItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(LookupSetItemViewModel.Value) Type="ColumnType.Number" HeaderText="Value" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                            <GridColumn Field=@nameof(LookupSetItemViewModel.Sequence) Type="ColumnType.Number" HeaderText="Sequence" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                             <GridColumn Field=@nameof(LookupSetItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="10"></GridColumn>
                         </GridColumns>
                     </SfGrid>
@@ -62,6 +57,13 @@
 @code {
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+
+    [Parameter]
+    public string Header { get; set; } = "LookupSets";
+    [Parameter]
+    public bool AllowDelete { get; set; } = true;
+    [Parameter]
+    public bool AllowEdit { get; set; } = true;
 
     SfGrid<LookupSetItemViewModel> Grid;
 
@@ -81,7 +83,7 @@
         }
         else
         {
-            var alllookupSets = await Task.FromResult(dbContext.LookupSets.OrderBy(p => p.LookupId).ToList());
+            var alllookupSets = await Task.FromResult(dbContext.LookupSets.OrderBy(p => p.LookupName).ToList());
 
             List<LookupSetItemViewModel> sivm = new List<LookupSetItemViewModel>();
 
@@ -90,12 +92,7 @@
                 var alookupSet = new LookupSetItemViewModel();
 
                 alookupSet.Id = lookupSet.Id;
-                alookupSet.LookupId = lookupSet.LookupId;
                 alookupSet.LookupName = lookupSet.LookupName;
-                alookupSet.English = lookupSet.English;
-                alookupSet.French = lookupSet.French;
-                alookupSet.Value = lookupSet.Value;
-                alookupSet.Sequence = lookupSet.Sequence;
                 alookupSet.YearId = lookupSet.YearId;
 
                 var year = dbContext.Years.Where(p => p.Id == alookupSet.YearId).FirstOrDefault();
@@ -136,113 +133,17 @@
         }
         if (args.Item.Id == "Add")
         {
-            LookupSetModel = new LookupSetItemViewModel();
-            parameters.Add("LookupSetModel", LookupSetModel);
-
-            Modal.Show<LookupSetWindow>("New EDI LookupSet", parameters);
-            Modal.OnClose += NewWindowModalClosed;
+            NavigationManager.NavigateTo("./LookupSets/new");
         }
         if (args.Item.Id == "Edit")
         {
-            LookupSetModel = new LookupSetItemViewModel();
-            var rowdata = this.lookupSets.Where(t => t.Id == rowid).FirstOrDefault();
-
-            if (rowdata != null)
-            {
-                LookupSetModel.LookupId = rowdata.LookupId;
-                LookupSetModel.LookupName = rowdata.LookupName;
-                LookupSetModel.English = rowdata.English;
-                LookupSetModel.French = rowdata.French;
-                LookupSetModel.Value = rowdata.Value;
-                LookupSetModel.Sequence = rowdata.Sequence;
-                LookupSetModel.YearId = rowdata.YearId;
-                LookupSetModel.Id = rowdata.Id;
-                parameters.Add("LookupSetModel", LookupSetModel);
-
-                Modal.Show<LookupSetWindow>("Edit EDI LookupSet", parameters);
-                Modal.OnClose += ExistWindowModalClosed;
-            }
+            NavigationManager.NavigateTo("./LookupSets/edit/" + this.rowid);
         }
         if (args.Item.Id == "GridLookupSet_delete")
         {
             Modal.Show<ConfirmDelete>("Confirm Delete");
             Modal.OnClose += ConfirmDeleteModalClosed;
         }
-    }
-
-
-    async void NewWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
-    {
-        if (modalResult.Data is LookupSetItemViewModel)
-        {
-            LookupSetModel = (LookupSetItemViewModel)modalResult.Data;
-
-            var alllookupSets = await Task.FromResult(dbContext.LookupSets.OrderBy(p => p.LookupName).ToList());
-
-            List<LookupSetItemViewModel> sivm = new List<LookupSetItemViewModel>();
-
-            foreach (var lookupSet in alllookupSets)
-            {
-                var alookupSet = new LookupSetItemViewModel();
-
-                alookupSet.Id = lookupSet.Id;
-                alookupSet.LookupId = lookupSet.LookupId;
-                alookupSet.LookupName = lookupSet.LookupName;
-                alookupSet.English = lookupSet.English;
-                alookupSet.French = lookupSet.French;
-                alookupSet.Value = lookupSet.Value;
-                alookupSet.Sequence = lookupSet.Sequence;
-                alookupSet.YearId = lookupSet.YearId;
-
-                var year = dbContext.Years.Where(p => p.Id == alookupSet.YearId).FirstOrDefault();
-                alookupSet.Ediyear = year != null ? year.Ediyear : null;
-
-                sivm.Add(alookupSet);
-            }
-
-            lookupSets = sivm;
-        }
-        Modal.OnClose -= NewWindowModalClosed;
-        this.Grid.Refresh();
-
-        StateHasChanged();
-        this.rowid = 0;
-    }
-
-    void ExistWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
-    {
-        if (modalResult.Data is LookupSetItemViewModel)
-        {
-            LookupSetModel = (LookupSetItemViewModel)modalResult.Data;
-
-            var tmp = new List<LookupSetItemViewModel>();
-
-            foreach (var item in this.lookupSets)
-            {
-                if (item.Id == LookupSetModel.Id)
-                {
-                    item.LookupId = LookupSetModel.LookupId;
-                    item.LookupName = LookupSetModel.LookupName;
-                    item.English = LookupSetModel.English;
-                    item.French = LookupSetModel.French;
-                    item.Value = LookupSetModel.Value;
-                    item.Sequence = LookupSetModel.Sequence;
-                    item.YearId = LookupSetModel.YearId;
-
-                    var year = dbContext.Years.Where(p => p.Id == item.YearId).FirstOrDefault();
-                    item.Ediyear = year != null ? year.Ediyear : null;
-                }
-                tmp.Add(item);
-            }
-
-            this.lookupSets = tmp;
-        }
-        Modal.OnClose -= ExistWindowModalClosed;
-
-        this.rowid = 0;
-        this.Grid.Refresh();
-
-        StateHasChanged();
     }
 
     async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
@@ -269,24 +170,6 @@
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<LookupSetItemViewModel> args)
     {
-        var parameters = new ModalParameters();
-        LookupSetModel = new LookupSetItemViewModel();
-        var rowdata = this.lookupSets.Where(t => t.Id == rowid).FirstOrDefault();
-
-        if (rowdata != null)
-        {
-            LookupSetModel.LookupId = rowdata.LookupId;
-            LookupSetModel.LookupName = rowdata.LookupName;
-            LookupSetModel.English = rowdata.English;
-            LookupSetModel.French = rowdata.French;
-            LookupSetModel.Value = rowdata.Value;
-            LookupSetModel.Sequence = rowdata.Sequence;
-            LookupSetModel.YearId = rowdata.YearId;
-            LookupSetModel.Id = rowdata.Id;
-            parameters.Add("LookupSetModel", LookupSetModel);
-
-            Modal.Show<LookupSetWindow>("Edit EDI LookupSet", parameters);
-            Modal.OnClose += ExistWindowModalClosed;
-        }
+        NavigationManager.NavigateTo("./LookupSets/edit/" + this.rowid);
     }
 }

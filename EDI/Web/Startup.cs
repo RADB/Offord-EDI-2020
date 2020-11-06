@@ -100,6 +100,7 @@ namespace EDI.Web
             services.AddScoped<ILinkService, LinkService>();
             services.AddScoped<IFaqService, FaqService>();
             services.AddScoped<ILookupSetService, LookupSetService>();
+            services.AddScoped<ILookupSetOptionService, LookupSetOptionService>();
             services.AddScoped<ICoordinatorService, CoordinatorService>();
             services.AddScoped<ITranslationService, TranslationService>();
             services.AddScoped<UserSettings>();

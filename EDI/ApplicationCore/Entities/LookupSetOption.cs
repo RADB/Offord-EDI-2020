@@ -16,6 +16,5 @@ namespace EDI.ApplicationCore.Entities
         public short Sequence { get; set; }
 
         public virtual LookupSet LookupSet { get; set; }
-        public virtual Year Year { get; set; }
     }
 }

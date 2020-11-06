@@ -723,6 +723,47 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("LookupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("YearId")
+                        .HasColumnName("YearID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("LookupSets","LUData");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.LookupSetOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("English")
                         .IsRequired()
                         .HasColumnType("nvarchar(140)")
@@ -732,13 +773,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(140)")
                         .HasMaxLength(140);
 
-                    b.Property<byte?>("LookupId")
+                    b.Property<int>("LookupId")
                         .HasColumnName("LookupID")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("LookupName")
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
@@ -761,9 +798,9 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("YearId");
+                    b.HasIndex("LookupId");
 
-                    b.ToTable("LookupSets","LUData");
+                    b.ToTable("LookupSetOptions","LUData");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.MenuConfigurations", b =>
@@ -836,6 +873,96 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MenuConfigurations");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.NewsFeed", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool?>("Alberta")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("BritishColumbia")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("Manitoba")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("NewBrunswick")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Newfoundland")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NovaScotia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Nunavut")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Nwt")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Ontario")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Pei")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Quebec")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Saskatchewan")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Summary")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("YearId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Yukon")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("NewsFeed","EDI");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Province", b =>
@@ -1618,6 +1745,26 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("LookupSets")
                         .HasForeignKey("YearId")
                         .HasConstraintName("FK_Years_LookupSets")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.LookupSetOption", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.LookupSet", "LookupSet")
+                        .WithMany("LookupSetOptions")
+                        .HasForeignKey("LookupId")
+                        .HasConstraintName("FK_LookupSetOptions_LookupSets")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.NewsFeed", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("NewsFeeds")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_NewsFeeds")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -13,7 +13,7 @@ namespace EDI.Web.Interfaces
 
         Task UpdateLookupSetAsync(LookupSetItemViewModel lookupSet);
 
-        Task CreateLookupSetAsync(LookupSetItemViewModel lookupSet);
+        Task<int> CreateLookupSetAsync(LookupSetItemViewModel lookupSet);
 
         Task<LookupSetItemViewModel> GetLookupSetItem(int lookupSetId);
     }

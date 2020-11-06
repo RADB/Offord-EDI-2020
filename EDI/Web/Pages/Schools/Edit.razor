@@ -71,8 +71,6 @@
 
     SfGrid<TeacherItemViewModel> Grid;
 
-    IEnumerable<TeacherItemViewModel> teachers;
-
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -85,34 +83,7 @@
         }
         else
         {
-            SchoolModel = await schoolService.GetSchoolItem(Id);
-
-            /*var allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == Id).OrderBy(p => p.TeacherNumber).ToList());
-
-            List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
-
-            foreach (var teacher in allteachers)
-            {
-                var ateacher = new TeacherItemViewModel();
-
-                ateacher.Id = teacher.Id;
-                ateacher.TeacherName = teacher.TeacherName;
-                ateacher.TeacherNumber = teacher.TeacherNumber;
-                ateacher.Email = teacher.Email;
-                ateacher.PhoneNumber = teacher.PhoneNumber;
-                ateacher.YearId = teacher.YearId;
-
-                var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
-                ateacher.Ediyear = year.Ediyear;
-
-                ateacher.SchoolId = teacher.SchoolId;
-                var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
-                ateacher.SchoolName = school.SchoolName;
-                ateacher.SchoolNumber = school.SchoolNumber;
-
-                sivm.Add(ateacher);
-            }
-            teachers = sivm;*/
+            SchoolModel = await schoolService.GetSchoolItem(Id);            
         }
     }
 
