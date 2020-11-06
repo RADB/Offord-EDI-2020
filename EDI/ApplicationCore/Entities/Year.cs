@@ -15,9 +15,13 @@ namespace EDI.ApplicationCore.Entities
             Children = new HashSet<Child>();
             Coordinators = new HashSet<Coordinator>();
             Faqs = new HashSet<Faq>();
+            InputTypes = new HashSet<InputType>(); 
             Links = new HashSet<Link>();
             LookupSets = new HashSet<LookupSet>();
             NewsFeeds = new HashSet<NewsFeed>();
+            Orientations = new HashSet<Orientation>();
+            Questionnaires = new HashSet<Questionnaire>();
+            QuestionnairesConfigurations = new HashSet<QuestionnairesConfiguration>();
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
             TeacherFeedbackForms = new HashSet<TeacherFeedbackForm>();
@@ -29,9 +33,13 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<Child> Children { get; set; }
         public virtual ICollection<Coordinator> Coordinators { get; set; }
         public virtual ICollection<Faq> Faqs { get; set; }
+        public virtual ICollection<InputType> InputTypes { get; set; }
         public virtual ICollection<Link> Links { get; set; }
         public virtual ICollection<LookupSet> LookupSets { get; set; }
         public virtual ICollection<NewsFeed> NewsFeeds { get; set; }
+        public virtual ICollection<Orientation> Orientations { get; set; }
+        public virtual ICollection<Questionnaire> Questionnaires { get; set; }
+        public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
         public virtual ICollection<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }

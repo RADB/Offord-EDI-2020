@@ -15,9 +15,11 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<DateDimension> DateDimension { get; set; }
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<InputType> InputTypes { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<LookupSet> LookupSets { get; set; }
         public virtual DbSet<LookupSetOption> LookupSetOptions { get; set; }
+        public virtual DbSet<Orientation> Orientations { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
         public virtual DbSet<SpecialProblem> SpecialProblems { get; set; }
@@ -40,6 +42,8 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Faq> Faqs { get; set; }
         public virtual DbSet<Link> Links { get; set; }
         public virtual DbSet<NewsFeed> NewsFeeds { get; set; }
+        public virtual DbSet<Questionnaire> Questionnaires { get; set; }
+        public virtual DbSet<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
@@ -298,6 +302,18 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
+            modelBuilder.Entity<InputType>(entity =>
+            {
+                entity.ToTable("InputTypes", "LUData");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(50);
+
+                entity.Property(e => e.French).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+            });
 
             modelBuilder.Entity<Language>(entity =>
             {
@@ -339,7 +355,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.LookupName).IsRequired().HasMaxLength(40);
+                entity.Property(e => e.LookupName).IsRequired().HasMaxLength(100);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
@@ -363,6 +379,18 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.YearId).HasColumnName("YearID");
 
                 entity.HasOne(d => d.LookupSet).WithMany(p => p.LookupSetOptions).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSetOptions_LookupSets");
+            });
+            modelBuilder.Entity<Orientation>(entity =>
+            {
+                entity.ToTable("Orientation", "LUData");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(50);
+
+                entity.Property(e => e.French).IsRequired().HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);                
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -406,6 +434,84 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
             });
 
+            modelBuilder.Entity<Questionnaire>(entity =>
+            {
+                entity.ToTable("Questionnaires", "EDI");              
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.DescriptionEnglish).HasMaxLength(255);
+
+                entity.Property(e => e.DescriptionFrench).HasMaxLength(255);
+
+                entity.Property(e => e.English).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.French).HasMaxLength(100);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.QuestionnaireName).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.ShowProgressBar).HasComment("Answered x of y Questions");
+
+                entity.Property(e => e.YearId).HasColumnName("YearID");
+
+            });
+
+            modelBuilder.Entity<QuestionnairesConfiguration>(entity =>
+            {
+                entity.ToTable("Questionnaires.Configuration", "EDI");
+
+                entity.Property(e => e.Condition).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.English).IsRequired().HasMaxLength(255);
+
+                entity.Property(e => e.EntityField).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.EntityName).IsRequired().HasMaxLength(100);
+
+                entity.Property(e => e.French).HasMaxLength(255);
+
+                entity.Property(e => e.GroupName).HasMaxLength(10);
+
+                entity.Property(e => e.InputTypeId).HasColumnName("InputTypeID");
+
+                entity.Property(e => e.LookupEntity).HasMaxLength(100);
+
+                entity.Property(e => e.LookupEntityId).HasColumnName("LookupEntityID");
+
+                entity.Property(e => e.Mask).HasMaxLength(20);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+
+                entity.Property(e => e.Notification).HasMaxLength(500);
+
+                entity.Property(e => e.NotificationCondition).HasMaxLength(200);
+
+                entity.Property(e => e.Nwt).HasColumnName("NWT");
+
+                entity.Property(e => e.OrientationId).HasColumnName("OrientationID");
+
+                entity.Property(e => e.Pei).HasColumnName("PEI");
+
+                entity.Property(e => e.QuestionNumber).HasMaxLength(5);
+
+                entity.Property(e => e.QuestionnaireId).HasColumnName("QuestionnaireID");
+
+                entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");
+
+                entity.Property(e => e.YearId).HasColumnName("YearID");
+
+                entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
+
+                entity.HasOne(d => d.Orientation).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.OrientationId).HasConstraintName("FK_Questionnaires.Configuration_Orientation");
+
+                entity.HasOne(d => d.Questionnaire).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires.Configuration_Questionnaires");
+
+            });
+
             modelBuilder.Entity<School>(entity =>
             {
                 entity.ToTable("Schools", "EDI");
@@ -429,10 +535,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.SchoolNumber).IsUnicode(false);
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Site)
-                        .WithMany(p => p.Schools)
-                        .HasForeignKey(d => d.SiteId)
-                        .HasConstraintName("FK_Schools_Sites");
+                entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
 
                 entity.HasMany(e => e.Teachers).WithOne(e => e.School).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SchoolId);
 
@@ -615,6 +718,10 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.NewsFeeds).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_NewsFeeds");
                 entity.HasMany(e => e.Faqs).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
                 entity.HasMany(e => e.LookupSets).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSets");
+                entity.HasMany(e => e.InputTypes).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_InputTypes");
+                entity.HasMany(e => e.Orientations).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Orientations");
+                entity.HasMany(e => e.Questionnaires).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires");
+                entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Configurations");
                 //entity.HasMany(e => e.LookupSetOptions).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSetOptions");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");

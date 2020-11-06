@@ -34,6 +34,14 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Configuration]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI].[Schools]"
       },
       {
@@ -66,6 +74,10 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[LUData].[InputTypes]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[LUData].[Languages]"
       },
       {
@@ -75,6 +87,10 @@
       {
          "HasPrimaryKey": true,
          "Name": "[LUData].[LookupSets]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[LUData].[Orientation]"
       },
       {
          "HasPrimaryKey": true,
