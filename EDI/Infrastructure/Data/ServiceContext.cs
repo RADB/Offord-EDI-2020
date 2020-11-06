@@ -500,13 +500,11 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.QuestionnaireId).HasColumnName("QuestionnaireID");
 
-                entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");
+                entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");                
 
-                entity.Property(e => e.YearId).HasColumnName("YearID");
+                entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
 
-                entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
-
-                entity.HasOne(d => d.Orientation).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.OrientationId).HasConstraintName("FK_Questionnaires.Configuration_Orientation");
+                entity.HasOne(d => d.Orientation).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.OrientationId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_Orientation");
 
                 entity.HasOne(d => d.Questionnaire).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaires.Configuration_Questionnaires");
 
@@ -720,7 +718,8 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.LookupSets).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSets");
                 entity.HasMany(e => e.InputTypes).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_InputTypes");
                 entity.HasMany(e => e.Orientations).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Orientations");
-                entity.HasMany(e => e.Questionnaires).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires");                
+                entity.HasMany(e => e.Questionnaires).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires");
+                //entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Configurations");
                 //entity.HasMany(e => e.LookupSetOptions).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSetOptions");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");

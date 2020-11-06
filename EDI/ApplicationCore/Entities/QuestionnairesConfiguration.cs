@@ -7,8 +7,6 @@ namespace EDI.ApplicationCore.Entities
     [Table("Questionnaires.Configuration", Schema = "EDI")]
     public partial class QuestionnairesConfiguration:BaseEntityProvinceConfiguration
     {
-
-        public int YearId { get; set; }
         public int QuestionnaireId { get; set; }
         public int InputTypeId { get; set; }
         public int? OrientationId { get; set; }
@@ -45,7 +43,6 @@ namespace EDI.ApplicationCore.Entities
 
         public virtual InputType InputType { get; set; }
         public virtual Orientation Orientation { get; set; }
-        public virtual Questionnaire Questionnaire { get; set; }
-        public virtual Year Year { get; set; }
+        public virtual Questionnaire Questionnaire { get; set; }        
     }
 }
