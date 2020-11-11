@@ -3,6 +3,7 @@
 @using EDI.Web.Shared.BusinessIntelligence
 @using EDI.Web.Shared.Verification
 @using EDI.Web.Shared.Questions
+@using EDI.Web.Pages.NewsFeeds
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
@@ -88,15 +89,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-8 mb-4">
+                                <!-- EDI Questionnaires Status -->
+                                <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" />
 
-                        <!-- EDI Questionnaires Status -->
-                        <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" />
+                                <!-- Participation Questionnaires Status -->
+                                <QuestionnaireStatusBar Header="Teacher Participation Questionnaires" Total="@teachers" />
 
-                        <!-- Participation Questionnaires Status -->
-                        <QuestionnaireStatusBar Header="Teacher Participation Questionnaires" Total="@teachers" />
-
-                        <!-- Teacher Training Questionnaires Status -->
-                        <QuestionnaireStatusBar Header="Teacher Training Questionnaires" Total="@teachers" />
+                                <!-- Teacher Training Questionnaires Status -->
+                                <QuestionnaireStatusBar Header="Teacher Training Questionnaires" Total="@teachers" />
+                            </div>
+                            <div class="col-lg-4 mb-4">                               
+                                <!--<div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <h4 class="text-dark" >This is a test header</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="small font-weight-normal">This is my message.</div>
+                                    </div>
+                                </div>-->
+                                <EDI.Web.Pages.NewsFeeds.Index />
+                            </div>
+                        </div>
                     </div>
                 </div>
             }
@@ -104,7 +119,7 @@
             {
                 <div class="card-header">
                     <strong>@Translate("Dashboard for Teacher")</strong>
-            </div>
+                </div>
                 <div class="card-body">
                     <div class="container-fluid">
                         <div class="row">
@@ -137,7 +152,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <strong>@Translate("Teacher Questionnaires")</strong>
-                                        </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card-body">

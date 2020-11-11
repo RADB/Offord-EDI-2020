@@ -12,15 +12,16 @@
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 
-<div class="row">
+<!--<div class="row">
     <div class="col-md-12">
-        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;">-->
+        <div class="card shadow mb-4">
             <div class="card-header">
                 <div class="row">
-                    <h2>NewsFeeds</h2>
+                    <h2>News Feed</h2>
                     <AuthorizeView Roles="Administrator">
                         <Authorized>
-                            <div class="float-right" style="margin-left:20px;">
+                            <div>
                                 <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
                             </div>
                         </Authorized>
@@ -28,102 +29,102 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="container-fluid">
-                    <AuthorizeView Roles="Administrator, Teacher, Coordinator">
-                        <Authorized>
-                            @foreach (var newsFeed in newsFeeds)
-                            {
-                                <EDI.Web.Shared.News newsobj="@newsFeed" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
-                            }
-                        </Authorized>
-                        <NotAuthorized>
-                            Nothing to see here!
-                        </NotAuthorized>
-                    </AuthorizeView>
+                <!--<div class="container-fluid">-->
+                <AuthorizeView Roles="Administrator, Teacher, Coordinator">
+                    <Authorized>
+                        @foreach (var newsFeed in newsFeeds)
+                        {
+                            <EDI.Web.Shared.News newsobj="@newsFeed" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
+                        }
+                    </Authorized>
+                    <NotAuthorized>
+                        Nothing to see here!
+                    </NotAuthorized>
+                </AuthorizeView>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+            <!--</div>
+                </div>
+            </div>-->
 
 
-@code {
-    private string Message { get; set; }
-    private string ErrorMessage { get; set; }
+            @code {
+                private string Message { get; set; }
+                private string ErrorMessage { get; set; }
 
-    IEnumerable<NewsFeedItemViewModel> newsFeeds;
+                IEnumerable<NewsFeedItemViewModel> newsFeeds;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (!UserSettings.IsAuthenticated)
-        {
-            NavigationManager.NavigateTo("./login");
-        }
-        else
-        {
-            var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.OrderBy(p => p.Title).ToList());
+                protected override async Task OnInitializedAsync()
+                {
+                    if (!UserSettings.IsAuthenticated)
+                    {
+                        NavigationManager.NavigateTo("./login");
+                    }
+                    else
+                    {
+                        var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.OrderBy(p => p.Title).ToList());
 
-            List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
+                        List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
 
-            foreach (var newsFeed in allnewsFeeds)
-            {
-                var anewsFeed = new NewsFeedItemViewModel();
+                        foreach (var newsFeed in allnewsFeeds)
+                        {
+                            var anewsFeed = new NewsFeedItemViewModel();
 
-                anewsFeed.Id = newsFeed.Id;
-                anewsFeed.Title = newsFeed.Title;
-                anewsFeed.Text = newsFeed.Text;
-                anewsFeed.Summary = newsFeed.Summary;
-                anewsFeed.Author = newsFeed.Author;
-                anewsFeed.ValidFrom = newsFeed.ValidFrom;
-                anewsFeed.ValidTo = newsFeed.ValidTo;
-                anewsFeed.YearId = newsFeed.YearId;
+                            anewsFeed.Id = newsFeed.Id;
+                            anewsFeed.Title = newsFeed.Title;
+                            anewsFeed.Text = newsFeed.Text;
+                            anewsFeed.Summary = newsFeed.Summary;
+                            anewsFeed.Author = newsFeed.Author;
+                            anewsFeed.ValidFrom = newsFeed.ValidFrom;
+                            anewsFeed.ValidTo = newsFeed.ValidTo;
+                            anewsFeed.YearId = newsFeed.YearId;
 
-                var year = dbContext.Years.Where(p => p.Id == newsFeed.YearId).FirstOrDefault();
-                anewsFeed.Ediyear = year != null ? year.Ediyear : null;
+                            var year = dbContext.Years.Where(p => p.Id == newsFeed.YearId).FirstOrDefault();
+                            anewsFeed.Ediyear = year != null ? year.Ediyear : null;
 
-                sivm.Add(anewsFeed);
+                            sivm.Add(anewsFeed);
+                        }
+
+                        newsFeeds = sivm;
+                    }
+                }
+
+                private void Add()
+                {
+                    NavigationManager.NavigateTo("./newsfeeds/new");
+                }
+
+                private void Edit(int id)
+                {
+                    NavigationManager.NavigateTo("./newsfeeds/edit/" + id);
+                }
+
+                private int newsid { get; set; }
+
+                private void Delete(int id)
+                {
+                    newsid = id;
+                    Modal.Show<ConfirmDelete>("Confirm Delete");
+                    Modal.OnClose += ConfirmDeleteModalClosed;
+                }
+
+                async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+                {
+                    if (!modalResult.Cancelled)
+                    {
+                        await newsFeedService.DeleteNewsFeedAsync(this.newsid);
+
+                        var tmp = new List<NewsFeedItemViewModel>();
+                        foreach (var item in newsFeeds)
+                        {
+                            if (item.Id != newsid)
+                                tmp.Add(item);
+                        }
+                        this.newsFeeds = tmp;
+                        this.newsid = 0;
+                        StateHasChanged();
+                    }
+
+                    Modal.OnClose -= ConfirmDeleteModalClosed;
+                }
             }
-
-            newsFeeds = sivm;
-        }
-    }
-
-    private void Add()
-    {
-        NavigationManager.NavigateTo("./newsfeeds/new");
-    }
-
-    private void Edit(int id)
-    {
-        NavigationManager.NavigateTo("./newsfeeds/edit/" + id);
-    }
-
-    private int newsid { get; set; }
-
-    private void Delete(int id)
-    {
-        newsid = id;
-        Modal.Show<ConfirmDelete>("Confirm Delete");
-        Modal.OnClose += ConfirmDeleteModalClosed;
-    }
-
-    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
-    {
-        if (!modalResult.Cancelled)
-        {
-            await newsFeedService.DeleteNewsFeedAsync(this.newsid);
-
-            var tmp = new List<NewsFeedItemViewModel>();
-            foreach (var item in newsFeeds)
-            {
-                if (item.Id != newsid)
-                    tmp.Add(item);
-            }
-            this.newsFeeds = tmp;
-            this.newsid = 0;
-            StateHasChanged();
-        }
-
-        Modal.OnClose -= ConfirmDeleteModalClosed;
-    }
-}
