@@ -835,10 +835,6 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte>("Value")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("YearId")
-                        .HasColumnName("YearID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LookupId");
@@ -1993,6 +1989,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool?>("Alberta")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("BritishColumbia")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")
@@ -2006,6 +2008,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("EDIYear")
                         .HasColumnType("smallint");
 
+                    b.Property<bool?>("Manitoba")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")
@@ -2014,6 +2019,36 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool?>("NewBrunswick")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Newfoundland")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NovaScotia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Nunavut")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Nwt")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Ontario")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Pei")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Quebec")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Saskatchewan")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Yukon")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

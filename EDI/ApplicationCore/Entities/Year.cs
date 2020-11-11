@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EDI.ApplicationCore.Entities
 {
     [Table("Years", Schema = "LUData")]
-    public partial class Year:BaseEntity
+    public partial class Year:BaseEntityProvinceConfiguration
     {
         public Year()
         {
