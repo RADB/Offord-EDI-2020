@@ -2,7 +2,7 @@
 @inject ISharedService sharedService
 @inject NavigationManager NavigationManager
 
-<SfRichTextEditor @ref="RteObj" @bind-Value="@BindValue">
+<SfRichTextEditor @ref="RteObj" @bind-Value="@BindValue" Placeholder="Put content here..."  UndoRedoSteps="50" UndoRedoTimer="400">
     <RichTextEditorImageSettings SaveUrl="api/Image" Path=@Path></RichTextEditorImageSettings>
     <RichTextEditorEvents OnImageUploadSuccess="@onSuccess"> </RichTextEditorEvents>
     <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@tools"></RichTextEditorToolbarSettings>
@@ -42,4 +42,3 @@
         Path = NavigationManager.BaseUri + sharedService.GetImagePath() + "/";
     }
 }
-

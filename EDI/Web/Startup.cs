@@ -103,6 +103,7 @@ namespace EDI.Web
             services.AddScoped<ILookupSetOptionService, LookupSetOptionService>();
             services.AddScoped<ICoordinatorService, CoordinatorService>();
             services.AddScoped<ITranslationService, TranslationService>();
+            services.AddScoped<INewsFeedService, NewsFeedService>();
             services.AddScoped<UserSettings>();
             services.AddScoped<LanguageSettings>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

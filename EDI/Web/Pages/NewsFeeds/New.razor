@@ -1,0 +1,108 @@
+﻿@page "/NewsFeeds/New/"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject INewsFeedService NewsFeedService
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+
+<br />
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>New Feed</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <NewsForm @ref="newsform1" NewsFeedModel="@NewsFeedModel" IsViewOnly="false" HandleValidSubmit="HandleValidSubmit" />
+        </div>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Sender { get; set; }
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private NewsFeedItemViewModel NewsFeedModel { get; set; } = new NewsFeedItemViewModel();
+
+    NewsForm newsform1 = new NewsForm();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = await NewsFeedService.GetDuplicateCount(NewsFeedModel.Title);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same NewsFeed has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            if (NewsFeedModel.YearId == 0)
+            {
+                ErrorMessage = "Year is required.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(NewsFeedModel.Title))
+            {
+                ErrorMessage = "Title is required.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+
+            newsform1.NewsFeedModel.Text = newsform1.rte.BindValue;
+            int id = await NewsFeedService.CreateNewsFeedAsync(newsform1.NewsFeedModel);
+
+            Message = "New NewsFeed added successfully.";
+            toastService.ShowSuccess(Message);
+            NavigationManager.NavigateTo("./NewsFeeds/edit/" + id);
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./NewsFeeds/index");
+    }
+
+    private async void Reset()
+    {
+        NewsFeedModel = new NewsFeedItemViewModel();
+        StateHasChanged();
+    }
+}
