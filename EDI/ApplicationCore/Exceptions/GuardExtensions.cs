@@ -146,4 +146,12 @@ namespace Ardalis.GuardClauses
                 throw new LookupSetOptionNotFoundException(lookupSetOptionid);
         }
     }
+    public static class NewsFeedGuards
+    {
+        public static void NullNewsFeed(this IGuardClause guardClause, int newsFeedid, NewsFeed newsFeeds)
+        {
+            if (newsFeeds == null)
+                throw new NewsFeedNotFoundException(newsFeedid);
+        }
+    }
 }

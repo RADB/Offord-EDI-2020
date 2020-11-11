@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Html
+@inject NavigationManager NavigationManager;
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title"><a href="@url1" class="card-news" title="@newsobj.Title" target="_blank">@newsobj.Title</a></h3>
+        <div class="card-text">@((MarkupString)newsobj.Summary)</div><br />
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="OnEditClick"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="OnDeleteClick"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+            </Authorized>
+        </AuthorizeView>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public NewsFeedItemViewModel newsobj { get; set; }
+    [Parameter]
+    public EventCallback OnDeleteClick { get; set; }
+    [Parameter]
+    public EventCallback OnEditClick { get; set; }
+
+    private string url1 { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        url1 = NavigationManager.BaseUri + "NewsFeeds/View/" + newsobj.Id;        
+    }
+}

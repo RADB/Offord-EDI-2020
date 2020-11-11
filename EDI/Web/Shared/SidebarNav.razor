@@ -62,6 +62,7 @@
         //treedata.Add(new TreeData { nodeId = "02-05", nodeText = "Coordinator-Sites", icon = "icon-organization icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" });
+        treedata.Add(new TreeData { nodeId = "02-09", nodeText = "News", icon = "icon-globe icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-08", nodeText = "Questionnaires", icon = "icon-link icon", pid = "02" });
         //treedata.Add(new TreeData { nodeId = "03", nodeText = "Screens", icon = "icon-docs icon" });
         treedata.Add(new TreeData { nodeId = "04", nodeText = "Maintenance", icon = "icon-briefcase icon", hasChild = true });
@@ -128,6 +129,10 @@
         else if (args.NodeData.Id == "02-08")
         {
             NavigationManager.NavigateTo("./questionnaires/index");
+        }
+        else if (args.NodeData.Id == "02-09")
+        {
+            NavigationManager.NavigateTo("./newsfeeds/index");
         }
         else if (args.NodeData.Id == "05-01")
         {
