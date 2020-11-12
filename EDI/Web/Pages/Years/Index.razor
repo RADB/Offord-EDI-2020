@@ -80,6 +80,19 @@
 
                 ayear.Id = year.Id;
                 ayear.Ediyear = year.Ediyear;
+                ayear.Alberta = year.Alberta.HasValue ? year.Alberta.Value : false;
+                ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
+                ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
+                ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
+                ayear.Newfoundland = year.Newfoundland.HasValue ? year.Newfoundland.Value : false;
+                ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
+                ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
+                ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
+                ayear.Pei = year.Pei.HasValue ? year.Pei.Value : false;
+                ayear.Quebec = year.Quebec.HasValue ? year.Quebec.Value : false;
+                ayear.Saskatchewan = year.Saskatchewan.HasValue ? year.Saskatchewan.Value : false;
+                ayear.Yukon = year.Yukon.HasValue ? year.Yukon.Value : false;
+                ayear.Nwt = year.Nwt.HasValue ? year.Nwt.Value : false;
 
                 sivm.Add(ayear);
             }
@@ -131,6 +144,19 @@
             {
                 YearModel.Ediyear = rowdata.Ediyear;
                 YearModel.Id = rowdata.Id;
+                YearModel.Alberta = rowdata.Alberta;
+                YearModel.BritishColumbia = rowdata.BritishColumbia;
+                YearModel.Manitoba = rowdata.Manitoba;
+                YearModel.NewBrunswick = rowdata.NewBrunswick;
+                YearModel.Newfoundland = rowdata.Newfoundland;
+                YearModel.NovaScotia = rowdata.NovaScotia;
+                YearModel.Nunavut = rowdata.Nunavut;
+                YearModel.Ontario = rowdata.Ontario;
+                YearModel.Pei = rowdata.Pei;
+                YearModel.Quebec = rowdata.Quebec;
+                YearModel.Saskatchewan = rowdata.Saskatchewan;
+                YearModel.Yukon = rowdata.Yukon;
+                YearModel.Nwt = rowdata.Nwt;
                 parameters.Add("YearModel", YearModel);
 
                 Modal.Show<YearWindow>("Edit EDI Year", parameters);
@@ -161,6 +187,19 @@
 
                 ayear.Id = year.Id;
                 ayear.Ediyear = year.Ediyear;
+                ayear.Alberta = year.Alberta.HasValue ? year.Alberta.Value : false;
+                ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
+                ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
+                ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
+                ayear.Newfoundland = year.Newfoundland.HasValue ? year.Newfoundland.Value : false;
+                ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
+                ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
+                ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
+                ayear.Pei = year.Pei.HasValue ? year.Pei.Value : false;
+                ayear.Quebec = year.Quebec.HasValue ? year.Quebec.Value : false;
+                ayear.Saskatchewan = year.Saskatchewan.HasValue ? year.Saskatchewan.Value : false;
+                ayear.Yukon = year.Yukon.HasValue ? year.Yukon.Value : false;
+                ayear.Nwt = year.Nwt.HasValue ? year.Nwt.Value : false;
 
                 sivm.Add(ayear);
             }
@@ -188,6 +227,19 @@
                 if (item.Id == YearModel.Id)
                 {
                     item.Ediyear = YearModel.Ediyear;
+                    item.Alberta = YearModel.Alberta;
+                    item.BritishColumbia = YearModel.BritishColumbia;
+                    item.Manitoba = YearModel.Manitoba;
+                    item.NewBrunswick = YearModel.NewBrunswick;
+                    item.Newfoundland = YearModel.Newfoundland;
+                    item.NovaScotia = YearModel.NovaScotia;
+                    item.Nunavut = YearModel.Nunavut;
+                    item.Ontario = YearModel.Ontario;
+                    item.Pei = YearModel.Pei;
+                    item.Quebec = YearModel.Quebec;
+                    item.Saskatchewan = YearModel.Saskatchewan;
+                    item.Yukon = YearModel.Yukon;
+                    item.Nwt = YearModel.Nwt;
                 }
                 tmp.Add(item);
             }
@@ -243,6 +295,19 @@
         {
             YearModel.Ediyear = rowdata.Ediyear;
             YearModel.Id = rowdata.Id;
+            YearModel.Alberta = rowdata.Alberta;
+            YearModel.BritishColumbia = rowdata.BritishColumbia;
+            YearModel.Manitoba = rowdata.Manitoba;
+            YearModel.NewBrunswick = rowdata.NewBrunswick;
+            YearModel.Newfoundland = rowdata.Newfoundland;
+            YearModel.NovaScotia = rowdata.NovaScotia;
+            YearModel.Nunavut = rowdata.Nunavut;
+            YearModel.Ontario = rowdata.Ontario;
+            YearModel.Pei = rowdata.Pei;
+            YearModel.Quebec = rowdata.Quebec;
+            YearModel.Saskatchewan = rowdata.Saskatchewan;
+            YearModel.Yukon = rowdata.Yukon;
+            YearModel.Nwt = rowdata.Nwt;
             parameters.Add("YearModel", YearModel);
 
             Modal.Show<YearWindow>("Edit EDI Year", parameters);
