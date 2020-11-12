@@ -1,0 +1,264 @@
+﻿@using Syncfusion.Blazor.Buttons
+
+<div class="form-group row">
+    <label class="col-md-4 col-form-label" for="Provinces">Provinces: </label>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Alberta" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Alberta" @onchange="AlbertaChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="British Columbia" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.BritishColumbia" @onchange="BCChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Manitoba" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Manitoba" @onchange="ManitobaChange" CssClass="e-info"></SfCheckBox>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-md-4 col-form-label"></div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="New Brunswick" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.NewBrunswick" @onchange="NewBrunswickChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Newfoundland" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Newfoundland" @onchange="NewfoundlandChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Nova Scotia" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.NovaScotia" @onchange="NovaScotiaChange" CssClass="e-info"></SfCheckBox>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-md-4 col-form-label"></div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Nunavut" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Nunavut" @onchange="NunavutChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Northwest Territories" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Nwt" @onchange="NwtChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Ontario" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Ontario" @onchange="OntarioChange" CssClass="e-info"></SfCheckBox>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-md-4 col-form-label"></div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Prince Edward Island" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Pei" @onchange="PeiChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Quebec" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Quebec" @onchange="QuebecChange" CssClass="e-info"></SfCheckBox>
+    </div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Saskatchewan" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Saskatchewan" @onchange="SaskatchewanChange" CssClass="e-info"></SfCheckBox>
+    </div>
+</div>
+<div class="form-group row">
+    <div class="col-md-4 col-form-label"></div>
+    <div class="input-group col-md-2">
+        <SfCheckBox Label="Yukon" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Yukon" @onchange="YukonChange" CssClass="e-info"></SfCheckBox>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ProvinceConfigurationItemViewModel ProvinceConfigModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    private void AlbertaChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Alberta = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Alberta = value;
+        }
+    }
+
+    private void BCChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.BritishColumbia = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.BritishColumbia = value;
+        }
+    }
+
+    private void ManitobaChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Manitoba = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Manitoba = value;
+        }
+    }
+
+    private void NewBrunswickChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.NewBrunswick = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.NewBrunswick = value;
+        }
+    }
+
+    private void NewfoundlandChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Newfoundland = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Newfoundland = value;
+        }
+    }
+
+    private void NovaScotiaChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.NovaScotia = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.NovaScotia = value;
+        }
+    }
+
+    private void NunavutChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Nunavut = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Nunavut = value;
+        }
+    }
+
+    private void NwtChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Nwt = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Nwt = value;
+        }
+    }
+
+    private void OntarioChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Ontario = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Ontario = value;
+        }
+    }
+
+    private void PeiChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Pei = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Pei = value;
+        }
+    }
+
+    private void QuebecChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Quebec = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Quebec = value;
+        }
+    }
+
+    private void SaskatchewanChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Saskatchewan = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Saskatchewan = value;
+        }
+    }
+
+    private void YukonChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.Yukon = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            ProvinceConfigModel.Yukon = value;
+        }
+    }
+}
+
+<style>
+    .e-checkbox-wrapper.e-primary:hover .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #e03872;
+    }
+
+    .e-checkbox-wrapper.e-success .e-frame.e-check,
+    .e-checkbox-wrapper.e-success .e-checkbox:focus + .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #689f38;
+    }
+
+    .e-checkbox-wrapper.e-success:hover .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #449d44;
+    }
+
+    .e-checkbox-wrapper.e-info .e-frame.e-check,
+    .e-checkbox-wrapper.e-info .e-checkbox:focus + .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #2196f3;
+    }
+
+    .e-checkbox-wrapper.e-info:hover .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #0b7dda;
+    }
+
+    .e-checkbox-wrapper.e-warning .e-frame.e-check,
+    .e-checkbox-wrapper.e-warning .e-checkbox:focus + .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #ef6c00;
+    }
+
+    .e-checkbox-wrapper.e-warning:hover .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #cc5c00;
+    }
+
+    .e-checkbox-wrapper.e-danger .e-frame.e-check,
+    .e-checkbox-wrapper.e-danger .e-checkbox:focus + .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #d84315;
+    }
+
+    .e-checkbox-wrapper.e-danger:hover .e-frame.e-check { /* csslint allow: adjoining-classes */
+        background-color: #ba3912;
+    }
+</style>

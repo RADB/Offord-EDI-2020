@@ -1,5 +1,4 @@
-﻿@page "/NewsFeeds/Index";
-@using Microsoft.AspNetCore.Http;
+﻿@using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
@@ -12,40 +11,34 @@
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
-            <div class="card-header">
-                <div class="row">
-                    <h2>News Feed</h2>
-                    <AuthorizeView Roles="Administrator">
-                        <Authorized>
-                            <div class="float-right" style="margin-left:20px;">
-                                <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
-                            </div>
-                        </Authorized>
-                    </AuthorizeView>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="container-fluid">
-                    <AuthorizeView Roles="Administrator, Teacher, Coordinator">
-                        <Authorized>
-                            @foreach (var newsFeed in newsFeeds)
-                            {
-                                <EDI.Web.Shared.News newsobj="@newsFeed" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
-                            }
-                        </Authorized>
-                        <NotAuthorized>
-                            Nothing to see here!
-                        </NotAuthorized>
-                    </AuthorizeView>
-                </div>
-            </div>
+<div class="card shadow mb-4">
+    <div class="card-header">
+        <div class="row">
+            <h2>News Feed</h2>
+            @*<AuthorizeView Roles="Administrator">
+                <Authorized>
+                    <div>
+                        <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                    </div>
+                </Authorized>
+            </AuthorizeView>*@
         </div>
     </div>
+    <div class="card-body">
+        <!--<div class="container-fluid">-->
+        <AuthorizeView Roles="Administrator, Teacher, Coordinator">
+            <Authorized>
+                @foreach (var newsFeed in newsFeeds)
+                {
+                    <EDI.Web.Shared.News newsobj="@newsFeed" ShowActions="false" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
+                }
+            </Authorized>
+            <NotAuthorized>
+                Nothing to see here!
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
 </div>
-
 
 @code {
     private string Message { get; set; }

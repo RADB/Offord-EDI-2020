@@ -107,6 +107,20 @@
             }
 
             newsFeedform1.NewsFeedModel.Text = newsFeedform1.rte.BindValue;
+            newsFeedform1.NewsFeedModel.Alberta = newsFeedform1.provinces.ProvinceConfigModel.Alberta;
+            newsFeedform1.NewsFeedModel.BritishColumbia = newsFeedform1.provinces.ProvinceConfigModel.BritishColumbia;
+            newsFeedform1.NewsFeedModel.Manitoba = newsFeedform1.provinces.ProvinceConfigModel.Manitoba;
+            newsFeedform1.NewsFeedModel.NewBrunswick = newsFeedform1.provinces.ProvinceConfigModel.NewBrunswick;
+            newsFeedform1.NewsFeedModel.Newfoundland = newsFeedform1.provinces.ProvinceConfigModel.Newfoundland;
+            newsFeedform1.NewsFeedModel.NovaScotia = newsFeedform1.provinces.ProvinceConfigModel.NovaScotia;
+            newsFeedform1.NewsFeedModel.Nunavut = newsFeedform1.provinces.ProvinceConfigModel.Nunavut;
+            newsFeedform1.NewsFeedModel.Ontario = newsFeedform1.provinces.ProvinceConfigModel.Ontario;
+            newsFeedform1.NewsFeedModel.Pei = newsFeedform1.provinces.ProvinceConfigModel.Pei;
+            newsFeedform1.NewsFeedModel.Quebec = newsFeedform1.provinces.ProvinceConfigModel.Quebec;
+            newsFeedform1.NewsFeedModel.Saskatchewan = newsFeedform1.provinces.ProvinceConfigModel.Saskatchewan;
+            newsFeedform1.NewsFeedModel.Yukon = newsFeedform1.provinces.ProvinceConfigModel.Yukon;
+            newsFeedform1.NewsFeedModel.Nwt = newsFeedform1.provinces.ProvinceConfigModel.Nwt;
+
             await newsFeedService.UpdateNewsFeedAsync(newsFeedform1.NewsFeedModel);
 
             Message = "NewsFeed updated successfully.";
