@@ -3,7 +3,7 @@
 @inject ServiceContext dbContext;
 
 
-<div class="simple-form" style="width:450px;">
+<div class="simple-form" style="width:750px;">
     @if (!string.IsNullOrEmpty(@Message))
     {
         <div class="text-success">@Message</div>
@@ -14,9 +14,10 @@
         <div class="text-danger">@ErrorMessage</div>
     }
     <div class="form-group row">
-        <label class="col-md-5 col-form-label" for="Year">Year: </label>
+        <label class="col-md-4 col-form-label" for="Year">Year: </label>
         <input type="number" class="col-md-6 col-form-label" value="@year" @onchange="@(e =>YearChange(e))" />
     </div>
+    <Provinces @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" />
     <button @onclick="@SaveYear" class="btn btn-primary">Submit</button>
     <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
 </div>
@@ -31,6 +32,9 @@
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
+    public Provinces provinces = new Provinces();
+    private ProvinceConfigurationItemViewModel ProvinceConfigModel { get; set; } = new ProvinceConfigurationItemViewModel();
+
     protected override async Task OnInitializedAsync()
     {
         YearModel = Parameters.Get<YearItemViewModel>("YearModel");
@@ -43,6 +47,20 @@
         {
             year = 0;
         }
+
+        ProvinceConfigModel.Alberta = YearModel.Alberta;
+        ProvinceConfigModel.BritishColumbia = YearModel.BritishColumbia;
+        ProvinceConfigModel.Manitoba = YearModel.Manitoba;
+        ProvinceConfigModel.NewBrunswick = YearModel.NewBrunswick;
+        ProvinceConfigModel.Newfoundland = YearModel.Newfoundland;
+        ProvinceConfigModel.NovaScotia = YearModel.NovaScotia;
+        ProvinceConfigModel.Nunavut = YearModel.Nunavut;
+        ProvinceConfigModel.Ontario = YearModel.Ontario;
+        ProvinceConfigModel.Pei = YearModel.Pei;
+        ProvinceConfigModel.Quebec = YearModel.Quebec;
+        ProvinceConfigModel.Saskatchewan = YearModel.Saskatchewan;
+        ProvinceConfigModel.Yukon = YearModel.Yukon;
+        ProvinceConfigModel.Nwt = YearModel.Nwt;
     }
 
     private void YearChange(ChangeEventArgs e)
@@ -72,7 +90,21 @@
             return;
         }
 
-        if(YearModel.Id > 0)
+        YearModel.Alberta = ProvinceConfigModel.Alberta;
+        YearModel.BritishColumbia = ProvinceConfigModel.BritishColumbia;
+        YearModel.Manitoba = ProvinceConfigModel.Manitoba;
+        YearModel.NewBrunswick = ProvinceConfigModel.NewBrunswick;
+        YearModel.Newfoundland = ProvinceConfigModel.Newfoundland;
+        YearModel.NovaScotia = ProvinceConfigModel.NovaScotia;
+        YearModel.Nunavut = ProvinceConfigModel.Nunavut;
+        YearModel.Ontario = ProvinceConfigModel.Ontario;
+        YearModel.Pei = ProvinceConfigModel.Pei;
+        YearModel.Quebec = ProvinceConfigModel.Quebec;
+        YearModel.Saskatchewan = ProvinceConfigModel.Saskatchewan;
+        YearModel.Yukon = ProvinceConfigModel.Yukon;
+        YearModel.Nwt = ProvinceConfigModel.Nwt;
+
+        if (YearModel.Id > 0)
         {
             var totalItems = await yearService.GetDuplicateCount(YearModel.Ediyear.Value, YearModel.Id);
 

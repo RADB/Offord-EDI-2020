@@ -91,6 +91,19 @@ namespace EDI.Web.Services
                 Guard.Against.NullYear(year.Id, _year);
 
                 _year.Ediyear = year.Ediyear;
+                _year.Alberta = year.Alberta;
+                _year.BritishColumbia = year.BritishColumbia;
+                _year.Manitoba = year.Manitoba;
+                _year.NewBrunswick = year.NewBrunswick;
+                _year.Newfoundland = year.Newfoundland;
+                _year.NovaScotia = year.NovaScotia;
+                _year.Nunavut = year.Nunavut;
+                _year.Ontario = year.Ontario;
+                _year.Pei = year.Pei;
+                _year.Quebec = year.Quebec;
+                _year.Saskatchewan = year.Saskatchewan;
+                _year.Yukon = year.Yukon;
+                _year.Nwt = year.Nwt;
                 _year.ModifiedDate = DateTime.Now;
                 _year.ModifiedBy = _userSettings.UserName;
 
@@ -112,6 +125,19 @@ namespace EDI.Web.Services
                 var _year = new Year();
 
                 _year.Ediyear = year.Ediyear;
+                _year.Alberta = year.Alberta;
+                _year.BritishColumbia = year.BritishColumbia;
+                _year.Manitoba = year.Manitoba;
+                _year.NewBrunswick = year.NewBrunswick;
+                _year.Newfoundland = year.Newfoundland;
+                _year.NovaScotia = year.NovaScotia;
+                _year.Nunavut = year.Nunavut;
+                _year.Ontario = year.Ontario;
+                _year.Pei = year.Pei;
+                _year.Quebec = year.Quebec;
+                _year.Saskatchewan = year.Saskatchewan;
+                _year.Yukon = year.Yukon;
+                _year.Nwt = year.Nwt;
                 _year.CreatedDate = DateTime.Now;
                 _year.CreatedBy = _userSettings.UserName;
                 _year.ModifiedDate = DateTime.Now;
@@ -140,6 +166,19 @@ namespace EDI.Web.Services
                 {
                     Id = year.Id,
                     Ediyear = year.Ediyear,
+                    Alberta = year.Alberta.HasValue ? year.Alberta.Value : false,
+                    BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false,
+                    Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false,
+                    NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false,
+                    Newfoundland = year.Newfoundland.HasValue ? year.Newfoundland.Value : false,
+                    NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false,
+                    Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false,
+                    Ontario = year.Ontario.HasValue ? year.Ontario.Value : false,
+                    Pei = year.Pei.HasValue ? year.Pei.Value : false,
+                    Quebec = year.Quebec.HasValue ? year.Quebec.Value : false,
+                    Saskatchewan = year.Saskatchewan.HasValue ? year.Saskatchewan.Value : false,
+                    Yukon = year.Yukon.HasValue ? year.Yukon.Value : false,
+                    Nwt = year.Nwt.HasValue ? year.Nwt.Value : false,
                     CreatedDate = year.CreatedDate,
                     CreatedBy = year.CreatedBy,
                     ModifiedDate = year.ModifiedDate,
