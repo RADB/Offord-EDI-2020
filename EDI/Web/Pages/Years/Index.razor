@@ -32,12 +32,26 @@
                 else
                 {
                     <SfGrid ID="GridYear" @ref="Grid" DataSource="@years" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
-                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEditSettings AllowAdding="true" AllowEditOnDblClick="true"  AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="YearItemViewModel"></GridEvents>
-                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"  ></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(YearItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Alberta) HeaderText="AB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Newfoundland) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.NovaScotia) HeaderText="NS" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Nunavut) HeaderText="NU" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Nwt) HeaderText="NT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Ontario) HeaderText="ON" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Pei) HeaderText="PE" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Quebec) HeaderText="QC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Saskatchewan) HeaderText="SK" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.Yukon) HeaderText="YT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            
                         </GridColumns>
                     </SfGrid>
                 }
