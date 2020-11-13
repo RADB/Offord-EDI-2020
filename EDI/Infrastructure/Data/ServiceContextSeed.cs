@@ -697,7 +697,7 @@ namespace EDI.Infrastructure.Data
                     new Province() { English = "British Columbia", French = "", EDICode= 99, Code = "BC", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new Province() { English = "Manitoba", French = "", Code = "MB", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                     new Province() { English = "New Brunswick", French = "", Code = "NB", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                    new Province() { English = "NewfoundlandandLabrador and Labrador", French = "", Code = "NL", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                    new Province() { English = "Newfoundland and Labrador", French = "", Code = "NL", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                     new Province() { English = "Northwest Territories", French = "", Code = "NT", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new Province() { English = "Nova Scotia", French = "", Code = "NS", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                     new Province() { English = "Nunavut", French = "", Code = "NU", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
@@ -705,7 +705,7 @@ namespace EDI.Infrastructure.Data
                     new Province() { English = "Prince Edward Island", French = "", Code = "PE", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new Province() { English = "Quebec", French = "", Code = "QC", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                     new Province() { English = "Saskatchewan", French = "", Code = "SK", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                    new Province() { English = "YukonTerritory Territory", French = "", Code = "YT", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+                    new Province() { English = "Yukon Territory", French = "", Code = "YT", CountryID = countryid, ProvinceTypeId = ProvinceTypeId, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
                 }.OrderBy(t => t.English);
             }
             else if (countryName == "China")

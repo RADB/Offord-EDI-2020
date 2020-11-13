@@ -1,4 +1,5 @@
-﻿@inject NavigationManager NavigationManager
+﻿
+@inject NavigationManager NavigationManager
 @inject INewsFeedService newsFeedService
 @inject ISharedService sharedService
 @inject IAccountService accountService
@@ -42,8 +43,8 @@ else
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="ValidTo">Valid To: </label>
                 <InputDate @bind-Value="NewsFeedModel.ValidTo" class="col-md-3 form-control" format-value="YYYY-MM-DD" />
-            </div>
-            <ProvincesYears @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" />
+            </div>            
+            <ProvincesYearsTest @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYearsTest>            
         </div>
         @if (!IsViewOnly)
         {
@@ -92,7 +93,7 @@ else
     public RichTextEditor rte = new RichTextEditor();
     // End RichText Editor
 
-    public ProvincesYears provinces = new ProvincesYears();
+    public ProvincesYearsTest provinces = new ProvincesYearsTest();
     private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     protected override async Task OnInitializedAsync()

@@ -81,23 +81,24 @@
                 }
                 else
                 {
-                    if(DateTime.Now >= anewsFeed.ValidFrom.Value && DateTime.Now <= anewsFeed.ValidTo.Value)
+                    if (DateTime.Now >= anewsFeed.ValidFrom.Value && DateTime.Now <= anewsFeed.ValidTo.Value)
                     {
                         if (UserSettings.IsTeacher)
                         {
                             var teacher = dbContext.Teachers.Where(p => p.UserId == UserSettings.UserID).FirstOrDefault();
-
+                            
                             if (teacher != null)
                             {
                                 var school = dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
 
                                 var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
 
-                                if(anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
+                                if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
                                 {
-                                    var property = anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null);
+                                    //var property = anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null);
 
-                                    if(property.Equals(true))
+                                    //if (property.Equals(true))
+                                    if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null).Equals(true))
                                     {
                                         sivm.Add(anewsFeed);
                                     }
