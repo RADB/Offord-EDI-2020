@@ -18,6 +18,6 @@ namespace EDI.Web.Models
         public int CountryID { get; set; }
         public string Country { get; set; }
 
-        public int? ProvinceTypeId { get; set; }
+        public int? ProvinceTyPrinceEdwardIslandd { get; set; }
     }
 }

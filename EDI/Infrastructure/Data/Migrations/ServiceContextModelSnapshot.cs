@@ -952,7 +952,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("NewBrunswick")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Newfoundland")
+                    b.Property<bool?>("NewfoundlandandLabrador")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("NovaScotia")
@@ -961,13 +961,13 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("Nunavut")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Nwt")
+                    b.Property<bool?>("NorthwestTerritories")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Ontario")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Pei")
+                    b.Property<bool?>("PrinceEdwardIsland")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Quebec")
@@ -994,7 +994,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int>("YearId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Yukon")
+                    b.Property<bool?>("YukonTerritory")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -1093,14 +1093,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProvinceTypeId")
+                    b.Property<int?>("ProvinceTyPrinceEdwardIslandd")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryID");
 
-                    b.HasIndex("ProvinceTypeId");
+                    b.HasIndex("ProvinceTyPrinceEdwardIslandd");
 
                     b.ToTable("Provinces","LUData");
                 });
@@ -1270,8 +1270,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("HelpText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InputTypeId")
-                        .HasColumnName("InputTypeID")
+                    b.Property<int>("InputTyPrinceEdwardIslandd")
+                        .HasColumnName("InputTyPrinceEdwardIslandD")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsConditional")
@@ -1316,7 +1316,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("NewBrunswick")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Newfoundland")
+                    b.Property<bool?>("NewfoundlandandLabrador")
                         .HasColumnType("bit");
 
                     b.Property<string>("Notification")
@@ -1333,8 +1333,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("Nunavut")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Nwt")
-                        .HasColumnName("NWT")
+                    b.Property<bool?>("NorthwestTerritories")
+                        .HasColumnName("NorthwestTerritories")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Ontario")
@@ -1344,8 +1344,8 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("OrientationID")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Pei")
-                        .HasColumnName("PEI")
+                    b.Property<bool?>("PrinceEdwardIsland")
+                        .HasColumnName("PrinceEdwardIsland")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Quebec")
@@ -1376,12 +1376,12 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int?>("YearId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("Yukon")
+                    b.Property<bool?>("YukonTerritory")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InputTypeId");
+                    b.HasIndex("InputTyPrinceEdwardIslandd");
 
                     b.HasIndex("OrientationId");
 
@@ -2023,7 +2023,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("NewBrunswick")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Newfoundland")
+                    b.Property<bool?>("NewfoundlandandLabrador")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("NovaScotia")
@@ -2032,13 +2032,13 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("Nunavut")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Nwt")
+                    b.Property<bool?>("NorthwestTerritories")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Ontario")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Pei")
+                    b.Property<bool?>("PrinceEdwardIsland")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Quebec")
@@ -2047,7 +2047,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("Saskatchewan")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("Yukon")
+                    b.Property<bool?>("YukonTerritory")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -2174,7 +2174,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.HasOne("EDI.ApplicationCore.Entities.ProvinceType", "ProvinceType")
                         .WithMany("Provinces")
-                        .HasForeignKey("ProvinceTypeId");
+                        .HasForeignKey("ProvinceTyPrinceEdwardIslandd");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Questionnaire", b =>
@@ -2191,7 +2191,7 @@ namespace EDI.Infrastructure.Data.Migrations
                 {
                     b.HasOne("EDI.ApplicationCore.Entities.InputType", "InputType")
                         .WithMany("QuestionnairesConfigurations")
-                        .HasForeignKey("InputTypeId")
+                        .HasForeignKey("InputTyPrinceEdwardIslandd")
                         .HasConstraintName("FK_Questionnaires.Configuration_InputTypes")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();

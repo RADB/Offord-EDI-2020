@@ -24,7 +24,7 @@ namespace EDI.ApplicationCore.Entities
 
         public int CountryID { get; set; }
 
-        public int? ProvinceTypeId { get; set; }
+        public int? ProvinceTyPrinceEdwardIslandd { get; set; }
 
         public virtual Country Country { get; set; }
 

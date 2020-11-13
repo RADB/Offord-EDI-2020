@@ -42,15 +42,15 @@
                             <GridColumn Field=@nameof(YearItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(YearItemViewModel.Newfoundland) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NovaScotia) HeaderText="NS" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Nunavut) HeaderText="NU" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(YearItemViewModel.Nwt) HeaderText="NT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.NorthwestTerritories) HeaderText="NT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Ontario) HeaderText="ON" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(YearItemViewModel.Pei) HeaderText="PE" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.PrinceEdwardIsland) HeaderText="PE" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Quebec) HeaderText="QC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Saskatchewan) HeaderText="SK" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(YearItemViewModel.Yukon) HeaderText="YT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.YukonTerritory) HeaderText="YT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean"Width="30"></GridColumn>
                             
                         </GridColumns>
                     </SfGrid>
@@ -98,15 +98,15 @@
                 ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
-                ayear.Newfoundland = year.Newfoundland.HasValue ? year.Newfoundland.Value : false;
+                ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
                 ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
                 ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
                 ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
-                ayear.Pei = year.Pei.HasValue ? year.Pei.Value : false;
+                ayear.PrinceEdwardIsland = year.PrinceEdwardIsland.HasValue ? year.PrinceEdwardIsland.Value : false;
                 ayear.Quebec = year.Quebec.HasValue ? year.Quebec.Value : false;
                 ayear.Saskatchewan = year.Saskatchewan.HasValue ? year.Saskatchewan.Value : false;
-                ayear.Yukon = year.Yukon.HasValue ? year.Yukon.Value : false;
-                ayear.Nwt = year.Nwt.HasValue ? year.Nwt.Value : false;
+                ayear.YukonTerritory = year.YukonTerritory.HasValue ? year.YukonTerritory.Value : false;
+                ayear.NorthwestTerritories = year.NorthwestTerritories.HasValue ? year.NorthwestTerritories.Value : false;
 
                 sivm.Add(ayear);
             }
@@ -162,15 +162,15 @@
                 YearModel.BritishColumbia = rowdata.BritishColumbia;
                 YearModel.Manitoba = rowdata.Manitoba;
                 YearModel.NewBrunswick = rowdata.NewBrunswick;
-                YearModel.Newfoundland = rowdata.Newfoundland;
+                YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
                 YearModel.NovaScotia = rowdata.NovaScotia;
                 YearModel.Nunavut = rowdata.Nunavut;
                 YearModel.Ontario = rowdata.Ontario;
-                YearModel.Pei = rowdata.Pei;
+                YearModel.PrinceEdwardIsland = rowdata.PrinceEdwardIsland;
                 YearModel.Quebec = rowdata.Quebec;
                 YearModel.Saskatchewan = rowdata.Saskatchewan;
-                YearModel.Yukon = rowdata.Yukon;
-                YearModel.Nwt = rowdata.Nwt;
+                YearModel.YukonTerritory = rowdata.YukonTerritory;
+                YearModel.NorthwestTerritories = rowdata.NorthwestTerritories;
                 parameters.Add("YearModel", YearModel);
 
                 Modal.Show<YearWindow>("Edit EDI Year", parameters);
@@ -205,15 +205,15 @@
                 ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
-                ayear.Newfoundland = year.Newfoundland.HasValue ? year.Newfoundland.Value : false;
+                ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
                 ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
                 ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
                 ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
-                ayear.Pei = year.Pei.HasValue ? year.Pei.Value : false;
+                ayear.PrinceEdwardIsland = year.PrinceEdwardIsland.HasValue ? year.PrinceEdwardIsland.Value : false;
                 ayear.Quebec = year.Quebec.HasValue ? year.Quebec.Value : false;
                 ayear.Saskatchewan = year.Saskatchewan.HasValue ? year.Saskatchewan.Value : false;
-                ayear.Yukon = year.Yukon.HasValue ? year.Yukon.Value : false;
-                ayear.Nwt = year.Nwt.HasValue ? year.Nwt.Value : false;
+                ayear.YukonTerritory = year.YukonTerritory.HasValue ? year.YukonTerritory.Value : false;
+                ayear.NorthwestTerritories = year.NorthwestTerritories.HasValue ? year.NorthwestTerritories.Value : false;
 
                 sivm.Add(ayear);
             }
@@ -245,15 +245,15 @@
                     item.BritishColumbia = YearModel.BritishColumbia;
                     item.Manitoba = YearModel.Manitoba;
                     item.NewBrunswick = YearModel.NewBrunswick;
-                    item.Newfoundland = YearModel.Newfoundland;
+                    item.NewfoundlandandLabrador = YearModel.NewfoundlandandLabrador;
                     item.NovaScotia = YearModel.NovaScotia;
                     item.Nunavut = YearModel.Nunavut;
                     item.Ontario = YearModel.Ontario;
-                    item.Pei = YearModel.Pei;
+                    item.PrinceEdwardIsland = YearModel.PrinceEdwardIsland;
                     item.Quebec = YearModel.Quebec;
                     item.Saskatchewan = YearModel.Saskatchewan;
-                    item.Yukon = YearModel.Yukon;
-                    item.Nwt = YearModel.Nwt;
+                    item.YukonTerritory = YearModel.YukonTerritory;
+                    item.NorthwestTerritories= YearModel.NorthwestTerritories;
                 }
                 tmp.Add(item);
             }
@@ -313,15 +313,15 @@
             YearModel.BritishColumbia = rowdata.BritishColumbia;
             YearModel.Manitoba = rowdata.Manitoba;
             YearModel.NewBrunswick = rowdata.NewBrunswick;
-            YearModel.Newfoundland = rowdata.Newfoundland;
+            YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
             YearModel.NovaScotia = rowdata.NovaScotia;
             YearModel.Nunavut = rowdata.Nunavut;
             YearModel.Ontario = rowdata.Ontario;
-            YearModel.Pei = rowdata.Pei;
+            YearModel.PrinceEdwardIsland = rowdata.PrinceEdwardIsland;
             YearModel.Quebec = rowdata.Quebec;
             YearModel.Saskatchewan = rowdata.Saskatchewan;
-            YearModel.Yukon = rowdata.Yukon;
-            YearModel.Nwt = rowdata.Nwt;
+            YearModel.YukonTerritory = rowdata.YukonTerritory;
+            YearModel.NorthwestTerritories = rowdata.NorthwestTerritories;
             parameters.Add("YearModel", YearModel);
 
             Modal.Show<YearWindow>("Edit EDI Year", parameters);

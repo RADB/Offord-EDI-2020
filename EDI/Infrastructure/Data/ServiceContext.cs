@@ -399,7 +399,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasIndex(e => e.CountryID);
 
-                entity.HasIndex(e => e.ProvinceTypeId);
+                entity.HasIndex(e => e.ProvinceTyPrinceEdwardIslandd);
 
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
 
@@ -417,7 +417,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasOne(d => d.Country).WithMany(p => p.Provinces).HasForeignKey(d => d.CountryID);
 
-                entity.HasOne(d => d.ProvinceType).WithMany(p => p.Provinces).HasForeignKey(d => d.ProvinceTypeId);
+                entity.HasOne(d => d.ProvinceType).WithMany(p => p.Provinces).HasForeignKey(d => d.ProvinceTyPrinceEdwardIslandd);
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Province).HasForeignKey(e => e.ProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Schools_Provinces");
                 //entity.HasMany(e => e.FileImports).WithOne(e => e.SchoolProvince).HasForeignKey(e => e.SchoolProvinceId).HasConstraintName("FK_FileImports_Provinces");
@@ -476,7 +476,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.GroupName).HasMaxLength(10);
 
-                entity.Property(e => e.InputTypeId).HasColumnName("InputTypeID");
+                entity.Property(e => e.InputTyPrinceEdwardIslandd).HasColumnName("InputTyPrinceEdwardIslandD");
 
                 entity.Property(e => e.LookupEntity).HasMaxLength(100);
 
@@ -490,11 +490,11 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.NotificationCondition).HasMaxLength(200);
 
-                entity.Property(e => e.Nwt).HasColumnName("NWT");
+                entity.Property(e => e.NorthwestTerritories).HasColumnName("NorthwestTerritories");
 
                 entity.Property(e => e.OrientationId).HasColumnName("OrientationID");
 
-                entity.Property(e => e.Pei).HasColumnName("PEI");
+                entity.Property(e => e.PrinceEdwardIsland).HasColumnName("PrinceEdwardIsland");
 
                 entity.Property(e => e.QuestionNumber).HasMaxLength(5);
 
@@ -502,7 +502,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");                
 
-                entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
+                entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTyPrinceEdwardIslandd).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
 
                 entity.HasOne(d => d.Orientation).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.OrientationId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_Orientation");
 
