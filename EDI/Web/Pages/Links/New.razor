@@ -81,6 +81,19 @@
             }
 
             linkform1.LinkModel.Description = linkform1.rte.BindValue;
+            LinkModel.Alberta = linkform1.provinces.ProvinceConfigModel.Alberta;
+            LinkModel.BritishColumbia = linkform1.provinces.ProvinceConfigModel.BritishColumbia;
+            LinkModel.Manitoba = linkform1.provinces.ProvinceConfigModel.Manitoba;
+            LinkModel.NewBrunswick = linkform1.provinces.ProvinceConfigModel.NewBrunswick;
+            LinkModel.NewfoundlandandLabrador = linkform1.provinces.ProvinceConfigModel.NewfoundlandandLabrador;
+            LinkModel.NovaScotia = linkform1.provinces.ProvinceConfigModel.NovaScotia;
+            LinkModel.Nunavut = linkform1.provinces.ProvinceConfigModel.Nunavut;
+            LinkModel.Ontario = linkform1.provinces.ProvinceConfigModel.Ontario;
+            LinkModel.PrinceEdwardIsland = linkform1.provinces.ProvinceConfigModel.PrinceEdwardIsland;
+            LinkModel.Quebec = linkform1.provinces.ProvinceConfigModel.Quebec;
+            LinkModel.Saskatchewan = linkform1.provinces.ProvinceConfigModel.Saskatchewan;
+            LinkModel.YukonTerritory = linkform1.provinces.ProvinceConfigModel.YukonTerritory;
+            LinkModel.NorthwestTerritories = linkform1.provinces.ProvinceConfigModel.NorthwestTerritories;
             int id = await LinkService.CreateLinkAsync(linkform1.LinkModel);
 
             Message = "New Link added successfully.";

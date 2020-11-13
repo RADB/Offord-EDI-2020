@@ -80,6 +80,19 @@
             }
 
             faqform1.FaqModel.Answer = faqform1.rte.BindValue;
+            FaqModel.Alberta = faqform1.provinces.ProvinceConfigModel.Alberta;
+            FaqModel.BritishColumbia = faqform1.provinces.ProvinceConfigModel.BritishColumbia;
+            FaqModel.Manitoba = faqform1.provinces.ProvinceConfigModel.Manitoba;
+            FaqModel.NewBrunswick = faqform1.provinces.ProvinceConfigModel.NewBrunswick;
+            FaqModel.NewfoundlandandLabrador = faqform1.provinces.ProvinceConfigModel.NewfoundlandandLabrador;
+            FaqModel.NovaScotia = faqform1.provinces.ProvinceConfigModel.NovaScotia;
+            FaqModel.Nunavut = faqform1.provinces.ProvinceConfigModel.Nunavut;
+            FaqModel.Ontario = faqform1.provinces.ProvinceConfigModel.Ontario;
+            FaqModel.PrinceEdwardIsland = faqform1.provinces.ProvinceConfigModel.PrinceEdwardIsland;
+            FaqModel.Quebec = faqform1.provinces.ProvinceConfigModel.Quebec;
+            FaqModel.Saskatchewan = faqform1.provinces.ProvinceConfigModel.Saskatchewan;
+            FaqModel.YukonTerritory = faqform1.provinces.ProvinceConfigModel.YukonTerritory;
+            FaqModel.NorthwestTerritories = faqform1.provinces.ProvinceConfigModel.NorthwestTerritories;
             int id = await FaqService.CreateFaqAsync(faqform1.FaqModel);
 
             Message = "New Faq added successfully.";

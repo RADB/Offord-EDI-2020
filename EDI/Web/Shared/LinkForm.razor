@@ -43,19 +43,7 @@
             <input type="number" class="col-md-3 col-form-label" @bind="LinkModel.Sequence" />
         </div>
 
-        <!--<div class="form-group row">
-        <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-        <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
-            @if (Years != null)
-            {
-                @foreach (var option in Years)
-                {
-                    <option value="@option.Value">@option.Text</option>
-                }
-            }
-        </select>
-    </div>-->
-        <ProvincesYearsTest @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYearsTest>
+        <ProvincesYears @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYears>
     </div>
     <div class="card-footer">
         <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
@@ -74,16 +62,12 @@
 
     public string coordinateid { get; set; }
 
-    public IEnumerable<SelectListItem> Years { get; set; }
-
-    public string yearid { get; set; }
-
     public bool isadmin { get; set; }
 
     public bool iscoordinator { get; set; }
 
     public bool isteacher { get; set; }
-    public ProvincesYearsTest provinces = new ProvincesYearsTest();
+    public ProvincesYears provinces = new ProvincesYears();
     private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     //Begin RichTextEditorToolbar
@@ -104,14 +88,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Years = await sharedService.GetYears();
-
-        if (LinkModel.YearId == 0 && Years.Count() == 2)
-        {
-            LinkModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
-        }
-
-        yearid = LinkModel.YearId.ToString();
+        ProvinceConfigModel.YearID = LinkModel.YearId;
 
         if (UserSettings.IsCoordinator)
         {
@@ -144,18 +121,6 @@
             ProvinceConfigModel.Saskatchewan = LinkModel.Saskatchewan;
             ProvinceConfigModel.YukonTerritory = LinkModel.YukonTerritory;
             ProvinceConfigModel.NorthwestTerritories = LinkModel.NorthwestTerritories;
-        }
-    }
-
-    private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
-
-        LinkModel.YearId = 0;
-
-        if (int.TryParse(selectedString, out int newyearid))
-        {
-            LinkModel.YearId = newyearid;
         }
     }
 

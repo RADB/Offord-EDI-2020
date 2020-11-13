@@ -44,7 +44,7 @@ else
                 <label class="col-md-4 col-form-label" for="ValidTo">Valid To: </label>
                 <InputDate @bind-Value="NewsFeedModel.ValidTo" class="col-md-3 form-control" format-value="YYYY-MM-DD" />
             </div>            
-            <ProvincesYearsTest @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYearsTest>            
+            <ProvincesYears @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" />            
         </div>
         @if (!IsViewOnly)
         {
@@ -93,7 +93,7 @@ else
     public RichTextEditor rte = new RichTextEditor();
     // End RichText Editor
 
-    public ProvincesYearsTest provinces = new ProvincesYearsTest();
+    public ProvincesYears provinces = new ProvincesYears();
     private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     protected override async Task OnInitializedAsync()
