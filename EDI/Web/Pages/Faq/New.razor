@@ -61,13 +61,6 @@
 
     private async void HandleValidSubmit()
     {
-        if (FaqModel.YearId == 0)
-        {
-            ErrorMessage = "Year is required.";
-            toastService.ShowError(ErrorMessage);
-            return;
-        }
-
         //Console.WriteLine("OnValidSubmit");
         var totalItems = await FaqService.GetDuplicateCount(FaqModel.Question);
 
@@ -78,6 +71,14 @@
         }
         else
         {
+            FaqModel.YearId = faqform1.provinces.ProvinceConfigModel.YearID;
+            if (FaqModel.YearId == 0)
+            {
+                ErrorMessage = "Year is required.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+
             faqform1.FaqModel.Answer = faqform1.rte.BindValue;
             int id = await FaqService.CreateFaqAsync(faqform1.FaqModel);
 

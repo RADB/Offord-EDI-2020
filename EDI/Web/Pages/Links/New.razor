@@ -72,6 +72,14 @@
         }
         else
         {
+            LinkModel.YearId = linkform1.provinces.ProvinceConfigModel.YearID;
+            if (LinkModel.YearId == 0)
+            {
+                ErrorMessage = "Year is required.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+
             linkform1.LinkModel.Description = linkform1.rte.BindValue;
             int id = await LinkService.CreateLinkAsync(linkform1.LinkModel);
 

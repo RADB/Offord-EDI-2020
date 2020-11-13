@@ -232,7 +232,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.Question).HasMaxLength(4000);
+                entity.Property(e => e.Question);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
             });
@@ -345,7 +345,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.Description).HasMaxLength(400);
+                entity.Property(e => e.Description);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
@@ -547,7 +547,7 @@ namespace EDI.Infrastructure.Data
 
                 //entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
 
-                entity.HasMany(e => e.Teachers).WithOne(e => e.School).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SchoolId).HasConstraintName("FK_Schools_Teachers");
+                entity.HasMany(e => e.Teachers).WithOne(e => e.School).HasForeignKey(e => e.SchoolId).HasConstraintName("FK_Schools_Teachers").OnDelete(DeleteBehavior.Cascade);
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Schools).HasForeignKey(d => d.YearId).HasConstraintName("FK_Schools_Years");
                 //can be done in this table definition or in foreign key - from here one --> many | from there many --> one
