@@ -64,6 +64,7 @@
         treedata.Add(new TreeData { nodeId = "04", nodeText = sharedService.GetTranslate("Links"), icon = "icon-link teachericon" });
         treedata.Add(new TreeData { nodeId = "05", nodeText = sharedService.GetTranslate("FAQ"), icon = "question_answer teachericon" });
         treedata.Add(new TreeData { nodeId = "06", nodeText = sharedService.GetTranslate("Questions"), icon = "icon-list teachericon" });
+        treedata.Add(new TreeData { nodeId = "07", nodeText = sharedService.GetTranslate("News"), icon = "icon-list teachericon" });
     }
 
     private void onSelect(NodeSelectEventArgs args)
@@ -91,6 +92,10 @@
         else if (args.NodeData.Id == "06")
         {
             NavigationManager.NavigateTo("./SampleQuestions/index");
+        }
+        else if (args.NodeData.Id == "07")
+        {
+            NavigationManager.NavigateTo("./newsfeeds/admin");
         }
 
     }
