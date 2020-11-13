@@ -169,11 +169,11 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Gender).WithMany(p => p.Children).HasForeignKey(d => d.GenderId).HasConstraintName("FK_Children_Gender");
+                //entity.HasOne(d => d.Gender).WithMany(p => p.Children).HasForeignKey(d => d.GenderId).HasConstraintName("FK_Children_Gender");
 
-                entity.HasOne(d => d.Teacher).WithMany(p => p.Children).HasForeignKey(d => d.TeacherId).HasConstraintName("FK_Children_Teachers");
+                //entity.HasOne(d => d.Teacher).WithMany(p => p.Children).HasForeignKey(d => d.TeacherId).HasConstraintName("FK_Children_Teachers");
 
-                entity.HasOne(d => d.Year).WithMany(p => p.Children).HasForeignKey(d => d.YearId).HasConstraintName("FK_Children_Years");
+                //entity.HasOne(d => d.Year).WithMany(p => p.Children).HasForeignKey(d => d.YearId).HasConstraintName("FK_Children_Years");
             });
 
             modelBuilder.Entity<Coordinator>(entity =>
@@ -212,7 +212,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.French).IsRequired().HasMaxLength(100);
 
-                entity.HasMany(e => e.Schools).WithOne(e => e.Country).HasForeignKey(e => e.CountryId);
+                entity.HasMany(e => e.Schools).WithOne(e => e.Country).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.CountryId).HasConstraintName("FK_Country_Schools");
+                entity.HasMany(e => e.Provinces).WithOne(e => e.Country).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.CountryID).HasConstraintName("FK_Country_Provinces");
             });
 
             modelBuilder.Entity<Faq>(entity =>
@@ -268,8 +269,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.TeacherName).HasMaxLength(100);
 
-                entity.HasOne(d => d.Gender).WithMany(p => p.FileImports).HasForeignKey(d => d.GenderId).HasConstraintName("FK_FileImports_Gender");
-                entity.HasOne(d => d.FileImportStatus).WithMany(p => p.FileImports).HasForeignKey(d => d.FileImportStatusId).HasConstraintName("FK_FileImports_FileImportStatus");
+                //entity.HasOne(d => d.Gender).WithMany(p => p.FileImports).HasForeignKey(d => d.GenderId).HasConstraintName("FK_FileImports_Gender");
+                //entity.HasOne(d => d.FileImportStatus).WithMany(p => p.FileImports).HasForeignKey(d => d.FileImportStatusId).HasConstraintName("FK_FileImports_FileImportStatus");
             });
 
             modelBuilder.Entity<FileImportStatus>(entity =>
@@ -285,6 +286,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.French).HasMaxLength(150);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
+                entity.HasMany(d => d.FileImports).WithOne(p => p.FileImportStatus).HasForeignKey(d => d.FileImportStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_FileImportStatus_FileImports");
             });
 
             modelBuilder.Entity<Gender>(entity =>
@@ -300,6 +302,10 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.French).HasMaxLength(150);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
+
+                entity.HasMany(d => d.Children).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_Children");
+                entity.HasMany(d => d.FileImports).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_FileImports");
+                entity.HasMany(d => d.TeacherParticipationForms).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_TeacherParticipationForms");
             });
 
             modelBuilder.Entity<InputType>(entity =>
@@ -313,6 +319,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.French).HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+                entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.InputType).HasForeignKey(e => e.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_InputType_QuestionnairesConfigurations");
             });
 
             modelBuilder.Entity<Language>(entity =>
@@ -360,6 +367,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
+                entity.HasMany(d => d.LookupSetOptions).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_LookupSetOptions");
             });
 
             modelBuilder.Entity<LookupSetOption>(entity =>
@@ -378,7 +386,7 @@ namespace EDI.Infrastructure.Data
 
                 //entity.Property(e => e.YearId).HasColumnName("YearID");
 
-                entity.HasOne(d => d.LookupSet).WithMany(p => p.LookupSetOptions).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSetOptions_LookupSets");
+                //entity.HasOne(d => d.LookupSet).WithMany(p => p.LookupSetOptions).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSetOptions_LookupSets");
             });
             modelBuilder.Entity<Orientation>(entity =>
             {
@@ -390,7 +398,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.French).IsRequired().HasMaxLength(50);
 
-                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);                
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
+                entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Orientation).HasForeignKey(e => e.OrientationId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Orientation_QuestionnairesConfigurations");
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -399,7 +408,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasIndex(e => e.CountryID);
 
-                entity.HasIndex(e => e.ProvinceTyPrinceEdwardIslandd);
+                entity.HasIndex(e => e.ProvinceTypeId);
 
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
 
@@ -415,9 +424,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.French).IsRequired().HasMaxLength(100);
 
-                entity.HasOne(d => d.Country).WithMany(p => p.Provinces).HasForeignKey(d => d.CountryID);
+                //entity.HasOne(d => d.Country).WithMany(p => p.Provinces).HasForeignKey(d => d.CountryID);
 
-                entity.HasOne(d => d.ProvinceType).WithMany(p => p.Provinces).HasForeignKey(d => d.ProvinceTyPrinceEdwardIslandd);
+                //entity.HasOne(d => d.ProvinceType).WithMany(p => p.Provinces).HasForeignKey(d => d.ProvinceTypeId);
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Province).HasForeignKey(e => e.ProvinceId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_Schools_Provinces");
                 //entity.HasMany(e => e.FileImports).WithOne(e => e.SchoolProvince).HasForeignKey(e => e.SchoolProvinceId).HasConstraintName("FK_FileImports_Provinces");
@@ -432,6 +441,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(64);
 
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
+                entity.HasMany(e => e.Provinces).WithOne(e => e.ProvinceType).HasForeignKey(e => e.ProvinceTypeId).HasConstraintName("FK_ProvinceType_Provinces");                
             });
 
             modelBuilder.Entity<Questionnaire>(entity =>
@@ -456,6 +466,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
 
+                entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Questionnaire).HasForeignKey(e => e.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaire_QuestionnairesConfigurations");
+
             });
 
             modelBuilder.Entity<QuestionnairesConfiguration>(entity =>
@@ -476,7 +488,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.GroupName).HasMaxLength(10);
 
-                entity.Property(e => e.InputTyPrinceEdwardIslandd).HasColumnName("InputTyPrinceEdwardIslandD");
+                entity.Property(e => e.InputTypeId).HasColumnName("InputTypeId");
 
                 entity.Property(e => e.LookupEntity).HasMaxLength(100);
 
@@ -502,11 +514,11 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");                
 
-                entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTyPrinceEdwardIslandd).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
+                //entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
 
-                entity.HasOne(d => d.Orientation).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.OrientationId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_Orientation");
+                //entity.HasOne(d => d.Orientation).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.OrientationId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_Orientation");
 
-                entity.HasOne(d => d.Questionnaire).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaires.Configuration_Questionnaires");
+                //entity.HasOne(d => d.Questionnaire).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaires.Configuration_Questionnaires");
 
             });
 
@@ -533,9 +545,9 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.SchoolNumber).IsUnicode(false);
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
+                //entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
 
-                entity.HasMany(e => e.Teachers).WithOne(e => e.School).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SchoolId);
+                entity.HasMany(e => e.Teachers).WithOne(e => e.School).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SchoolId).HasConstraintName("FK_Schools_Teachers");
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Schools).HasForeignKey(d => d.YearId).HasConstraintName("FK_Schools_Years");
                 //can be done in this table definition or in foreign key - from here one --> many | from there many --> one
@@ -562,7 +574,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.SiteNumber).IsUnicode(false);
 
-                entity.HasMany(e => e.Schools).WithOne(e => e.Site).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SiteId);
+                entity.HasMany(e => e.Schools).WithOne(e => e.Site).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SiteId).HasConstraintName("FK_Sites_Schools");
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
@@ -612,13 +624,13 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.School).WithMany(p => p.Teachers).HasForeignKey(d => d.SchoolId).HasConstraintName("FK_Teachers_Schools");
+                //entity.HasOne(d => d.School).WithMany(p => p.Teachers).HasForeignKey(d => d.SchoolId).HasConstraintName("FK_Teachers_Schools");
 
-                entity.HasMany(e => e.Children).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
+                entity.HasMany(e => e.Children).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_Children");
 
-                entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
+                entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_TeacherFeedbackForms");
 
-                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId);
+                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_TeacherParticipationForms");
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
@@ -646,7 +658,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherFeedbackForms).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherFeedback_Teachers");
+                //entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherFeedbackForms).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherFeedback_Teachers");
 
                // entity.HasOne(d => d.Year).WithMany(p => p.TeacherFeedbackForms).HasForeignKey(d => d.YearId).HasConstraintName("FK_TeacherFeedback_Years");
             });
@@ -679,8 +691,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
-                entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
+                //entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
+                //entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
 
             });
             modelBuilder.Entity<Translation>(entity =>

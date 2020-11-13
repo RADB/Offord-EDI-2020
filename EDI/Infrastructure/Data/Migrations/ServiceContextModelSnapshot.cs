@@ -955,13 +955,13 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("NewfoundlandandLabrador")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("NorthwestTerritories")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("NovaScotia")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Nunavut")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("NorthwestTerritories")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Ontario")
@@ -1093,14 +1093,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ProvinceTyPrinceEdwardIslandd")
+                    b.Property<int?>("ProvinceTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryID");
 
-                    b.HasIndex("ProvinceTyPrinceEdwardIslandd");
+                    b.HasIndex("ProvinceTypeId");
 
                     b.ToTable("Provinces","LUData");
                 });
@@ -1270,8 +1270,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("HelpText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("InputTyPrinceEdwardIslandd")
-                        .HasColumnName("InputTyPrinceEdwardIslandD")
+                    b.Property<int>("InputTypeId")
+                        .HasColumnName("InputTypeId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsConditional")
@@ -1319,6 +1319,10 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("NewfoundlandandLabrador")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("NorthwestTerritories")
+                        .HasColumnName("NorthwestTerritories")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Notification")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
@@ -1331,10 +1335,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Nunavut")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("NorthwestTerritories")
-                        .HasColumnName("NorthwestTerritories")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Ontario")
@@ -1381,7 +1381,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InputTyPrinceEdwardIslandd");
+                    b.HasIndex("InputTypeId");
 
                     b.HasIndex("OrientationId");
 
@@ -2026,13 +2026,13 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("NewfoundlandandLabrador")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("NorthwestTerritories")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("NovaScotia")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Nunavut")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("NorthwestTerritories")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Ontario")
@@ -2060,12 +2060,13 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
                         .WithMany("Children")
                         .HasForeignKey("GenderId")
-                        .HasConstraintName("FK_Children_Gender");
+                        .HasConstraintName("FK_Gender_Children")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
                         .WithMany("Children")
                         .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_Children_Teachers")
+                        .HasConstraintName("FK_Teachers_Children")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
@@ -2097,12 +2098,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.FileImportStatus", "FileImportStatus")
                         .WithMany("FileImports")
                         .HasForeignKey("FileImportStatusId")
-                        .HasConstraintName("FK_FileImports_FileImportStatus");
+                        .HasConstraintName("FK_FileImportStatus_FileImports")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
                         .WithMany("FileImports")
                         .HasForeignKey("GenderId")
-                        .HasConstraintName("FK_FileImports_Gender");
+                        .HasConstraintName("FK_Gender_FileImports")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.InputType", b =>
@@ -2140,7 +2143,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.LookupSet", "LookupSet")
                         .WithMany("LookupSetOptions")
                         .HasForeignKey("LookupId")
-                        .HasConstraintName("FK_LookupSetOptions_LookupSets")
+                        .HasConstraintName("FK_LookupSet_LookupSetOptions")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -2169,12 +2172,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Country", "Country")
                         .WithMany("Provinces")
                         .HasForeignKey("CountryID")
+                        .HasConstraintName("FK_Country_Provinces")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EDI.ApplicationCore.Entities.ProvinceType", "ProvinceType")
                         .WithMany("Provinces")
-                        .HasForeignKey("ProvinceTyPrinceEdwardIslandd");
+                        .HasForeignKey("ProvinceTypeId")
+                        .HasConstraintName("FK_ProvinceType_Provinces");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Questionnaire", b =>
@@ -2191,21 +2196,21 @@ namespace EDI.Infrastructure.Data.Migrations
                 {
                     b.HasOne("EDI.ApplicationCore.Entities.InputType", "InputType")
                         .WithMany("QuestionnairesConfigurations")
-                        .HasForeignKey("InputTyPrinceEdwardIslandd")
-                        .HasConstraintName("FK_Questionnaires.Configuration_InputTypes")
+                        .HasForeignKey("InputTypeId")
+                        .HasConstraintName("FK_InputType_QuestionnairesConfigurations")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("EDI.ApplicationCore.Entities.Orientation", "Orientation")
                         .WithMany("QuestionnairesConfigurations")
                         .HasForeignKey("OrientationId")
-                        .HasConstraintName("FK_Questionnaires.Configuration_Orientation")
+                        .HasConstraintName("FK_Orientation_QuestionnairesConfigurations")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Questionnaire", "Questionnaire")
                         .WithMany("QuestionnairesConfigurations")
                         .HasForeignKey("QuestionnaireId")
-                        .HasConstraintName("FK_Questionnaires.Configuration_Questionnaires")
+                        .HasConstraintName("FK_Questionnaire_QuestionnairesConfigurations")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2219,6 +2224,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Country", "Country")
                         .WithMany("Schools")
                         .HasForeignKey("CountryId")
+                        .HasConstraintName("FK_Country_Schools")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2231,7 +2237,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Site", "Site")
                         .WithMany("Schools")
                         .HasForeignKey("SiteId")
-                        .HasConstraintName("FK_Schools_Sites")
+                        .HasConstraintName("FK_Sites_Schools")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -2262,7 +2268,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.School", "School")
                         .WithMany("Teachers")
                         .HasForeignKey("SchoolId")
-                        .HasConstraintName("FK_Teachers_Schools")
+                        .HasConstraintName("FK_Schools_Teachers")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
@@ -2276,7 +2282,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
                         .WithMany("TeacherFeedbackForms")
                         .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_TeacherFeedback_Teachers")
+                        .HasConstraintName("FK_Teachers_TeacherFeedbackForms")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
@@ -2290,12 +2297,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
                         .WithMany("TeacherParticipationForms")
                         .HasForeignKey("GenderId")
-                        .HasConstraintName("FK_TeacherParticipationForms_Gender");
+                        .HasConstraintName("FK_Gender_TeacherParticipationForms")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
                         .WithMany("TeacherParticipationForms")
                         .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_TeacherParticipation_Teachers")
+                        .HasConstraintName("FK_Teachers_TeacherParticipationForms")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")

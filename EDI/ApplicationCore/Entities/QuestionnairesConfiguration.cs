@@ -8,7 +8,7 @@ namespace EDI.ApplicationCore.Entities
     public partial class QuestionnairesConfiguration:BaseEntityProvinceConfiguration
     {
         public int QuestionnaireId { get; set; }
-        public int InputTyPrinceEdwardIslandd { get; set; }
+        public int InputTypeId { get; set; }
         public int? OrientationId { get; set; }
         public string QuestionNumber { get; set; }
         public bool? IsNewGroup { get; set; }
