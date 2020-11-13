@@ -14,7 +14,9 @@ namespace EDI.Web.Models
         [Required(ErrorMessage = "Year is required.")]
         public int YearId { get; set; }
         public short? Ediyear { get; set; }
+        [Required(ErrorMessage = "Valid From is required.")]
         public DateTime? ValidFrom { get; set; }
+        [Required(ErrorMessage = "Valid To is required.")]
         public DateTime? ValidTo { get; set; }
     }
 }

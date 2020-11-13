@@ -87,6 +87,20 @@
                 return;
             }
 
+            if (!NewsFeedModel.ValidFrom.HasValue)
+            {
+                ErrorMessage = "Valid From is required.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+
+            if (!NewsFeedModel.ValidTo.HasValue)
+            {
+                ErrorMessage = "Valid To is required.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+
             NewsFeedModel.Text = newsform1.rte.BindValue;
             NewsFeedModel.Alberta = newsform1.provinces.ProvinceConfigModel.Alberta;
             NewsFeedModel.BritishColumbia = newsform1.provinces.ProvinceConfigModel.BritishColumbia;
