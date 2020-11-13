@@ -319,9 +319,15 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool?>("Alberta")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Answer")
                         .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
+
+                    b.Property<bool?>("BritishColumbia")
+                        .HasColumnType("bit");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -344,6 +350,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("IsTeacherFAQ")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("Manitoba")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")
@@ -353,9 +362,36 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool?>("NewBrunswick")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NewfoundlandandLabrador")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NorthwestTerritories")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NovaScotia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Nunavut")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Ontario")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("PrinceEdwardIsland")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Quebec")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Question")
                         .HasColumnType("nvarchar(4000)")
                         .HasMaxLength(4000);
+
+                    b.Property<bool?>("Saskatchewan")
+                        .HasColumnType("bit");
 
                     b.Property<short>("Sequence")
                         .HasColumnType("smallint");
@@ -363,6 +399,9 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int>("YearId")
                         .HasColumnName("YearID")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("YukonTerritory")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -696,6 +735,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool?>("Alberta")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("BritishColumbia")
+                        .HasColumnType("bit");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")
@@ -718,6 +763,9 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("IsTeacherLink")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("Manitoba")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")
@@ -731,6 +779,33 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(255)")
                         .HasMaxLength(255);
 
+                    b.Property<bool?>("NewBrunswick")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NewfoundlandandLabrador")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NorthwestTerritories")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NovaScotia")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Nunavut")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Ontario")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("PrinceEdwardIsland")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Quebec")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Saskatchewan")
+                        .HasColumnType("bit");
+
                     b.Property<short>("Sequence")
                         .HasColumnType("smallint");
 
@@ -742,6 +817,9 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int>("YearId")
                         .HasColumnName("YearID")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("YukonTerritory")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

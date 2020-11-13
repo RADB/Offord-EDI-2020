@@ -16,7 +16,7 @@
 </div>
 
 <div class="form-group row">
-    <!--<label class="col-md-4 col-form-label" for="Provinces">Provinces: </label>-->
+    <label class="col-md-4 col-form-label" for="Provinces">Provinces: </label>
     @foreach (var option in ProvincesTest)
     {
         @if (year != null && year.GetType().GetProperty((option.English).Replace(" ", "")).GetValue(year, null).Equals(true))

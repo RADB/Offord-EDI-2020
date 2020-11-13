@@ -21,7 +21,7 @@
             <input type="text" class="col-md-7 col-form-label" @bind="LinkModel.Url" />
         </div>
         <div class="form-group row">
-            <RichTextEditor @ref="rte" BindValue="@LinkModel.Description"/>
+            <RichTextEditor @ref="rte" BindValue="@LinkModel.Description" />
         </div>
         @if (UserSettings.IsAdmin)
         {
@@ -43,18 +43,19 @@
             <input type="number" class="col-md-3 col-form-label" @bind="LinkModel.Sequence" />
         </div>
 
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-            <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
-                @if (Years != null)
+        <!--<div class="form-group row">
+        <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
+            @if (Years != null)
+            {
+                @foreach (var option in Years)
                 {
-                    @foreach (var option in Years)
-                    {
-                        <option value="@option.Value">@option.Text</option>
-                    }
+                    <option value="@option.Value">@option.Text</option>
                 }
-            </select>
-        </div>
+            }
+        </select>
+    </div>-->
+        <ProvincesYearsTest @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYearsTest>
     </div>
     <div class="card-footer">
         <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
@@ -82,6 +83,8 @@
     public bool iscoordinator { get; set; }
 
     public bool isteacher { get; set; }
+    public ProvincesYearsTest provinces = new ProvincesYearsTest();
+    private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     //Begin RichTextEditorToolbar
     SfRichTextEditor RteObj;
@@ -127,6 +130,20 @@
             iscoordinator = LinkModel.IsCoordinatorLink.HasValue && LinkModel.IsCoordinatorLink.Value ? true : false;
 
             isteacher = LinkModel.IsTeacherLink.HasValue && LinkModel.IsTeacherLink.Value ? true : false;
+
+            ProvinceConfigModel.Alberta = LinkModel.Alberta;
+            ProvinceConfigModel.BritishColumbia = LinkModel.BritishColumbia;
+            ProvinceConfigModel.Manitoba = LinkModel.Manitoba;
+            ProvinceConfigModel.NewBrunswick = LinkModel.NewBrunswick;
+            ProvinceConfigModel.NewfoundlandandLabrador = LinkModel.NewfoundlandandLabrador;
+            ProvinceConfigModel.NovaScotia = LinkModel.NovaScotia;
+            ProvinceConfigModel.Nunavut = LinkModel.Nunavut;
+            ProvinceConfigModel.Ontario = LinkModel.Ontario;
+            ProvinceConfigModel.PrinceEdwardIsland = LinkModel.PrinceEdwardIsland;
+            ProvinceConfigModel.Quebec = LinkModel.Quebec;
+            ProvinceConfigModel.Saskatchewan = LinkModel.Saskatchewan;
+            ProvinceConfigModel.YukonTerritory = LinkModel.YukonTerritory;
+            ProvinceConfigModel.NorthwestTerritories = LinkModel.NorthwestTerritories;
         }
     }
 

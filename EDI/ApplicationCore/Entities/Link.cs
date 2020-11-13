@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EDI.ApplicationCore.Entities
 {
     [Table("Links", Schema = "EDI")]
-    public partial class Link:BaseEntity
+    public partial class Link:BaseEntityProvinceConfiguration
     {        
         public int YearId { get; set; }
         public string Name { get; set; }

@@ -40,18 +40,19 @@
             <input type="number" class="col-md-3 col-form-label" @bind="FaqModel.Sequence" />
         </div>
 
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-            <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
-                @if (Years != null)
+        <!--<div class="form-group row">
+        <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
+            @if (Years != null)
+            {
+                @foreach (var option in Years)
                 {
-                    @foreach (var option in Years)
-                    {
-                        <option value="@option.Value">@option.Text</option>
-                    }
+                    <option value="@option.Value">@option.Text</option>
                 }
-            </select>
-        </div>
+            }
+        </select>
+    </div>-->
+        <ProvincesYearsTest @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYearsTest>
     </div>
     <div class="card-footer">
         <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
@@ -65,6 +66,9 @@
 
     [Parameter]
     public EventCallback HandleValidSubmit { get; set; }
+
+    public ProvincesYearsTest provinces = new ProvincesYearsTest();
+    private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     //Begin RichTextEditorToolbar
     SfRichTextEditor RteObj;
@@ -124,6 +128,20 @@
             iscoordinator = FaqModel.IsCoordinatorFaq.HasValue && FaqModel.IsCoordinatorFaq.Value ? true : false;
 
             isteacher = FaqModel.IsTeacherFaq.HasValue && FaqModel.IsTeacherFaq.Value ? true : false;
+
+            ProvinceConfigModel.Alberta = FaqModel.Alberta;
+            ProvinceConfigModel.BritishColumbia = FaqModel.BritishColumbia;
+            ProvinceConfigModel.Manitoba = FaqModel.Manitoba;
+            ProvinceConfigModel.NewBrunswick = FaqModel.NewBrunswick;
+            ProvinceConfigModel.NewfoundlandandLabrador = FaqModel.NewfoundlandandLabrador;
+            ProvinceConfigModel.NovaScotia = FaqModel.NovaScotia;
+            ProvinceConfigModel.Nunavut = FaqModel.Nunavut;
+            ProvinceConfigModel.Ontario = FaqModel.Ontario;
+            ProvinceConfigModel.PrinceEdwardIsland = FaqModel.PrinceEdwardIsland;
+            ProvinceConfigModel.Quebec = FaqModel.Quebec;
+            ProvinceConfigModel.Saskatchewan = FaqModel.Saskatchewan;
+            ProvinceConfigModel.YukonTerritory = FaqModel.YukonTerritory;
+            ProvinceConfigModel.NorthwestTerritories = FaqModel.NorthwestTerritories;
         }
     }
 

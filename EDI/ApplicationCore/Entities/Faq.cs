@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace EDI.ApplicationCore.Entities
 {
-    public partial class Faq:BaseEntity
+    public partial class Faq:BaseEntityProvinceConfiguration
     {
         public int YearId { get; set; }
         public string Question { get; set; }
