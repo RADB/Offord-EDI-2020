@@ -29,7 +29,7 @@
 <br />
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
                 <strong>Edit NewsFeed</strong>
@@ -92,6 +92,7 @@
         }
         else
         {
+            NewsFeedModel.YearId = newsFeedform1.provinces.ProvinceConfigModel.YearID;
             if (NewsFeedModel.YearId == 0)
             {
                 ErrorMessage = "Year is required.";
@@ -106,22 +107,22 @@
                 return;
             }
 
-            newsFeedform1.NewsFeedModel.Text = newsFeedform1.rte.BindValue;
-            newsFeedform1.NewsFeedModel.Alberta = newsFeedform1.provinces.ProvinceConfigModel.Alberta;
-            newsFeedform1.NewsFeedModel.BritishColumbia = newsFeedform1.provinces.ProvinceConfigModel.BritishColumbia;
-            newsFeedform1.NewsFeedModel.Manitoba = newsFeedform1.provinces.ProvinceConfigModel.Manitoba;
-            newsFeedform1.NewsFeedModel.NewBrunswick = newsFeedform1.provinces.ProvinceConfigModel.NewBrunswick;
-            newsFeedform1.NewsFeedModel.Newfoundland = newsFeedform1.provinces.ProvinceConfigModel.Newfoundland;
-            newsFeedform1.NewsFeedModel.NovaScotia = newsFeedform1.provinces.ProvinceConfigModel.NovaScotia;
-            newsFeedform1.NewsFeedModel.Nunavut = newsFeedform1.provinces.ProvinceConfigModel.Nunavut;
-            newsFeedform1.NewsFeedModel.Ontario = newsFeedform1.provinces.ProvinceConfigModel.Ontario;
-            newsFeedform1.NewsFeedModel.Pei = newsFeedform1.provinces.ProvinceConfigModel.Pei;
-            newsFeedform1.NewsFeedModel.Quebec = newsFeedform1.provinces.ProvinceConfigModel.Quebec;
-            newsFeedform1.NewsFeedModel.Saskatchewan = newsFeedform1.provinces.ProvinceConfigModel.Saskatchewan;
-            newsFeedform1.NewsFeedModel.Yukon = newsFeedform1.provinces.ProvinceConfigModel.Yukon;
-            newsFeedform1.NewsFeedModel.Nwt = newsFeedform1.provinces.ProvinceConfigModel.Nwt;
+            NewsFeedModel.Text = newsFeedform1.rte.BindValue;
+            NewsFeedModel.Alberta = newsFeedform1.provinces.ProvinceConfigModel.Alberta;
+            NewsFeedModel.BritishColumbia = newsFeedform1.provinces.ProvinceConfigModel.BritishColumbia;
+            NewsFeedModel.Manitoba = newsFeedform1.provinces.ProvinceConfigModel.Manitoba;
+            NewsFeedModel.NewBrunswick = newsFeedform1.provinces.ProvinceConfigModel.NewBrunswick;
+            NewsFeedModel.Newfoundland = newsFeedform1.provinces.ProvinceConfigModel.Newfoundland;
+            NewsFeedModel.NovaScotia = newsFeedform1.provinces.ProvinceConfigModel.NovaScotia;
+            NewsFeedModel.Nunavut = newsFeedform1.provinces.ProvinceConfigModel.Nunavut;
+            NewsFeedModel.Ontario = newsFeedform1.provinces.ProvinceConfigModel.Ontario;
+            NewsFeedModel.Pei = newsFeedform1.provinces.ProvinceConfigModel.Pei;
+            NewsFeedModel.Quebec = newsFeedform1.provinces.ProvinceConfigModel.Quebec;
+            NewsFeedModel.Saskatchewan = newsFeedform1.provinces.ProvinceConfigModel.Saskatchewan;
+            NewsFeedModel.Yukon = newsFeedform1.provinces.ProvinceConfigModel.Yukon;
+            NewsFeedModel.Nwt = newsFeedform1.provinces.ProvinceConfigModel.Nwt;
 
-            await newsFeedService.UpdateNewsFeedAsync(newsFeedform1.NewsFeedModel);
+            await newsFeedService.UpdateNewsFeedAsync(NewsFeedModel);
 
             Message = "NewsFeed updated successfully.";
 

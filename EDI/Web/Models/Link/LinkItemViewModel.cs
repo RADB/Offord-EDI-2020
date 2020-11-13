@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class LinkItemViewModel
-    {
-        public int Id { get; set; }
+    public class LinkItemViewModel : BaseModel
+    {        
         [Required(ErrorMessage = "Year is required.")]
         public int YearId { get; set; }
         public short? Ediyear { get; set; }
@@ -21,9 +20,5 @@ namespace EDI.Web.Models
         public bool? IsCoordinatorLink { get; set; }
         public string IsCoordinatorLinkFormatted { get; set; }
         public short Sequence { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
     }
 }

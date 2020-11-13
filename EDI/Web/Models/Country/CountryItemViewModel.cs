@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class CountryItemViewModel
+    public class CountryItemViewModel : BaseModel
     {
-        public int Id { get; set; }
-
         [Required]
         public int Code { get; set; }
 
@@ -22,13 +20,5 @@ namespace EDI.Web.Models
         [Required]
         [StringLength(3)]
         public string ISO3CountryCode { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-        
-        public string CreatedBy { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
-
-        public string ModifiedBy { get; set; }
     }
 }

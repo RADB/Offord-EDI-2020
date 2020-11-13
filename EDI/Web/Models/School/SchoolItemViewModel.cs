@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class SchoolItemViewModel
+    public class SchoolItemViewModel : BaseModel
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "School Number is required.")]
         [StringLength(3)]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "School number can only contain numbers.")]
@@ -30,9 +28,5 @@ namespace EDI.Web.Models
         public string Description { get; set; }
         public string SiteNumber { get; set; }
         public int Teachers { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
     }
 }

@@ -18,5 +18,7 @@ namespace EDI.Web.Models
         public bool Saskatchewan { get; set; }
         public bool Yukon { get; set; }
         public bool Nwt { get; set; }
+
+        public int YearID { get; set; }
     }
 }

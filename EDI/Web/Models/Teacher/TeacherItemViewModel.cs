@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class TeacherItemViewModel
+    public class TeacherItemViewModel : BaseModel
     {
-        public int Id { get; set; }
         public string UserId { get; set; }
         [Required(ErrorMessage = "Teacher Number is required.")]
         [StringLength(2)]
@@ -27,9 +26,5 @@ namespace EDI.Web.Models
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public int Children { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
     }
 }

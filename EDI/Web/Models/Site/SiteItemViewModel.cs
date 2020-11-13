@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class SiteItemViewModel
+    public class SiteItemViewModel : BaseModel
     {
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "Site Number is required.")]
         [StringLength(3)]
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Site number can only contain numbers.")]
@@ -22,9 +20,5 @@ namespace EDI.Web.Models
         public int? YearId { get; set; }
         public short? Ediyear { get; set; }
         public int Schools { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
     }
 }

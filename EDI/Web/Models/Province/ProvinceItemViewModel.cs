@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class ProvinceItemViewModel
+    public class ProvinceItemViewModel : BaseModel
     {
-        public int Id { get; set; }
         [Required]
         [StringLength(100)]
         public string English { get; set; }
@@ -20,17 +19,5 @@ namespace EDI.Web.Models
         public string Country { get; set; }
 
         public int? ProvinceTypeId { get; set; }
-
-        [Required]
-        [StringLength(64)]
-        public string CreatedBy { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        [Required]
-        [StringLength(64)]
-        public string ModifiedBy { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
     }
 }

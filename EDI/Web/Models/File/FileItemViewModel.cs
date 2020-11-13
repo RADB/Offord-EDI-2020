@@ -3,9 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class FileItemViewModel
+    public class FileItemViewModel : BaseModel
     {
-        public int Id { get; set; }
         public string FileName { get; set; }
         public string SiteName { get; set; }
         public string CoordinatorName { get; set; }
@@ -24,15 +23,5 @@ namespace EDI.Web.Models
         public string ChildEdiid { get; set; }
         public int? FileImportStatusId { get; set; }
         public string FileImportStatus { get; set; }
-
-        [StringLength(50)]
-        public string CreatedBy { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        [StringLength(50)]
-        public string ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
     }
 }

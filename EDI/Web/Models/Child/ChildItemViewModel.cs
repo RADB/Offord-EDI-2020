@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class ChildItemViewModel
+    public class ChildItemViewModel: BaseModel
     {
-        public int Id { get; set; }
         [Required(ErrorMessage = "EDI ID is required.")]
         public string Ediid { get; set; }
         public string LocalId { get; set; }
@@ -34,9 +33,5 @@ namespace EDI.Web.Models
         public string ChildNumber { get; set; }
         public int? Progress { get; set; }
         public bool? IsAdmin { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
     }
 }

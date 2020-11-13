@@ -33,7 +33,7 @@
     private string ErrorMessage { get; set; }
 
     public Provinces provinces = new Provinces();
-    private ProvinceConfigurationItemViewModel ProvinceConfigModel { get; set; } = new ProvinceConfigurationItemViewModel();
+    private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     protected override async Task OnInitializedAsync()
     {

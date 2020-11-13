@@ -1,67 +1,149 @@
 ﻿@using Syncfusion.Blazor.Buttons
+@inject ISharedService sharedService
+@inject ServiceContext dbContext;
 
 <div class="form-group row">
+    <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+    <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
+        @if (Years != null)
+        {
+            @foreach (var option in Years)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+        }
+    </select>
+</div>
+<div class="form-group row">
     <label class="col-md-4 col-form-label" for="Provinces">Provinces: </label>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Alberta" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Alberta" @onchange="AlbertaChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="British Columbia" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.BritishColumbia" @onchange="BCChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Manitoba" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Manitoba" @onchange="ManitobaChange" CssClass="e-info"></SfCheckBox>
-    </div>
+    @if (year != null && year.Alberta.HasValue && year.Alberta.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Alberta" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Alberta" @onchange="AlbertaChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.BritishColumbia.HasValue && year.BritishColumbia.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="British Columbia" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.BritishColumbia" @onchange="BCChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.Manitoba.HasValue && year.Manitoba.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Manitoba" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Manitoba" @onchange="ManitobaChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
 </div>
 <div class="form-group row">
     <div class="col-md-4 col-form-label"></div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="New Brunswick" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.NewBrunswick" @onchange="NewBrunswickChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Newfoundland" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Newfoundland" @onchange="NewfoundlandChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Nova Scotia" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.NovaScotia" @onchange="NovaScotiaChange" CssClass="e-info"></SfCheckBox>
-    </div>
+    @if (year != null && year.NewBrunswick.HasValue && year.NewBrunswick.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="New Brunswick" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.NewBrunswick" @onchange="NewBrunswickChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.Newfoundland.HasValue && year.Newfoundland.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Newfoundland" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Newfoundland" @onchange="NewfoundlandChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.NovaScotia.HasValue && year.NovaScotia.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Nova Scotia" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.NovaScotia" @onchange="NovaScotiaChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
 </div>
 <div class="form-group row">
     <div class="col-md-4 col-form-label"></div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Nunavut" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Nunavut" @onchange="NunavutChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Northwest Territories" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Nwt" @onchange="NwtChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Ontario" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Ontario" @onchange="OntarioChange" CssClass="e-info"></SfCheckBox>
-    </div>
+    @if (year != null && year.Nunavut.HasValue && year.Nunavut.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Nunavut" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Nunavut" @onchange="NunavutChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.Nwt.HasValue && year.Nwt.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Northwest Territories" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Nwt" @onchange="NwtChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.Ontario.HasValue && year.Ontario.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Ontario" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Ontario" @onchange="OntarioChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
 </div>
 <div class="form-group row">
     <div class="col-md-4 col-form-label"></div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Prince Edward Island" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Pei" @onchange="PeiChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Quebec" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Quebec" @onchange="QuebecChange" CssClass="e-info"></SfCheckBox>
-    </div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Saskatchewan" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Saskatchewan" @onchange="SaskatchewanChange" CssClass="e-info"></SfCheckBox>
-    </div>
+    @if (year != null && year.Pei.HasValue && year.Pei.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Prince Edward Island" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Pei" @onchange="PeiChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.Quebec.HasValue && year.Quebec.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Quebec" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Quebec" @onchange="QuebecChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
+    @if (year != null && year.Saskatchewan.HasValue && year.Saskatchewan.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Saskatchewan" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Saskatchewan" @onchange="SaskatchewanChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
 </div>
 <div class="form-group row">
     <div class="col-md-4 col-form-label"></div>
-    <div class="input-group col-md-2">
-        <SfCheckBox Label="Yukon" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Yukon" @onchange="YukonChange" CssClass="e-info"></SfCheckBox>
-    </div>
+    @if (year != null && year.Yukon.HasValue && year.Yukon.Value)
+    {
+        <div class="input-group col-md-2">
+            <SfCheckBox Label="Yukon" LabelPosition="LabelPosition.After" Checked="@ProvinceConfigModel.Yukon" @onchange="YukonChange" CssClass="e-info"></SfCheckBox>
+        </div>
+    }
 </div>
 
 @code {
     [Parameter]
     public BaseModelProvince ProvinceConfigModel { get; set; }
 
+    private IEnumerable<SelectListItem> Years { get; set; }
+
+    private string yearid { get; set; }
+
+    private Year year { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        Years = await sharedService.GetYears();
 
+        if (ProvinceConfigModel.YearID == 0 && Years.Count() == 2)
+        {
+            ProvinceConfigModel.YearID = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
+
+        yearid = ProvinceConfigModel.YearID.ToString();
+
+        year = dbContext.Years.Where(p => p.Id == ProvinceConfigModel.YearID).FirstOrDefault();
+    }
+
+    private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        ProvinceConfigModel.YearID = 0;
+
+        if (int.TryParse(selectedString, out int value))
+        {
+            ProvinceConfigModel.YearID = value;
+
+            year = dbContext.Years.Where(p => p.Id == ProvinceConfigModel.YearID).FirstOrDefault();
+        }
     }
 
     private void AlbertaChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)

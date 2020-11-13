@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace EDI.Web.Models
 {
-    public class FormItemViewModel
+    public class FormItemViewModel : BaseModel
     {
-        public int Id { get; set; }
-
         public string FormName { get; set; }
 
         public string FieldName { get; set; }
@@ -22,13 +20,5 @@ namespace EDI.Web.Models
         public bool IsVisible { get; set; }
 
         public bool IsEnabled { get; set; }
-                
-        public string CreatedBy { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        public string ModifiedBy { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
     }
 }

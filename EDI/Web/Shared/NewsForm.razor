@@ -4,9 +4,7 @@
 @inject IAccountService accountService
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
-@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.RichTextEditor
-@using Syncfusion.Blazor.Calendars
 
 @if (IsViewOnly)
 {
@@ -45,19 +43,7 @@ else
                 <label class="col-md-4 col-form-label" for="ValidTo">Valid To: </label>
                 <InputDate @bind-Value="NewsFeedModel.ValidTo" class="col-md-3 form-control" format-value="YYYY-MM-DD" />
             </div>
-            <div class="form-group row">
-                <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-                <select class="col-md-3" value="@yearid" @onchange="@(e =>YearChange(e))">
-                    @if (Years != null)
-                    {
-                        @foreach (var option in Years)
-                        {
-                            <option value="@option.Value">@option.Text</option>
-                        }
-                    }
-                </select>
-            </div>
-            <Provinces @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" />
+            <ProvincesYears @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" />
         </div>
         @if (!IsViewOnly)
         {
@@ -84,10 +70,6 @@ else
 
     public string coordinateid { get; set; }
 
-    public IEnumerable<SelectListItem> Years { get; set; }
-
-    public string yearid { get; set; }
-
     public bool isadmin { get; set; }
 
     public bool iscoordinator { get; set; }
@@ -110,21 +92,14 @@ else
     public RichTextEditor rte = new RichTextEditor();
     // End RichText Editor
 
-    public Provinces provinces = new Provinces();
-    private ProvinceConfigurationItemViewModel ProvinceConfigModel { get; set; } = new ProvinceConfigurationItemViewModel();
+    public ProvincesYears provinces = new ProvincesYears();
+    private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
 
     protected override async Task OnInitializedAsync()
     {
         if (!IsViewOnly)
         {
-            Years = await sharedService.GetYears();
-
-            if (NewsFeedModel.YearId == 0 && Years.Count() == 2)
-            {
-                NewsFeedModel.YearId = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
-            }
-
-            yearid = NewsFeedModel.YearId.ToString();
+            ProvinceConfigModel.YearID = NewsFeedModel.YearId;
 
             if (!NewsFeedModel.ValidFrom.HasValue)
             {
@@ -150,18 +125,6 @@ else
             ProvinceConfigModel.Yukon = NewsFeedModel.Yukon;
             ProvinceConfigModel.Nwt = NewsFeedModel.Nwt;
 
-        }
-    }
-
-    private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
-
-        NewsFeedModel.YearId = 0;
-
-        if (int.TryParse(selectedString, out int newyearid))
-        {
-            NewsFeedModel.YearId = newyearid;
         }
     }
 }

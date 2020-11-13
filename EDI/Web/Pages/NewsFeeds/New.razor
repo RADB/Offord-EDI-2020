@@ -72,6 +72,7 @@
         }
         else
         {
+            NewsFeedModel.YearId = newsform1.provinces.ProvinceConfigModel.YearID;
             if (NewsFeedModel.YearId == 0)
             {
                 ErrorMessage = "Year is required.";
@@ -86,21 +87,21 @@
                 return;
             }
 
-            newsform1.NewsFeedModel.Text = newsform1.rte.BindValue;
-            newsform1.NewsFeedModel.Alberta = newsform1.provinces.ProvinceConfigModel.Alberta;
-            newsform1.NewsFeedModel.BritishColumbia = newsform1.provinces.ProvinceConfigModel.BritishColumbia;
-            newsform1.NewsFeedModel.Manitoba = newsform1.provinces.ProvinceConfigModel.Manitoba;
-            newsform1.NewsFeedModel.NewBrunswick = newsform1.provinces.ProvinceConfigModel.NewBrunswick;
-            newsform1.NewsFeedModel.Newfoundland = newsform1.provinces.ProvinceConfigModel.Newfoundland;
-            newsform1.NewsFeedModel.NovaScotia = newsform1.provinces.ProvinceConfigModel.NovaScotia;
-            newsform1.NewsFeedModel.Nunavut = newsform1.provinces.ProvinceConfigModel.Nunavut;
-            newsform1.NewsFeedModel.Ontario = newsform1.provinces.ProvinceConfigModel.Ontario;
-            newsform1.NewsFeedModel.Pei = newsform1.provinces.ProvinceConfigModel.Pei;
-            newsform1.NewsFeedModel.Quebec = newsform1.provinces.ProvinceConfigModel.Quebec;
-            newsform1.NewsFeedModel.Saskatchewan = newsform1.provinces.ProvinceConfigModel.Saskatchewan;
-            newsform1.NewsFeedModel.Yukon = newsform1.provinces.ProvinceConfigModel.Yukon;
-            newsform1.NewsFeedModel.Nwt = newsform1.provinces.ProvinceConfigModel.Nwt;
-            int id = await NewsFeedService.CreateNewsFeedAsync(newsform1.NewsFeedModel);
+            NewsFeedModel.Text = newsform1.rte.BindValue;
+            NewsFeedModel.Alberta = newsform1.provinces.ProvinceConfigModel.Alberta;
+            NewsFeedModel.BritishColumbia = newsform1.provinces.ProvinceConfigModel.BritishColumbia;
+            NewsFeedModel.Manitoba = newsform1.provinces.ProvinceConfigModel.Manitoba;
+            NewsFeedModel.NewBrunswick = newsform1.provinces.ProvinceConfigModel.NewBrunswick;
+            NewsFeedModel.Newfoundland = newsform1.provinces.ProvinceConfigModel.Newfoundland;
+            NewsFeedModel.NovaScotia = newsform1.provinces.ProvinceConfigModel.NovaScotia;
+            NewsFeedModel.Nunavut = newsform1.provinces.ProvinceConfigModel.Nunavut;
+            NewsFeedModel.Ontario = newsform1.provinces.ProvinceConfigModel.Ontario;
+            NewsFeedModel.Pei = newsform1.provinces.ProvinceConfigModel.Pei;
+            NewsFeedModel.Quebec = newsform1.provinces.ProvinceConfigModel.Quebec;
+            NewsFeedModel.Saskatchewan = newsform1.provinces.ProvinceConfigModel.Saskatchewan;
+            NewsFeedModel.Yukon = newsform1.provinces.ProvinceConfigModel.Yukon;
+            NewsFeedModel.Nwt = newsform1.provinces.ProvinceConfigModel.Nwt;
+            int id = await NewsFeedService.CreateNewsFeedAsync(NewsFeedModel);
 
             Message = "New NewsFeed added successfully.";
             toastService.ShowSuccess(Message);
