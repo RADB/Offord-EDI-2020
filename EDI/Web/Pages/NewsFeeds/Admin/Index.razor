@@ -110,7 +110,20 @@
 
                             if (coordinator != null)
                             {
-                                sivm.Add(anewsFeed);
+                                var site = dbContext.Sites.Where(c => c.CoordinatorId == coordinator.Id).FirstOrDefault();
+                                var school = dbContext.Schools.Where(c => c.SiteId == site.Id).FirstOrDefault();
+
+                                var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+
+                                if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
+                                {
+                                    var property = anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null);
+
+                                    if (property.Equals(true))
+                                    {
+                                        sivm.Add(anewsFeed);
+                                    }
+                                }
                             }
                         }
                     }
