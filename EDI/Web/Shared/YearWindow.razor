@@ -3,7 +3,7 @@
 @inject ServiceContext dbContext;
 
 
-<div class="simple-form" style="width:750px;">
+<div class="simple-form" style="width:850px;">
     @if (!string.IsNullOrEmpty(@Message))
     {
         <div class="text-success">@Message</div>
@@ -15,7 +15,7 @@
     }
     <div class="form-group row">
         <label class="col-md-4 col-form-label" for="Year">Year: </label>
-        <input type="number" class="col-md-6 col-form-label" value="@year" @onchange="@(e =>YearChange(e))" />
+        <input type="number" class="col-md-3 col-form-label" value="@year" @onchange="@(e =>YearChange(e))" />
     </div>
     <Provinces @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" />
     <button @onclick="@SaveYear" class="btn btn-primary">Submit</button>

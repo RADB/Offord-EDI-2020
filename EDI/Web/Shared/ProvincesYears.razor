@@ -17,7 +17,7 @@
 
 <div class="form-group row">
     <label class="col-md-4 col-form-label" for="Provinces">Provinces: </label>
-    @foreach (var option in ProvincesTest)
+    @foreach (var option in Provinces)
     {
         @if (year != null && year.GetType().GetProperty((option.English).Replace(" ", "")).GetValue(year, null).Equals(true))
         {
@@ -35,12 +35,11 @@
     public BaseModelProvince ProvinceConfigModel { get; set; }
 
     private IEnumerable<SelectListItem> Years { get; set; }
-    IEnumerable<ProvinceItemViewModel> ProvincesTest { get; set; }
+    IEnumerable<ProvinceItemViewModel> Provinces { get; set; }
 
     private string yearid { get; set; }
 
     private Year year { get; set; }
-    private String ProvString { get; set; } = "Alberta";
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,7 +68,7 @@
             sivm.Add(aprovince);
         }
 
-        ProvincesTest = sivm;
+        Provinces = sivm;
 
         if (ProvinceConfigModel.YearID == 0 && Years.Count() == 2)
         {
