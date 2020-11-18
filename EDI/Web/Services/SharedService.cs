@@ -32,6 +32,7 @@ using NPOI.XSSF.UserModel;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Data;
 using Syncfusion.XlsIO;
+using EDI.ApplicationCore.Models;
 
 namespace EDI.Web.Services
 {
@@ -1335,6 +1336,17 @@ namespace EDI.Web.Services
             }
 
             return folderName;
+        }
+
+        public async Task<string> SendEmail(EmailModel EmailModel)
+        {
+            string message = string.Empty;
+
+            EmailModel.To = POAppSettings.EmailTo;
+
+            message = await _emailSender.SendEmailAsync(EmailModel);
+
+            return message;
         }
     }
 }
