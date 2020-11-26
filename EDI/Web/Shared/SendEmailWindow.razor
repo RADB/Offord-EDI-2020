@@ -17,29 +17,19 @@
             <label class="col-md-4 col-form-label" for="from">From: </label>
             <input type="text" class="col-md-7 col-form-label" value="@from" @onchange="@(e =>FromChange(e))" />
         </div>
-        <div class="form-group row">
+        @*<div class="form-group row">
             <label class="col-md-4 col-form-label" for="to">To: </label>
             <input type="text" class="col-md-7 col-form-label" value="@to" @onchange="@(e =>ToChange(e))" />
-        </div>
+        </div>*@
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="subject">Subject: </label>
             <input type="text" class="col-md-7 col-form-label" value="@subject" @onchange="@(e =>SubjectChange(e))" />
         </div>
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Description">Message: </label>
-            <div class="input-group col-md-7">
-                <textarea rows="8" cols="60" class="form-control" value="@body" @onchange="@(e =>BodyChange(e))"></textarea>
-            </div>
+            <textarea rows="8" cols="60" class="col-md-7 col-form-label" value="@body" @onchange="@(e =>BodyChange(e))"></textarea>
         </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="UseAttachment">Attach the invoice as a PDF: </label>
-            <input type="checkbox" value="@useattachment" @onchange="@(e =>UseAttachmentChange(e))" />
-        </div>
-        <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="SendCopy">Send a copy to self: </label>
-            <input type="checkbox" value="@copytoself" @onchange="@(e =>CopyToSelfChange(e))" />
-        </div>
-        <button @onclick="@SendInvoice" class="btn btn-primary">Send</button>
+        <button @onclick="@SendEmail" class="btn btn-primary">Send</button>
         <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
     </div>
 
@@ -135,7 +125,7 @@
         }
     }
 
-    private async void SendInvoice()
+    private async void SendEmail()
     {
         if (string.IsNullOrEmpty(EmailModel.From))
         {
@@ -149,17 +139,17 @@
             return;
         }
 
-        if (string.IsNullOrEmpty(EmailModel.To))
-        {
-            ErrorMessage = "To is required.";
-            return;
-        }
+        //if (string.IsNullOrEmpty(EmailModel.To))
+        //{
+        //    ErrorMessage = "To is required.";
+        //    return;
+        //}
 
-        if (!ValidateExtension.IsEmailValid(EmailModel.To))
-        {
-            ErrorMessage = "To is invalid email address.";
-            return;
-        }
+        //if (!ValidateExtension.IsEmailValid(EmailModel.To))
+        //{
+        //    ErrorMessage = "To is invalid email address.";
+        //    return;
+        //}
 
         if (string.IsNullOrEmpty(EmailModel.Subject))
         {

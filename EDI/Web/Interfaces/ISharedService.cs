@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EDI.ApplicationCore.Models;
 using EDI.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -22,5 +23,6 @@ namespace EDI.Web.Interfaces
         Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
         string GetTranslate(string english);
         string GetImagePath();
+        Task<string> SendEmail(EmailModel EmailModel);
     }
 }

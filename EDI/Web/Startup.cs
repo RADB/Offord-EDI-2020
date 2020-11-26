@@ -106,6 +106,7 @@ namespace EDI.Web
             services.AddScoped<INewsFeedService, NewsFeedService>();
             services.AddScoped<UserSettings>();
             services.AddScoped<LanguageSettings>();
+            services.AddScoped<EDIAppSettings>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
 

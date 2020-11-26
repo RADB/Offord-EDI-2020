@@ -1,4 +1,13 @@
-﻿@page "/Contact"
+﻿@using EDI.ApplicationCore.Models;
+@using System.Text.RegularExpressions;
+@inject IToastService toastService;
+@inject ISharedService sharedService;
+@inject ServiceContext dbContext;
+@inject IModalService Modal;
+@inject UserSettings UserSettings;
+@inject EDIAppSettings AppSettings;
+
+@page "/Contact"
 
 <div class="row">
     <div class="col-md-12">
@@ -11,7 +20,8 @@
                     <!--<header class="entry-header">
 
                         <h1 class="entry-title">Contact</h1>
-                    </header>--><!-- .entry-header -->
+                    </header>-->
+                    <!-- .entry-header -->
 
                     <div class="entry-content">
                         @*<p>Interested in using the EDI? <a href="/contact/interested-in-using-the-edi/">Click here</a> to provide us with some information.</p>*@
@@ -50,14 +60,14 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                     </div><!-- .entry-content -->
 
                     <footer class="entry-meta">
                     </footer><!-- .entry-meta -->
                 </article>
             </div>
-
+            <button data-toggle="tooltip" data-placement="bottom" title="Email" @onclick="@SendMessage" class="btn btn-primary"><i class="fa fa-envelope-square fa-1x whiteiconcolor"></i></button>
         </div>
     </div>
 </div>
@@ -65,4 +75,55 @@
 
 @code {
 
+    EmailModel EmailModel { get; set; }
+
+    private void SendMessage()
+    {
+        var parameters = new ModalParameters();
+
+        EmailModel = new EmailModel();
+
+        EmailModel.Subject = "Contact EDI Group";
+
+        EmailModel.From = UserSettings.UserName;
+        //EmailModel.To = AppSettings.EmailTo;
+
+        EmailModel.Body = string.Empty;
+
+        parameters.Add("EmailModel", EmailModel);
+
+        Modal.Show<SendEmailWindow>("Contact EDI", parameters);
+        Modal.OnClose += EmailWindowModalClosed;
+    }
+
+    async void EmailWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (modalResult.Data is EmailModel)
+        {
+            EmailModel = (EmailModel)modalResult.Data;
+
+            string htmlString = "<html><body><p>";
+            string htmlString2 = Regex.Replace(EmailModel.Body, "\r\\D\n?|\n\\D\r?", "</p><p>");
+            string htmlString3 = "</p></body></html>";
+
+            string htmlString4 = htmlString + htmlString2 + htmlString3;
+
+            EmailModel.Body = htmlString4;
+
+            string msg = await sharedService.SendEmail(EmailModel);
+
+            if (msg == "Sent.")
+            {
+                toastService.ShowSuccess("Email was sent successfully.");
+            }
+            else
+            {
+                toastService.ShowError(msg);
+            }
+        }
+
+        Modal.OnClose -= EmailWindowModalClosed;
+
+        StateHasChanged();
+    }
 }
