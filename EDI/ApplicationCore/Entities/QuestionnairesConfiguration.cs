@@ -11,7 +11,7 @@ namespace EDI.ApplicationCore.Entities
         public int InputTypeId { get; set; }
         public int? OrientationId { get; set; }
         public string QuestionNumber { get; set; }
-        public bool? IsNewGroup { get; set; }
+        public bool ShowGroupHeader { get; set; }
         public string GroupName { get; set; }
         public string English { get; set; }
         public string French { get; set; }
@@ -32,8 +32,10 @@ namespace EDI.ApplicationCore.Entities
         public bool HasNotification { get; set; }
         public string NotificationCondition { get; set; }
         public string Notification { get; set; }
+        public string NotificationFrench { get; set; }
         public bool HasHelp { get; set; }
         public string HelpText { get; set; }
+        public string HelpTextFrench { get; set; }
         public string Mask { get; set; }
         public byte? MaxLength { get; set; }
         public byte Columns { get; set; }

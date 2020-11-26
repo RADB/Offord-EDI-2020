@@ -220,8 +220,6 @@ namespace EDI.Infrastructure.Data
             {
                 entity.ToTable("FAQ", "EDI");
 
-                entity.Property(e => e.Answer).HasMaxLength(4000);
-
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
                 entity.Property(e => e.IsAdministratorFaq).HasColumnName("IsAdministratorFAQ");
@@ -231,8 +229,6 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.IsTeacherFaq).HasColumnName("IsTeacherFAQ");
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
-
-                entity.Property(e => e.Question);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
             });
@@ -344,8 +340,6 @@ namespace EDI.Infrastructure.Data
                 entity.ToTable("Links", "EDI");
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
-
-                entity.Property(e => e.Description);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
