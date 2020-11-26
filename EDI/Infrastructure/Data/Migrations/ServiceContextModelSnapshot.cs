@@ -323,8 +323,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("BritishColumbia")
                         .HasColumnType("bit");
@@ -387,8 +386,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Question")
-                        .HasColumnType("nvarchar(4000)")
-                        .HasMaxLength(4000);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("Saskatchewan")
                         .HasColumnType("bit");
@@ -751,8 +749,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(400)")
-                        .HasMaxLength(400);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsAdminLink")
                         .HasColumnType("bit");
@@ -1348,14 +1345,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("HelpText")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("HelpTextFrench")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("InputTypeId")
                         .HasColumnName("InputTypeId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsConditional")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsNewGroup")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsReadOnly")
@@ -1409,6 +1406,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
+                    b.Property<string>("NotificationFrench")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("NovaScotia")
                         .HasColumnType("bit");
 
@@ -1445,6 +1445,9 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<int>("Sequence")
                         .HasColumnType("int");
+
+                    b.Property<bool>("ShowGroupHeader")
+                        .HasColumnType("bit");
 
                     b.Property<string>("VariableName")
                         .HasColumnType("nvarchar(50)")

@@ -15,7 +15,7 @@ namespace EDI.Infrastructure.Data
             int retryForAvailability = retry.Value;
             try
             {
-                if(ServiceContext.Years.Where(y =>y.Ediyear == DateTime.Now.Year).FirstOrDefault() == null)
+                if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.Year).FirstOrDefault() == null)
                 {
                     ServiceContext.Years.AddRange(
                         GetPreconfiguredYear());
@@ -43,6 +43,38 @@ namespace EDI.Infrastructure.Data
                 {
                     ServiceContext.Genders.AddRange(
                         GetPreconfiguredGender());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+                
+                if (!ServiceContext.Orientations.Any())
+                {
+                    ServiceContext.Orientations.AddRange(
+                        GetPreconfiguredOrientation());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
+                if (!ServiceContext.LookupSets.Any())
+                {
+                    ServiceContext.LookupSets.AddRange(
+                        GetPreconfiguredLookupSet());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
+                if (!ServiceContext.LookupSetOptions.Any())
+                {
+                    ServiceContext.LookupSetOptions.AddRange(
+                        GetPreconfiguredLookupSetOption());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
+                if (!ServiceContext.InputTypes.Any())
+                {
+                    ServiceContext.InputTypes.AddRange(
+                        GetPreconfiguredInputType());
 
                     await ServiceContext.SaveChangesAsync();
                 }
@@ -2354,6 +2386,71 @@ namespace EDI.Infrastructure.Data
             {
                 new FileImportStatus() { Code = "1", English = "Imported", French = "Importé",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<Orientation> GetPreconfiguredOrientation()
+        {
+            return new List<Orientation>()
+            {
+                new Orientation() { YearId= 1, English = "Horizontal", French = "Horizontal", CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new Orientation() { YearId= 1, English = "Vertical", French = "Vertical", CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<LookupSet> GetPreconfiguredLookupSet()
+        {
+            return new List<LookupSet>()
+            {
+                new LookupSet() {LookupName="YesNo",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="YesNoDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="GoodAvgPoorDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="OftenSometimesNeverDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="ObservedDiagnosisBoth",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="FullPartDontknowNO",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<LookupSetOption> GetPreconfiguredLookupSetOption()
+        {
+            return new List<LookupSetOption>()
+            {
+                new LookupSetOption() {English="Yes",LookupId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Oui",Value=1,Sequence=10},
+                new LookupSetOption() {English="No",LookupId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=0,Sequence=20},
+                new LookupSetOption() {English="Yes",LookupId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="oui",Value=1,Sequence=10},
+                new LookupSetOption() {English="No",LookupId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=2,Sequence=20},
+                new LookupSetOption() {English="Don't Know",LookupId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Very Good/Good",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Average",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Poor/Very Poor",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Don't Know",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
+                new LookupSetOption() {English="Often or Very True",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Sometimes or Somewhat True",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Never or Not True",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Don't Know",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
+                new LookupSetOption() {English="Yes Observed",LookupId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Yes Parent Info/Medical Diagnosis",LookupId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Both",LookupId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Full-Time",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Part-Time",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Don't Know",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="No",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40}
+
+            };
+        }
+        static IEnumerable<InputType> GetPreconfiguredInputType()
+        {
+            return new List<InputType>()
+            {
+                new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="TextBox",English="TextBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="SelectBox",English="SelectBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="CheckBox",English="CheckBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="DatePicker",English="DatePicker",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="NumberBox",English="NumberBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="RadioButtons",English="RadioButtons",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="RadioMatrix",English="RadioMatrix",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="TextArea",English="TextArea",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
     }
