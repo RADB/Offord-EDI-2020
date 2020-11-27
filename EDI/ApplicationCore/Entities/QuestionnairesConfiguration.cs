@@ -19,8 +19,8 @@ namespace EDI.ApplicationCore.Entities
         /// Variable Name for data dictionary
         /// </summary>
         public string VariableName { get; set; }
-        public string EntityName { get; set; }
-        public string EntityField { get; set; }
+        public string? EntityName { get; set; }
+        public string? EntityField { get; set; }
         public bool HasLookupEntity { get; set; }
         public string LookupEntity { get; set; }
         public int? LookupEntityId { get; set; }

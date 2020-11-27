@@ -1316,12 +1316,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("EntityField")
-                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("EntityName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
@@ -1330,8 +1328,8 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasMaxLength(255);
 
                     b.Property<string>("GroupName")
-                        .HasColumnType("nvarchar(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
 
                     b.Property<bool>("HasHelp")
                         .HasColumnType("bit");

@@ -474,13 +474,13 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.English).IsRequired().HasMaxLength(255);
 
-                entity.Property(e => e.EntityField).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.EntityField).HasMaxLength(100);
 
-                entity.Property(e => e.EntityName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.EntityName).HasMaxLength(100);
 
                 entity.Property(e => e.French).HasMaxLength(255);
 
-                entity.Property(e => e.GroupName).HasMaxLength(10);
+                entity.Property(e => e.GroupName).HasMaxLength(100);
 
                 entity.Property(e => e.InputTypeId).HasColumnName("InputTypeId");
 
