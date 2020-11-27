@@ -78,7 +78,13 @@ namespace EDI.Infrastructure.Data
 
                     await ServiceContext.SaveChangesAsync();
                 }
+                if (!ServiceContext.Questionnaires.Any())
+                {
+                    ServiceContext.Questionnaires.AddRange(
+                        GetPreconfiguredQuestionnaires());
 
+                    await ServiceContext.SaveChangesAsync();
+                }
                 if (!ServiceContext.FileImportStatuses.Any())
                 {
                     ServiceContext.FileImportStatuses.AddRange(
@@ -2451,6 +2457,21 @@ namespace EDI.Infrastructure.Data
                 new InputType() {French="RadioButtons",English="RadioButtons",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="RadioMatrix",English="RadioMatrix",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="TextArea",English="TextArea",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+            };
+        }
+
+        static IEnumerable<Questionnaire> GetPreconfiguredQuestionnaires()
+        {
+            return new List<Questionnaire>()
+            {
+                new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true},
+                new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true},
+                new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true},
+                new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true},
+                new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true},
+                new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true},
+                new Questionnaire() {English="Teacher Feedback",QuestionnaireName="Teacher Feedback",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Teacher Feedback",DescriptionEnglish="Teacher Feedback",DescriptionFrench="Teacher Feedback",ShowProgressBar=true,ShowQuestionNumbers=true},
+
             };
         }
     }
