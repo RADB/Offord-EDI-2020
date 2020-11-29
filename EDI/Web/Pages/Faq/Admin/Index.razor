@@ -1,6 +1,7 @@
 ﻿@page "/Faq/Admin"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core;
 @using Syncfusion.Blazor.Navigations;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
@@ -71,6 +72,7 @@
 @code {
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private List<Faq> allfaqs { get; set; }
 
     IEnumerable<FaqItemViewModel> faqs;
 
@@ -82,15 +84,19 @@
         }
         else
         {
-            var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Sequence).ToList());
-
             if (UserSettings.IsCoordinator)
             {
                 allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Sequence).ToList());
             }
             else if (UserSettings.IsTeacher)
             {
-                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Sequence).ToList());
+                var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
+                //allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Sequence).ToList());
+            }
+            else if (UserSettings.IsAdmin)
+            {
+                allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Sequence).ToList());
             }
 
             List<FaqItemViewModel> sivm = new List<FaqItemViewModel>();
@@ -98,6 +104,8 @@
             foreach (var faq in allfaqs)
             {
                 var afaq = new FaqItemViewModel();
+                // load the years - EF5 will change to Include
+                dbContext.Entry(faq).Reference(y => y.Year).Load();
 
                 afaq.Id = faq.Id;
                 afaq.Question = faq.Question;
@@ -111,13 +119,14 @@
                 afaq.Sequence = faq.Sequence;
                 afaq.YearId = faq.YearId;
 
-                var year = dbContext.Years.Where(p => p.Id == faq.YearId).FirstOrDefault();
-                afaq.Ediyear = year != null ? year.Ediyear : null;
+                //var year = dbContext.Years.Where(p => p.Id == faq.YearId).FirstOrDefault();
+                //afaq.Ediyear = year != null ? year.Ediyear : null;
+                afaq.Ediyear = faq.Year.Ediyear;
 
                 sivm.Add(afaq);
             }
 
-            faqs = sivm;
+            faqs = sivm;            
         }
     }
 

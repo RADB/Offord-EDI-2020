@@ -308,10 +308,12 @@ namespace EDI.Infrastructure.Data
         }
 
         static IEnumerable<Year> GetPreconfiguredYear()
-        {
+        {           
             return new List<Year>()
             {
-                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(1).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(2).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
 

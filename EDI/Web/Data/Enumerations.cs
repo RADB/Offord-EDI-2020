@@ -7,23 +7,23 @@ namespace EDI.Web.Data
 {
     public class Enumerations
     {
-        enum Orientation : int
+        public enum Orientations : int
         {
             Vertical = 1,
             Horizontal = 2
         }
 
-        enum InputType: int
+        public enum InputTypes: int
         {
-            SectionHeader =1,
-            QuestionHeader = 2,
-            Header =3,
-            Text=4,
-            Date=5,
-            Checkbox=6,
-            RadioButtons=7,
-            NumberBox=8,
-            TextArea=9
+            TextArea = 1,
+            RadioMatrix =2,
+            RadioButtons=3,
+            NumberBox =4,
+            DatePicker=5,
+            CheckBox=6,
+            SelectBox=7,
+            TextBox=8,
+            Header=9
         }
 
     }

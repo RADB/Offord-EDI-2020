@@ -1,6 +1,7 @@
 ﻿@page "/Faq/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IFaqService faqService;
@@ -29,7 +30,7 @@
                 }
                 else
                 {
-                    @if (UserSettings.IsAdmin)
+                    @if (!UserSettings.IsCoordinator)
                     {
                         <SfGrid ID="GridFaq" @ref="Grid" DataSource="@faqs" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                             <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
@@ -63,6 +64,7 @@
 @code {
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private List<Faq> allfaqs { get; set; }
 
     SfGrid<FaqItemViewModel> Grid;
 
@@ -74,21 +76,21 @@
         {
             NavigationManager.NavigateTo("./login");
         }
-        else if (!UserSettings.IsAdmin)
-        {
-            NavigationManager.NavigateTo("./dashboard/index");
-        }
         else
         {
-            var allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Sequence).ToList());
-
             if (UserSettings.IsCoordinator)
             {
                 allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Sequence).ToList());
             }
             else if (UserSettings.IsTeacher)
             {
-                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Sequence).ToList());
+                var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
+                //allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Sequence).ToList());
+            }
+            else if (UserSettings.IsAdmin)
+            {
+                allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Sequence).ToList());
             }
 
             List<FaqItemViewModel> sivm = new List<FaqItemViewModel>();
