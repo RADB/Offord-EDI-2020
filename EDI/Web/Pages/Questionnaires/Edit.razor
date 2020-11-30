@@ -1,0 +1,154 @@
+﻿@page "/questionnaires"
+@page "/questionnaires/edit/{Id:int}"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Navigations;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject IQuestionnaireService questionnaireService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime;
+@inject IModalService Modal;
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+<br />
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>Edit Questionnaire</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <br />
+            <div class="col-md-10" style="margin-left: 24px;">
+                <SfAccordion>
+                    <AccordionItems>
+                        <AccordionItem Header="Details" Expanded="true">
+                            <ContentTemplate>
+                                <QuestionnaireForm @ref="questionnaireform1" QuestionnaireModel="@QuestionnaireModel" HandleValidSubmit="HandleValidSubmit" />
+                            </ContentTemplate>
+                        </AccordionItem>
+                    </AccordionItems>
+                </SfAccordion>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private QuestionnaireItemViewModel QuestionnaireModel { get; set; } = new QuestionnaireItemViewModel();
+
+    QuestionnaireForm questionnaireform1 = new QuestionnaireForm();
+
+    SfGrid<TeacherItemViewModel> Grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            QuestionnaireModel = await questionnaireService.GetQuestionnaireItem(Id);
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        QuestionnaireModel.QuestionnaireName = questionnaireform1.textName.TextModel.Value;
+
+        if (string.IsNullOrEmpty(QuestionnaireModel.QuestionnaireName))
+        {
+            ErrorMessage = "Questionnaire Name is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        QuestionnaireModel.English = questionnaireform1.rteEnglish.BindValue;
+
+        if (string.IsNullOrEmpty(QuestionnaireModel.English))
+        {
+            ErrorMessage = "Questionnaire English is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        QuestionnaireModel.YearId = questionnaireform1.selectYear.SelectModel.ID.HasValue ? questionnaireform1.selectYear.SelectModel.ID.Value : 0;
+        if (QuestionnaireModel.YearId == 0)
+        {
+            ErrorMessage = "Year is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        var totalItems = await questionnaireService.GetDuplicateCount(QuestionnaireModel.QuestionnaireName, questionnaireform1.QuestionnaireModel.Id);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same Questionnaire has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            QuestionnaireModel.French = questionnaireform1.rteFrench.BindValue;
+            QuestionnaireModel.DescriptionEnglish = questionnaireform1.rteDescriptionEnglish.BindValue;
+            QuestionnaireModel.DescriptionFrench = questionnaireform1.rteDescriptionFrench.BindValue;
+            QuestionnaireModel.ShowProgressBar = questionnaireform1.checkProgressBar.CheckModel.Value;
+            QuestionnaireModel.ShowQuestionNumbers = questionnaireform1.checkQuestionNumer.CheckModel.Value;
+
+            await questionnaireService.UpdateQuestionnaireAsync(questionnaireform1.QuestionnaireModel);
+
+            Message = "Questionnaire updated successfully.";
+
+            toastService.ShowSuccess(Message);
+
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./questionnaires/index");
+    }
+
+    private async void Reset()
+    {
+        QuestionnaireModel = await questionnaireService.GetQuestionnaireItem(Id);
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./questionnaires/new");
+    }
+}

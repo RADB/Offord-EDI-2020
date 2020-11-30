@@ -1,19 +1,8 @@
-﻿@inherits QuestionnaireBase
+﻿@using Syncfusion.Blazor.Inputs
 
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow mb-4">
-            <div class="card-body">
-                <div class="col-12">
-                    <h4>@QuestionText</h4>
-                    <!--<InputText name=@DataColumn id=@DataColumn style="width:100%; max-width: 100%;resize:none;">@DataValue</InputText>-->
-                    <input type="text" name=@DataColumn id=@DataColumn style="width:100%; max-width: 100%;resize:none;" @bind=@StringValue />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<SfTextBox @bind-Value="@TextModel.Value" Placeholder="@TextModel.Placeholder"></SfTextBox>
 
 @code {
-    
+    [Parameter]
+    public TextViewModel TextModel { get; set; }
 }

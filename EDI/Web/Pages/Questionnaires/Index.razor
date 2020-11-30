@@ -1,0 +1,189 @@
+﻿@page "/Questionnaires/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IQuestionnaireService questionnaireService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+@inject UserSettings UserSettings;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>@Header</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                @if (questionnaires == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridQuestionnaire" @ref="Grid" DataSource="@questionnaires" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="QuestionnaireItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="QuestionnaireName" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.QuestionnaireName) HeaderText="Name" Width="30"></GridColumn>
+                            <GridColumn HeaderText="English" Width="30">
+                                <Template>
+                                    @{
+                                        var comm = (context as QuestionnaireItemViewModel);
+                                        @((MarkupString)comm.English)
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="French" Width="30">
+                                <Template>
+                                    @{
+                                        var comm = (context as QuestionnaireItemViewModel);
+                                        @((MarkupString)comm.French)
+                                    }
+                                </Template>
+                            </GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int SiteID { get; set; } = 0;
+    [Parameter]
+    public string Header { get; set; } = "Questionnaire";
+    [Parameter]
+    public bool AllowDelete { get; set; } = true;
+    [Parameter]
+    public bool AllowEdit { get; set; } = true;
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<QuestionnaireItemViewModel> Grid;
+
+    IEnumerable<QuestionnaireItemViewModel> questionnaires;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            var allquestionnaires = await Task.FromResult(dbContext.Questionnaires.OrderBy(p => p.QuestionnaireName).ToList());
+
+            List<QuestionnaireItemViewModel> sivm = new List<QuestionnaireItemViewModel>();
+
+            foreach (var questionnaire in allquestionnaires)
+            {
+                var aquestionnaire = new QuestionnaireItemViewModel();
+
+                aquestionnaire.Id = questionnaire.Id;
+                aquestionnaire.QuestionnaireName = questionnaire.QuestionnaireName;
+                aquestionnaire.English = questionnaire.English;
+                aquestionnaire.French = questionnaire.French;
+                aquestionnaire.DescriptionEnglish = questionnaire.DescriptionEnglish;
+                aquestionnaire.DescriptionFrench = questionnaire.DescriptionFrench;
+                aquestionnaire.ShowProgressBar = questionnaire.ShowProgressBar;
+                aquestionnaire.ShowQuestionNumbers = questionnaire.ShowQuestionNumbers;
+
+                aquestionnaire.YearId = questionnaire.YearId;
+                var year = dbContext.Years.Where(p => p.Id == questionnaire.YearId).FirstOrDefault();
+                if (year != null && year.Ediyear.HasValue)
+                    aquestionnaire.Ediyear = year.Ediyear.Value;
+
+                sivm.Add(aquestionnaire);
+            }
+
+            this.rowid = 0;
+            questionnaires = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<QuestionnaireItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridQuestionnaire_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridQuestionnaire_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridQuestionnaire_csvexport")
+        {
+            this.Grid.CsvExport();
+        }
+        if (args.Item.Id == "GridQuestionnaire_add")
+        {
+            NavigationManager.NavigateTo("./questionnaires/new");
+        }
+        if (args.Item.Id == "GridQuestionnaire_edit")
+        {
+            NavigationManager.NavigateTo("./questionnaires/edit/" + this.rowid);
+        }
+        if (args.Item.Id == "GridQuestionnaire_delete")
+        {
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await questionnaireService.DeleteQuestionnaireAsync(this.rowid);
+
+            var tmp = new List<QuestionnaireItemViewModel>();
+            foreach (var item in questionnaires)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.questionnaires = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<QuestionnaireItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./questionnaires/edit/" + this.rowid);
+    }
+}

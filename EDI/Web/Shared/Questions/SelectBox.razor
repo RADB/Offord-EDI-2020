@@ -1,0 +1,28 @@
+﻿
+<select value="@SelectModel.Value" @onchange="@(e =>OptionChange(e))">
+    @if (@SelectModel.Options != null)
+    {
+        @foreach (var option in @SelectModel.Options)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    }
+</select>
+
+@code {
+    [Parameter]
+    public SelectViewModel SelectModel { get; set; }
+
+
+    private void OptionChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SelectModel.ID = 0;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            SelectModel.ID = newid;
+        }
+    }
+}

@@ -1,0 +1,112 @@
+﻿@inject NavigationManager NavigationManager
+@inject IQuestionnaireService questionnaireService
+@inject ISharedService sharedService
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+
+<div class="card-body">
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="Question">Question Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <div class="col-md-7 col-form-label">
+            <Text @ref="@textName" TextModel="@textModelForName" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="English">English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <div class="col-md-7 col-form-label">
+            <RichTextEditor @ref="rteEnglish" BindValue="@QuestionnaireModel.English" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="French">French: </label>
+        <div class="col-md-7 col-form-label">
+            <RichTextEditor @ref="rteFrench" BindValue="@QuestionnaireModel.French" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="DescriptionEnglish">Description English: </label>
+        <div class="col-md-7 col-form-label">
+            <RichTextEditor @ref="rteDescriptionEnglish" BindValue="@QuestionnaireModel.DescriptionEnglish" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="DescriptionFrench">Description French: </label>
+        <div class="col-md-7 col-form-label">
+            <RichTextEditor @ref="rteDescriptionFrench" BindValue="@QuestionnaireModel.DescriptionFrench" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="ShowProgressBar">Show Progress Bar: </label>
+        <div class="col-md-7 col-form-label">
+            <CheckBox @ref="checkProgressBar" CheckModel="@checkModelForProgressBar" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="ShowQuestionNumbers">Show Question Numbers: </label>
+        <div class="col-md-7 col-form-label">
+            <CheckBox @ref="checkQuestionNumer" CheckModel="@checkModelForQuestionNumer" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <div class="col-md-7 col-form-label">
+            <SelectBox @ref="@selectYear" SelectModel="@selectModelForYear" />
+        </div>
+    </div>
+</div>
+<div class="card-footer">
+    <button type="submit" class="savebutton" @onclick="HandleValidSubmit"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+</div>
+
+
+@code {
+    [Parameter]
+    public QuestionnaireItemViewModel QuestionnaireModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public RichTextEditor rteEnglish = new RichTextEditor();
+
+    public RichTextEditor rteDescriptionEnglish = new RichTextEditor();
+
+    public RichTextEditor rteFrench = new RichTextEditor();
+
+    public RichTextEditor rteDescriptionFrench = new RichTextEditor();
+
+    public Text textName = new Text();
+
+    private TextViewModel textModelForName { get; set; } = new TextViewModel();
+
+    public SelectBox selectYear = new SelectBox();
+
+    private SelectViewModel selectModelForYear { get; set; } = new SelectViewModel();
+
+    public CheckBox checkProgressBar = new CheckBox();
+
+    private CheckViewModel checkModelForProgressBar { get; set; } = new CheckViewModel();
+
+    public CheckBox checkQuestionNumer = new CheckBox();
+
+    private CheckViewModel checkModelForQuestionNumer { get; set; } = new CheckViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        textModelForName.Name = "QuestionnaireName";
+        textModelForName.Placeholder = "Questionnaire Name";
+        textModelForName.Value = QuestionnaireModel.QuestionnaireName;
+
+        checkModelForProgressBar.Value = QuestionnaireModel.ShowProgressBar.HasValue ? QuestionnaireModel.ShowProgressBar.Value : false;
+        checkModelForQuestionNumer.Value = QuestionnaireModel.ShowQuestionNumbers.HasValue ? QuestionnaireModel.ShowQuestionNumbers.Value : false;
+
+        selectModelForYear.Options = await sharedService.GetYears();
+
+        selectModelForYear.ID = QuestionnaireModel.YearId;
+
+        if (selectModelForYear.ID == 0 && selectModelForYear.Options.Count() == 2)
+        {
+            selectModelForYear.ID = int.Parse(selectModelForYear.Options.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        }
+        selectModelForYear.Value = selectModelForYear.ID.HasValue ? selectModelForYear.ID.ToString() : string.Empty;
+    }
+}

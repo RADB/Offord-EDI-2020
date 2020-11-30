@@ -442,13 +442,13 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.DescriptionEnglish).HasMaxLength(255);
+                entity.Property(e => e.DescriptionEnglish);
 
-                entity.Property(e => e.DescriptionFrench).HasMaxLength(255);
+                entity.Property(e => e.DescriptionFrench);
 
-                entity.Property(e => e.English).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.English).IsRequired();
 
-                entity.Property(e => e.French).HasMaxLength(100);
+                entity.Property(e => e.French);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
@@ -470,13 +470,13 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.English).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.English).IsRequired();
 
                 entity.Property(e => e.EntityField).HasMaxLength(100);
 
                 entity.Property(e => e.EntityName).HasMaxLength(100);
 
-                entity.Property(e => e.French).HasMaxLength(255);
+                entity.Property(e => e.French);
 
                 entity.Property(e => e.GroupName).HasMaxLength(100);
 

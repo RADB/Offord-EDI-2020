@@ -104,6 +104,7 @@ namespace EDI.Web
             services.AddScoped<ICoordinatorService, CoordinatorService>();
             services.AddScoped<ITranslationService, TranslationService>();
             services.AddScoped<INewsFeedService, NewsFeedService>();
+            services.AddScoped<IQuestionnaireService, QuestionnaireService>();
             services.AddScoped<UserSettings>();
             services.AddScoped<LanguageSettings>();
             services.AddScoped<EDIAppSettings>();
