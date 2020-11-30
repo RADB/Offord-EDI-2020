@@ -1230,21 +1230,17 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DescriptionEnglish")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DescriptionFrench")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("English")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("French")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
@@ -1312,8 +1308,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("English")
                         .IsRequired()
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EntityField")
                         .HasColumnType("nvarchar(100)")
@@ -1324,8 +1319,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("French")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GroupName")
                         .HasColumnType("nvarchar(100)")

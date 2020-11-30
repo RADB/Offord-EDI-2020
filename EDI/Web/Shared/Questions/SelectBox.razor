@@ -1,20 +1,28 @@
-﻿@inherits QuestionBase
-
-<div class="row">
-    <div class="col-12">
-        <div class="card shadow mb-4">
-            <div class="card-body">
-                <div class="col-12">
-                    <h4>@QuestionText</h4>
-                    <!--<InputText name=@DataColumn id=@DataColumn style="width:100%; max-width: 100%;resize:none;">@DataValue</InputText>
-    <input type="text" name=@DataColumn id=@DataColumn style="width:100%; max-width: 100%;resize:none;" @bind=@DataValue />-->
-                    SELECT BOX 
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+﻿
+<select value="@SelectModel.Value" @onchange="@(e =>OptionChange(e))">
+    @if (@SelectModel.Options != null)
+    {
+        @foreach (var option in @SelectModel.Options)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    }
+</select>
 
 @code {
+    [Parameter]
+    public SelectViewModel SelectModel { get; set; }
 
+
+    private void OptionChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SelectModel.ID = 0;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            SelectModel.ID = newid;
+        }
+    }
 }

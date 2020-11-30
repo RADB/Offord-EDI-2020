@@ -60,7 +60,6 @@
     <Folder Include="Data\Files\" />
     <Folder Include="Pages\InputTypes\" />
     <Folder Include="Pages\QuestionnaireConfigurations\" />
-    <Folder Include="Pages\Questionnaires\" />
     <Folder Include="Pages\Orientations\" />
     <Folder Include="wwwroot\data\" />
     <Folder Include="wwwroot\Download\" />
