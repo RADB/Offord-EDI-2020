@@ -1,6 +1,7 @@
 ﻿@page "/NewsFeeds/Admin"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject INewsFeedService newsFeedService;
@@ -53,7 +54,7 @@
             NavigationManager.NavigateTo("./login");
         }
         else
-        {
+        {            
             var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.OrderBy(p => p.Title).ToList());
 
             List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
@@ -86,19 +87,20 @@
                         if (UserSettings.IsTeacher)
                         {
                             var teacher = dbContext.Teachers.Where(p => p.UserId == UserSettings.UserID).FirstOrDefault();
-                            
+
                             if (teacher != null)
                             {
-                                var school = dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
+                                //var school = dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
 
-                                var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+                                //var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
 
-                                if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
+                                //if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
+                                if (anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null) != null)
                                 {
                                     //var property = anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null);
 
                                     //if (property.Equals(true))
-                                    if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null).Equals(true))
+                                    if (anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null).Equals(true))
                                     {
                                         sivm.Add(anewsFeed);
                                     }
@@ -116,9 +118,9 @@
 
                                 var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
 
-                                if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
+                                if (anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null) != null)
                                 {
-                                    var property = anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null);
+                                    var property = anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null);
 
                                     if (property.Equals(true))
                                     {

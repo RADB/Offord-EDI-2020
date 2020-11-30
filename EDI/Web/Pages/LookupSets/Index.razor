@@ -1,8 +1,8 @@
 ﻿@page "/LookupSets/index"
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.Navigations;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ILookupSetService lookupSetService;
@@ -10,7 +10,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+@inject IModalService Modal;
 @inject UserSettings UserSettings;
 
 <div class="row">

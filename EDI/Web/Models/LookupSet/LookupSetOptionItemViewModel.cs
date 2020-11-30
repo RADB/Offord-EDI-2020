@@ -5,7 +5,7 @@ namespace EDI.Web.Models
 {
     public class LookupSetOptionItemViewModel : BaseModel
     {
-        public int LookupId { get; set; }
+        public int LookupSetId { get; set; }
        
         [Required(ErrorMessage = "English is required.")]
         public string English { get; set; }

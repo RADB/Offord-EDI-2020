@@ -112,6 +112,13 @@ else
                     sivm.Add(atranslation);
                 }
 
+
+                // get the teacher record - which contains the school and the province
+                var teacher = await Task.FromResult(dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID).FirstOrDefault());
+                dbContext.Entry(teacher).Reference(s => s.School).Load();
+                dbContext.Entry(teacher.School).Reference(ts => ts.Province).Load();
+
+                UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
                 LanguageSettings.Translations = sivm;
             }
             else

@@ -48,6 +48,7 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<Year> _yearRepository;
         private readonly IAsyncRepository<Gender> _genderRepository;
         private readonly IAsyncRepository<School> _schoolRepository;
+        private readonly IAsyncRepository<LookupSetOption> _lookupSetOptionRepository;
         private readonly IAsyncRepository<Teacher> _teacherRepository;
         private readonly IAsyncRepository<Child> _childRepository;
         private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
@@ -82,6 +83,7 @@ namespace EDI.Web.Services
             IAsyncRepository<School> schoolRepository,
             IAsyncRepository<Teacher> teacherRepository,
             IAsyncRepository<Child> childRepository,
+        //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
             IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
             IAsyncRepository<TeacherParticipationForm> participationRepository,
             IAsyncIdentityRepository accountRepository,
@@ -110,6 +112,7 @@ namespace EDI.Web.Services
             _genderRepository = genderRepository;
             _yearRepository = yearRepository;
             _schoolRepository = schoolRepository;
+        //  _lookupSetOptionRepository=lookupSetOptionsRepository;
             _teacherRepository = teacherRepository;
             _childRepository = childRepository;
             _feedbackRepository = feedbackRepository;
@@ -123,6 +126,10 @@ namespace EDI.Web.Services
             _languageSettings = languageSettings;
             POAppSettings = settings.Value;
         }
+        /*public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
+        {
+            return _lookupSetOptionRepository.GetByIdAsync(LookupSetId)
+        }*/
 
         public async Task<IEnumerable<SelectListItem>> GetCountries()
         {
@@ -1347,6 +1354,27 @@ namespace EDI.Web.Services
             message = await _emailSender.SendEmailAsync(EmailModel);
 
             return message;
+        }
+        public string GetConfigText(QuestionnairesConfiguration config)
+        {
+            return GetLanguageText(config.English, config.French);
+        }
+
+        public string GetOptionText(LookupSetOption option)
+        {
+            return GetLanguageText(option.English, option.French);
+        }
+
+        private string GetLanguageText(string English, string French)
+        {
+            string LanguageText = "";
+
+            if (_userSettings.Language.Equals("English"))
+                LanguageText = English;
+            else
+                LanguageText = French;
+
+            return LanguageText;
         }
     }
 }
