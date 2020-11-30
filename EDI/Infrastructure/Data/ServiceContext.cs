@@ -504,7 +504,55 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.QuestionnaireId).HasColumnName("QuestionnaireID");
 
-                entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");                
+                entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");       
+                
+                 entity.Property(e => e.Alberta).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.BritishColumbia).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.ColumnSpan).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Columns).HasDefaultValueSql("((11))");
+
+                entity.Property(e => e.Condition).HasMaxLength(255);
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('Renner')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+               entity.Property(e => e.HasHelp).IsRequired().HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.IsReadOnly).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.IsRequired).IsRequired().HasDefaultValueSql("((1))");
+                                
+                entity.Property(e => e.Manitoba).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('Renner')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.NewBrunswick).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.NewfoundlandandLabrador).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.NorthwestTerritories).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.NovaScotia).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Nunavut).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Ontario).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.PrinceEdwardIsland).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Quebec).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Saskatchewan).HasDefaultValueSql("((0))");
+
+                //entity.Property(e => e.YearId).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.YukonTerritory).HasDefaultValueSql("((0))");
 
                 //entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
 

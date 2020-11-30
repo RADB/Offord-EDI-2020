@@ -14,107 +14,133 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Children]"
+         "Name": "[EDI].[Children]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Coordinators]"
+         "Name": "[EDI].[Coordinators]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[FAQ]"
+         "Name": "[EDI].[FAQ]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Links]"
+         "Name": "[EDI].[Links]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[NewsFeed]"
+         "Name": "[EDI].[NewsFeed]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Configuration]"
+         "Name": "[EDI].[Questionnaires.Configuration]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires]"
+         "Name": "[EDI].[Questionnaires]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Schools]"
+         "Name": "[EDI].[Schools]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Sites]"
+         "Name": "[EDI].[Sites]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Teachers]"
+         "Name": "[EDI].[Teachers]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI_Forms].[TeacherFeedbackForms]"
+         "Name": "[EDI_Forms].[TeacherFeedbackForms]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI_Forms].[TeacherParticipationForms]"
+         "Name": "[EDI_Forms].[TeacherParticipationForms]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Countries]"
+         "Name": "[LUData].[Countries]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[FileImportStatus]"
+         "Name": "[LUData].[FileImportStatus]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Genders]"
+         "Name": "[LUData].[Genders]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[InputTypes]"
+         "Name": "[LUData].[InputTypes]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Languages]"
+         "Name": "[LUData].[Languages]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[LookupSetOptions]"
+         "Name": "[LUData].[LookupSetOptions]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[LookupSets]"
+         "Name": "[LUData].[LookupSets]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Orientations]"
+         "Name": "[LUData].[Orientations]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Provinces]"
+         "Name": "[LUData].[Provinces]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[ProvinceType]"
+         "Name": "[LUData].[ProvinceType]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[SpecialProblems]"
+         "Name": "[LUData].[SpecialProblems]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Translations]"
+         "Name": "[LUData].[Translations]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[LUData].[Years]"
+         "Name": "[LUData].[Years]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[Staging].[FileImports]"
+         "Name": "[Staging].[FileImports]",
+         "ObjectType": 0
       }
    ],
    "UseDatabaseNames": false,
@@ -124,6 +150,5 @@
    "UseInflector": true,
    "UseLegacyPluralizer": false,
    "UseNodaTime": false,
-   "UseSpatial": false,
-   "UseStoredProcedures": false
+   "UseSpatial": false
 }
