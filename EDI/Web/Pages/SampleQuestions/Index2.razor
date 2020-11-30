@@ -1,6 +1,6 @@
 ﻿@page "/SampleQuestions/index2"
 @using Microsoft.AspNetCore.Components.Authorization
-@using EDI.Web.Shared.Questions
+@using EDI.Web.Shared.Questionnaires
 @using static EDI.Web.Data.Enumerations
 @using System.Linq.Dynamic.Core 
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -23,7 +23,7 @@
                     {
                         <div class="card-header">
                             <strong>@_Text</strong>
-                        </div>                       
+                        </div>
                     }
 
                     _Text = sharedService.GetConfigText(config);
@@ -31,9 +31,15 @@
                     @switch ((InputTypes)config.InputTypeId)
                     {
                         case InputTypes.RadioButtons:
-                            { 
-                                <div class="card-body border border-secondary">
-                                    <RadioButtons QuestionText=@_Text LookupSetId=@config.LookupEntityId.GetValueOrDefault(1) OrientationId="@config.OrientationId.GetValueOrDefault(1)"></RadioButtons>
+                            {                                
+                                <RadioButtonsPart QuestionText=@_Text LookupSetId=@config.LookupEntityId.GetValueOrDefault(1) OrientationId="@config.OrientationId.GetValueOrDefault(1)"></RadioButtonsPart>                               
+                                break;
+                            }
+
+                        case InputTypes.DatePicker:
+                            {
+                                <div class="card-body border border-secondary rounded">
+                                    <DatePickerPart QuestionText=@_Text StringValue="2011-01-08" ></DatePickerPart>
                                 </div>
                                 break;
                             }

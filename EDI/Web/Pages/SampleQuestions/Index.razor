@@ -1,6 +1,6 @@
 ﻿@page "/SampleQuestions/index"
 @using Microsoft.AspNetCore.Components.Authorization
-@using EDI.Web.Shared.Questions
+@using EDI.Web.Shared.Questionnaires
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
@@ -25,18 +25,18 @@
 
                 <div class="card-body">
                     <div class="container-fluid">
-                        <TextArea QuestionText="Test Question" StringValue="This is the textarea answer. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." DataColumn="Test"></TextArea>
+                        <TextAreaPart QuestionText="Test Question" StringValue="This is the textarea answer. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." DataColumn="Test"></TextAreaPart>
 
-                        <Text QuestionText="Please complete the text question." StringValue="This is the text answer." DataColumn="Test"></Text>
+                        <TextPart QuestionText="Please complete the text question." StringValue="This is the text answer." DataColumn="Test"></TextPart>
 
-                        <RadioButtons QuestionText="Please complete the options question?"></RadioButtons>
+                        <RadioButtonsPart QuestionText="Please complete the options question?"></RadioButtonsPart>
 
-                        <DatePicker QuestionText="What is the child's Date of Birth?" StringValue="2011-01-08"></DatePicker>
+                        <DatePickerPart QuestionText="What is the child's Date of Birth?" StringValue="2011-01-08"></DatePickerPart>
 
-                        <NumberBox QuestionText="How many years have you been teaching?" IntValue=11 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBox>
+                        <NumberBoxPart QuestionText="How many years have you been teaching?" IntValue=11 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBoxPart>
 
-                        <NumberBox QuestionText="How many days of school did the child miss?" DblValue=3.5 DataTypeString="Double" NumberFormat="n1" NumberStep=0.5></NumberBox>
-                        <NumberBox QuestionText="How old are you?" IntValue=40 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBox>
+                        <NumberBoxPart QuestionText="How many days of school did the child miss?" DblValue=3.5 DataTypeString="Double" NumberFormat="n1" NumberStep=0.5></NumberBoxPart>
+                        <NumberBoxPart QuestionText="How old are you?" IntValue=40 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBoxPart>
 
                     </div>
                 </div>
