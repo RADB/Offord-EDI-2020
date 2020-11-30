@@ -11,8 +11,9 @@ namespace EDI.ApplicationCore.Entities
         public int InputTypeId { get; set; }
         public int? OrientationId { get; set; }
         public string QuestionNumber { get; set; }
-        public bool ShowGroupHeader { get; set; }
+        public bool IsHeader { get; set; }
         public string GroupName { get; set; }
+        public bool ShowGroupName { get; set; }
         public string English { get; set; }
         public string French { get; set; }
         /// <summary>

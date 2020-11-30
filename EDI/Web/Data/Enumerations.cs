@@ -22,8 +22,7 @@ namespace EDI.Web.Data
             DatePicker=5,
             CheckBox=6,
             SelectBox=7,
-            TextBox=8,
-            Header=9
+            TextBox=8,            
         }
 
     }

@@ -110,15 +110,15 @@
         StateHasChanged();
     }
 
-    private void LookupIdChange(ChangeEventArgs e)
+    private void LookupSetIdChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 
-        LookupSetOptionModel.LookupId = 0;
+        LookupSetOptionModel.LookupSetId = 0;
 
         if (byte.TryParse(selectedString, out byte newvalue))
         {
-            LookupSetOptionModel.LookupId = newvalue;
+            LookupSetOptionModel.LookupSetId = newvalue;
         }
         StateHasChanged();
     }

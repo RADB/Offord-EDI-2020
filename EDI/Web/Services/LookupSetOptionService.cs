@@ -90,7 +90,7 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullLookupSetOption(lookupSet.Id, _lookupSet);
 
-                _lookupSet.LookupId = lookupSet.LookupId;
+                _lookupSet.LookupSetId = lookupSet.LookupSetId;
                 _lookupSet.English = lookupSet.English;
                 _lookupSet.French = lookupSet.French;
                 _lookupSet.Value = lookupSet.Value;
@@ -116,7 +116,7 @@ namespace EDI.Web.Services
             {
                 var _lookupSet = new LookupSetOption();
 
-                _lookupSet.LookupId = lookupSet.LookupId;
+                _lookupSet.LookupSetId = lookupSet.LookupSetId;
                 _lookupSet.English = lookupSet.English;
                 _lookupSet.French = lookupSet.French;
                 _lookupSet.Value = lookupSet.Value;
@@ -149,7 +149,7 @@ namespace EDI.Web.Services
                 var vm = new LookupSetOptionItemViewModel()
                 {
                     Id = lookupSet.Id,
-                    LookupId = lookupSet.LookupId,
+                    LookupSetId = lookupSet.LookupSetId,
                     English = lookupSet.English,
                     French = lookupSet.French,
                     Value = lookupSet.Value,

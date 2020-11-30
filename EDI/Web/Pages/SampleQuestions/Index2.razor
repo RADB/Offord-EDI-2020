@@ -13,45 +13,39 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             @if (IsAdmin)
-            { 
+            {
             }
             else if (IsTeacher)
-            {                
+            {
                 foreach (var config in configs)
                 {
-                    if ((InputTypes)config.InputTypeId == InputTypes.Header)
+                    if (config.IsHeader)
                     {
                         <div class="card-header">
-                            <strong>@config.English</strong>
-                        </div>
+                            <strong>@_Text</strong>
+                        </div>                       
                     }
 
-                    <div class="card-body">
-                        <p>@config.English</p>
-                    </div>
+                    _Text = sharedService.GetConfigText(config);
+
+                    @switch ((InputTypes)config.InputTypeId)
+                    {
+                        case InputTypes.RadioButtons:
+                            { 
+                                <div class="card-body border border-secondary">
+                                    <RadioButtons QuestionText=@_Text LookupSetId=@config.LookupEntityId.GetValueOrDefault(1) OrientationId="@config.OrientationId.GetValueOrDefault(1)"></RadioButtons>
+                                </div>
+                                break;
+                            }
+                        default:
+                            {
+                                <div class="card-body border">
+                                    <p>@_Text</p>
+                                </div>
+                                break;
+                            }
+                    }
                 }
-                
-                <div class="card-header">
-                    <strong>@Translate("Sample Questions for Teacher")</strong>
-                </div>
-
-                <div class="card-body">
-                    <div class="container-fluid">
-                        <TextArea QuestionText="Test Question" StringValue="This is the textarea answer. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." DataColumn="Test"></TextArea>
-
-                        <Text QuestionText="Please complete the text question." StringValue="This is the text answer." DataColumn="Test"></Text>
-
-                        <RadioButtons QuestionText="Please complete the options question?"></RadioButtons>
-
-                        <DatePicker QuestionText="What is the child's Date of Birth?" StringValue="2011-01-08"></DatePicker>
-
-                        <NumberBox QuestionText="How many years have you been teaching?" IntValue=11 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBox>
-
-                        <NumberBox QuestionText="How many days of school did the child miss?" DblValue=3.5 DataTypeString="Double" NumberFormat="n1" NumberStep=0.5></NumberBox>
-                        <NumberBox QuestionText="How old are you?" IntValue=40 DataTypeString="Int32" NumberFormat="n0" NumberStep=1></NumberBox>
-
-                    </div>
-                </div>
             }
             else
             {
@@ -73,6 +67,7 @@
     private bool IsCoordinator { get; set; }
     private List<QuestionnairesConfiguration> configs;
 
+    private string _Text;
 
     protected override async Task OnInitializedAsync()
     {
@@ -82,28 +77,30 @@
         }
         else
         {
-            @if (UserSettings.IsAdmin)
-            {
-                IsAdmin = true;
-                //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
+                    @if (UserSettings.IsAdmin)
+                    {
+                        IsAdmin = true;
+                        //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
 
+                    }
+                    else if (UserSettings.IsTeacher)
+                    {
+                        IsTeacher = true;
+                        // Add filter for province
+                        //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
+                        //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
+                        var pred = "t => t.QuestionnaireId == 7 && " + UserSettings.Province + "==true";
+                        configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();                       
+                    }
+                    else
+                    {
+                        IsCoordinator = true;
+                    }
+                }
             }
-            else if (UserSettings.IsTeacher)
-            {
-                IsTeacher = true;
-                // Add filter for province
-                var pred = "t => t.QuestionnaireId == 7 && " + UserSettings.Province + "==true";
-                configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
-            }
-            else
-            {
-                IsCoordinator = true;
-            }
-        }
-    }
 
-    private string Translate(string word)
-    {
-        return sharedService.GetTranslate(word);
-    }
+            private string Translate(string word)
+            {
+                return sharedService.GetTranslate(word);
+            }
 }

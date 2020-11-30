@@ -361,7 +361,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
-                entity.HasMany(d => d.LookupSetOptions).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_LookupSetOptions");
+                entity.HasMany(d => d.LookupSetOptions).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupSetId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_LookupSetOptions");
             });
 
             modelBuilder.Entity<LookupSetOption>(entity =>
@@ -372,9 +372,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.English).IsRequired().HasMaxLength(140);
 
-                entity.Property(e => e.French).HasMaxLength(140);
-
-                entity.Property(e => e.LookupId).HasColumnName("LookupID");
+                entity.Property(e => e.French).HasMaxLength(140);                
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 

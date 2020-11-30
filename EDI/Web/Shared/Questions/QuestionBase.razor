@@ -1,6 +1,11 @@
 ﻿<!-- https://chrissainty.com/building-custom-input-components-for-blazor-using-inputbase/
     https://blazor-university.com/templating-components-with-renderfragements/
     -->
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+
+@using System.Linq.Dynamic.Core;
+
 
 
 @code {
@@ -20,10 +25,15 @@
     public double DblValue { get; set; } = 0.00;
 
     [Parameter] // Data Type String
-    public String DataTypeString { get; set; } = "Int32";
-   
+    public String DataTypeString { get; set; } = "Int32";    
 
     //[Parameter] // Data Type
     //public System.Type DataType { get; set; } = typeof(String);
+
+    public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
+    {
+        return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
+    }
+
 
 }

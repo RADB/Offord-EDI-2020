@@ -1,35 +1,66 @@
-﻿@inherits QuestionBase
-@using Syncfusion.Blazor.Buttons
+﻿@inherits QuestionBase;
+@using Syncfusion.Blazor.Buttons;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
 
 <div class="row">
     <div class="col-12">
-        <div class="card shadow mb-4">
+        <div class="card shadow">
             <div class="card-body">
-                <div class="col-12">
-                    <div>
+                <div class="row">
+                    <div class="col-12">
                         <h4>@QuestionText</h4>
-                        @foreach (var item in new string[] { "Andrew", "Bryan", "Ashlynn" })
-                        {
-                            <SfRadioButton name="Dev" Checked=@(StringValue.Equals(item, StringComparison.OrdinalIgnoreCase)) @onchange="RadioSelection" Label=@item Value=@item></SfRadioButton>
-                        }
-                    </div>                    
-                    <div>
-                        <label>Selected Value is @StringValue</label>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-11 bg-light">
+                                @foreach (var option in _LookupSetOptions)
+                                {
+                                    _optionCount += 1;
+
+                                    _optionLabel = sharedService.GetOptionText(option);
+
+                                    //replace checked with value from object
+                                    <SfRadioButton name="Dev" Checked=@(StringValue.Equals(option.Value.ToString(), StringComparison.OrdinalIgnoreCase)) @onchange="RadioSelection" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
+                                    if ((Orientations)OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
+                                    {
+                                        <br />
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div>
+                            <label>Selected Value is @StringValue</label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 @code
 {
-    [Parameter] 
-    public int OptionSetId { get; set; } = 0;
+    [Parameter]
+    public int LookupSetId { get; set; } = 1;
+
+    [Parameter]
+    public int OrientationId { get; set; } = (int)Orientations.Vertical;
+
+    private List<LookupSetOption> _LookupSetOptions;
+    private string _optionLabel;
+    private int _optionCount = 0;
 
     private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
         StringValue = args.Value.ToString();
+
+        // reset the optioncount
+        _optionCount = 0;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get the lookupset options
+        _LookupSetOptions = GetLookupSetOptions(LookupSetId);
     }
 }
 

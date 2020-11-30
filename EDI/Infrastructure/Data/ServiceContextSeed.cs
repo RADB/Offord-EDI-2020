@@ -2415,7 +2415,9 @@ namespace EDI.Infrastructure.Data
                 new LookupSet() {LookupName="GoodAvgPoorDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="OftenSometimesNeverDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="ObservedDiagnosisBoth",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="FullPartDontknowNO",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+                new LookupSet() {LookupName="FullPartDontknowNO",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="Status",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="ClassAssignment",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
 
@@ -2423,34 +2425,39 @@ namespace EDI.Infrastructure.Data
         {
             return new List<LookupSetOption>()
             {
-                new LookupSetOption() {English="Yes",LookupId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Oui",Value=1,Sequence=10},
-                new LookupSetOption() {English="No",LookupId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=0,Sequence=20},
-                new LookupSetOption() {English="Yes",LookupId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="oui",Value=1,Sequence=10},
-                new LookupSetOption() {English="No",LookupId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=2,Sequence=20},
-                new LookupSetOption() {English="Don't Know",LookupId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
-                new LookupSetOption() {English="Very Good/Good",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
-                new LookupSetOption() {English="Average",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
-                new LookupSetOption() {English="Poor/Very Poor",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
-                new LookupSetOption() {English="Don't Know",LookupId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
-                new LookupSetOption() {English="Often or Very True",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
-                new LookupSetOption() {English="Sometimes or Somewhat True",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
-                new LookupSetOption() {English="Never or Not True",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
-                new LookupSetOption() {English="Don't Know",LookupId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
-                new LookupSetOption() {English="Yes Observed",LookupId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
-                new LookupSetOption() {English="Yes Parent Info/Medical Diagnosis",LookupId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
-                new LookupSetOption() {English="Both",LookupId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
-                new LookupSetOption() {English="Full-Time",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
-                new LookupSetOption() {English="Part-Time",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
-                new LookupSetOption() {English="Don't Know",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
-                new LookupSetOption() {English="No",LookupId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40}
-
+                new LookupSetOption() {English="Yes",LookupSetId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Oui",Value=1,Sequence=10},
+                new LookupSetOption() {English="No",LookupSetId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=0,Sequence=20},
+                new LookupSetOption() {English="Yes",LookupSetId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="oui",Value=1,Sequence=10},
+                new LookupSetOption() {English="No",LookupSetId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=2,Sequence=20},
+                new LookupSetOption() {English="Don't Know",LookupSetId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Very Good/Good",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Average",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Poor/Very Poor",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Don't Know",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
+                new LookupSetOption() {English="Often or Very True",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Sometimes or Somewhat True",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Never or Not True",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Don't Know",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
+                new LookupSetOption() {English="Yes Observed",LookupSetId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Yes Parent Info/Medical Diagnosis",LookupSetId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Both",LookupSetId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="Full-Time",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=1,Sequence=10},
+                new LookupSetOption() {English="Part-Time",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=2,Sequence=20},
+                new LookupSetOption() {English="Don't Know",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=3,Sequence=30},
+                new LookupSetOption() {English="No",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="NULL",Value=4,Sequence=40},
+                new LookupSetOption() {English="Child in class more than 1 month",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Child in class more than 1 month",Value=1,Sequence=10},
+                new LookupSetOption() {English="Child in class less than 1 month",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Child in class less than 1 month",Value=2,Sequence=20},
+                new LookupSetOption() {English="Moved out of this class",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Moved out of this class",Value=3,Sequence=30},
+                new LookupSetOption() {English="Moved out of school",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Moved out of school",Value=4,Sequence=40},
+                new LookupSetOption() {English="Other",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Other",Value=9,Sequence=50},
+                new LookupSetOption() {English="registered non-attender",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="registered non-attender",Value=6,Sequence=60},
+                new LookupSetOption() {English="Kindergarten",LookupSetId=8,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Kindergarten French",Value=1,Sequence=10}
             };
         }
         static IEnumerable<InputType> GetPreconfiguredInputType()
         {
             return new List<InputType>()
-            {
-                new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+            {                
                 new InputType() {French="TextBox",English="TextBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="SelectBox",English="SelectBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="CheckBox",English="CheckBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},

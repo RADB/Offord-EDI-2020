@@ -9,7 +9,7 @@ namespace EDI.ApplicationCore.Entities
     public partial class LookupSetOption:BaseEntity
     {       
         //public int YearId { get; set; }
-        public int LookupId { get; set; }
+        public int LookupSetId { get; set; }
         public string English { get; set; }
         public string French { get; set; }
         public byte Value { get; set; }
