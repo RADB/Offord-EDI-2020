@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Http;
+@using Blazored.Modal
+@inject IModalService ModalService
+<!-- Modal -->
+
+<div class="container" >
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-11">
+                    <img src="~/images/Help.png" /><h4 class="modal-title">@ModalTitle</h4>
+                </div>
+                <div class="col-1">
+                    <button type="button" class="close" @onclick="@Cancel">&times;</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            @((MarkupString)ModalBody)
+        </div>
+        <div class="modal-footer">
+            <button @onclick="@Cancel" class="btn btn-outline-secondary ">Cancel</button>
+        </div>
+    </div>
+</div>
+
+@code 
+{
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    ModalPartViewModel ModalPartModel { get; set; }
+
+    [Parameter]
+    public string ModalTitle { get; set; }
+
+    [Parameter]
+    public string ModalBody { get; set; }
+
+    void Cancel()
+    {
+        ModalService.Cancel();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ModalPartModel = Parameters.Get<ModalPartViewModel>("ModalPartModel");
+        ModalBody = ModalPartModel.ModalBody;
+        ModalTitle = ModalPartModel.ModalTitle;
+
+        //ModalTitle = Parameters.Get<ModalParameters>
+        //("ModalTitle").ToString();
+    }
+}

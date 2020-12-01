@@ -1,5 +1,6 @@
 ﻿@inherits QuestionnaireBase
 @using Syncfusion.Blazor.Inputs
+@using static EDI.Web.Data.Enumerations
 
 <div class="row">
     <div class="col-12">
@@ -8,29 +9,41 @@
                 <div class="col-12">
                     <h4>@QuestionText</h4>
                     <div id="NumberBox" class="numberbox">
-                        @if (DataTypeString == "Int32")
+                        @if (DataType == NumericDataTypes.Int32)
                         {
                             <SfNumericTextBox TValue="Int32?" Value=@IntValue Format="@NumberFormat" Step=@Convert.ToInt32(NumberStep)></SfNumericTextBox>
                         }
-                        else if (DataTypeString == "Double")
+                        else if (DataType == NumericDataTypes.Double)
                         {
                             <SfNumericTextBox TValue="Double?" Value=@DblValue Format="@NumberFormat" Step=@NumberStep></SfNumericTextBox>
                         }
                     </div>
-                    </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
 
 @code {
-    [Parameter] // Number format n#- number #decimals, c currency, p percent  
+    [Parameter] // Number format n#- number d#decimals, c# currency, p# percent
     public String NumberFormat { get; set; } = "n0";
 
     [Parameter] // Number Box Counter
     public Double NumberStep { get; set; } = 1;
 
+    [Parameter] // integer value
+    public Int32 IntValue { get; set; } = 0;
+
+    [Parameter] // double value
+    public double DblValue { get; set; } = 0.00;
+
+    [Parameter] // Numeric Data Type
+    public NumericDataTypes DataType { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        //Enum.GetName(typeof(Colors), 3)
+        //name = Enum.GetName(typeof(NumericDataTypes),1)
 
-    }}
+    }
+}

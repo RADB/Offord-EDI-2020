@@ -2,7 +2,9 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
 @using static EDI.Web.Data.Enumerations
-@using System.Linq.Dynamic.Core 
+@using System.Linq.Dynamic.Core
+@using Blazored.Modal
+@using Blazored.Modal.Services
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
@@ -19,37 +21,31 @@
             {
                 foreach (var config in configs)
                 {
+                    _Text = sharedService.GetConfigText(config);
                     if (config.IsHeader)
                     {
                         <div class="card-header">
                             <strong>@_Text</strong>
                         </div>
                     }
-
-                    _Text = sharedService.GetConfigText(config);
-
-                    @switch ((InputTypes)config.InputTypeId)
+                    else
                     {
-                        case InputTypes.RadioButtons:
-                            {                                
-                                <RadioButtonsPart QuestionText=@_Text LookupSetId=@config.LookupEntityId.GetValueOrDefault(1) OrientationId="@config.OrientationId.GetValueOrDefault(1)"></RadioButtonsPart>                               
-                                break;
-                            }
-
-                        case InputTypes.DatePicker:
-                            {
+                        switch ((InputTypes)config.InputTypeId)
+                        {
+                            case InputTypes.RadioButtons:                                
+                                <RadioButtonsPart  Config=@config CurrentValue=1></RadioButtonsPart>
+                                break;                                
+                            case InputTypes.DatePicker:                                
                                 <div class="card-body border border-secondary rounded">
-                                    <DatePickerPart QuestionText=@_Text StringValue="2011-01-08" ></DatePickerPart>
+                                    <DatePickerPart Config=@config  CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
                                 </div>
-                                break;
-                            }
-                        default:
-                            {
+                                break;                                
+                            default:                                
                                 <div class="card-body border">
-                                    <p>@_Text</p>
+                                    <p>@Enum.GetName(typeof(InputTypes), config.InputType) needs to be crafted</p>
                                 </div>
-                                break;
-                            }
+                                break;                                
+                        }
                     }
                 }
             }
@@ -83,30 +79,30 @@
         }
         else
         {
-                    @if (UserSettings.IsAdmin)
-                    {
-                        IsAdmin = true;
-                        //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
-
-                    }
-                    else if (UserSettings.IsTeacher)
-                    {
-                        IsTeacher = true;
-                        // Add filter for province
-                        //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
-                        //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
-                        var pred = "t => t.QuestionnaireId == 7 && " + UserSettings.Province + "==true";
-                        configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();                       
-                    }
-                    else
-                    {
-                        IsCoordinator = true;
-                    }
-                }
-            }
-
-            private string Translate(string word)
+            @if (UserSettings.IsAdmin)
             {
-                return sharedService.GetTranslate(word);
+                IsAdmin = true;
+                //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
+
             }
+            else if (UserSettings.IsTeacher)
+            {
+                IsTeacher = true;
+                // Add filter for province
+                //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
+                //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
+                var pred = "t => t.QuestionnaireId == 7 && " + UserSettings.Province + "==true";
+                configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
+            }
+            else
+            {
+                IsCoordinator = true;
+            }
+        }
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
 }

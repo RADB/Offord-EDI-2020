@@ -2,66 +2,86 @@
 @using Syncfusion.Blazor.Buttons;
 @using static EDI.Web.Data.Enumerations;
 @inject ISharedService sharedService;
-    <div class="card-body border border-secondary rounded">
-        <div class="row">
-            <div class="col-12">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <h4>@QuestionText</h4>
-                                <div class="row">
-                                    <div class="col-1"></div>
-                                    <div class="col-11 bg-light">
-                                        @foreach (var option in _LookupSetOptions)
+@inject IModalService Modal
+
+
+<div class="card-body border border-primary rounded">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>@QuestionText</h4>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-9">
+                                    @foreach (var option in _LookupSetOptions)
+                                    {
+                                        _optionCount += 1;
+
+                                        _optionLabel = sharedService.GetOptionText(option);
+
+                                        //replace checked with value from object
+                                        <SfRadioButton name="Dev" Checked=@(CurrentValue.Equals(option.Value)) @onchange="RadioSelection" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
+                                        if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
                                         {
-                                            _optionCount += 1;
-
-                                            _optionLabel = sharedService.GetOptionText(option);
-
-                                            //replace checked with value from object
-                                            <SfRadioButton name="Dev" Checked=@(StringValue.Equals(option.Value.ToString(), StringComparison.OrdinalIgnoreCase)) @onchange="RadioSelection" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
-                                            if ((Orientations)OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
-                                            {
-                                                <br />
-                                            }
+                                            <br />
                                         }
-                                    </div>
+                                    }
                                 </div>
-                                <div>
-                                    <label>Selected Value is @StringValue</label>
+
+                                <div class="col-2">
+                                    @if (Config.HasHelp)
+                                    {
+                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("This Modal Header is Hidden",HelpText))"><i class="icon-question"></i> Help</button>                                        
+                                    }
                                 </div>
                             </div>
+                            <!--<div>
+                                <label>Selected Value is @StringValue</label>
+                            </div>-->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @code
+</div>
+@code
 {
-        [Parameter]
-        public int LookupSetId { get; set; } = 1;
+    [Parameter]
+    public byte CurrentValue { get; set; }
 
-        [Parameter]
-        public int OrientationId { get; set; } = (int)Orientations.Vertical;
+    //[CascadingParameter] public IModalService Modal { get; set; }
 
-        private List<LookupSetOption> _LookupSetOptions;
-        private string _optionLabel;
-        private int _optionCount = 0;
+    /*[Parameter]
+    public int LookupSetId { get; set; } = 1;*/
 
-        private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-        {
-            StringValue = args.Value.ToString();
+    /*[Parameter]
+    public int OrientationId { get; set; } = (int)Orientations.Vertical;*/
 
-            // reset the optioncount
-            _optionCount = 0;
-        }
+    // will be removed once relationship is loaded
+    private List<LookupSetOption> _LookupSetOptions;
 
-        protected override async Task OnInitializedAsync()
-        {
-            // get the lookupset options
-            _LookupSetOptions = GetLookupSetOptions(LookupSetId);
-        }
+    private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        // get the selected value
+        //StringValue = args.Value.ToString();
+
+        // reset the optioncount
+        _optionCount = 0;
+
+        // update the currentvalue -- TODO
+        ///CurrentValue = (byte)args.Value;
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetQuestionText();
+        // get the lookupset options
+        _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+    }
+
+}
 

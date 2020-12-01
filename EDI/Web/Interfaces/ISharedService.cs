@@ -27,7 +27,9 @@ namespace EDI.Web.Interfaces
         Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
         string GetConfigText(QuestionnairesConfiguration config);
 
-        string GetOptionText(LookupSetOption option);
+        string GetHelpText(QuestionnairesConfiguration config);
+
+        string GetOptionText(LookupSetOption option);        
 
         string GetTranslate(string english);
         string GetImagePath();

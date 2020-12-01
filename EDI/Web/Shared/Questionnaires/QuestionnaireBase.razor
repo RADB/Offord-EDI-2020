@@ -3,16 +3,24 @@
     -->
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
-
+@inject ISharedService sharedService;
 @using System.Linq.Dynamic.Core;
+@inject IModalService ModalService
 
+@code 
+{   
+        [Parameter]
+        public QuestionnairesConfiguration Config { get; set; }
 
+    public ModalPartViewModel ModalPartModel { get; set; }
 
-@code {
-    [Parameter]
-    public string QuestionText { get; set; } = "";
+    public string QuestionText { get; set; }
+    public string HelpText { get; set; }
 
-    [Parameter] // column to store responses
+    public int _optionCount = 0;
+    public string _optionLabel;
+
+    /*[Parameter] // column to store responses
     public string DataColumn { get; set; } = "";
 
     [Parameter] // string value
@@ -25,15 +33,52 @@
     public double DblValue { get; set; } = 0.00;
 
     [Parameter] // Data Type String
-    public String DataTypeString { get; set; } = "Int32";    
+    public String DataTypeString { get; set; } = "Int32";
 
     //[Parameter] // Data Type
-    //public System.Type DataType { get; set; } = typeof(String);
+    //public System.Type DataType { get; set; } = typeof(String);*/
 
     public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
     {
+        // convert to loading the object rather than another list
         return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
     }
 
+    public void ShowModal(string ModalTitle, string ModalBody)
+    {
+        _optionCount = 0;
+        ModalPartModel = new ModalPartViewModel();
+        ModalPartModel.ModalTitle = ModalTitle;
+        ModalPartModel.ModalBody = ModalBody;
 
+        var parameters = new ModalParameters();
+        parameters.Add("ModalPartModel", ModalPartModel);
+
+        /*parameters.Add("ModalTitle", ModalTitle);
+        parameters.Add("ModalBody", ModalBody);*/
+
+
+        var options = new ModalOptions()
+        {
+            HideHeader = true,
+            HideCloseButton = true
+        };
+
+        ModalService.Show<ModalPart>("e-EDI Help", parameters,options);
+    }
+
+    public string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    public void GetQuestionText()
+    {
+        // get the Question Text
+        QuestionText = sharedService.GetConfigText(Config);
+
+        // get the Help Text if the question has help
+        if (Config.HasHelp)
+            HelpText = sharedService.GetHelpText(Config);
+    }    
 }

@@ -512,7 +512,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ColumnSpan).HasDefaultValueSql("((1))");
 
-                entity.Property(e => e.Columns).HasDefaultValueSql("((11))");
+                entity.Property(e => e.Columns).HasDefaultValueSql("((10))");
 
                 entity.Property(e => e.Condition).HasMaxLength(255);
 
