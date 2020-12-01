@@ -58,12 +58,10 @@
         parameters.Add("ModalBody", ModalBody);*/
 
 
-        var options = new ModalOptions()
-        {
-            HideHeader = true,
-            HideCloseButton = true
-        };
-
+        var options = new ModalOptions();
+        options.HideHeader = false;
+        options.HideCloseButton = false;
+   
         ModalService.Show<ModalPart>("e-EDI Help", parameters,options);
     }
 

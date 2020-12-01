@@ -35,10 +35,8 @@
                             case InputTypes.RadioButtons:                                
                                 <RadioButtonsPart  Config=@config CurrentValue=1></RadioButtonsPart>
                                 break;                                
-                            case InputTypes.DatePicker:                                
-                                <div class="card-body border border-secondary rounded">
-                                    <DatePickerPart Config=@config  CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
-                                </div>
+                            case InputTypes.DatePicker:                                                                
+                                <DatePickerPart Config=@config  CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>                                
                                 break;                                
                             default:                                
                                 <div class="card-body border">
