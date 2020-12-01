@@ -162,7 +162,9 @@
         }
         if (args.Item.Id == "GridSchool_delete")
         {
+            var options = new ModalOptions();
             Modal.Show<ConfirmDelete>("Confirm Delete");
+
             Modal.OnClose += ConfirmDeleteModalClosed;
         }
     }
