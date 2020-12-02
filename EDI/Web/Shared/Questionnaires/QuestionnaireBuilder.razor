@@ -24,7 +24,9 @@
                 <TextPart Config=@config CurrentValue="Change me once here"></TextPart>
                 break;
             case InputTypes.CheckBox:
-                <TextPart Config=@config CurrentValue="Change me once here"></TextPart>
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
+                </div>
                 break;
             default:
                 <div class="card-body border">
