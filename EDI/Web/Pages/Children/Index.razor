@@ -40,14 +40,6 @@
                             </GridSortColumns>
                         </GridSortSettings>
                         <GridColumns>
-                            <GridColumn HeaderText="" Width="15">
-                                <Template>
-                                    @{
-                                        var comm = (context as ChildItemViewModel);
-                                        <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Ediid))" style="border:none;background-color:transparent;"><img src="./images/survey.png" style="width:20px;"></button>
-                                    }
-                                </Template>
-                            </GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText=@Translate("EDI_ID") TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText=@Translate("Child's Local ID") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText=@Translate("Year") Width="15"></GridColumn>
@@ -71,6 +63,14 @@
                                                 <div id="label" class="barlabel">@comm.Progress % </div>
                                             </div>
                                         </div>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="" Width="20">
+                                <Template>
+                                    @{
+                                        var comm = (context as ChildItemViewModel);
+                                        <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Ediid))" style="border:none;background-color:transparent;"><img src="./images/survey.png" style="width: 20px; height: 15px; margin-top: -8px;"><b style="font-size:18px;">EDI</b></button>
                                     }
                                 </Template>
                             </GridColumn>
