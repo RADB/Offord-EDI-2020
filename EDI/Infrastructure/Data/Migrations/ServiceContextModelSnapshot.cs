@@ -1344,7 +1344,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool>("HasLookupEntity")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasNotification")
+                    b.Property<bool?>("HasNotification")
                         .HasColumnType("bit");
 
                     b.Property<string>("HelpText")
@@ -1357,7 +1357,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("InputTypeId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsConditional")
+                    b.Property<bool?>("IsConditional")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsHeader")
@@ -1471,7 +1471,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("QuestionnaireID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("RepeatHeader")
+                    b.Property<bool?>("RepeatHeader")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Saskatchewan")

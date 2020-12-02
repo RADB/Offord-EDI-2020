@@ -27,12 +27,12 @@ namespace EDI.ApplicationCore.Entities
         public bool HasLookupEntity { get; set; }
         public string LookupEntity { get; set; }
         public int? LookupEntityId { get; set; }
-        public bool RepeatHeader { get; set; }
+        public bool? RepeatHeader { get; set; }
         public bool IsRequired { get; set; }
         public bool IsReadOnly { get; set; }
-        public bool IsConditional { get; set; }
+        public bool? IsConditional { get; set; }
         public string Condition { get; set; }
-        public bool HasNotification { get; set; }
+        public bool? HasNotification { get; set; }
         public string NotificationCondition { get; set; }
         public string Notification { get; set; }
         public string NotificationFrench { get; set; }
