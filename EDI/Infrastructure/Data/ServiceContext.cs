@@ -44,6 +44,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<NewsFeed> NewsFeeds { get; set; }
         public virtual DbSet<Questionnaire> Questionnaires { get; set; }
         public virtual DbSet<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
+        public virtual DbSet<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
@@ -169,11 +170,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
-                //entity.HasOne(d => d.Gender).WithMany(p => p.Children).HasForeignKey(d => d.GenderId).HasConstraintName("FK_Children_Gender");
-
-                //entity.HasOne(d => d.Teacher).WithMany(p => p.Children).HasForeignKey(d => d.TeacherId).HasConstraintName("FK_Children_Teachers");
-
-                //entity.HasOne(d => d.Year).WithMany(p => p.Children).HasForeignKey(d => d.YearId).HasConstraintName("FK_Children_Years");
+                entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.Demographics");
+                
             });
 
             modelBuilder.Entity<Coordinator>(entity =>
@@ -560,6 +558,29 @@ namespace EDI.Infrastructure.Data
 
                 //entity.HasOne(d => d.Questionnaire).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaires.Configuration_Questionnaires");
 
+            });
+
+            modelBuilder.Entity<QuestionnairesDataDemographic>(entity =>
+            {                
+                entity.ToTable("Questionnaires.Data.Demographics", "EDI");
+
+                entity.Property(e => e.AttendedJk).HasColumnName("AttendedJK");
+
+                entity.Property(e => e.ConsideredEsl).HasColumnName("ConsideredESL");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Jkteacher).HasColumnName("JKTeacher");
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PostalCode).HasMaxLength(10);                
             });
 
             modelBuilder.Entity<School>(entity =>

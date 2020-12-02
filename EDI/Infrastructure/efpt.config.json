@@ -44,6 +44,11 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.Demographics]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI].[Questionnaires]",
          "ObjectType": 0
       },
