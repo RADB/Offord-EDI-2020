@@ -8,7 +8,12 @@ namespace EDI.ApplicationCore.Entities
 {
     [Table("Children", Schema = "EDI")]
     public partial class Child:BaseEntity
-    {        
+    {
+        public Child()
+        {
+            QuestionnairesDataDemographics = new HashSet<QuestionnairesDataDemographic>();
+        }
+
         public string Ediid { get; set; }
         public string LocalId { get; set; }
         /// <summary>
@@ -24,5 +29,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual Gender Gender { get; set; }
         public virtual Teacher Teacher { get; set; }
         public virtual Year Year { get; set; }
+        public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
+        //public object Child { get; set; }
     }
 }

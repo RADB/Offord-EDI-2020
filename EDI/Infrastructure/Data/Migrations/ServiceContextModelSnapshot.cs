@@ -891,8 +891,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(140)")
                         .HasMaxLength(140);
 
-                    b.Property<int>("LookupId")
-                        .HasColumnName("LookupID")
+                    b.Property<int>("LookupSetId")
                         .HasColumnType("int");
 
                     b.Property<string>("ModifiedBy")
@@ -907,12 +906,12 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<short>("Sequence")
                         .HasColumnType("smallint");
 
-                    b.Property<byte>("Value")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Value")
+                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LookupId");
+                    b.HasIndex("LookupSetId");
 
                     b.ToTable("LookupSetOptions","LUData");
                 });
@@ -1282,16 +1281,24 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool?>("Alberta")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool?>("BritishColumbia")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<byte?>("ColumnSpan")
-                        .HasColumnType("tinyint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
+                        .HasDefaultValueSql("((1))");
 
                     b.Property<byte>("Columns")
-                        .HasColumnType("tinyint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
+                        .HasDefaultValueSql("((10))");
 
                     b.Property<string>("Condition")
                         .HasColumnType("nvarchar(255)")
@@ -1299,12 +1306,16 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('Renner')")
                         .HasMaxLength(256)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<string>("English")
                         .IsRequired()
@@ -1326,12 +1337,14 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<bool>("HasHelp")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((1))");
 
                     b.Property<bool>("HasLookupEntity")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("HasNotification")
+                    b.Property<bool?>("HasNotification")
                         .HasColumnType("bit");
 
                     b.Property<string>("HelpText")
@@ -1344,14 +1357,21 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("InputTypeId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsConditional")
+                    b.Property<bool?>("IsConditional")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsReadOnly")
+                    b.Property<bool>("IsHeader")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsReadOnly")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool>("IsRequired")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((1))");
 
                     b.Property<string>("LookupEntity")
                         .HasColumnType("nvarchar(100)")
@@ -1362,7 +1382,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool?>("Manitoba")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("Mask")
                         .HasColumnType("nvarchar(20)")
@@ -1373,22 +1395,32 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('Renner')")
                         .HasMaxLength(256)
                         .IsUnicode(false);
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<bool?>("NewBrunswick")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool?>("NewfoundlandandLabrador")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool?>("NorthwestTerritories")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("NorthwestTerritories")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("Notification")
                         .HasColumnType("nvarchar(500)")
@@ -1402,24 +1434,34 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("NovaScotia")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool?>("Nunavut")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool?>("Ontario")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<int?>("OrientationId")
                         .HasColumnName("OrientationID")
                         .HasColumnType("int");
 
                     b.Property<bool?>("PrinceEdwardIsland")
+                        .ValueGeneratedOnAdd()
                         .HasColumnName("PrinceEdwardIsland")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<bool?>("Quebec")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("QuestionNumber")
                         .HasColumnType("nvarchar(5)")
@@ -1429,16 +1471,18 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("QuestionnaireID")
                         .HasColumnType("int");
 
-                    b.Property<bool>("RepeatHeader")
+                    b.Property<bool?>("RepeatHeader")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("Saskatchewan")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<int>("Sequence")
                         .HasColumnType("int");
 
-                    b.Property<bool>("ShowGroupHeader")
+                    b.Property<bool>("ShowGroupName")
                         .HasColumnType("bit");
 
                     b.Property<string>("VariableName")
@@ -1450,7 +1494,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool?>("YukonTerritory")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.HasKey("Id");
 
@@ -1463,6 +1509,135 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasIndex("YearId");
 
                     b.ToTable("Questionnaires.Configuration","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataDemographic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte?>("AttendedJk")
+                        .HasColumnName("AttendedJK")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Chipewyan")
+                        .HasColumnType("bit");
+
+                    b.Property<byte?>("ClassAssignment")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ClassType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("Communicates")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ConsideredEsl")
+                        .HasColumnName("ConsideredESL")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<bool?>("Cree")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Dob")
+                        .HasColumnName("DOB")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<bool?>("English")
+                        .HasColumnType("bit");
+
+                    b.Property<byte?>("EthnicStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool?>("French")
+                        .HasColumnType("bit");
+
+                    b.Property<byte?>("FrenchImmersion")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("Gender")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool?>("Gwichin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Inuinnaqtun")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Inuktitut")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Inuvialuktun")
+                        .HasColumnType("bit");
+
+                    b.Property<byte?>("Jkteacher")
+                        .HasColumnName("JKTeacher")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<bool?>("NorthSlavey")
+                        .HasColumnType("bit");
+
+                    b.Property<byte?>("OtherImmersion")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("OtherLanguage")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<bool?>("SouthSlavey")
+                        .HasColumnType("bit");
+
+                    b.Property<byte?>("SpecialNeeds")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("StudentStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool?>("Tlicho")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.ToTable("Questionnaires.Data.Demographics","EDI");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>
@@ -2215,7 +2390,7 @@ namespace EDI.Infrastructure.Data.Migrations
                 {
                     b.HasOne("EDI.ApplicationCore.Entities.LookupSet", "LookupSet")
                         .WithMany("LookupSetOptions")
-                        .HasForeignKey("LookupId")
+                        .HasForeignKey("LookupSetId")
                         .HasConstraintName("FK_LookupSet_LookupSetOptions")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2287,9 +2462,19 @@ namespace EDI.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EDI.ApplicationCore.Entities.Year", null)
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
                         .WithMany("QuestionnairesConfigurations")
                         .HasForeignKey("YearId");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataDemographic", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
+                        .WithMany("QuestionnairesDataDemographics")
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("FK_Children_Questionnaires.Data.Demographics")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>

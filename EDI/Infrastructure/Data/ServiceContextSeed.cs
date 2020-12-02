@@ -2419,12 +2419,12 @@ namespace EDI.Infrastructure.Data
                 new LookupSet() {LookupName="ClassType",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="ClassAssignment",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="Status",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="YesNo",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="YesNoDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="GoodAvgPoorDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="OftenSometimesNeverDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="FullPartDontknowNO",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="ObservedDiagnosisBoth",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="FullPartDontknowNO",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+                new LookupSet() {LookupName="OftenSometimesNeverDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="GoodAvgPoorDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="YesNoDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="YesNo",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
 
@@ -2610,7 +2610,8 @@ namespace EDI.Infrastructure.Data
         static IEnumerable<InputType> GetPreconfiguredInputType()
         {
             return new List<InputType>()
-            {                
+            {
+                new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="TextBox",English="TextBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="SelectBox",English="SelectBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="CheckBox",English="CheckBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
