@@ -11,7 +11,7 @@ namespace EDI.Web.Models
         public string English { get; set; }
         public string French { get; set; }
         [Required(ErrorMessage = "Value is required.")]
-        public byte Value { get; set; }
+        public short Value { get; set; }
         [Required(ErrorMessage = "Sequence is required.")]
         public short Sequence { get; set; }
         [Required(ErrorMessage = "Year is required.")]

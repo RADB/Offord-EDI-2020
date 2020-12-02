@@ -1,7 +1,5 @@
 ﻿@inherits QuestionnaireBase
-@using Syncfusion.Blazor.Calendars
-
-
+@using EDI.Web.Shared.Questions
 <div class="card-body border border-primary rounded">
     <div class="row">
         <div class="col-12">
@@ -12,17 +10,16 @@
                             <h4>@QuestionText</h4>
                             <div class="row">
                                 <div class="col-1"></div>
-                                <div class="col-9">                                    
-                                    <div id="datepicker-control" class="datepicker">
-                                        <SfDatePicker Value="@DateValue" TValue="DateTime?" Placeholder="@QuestionText" Format="yyyy-MM-dd"></SfDatePicker>
-                                    </div>
+                                <div class="col-9">
+                                    <Text TextModel=@TextModel />
                                 </div>
 
                                 <div class="col-2">
                                     @if (Config.HasHelp)
                                     {
-                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
                                     }
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -31,17 +28,19 @@
             </div>
         </div>
     </div>
-</div>
 
     @code {
         [Parameter]
-        public DateTime CurrentValue { get; set; }
+        public string CurrentValue { get; set; }
 
-        public DateTime DateValue { get; set; } = DateTime.Now;
+        public TextViewModel TextModel { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             GetQuestionText();
-            DateValue = Convert.ToDateTime(CurrentValue);
+            TextModel = new TextViewModel();
+            TextModel.Name = Config.VariableName;
+            TextModel.Placeholder = QuestionText;
+            TextModel.Value = "Replace me with real value";
         }
     }

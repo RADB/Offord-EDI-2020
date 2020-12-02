@@ -16,37 +16,11 @@
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             @if (IsAdmin)
             {
+                <QuestionnaireBuilder configs=@configs IsReadonly="true"></QuestionnaireBuilder>
             }
             else if (IsTeacher)
             {
-                foreach (var config in configs)
-                {
-                    _Text = sharedService.GetConfigText(config);
-                    if (config.IsHeader)
-                    {
-                        <div class="card-header">
-                            <strong>@_Text</strong>
-                        </div>
-                    }
-                    else
-                    {
-                        switch ((InputTypes)config.InputTypeId)
-                        {
-                            case InputTypes.RadioButtons:                                
-                                <RadioButtonsPart  Config=@config CurrentValue=1></RadioButtonsPart>
-                                break;                                
-                            case InputTypes.DatePicker:                                                                
-                                <DatePickerPart Config=@config  CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>                                
-                                break;                                
-                            default:                                
-                                <div class="card-body border">
-                                    <p>@Enum.GetName(typeof(InputTypes), config.InputType) needs to be crafted</p>
-                                </div>
-                                break;                                
-                        }
-                    }
-                }
-            }
+                <QuestionnaireBuilder configs=@configs IsReadonly="false"></QuestionnaireBuilder> }
             else
             {
                 <div class="card-header">
@@ -67,7 +41,7 @@
     private bool IsCoordinator { get; set; }
     private List<QuestionnairesConfiguration> configs;
 
-    private string _Text;
+    
 
     protected override async Task OnInitializedAsync()
     {

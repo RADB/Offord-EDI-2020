@@ -12,7 +12,7 @@ namespace EDI.ApplicationCore.Entities
         public int LookupSetId { get; set; }
         public string English { get; set; }
         public string French { get; set; }
-        public byte Value { get; set; }
+        public short Value { get; set; }
         public short Sequence { get; set; }
 
         public virtual LookupSet LookupSet { get; set; }
