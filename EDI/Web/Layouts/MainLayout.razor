@@ -85,7 +85,7 @@ else
             UserSettings.IsAdmin = false;
             UserSettings.IsCoordinator = false;
             UserSettings.IsTeacher = false;
-            UserSettings.Language = user1.Language;
+            UserSettings.Language = user1.Language == null ? "English" : user1.Language;
 
             @if (user.IsInRole("Administrator"))
             {
