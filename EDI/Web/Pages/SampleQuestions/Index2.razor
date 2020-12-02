@@ -1,4 +1,4 @@
-﻿@page "/SampleQuestions/index2"
+﻿@page "/SampleQuestions/index2/{EDIID}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
 @using static EDI.Web.Data.Enumerations
@@ -35,6 +35,8 @@
 </div>
 
 @code {
+    [Parameter]
+    public string EDIID { get; set; }
 
     // look to move this to a session variable and carry throughout the session
     private bool IsAdmin { get; set; }
