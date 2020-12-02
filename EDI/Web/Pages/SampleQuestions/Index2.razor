@@ -62,6 +62,8 @@
             {
                 IsAdmin = true;
                 //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
+                var pred = "t => t.QuestionnaireId == 7";
+                configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
             }
             else if (UserSettings.IsTeacher)
