@@ -1,10 +1,11 @@
-﻿@page "/SampleQuestions/index2/{EDIID}"
+﻿@page "/SampleQuestions/index2/{ChildID:int}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
 @using static EDI.Web.Data.Enumerations
 @using System.Linq.Dynamic.Core
 @using Blazored.Modal
 @using Blazored.Modal.Services
+@using Syncfusion.Blazor.Navigations
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
@@ -14,25 +15,83 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
-            @if (@configs != null)
-            {
-                @if (IsAdmin)
-                {
-                    <QuestionnaireBuilder configs=@configs IsReadonly="true"></QuestionnaireBuilder>
-                }
-                else if (IsTeacher)
-                {
-                    <QuestionnaireBuilder configs=@configs IsReadonly="false"></QuestionnaireBuilder>
-                }
-                else
-                {
-                    <div class="card-header">
-                        <strong>Sample for Coordinator</strong>
-                    </div>
-                    <div class="card-body">
-                    </div>
-                }
-            }
+            <SfTab>
+                <TabEvents Selected="OnTabSelected" Selecting="OnTabSelecting"></TabEvents>
+                <TabItems>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Demographics"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+                            @if (@configs != null)
+                            {
+                                @if (IsAdmin)
+                                {
+                                    <QuestionnaireBuilder configs=@configs IsReadonly="true"></QuestionnaireBuilder>
+                                }
+                                else if (IsTeacher)
+                                {
+                                    <QuestionnaireBuilder configs=@configs IsReadonly="false"></QuestionnaireBuilder>
+                                }
+                                else
+                                {
+                                    <div class="card-header">
+                                        <strong>Sample for Coordinator</strong>
+                                    </div>
+                                    <div class="card-body">
+                                    </div>
+                                }
+                            }
+                        </ContentTemplate>
+                    </TabItem>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Section A"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+
+                        </ContentTemplate>
+                    </TabItem>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Section B"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+
+                        </ContentTemplate>
+                    </TabItem>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Section C"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+
+                        </ContentTemplate>
+                    </TabItem>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Section D"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+
+                        </ContentTemplate>
+                    </TabItem>
+                    <TabItem>
+                        <ChildContent>
+                            <TabHeader Text="Section E"></TabHeader>
+                        </ChildContent>
+                        <ContentTemplate>
+
+                        </ContentTemplate>
+                    </TabItem>
+                </TabItems>
+            </SfTab>
+            
+            
+            
+            
+            
+            
 
         </div>
     </div>
@@ -40,15 +99,15 @@
 
 @code {
     [Parameter]
-    public string EDIID { get; set; }
+    public int ChildID { get; set; }
+
+    private int SelectedTab = 0;
 
     // look to move this to a session variable and carry throughout the session
     private bool IsAdmin { get; set; }
     private bool IsTeacher { get; set; }
     private bool IsCoordinator { get; set; }
     private List<QuestionnairesConfiguration> configs;
-
-    
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,5 +145,15 @@
     private string Translate(string word)
     {
         return sharedService.GetTranslate(word);
+    }
+
+    public void OnTabSelected(Syncfusion.Blazor.Navigations.SelectEventArgs args)
+    {
+
+
+    }
+    public void OnTabSelecting(Syncfusion.Blazor.Navigations.SelectingEventArgs args)
+    {
+
     }
 }
