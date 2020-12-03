@@ -15,7 +15,7 @@
         @foreach (var item in questionnaires)
         {
             var _name = sharedService.GetQuestionnaireText(item);
-            <TabItem>
+            <TabItem >
                 <ChildContent>
                     <TabHeader Text=@_name></TabHeader>
                 </ChildContent>
@@ -146,6 +146,11 @@
                     pred = "t => t.QuestionnaireId == " + ListTab[i].Id +" && " + UserSettings.Province + "==true";
                 }
                 configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
+
+                
+                
+                //    dbContext.Entry(data).Reference(q => q.QuestionnairesDataDemographics).Load();
+
                 break;
             }
         }

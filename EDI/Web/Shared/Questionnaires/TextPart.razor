@@ -51,10 +51,10 @@
         {
             switch (Config.EntityName)
             {
-                case "QuestionnairesDataDemographics":
+                case "Questionnaires.Data.Demographics":
                     data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataDemographics, e.Value.ToString());
                     break;
-                case "QuestionnairesDataSectionB":
+                case "Questionnaires.Data.SectionB":
                     data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataSectionBs, e.Value.ToString());
                     break;
             }
