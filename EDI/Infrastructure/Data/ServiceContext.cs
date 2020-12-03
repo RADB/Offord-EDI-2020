@@ -589,6 +589,21 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.PostalCode).HasMaxLength(10);                
             });
 
+            modelBuilder.Entity<QuestionnairesDataSectionB>(entity =>
+            {
+                entity.ToTable("Questionnaires.Data.DataSectionB", "EDI");
+
+                entity.HasIndex(e => e.ChildId);
+
+                entity.HasIndex(e => e.YearId);
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256);
+
+
+            });
+
             modelBuilder.Entity<School>(entity =>
             {
                 entity.ToTable("Schools", "EDI");
@@ -773,6 +788,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
             });
 
+            
+
             modelBuilder.Entity<Year>(entity =>
             {
                 entity.ToTable("Years", "LUData");
@@ -800,6 +817,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.Questionnaires).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires");
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Configurations");
                 entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.Demographics");
+                entity.HasMany(e => e.QuestionnairesDataSectionBs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionB");
                 //entity.HasMany(e => e.LookupSetOptions).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSetOptions");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");
@@ -809,6 +827,7 @@ namespace EDI.Infrastructure.Data
                 //entity.HasMany(e => e.Schools).WithOne(e => e.Countries).HasForeignKey(e => e.CountryId);
                 //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
             });
+
 
         }
     }

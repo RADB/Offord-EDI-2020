@@ -1656,6 +1656,98 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Questionnaires.Data.Demographics","EDI");
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionB", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte?>("ArticulateClearly")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("CommunicateNeeds")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte?>("EnglishEffectiveUse")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EnglishListen")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("GroupReading")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("HandleBook")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ImaginativePlay")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("InterestedBooks")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("InterestedRead")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)")
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte?>("ReadComplex")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ReadSimple")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ReadSimpleSentence")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("RhymingWords")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("SoundsToLetters")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TellStory")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TenLetters")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("UnderstandsFirstTry")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Questionnaires.Data.DataSectionB","EDI");
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>
                 {
                     b.Property<int>("Id")
@@ -2504,6 +2596,20 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasForeignKey("YearId")
                         .HasConstraintName("FK_Years_Questionnaires.Data.Demographics")
                         .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionB", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
+                        .WithMany("QuestionnairesDataSectionBs")
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("FK_Children_Questionnaires.Data.SectionBs")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany()
+                        .HasForeignKey("YearId");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>

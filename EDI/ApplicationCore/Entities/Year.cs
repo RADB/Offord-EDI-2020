@@ -23,6 +23,7 @@ namespace EDI.ApplicationCore.Entities
             Questionnaires = new HashSet<Questionnaire>();
             QuestionnairesConfigurations = new HashSet<QuestionnairesConfiguration>();
             QuestionnairesDataDemographics = new HashSet<QuestionnairesDataDemographic>();
+            QuestionnairesDataSectionBs = new HashSet<QuestionnairesDataSectionB>();
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
             TeacherFeedbackForms = new HashSet<TeacherFeedbackForm>();
@@ -42,6 +43,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<Questionnaire> Questionnaires { get; set; }
         public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
         public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics{ get; set; }
+        public virtual ICollection<QuestionnairesDataSectionB> QuestionnairesDataSectionBs { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
         public virtual ICollection<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }

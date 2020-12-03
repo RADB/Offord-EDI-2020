@@ -44,12 +44,12 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.Demographics]",
+         "Name": "[EDI].[Questionnaires.Data.DataSectionB]",
          "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.SectionB]",
+         "Name": "[EDI].[Questionnaires.Data.Demographics]",
          "ObjectType": 0
       },
       {
