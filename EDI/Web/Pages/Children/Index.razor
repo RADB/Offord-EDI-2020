@@ -70,7 +70,7 @@
                                 <Template>
                                     @{
                                         var comm = (context as ChildItemViewModel);
-                                        <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Ediid))" style="border:none;background-color:transparent;"><img src="./images/survey.png" style="width: 20px; height: 15px; margin-top: -8px;"><b style="font-size:18px;">EDI</b></button>
+                                        <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/survey.png" style="width: 20px; height: 15px; margin-top: -8px;"><b style="font-size:18px;">EDI</b></button>
                                     }
                                 </Template>
                             </GridColumn>
@@ -228,8 +228,8 @@
         NavigationManager.NavigateTo("./children/edit/" + this.rowid);
     }
 
-    private void GotoQuestionnaire(string ediid)
+    private void GotoQuestionnaire(int id)
     {
-        NavigationManager.NavigateTo("./samplequestions/index2/" + ediid);
+        NavigationManager.NavigateTo("./samplequestions/index2/" + id);
     }
 }

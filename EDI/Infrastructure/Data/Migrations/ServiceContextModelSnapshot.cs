@@ -1241,6 +1241,12 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("French")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsChildQuestionnaire")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTeacherQuestionnaire")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasColumnType("varchar(256)")
@@ -1254,6 +1260,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("int");
 
                     b.Property<bool?>("ShowProgressBar")
                         .HasColumnType("bit")
@@ -1501,6 +1510,8 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("InputTypeId");
+
+                    b.HasIndex("LookupEntityId");
 
                     b.HasIndex("OrientationId");
 
@@ -2448,6 +2459,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasConstraintName("FK_InputType_QuestionnairesConfigurations")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.LookupSet", "LookupSet")
+                        .WithMany("QuestionnairesConfigurations")
+                        .HasForeignKey("LookupEntityId")
+                        .HasConstraintName("FK_LookupSet_QuestionnaireConfiguration")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("EDI.ApplicationCore.Entities.Orientation", "Orientation")
                         .WithMany("QuestionnairesConfigurations")
