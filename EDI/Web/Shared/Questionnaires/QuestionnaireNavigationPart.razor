@@ -73,7 +73,7 @@
             {
                 IsAdmin = true;
                 //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
-                var pred = "t => t.IsChildQuestionnaire == true";
+                var pred = "t => t.IsChildQuestionnaire == true && t.YearId ==1";
                 questionnaires = dbContext.Questionnaires.Where(pred).OrderBy(t=>t.Sequence).ToList();
 
 
@@ -84,7 +84,7 @@
                 // Add filter for province
                 //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
                 //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
-                var pred = "t => t.IsChildQuestionnaire == true";
+                var pred = "t => t.IsChildQuestionnaire == true && t.YearId ==1";
                 questionnaires = dbContext.Questionnaires.Where(pred).OrderBy(t => t.Sequence).ToList();
             }
             else
