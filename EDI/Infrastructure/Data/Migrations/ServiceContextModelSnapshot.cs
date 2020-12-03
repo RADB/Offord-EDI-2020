@@ -1644,9 +1644,14 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<bool?>("Tlicho")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChildId");
+
+                    b.HasIndex("YearId");
 
                     b.ToTable("Questionnaires.Data.Demographics","EDI");
                 });
@@ -2463,8 +2468,7 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasOne("EDI.ApplicationCore.Entities.LookupSet", "LookupSet")
                         .WithMany("QuestionnairesConfigurations")
                         .HasForeignKey("LookupEntityId")
-                        .HasConstraintName("FK_LookupSet_QuestionnaireConfiguration")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasConstraintName("FK_LookupSet_QuestionnaireConfiguration");
 
                     b.HasOne("EDI.ApplicationCore.Entities.Orientation", "Orientation")
                         .WithMany("QuestionnairesConfigurations")
@@ -2481,7 +2485,9 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
                         .WithMany("QuestionnairesConfigurations")
-                        .HasForeignKey("YearId");
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Configurations")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataDemographic", b =>
@@ -2492,6 +2498,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasConstraintName("FK_Children_Questionnaires.Data.Demographics")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("QuestionnairesDataDemographics")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.Demographics")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>
