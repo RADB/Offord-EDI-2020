@@ -36,7 +36,8 @@
     private bool IsTeacher { get; set; }
     private bool IsCoordinator { get; set; }
     private List<QuestionnairesConfiguration> configs;
-    private QuestionnairesDataDemographic data;
+    //private QuestionnairesDataDemographic data;
+    private Child data;
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,8 +56,8 @@
 
                 // get the data object for the child
                 pred = "t=>t.ChildId == " + ChildID;
-                data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
-
+                //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+                data = dbContext.Children.Where(pred).Single();
             }
             else if (UserSettings.IsTeacher)
             {
@@ -69,8 +70,15 @@
 
                 // get the data object for the child
                 pred = "t=>t.ChildId == " + ChildID;
-                data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+                //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+                data = dbContext.Children.Where(pred).Single();
+                //if (data.QuestionnairesDataDemographics ==null)
+                //  dbContext.Entry(data).Reference(q => q.QuestionnairesDataDemographics).Load();
+                // Access this via data.QuestionnairesDataDemographics...
+                //if (data.QuestionnairesDataDemographics ==null)
+                //dbContext.Entry(data).Reference(q => q.QuestionnairesDataSectionBs).Load();
             }
+
             else
             {
                 IsCoordinator = true;
