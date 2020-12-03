@@ -138,28 +138,18 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>                        
 
-
-                        <!-- EDI Questionnaires Status -->
-                        <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" />
-
-                        <!-- Teacher Questionnaires Status -->
                         <div class="row">
-                            <div class="col-12">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <strong>@Translate("Teacher Questionnaires")</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Participation Questionaire") URL="/Dashboard/Index" />
-                                        <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Training Feedback Questionaire") URL="/Dashboard/Index" />
-                                    </div>
-                                </div>
+                            <div class="col-lg-8 mb-4">
+                                <!-- EDI Questionnaires Status -->
+                                <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" />
+
+                                <QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Participation Questionaire") URL="/Dashboard/Index" />
+                                <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Training Feedback Questionaire") URL="/Dashboard/Index" />
+                            </div>
+                            <div class="col-lg-4 mb-4">
+                                <EDI.Web.Pages.NewsFeeds.Newslist />
                             </div>
                         </div>
                     </div>

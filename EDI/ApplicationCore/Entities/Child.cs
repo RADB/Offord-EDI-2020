@@ -12,6 +12,7 @@ namespace EDI.ApplicationCore.Entities
         public Child()
         {
             QuestionnairesDataDemographics = new HashSet<QuestionnairesDataDemographic>();
+            QuestionnairesDataSectionBs = new HashSet<QuestionnairesDataSectionB>();
         }
 
         public string Ediid { get; set; }
@@ -30,6 +31,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual Teacher Teacher { get; set; }
         public virtual Year Year { get; set; }
         public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
+        public virtual ICollection<QuestionnairesDataSectionB> QuestionnairesDataSectionBs { get; set; }
         //public object Child { get; set; }
     }
 }

@@ -45,6 +45,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Questionnaire> Questionnaires { get; set; }
         public virtual DbSet<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
         public virtual DbSet<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
+        public virtual DbSet<QuestionnairesDataSectionB> QuestionnairesDataSectionBs { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
@@ -171,7 +172,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
                 entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.Demographics");
-                
+                entity.HasMany(e => e.QuestionnairesDataSectionBs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionBs");
+
             });
 
             modelBuilder.Entity<Coordinator>(entity =>

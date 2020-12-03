@@ -49,6 +49,11 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.SectionB]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[EDI].[Questionnaires]",
          "ObjectType": 0
       },
