@@ -1,28 +1,31 @@
-﻿
-<select value="@SelectModel.Value" @onchange="@(e =>OptionChange(e))">
-    @if (@SelectModel.Options != null)
+﻿@inject ISharedService sharedService;
+
+<select value="@OptionsModel.Value" @onchange="@(e =>OptionChange(e))">
+    @if (OptionsModel.LookupSetOptions != null)
     {
-        @foreach (var option in @SelectModel.Options)
+        @foreach (var option in OptionsModel.LookupSetOptions)
         {
-            <option value="@option.Value">@option.Text</option>
+            _optionLabel = sharedService.GetOptionText(option);
+            <option value="@option.Value">@_optionLabel</option>
         }
     }
 </select>
 
 @code {
     [Parameter]
-    public SelectViewModel SelectModel { get; set; }
+    public OptionsViewModel OptionsModel { get; set; }
 
+    private string _optionLabel;
 
     private void OptionChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 
-        SelectModel.ID = 0;
+        OptionsModel.ID = 0;
 
         if (int.TryParse(selectedString, out int newid))
         {
-            SelectModel.ID = newid;
+            OptionsModel.ID = newid;
         }
     }
 }

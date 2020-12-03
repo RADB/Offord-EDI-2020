@@ -1370,6 +1370,10 @@ namespace EDI.Web.Services
             return GetLanguageText(option.English, option.French);
         }
 
+        public string GetQuestionnaireText(Questionnaire q)
+        {
+            return GetLanguageText(q.English, q.French);
+        }
         private string GetLanguageText(string English, string French)
         {
             string LanguageText = "";

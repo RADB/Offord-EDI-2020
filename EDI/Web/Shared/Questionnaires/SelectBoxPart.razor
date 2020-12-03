@@ -12,8 +12,7 @@
                             <div class="row">
                                 <div class="col-1"></div>
                                 <div class="col-9">
-                                    <!--<SelectBox  SelectModel=@SelectModel />-->
-                                    CODE THIS
+                                    <SelectBox  OptionsModel="@OptionsViewModel"/>                                  
                                 </div>
 
                                 <div class="col-2">
@@ -35,17 +34,16 @@
         [Parameter]
         public string CurrentValue { get; set; }
 
-        public SelectViewModel SelectModel { get; set; }
+        public OptionsViewModel OptionsViewModel { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
+            // get the question and help text for the language
             GetQuestionText();
-            SelectModel = new SelectViewModel();
-            //SelectModel.Options 
-            //SelectModel.Name = Config.VariableName;
-            
-            SelectModel.Placeholder = QuestionText;
-            SelectModel.Value = CurrentValue;
 
+            OptionsViewModel = new OptionsViewModel();            
+            OptionsViewModel.LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+            OptionsViewModel.Placeholder = QuestionText;
+            OptionsViewModel.Value = CurrentValue;            
         }
     }

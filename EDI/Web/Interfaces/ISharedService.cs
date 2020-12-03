@@ -29,8 +29,9 @@ namespace EDI.Web.Interfaces
 
         string GetHelpText(QuestionnairesConfiguration config);
 
-        string GetOptionText(LookupSetOption option);        
+        string GetOptionText(LookupSetOption option);
 
+        string GetQuestionnaireText(Questionnaire q);
         string GetTranslate(string english);
         string GetImagePath();
         Task<string> SendEmail(EmailModel EmailModel);
