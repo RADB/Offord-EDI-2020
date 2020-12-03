@@ -24,11 +24,11 @@
                     {
                         @if (IsAdmin)
                         {
-                            <QuestionnaireBuilder configs=@configs demographic_data=@data IsReadonly="true"></QuestionnaireBuilder>
+                            <QuestionnaireBuilder configs=@configs data=@data IsReadonly="true"></QuestionnaireBuilder>
                         }
                         else if (IsTeacher)
                         {
-                            <QuestionnaireBuilder configs=@configs demographic_data=@data IsReadonly="false"></QuestionnaireBuilder>
+                            <QuestionnaireBuilder configs=@configs data=@data IsReadonly="false"></QuestionnaireBuilder>
                         }
                         else
                         {

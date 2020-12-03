@@ -34,7 +34,7 @@
         public string CurrentValue { get; set; }
 
         [Parameter]
-        public List<QuestionnairesConfiguration> configs { get; set; }
+        public QuestionnairesDataDemographic data { get; set; }
 
         public TextViewModel TextModel { get; set; }
 
@@ -49,12 +49,6 @@
 
         public async void ChangeTextModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
         {
-            foreach (var config in configs)
-            {
-                if(config.EntityField == Config.VariableName)
-                {
-                    config.Condition = e.Value.ToString();
-                }
-            }
+            data.GetType().GetProperty((Config.VariableName).Replace(" ", "")).SetValue(data, e.Value.ToString());
         }
     }

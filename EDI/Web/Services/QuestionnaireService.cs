@@ -28,6 +28,7 @@ namespace EDI.Web.Services
     {
         private readonly ILogger<QuestionnaireService> _logger;
         private readonly IAsyncRepository<Questionnaire> _questionnaireRepository;
+        private readonly IAsyncRepository<QuestionnairesDataDemographic> _questionnairesDataDemographic;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private EDIAppSettings EDIppSettings { get; set; }

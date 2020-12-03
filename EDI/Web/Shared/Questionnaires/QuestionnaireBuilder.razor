@@ -24,7 +24,7 @@
                 <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
                 break;
             case InputTypes.TextBox:
-                <TextPart Config=@config CurrentValue="Change me once here"></TextPart>
+                <TextPart Config=@config data=@data CurrentValue="Change me once here"></TextPart>
                 break;
             case InputTypes.SelectBox:
                 <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
@@ -48,7 +48,7 @@
     public List<QuestionnairesConfiguration> configs { get; set; }
 
     [Parameter]
-    public QuestionnairesDataDemographic demographic_data { get; set; }
+    public QuestionnairesDataDemographic data { get; set; }
 
     [Parameter]
     public bool IsReadonly { get; set; }
