@@ -12,9 +12,7 @@
         </div>
     }
     else
-    {
-        dbContext.Entry(config).Reference("LookupSet").Load();
-        //dbContext.Entry(Config.LookupSet).Reference(s => s.LookupSetOptions).Load();
+    {   
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:

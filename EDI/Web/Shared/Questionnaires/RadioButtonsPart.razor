@@ -79,12 +79,9 @@
     protected override async Task OnInitializedAsync()
     {
         GetQuestionText();
+
         // get the lookupset options
         _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));        
-        //dbContext.Entry(Config).Reference(s => s.LookupSet).Load();
-        //dbContext.Entry(Config.LookupSet).Reference(s => s.LookupSetOptions).Load();
-
-        //_LookupSetOptions = Config.LookupSet.LookupSetOptions.ToList();
     }
 
 }
