@@ -1,5 +1,6 @@
 ﻿@using static EDI.Web.Data.Enumerations
 @inject ISharedService sharedService;
+@inject ServiceContext dbContext;
 
 @foreach (var config in configs)
 {
@@ -12,6 +13,8 @@
     }
     else
     {
+        dbContext.Entry(config).Reference("LookupSet").Load();
+        //dbContext.Entry(Config.LookupSet).Reference(s => s.LookupSetOptions).Load();
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:

@@ -65,6 +65,7 @@
                 var pred = "t => t.QuestionnaireId == 7";
                 configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
+
             }
             else if (UserSettings.IsTeacher)
             {
