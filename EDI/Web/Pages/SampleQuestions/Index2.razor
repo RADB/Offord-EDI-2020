@@ -104,7 +104,7 @@
 
             // get the data object for the child
             pred = "t=>t.ChildId == " + ChildID;
-            data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+            data = dbContext.Children.Where(pred).Single();
 
         }
         else if (UserSettings.IsTeacher)
@@ -118,7 +118,7 @@
 
             // get the data object for the child
             pred = "t=>t.ChildId == " + ChildID;
-            data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+            data = dbContext.Children.Where(pred).Single();
         }
         else
         {

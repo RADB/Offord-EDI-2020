@@ -34,7 +34,7 @@
         public string CurrentValue { get; set; }
 
         [Parameter]
-        public QuestionnairesDataDemographic data { get; set; }
+        public Child data { get; set; }
 
         public TextViewModel TextModel { get; set; }
 
@@ -42,13 +42,22 @@
         {
             GetQuestionText();
             TextModel = new TextViewModel();
-            TextModel.Name = Config.VariableName;
+            TextModel.Name = Config.EntityField;
             TextModel.Placeholder = QuestionText;
             TextModel.Value = CurrentValue;
         }
 
         public async void ChangeTextModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
         {
-            data.GetType().GetProperty((Config.VariableName).Replace(" ", "")).SetValue(data, e.Value.ToString());
+            switch (Config.EntityName)
+            {
+                case "QuestionnairesDataDemographics":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataDemographics, e.Value.ToString());
+                    break;
+                case "QuestionnairesDataSectionB":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataSectionBs, e.Value.ToString());
+                    break;
+            }
+
         }
     }
