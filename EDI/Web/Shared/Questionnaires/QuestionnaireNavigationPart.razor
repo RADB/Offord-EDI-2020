@@ -1,0 +1,112 @@
+﻿@using static EDI.Web.Data.Enumerations
+@inject ISharedService sharedService;
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+@inject NavigationManager NavigationManager;
+@using System.Linq.Dynamic.Core
+@using Blazored.Modal
+@using Blazored.Modal.Services
+@using Syncfusion.Blazor.Navigations
+
+<SfTab>
+    <TabEvents Selected="OnTabSelected" Selecting="OnTabSelecting"></TabEvents>
+    <TabItems>
+        @foreach (var item in questionnaires)
+        {
+            var _name = sharedService.GetQuestionnaireText(item);
+            <TabItem>
+                <ChildContent>
+                    <TabHeader Text=@_name></TabHeader>
+                </ChildContent>
+                <ContentTemplate>
+                    @if (@configs != null)
+                    {
+                        @if (IsAdmin)
+                        {
+                            <QuestionnaireBuilder configs=@configs demographic_data=@data IsReadonly="true"></QuestionnaireBuilder>
+                        }
+                        else if (IsTeacher)
+                        {
+                            <QuestionnaireBuilder configs=@configs demographic_data=@data IsReadonly="false"></QuestionnaireBuilder>
+                        }
+                        else
+                        {
+                            <div class="card-header">
+                                <strong>Sample for Coordinator</strong>
+                            </div>
+                            <div class="card-body">
+                            </div>
+                        }
+                    }
+                </ContentTemplate>
+            </TabItem>
+        }
+
+        
+    </TabItems>
+</SfTab>
+
+@code {
+    [Parameter]
+    public List<QuestionnairesConfiguration> configs { get; set; }
+
+    [Parameter]
+    public QuestionnairesDataDemographic data{ get; set; }
+
+    private int SelectedTab = 0;
+
+    // look to move this to a session variable and carry throughout the session
+    private bool IsAdmin { get; set; }
+    private bool IsTeacher { get; set; }
+    private bool IsCoordinator { get; set; }
+    private List<Questionnaire> questionnaires;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            @if (UserSettings.IsAdmin)
+            {
+                IsAdmin = true;
+                //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
+                var pred = "t => t.IsChildQuestionnaire == true";
+                questionnaires = dbContext.Questionnaires.Where(pred).OrderBy(t=>t.Sequence).ToList();
+
+
+            }
+            else if (UserSettings.IsTeacher)
+            {
+                IsTeacher = true;
+                // Add filter for province
+                //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
+                //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
+                var pred = "t => t.IsChildQuestionnaire == true";
+                questionnaires = dbContext.Questionnaires.Where(pred).OrderBy(t => t.Sequence).ToList();
+            }
+            else
+            {
+                IsCoordinator = true;
+            }
+        }
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    public void OnTabSelected(Syncfusion.Blazor.Navigations.SelectEventArgs args)
+    {
+
+
+    }
+    public void OnTabSelecting(Syncfusion.Blazor.Navigations.SelectingEventArgs args)
+    {
+
+    }
+
+}

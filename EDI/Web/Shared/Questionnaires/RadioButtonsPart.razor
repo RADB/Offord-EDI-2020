@@ -21,7 +21,7 @@
                                         _optionCount += 1;
 
                                         _optionLabel = sharedService.GetOptionText(option);
-
+                                        
                                         //replace checked with value from object
                                         <SfRadioButton name="Dev" Checked=@(CurrentValue.Equals(option.Value)) @onchange="RadioSelection" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
                                         if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)

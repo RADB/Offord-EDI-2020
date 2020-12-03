@@ -5,7 +5,7 @@
 @foreach (var config in configs)
 {
     if (config.IsHeader)
-    {
+    {        
         _Text = sharedService.GetConfigText(config);
         <div class="card-header">
             <strong>@_Text</strong>
@@ -13,6 +13,8 @@
     }
     else
     {
+        // bind to value from demographic_data
+
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:
@@ -44,6 +46,9 @@
 @code {
     [Parameter]
     public List<QuestionnairesConfiguration> configs { get; set; }
+
+    [Parameter]
+    public QuestionnairesDataDemographic demographic_data { get; set; }
 
     [Parameter]
     public bool IsReadonly { get; set; }
