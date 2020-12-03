@@ -22,7 +22,7 @@
                 <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
                 break;
             case InputTypes.TextBox:
-                <TextPart Config=@config CurrentValue="Change me once here"></TextPart>
+                <TextPart @ref="textpart" configs=@configs Config=@config CurrentValue="Change me once here"></TextPart>
                 break;
             case InputTypes.CheckBox:
                 <div class="card-body border">
@@ -41,6 +41,8 @@
 @code {
     [Parameter]
     public List<QuestionnairesConfiguration> configs { get; set; }
+
+    public TextPart textpart = new TextPart();
 
     [Parameter]
     public bool IsReadonly { get; set; }

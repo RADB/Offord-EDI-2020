@@ -1,8 +1,10 @@
 ﻿@using Syncfusion.Blazor.Inputs
 
-<SfTextBox @bind-Value="@TextModel.Value" Placeholder="@TextModel.Placeholder"></SfTextBox>
+<SfTextBox @bind-Value="@TextModel.Value" Placeholder="@TextModel.Placeholder" @onchange="@((ev) => OnChange.InvokeAsync(ev))"></SfTextBox>
 
 @code {
     [Parameter]
     public TextViewModel TextModel { get; set; }
+    [Parameter]
+    public EventCallback<Microsoft.AspNetCore.Components.ChangeEventArgs> OnChange { get; set; }
 }

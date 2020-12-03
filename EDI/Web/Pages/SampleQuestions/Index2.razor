@@ -27,11 +27,12 @@
                             {
                                 @if (IsAdmin)
                                 {
-                                    <QuestionnaireBuilder configs=@configs IsReadonly="true"></QuestionnaireBuilder>
+                                    <QuestionnaireBuilder @ref="builder" configs=@configs IsReadonly="true"></QuestionnaireBuilder>
+                                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Save"></button>
                                 }
                                 else if (IsTeacher)
                                 {
-                                    <QuestionnaireBuilder configs=@configs IsReadonly="false"></QuestionnaireBuilder>
+                                    <QuestionnaireBuilder @ref="builder" configs=@configs IsReadonly="false"></QuestionnaireBuilder>
                                 }
                                 else
                                 {
@@ -108,6 +109,7 @@
     private bool IsTeacher { get; set; }
     private bool IsCoordinator { get; set; }
     private List<QuestionnairesConfiguration> configs;
+    QuestionnaireBuilder builder = new QuestionnaireBuilder();
 
     protected override async Task OnInitializedAsync()
     {
@@ -155,5 +157,16 @@
     public void OnTabSelecting(Syncfusion.Blazor.Navigations.SelectingEventArgs args)
     {
 
+    }
+
+    private void Save()
+    {
+        foreach (var config in builder.textpart.configs)
+        {
+            if (config.EntityField == "PostalCode")
+            {
+                var tmp = config.Condition;
+            }
+        }
     }
 }
