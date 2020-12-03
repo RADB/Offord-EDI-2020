@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Questionnaires.Data.DataSectionB", Schema = "EDI")]
+    [Table("Questionnaires.Data.SectionB", Schema = "EDI")]
 
     public partial class QuestionnairesDataSectionB : BaseEntityQuestionnaire
     {

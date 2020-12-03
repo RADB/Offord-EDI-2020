@@ -2608,8 +2608,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
-                        .WithMany()
-                        .HasForeignKey("YearId");
+                        .WithMany("QuestionnairesDataSectionBs")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.SectionB")
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>

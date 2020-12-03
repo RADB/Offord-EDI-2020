@@ -591,17 +591,19 @@ namespace EDI.Infrastructure.Data
 
             modelBuilder.Entity<QuestionnairesDataSectionB>(entity =>
             {
-                entity.ToTable("Questionnaires.Data.DataSectionB", "EDI");
+                entity.ToTable("Questionnaires.Data.SectionB", "EDI");
 
                 entity.HasIndex(e => e.ChildId);
 
                 entity.HasIndex(e => e.YearId);
 
-                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256);
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
-                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256);
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<School>(entity =>
