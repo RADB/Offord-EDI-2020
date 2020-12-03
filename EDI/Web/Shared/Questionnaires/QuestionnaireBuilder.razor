@@ -5,7 +5,7 @@
 @foreach (var config in configs)
 {
     if (config.IsHeader)
-    {        
+    {
         _Text = sharedService.GetConfigText(config);
         <div class="card-header">
             <strong>@_Text</strong>
@@ -24,7 +24,7 @@
                 <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
                 break;
             case InputTypes.TextBox:
-                <TextPart @ref="textpart" configs=@configs Config=@config CurrentValue="Change me once here"></TextPart>
+                <TextPart Config=@config CurrentValue="Change me once here"></TextPart>
                 break;
             case InputTypes.SelectBox:
                 <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
@@ -46,8 +46,6 @@
 @code {
     [Parameter]
     public List<QuestionnairesConfiguration> configs { get; set; }
-
-    public TextPart textpart = new TextPart();
 
     [Parameter]
     public QuestionnairesDataDemographic demographic_data { get; set; }
