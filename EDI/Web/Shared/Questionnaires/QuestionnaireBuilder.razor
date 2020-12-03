@@ -12,7 +12,7 @@
         </div>
     }
     else
-    {   
+    {
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:
@@ -23,6 +23,9 @@
                 break;
             case InputTypes.TextBox:
                 <TextPart Config=@config CurrentValue="Change me once here"></TextPart>
+                break;
+            case InputTypes.SelectBox:
+                <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
                 break;
             case InputTypes.CheckBox:
                 <div class="card-body border">

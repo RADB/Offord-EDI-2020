@@ -53,15 +53,7 @@
     [Parameter]
     public byte CurrentValue { get; set; }
 
-    //[CascadingParameter] public IModalService Modal { get; set; }
-
-    /*[Parameter]
-    public int LookupSetId { get; set; } = 1;*/
-
-    /*[Parameter]
-    public int OrientationId { get; set; } = (int)Orientations.Vertical;*/
-
-    // will be removed once relationship is loaded
+    // option set
     private List<LookupSetOption> _LookupSetOptions;
 
     private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
