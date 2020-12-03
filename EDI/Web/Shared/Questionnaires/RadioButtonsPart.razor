@@ -3,7 +3,7 @@
 @using static EDI.Web.Data.Enumerations;
 @inject ISharedService sharedService;
 @inject IModalService Modal
-
+@inject ServiceContext dbContext;
 
 <div class="card-body border border-primary rounded">
     <div class="row">
@@ -34,7 +34,7 @@
                                 <div class="col-2">
                                     @if (Config.HasHelp)
                                     {
-                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>                                        
+                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
                                     }
                                 </div>
                             </div>
@@ -80,7 +80,11 @@
     {
         GetQuestionText();
         // get the lookupset options
-        _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        //_LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        dbContext.Entry(Config).Reference(s => s.LookupSet).Load();
+        dbContext.Entry(Config.LookupSet).Reference(s => s.LookupSetOptions).Load();        
+
+        _LookupSetOptions = Config.LookupSet.LookupSetOptions.ToList();
     }
 
 }

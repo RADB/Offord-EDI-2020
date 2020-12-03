@@ -46,6 +46,7 @@ namespace EDI.ApplicationCore.Entities
         public int Sequence { get; set; }
         public int? YearId { get; set; }
 
+        public virtual LookupSet LookupSet { get; set; }
         public virtual InputType InputType { get; set; }
         public virtual Orientation Orientation { get; set; }
         public virtual Questionnaire Questionnaire { get; set; }

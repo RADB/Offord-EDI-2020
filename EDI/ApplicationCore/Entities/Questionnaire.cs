@@ -23,7 +23,9 @@ namespace EDI.ApplicationCore.Entities
         /// </summary>
         public bool? ShowProgressBar { get; set; }
         public bool? ShowQuestionNumbers { get; set; }
-
+        public int Sequence { get; set; } 
+        public bool IsChildQuestionnaire { get; set; }
+        public bool IsTeacherQuestionnaire { get; set; } 
         public virtual Year Year { get; set; }
         public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
     }

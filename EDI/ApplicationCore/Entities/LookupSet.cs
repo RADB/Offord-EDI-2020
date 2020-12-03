@@ -12,6 +12,7 @@ namespace EDI.ApplicationCore.Entities
         public LookupSet()
         {
             LookupSetOptions = new HashSet<LookupSetOption>();
+            QuestionnairesConfigurations = new HashSet<QuestionnairesConfiguration>();
         }
         
         public int YearId { get; set; }
@@ -19,5 +20,6 @@ namespace EDI.ApplicationCore.Entities
         
         public virtual Year Year { get; set; }
         public virtual ICollection<LookupSetOption> LookupSetOptions { get; set; }
+        public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
     }
 }

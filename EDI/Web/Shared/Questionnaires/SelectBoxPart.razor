@@ -1,5 +1,6 @@
 ﻿@inherits QuestionnaireBase
 @using EDI.Web.Shared.Questions
+
 <div class="card-body border border-primary rounded">
     <div class="row">
         <div class="col-12">
@@ -11,7 +12,8 @@
                             <div class="row">
                                 <div class="col-1"></div>
                                 <div class="col-9">
-                                    <Text TextModel=@TextModel />
+                                    <!--<SelectBox  SelectModel=@SelectModel />-->
+                                    CODE THIS
                                 </div>
 
                                 <div class="col-2">
@@ -33,14 +35,17 @@
         [Parameter]
         public string CurrentValue { get; set; }
 
-        public TextViewModel TextModel { get; set; }
+        public SelectViewModel SelectModel { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
             GetQuestionText();
-            TextModel = new TextViewModel();
-            TextModel.Name = Config.VariableName;
-            TextModel.Placeholder = QuestionText;
-            TextModel.Value = CurrentValue;
+            SelectModel = new SelectViewModel();
+            //SelectModel.Options 
+            //SelectModel.Name = Config.VariableName;
+            
+            SelectModel.Placeholder = QuestionText;
+            SelectModel.Value = CurrentValue;
+
         }
     }

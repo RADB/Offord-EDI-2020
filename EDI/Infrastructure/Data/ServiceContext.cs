@@ -360,6 +360,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.YearId).HasColumnName("YearID");
                 entity.HasMany(d => d.LookupSetOptions).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupSetId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_LookupSetOptions");
+                entity.HasMany(p => p.QuestionnairesConfigurations).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupEntityId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_QuestionnaireConfiguration");
+                //entity.HasOne(d => d.Id).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.LookupEntityId).HasConstraintName("FK_Questionnaires.Configuration_LookupSets");
+
             });
 
             modelBuilder.Entity<LookupSetOption>(entity =>
@@ -551,6 +554,7 @@ namespace EDI.Infrastructure.Data
                 //entity.Property(e => e.YearId).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.YukonTerritory).HasDefaultValueSql("((0))");
+
 
                 //entity.HasOne(d => d.InputType).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Questionnaires.Configuration_InputTypes");
 
