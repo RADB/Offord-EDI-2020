@@ -8,6 +8,7 @@
 @using Blazored.Modal.Services
 @using Syncfusion.Blazor.Navigations
 @using System.Collections.Specialized;
+@using Microsoft.EntityFrameworkCore;
 
 <SfTab>
     <TabEvents Selected="OnTabSelected" Selecting="OnTabSelecting"></TabEvents>
@@ -146,17 +147,6 @@
                     pred = "t => t.QuestionnaireId == " + ListTab[i].Id +" && " + UserSettings.Province + "==true";
                 }
                 configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
-
-                switch ((Questionnaires)i)
-                {
-                    case Questionnaires.Demographics:
-                        dbContext.Entry(data).Collection(q => q.QuestionnairesDataDemographics).Load();
-                        break;
-                    case Questionnaires.SectionB:
-                        dbContext.Entry(data).Collection(q => q.QuestionnairesDataSectionBs).Load();                        
-                        break;
-
-                }
             }
         }
     }
