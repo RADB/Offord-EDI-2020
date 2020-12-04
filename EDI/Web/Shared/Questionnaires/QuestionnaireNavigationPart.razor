@@ -147,11 +147,16 @@
                 }
                 configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
-                
-                
-                //    dbContext.Entry(data).Reference(q => q.QuestionnairesDataDemographics).Load();
+                switch ((Questionnaires)i)
+                {
+                    case Questionnaires.Demographics:
+                        dbContext.Entry(data).Collection(q => q.QuestionnairesDataDemographics).Load();
+                        break;
+                    case Questionnaires.SectionB:
+                        dbContext.Entry(data).Collection(q => q.QuestionnairesDataSectionBs).Load();                        
+                        break;
 
-                break;
+                }
             }
         }
     }
@@ -161,4 +166,4 @@
 
     }
 
-}
+    }

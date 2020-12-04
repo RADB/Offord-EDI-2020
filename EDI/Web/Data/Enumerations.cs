@@ -30,5 +30,16 @@ namespace EDI.Web.Data
             Int32 = 1,
             Double = 2
         }
+
+        public enum Questionnaires: int
+        {
+            Demographics =0,
+            SectionA = 1,
+            SectionB=2,
+            SectionC=3,
+            SectionD=4,
+            SectionE=5,
+            TeacherProfile=6
+        }
     }
 }
