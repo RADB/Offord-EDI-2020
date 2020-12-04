@@ -47,7 +47,7 @@
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="18.2.0.59" />
     <PackageReference Include="Syncfusion.HtmlToPdfConverter.QtWebKit.Net.Core" Version="18.1.0.52" />
     <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="18.1.0.57" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.6" />
     <PackageReference Include="TextCopy" Version="3.0.1" />
   </ItemGroup>
