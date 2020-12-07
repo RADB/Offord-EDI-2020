@@ -8,5 +8,6 @@ namespace EDI.ApplicationCore.Entities
     public class BaseEntityQuestionnaire:BaseEntity
     {
         public string LanguageCompleted { get; set; }
+        public int? YearId { get; set; }
     }
 }

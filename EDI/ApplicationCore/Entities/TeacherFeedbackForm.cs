@@ -12,8 +12,7 @@ namespace EDI.ApplicationCore.Entities
         public int TeacherId { get; set; }
         /// <summary>
         /// Year of the EDI implementation
-        /// </summary>
-        public int? YearId { get; set; }
+        /// </summary>        
         public byte? FirstTimeCompletingEdi { get; set; }
         public byte? CompletedPaperVersion { get; set; }
         public byte? VersionPreferred { get; set; }

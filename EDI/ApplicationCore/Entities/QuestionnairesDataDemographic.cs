@@ -35,8 +35,7 @@ namespace EDI.ApplicationCore.Entities
         public bool? NorthSlavey { get; set; }
         public bool? SouthSlavey { get; set; }
         public bool? Tlicho { get; set; }
-        public byte? OtherLanguage { get; set; }
-        public int? YearId { get; set; }
+        public byte? OtherLanguage { get; set; }        
         public virtual Child Child { get; set; }
         public virtual Year Year { get; set; }
     }
