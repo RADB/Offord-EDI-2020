@@ -43,24 +43,27 @@
     public string Header { get; set; } = "Questionnaire Status Bar - Set the header property to change me";
 
 
-    private int CompletePercent { get; set; }
-    private int InprogressPercent { get; set; }
-    private int NotStartedPercent { get; set; }
+    private int CompletePercent { get; set; } = 0;
+    private int InprogressPercent { get; set; } = 0;
+    private int NotStartedPercent { get; set; } = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        if (Complete == 0)
-            Complete = MathService.GetRandomNumber(1, Total);
-
-        if (Inprogress == 0)
+        if (Total > 0)
         {
-            if (Total - Complete > 0)
-                Inprogress = MathService.GetRandomNumber(1, Total - Complete);
+            if (Complete == 0)
+                Complete = MathService.GetRandomNumber(1, Total);
+
+            if (Inprogress == 0)
+            {
+                if (Total - Complete > 0)
+                    Inprogress = MathService.GetRandomNumber(1, Total - Complete);
+            }
+            CompletePercent = MathService.GetPercent(Complete, Total);
+            InprogressPercent = MathService.GetPercent(Inprogress, Total);
+            NotStartedPercent = 100 - CompletePercent - InprogressPercent;
         }
 
-        CompletePercent = MathService.GetPercent(Complete, Total);
-        InprogressPercent = MathService.GetPercent(Inprogress, Total);
-        NotStartedPercent = 100 - CompletePercent - InprogressPercent;
     }
 
     private string Translate(string word)

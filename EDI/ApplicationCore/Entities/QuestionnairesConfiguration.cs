@@ -26,8 +26,7 @@ namespace EDI.ApplicationCore.Entities
         public string EntityField { get; set; }
         public bool HasLookupEntity { get; set; }
         public string LookupEntity { get; set; }
-        public int? LookupEntityId { get; set; }
-        public bool? RepeatHeader { get; set; }
+        public int? LookupEntityId { get; set; }        
         public bool IsRequired { get; set; }
         public bool IsReadOnly { get; set; }
         public bool? IsConditional { get; set; }

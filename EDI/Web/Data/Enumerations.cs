@@ -23,7 +23,9 @@ namespace EDI.Web.Data
             CheckBox = 6,
             SelectBox = 7,
             TextBox = 8,
-            Header = 9
+            Header = 9,
+            QuestionHeader = 10,
+            GroupHeader = 11
         }
         public enum NumericDataTypes : int
         {
@@ -31,6 +33,7 @@ namespace EDI.Web.Data
             Double = 2
         }
 
+       
         public enum Questionnaires: int
         {
             Demographics =0,

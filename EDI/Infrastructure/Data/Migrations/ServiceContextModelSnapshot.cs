@@ -884,12 +884,12 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("English")
                         .IsRequired()
-                        .HasColumnType("nvarchar(140)")
-                        .HasMaxLength(140);
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
                     b.Property<string>("French")
-                        .HasColumnType("nvarchar(140)")
-                        .HasMaxLength(140);
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
                     b.Property<int>("LookupSetId")
                         .HasColumnType("int");
@@ -1480,9 +1480,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("QuestionnaireID")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("RepeatHeader")
-                        .HasColumnType("bit");
-
                     b.Property<bool?>("Saskatchewan")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -1674,11 +1671,16 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<byte?>("EnglishEffectiveUse")
                         .HasColumnType("tinyint");
@@ -1706,11 +1708,16 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
 
                     b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
 
                     b.Property<byte?>("ReadComplex")
                         .HasColumnType("tinyint");
@@ -1745,7 +1752,7 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.HasIndex("YearId");
 
-                    b.ToTable("Questionnaires.Data.DataSectionB","EDI");
+                    b.ToTable("Questionnaires.Data.SectionB","EDI");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>

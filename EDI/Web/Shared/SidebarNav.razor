@@ -73,12 +73,12 @@
         treedata.Add(new TreeData { nodeId = "04-07", nodeText = "File Import Status", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-08", nodeText = "Genders", icon = "icon-symbol-female icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-16", nodeText = "Input Types", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-09", nodeText = "Languages", icon = "icon-list icon", pid = "04-05" });
+        //treedata.Add(new TreeData { nodeId = "04-09", nodeText = "Languages", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-10", nodeText = "Lookup Sets", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-17", nodeText = "Orientation", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-11", nodeText = "Provinces", icon = "icon-location-pin icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-12", nodeText = "Province Types", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
+       // treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-14", nodeText = "Translations", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-15", nodeText = "Years", icon = "icon-calendar icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "05", nodeText = "Accounts", icon = "icon-list icon", hasChild = true});
@@ -166,10 +166,10 @@
         {
             NavigationManager.NavigateTo("./Genders/index");
         }
-        else if (args.NodeData.Id == "04-09")
+       /*else if (args.NodeData.Id == "04-09")
         {
             NavigationManager.NavigateTo("./languages/index");
-        }
+        }*/
         else if (args.NodeData.Id == "04-10")
         {
             NavigationManager.NavigateTo("./lookupsets/index");
@@ -182,10 +182,10 @@
         {
             NavigationManager.NavigateTo("./provincetypes/index");
         }
-        else if (args.NodeData.Id == "04-13")
+        /*else if (args.NodeData.Id == "04-13")
         {
             NavigationManager.NavigateTo("./specialproblems/index");
-        }
+        }*/
         else if (args.NodeData.Id == "04-14")
         {
             NavigationManager.NavigateTo("./translations/index/0");

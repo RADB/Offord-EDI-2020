@@ -15,7 +15,7 @@ namespace EDI.Infrastructure.Data
             int retryForAvailability = retry.Value;
             try
             {
-                if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.Year).FirstOrDefault() == null)
+                if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.AddYears(1).Year).FirstOrDefault() == null)
                 {
                     ServiceContext.Years.AddRange(
                         GetPreconfiguredYear());
@@ -65,10 +65,14 @@ namespace EDI.Infrastructure.Data
 
                 if (!ServiceContext.LookupSetOptions.Any())
                 {
-                    ServiceContext.LookupSetOptions.AddRange(
-                        GetPreconfiguredLookupSetOption());
+                    var lus = ServiceContext.LookupSets.ToList();
+                    foreach (var item in lus)
+                    {                       
+                        ServiceContext.LookupSetOptions.AddRange(
+                        GetPreconfiguredLookupSetOption(item.Id, item.LookupName));
 
-                    await ServiceContext.SaveChangesAsync();
+                        await ServiceContext.SaveChangesAsync();
+                    }                    
                 }
 
                 if (!ServiceContext.InputTypes.Any())
@@ -311,9 +315,9 @@ namespace EDI.Infrastructure.Data
         {           
             return new List<Year>()
             {
-                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(1).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(2).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+                //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(2).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
 
@@ -2410,6 +2414,10 @@ namespace EDI.Infrastructure.Data
         {
             return new List<LookupSet>()
             {
+                new LookupSet() {LookupName="Participation",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="MainCareJK",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new LookupSet() {LookupName="MainCare",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},    
+                new LookupSet() {LookupName="SpecialProblems",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="Languages",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="LandAgreements",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="NWTLanguages",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
@@ -2425,192 +2433,307 @@ namespace EDI.Infrastructure.Data
                 new LookupSet() {LookupName="GoodAvgPoorDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="YesNoDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new LookupSet() {LookupName="YesNo",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
-            };
+        }.OrderBy(t => t.CreatedDate); 
         }
 
-        static IEnumerable<LookupSetOption> GetPreconfiguredLookupSetOption()
+        static IEnumerable<LookupSetOption> GetPreconfiguredLookupSetOption(int id, string lookupsetname)
         {
-            return new List<LookupSetOption>()
-            {
-                new LookupSetOption() {English="Yes",LookupSetId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Oui",Value=1,Sequence=10},
-                new LookupSetOption() {English="No",LookupSetId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=0,Sequence=20},
-                new LookupSetOption() {English="Yes",LookupSetId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="oui",Value=1,Sequence=10},
-                new LookupSetOption() {English="No",LookupSetId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=2,Sequence=20},
-                new LookupSetOption() {English="Don't Know",LookupSetId=2,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="ne sais pas",Value=3,Sequence=30},
-                new LookupSetOption() {English="Very Good/Good",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="très bon/bon",Value=1,Sequence=10},
-                new LookupSetOption() {English="Average",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="moyen",Value=2,Sequence=20},
-                new LookupSetOption() {English="Poor/Very Poor",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="mauvais/très mauvais",Value=3,Sequence=30},
-                new LookupSetOption() {English="Don't Know",LookupSetId=3,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="ne sais pas",Value=4,Sequence=40},
-                new LookupSetOption() {English="Often or Very True",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="souvent ou très vrai",Value=1,Sequence=10},
-                new LookupSetOption() {English="Sometimes or Somewhat True",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="quelquefois ou assez vrai",Value=2,Sequence=20},
-                new LookupSetOption() {English="Never or Not True",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="jamais ou pas vrai",Value=3,Sequence=30},
-                new LookupSetOption() {English="Don't Know",LookupSetId=4,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="ne sais pas",Value=4,Sequence=40},
-                new LookupSetOption() {English="Yes Observed",LookupSetId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="OUI Observations de l'enseignant(e)",Value=1,Sequence=10},
-                new LookupSetOption() {English="Yes Parent Info/Medical Diagnosis",LookupSetId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="OUI Renseignements des parents et/ou diagnostic médical",Value=2,Sequence=20},
-                new LookupSetOption() {English="Both",LookupSetId=5,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="tous les deux",Value=3,Sequence=30},
-                new LookupSetOption() {English="Full-Time",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="à plein temps",Value=1,Sequence=10},
-                new LookupSetOption() {English="Part-Time",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="à temps partiel",Value=2,Sequence=20},
-                new LookupSetOption() {English="Don't Know",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="ne sais pas",Value=3,Sequence=30},
-                new LookupSetOption() {English="No",LookupSetId=6,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="non",Value=4,Sequence=40},
-                new LookupSetOption() {English="Child in class more than 1 month",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="dans la classe plus d'un mois",Value=1,Sequence=10},
-                new LookupSetOption() {English="Child in class less than 1 month",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="dans la classe moins d'un mois",Value=2,Sequence=20},
-                new LookupSetOption() {English="Moved out of this class",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="a quitté la classe",Value=3,Sequence=30},
-                new LookupSetOption() {English="Moved out of school",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="a quitté l’école",Value=4,Sequence=40},
-                new LookupSetOption() {English="Other",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="autre",Value=9,Sequence=50},
-                new LookupSetOption() {English="registered non-attender",LookupSetId=7,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="inscrit mais non fréquentant",Value=6,Sequence=60},
-                new LookupSetOption() {English="Kindergarten",LookupSetId=8,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Maternelle",Value=1,Sequence=10},
-                new LookupSetOption() {English="K",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M",Value=1,Sequence=10},
-                new LookupSetOption() {English="K-1",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M-1",Value=2,Sequence=20},
-                new LookupSetOption() {English="K-2",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M-2",Value=3,Sequence=30},
-                new LookupSetOption() {English="K-3",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M-3",Value=4,Sequence=40},
-                new LookupSetOption() {English="K-4",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M-4",Value=5,Sequence=50},
-                new LookupSetOption() {English="K-5",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M-5",Value=6,Sequence=60},
-                new LookupSetOption() {English="K-6",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="M-6",Value=7,Sequence=70},
-                new LookupSetOption() {English="Other",LookupSetId=9,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre",Value=8,Sequence=80},
-                new LookupSetOption() {English="Male",LookupSetId=10,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Masculin",Value=1,Sequence=10},
-                new LookupSetOption() {English="Female",LookupSetId=10,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Feminin",Value=2,Sequence=20},
-                new LookupSetOption() {English="No",LookupSetId=11,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Non",Value=0,Sequence=10},
-                new LookupSetOption() {English="ESL",LookupSetId=11,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="ALS",Value=1,Sequence=20},
-                new LookupSetOption() {English="FSL",LookupSetId=11,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="FLS",Value=2,Sequence=30},
-                new LookupSetOption() {English="Dene(D)",LookupSetId=12,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Déné",Value=1,Sequence=10},
-                new LookupSetOption() {English="Inuit/Inuvialuit (I)",LookupSetId=12,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Inuit/Inuvialuit",Value=2,Sequence=20},
-                new LookupSetOption() {English="Metis (M)",LookupSetId=12,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Métis",Value=3,Sequence=30},
-                new LookupSetOption() {English="Southern Aboriginal (S)",LookupSetId=12,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autochtone du sud",Value=4,Sequence=40},
-                new LookupSetOption() {English="Non-Aboriginal (N)",LookupSetId=12,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Non autochtone",Value=5,Sequence=50},
-                new LookupSetOption() {English="Don't Know",LookupSetId=12,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Ne sais pas",Value=6,Sequence=60},
-                new LookupSetOption() {English="Chipewyan",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Chippewyan",Value=31,Sequence=10},
-                new LookupSetOption() {English="Cree",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Cri",Value=32,Sequence=20},
-                new LookupSetOption() {English="English",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Anglais",Value=33,Sequence=30},
-                new LookupSetOption() {English="French",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Fran&ccedil;ais",Value=34,Sequence=40},
-                new LookupSetOption() {English="Gwich'in",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Gwich'in",Value=35,Sequence=50},
-                new LookupSetOption() {English="Inuinnaqtun",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Inuinnaqtun",Value=36,Sequence=60},
-                new LookupSetOption() {English="Inuktitut",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Cri",Value=37,Sequence=70},
-                new LookupSetOption() {English="Inuvialuktun",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Inuvialuktun",Value=38,Sequence=80},
-                new LookupSetOption() {English="North Slavey",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Langue des Esclaves du nord",Value=39,Sequence=90},
-                new LookupSetOption() {English="South Slavey",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Langue des Esclaves du sud",Value=40,Sequence=100},
-                new LookupSetOption() {English="Tlicho (Dogrib)",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Tlicho (Dogrib)",Value=41,Sequence=110},
-                new LookupSetOption() {English="Other",LookupSetId=13,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre",Value=42,Sequence=120},
-                new LookupSetOption() {English="Inuvialuit",LookupSetId=14,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Inuvialuit",Value=1,Sequence=10},
-                new LookupSetOption() {English="Gwich'in",LookupSetId=14,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Gwich'in",Value=2,Sequence=20},
-                new LookupSetOption() {English="Sahtu",LookupSetId=14,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Sahtu",Value=3,Sequence=30},
-                new LookupSetOption() {English="Tlicho",LookupSetId=14,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Tlicho",Value=4,Sequence=40},
-                new LookupSetOption() {English="Don't Know",LookupSetId=14,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Ne sais pas",Value=5,Sequence=50},
-                new LookupSetOption() {English="No",LookupSetId=14,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Non",Value=6,Sequence=60},
-                new LookupSetOption() {English="English",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Anglais",Value=140,Sequence=10},
-                new LookupSetOption() {English="French",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Français",Value=170,Sequence=20},
-                new LookupSetOption() {English="Unknown",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Inconnu",Value=0,Sequence=30},
-                new LookupSetOption() {English="Afrikaans",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Afrikaans",Value=10,Sequence=40},
-                new LookupSetOption() {English="Albanian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Albanais",Value=20,Sequence=50},
-                new LookupSetOption() {English="Amharic",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Amharique",Value=25,Sequence=60},
-                new LookupSetOption() {English="Arabic",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Arabe",Value=30,Sequence=70},
-                new LookupSetOption() {English="Armenian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Arménien",Value=40,Sequence=80},
-                new LookupSetOption() {English="Ashanti",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Asante",Value=42,Sequence=90},
-                new LookupSetOption() {English="Assyrian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Assyrien",Value=45,Sequence=100},
-                new LookupSetOption() {English="Azeri",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Azéri",Value=50,Sequence=110},
-                new LookupSetOption() {English="Bengali",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Bengalais",Value=60,Sequence=120},
-                new LookupSetOption() {English="Bihari",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Bihari",Value=70,Sequence=130},
-                new LookupSetOption() {English="Bulgarian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Bulgare",Value=80,Sequence=140},
-                new LookupSetOption() {English="Burmese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Birman",Value=90,Sequence=150},
-                new LookupSetOption() {English="Cantonese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Cantonais",Value=100,Sequence=160},
-                new LookupSetOption() {English="Chiu Chow",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Chiu Chow",Value=105,Sequence=170},
-                new LookupSetOption() {English="Cree",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Crie",Value=108,Sequence=180},
-                new LookupSetOption() {English="Czech",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Tchèque",Value=110,Sequence=190},
-                new LookupSetOption() {English="Danish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Danois",Value=120,Sequence=200},
-                new LookupSetOption() {English="Dari",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Dari",Value=125,Sequence=210},
-                new LookupSetOption() {English="Dutch/Flemish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hollandais/flamand",Value=130,Sequence=220},
-                new LookupSetOption() {English="Egyptian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Égyptien",Value=135,Sequence=230},
-                new LookupSetOption() {English="English",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Anglais",Value=140,Sequence=240},
-                new LookupSetOption() {English="Estonian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Estonien",Value=150,Sequence=250},
-                new LookupSetOption() {English="Ethiopian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Éthiopien",Value=155,Sequence=260},
-                new LookupSetOption() {English="Farsi/Persian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Parsi/Persan",Value=430,Sequence=270},
-                new LookupSetOption() {English="Filipino/Tagalog",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Philippin/tagalog",Value=570,Sequence=280},
-                new LookupSetOption() {English="Finnish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Finlandais",Value=160,Sequence=290},
-                new LookupSetOption() {English="French",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Français",Value=170,Sequence=300},
-                new LookupSetOption() {English="Fukienese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Fou-kien",Value=175,Sequence=310},
-                new LookupSetOption() {English="Gaelic",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Gaélique",Value=180,Sequence=320},
-                new LookupSetOption() {English="German",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Allemand",Value=190,Sequence=330},
-                new LookupSetOption() {English="Grebo",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Grebo",Value=195,Sequence=340},
-                new LookupSetOption() {English="Greek",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Grec",Value=200,Sequence=350},
-                new LookupSetOption() {English="Gujarati",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Gujarati",Value=210,Sequence=360},
-                new LookupSetOption() {English="Hakka",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hakka",Value=215,Sequence=370},
-                new LookupSetOption() {English="Hebrew",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hébreu",Value=220,Sequence=380},
-                new LookupSetOption() {English="Hindi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hindi",Value=230,Sequence=390},
-                new LookupSetOption() {English="Hindustani",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hindustani",Value=240,Sequence=400},
-                new LookupSetOption() {English="Hok Chiu",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hok Chiu",Value=245,Sequence=410},
-                new LookupSetOption() {English="Hungarian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Hongrois",Value=250,Sequence=420},
-                new LookupSetOption() {English="Icelandic",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Islandais",Value=260,Sequence=430},
-                new LookupSetOption() {English="Ilocano",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Ilocano",Value=270,Sequence=440},
-                new LookupSetOption() {English="Indigenous (North American)",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autochtones (Amérique du Nord)",Value=275,Sequence=450},
-                new LookupSetOption() {English="Indigenous (South American)",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autochtones (Amérique du Sud)",Value=280,Sequence=460},
-                new LookupSetOption() {English="Indonesian/Malay",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Indonésien/malais",Value=380,Sequence=470},
-                new LookupSetOption() {English="Inuktitut",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Inuktitut",Value=285,Sequence=480},
-                new LookupSetOption() {English="Italian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Italien",Value=290,Sequence=490},
-                new LookupSetOption() {English="Jaffna",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Jaffna",Value=295,Sequence=500},
-                new LookupSetOption() {English="Japanese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Japonais",Value=300,Sequence=510},
-                new LookupSetOption() {English="Kannada",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Canara",Value=320,Sequence=520},
-                new LookupSetOption() {English="Kashmiri",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Kashméré",Value=330,Sequence=530},
-                new LookupSetOption() {English="Katchi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Katchi",Value=310,Sequence=540},
-                new LookupSetOption() {English="Khmer",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Kampuchéen",Value=335,Sequence=550},
-                new LookupSetOption() {English="Kinyarwanda",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Kinyarwanda",Value=325,Sequence=560},
-                new LookupSetOption() {English="Kirundi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Kirundi",Value=315,Sequence=570},
-                new LookupSetOption() {English="Korean",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Coréen",Value=340,Sequence=580},
-                new LookupSetOption() {English="Kurdish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Kurde",Value=342,Sequence=590},
-                new LookupSetOption() {English="Lao",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Lao",Value=345,Sequence=600},
-                new LookupSetOption() {English="Latvian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Lettonien",Value=350,Sequence=610},
-                new LookupSetOption() {English="Lebanese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Libanais",Value=355,Sequence=620},
-                new LookupSetOption() {English="Lingala",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Lingala",Value=365,Sequence=630},
-                new LookupSetOption() {English="Lithuanian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Lithuanien",Value=360,Sequence=640},
-                new LookupSetOption() {English="Macedonian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Macédonien",Value=370,Sequence=650},
-                new LookupSetOption() {English="Malayalam",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Malayalam",Value=375,Sequence=660},
-                new LookupSetOption() {English="Mandarin",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Mandarin",Value=400,Sequence=670},
-                new LookupSetOption() {English="Manding",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Mandingues",Value=378,Sequence=680},
-                new LookupSetOption() {English="Marathi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Marathi",Value=410,Sequence=690},
-                new LookupSetOption() {English="mi'kmaq",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="mi'kmaq",Value=412,Sequence=700},
-                new LookupSetOption() {English="Mohawk",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Mohawk",Value=415,Sequence=710},
-                new LookupSetOption() {English="Norwegian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Norvégien",Value=420,Sequence=720},
-                new LookupSetOption() {English="Ojibway",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Ojibway",Value=422,Sequence=730},
-                new LookupSetOption() {English="Pashto/Pushtu",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Afhgan/Pachtou",Value=425,Sequence=740},
-                new LookupSetOption() {English="Patois/Creole",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Patois/créole",Value=680,Sequence=750},
-                new LookupSetOption() {English="Polish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Polonais",Value=440,Sequence=760},
-                new LookupSetOption() {English="Portuguese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Portugais",Value=450,Sequence=770},
-                new LookupSetOption() {English="Punjabi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Punjabi",Value=460,Sequence=780},
-                new LookupSetOption() {English="Romanian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Roumain",Value=480,Sequence=790},
-                new LookupSetOption() {English="Russian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Russe",Value=490,Sequence=800},
-                new LookupSetOption() {English="Serbian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Serbe",Value=495,Sequence=810},
-                new LookupSetOption() {English="Serbo-Croatian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Serbo-croate",Value=500,Sequence=820},
-                new LookupSetOption() {English="Sindhi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Sindhi",Value=505,Sequence=830},
-                new LookupSetOption() {English="Singhalese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Cinghalais",Value=510,Sequence=840},
-                new LookupSetOption() {English="Slovak",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Slovaque",Value=520,Sequence=850},
-                new LookupSetOption() {English="Slovenian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Slovène",Value=530,Sequence=860},
-                new LookupSetOption() {English="Somali",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Somalien",Value=535,Sequence=870},
-                new LookupSetOption() {English="Spanish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Espagnol",Value=540,Sequence=880},
-                new LookupSetOption() {English="Swahili",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Swahili",Value=550,Sequence=890},
-                new LookupSetOption() {English="SwLudatash",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Suédois",Value=560,Sequence=900},
-                new LookupSetOption() {English="Tamil",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Tamoul",Value=580,Sequence=910},
-                new LookupSetOption() {English="Thai",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Thai",Value=600,Sequence=920},
-                new LookupSetOption() {English="Tigrinia",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Tigrigna",Value=610,Sequence=930},
-                new LookupSetOption() {English="Turkish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Turque",Value=620,Sequence=940},
-                new LookupSetOption() {English="Twi",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Twi",Value=630,Sequence=950},
-                new LookupSetOption() {English="Ukrainian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Ukrainien",Value=640,Sequence=960},
-                new LookupSetOption() {English="Urdu",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Urdu",Value=650,Sequence=970},
-                new LookupSetOption() {English="Vietnamese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Vietnamien",Value=660,Sequence=980},
-                new LookupSetOption() {English="Welsh",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Gallois",Value=670,Sequence=990},
-                new LookupSetOption() {English="Wolastoqiyik (Maliseet) ",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Wolastoqiyik (Maliseet) ",Value=675,Sequence=1000},
-                new LookupSetOption() {English="Xhosa",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Xhosa",Value=685,Sequence=1010},
-                new LookupSetOption() {English="Yiddish",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Yiddish",Value=690,Sequence=1020},
-                new LookupSetOption() {English="Yoruba",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Yoruba",Value=700,Sequence=1030},
-                new LookupSetOption() {English="Other",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre",Value=710,Sequence=1040},
-                new LookupSetOption() {English="Other Chinese",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre langue chinoise",Value=720,Sequence=1050},
-                new LookupSetOption() {English="Other African",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre langue africaine",Value=730,Sequence=1060},
-                new LookupSetOption() {English="Other Indian (Asia)",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre langue indienne (Asie)",Value=740,Sequence=1070},
-                new LookupSetOption() {English="Other Asian",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre langue asiatique",Value=750,Sequence=1080},
-                new LookupSetOption() {English="Other European",LookupSetId=15,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Autre langue européenne",Value=760,Sequence=1090}
-            };
+            var luso = new List<LookupSetOption>();
+
+            switch (lookupsetname)
+           {
+                case "YesNo":
+                    luso.Add(new LookupSetOption() { English = "Yes", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Oui", Value = 1, Sequence = 10 });                    
+                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "non", Value = 0, Sequence = 20 });                    
+                    break;
+                case "YesNoDontKnow":
+                    luso.Add(new LookupSetOption() { English = "Yes", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "oui", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "non", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ne sais pas", Value = 3, Sequence = 30 });
+                    break;
+                case "GoodAvgPoorDontKnow":
+                    luso.Add(new LookupSetOption() { English = "Very Good/Good", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "très bon/bon", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Average", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "moyen", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Poor/Very Poor", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "mauvais/très mauvais", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ne sais pas", Value = 4, Sequence = 40 });
+                    break;
+                case "OftenSometimesNeverDontKnow":
+                    luso.Add(new LookupSetOption() { English = "Often or Very True", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "souvent ou très vrai", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Sometimes or Somewhat True", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "quelquefois ou assez vrai", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Never or Not True", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "jamais ou pas vrai", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ne sais pas", Value = 4, Sequence = 40 });
+                    break;
+                case "ObservedDiagnosisBoth":
+                    luso.Add(new LookupSetOption() { English = "Yes Observed", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "OUI Observations de l'enseignant(e)", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Yes Parent Info/Medical Diagnosis", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "OUI Renseignements des parents et/ou diagnostic médical", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Both", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "tous les deux", Value = 3, Sequence = 30 });
+                    break;
+                case "FullPartDontknowNO":
+                    luso.Add(new LookupSetOption() { English = "Full-Time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "à plein temps", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Part-Time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "à temps partiel", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ne sais pas", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "non", Value = 4, Sequence = 40 });
+
+                    break;
+                case "Status":
+                    luso.Add(new LookupSetOption() { English = "Child in class more than 1 month", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "dans la classe plus d'un mois", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Child in class less than 1 month", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "dans la classe moins d'un mois", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Moved out of this class", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "a quitté la classe", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Moved out of school", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "a quitté l’école", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "autre", Value = 9, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "registered non-attender", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "inscrit mais non fréquentant", Value = 6, Sequence = 60 });
+
+                    break;
+                case "ClassAssignment":
+                    luso.Add(new LookupSetOption() { English = "Kindergarten", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Maternelle", Value = 1, Sequence = 10 });
+
+                    break;
+                case "ClassType":
+                    luso.Add(new LookupSetOption() { English = "K", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "K-1", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-1", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "K-2", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-2", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "K-3", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-3", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "K-4", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-4", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "K-5", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-5", Value = 6, Sequence = 60 });
+                    luso.Add(new LookupSetOption() { English = "K-6", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-6", Value = 7, Sequence = 70 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 8, Sequence = 80 });
+
+                    break;
+                case "Gender":
+                    luso.Add(new LookupSetOption() { English = "Male", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Masculin", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Female", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Feminin", Value = 2, Sequence = 20 });
+
+                    break;
+                case "ConsideredESL":
+                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non", Value = 0, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "ESL", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ALS", Value = 1, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "FSL", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "FLS", Value = 2, Sequence = 30 });
+
+                    break;
+                case "EthnicStatus":
+                    luso.Add(new LookupSetOption() { English = "Dene(D)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Déné", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Inuit/Inuvialuit (I)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuit/Inuvialuit", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Metis (M)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Métis", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Southern Aboriginal (S)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autochtone du sud", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Non-Aboriginal (N)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non autochtone", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Ne sais pas", Value = 6, Sequence = 60 });
+
+                    break;
+                case "NWTLanguages":
+                    luso.Add(new LookupSetOption() { English = "Chipewyan", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Chippewyan", Value = 31, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Cree", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Cri", Value = 32, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "English", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Anglais", Value = 33, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "French", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Fran&ccedil;ais", Value = 34, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Gwich'in", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Gwich'in", Value = 35, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "Inuinnaqtun", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuinnaqtun", Value = 36, Sequence = 60 });
+                    luso.Add(new LookupSetOption() { English = "Inuktitut", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Cri", Value = 37, Sequence = 70 });
+                    luso.Add(new LookupSetOption() { English = "Inuvialuktun", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuvialuktun", Value = 38, Sequence = 80 });
+                    luso.Add(new LookupSetOption() { English = "North Slavey", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Langue des Esclaves du nord", Value = 39, Sequence = 90 });
+                    luso.Add(new LookupSetOption() { English = "South Slavey", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Langue des Esclaves du sud", Value = 40, Sequence = 100 });
+                    luso.Add(new LookupSetOption() { English = "Tlicho (Dogrib)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Tlicho (Dogrib)", Value = 41, Sequence = 110 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 42, Sequence = 120 });
+
+                    break;
+                case "LandAgreements":
+                    luso.Add(new LookupSetOption() { English = "Inuvialuit", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuvialuit", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Gwich'in", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Gwich'in", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Sahtu", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Sahtu", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Tlicho", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Tlicho", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Ne sais pas", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non", Value = 6, Sequence = 60 });
+
+                    break;
+                case "Languages":
+                    luso.Add(new LookupSetOption() { English = "English", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Anglais", Value = 140, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "French", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Français", Value = 170, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Unknown", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inconnu", Value = 0, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Afrikaans", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Afrikaans", Value = 10, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Albanian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Albanais", Value = 20, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "Amharic", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Amharique", Value = 25, Sequence = 60 });
+                    luso.Add(new LookupSetOption() { English = "Arabic", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Arabe", Value = 30, Sequence = 70 });
+                    luso.Add(new LookupSetOption() { English = "Armenian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Arménien", Value = 40, Sequence = 80 });
+                    luso.Add(new LookupSetOption() { English = "Ashanti", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Asante", Value = 42, Sequence = 90 });
+                    luso.Add(new LookupSetOption() { English = "Assyrian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Assyrien", Value = 45, Sequence = 100 });
+                    luso.Add(new LookupSetOption() { English = "Azeri", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Azéri", Value = 50, Sequence = 110 });
+                    luso.Add(new LookupSetOption() { English = "Bengali", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Bengalais", Value = 60, Sequence = 120 });
+                    luso.Add(new LookupSetOption() { English = "Bihari", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Bihari", Value = 70, Sequence = 130 });
+                    luso.Add(new LookupSetOption() { English = "Bulgarian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Bulgare", Value = 80, Sequence = 140 });
+                    luso.Add(new LookupSetOption() { English = "Burmese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Birman", Value = 90, Sequence = 150 });
+                    luso.Add(new LookupSetOption() { English = "Cantonese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Cantonais", Value = 100, Sequence = 160 });
+                    luso.Add(new LookupSetOption() { English = "Chiu Chow", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Chiu Chow", Value = 105, Sequence = 170 });
+                    luso.Add(new LookupSetOption() { English = "Cree", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Crie", Value = 108, Sequence = 180 });
+                    luso.Add(new LookupSetOption() { English = "Czech", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Tchèque", Value = 110, Sequence = 190 });
+                    luso.Add(new LookupSetOption() { English = "Danish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Danois", Value = 120, Sequence = 200 });
+                    luso.Add(new LookupSetOption() { English = "Dari", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Dari", Value = 125, Sequence = 210 });
+                    luso.Add(new LookupSetOption() { English = "Dutch/Flemish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hollandais/flamand", Value = 130, Sequence = 220 });
+                    luso.Add(new LookupSetOption() { English = "Egyptian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Égyptien", Value = 135, Sequence = 230 });
+                    luso.Add(new LookupSetOption() { English = "English", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Anglais", Value = 140, Sequence = 240 });
+                    luso.Add(new LookupSetOption() { English = "Estonian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Estonien", Value = 150, Sequence = 250 });
+                    luso.Add(new LookupSetOption() { English = "Ethiopian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Éthiopien", Value = 155, Sequence = 260 });
+                    luso.Add(new LookupSetOption() { English = "Farsi/Persian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Parsi/Persan", Value = 430, Sequence = 270 });
+                    luso.Add(new LookupSetOption() { English = "Filipino/Tagalog", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Philippin/tagalog", Value = 570, Sequence = 280 });
+                    luso.Add(new LookupSetOption() { English = "Finnish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Finlandais", Value = 160, Sequence = 290 });
+                    luso.Add(new LookupSetOption() { English = "French", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Français", Value = 170, Sequence = 300 });
+                    luso.Add(new LookupSetOption() { English = "Fukienese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Fou-kien", Value = 175, Sequence = 310 });
+                    luso.Add(new LookupSetOption() { English = "Gaelic", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Gaélique", Value = 180, Sequence = 320 });
+                    luso.Add(new LookupSetOption() { English = "German", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Allemand", Value = 190, Sequence = 330 });
+                    luso.Add(new LookupSetOption() { English = "Grebo", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Grebo", Value = 195, Sequence = 340 });
+                    luso.Add(new LookupSetOption() { English = "Greek", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Grec", Value = 200, Sequence = 350 });
+                    luso.Add(new LookupSetOption() { English = "Gujarati", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Gujarati", Value = 210, Sequence = 360 });
+                    luso.Add(new LookupSetOption() { English = "Hakka", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hakka", Value = 215, Sequence = 370 });
+                    luso.Add(new LookupSetOption() { English = "Hebrew", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hébreu", Value = 220, Sequence = 380 });
+                    luso.Add(new LookupSetOption() { English = "Hindi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hindi", Value = 230, Sequence = 390 });
+                    luso.Add(new LookupSetOption() { English = "Hindustani", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hindustani", Value = 240, Sequence = 400 });
+                    luso.Add(new LookupSetOption() { English = "Hok Chiu", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hok Chiu", Value = 245, Sequence = 410 });
+                    luso.Add(new LookupSetOption() { English = "Hungarian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Hongrois", Value = 250, Sequence = 420 });
+                    luso.Add(new LookupSetOption() { English = "Icelandic", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Islandais", Value = 260, Sequence = 430 });
+                    luso.Add(new LookupSetOption() { English = "Ilocano", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Ilocano", Value = 270, Sequence = 440 });
+                    luso.Add(new LookupSetOption() { English = "Indigenous (North American)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autochtones (Amérique du Nord)", Value = 275, Sequence = 450 });
+                    luso.Add(new LookupSetOption() { English = "Indigenous (South American)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autochtones (Amérique du Sud)", Value = 280, Sequence = 460 });
+                    luso.Add(new LookupSetOption() { English = "Indonesian/Malay", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Indonésien/malais", Value = 380, Sequence = 470 });
+                    luso.Add(new LookupSetOption() { English = "Inuktitut", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuktitut", Value = 285, Sequence = 480 });
+                    luso.Add(new LookupSetOption() { English = "Italian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Italien", Value = 290, Sequence = 490 });
+                    luso.Add(new LookupSetOption() { English = "Jaffna", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Jaffna", Value = 295, Sequence = 500 });
+                    luso.Add(new LookupSetOption() { English = "Japanese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Japonais", Value = 300, Sequence = 510 });
+                    luso.Add(new LookupSetOption() { English = "Kannada", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Canara", Value = 320, Sequence = 520 });
+                    luso.Add(new LookupSetOption() { English = "Kashmiri", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Kashméré", Value = 330, Sequence = 530 });
+                    luso.Add(new LookupSetOption() { English = "Katchi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Katchi", Value = 310, Sequence = 540 });
+                    luso.Add(new LookupSetOption() { English = "Khmer", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Kampuchéen", Value = 335, Sequence = 550 });
+                    luso.Add(new LookupSetOption() { English = "Kinyarwanda", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Kinyarwanda", Value = 325, Sequence = 560 });
+                    luso.Add(new LookupSetOption() { English = "Kirundi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Kirundi", Value = 315, Sequence = 570 });
+                    luso.Add(new LookupSetOption() { English = "Korean", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Coréen", Value = 340, Sequence = 580 });
+                    luso.Add(new LookupSetOption() { English = "Kurdish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Kurde", Value = 342, Sequence = 590 });
+                    luso.Add(new LookupSetOption() { English = "Lao", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Lao", Value = 345, Sequence = 600 });
+                    luso.Add(new LookupSetOption() { English = "Latvian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Lettonien", Value = 350, Sequence = 610 });
+                    luso.Add(new LookupSetOption() { English = "Lebanese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Libanais", Value = 355, Sequence = 620 });
+                    luso.Add(new LookupSetOption() { English = "Lingala", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Lingala", Value = 365, Sequence = 630 });
+                    luso.Add(new LookupSetOption() { English = "Lithuanian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Lithuanien", Value = 360, Sequence = 640 });
+                    luso.Add(new LookupSetOption() { English = "Macedonian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Macédonien", Value = 370, Sequence = 650 });
+                    luso.Add(new LookupSetOption() { English = "Malayalam", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Malayalam", Value = 375, Sequence = 660 });
+                    luso.Add(new LookupSetOption() { English = "Mandarin", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Mandarin", Value = 400, Sequence = 670 });
+                    luso.Add(new LookupSetOption() { English = "Manding", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Mandingues", Value = 378, Sequence = 680 });
+                    luso.Add(new LookupSetOption() { English = "Marathi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Marathi", Value = 410, Sequence = 690 });
+                    luso.Add(new LookupSetOption() { English = "mi'kmaq", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "mi'kmaq", Value = 412, Sequence = 700 });
+                    luso.Add(new LookupSetOption() { English = "Mohawk", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Mohawk", Value = 415, Sequence = 710 });
+                    luso.Add(new LookupSetOption() { English = "Norwegian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Norvégien", Value = 420, Sequence = 720 });
+                    luso.Add(new LookupSetOption() { English = "Ojibway", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Ojibway", Value = 422, Sequence = 730 });
+                    luso.Add(new LookupSetOption() { English = "Pashto/Pushtu", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Afhgan/Pachtou", Value = 425, Sequence = 740 });
+                    luso.Add(new LookupSetOption() { English = "Patois/Creole", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Patois/créole", Value = 680, Sequence = 750 });
+                    luso.Add(new LookupSetOption() { English = "Polish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Polonais", Value = 440, Sequence = 760 });
+                    luso.Add(new LookupSetOption() { English = "Portuguese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Portugais", Value = 450, Sequence = 770 });
+                    luso.Add(new LookupSetOption() { English = "Punjabi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Punjabi", Value = 460, Sequence = 780 });
+                    luso.Add(new LookupSetOption() { English = "Romanian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Roumain", Value = 480, Sequence = 790 });
+                    luso.Add(new LookupSetOption() { English = "Russian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Russe", Value = 490, Sequence = 800 });
+                    luso.Add(new LookupSetOption() { English = "Serbian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Serbe", Value = 495, Sequence = 810 });
+                    luso.Add(new LookupSetOption() { English = "Serbo-Croatian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Serbo-croate", Value = 500, Sequence = 820 });
+                    luso.Add(new LookupSetOption() { English = "Sindhi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Sindhi", Value = 505, Sequence = 830 });
+                    luso.Add(new LookupSetOption() { English = "Singhalese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Cinghalais", Value = 510, Sequence = 840 });
+                    luso.Add(new LookupSetOption() { English = "Slovak", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Slovaque", Value = 520, Sequence = 850 });
+                    luso.Add(new LookupSetOption() { English = "Slovenian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Slovène", Value = 530, Sequence = 860 });
+                    luso.Add(new LookupSetOption() { English = "Somali", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Somalien", Value = 535, Sequence = 870 });
+                    luso.Add(new LookupSetOption() { English = "Spanish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Espagnol", Value = 540, Sequence = 880 });
+                    luso.Add(new LookupSetOption() { English = "Swahili", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Swahili", Value = 550, Sequence = 890 });
+                    luso.Add(new LookupSetOption() { English = "SwLudatash", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Suédois", Value = 560, Sequence = 900 });
+                    luso.Add(new LookupSetOption() { English = "Tamil", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Tamoul", Value = 580, Sequence = 910 });
+                    luso.Add(new LookupSetOption() { English = "Thai", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Thai", Value = 600, Sequence = 920 });
+                    luso.Add(new LookupSetOption() { English = "Tigrinia", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Tigrigna", Value = 610, Sequence = 930 });
+                    luso.Add(new LookupSetOption() { English = "Turkish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Turque", Value = 620, Sequence = 940 });
+                    luso.Add(new LookupSetOption() { English = "Twi", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Twi", Value = 630, Sequence = 950 });
+                    luso.Add(new LookupSetOption() { English = "Ukrainian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Ukrainien", Value = 640, Sequence = 960 });
+                    luso.Add(new LookupSetOption() { English = "Urdu", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Urdu", Value = 650, Sequence = 970 });
+                    luso.Add(new LookupSetOption() { English = "Vietnamese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Vietnamien", Value = 660, Sequence = 980 });
+                    luso.Add(new LookupSetOption() { English = "Welsh", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Gallois", Value = 670, Sequence = 990 });
+                    luso.Add(new LookupSetOption() { English = "Wolastoqiyik (Maliseet) ", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Wolastoqiyik (Maliseet) ", Value = 675, Sequence = 1000 });
+                    luso.Add(new LookupSetOption() { English = "Xhosa", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Xhosa", Value = 685, Sequence = 1010 });
+                    luso.Add(new LookupSetOption() { English = "Yiddish", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Yiddish", Value = 690, Sequence = 1020 });
+                    luso.Add(new LookupSetOption() { English = "Yoruba", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Yoruba", Value = 700, Sequence = 1030 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 710, Sequence = 1040 });
+                    luso.Add(new LookupSetOption() { English = "Other Chinese", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre langue chinoise", Value = 720, Sequence = 1050 });
+                    luso.Add(new LookupSetOption() { English = "Other African", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre langue africaine", Value = 730, Sequence = 1060 });
+                    luso.Add(new LookupSetOption() { English = "Other Indian (Asia)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre langue indienne (Asie)", Value = 740, Sequence = 1070 });
+                    luso.Add(new LookupSetOption() { English = "Other Asian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre langue asiatique", Value = 750, Sequence = 1080 });
+                    luso.Add(new LookupSetOption() { English = "Other European", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre langue européenne", Value = 760, Sequence = 1090 });
+
+                    break;
+                case "SpecialProblems":
+                    luso.Add(new LookupSetOption() { English = "Acquired Brain Injury", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Lésion cérébrale acquise", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "ADHD", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Trouble déficitaire de l'attention ", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Anxiety", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Anxiété", Value = 18, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Apraxia", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Apraxie", Value = 28, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Autism Spectrum Disorder (ASD includes Autism, Asperger Syndrome, Pervasive Developmental Disorder not specified)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Trouble du spectre de l'autisme (TSA) – comprend l'autisme, le syndrome d'Asperger, le trouble envahissant du développement non spécifié (TEDNS)", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "Asthma", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Asthme", Value = 6, Sequence = 60 });
+                    luso.Add(new LookupSetOption() { English = "Blind/Visually Impaired", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Cécité/déficience visuelle ", Value = 37, Sequence = 70 });
+                    luso.Add(new LookupSetOption() { English = "Cancer/Leukemia/Brain Tumour", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Cancer/leucémie/tumeur cérébrale", Value = 52, Sequence = 80 });
+                    luso.Add(new LookupSetOption() { English = "Cerebral palsy", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Paralysie cérébrale", Value = 22, Sequence = 90 });
+                    luso.Add(new LookupSetOption() { English = "Cleft palette/lip", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Fente palatine ou labiale", Value = 29, Sequence = 100 });
+                    luso.Add(new LookupSetOption() { English = "Cystic Fibrosis (CF)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Fibrose kystique", Value = 42, Sequence = 110 });
+                    luso.Add(new LookupSetOption() { English = "Depression", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Dépression", Value = 19, Sequence = 120 });
+                    luso.Add(new LookupSetOption() { English = "Diabetes", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Diabète", Value = 11, Sequence = 130 });
+                    luso.Add(new LookupSetOption() { English = "Down Syndrome/other genetic", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Syndrome de Down/autre trouble génétique", Value = 9, Sequence = 140 });
+                    luso.Add(new LookupSetOption() { English = "Deaf/Hard of Hearing ", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Surdité/déficience auditive  ", Value = 38, Sequence = 150 });
+                    luso.Add(new LookupSetOption() { English = "Developmentally Delayed/Global delay", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Retard du développement/retard global de développement", Value = 10, Sequence = 160 });
+                    luso.Add(new LookupSetOption() { English = "Epilepsy/Seizures", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Épilepsie", Value = 12, Sequence = 170 });
+                    luso.Add(new LookupSetOption() { English = "Fetal Alcohol Spectrum Disorder (FASD) or Alcohol-Related Neurodevelopmental Disorder (ARND)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Ensemble des troubles causés par l'alcoolisation fœtale (ETCAF) ou trouble neurologique du développement lié à l'alcool (TNDLA)", Value = 13, Sequence = 180 });
+                    luso.Add(new LookupSetOption() { English = "Heart problems/stroke", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Troubles cardiaques/accident cérébrovasculaire ", Value = 14, Sequence = 190 });
+                    luso.Add(new LookupSetOption() { English = "Intellectual delay (mild or moderate)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Retard mental (léger ou moyen)", Value = 15, Sequence = 200 });
+                    luso.Add(new LookupSetOption() { English = "Juvenile Rheumatoid  Arthritis", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Arthrite chronique juvénile", Value = 23, Sequence = 210 });
+                    luso.Add(new LookupSetOption() { English = "Learning disorders (reading, writing, math)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Troubles d’apprentissage (lecture, écriture, mathématiques)", Value = 51, Sequence = 220 });
+                    luso.Add(new LookupSetOption() { English = "Mitochondrial disease", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Maladie mitochondriale", Value = 40, Sequence = 230 });
+                    luso.Add(new LookupSetOption() { English = "Muscular dystrophies", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Dystrophie musculaire", Value = 24, Sequence = 240 });
+                    luso.Add(new LookupSetOption() { English = "Obesity", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Obésité", Value = 26, Sequence = 250 });
+                    luso.Add(new LookupSetOption() { English = "Oppositional defiant disorder/Conduct Disorder", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Trouble oppositionnel avec provocation/trouble des conduites ", Value = 20, Sequence = 260 });
+                    luso.Add(new LookupSetOption() { English = "Phenylketonuria (PKU) /other metabolic", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Phénylcétonurie/autre trouble métabolique", Value = 43, Sequence = 270 });
+                    luso.Add(new LookupSetOption() { English = "Receptive or Expressive language", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Langage dans son versant réceptif/expression orale du langage ", Value = 30, Sequence = 280 });
+                    luso.Add(new LookupSetOption() { English = "Rett’s Disorder, Childhood Disintegrative Disorder [CDD]", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Syndrome de Rett, trouble désintégratif de l'enfance (TDE) ", Value = 35, Sequence = 290 });
+                    luso.Add(new LookupSetOption() { English = "Selective Mutism", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Mutisme sélectif", Value = 31, Sequence = 300 });
+                    luso.Add(new LookupSetOption() { English = "Spina Bifida", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Spina-bifida", Value = 25, Sequence = 310 });
+                    luso.Add(new LookupSetOption() { English = "Tourette Syndrome", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Syndrome de Tourette", Value = 50, Sequence = 320 });
+                    luso.Add(new LookupSetOption() { English = "Other Mental Health Disorders", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autres troubles de santé mentale ", Value = 34, Sequence = 330 });
+                    luso.Add(new LookupSetOption() { English = "Other Motor Impairment", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre déficience motrice", Value = 41, Sequence = 340 });
+                    luso.Add(new LookupSetOption() { English = "Other Sensory", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre trouble sensoriel ", Value = 39, Sequence = 350 });
+                    luso.Add(new LookupSetOption() { English = "Other Speech & Language Disorders", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre trouble de la parole et du langage ", Value = 36, Sequence = 360 });
+                    luso.Add(new LookupSetOption() { English = "Other, not listed", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre, ne figurant pas sur la liste ", Value = 33, Sequence = 370 });
+
+                    break;
+                case "MainCare":
+                    luso.Add(new LookupSetOption() { English = "Parent/Guardian Care", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Garde assurée par les parents/tuteurs", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Licensed Center-based care/early childhood program", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde agréé dans une garderie/maternelle", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Licensed Care in Somone's Home(e.g. dayhome)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde agréé dans un domicile privé", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Paid Unlicensed Care (e.g. babysitter)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde payant, non agréé (p. ex. gardien(ne))", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Unpaid Unlicensed Care(e.g. friend or relative)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde non payant, non agréé (ami(e) ou membre de la famille)", Value = 5, Sequence = 50 });
+                   
+                    break;
+                case "MainCareJK":
+                    luso.Add(new LookupSetOption() { English = "Parent/Guardian Care", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Garde assurée par les parents/tuteurs", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Licensed Center-based care/early childhood program", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde agréé dans une garderie/maternelle", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Licensed Care in Somone's Home(e.g. dayhome)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde agréé dans un domicile privé", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Paid Unlicensed Care (e.g. babysitter)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde payant, non agréé (p. ex. gardien(ne))", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Unpaid Unlicensed Care(e.g. friend or relative)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde non payant, non agréé (ami(e) ou membre de la famille)", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "Junior Kindergarten", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Prématernelle", Value = 6, Sequence = 60 });
+
+                    break;
+                case "Participation":
+                    luso.Add(new LookupSetOption() { English = "Once a Week or More", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Une fois par semaine ou plus", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "1-3 Times a Month", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "1-3 fois par mois", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Several times a year", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Plusieurs fois par année", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Once a year", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Une fois par année", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Not at all", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Jamais", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "Not available in the community", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Pas disponible dans la communauté", Value = 6, Sequence = 60 });
+
+                    break;
+                default:                     
+                    Console.WriteLine("You need to add the lookupset options for {0} with id {1}.", lookupsetname,id );
+                    break;
+            }
+            return luso;            
         }
+                    
         static IEnumerable<InputType> GetPreconfiguredInputType()
         {
             return new List<InputType>()
             {
+                new InputType() {French="GroupHeader",English="GroupHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new InputType() {French="QuestionHeader",English="QuestionHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="TextBox",English="TextBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="SelectBox",English="SelectBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
