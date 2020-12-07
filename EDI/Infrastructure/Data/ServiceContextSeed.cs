@@ -23,7 +23,7 @@ namespace EDI.Infrastructure.Data
                     await ServiceContext.SaveChangesAsync();
                 }
 
-                if (!ServiceContext.SpecialProblems.Any())
+                /*if (!ServiceContext.SpecialProblems.Any())
                 {
                     ServiceContext.SpecialProblems.AddRange(
                         GetPreconfiguredSpecialProblem());
@@ -37,7 +37,7 @@ namespace EDI.Infrastructure.Data
                         GetPreconfiguredLanguage());
 
                     await ServiceContext.SaveChangesAsync();
-                }
+                }*/
 
                 if (!ServiceContext.Genders.Any())
                 {
