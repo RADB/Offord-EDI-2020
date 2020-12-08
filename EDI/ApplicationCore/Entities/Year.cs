@@ -7,15 +7,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EDI.ApplicationCore.Entities
 {
     [Table("Years", Schema = "LUData")]
-    public partial class Year:BaseEntityProvinceConfiguration
+    public partial class Year : BaseEntityProvinceConfiguration
     {
         public Year()
         {
-            // add lookupdata to the years
             Children = new HashSet<Child>();
             Coordinators = new HashSet<Coordinator>();
             Faqs = new HashSet<Faq>();
-            InputTypes = new HashSet<InputType>(); 
+            InputTypes = new HashSet<InputType>();
             Links = new HashSet<Link>();
             LookupSets = new HashSet<LookupSet>();
             NewsFeeds = new HashSet<NewsFeed>();
@@ -23,11 +22,14 @@ namespace EDI.ApplicationCore.Entities
             Questionnaires = new HashSet<Questionnaire>();
             QuestionnairesConfigurations = new HashSet<QuestionnairesConfiguration>();
             QuestionnairesDataDemographics = new HashSet<QuestionnairesDataDemographic>();
+            QuestionnairesDataSectionAs = new HashSet<QuestionnairesDataSectionA>();
             QuestionnairesDataSectionBs = new HashSet<QuestionnairesDataSectionB>();
+            QuestionnairesDataSectionCs = new HashSet<QuestionnairesDataSectionC>();
+            QuestionnairesDataSectionDs = new HashSet<QuestionnairesDataSectionD>();
+            QuestionnairesDataSectionEs = new HashSet<QuestionnairesDataSectionE>();
+            QuestionnairesDataTeacherProfiles = new HashSet<QuestionnairesDataTeacherProfile>();
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
-            TeacherFeedbackForms = new HashSet<TeacherFeedbackForm>();
-            TeacherParticipationForms = new HashSet<TeacherParticipationForm>();
             Teachers = new HashSet<Teacher>();
         }
         public short? Ediyear { get; set; }
@@ -42,12 +44,15 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<Orientation> Orientations { get; set; }
         public virtual ICollection<Questionnaire> Questionnaires { get; set; }
         public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
-        public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics{ get; set; }
+        public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
+        public virtual ICollection<QuestionnairesDataSectionA> QuestionnairesDataSectionAs { get; set; }
         public virtual ICollection<QuestionnairesDataSectionB> QuestionnairesDataSectionBs { get; set; }
+        public virtual ICollection<QuestionnairesDataSectionC> QuestionnairesDataSectionCs { get; set; }
+        public virtual ICollection<QuestionnairesDataSectionD> QuestionnairesDataSectionDs { get; set; }
+        public virtual ICollection<QuestionnairesDataSectionE> QuestionnairesDataSectionEs { get; set; }
+        public virtual ICollection<QuestionnairesDataTeacherProfile> QuestionnairesDataTeacherProfiles { get; set; }
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
-        public virtual ICollection<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }
-        public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
     }
 }

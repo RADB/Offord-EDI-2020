@@ -44,12 +44,37 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.DataSectionB]",
+         "Name": "[EDI].[Questionnaires.Data.Demographics]",
          "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.Demographics]",
+         "Name": "[EDI].[Questionnaires.Data.SectionA]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.SectionB]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.SectionC]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.SectionD]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.SectionE]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Data.TeacherFeedback]",
          "ObjectType": 0
       },
       {

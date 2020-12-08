@@ -1600,8 +1600,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("JKTeacher")
                         .HasColumnType("tinyint");
 
+                    b.Property<byte?>("LandAgreement")
+                        .HasColumnType("tinyint");
+
                     b.Property<string>("LanguageCompleted")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
@@ -1653,20 +1657,20 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.ToTable("Questionnaires.Data.Demographics","EDI");
                 });
 
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionB", b =>
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionA", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte?>("ArticulateClearly")
-                        .HasColumnType("tinyint");
-
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<byte?>("CommunicateNeeds")
+                    b.Property<byte>("ClimbingStairs")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Coordinated")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("CreatedBy")
@@ -1682,29 +1686,30 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte?>("EnglishEffectiveUse")
+                    b.Property<decimal>("Days")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte>("Energy")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("EnglishListen")
+                    b.Property<byte>("HandPreference")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("GroupReading")
+                    b.Property<byte>("Holding")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("HandleBook")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ImaginativePlay")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("InterestedBooks")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("InterestedRead")
+                    b.Property<byte>("Hungry")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LanguageCompleted")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<byte>("Late")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Manipulating")
+                        .HasColumnType("tinyint");
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
@@ -1719,28 +1724,190 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte?>("ReadComplex")
+                    b.Property<byte>("PhysicalDevelopment")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("ReadSimple")
+                    b.Property<byte>("Tired")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("ReadSimpleSentence")
+                    b.Property<byte>("UnderDressed")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("RhymingWords")
+                    b.Property<byte>("WashroomHabits")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("SoundsToLetters")
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Questionnaires.Data.SectionA","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionB", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte>("Articulates")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("TellStory")
+                    b.Property<byte>("Bigger")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("TenLetters")
+                    b.Property<byte>("Books")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte?>("UnderstandsFirstTry")
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Communicates")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("ComplexWords")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Count20")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("Effective")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("GroupReading")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Handles")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Imagines")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Letters10")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Listens")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Mathematics")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("NumberGames")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("OneToOne")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("OtherSkills")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Reading")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Recognize10")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Remembers")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Rhyming")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Shapes")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SimpleSentences")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SimpleWords")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Sorting")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Sounds")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialArtSkills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialAthSkills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialLitSkills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialMusSkills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialNumSkills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialOthSkills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialPblskills")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Tells")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("TimeConcepts")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Understands")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Voluntarily")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("WriteSimpleSentences")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("WriteSimpleWords")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("WritesName")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Writing")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("WritingDirections")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("YearId")
@@ -1753,6 +1920,580 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasIndex("YearId");
 
                     b.ToTable("Questionnaires.Data.SectionB","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionC", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte>("AnswersQuestions")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("AssistOthers")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Bullies")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Comforting")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Cooperative")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("Cries")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Curious")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Directions")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Disobedient")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Distactable")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("EagerNewGame")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("EagerNewToy")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("EagerRead")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Fearful")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Fidgets")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Fights")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("FollowInstruction1Step")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("HelpHurt")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("HelpPickUpObjects")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("HelpSick")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Impulsive")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Inattentive")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("IncludesOthers")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Independent")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("KicksHits")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<byte>("LaughsAtOthers")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Listens")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Mediate")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("MessCleanup")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("Neat")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Nervous")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("NoDecisions")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Peers")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Play")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("RespectsAdults")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("RespectsChildren")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("RespectsProperty")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Responsible")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Restless")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("RoutineChanges")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Routines")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Rules")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SelfConfidence")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SelfControl")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Separation")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Settle")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Shy")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Social")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SolvesProblem")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SucksThumb")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Takes")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("TakesCard")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("TakingTurns")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Temper")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Tolerance")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Unhappy")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("WorkOnTime")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Worried")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Questionnaires.Data.SectionC","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionD", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AssessSpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Behavioural")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Chronic")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("Dental")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Emotional")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Further")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Hearing")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Language")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<byte>("Learning")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("NeedsAssess")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Other")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("OtherSpecialProblem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherSpecify")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Physical")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Problem")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialProblem1")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialProblem2")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("SpecialProblem3")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Speech")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Support")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Visual")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("WaitList")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Questionnaires.Data.SectionD","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionE", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte>("Birth1")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Clubs")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("Cultural")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("FamilyLiteracy")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("FamilyResource")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Four5")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Langauges")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<byte>("LibraryReading")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte>("MusicArts")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("One2")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Other")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("OtherSpecify")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Religion")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Sports")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Three4")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Two3")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Questionnaires.Data.SectionE","EDI");
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataTeacherProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte?>("AgeCategory")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte?>("EducationBachelorDegree")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationBachelorEducationDegree")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationMastersCourses")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationMastersDegree")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationOther")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("EducationOtherComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte?>("EducationPhd")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationPhdcourses")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationPostBachelorCertificate")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationPostBachelorCourses")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationSomeCoursesBachelors")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("EducationTeachingCertificate")
+                        .HasColumnType("tinyint");
+
+                    b.Property<short?>("ExperienceGradeInYears")
+                        .HasColumnType("smallint");
+
+                    b.Property<short?>("ExperienceInYears")
+                        .HasColumnType("smallint");
+
+                    b.Property<short?>("ExperienceSchoolInYears")
+                        .HasColumnType("smallint");
+
+                    b.Property<byte?>("FirstTimeCompletingEdi")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("Gender")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("GuideOtherComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte?>("GuideUsefulness")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("LanguageCompleted")
+                        .HasColumnType("nvarchar(10)")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(256)")
+                        .HasDefaultValueSql("('admin')")
+                        .HasMaxLength(256)
+                        .IsUnicode(false);
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<byte?>("PreviouslyAttendedTeacherTraining")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<byte?>("TeacherTrainingForThisImplementation")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TeacherTrainingUsefulness")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TimesAttendedTeacherTraining")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TimesCompletedEdi")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int?>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("YearId");
+
+                    b.ToTable("Questionnaires.Data.TeacherProfile","EDI");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.School", b =>
@@ -2025,287 +2766,6 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.HasIndex("YearId");
 
                     b.ToTable("Teachers","EDI");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherFeedbackForm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CommentsFeedback")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte?>("CompletedPaperVersion")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ContentClearlyPresented")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ContentQualityPresentations")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ContentRelevant")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ContentUsefulnessOfHandouts")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte?>("FirstTimeCompletingEdi")
-                        .HasColumnName("FirstTimeCompletingEDI")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("FirstTraining")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("LanguageCompleted")
-                        .HasColumnType("nvarchar(20)")
-                        .HasComment("English or French")
-                        .HasMaxLength(20);
-
-                    b.Property<byte?>("MaterialsGuestSpeaker")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("MaterialsHistory")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("MaterialsOther")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("MaterialsOtherSpecify")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
-
-                    b.Property<byte?>("MaterialsPastEdi")
-                        .HasColumnName("MaterialsPastEDI")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("MaterialsPpt")
-                        .HasColumnName("MaterialsPPT")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("MaterialsTimeToStart")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("MaterialsTrainingInComputerLab")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("MaterialsVideo")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MostBeneficial")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte?>("OverallAssessment")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ProcessDiscussion")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ProcessInteration")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ProcessOrganization")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("ProcessQuestions")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnName("TeacherID")
-                        .HasColumnType("int");
-
-                    b.Property<byte?>("VersionPreferred")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int?>("YearId")
-                        .HasColumnName("YearID")
-                        .HasColumnType("int")
-                        .HasComment("Year of the EDI implementation");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TeacherId");
-
-                    b.HasIndex("YearId");
-
-                    b.ToTable("TeacherFeedbackForms","EDI_Forms");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherParticipationForm", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<byte?>("Age")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte?>("EducationBachelorDegree")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationBachelorEducationDegree")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationMastersCourses")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationMastersDegree")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationOther")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("EducationOtherComment")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<byte?>("EducationPhd")
-                        .HasColumnName("EducationPHD")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationPhdcourses")
-                        .HasColumnName("EducationPHDCourses")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationPostBachelorCertificate")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationPostBachelorCourses")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationSomeCoursesBachelors")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("EducationTeachingCertificate")
-                        .HasColumnType("tinyint");
-
-                    b.Property<short?>("ExperienceAtClassInMonths")
-                        .HasColumnType("smallint");
-
-                    b.Property<short?>("ExperienceGradeInMonths")
-                        .HasColumnType("smallint");
-
-                    b.Property<short?>("ExperienceInMonths")
-                        .HasColumnType("smallint");
-
-                    b.Property<short?>("ExperienceSchoolInMonths")
-                        .HasColumnType("smallint");
-
-                    b.Property<byte?>("FirstTimeCompletingEdi")
-                        .HasColumnName("FirstTimeCompletingEDI")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int?>("GenderId")
-                        .HasColumnName("GenderID")
-                        .HasColumnType("int");
-
-                    b.Property<byte?>("GuideNotUsedDidntHave")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("GuideNotUsedFamiliar")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("GuideNotUsedNoTime")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("GuideNotUsedNotHelpful")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("GuideOther")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("GuideOtherComment")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
-
-                    b.Property<byte?>("GuideUsedHelpful")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("GuideUsedNotHelpful")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("LanguageCompleted")
-                        .HasColumnType("nvarchar(20)")
-                        .HasComment("English or French")
-                        .HasMaxLength(20);
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("varchar(256)")
-                        .HasMaxLength(256)
-                        .IsUnicode(false);
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte?>("PreviouslyAttendedTeacherTraining")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("StudentCount")
-                        .HasColumnType("tinyint");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnName("TeacherID")
-                        .HasColumnType("int");
-
-                    b.Property<byte?>("TeacherTrainingForThisImplementation")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("TeacherTrainingUsefulness")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("TimesAttendedTeacherTraining")
-                        .HasColumnType("tinyint");
-
-                    b.Property<byte?>("TimesCompletedEdi")
-                        .HasColumnName("TimesCompletedEDI")
-                        .HasColumnType("tinyint")
-                        .HasComment("1-4 or more");
-
-                    b.Property<int?>("YearId")
-                        .HasColumnName("YearID")
-                        .HasColumnType("int")
-                        .HasComment("Year of the EDI implementation");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GenderId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.HasIndex("YearId");
-
-                    b.ToTable("TeacherParticipationForms","EDI_Forms");
                 });
 
             modelBuilder.Entity("EDI.ApplicationCore.Entities.Translation", b =>
@@ -2605,6 +3065,22 @@ namespace EDI.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionA", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
+                        .WithMany("QuestionnairesDataSectionAs")
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("FK_Children_Questionnaires.Data.SectionAs")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("QuestionnairesDataSectionAs")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.SectionA")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
             modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionB", b =>
                 {
                     b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
@@ -2618,6 +3094,70 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("QuestionnairesDataSectionBs")
                         .HasForeignKey("YearId")
                         .HasConstraintName("FK_Years_Questionnaires.Data.SectionB")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionC", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
+                        .WithMany("QuestionnairesDataSectionCs")
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("FK_Children_Questionnaires.Data.SectionCs")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("QuestionnairesDataSectionCs")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.SectionC")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionD", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
+                        .WithMany("QuestionnairesDataSectionDs")
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("FK_Children_Questionnaires.Data.SectionDs")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("QuestionnairesDataSectionDs")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.SectionD")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataSectionE", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Child", "Child")
+                        .WithMany("QuestionnairesDataSectionEs")
+                        .HasForeignKey("ChildId")
+                        .HasConstraintName("FK_Children_Questionnaires.Data.SectionEs")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("QuestionnairesDataSectionEs")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.SectionE")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("EDI.ApplicationCore.Entities.QuestionnairesDataTeacherProfile", b =>
+                {
+                    b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
+                        .WithMany("QuestionnairesDataTeacherProfiles")
+                        .HasForeignKey("TeacherId")
+                        .HasConstraintName("FK_Teachers_QuestionnairesDataTeacherProfiles")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
+                        .WithMany("QuestionnairesDataTeacherProfiles")
+                        .HasForeignKey("YearId")
+                        .HasConstraintName("FK_Years_Questionnaires.Data.TeacherProfile")
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 
@@ -2677,42 +3217,6 @@ namespace EDI.Infrastructure.Data.Migrations
                         .WithMany("Teachers")
                         .HasForeignKey("YearId")
                         .HasConstraintName("FK_Years_Teachers");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherFeedbackForm", b =>
-                {
-                    b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
-                        .WithMany("TeacherFeedbackForms")
-                        .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_Teachers_TeacherFeedbackForms")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
-                        .WithMany("TeacherFeedbackForms")
-                        .HasForeignKey("YearId")
-                        .HasConstraintName("FK_Years_TeacherFeedbackForms");
-                });
-
-            modelBuilder.Entity("EDI.ApplicationCore.Entities.TeacherParticipationForm", b =>
-                {
-                    b.HasOne("EDI.ApplicationCore.Entities.Gender", "Gender")
-                        .WithMany("TeacherParticipationForms")
-                        .HasForeignKey("GenderId")
-                        .HasConstraintName("FK_Gender_TeacherParticipationForms")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Teacher", "Teacher")
-                        .WithMany("TeacherParticipationForms")
-                        .HasForeignKey("TeacherId")
-                        .HasConstraintName("FK_Teachers_TeacherParticipationForms")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EDI.ApplicationCore.Entities.Year", "Year")
-                        .WithMany("TeacherParticipationForms")
-                        .HasForeignKey("YearId")
-                        .HasConstraintName("FK_Years_TeacherParticipationForms");
                 });
 #pragma warning restore 612, 618
         }

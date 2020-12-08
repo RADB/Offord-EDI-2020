@@ -51,8 +51,8 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<LookupSetOption> _lookupSetOptionRepository;
         private readonly IAsyncRepository<Teacher> _teacherRepository;
         private readonly IAsyncRepository<Child> _childRepository;
-        private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
-        private readonly IAsyncRepository<TeacherParticipationForm> _participationRepository;
+       // private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
+        private readonly IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
         private readonly IAsyncRepository<Translation> _tranRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -83,9 +83,10 @@ namespace EDI.Web.Services
             IAsyncRepository<School> schoolRepository,
             IAsyncRepository<Teacher> teacherRepository,
             IAsyncRepository<Child> childRepository,
-        //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
-            IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
-            IAsyncRepository<TeacherParticipationForm> participationRepository,
+            //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
+            // IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
+            //IAsyncRepository<TeacherParticipationForm> participationRepository,
+            IAsyncRepository<QuestionnairesDataTeacherProfile> profileRepository,
             IAsyncIdentityRepository accountRepository,
             IAsyncRepository<Translation> tranRepository,
             IHostEnvironment hostingEnvironment,
@@ -115,8 +116,8 @@ namespace EDI.Web.Services
         //  _lookupSetOptionRepository=lookupSetOptionsRepository;
             _teacherRepository = teacherRepository;
             _childRepository = childRepository;
-            _feedbackRepository = feedbackRepository;
-            _participationRepository = participationRepository;
+            //_feedbackRepository = feedbackRepository;
+            //_participationRepository = participationRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _dbContext = dbContext;
@@ -981,7 +982,7 @@ namespace EDI.Web.Services
                                                 teacherid = _teacher.Id;
                                                 totalteachers++;
 
-                                                var _teacherFeedbackForms = new TeacherFeedbackForm();
+                                                /*var _teacherFeedbackForms = new TeacherFeedbackForm();
                                                 _teacherFeedbackForms.TeacherId = teacherid;
                                                 _teacherFeedbackForms.YearId = yearid;
                                                 _teacherFeedbackForms.CreatedDate = DateTime.Now;
@@ -989,17 +990,17 @@ namespace EDI.Web.Services
                                                 _teacherFeedbackForms.ModifiedDate = DateTime.Now;
                                                 _teacherFeedbackForms.ModifiedBy = _userSettings.UserName;
 
-                                                await _feedbackRepository.AddAsync(_teacherFeedbackForms);
+                                                await _feedbackRepository.AddAsync(_teacherFeedbackForms);*/
 
-                                                var _teacherParticipationForms = new TeacherParticipationForm();
-                                                _teacherParticipationForms.TeacherId = teacherid;
-                                                _teacherParticipationForms.YearId = yearid;
-                                                _teacherParticipationForms.CreatedDate = DateTime.Now;
-                                                _teacherParticipationForms.CreatedBy = _userSettings.UserName;
-                                                _teacherParticipationForms.ModifiedDate = DateTime.Now;
-                                                _teacherParticipationForms.ModifiedBy = _userSettings.UserName;
+                                                var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
+                                                _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
+                                                _QuestionnairesDataTeacherProfile.YearId = yearid;
+                                                _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
+                                                _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
+                                                _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
+                                                _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
 
-                                                await _participationRepository.AddAsync(_teacherParticipationForms);
+                                                await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
                                             }
                                             catch (Exception ex)
                                             {

@@ -45,7 +45,12 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Questionnaire> Questionnaires { get; set; }
         public virtual DbSet<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
         public virtual DbSet<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
+        public virtual DbSet<QuestionnairesDataSectionA> QuestionnairesDataSectionAs { get; set; }
         public virtual DbSet<QuestionnairesDataSectionB> QuestionnairesDataSectionBs { get; set; }
+        public virtual DbSet<QuestionnairesDataSectionC> QuestionnairesDataSectionCs { get; set; }
+        public virtual DbSet<QuestionnairesDataSectionD> QuestionnairesDataSectionDs { get; set; }
+        public virtual DbSet<QuestionnairesDataSectionE> QuestionnairesDataSectionEs { get; set; }
+        public virtual DbSet<QuestionnairesDataTeacherProfile> QuestionnairesDataTeacherFeedbacks { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
@@ -53,8 +58,8 @@ namespace EDI.Infrastructure.Data
         
 
         /*EDI Form Data*/
-        public virtual DbSet<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }
-        public virtual DbSet<TeacherParticipationForm> TeacherParticipationForms { get; set; }
+//        public virtual DbSet<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }
+  //      public virtual DbSet<TeacherParticipationForm> TeacherParticipationForms { get; set; }
 
 
 
@@ -172,7 +177,11 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
 
                 entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.Demographics");
+                entity.HasMany(e => e.QuestionnairesDataSectionAs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionAs");
                 entity.HasMany(e => e.QuestionnairesDataSectionBs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionBs");
+                entity.HasMany(e => e.QuestionnairesDataSectionCs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionCs");
+                entity.HasMany(e => e.QuestionnairesDataSectionDs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionDs");
+                entity.HasMany(e => e.QuestionnairesDataSectionEs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionEs");
 
             });
 
@@ -301,7 +310,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasMany(d => d.Children).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_Children");
                 entity.HasMany(d => d.FileImports).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_FileImports");
-                entity.HasMany(d => d.TeacherParticipationForms).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_TeacherParticipationForms");
+                //entity.HasMany(d => d.TeacherParticipationForms).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_TeacherParticipationForms");
             });
 
             modelBuilder.Entity<InputType>(entity =>
@@ -565,6 +574,7 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Questionnaire).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaires.Configuration_Questionnaires");
 
             });
+   
 
             modelBuilder.Entity<QuestionnairesDataDemographic>(entity =>
             {                
@@ -578,24 +588,37 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
-
-                entity.Property(e => e.Jkteacher).HasColumnName("JKTeacher");
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(10);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
+
+                entity.Property(e => e.Jkteacher).HasColumnName("JKTeacher");
+
                 entity.Property(e => e.PostalCode).HasMaxLength(10);                
             });
 
+            modelBuilder.Entity<QuestionnairesDataSectionA>(entity =>
+            {
+                entity.ToTable("Questionnaires.Data.SectionA", "EDI");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(10);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+            });
             modelBuilder.Entity<QuestionnairesDataSectionB>(entity =>
             {
                 entity.ToTable("Questionnaires.Data.SectionB", "EDI");
-
-                entity.HasIndex(e => e.ChildId);
-
-                entity.HasIndex(e => e.YearId);
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
@@ -605,7 +628,67 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
             });
+            modelBuilder.Entity<QuestionnairesDataSectionC>(entity =>
+            {
+                entity.ToTable("Questionnaires.Data.SectionC", "EDI");
 
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(10);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+            });
+            modelBuilder.Entity<QuestionnairesDataSectionD>(entity =>
+            {
+                entity.ToTable("Questionnaires.Data.SectionD", "EDI");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(10);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+            });
+            modelBuilder.Entity<QuestionnairesDataSectionE>(entity =>
+            {
+                entity.ToTable("Questionnaires.Data.SectionE", "EDI");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(10);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+            });
+
+            modelBuilder.Entity<QuestionnairesDataTeacherProfile>(entity =>
+            {
+                entity.ToTable("Questionnaires.Data.TeacherProfile", "EDI");
+
+                entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.LanguageCompleted).HasMaxLength(10);
+
+                entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
+
+                entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+
+            });
             modelBuilder.Entity<School>(entity =>
             {
                 entity.ToTable("Schools", "EDI");
@@ -712,15 +795,16 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasMany(e => e.Children).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_Children");
 
-                entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_TeacherFeedbackForms");
+                //entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_TeacherFeedbackForms");
 
-                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_TeacherParticipationForms");
+                //entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_TeacherParticipationForms");
+                entity.HasMany(e => e.QuestionnairesDataTeacherProfiles).WithOne(e => e.Teacher).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.TeacherId).HasConstraintName("FK_Teachers_QuestionnairesDataTeacherProfiles");
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
                      
        
-            modelBuilder.Entity<TeacherFeedbackForm>(entity =>
+           /* modelBuilder.Entity<TeacherFeedbackForm>(entity =>
             {
                 entity.ToTable("TeacherFeedbackForms", "EDI_Forms");
 
@@ -778,7 +862,7 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
                 //entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
 
-            });
+            });*/
             modelBuilder.Entity<Translation>(entity =>
             {
                 entity.ToTable("Translations", "LUData");
@@ -808,8 +892,6 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.Teachers).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Teachers");
                 entity.HasMany(e => e.Coordinators).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Coordinators");
                 entity.HasMany(e => e.Children).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Children");
-                entity.HasMany(e => e.TeacherFeedbackForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherFeedbackForms");
-                entity.HasMany(e => e.TeacherParticipationForms).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_TeacherParticipationForms");
                 entity.HasMany(e => e.Links).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Links");
                 entity.HasMany(e => e.NewsFeeds).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_NewsFeeds");
                 entity.HasMany(e => e.Faqs).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_FAQ");
@@ -819,7 +901,13 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.Questionnaires).WithOne(e => e.Year).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires");
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Configurations");
                 entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.Demographics");
+                entity.HasMany(e => e.QuestionnairesDataSectionAs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionA");
                 entity.HasMany(e => e.QuestionnairesDataSectionBs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionB");
+                entity.HasMany(e => e.QuestionnairesDataSectionCs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionC");
+                entity.HasMany(e => e.QuestionnairesDataSectionDs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionD");
+                entity.HasMany(e => e.QuestionnairesDataSectionEs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionE");
+                entity.HasMany(e => e.QuestionnairesDataTeacherProfiles).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.TeacherProfile");
+
                 //entity.HasMany(e => e.LookupSetOptions).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSetOptions");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");

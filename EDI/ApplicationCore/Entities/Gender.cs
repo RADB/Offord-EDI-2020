@@ -13,7 +13,7 @@ namespace EDI.ApplicationCore.Entities
         {
             Children = new HashSet<Child>();
             FileImports = new HashSet<FileImport>();
-            TeacherParticipationForms = new HashSet<TeacherParticipationForm>();
+           // TeacherParticipationForms = new HashSet<TeacherParticipationForm>();
         }
         
         public string Code { get; set; }
@@ -23,6 +23,6 @@ namespace EDI.ApplicationCore.Entities
 
         public virtual ICollection<Child> Children { get; set; }
         public virtual ICollection<FileImport> FileImports { get; set; }
-        public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms{ get; set; }
+        //public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms{ get; set; }
     }
 }

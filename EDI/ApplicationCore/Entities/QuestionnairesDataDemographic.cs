@@ -6,10 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
 {
-    [Table("Questionnaires.Data.Demographic", Schema = "EDI")]
+    [Table("Questionnaires.Data.Demographics", Schema = "EDI")]
     public partial class QuestionnairesDataDemographic:BaseEntityQuestionnaire
     {
-        public int ChildId { get; set; }
+        public int ChildId { get; set; }        
         public byte? StudentStatus { get; set; }
         public byte? ClassAssignment { get; set; }
         public DateTime? Dob { get; set; }
@@ -35,8 +35,9 @@ namespace EDI.ApplicationCore.Entities
         public bool? NorthSlavey { get; set; }
         public bool? SouthSlavey { get; set; }
         public bool? Tlicho { get; set; }
-        public byte? OtherLanguage { get; set; }        
+        public byte? OtherLanguage { get; set; }
+        public byte? LandAgreement { get; set; }
+
         public virtual Child Child { get; set; }
-        public virtual Year Year { get; set; }
     }
 }

@@ -9,5 +9,7 @@ namespace EDI.ApplicationCore.Entities
     {
         public string LanguageCompleted { get; set; }
         public int? YearId { get; set; }
+
+        public virtual Year Year { get; set; }
     }
 }

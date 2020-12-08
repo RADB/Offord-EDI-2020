@@ -2412,28 +2412,33 @@ namespace EDI.Infrastructure.Data
 
         static IEnumerable<LookupSet> GetPreconfiguredLookupSet()
         {
-            return new List<LookupSet>()
-            {
-                new LookupSet() {LookupName="Participation",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="MainCareJK",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="MainCare",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},    
-                new LookupSet() {LookupName="SpecialProblems",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="Languages",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="LandAgreements",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="NWTLanguages",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="EthnicStatus",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="ConsideredESL",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="Gender",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="ClassType",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="ClassAssignment",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="Status",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="FullPartDontknowNO",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="ObservedDiagnosisBoth",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="OftenSometimesNeverDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="GoodAvgPoorDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="YesNoDontKnow",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new LookupSet() {LookupName="YesNo",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
-        }.OrderBy(t => t.CreatedDate); 
+            var lus = new List<LookupSet>();
+
+            lus.Add(new LookupSet() { LookupName = "YesNo", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "YesNoDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "GoodAvgPoorDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "OftenSometimesNeverDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "ObservedDiagnosisBoth", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "FullPartDontknowNO", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "Status", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "ClassAssignment", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "ClassType", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "Gender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "ConsideredESL", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "EthnicStatus", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "NWTLanguages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "LandAgreements", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "Languages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "SpecialProblems", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "MainCare", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "MainCareJK", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "Participation", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "AgeRange", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "TeacherGender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "VerySomewhatNot", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+            lus.Add(new LookupSet() { LookupName = "GuideUsefulness", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+
+            return lus;
         }
 
         static IEnumerable<LookupSetOption> GetPreconfiguredLookupSetOption(int id, string lookupsetname)
@@ -2721,6 +2726,33 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "Not available in the community", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Pas disponible dans la communauté", Value = 6, Sequence = 60 });
 
                     break;
+                case "AgeRange":
+                    luso.Add(new LookupSetOption() { English = "20-29", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "20-29", Value = 2, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "30-39", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "30-39", Value = 3, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "49-49", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "49-49", Value = 4, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "50-59", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "50-59", Value = 5, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "60+", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "60+", Value = 6, Sequence = 50 });
+
+                    break;
+                case "TeacherGender":
+                    luso.Add(new LookupSetOption() { English = "Female", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Masculin", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Male", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Feminin", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Non-Binary", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non Binaire", Value = 3, Sequence = 30 });
+                    break;
+                case "VerySomewhatNot":
+                    luso.Add(new LookupSetOption() { English = "Very", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Very", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Somewhat", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Somewhat", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Not At All", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Not At All", Value = 3, Sequence = 30 });
+                    break;
+                case "GuideUsefulness":
+                    luso.Add(new LookupSetOption() { English = "Yes, I used the Guide and found it helpful", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Yes, I used the Guide and found it helpful", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Yes, I used the Guide but didn't find it helpful", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Yes, I used the Guide but didn't find it helpful", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "No, I didn't use the Guide, I didn't find it helpful", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No, I didn't use the Guide, I didn't find it helpful", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "No, I didn't use the Guide, I didn't have one", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No, I didn't use the Guide, I didn't have one", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "No, I didn't use the Guide, I didn't have enough time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No, I didn't use the Guide, I didn't have enough time", Value = 5, Sequence = 50 });
+                    luso.Add(new LookupSetOption() { English = "No, I didn't use the Guide, I'm already familiar with it", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No, I didn't use the Guide, I'm already familiar with it", Value = 6, Sequence = 60 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Other", Value = 7, Sequence = 70 });
+                    break;
                 default:                     
                     Console.WriteLine("You need to add the lookupset options for {0} with id {1}.", lookupsetname,id );
                     break;
@@ -2732,6 +2764,7 @@ namespace EDI.Infrastructure.Data
         {
             return new List<InputType>()
             {
+                new InputType() {French="Toggle",English="Toggle",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="GroupHeader",English="GroupHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="QuestionHeader",English="QuestionHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
