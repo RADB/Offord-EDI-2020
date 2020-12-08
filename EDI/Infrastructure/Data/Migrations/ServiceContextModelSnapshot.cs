@@ -828,9 +828,7 @@ namespace EDI.Infrastructure.Data.Migrations
             modelBuilder.Entity("EDI.ApplicationCore.Entities.LookupSet", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()

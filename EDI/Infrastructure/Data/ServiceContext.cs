@@ -362,6 +362,7 @@ namespace EDI.Infrastructure.Data
             modelBuilder.Entity<LookupSet>(entity =>
             {
                 entity.ToTable("LookupSets", "LUData");
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 

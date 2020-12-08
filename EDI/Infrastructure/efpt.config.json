@@ -74,11 +74,6 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.TeacherFeedback]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Questionnaires]",
          "ObjectType": 0
       },
@@ -95,16 +90,6 @@
       {
          "HasPrimaryKey": true,
          "Name": "[EDI].[Teachers]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI_Forms].[TeacherFeedbackForms]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI_Forms].[TeacherParticipationForms]",
          "ObjectType": 0
       },
       {
