@@ -51,7 +51,13 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<LookupSetOption> _lookupSetOptionRepository;
         private readonly IAsyncRepository<Teacher> _teacherRepository;
         private readonly IAsyncRepository<Child> _childRepository;
-       // private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
+        private readonly IAsyncRepository<QuestionnairesDataDemographic> _questionnairesDataDemographic;
+        private readonly IAsyncRepository<QuestionnairesDataSectionA> _questionnairesDataSectionA;
+        private readonly IAsyncRepository<QuestionnairesDataSectionB> _questionnairesDataSectionB;
+        private readonly IAsyncRepository<QuestionnairesDataSectionC> _questionnairesDataSectionC;
+        private readonly IAsyncRepository<QuestionnairesDataSectionD> _questionnairesDataSectionD;
+        private readonly IAsyncRepository<QuestionnairesDataSectionE> _questionnairesDataSectionE;
+        // private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
         private readonly IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
         private readonly IAsyncRepository<Translation> _tranRepository;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -83,6 +89,12 @@ namespace EDI.Web.Services
             IAsyncRepository<School> schoolRepository,
             IAsyncRepository<Teacher> teacherRepository,
             IAsyncRepository<Child> childRepository,
+            IAsyncRepository<QuestionnairesDataDemographic> questionnairesDataDemographic,
+            IAsyncRepository<QuestionnairesDataSectionA> questionnairesDataSectionA,
+            IAsyncRepository<QuestionnairesDataSectionB> questionnairesDataSectionB,
+            IAsyncRepository<QuestionnairesDataSectionC> questionnairesDataSectionC,
+            IAsyncRepository<QuestionnairesDataSectionD> questionnairesDataSectionD,
+            IAsyncRepository<QuestionnairesDataSectionE> questionnairesDataSectionE,
             //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
             // IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
             //IAsyncRepository<TeacherParticipationForm> participationRepository,
@@ -116,6 +128,12 @@ namespace EDI.Web.Services
         //  _lookupSetOptionRepository=lookupSetOptionsRepository;
             _teacherRepository = teacherRepository;
             _childRepository = childRepository;
+            _questionnairesDataDemographic = questionnairesDataDemographic;
+            _questionnairesDataSectionA = questionnairesDataSectionA;
+            _questionnairesDataSectionB = questionnairesDataSectionB;
+            _questionnairesDataSectionC = questionnairesDataSectionC;
+            _questionnairesDataSectionD = questionnairesDataSectionD;
+            _questionnairesDataSectionE = questionnairesDataSectionE;
             //_feedbackRepository = feedbackRepository;
             _profileRepository = profileRepository;
             _hostingEnvironment = hostingEnvironment;
@@ -1076,6 +1094,69 @@ namespace EDI.Web.Services
                             {
                                 errormessages.Add("FileImports data " + data.Id + ": Local Id is required.");
                                 haserror = true;
+                            }
+
+                            if (childid > 0)
+                            {
+                                var _demographics = new QuestionnairesDataDemographic();
+
+                                _demographics.ChildId = childid;
+                                _demographics.CreatedDate = DateTime.Now;
+                                _demographics.CreatedBy = _userSettings.UserName;
+                                _demographics.ModifiedDate = DateTime.Now;
+                                _demographics.ModifiedBy = _userSettings.UserName;
+
+                                await _questionnairesDataDemographic.AddAsync(_demographics);
+
+                                var _sectionA = new QuestionnairesDataSectionA();
+
+                                _sectionA.ChildId = childid;
+                                _sectionA.CreatedDate = DateTime.Now;
+                                _sectionA.CreatedBy = _userSettings.UserName;
+                                _sectionA.ModifiedDate = DateTime.Now;
+                                _sectionA.ModifiedBy = _userSettings.UserName;
+
+                                await _questionnairesDataSectionA.AddAsync(_sectionA);
+
+                                var _sectionB = new QuestionnairesDataSectionB();
+
+                                _sectionB.ChildId = childid;
+                                _sectionB.CreatedDate = DateTime.Now;
+                                _sectionB.CreatedBy = _userSettings.UserName;
+                                _sectionB.ModifiedDate = DateTime.Now;
+                                _sectionB.ModifiedBy = _userSettings.UserName;
+
+                                await _questionnairesDataSectionB.AddAsync(_sectionB);
+
+                                var _sectionC = new QuestionnairesDataSectionC();
+
+                                _sectionC.ChildId = childid;
+                                _sectionC.CreatedDate = DateTime.Now;
+                                _sectionC.CreatedBy = _userSettings.UserName;
+                                _sectionC.ModifiedDate = DateTime.Now;
+                                _sectionC.ModifiedBy = _userSettings.UserName;
+
+                                await _questionnairesDataSectionC.AddAsync(_sectionC);
+
+                                var _sectionD = new QuestionnairesDataSectionD();
+
+                                _sectionD.ChildId = childid;
+                                _sectionD.CreatedDate = DateTime.Now;
+                                _sectionD.CreatedBy = _userSettings.UserName;
+                                _sectionD.ModifiedDate = DateTime.Now;
+                                _sectionD.ModifiedBy = _userSettings.UserName;
+
+                                await _questionnairesDataSectionD.AddAsync(_sectionD);
+
+                                var _sectionE = new QuestionnairesDataSectionE();
+
+                                _sectionE.ChildId = childid;
+                                _sectionE.CreatedDate = DateTime.Now;
+                                _sectionE.CreatedBy = _userSettings.UserName;
+                                _sectionE.ModifiedDate = DateTime.Now;
+                                _sectionE.ModifiedBy = _userSettings.UserName;
+
+                                await _questionnairesDataSectionE.AddAsync(_sectionE);
                             }
                         }
 

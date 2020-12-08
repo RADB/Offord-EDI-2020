@@ -24,6 +24,12 @@ namespace EDI.Web.Services
     {
         private readonly ILogger<ChildService> _logger;
         private readonly IAsyncRepository<Child> _childRepository;
+        private readonly IAsyncRepository<QuestionnairesDataDemographic> _questionnairesDataDemographic;
+        private readonly IAsyncRepository<QuestionnairesDataSectionA> _questionnairesDataSectionA;
+        private readonly IAsyncRepository<QuestionnairesDataSectionB> _questionnairesDataSectionB;
+        private readonly IAsyncRepository<QuestionnairesDataSectionC> _questionnairesDataSectionC;
+        private readonly IAsyncRepository<QuestionnairesDataSectionD> _questionnairesDataSectionD;
+        private readonly IAsyncRepository<QuestionnairesDataSectionE> _questionnairesDataSectionE;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private EDIAppSettings EDIppSettings { get; set; }
@@ -39,6 +45,12 @@ namespace EDI.Web.Services
             UserManager<ApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Child> childRepository,
+            IAsyncRepository<QuestionnairesDataDemographic> questionnairesDataDemographic,
+            IAsyncRepository<QuestionnairesDataSectionA> questionnairesDataSectionA,
+            IAsyncRepository<QuestionnairesDataSectionB> questionnairesDataSectionB,
+            IAsyncRepository<QuestionnairesDataSectionC> questionnairesDataSectionC,
+            IAsyncRepository<QuestionnairesDataSectionD> questionnairesDataSectionD,
+            IAsyncRepository<QuestionnairesDataSectionE> questionnairesDataSectionE,
             IAsyncIdentityRepository accountRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
@@ -49,6 +61,12 @@ namespace EDI.Web.Services
             _logger = loggerFactory.CreateLogger<ChildService>();
             _httpContextAccessor = httpContextAccessor;
             _childRepository = childRepository;
+            _questionnairesDataDemographic = questionnairesDataDemographic;
+            _questionnairesDataSectionA = questionnairesDataSectionA;
+            _questionnairesDataSectionB = questionnairesDataSectionB;
+            _questionnairesDataSectionC = questionnairesDataSectionC;
+            _questionnairesDataSectionD = questionnairesDataSectionD;
+            _questionnairesDataSectionE = questionnairesDataSectionE;
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
@@ -128,6 +146,70 @@ namespace EDI.Web.Services
                 _child.ModifiedBy = _userSettings.UserName;
 
                 await _childRepository.AddAsync(_child);
+
+                if (_child.Id > 0)
+                {
+                    var childid = _child.Id;
+                    var _demographics = new QuestionnairesDataDemographic();
+
+                    _demographics.ChildId = childid;
+                    _demographics.CreatedDate = DateTime.Now;
+                    _demographics.CreatedBy = _userSettings.UserName;
+                    _demographics.ModifiedDate = DateTime.Now;
+                    _demographics.ModifiedBy = _userSettings.UserName;
+
+                    await _questionnairesDataDemographic.AddAsync(_demographics);
+
+                    var _sectionA = new QuestionnairesDataSectionA();
+
+                    _sectionA.ChildId = childid;
+                    _sectionA.CreatedDate = DateTime.Now;
+                    _sectionA.CreatedBy = _userSettings.UserName;
+                    _sectionA.ModifiedDate = DateTime.Now;
+                    _sectionA.ModifiedBy = _userSettings.UserName;
+
+                    await _questionnairesDataSectionA.AddAsync(_sectionA);
+
+                    var _sectionB = new QuestionnairesDataSectionB();
+
+                    _sectionB.ChildId = childid;
+                    _sectionB.CreatedDate = DateTime.Now;
+                    _sectionB.CreatedBy = _userSettings.UserName;
+                    _sectionB.ModifiedDate = DateTime.Now;
+                    _sectionB.ModifiedBy = _userSettings.UserName;
+
+                    await _questionnairesDataSectionB.AddAsync(_sectionB);
+
+                    var _sectionC = new QuestionnairesDataSectionC();
+
+                    _sectionC.ChildId = childid;
+                    _sectionC.CreatedDate = DateTime.Now;
+                    _sectionC.CreatedBy = _userSettings.UserName;
+                    _sectionC.ModifiedDate = DateTime.Now;
+                    _sectionC.ModifiedBy = _userSettings.UserName;
+
+                    await _questionnairesDataSectionC.AddAsync(_sectionC);
+
+                    var _sectionD = new QuestionnairesDataSectionD();
+
+                    _sectionD.ChildId = childid;
+                    _sectionD.CreatedDate = DateTime.Now;
+                    _sectionD.CreatedBy = _userSettings.UserName;
+                    _sectionD.ModifiedDate = DateTime.Now;
+                    _sectionD.ModifiedBy = _userSettings.UserName;
+
+                    await _questionnairesDataSectionD.AddAsync(_sectionD);
+
+                    var _sectionE = new QuestionnairesDataSectionE();
+
+                    _sectionE.ChildId = childid;
+                    _sectionE.CreatedDate = DateTime.Now;
+                    _sectionE.CreatedBy = _userSettings.UserName;
+                    _sectionE.ModifiedDate = DateTime.Now;
+                    _sectionE.ModifiedBy = _userSettings.UserName;
+
+                    await _questionnairesDataSectionE.AddAsync(_sectionE);
+                }
                 return _child.Id;
             }
             catch (Exception ex)
