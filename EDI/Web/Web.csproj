@@ -60,9 +60,7 @@
   <ItemGroup>
     <Folder Include="Data\Files\" />
     <Folder Include="Scaffold\" />
-    <Folder Include="Pages\InputTypes\" />
     <Folder Include="Pages\QuestionnaireConfigurations\" />
-    <Folder Include="Pages\Orientations\" />
     <Folder Include="wwwroot\data\" />
     <Folder Include="wwwroot\Download\" />
     <Folder Include="wwwroot\UploadImages\" />
