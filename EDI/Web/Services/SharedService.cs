@@ -117,7 +117,7 @@ namespace EDI.Web.Services
             _teacherRepository = teacherRepository;
             _childRepository = childRepository;
             //_feedbackRepository = feedbackRepository;
-            //_participationRepository = participationRepository;
+            _profileRepository = profileRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _dbContext = dbContext;
