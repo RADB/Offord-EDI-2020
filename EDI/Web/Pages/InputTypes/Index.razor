@@ -1,0 +1,119 @@
+﻿@page "/InputTypes/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Navigations
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+@inject UserSettings UserSettings;
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Input Types</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (inputTypes == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridInputType" @ref="Grid" DataSource="@inputTypes" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" TValue="InputTypeItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(InputTypeItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(InputTypeItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(InputTypeItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="15"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<InputTypeItemViewModel> Grid;
+
+    IEnumerable<InputTypeItemViewModel> inputTypes;
+
+    private List<Object> Toolbaritems = new List<Object>() { "ExcelExport", "Search" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            var allinputTypes = await Task.FromResult(dbContext.InputTypes.OrderBy(p => p.English).ToList());
+
+            List<InputTypeItemViewModel> sivm = new List<InputTypeItemViewModel>();
+
+            foreach (var inputType in allinputTypes)
+            {
+                var ainputType = new InputTypeItemViewModel();
+
+                ainputType.Id = inputType.Id;
+                ainputType.English = inputType.English;
+                ainputType.French = inputType.French;
+
+                var year = dbContext.Years.Where(p => p.Id == inputType.YearId).FirstOrDefault();
+                ainputType.Ediyear = year.Ediyear;
+
+                sivm.Add(ainputType);
+            }
+
+            this.rowid = 0;
+
+            inputTypes = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<InputTypeItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    InputTypeItemViewModel InputTypeModel { get; set; }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        var parameters = new ModalParameters();
+        if (args.Item.Id == "GridInputType_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridInputType_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+    }
+}
