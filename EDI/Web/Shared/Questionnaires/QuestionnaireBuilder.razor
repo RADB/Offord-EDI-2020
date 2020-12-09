@@ -36,7 +36,7 @@
                 break;
             default:
                 <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config);</p>
                 </div>
                 break;
         }

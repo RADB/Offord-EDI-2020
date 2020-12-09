@@ -1153,18 +1153,20 @@ a {
     text-shadow: 0 1px 0 #fff;
     opacity: .5;
 }
-
+/* Teacher Left Side Menu - adjust height to change*/
 .main-teachertreeview.e-treeview .e-fullrow {
-    height: 125px;
+    height: 85px;
 }
 
 .main-teachertreeview.e-treeview .e-text-content {
-    height: 125px;
+    height: 85px;
 }
 
 .main-teachertreeview.e-treeview .e-list-text {
     line-height: normal;
 }
+
+/*END Teacher Left Side Menu*/
 
 .teachericon {
     font-size: 36px;    
@@ -1216,4 +1218,10 @@ a {
 .e-switch-wrapper, .e-css.e-switch-wrapper {
     height: 36px;
     width: 108px;
+}
+
+/* Fontawesome Overrides */
+.fa-newspaper {
+    color: #95989a;
+    font-size: 36px;
 }
