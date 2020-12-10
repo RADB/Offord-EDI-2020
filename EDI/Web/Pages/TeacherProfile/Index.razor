@@ -102,8 +102,8 @@
             configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
             // get the data object for the Teacher
-            pred = "t=>t.Id == " + TeacherId;
-            data = dbContext.Teachers.Where(pred).Single();
+            //pred = "t=>t.Id == " + TeacherId;
+            data = dbContext.Teachers.Where(t => t.Id == TeacherId).Single();
 
         }
         else if (UserSettings.IsTeacher)
@@ -116,8 +116,8 @@
             configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
             // get the data object for the teacher
-            pred = "t=>t.Id == " + TeacherId;
-            data = dbContext.Teachers.Where(pred).Single();
+            //pred = "t=>t.Id == " + TeacherId;
+            data = dbContext.Teachers.Where(t => t.Id == TeacherId).Single();
         }
         else
         {
