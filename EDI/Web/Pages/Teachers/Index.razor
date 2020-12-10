@@ -4,12 +4,14 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ITeacherService teacherService;
+@inject ISharedService sharedService;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
 @inject UserSettings UserSettings;
+@inject IMathService mathService;
 
 <div class="row">
     <div class="col-md-12">
@@ -45,6 +47,33 @@
                             <GridColumn Field=@nameof(TeacherItemViewModel.SchoolName) HeaderText="School" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(TeacherItemViewModel.Email) HeaderText="Email" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(TeacherItemViewModel.PhoneNumber) HeaderText="Phone" Width="30"></GridColumn>
+                            <GridColumn HeaderText=@Translate("Status") Width="15">
+                                <Template>
+                                    @{
+                                        <h6>@Translate("In Progress")</h6>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText=@Translate("% Complete") Width="25">
+                                <Template>
+                                    @{
+                                        var comm = (context as TeacherItemViewModel);
+                                        <div id="myProgress" class="pbar">
+                                            <div id="myBar" style="width:@comm.Progress%" class="bar">
+                                                <div id="label" class="barlabel">@comm.Progress % </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="" Width="20">
+                                <Template>
+                                    @{
+                                        var comm = (context as TeacherItemViewModel);
+                                        <button data-toggle="tooltip" data-placement="bottom" title="Profile" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">Profile</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                    }
+                                </Template>
+                            </GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }
@@ -112,7 +141,7 @@
                 var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
                 ateacher.SchoolName = school.SchoolName;
                 ateacher.SchoolNumber = school.SchoolNumber;
-
+                ateacher.Progress = mathService.GetRandomPercent(1, 99);
                 sivm.Add(ateacher);
             }
 
@@ -183,5 +212,15 @@
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<TeacherItemViewModel> args)
     {
         NavigationManager.NavigateTo("./teachers/edit/" + this.rowid);
+    }
+
+    private void GotoQuestionnaire(int id)
+    {
+        NavigationManager.NavigateTo("./TeacherProfile/Index/" + id);
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

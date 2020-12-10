@@ -53,13 +53,13 @@
                 IsAdmin = true;
                 //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
                 var pred = "t => t.QuestionnaireId == 1";
-                configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
+                configs = dbContext.QuestionnairesConfigurations.Where(pred).OrderBy(q => q.Sequence).ToList();
 
                 // get the data object for the teacher
                 pred = "t=>t.Id == " + TeacherId;
                 //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
-                data = dbContext.Teachers.Where(pred)                    
-                        .Include(c => c.QuestionnairesDataTeacherProfiles)                        
+                data = dbContext.Teachers.Where(pred)
+                        .Include(c => c.QuestionnairesDataTeacherProfiles)
                         .Single();
             }
             else if (UserSettings.IsTeacher)
@@ -69,12 +69,12 @@
                 //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
                 //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
                 var pred = "t => t.QuestionnaireId == 1 && " + UserSettings.Province + "==true";
-                configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
-                
+                configs = dbContext.QuestionnairesConfigurations.Where(pred).OrderBy(q => q.Sequence).ToList();
+
                 // get the data object for the teacher
                 //pred = "t=>t.Id == " + TeacherId;
                 data = dbContext.Teachers.Where(t => t.Id == TeacherId)
-                        .Include(c => c.QuestionnairesDataTeacherProfiles)                        
+                        .Include(c => c.QuestionnairesDataTeacherProfiles)
                         .Single();
             }
 

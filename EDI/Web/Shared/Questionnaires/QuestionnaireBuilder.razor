@@ -7,9 +7,31 @@
     if (config.IsHeader)
     {
         _Text = sharedService.GetConfigText(config);
-        <div class="card-header">
-            <strong>@_Text</strong>
-        </div>
+
+        // process the header type
+        switch ((InputTypes)config.InputTypeId)
+        {
+            case InputTypes.Header:
+                <div class="card-header">
+                    <strong>@_Text</strong>
+                </div>
+                break;
+            case InputTypes.GroupHeader:
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />@sharedService.GetConfigText(config)</p>
+                </div>
+                break;
+            case InputTypes.QuestionHeader:
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Question Header<br />@sharedService.GetConfigText(config)</p>
+                </div>
+                break;
+            default:
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
+                </div>
+                break;
+        }
     }
     else
     {
@@ -36,7 +58,7 @@
                 break;
             default:
                 <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config);</p>
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
                 </div>
                 break;
         }

@@ -25,6 +25,7 @@ namespace EDI.Web.Models
         [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public int? Progress { get; set; }
         public int Children { get; set; }
     }
 }
