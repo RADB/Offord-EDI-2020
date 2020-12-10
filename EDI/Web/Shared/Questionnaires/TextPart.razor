@@ -34,7 +34,7 @@
         public string CurrentValue { get; set; }
 
         [Parameter]
-        public Child data { get; set; }
+        public Teacher data { get; set; }
 
         public TextViewModel TextModel { get; set; }
 
@@ -52,10 +52,10 @@
             switch (Config.EntityName)
             {
                 case "Questionnaires.Data.Demographics":
-                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataDemographics, e.Value.ToString());
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataDemographics, e.Value.ToString());
                     break;
                 case "Questionnaires.Data.SectionB":
-                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataSectionBs, e.Value.ToString());
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionBs, e.Value.ToString());
                     break;
             }
 

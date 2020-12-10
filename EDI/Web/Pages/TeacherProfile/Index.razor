@@ -1,4 +1,4 @@
-﻿@page "/SampleQuestions/index2/{ChildID:int}"
+﻿@page "/TeacherProfile/index/{TeacherId:int}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
 @using static EDI.Web.Data.Enumerations
@@ -6,7 +6,7 @@
 @using Blazored.Modal
 @using Blazored.Modal.Services
 @using Syncfusion.Blazor.Navigations
-@using Microsoft.EntityFrameworkCore 
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
@@ -16,7 +16,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
-            <QuestionnaireNavigationPart configs="@configs" data="@data"></QuestionnaireNavigationPart>
+            <QuestionnaireBuilder configs=@configs data=@data IsReadonly="false"></QuestionnaireBuilder>
 
             <div class="card-footer">
                 <button class="savebutton" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
@@ -28,7 +28,7 @@
 @code {
 
     [Parameter]
-    public int ChildID { get; set; }
+    public int TeacherId { get; set; }
 
     private int SelectedTab = 0;
 
@@ -52,20 +52,15 @@
             {
                 IsAdmin = true;
                 //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
-                var pred = "t => t.QuestionnaireId == 7";
+                var pred = "t => t.QuestionnaireId == 1";
                 configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
-                // get the data object for the child
-                pred = "t=>t.Id == " + ChildID;
+                // get the data object for the teacher
+                pred = "t=>t.Id == " + TeacherId;
                 //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
-                data = dbContext.Children.Where(pred)
-                        .Include(c => c.QuestionnairesDataDemographics)
-                        .Include(c => c.QuestionnairesDataSectionAs)
-                        .Include(c => c.QuestionnairesDataSectionBs)
-                        .Include(c => c.QuestionnairesDataSectionCs)
-                        .Include(c => c.QuestionnairesDataSectionDs)
-                        .Include(c => c.QuestionnairesDataSectionEs)
-                        .Single().Teacher;
+                data = dbContext.Teachers.Where(pred)                    
+                        .Include(c => c.QuestionnairesDataTeacherProfiles)                        
+                        .Single();
             }
             else if (UserSettings.IsTeacher)
             {
@@ -73,24 +68,14 @@
                 // Add filter for province
                 //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
                 //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
-                var pred = "t => t.QuestionnaireId == 7 && " + UserSettings.Province + "==true";
+                var pred = "t => t.QuestionnaireId == 1 && " + UserSettings.Province + "==true";
                 configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
-
-                // get the data object for the child
-                //pred = "t=>t.Id == " + ChildID;                
-                data = dbContext.Children.Where(c=>c.Id==ChildID)
-                        .Include(c => c.QuestionnairesDataDemographics)
-                        .Include(c => c.QuestionnairesDataSectionAs)
-                        .Include(c => c.QuestionnairesDataSectionBs)
-                        .Include(c => c.QuestionnairesDataSectionCs)
-                        .Include(c => c.QuestionnairesDataSectionDs)
-                        .Include(c => c.QuestionnairesDataSectionEs)
-                        .Single().Teacher;
-                //if (data.QuestionnairesDataDemographics ==null)
-                //  dbContext.Entry(data).Reference(q => q.QuestionnairesDataDemographics).Load();
-                // Access this via data.QuestionnairesDataDemographics...
-                //if (data.QuestionnairesDataDemographics ==null)
-                //dbContext.Entry(data).Reference(q => q.QuestionnairesDataSectionBs).Load();
+                
+                // get the data object for the teacher
+                //pred = "t=>t.Id == " + TeacherId;
+                data = dbContext.Teachers.Where(t => t.Id == TeacherId)
+                        .Include(c => c.QuestionnairesDataTeacherProfiles)                        
+                        .Single();
             }
 
             else
@@ -113,19 +98,12 @@
         {
             IsAdmin = true;
             //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
-            var pred = "t => t.QuestionnaireId == 7";
+            var pred = "t => t.QuestionnaireId == 1";
             configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
-            // get the data object for the child
-            pred = "t=>t.Id == " + ChildID;
-            data = dbContext.Children.Where(pred)
-                .Include(c => c.QuestionnairesDataDemographics)
-                .Include(c => c.QuestionnairesDataSectionAs)
-                .Include(c => c.QuestionnairesDataSectionBs)
-                .Include(c => c.QuestionnairesDataSectionCs)
-                .Include(c => c.QuestionnairesDataSectionDs)
-                .Include(c => c.QuestionnairesDataSectionEs)
-                .Single().Teacher;
+            // get the data object for the Teacher
+            pred = "t=>t.Id == " + TeacherId;
+            data = dbContext.Teachers.Where(pred).Single();
 
         }
         else if (UserSettings.IsTeacher)
@@ -134,19 +112,12 @@
             // Add filter for province
             //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
             //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
-            var pred = "t => t.QuestionnaireId == 7 && " + UserSettings.Province + "==true";
+            var pred = "t => t.QuestionnaireId == 1 && " + UserSettings.Province + "==true";
             configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
 
-            // get the data object for the child
-            //pred = "t=>t.Id == " + ChildID;
-            data = dbContext.Children.Where(c => c.Id == ChildID)
-                .Include(c => c.QuestionnairesDataDemographics)
-                .Include(c => c.QuestionnairesDataSectionAs)
-                .Include(c => c.QuestionnairesDataSectionBs)
-                .Include(c => c.QuestionnairesDataSectionCs)
-                .Include(c => c.QuestionnairesDataSectionDs)
-                .Include(c => c.QuestionnairesDataSectionEs)
-                .Single().Teacher;
+            // get the data object for the teacher
+            pred = "t=>t.Id == " + TeacherId;
+            data = dbContext.Teachers.Where(pred).Single();
         }
         else
         {

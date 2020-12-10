@@ -7,6 +7,7 @@ namespace EDI.Web.Models
 {
     public class UserSettings
     {
+        //public int Id { get; set; } 
         public string UserName { get; set; }
 
         public string UserID { get; set; }

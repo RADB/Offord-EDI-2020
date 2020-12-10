@@ -3,6 +3,7 @@
 @inject UserSettings UserSettings;
 @inject LanguageSettings LanguageSettings;
 @inject ISharedService sharedService;
+@inject ServiceContext dbContext;
 
 <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
     <ChildContent>
@@ -45,66 +46,67 @@
 </SfSidebar>
 
 @code {
-                                    SfTreeView<TreeData> TreeView;
+    SfTreeView<TreeData> TreeView;
     public SfSidebar Sidebar;
-                                public ExpandOnSettings Expand = ExpandOnSettings.Click;
-                                Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
+    public ExpandOnSettings Expand = ExpandOnSettings.Click;
+    Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
 {
         {"class", "sidebar-treeview" }
     };
 
-                                public class TreeData
-                                {
-                                    public string nodeId { get; set; }
-                                    public string nodeText { get; set; }
-                                    public string icon { get; set; }
-                                    public bool hasChild { get; set; }
-                                    public string pid { get; set; }
-                                }
-                                private List<TreeData> treedata = new List<TreeData>();
-                                protected override void OnInitialized()
-                                {
-                                    base.OnInitialized();
-                                    // default uses simple-line-icons, can use material or fontawesome or fabric
-                                    treedata.Add(new TreeData { nodeId = "01", nodeText = sharedService.GetTranslate("Dashboard"), icon = "icon-graph teachericon" });
-                                    treedata.Add(new TreeData { nodeId = "02", nodeText = sharedService.GetTranslate("Profile"), icon = "icon-user teachericon" });
-                                    treedata.Add(new TreeData { nodeId = "03", nodeText = sharedService.GetTranslate("Class List"), icon = "icon-people teachericon" });
-                                    treedata.Add(new TreeData { nodeId = "04", nodeText = sharedService.GetTranslate("Resources"), icon = "icon-folder-alt teachericon" });
-                                    treedata.Add(new TreeData { nodeId = "05", nodeText = sharedService.GetTranslate("Links"), icon = "icon-link teachericon" });
-                                    treedata.Add(new TreeData { nodeId = "06", nodeText = sharedService.GetTranslate("FAQ"), icon = "question_answer teachericon" });
-                                    treedata.Add(new TreeData { nodeId = "07", nodeText = sharedService.GetTranslate("News"), icon = "newspaper teachericon" });
-                                }
+    public class TreeData
+    {
+        public string nodeId { get; set; }
+        public string nodeText { get; set; }
+        public string icon { get; set; }
+        public bool hasChild { get; set; }
+        public string pid { get; set; }
+    }
+    private List<TreeData> treedata = new List<TreeData>();
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        // default uses simple-line-icons, can use material or fontawesome or fabric
+        treedata.Add(new TreeData { nodeId = "01", nodeText = sharedService.GetTranslate("Dashboard"), icon = "icon-graph teachericon" });
+        treedata.Add(new TreeData { nodeId = "02", nodeText = sharedService.GetTranslate("Profile"), icon = "icon-user teachericon" });
+        treedata.Add(new TreeData { nodeId = "03", nodeText = sharedService.GetTranslate("Class List"), icon = "icon-people teachericon" });
+        treedata.Add(new TreeData { nodeId = "04", nodeText = sharedService.GetTranslate("Resources"), icon = "icon-folder-alt teachericon" });
+        treedata.Add(new TreeData { nodeId = "05", nodeText = sharedService.GetTranslate("Links"), icon = "icon-link teachericon" });
+        treedata.Add(new TreeData { nodeId = "06", nodeText = sharedService.GetTranslate("FAQ"), icon = "question_answer teachericon" });
+        treedata.Add(new TreeData { nodeId = "07", nodeText = sharedService.GetTranslate("News"), icon = "newspaper teachericon" });
+    }
 
-                                private void onSelect(NodeSelectEventArgs args)
-                                {
-                                    if (args.NodeData.Id == "01")
-                                    {
-                                        NavigationManager.NavigateTo("./Dashboard/index");
-                                    }
-                                    else if (args.NodeData.Id == "03")
-                                    {
-                                        NavigationManager.NavigateTo("./children/index");
-                                    }
-                                    else if (args.NodeData.Id == "04")
-                                    {
-                                        NavigationManager.NavigateTo("./documents/index");
-                                    }
-                                    else if (args.NodeData.Id == "05")
-                                    {
-                                        NavigationManager.NavigateTo("./links/admin");
-                                    }
-                                    else if (args.NodeData.Id == "06")
-                                    {
-                                        NavigationManager.NavigateTo("./faq/admin");
-                                    }
-                                    else if (args.NodeData.Id == "02")
-                                    {
-                                        NavigationManager.NavigateTo("./TeacherProfile");
-                                    }
-                                    else if (args.NodeData.Id == "07")
-                                    {
-                                        NavigationManager.NavigateTo("./newsfeeds/admin");
-                                    }
+    private void onSelect(NodeSelectEventArgs args)
+    {
+        if (args.NodeData.Id == "01")
+        {
+            NavigationManager.NavigateTo("./Dashboard/index");
+        }
+        else if (args.NodeData.Id == "03")
+        {
+            NavigationManager.NavigateTo("./children/index");
+        }
+        else if (args.NodeData.Id == "04")
+        {
+            NavigationManager.NavigateTo("./documents/index");
+        }
+        else if (args.NodeData.Id == "05")
+        {
+            NavigationManager.NavigateTo("./links/admin");
+        }
+        else if (args.NodeData.Id == "06")
+        {
+            NavigationManager.NavigateTo("./faq/admin");
+        }
+        else if (args.NodeData.Id == "02")
+        {
+            var TeacherId = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID).Single().Id;
+            NavigationManager.NavigateTo("./TeacherProfile/Index/"+TeacherId);
+        }
+        else if (args.NodeData.Id == "07")
+        {
+            NavigationManager.NavigateTo("./newsfeeds/admin");
+        }
 
-                                }
+    }
 }
