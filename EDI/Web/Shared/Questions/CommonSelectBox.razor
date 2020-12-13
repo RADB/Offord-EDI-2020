@@ -1,0 +1,17 @@
+﻿
+<select value="@SelectModel.Value" @onchange="@((ev) => OnChange.InvokeAsync(ev))" style=" height:30px;border-radius:4px;">
+    @if (@SelectModel.Options != null)
+    {
+        @foreach (var option in @SelectModel.Options)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    }
+</select>
+
+@code {
+    [Parameter]
+    public SelectViewModel SelectModel { get; set; }
+    [Parameter]
+    public EventCallback<Microsoft.AspNetCore.Components.ChangeEventArgs> OnChange { get; set; }
+}

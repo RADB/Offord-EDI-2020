@@ -1,0 +1,176 @@
+﻿@page "/questionnaireConfigurations"
+@page "/questionnaireConfigurations/edit/{Id:int}/{QuestionnaireId:int}"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Navigations;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject IQuestionnaireService questionnaireConfigurationService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime;
+@inject IModalService Modal;
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+<br />
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>Edit Questionnaire Configuration</strong>
+                <div class="pull-right">
+                    <button class="resetbutton" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i></button>
+                    <button class="addnewbutton" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i></button>
+                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i></button>
+                </div>
+            </div>
+            <br />
+            <div class="col-md-11" style="margin-left: 24px;">
+                <SfAccordion>
+                    <AccordionItems>
+                        <AccordionItem Header="Details" Expanded="true">
+                            <ContentTemplate>
+                                <QuestionnaireConfigurationForm @ref="questionnaireConfigurationform1" QuestionnaireConfigurationModel="@QuestionnaireConfigurationModel" HandleValidSubmit="HandleValidSubmit" />
+                            </ContentTemplate>
+                        </AccordionItem>
+                    </AccordionItems>
+                </SfAccordion>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public int QuestionnaireId { get; set; }
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private QuestionnaireConfigurationItemViewModel QuestionnaireConfigurationModel { get; set; } = new QuestionnaireConfigurationItemViewModel();
+
+    QuestionnaireConfigurationForm questionnaireConfigurationform1 = new QuestionnaireConfigurationForm();
+
+    SfGrid<TeacherItemViewModel> Grid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            QuestionnaireConfigurationModel = await questionnaireConfigurationService.GetQuestionnaireConfigurationItem(Id);
+        }
+    }
+
+    private async void HandleValidSubmit()
+    {
+        if (!string.IsNullOrEmpty(QuestionnaireConfigurationModel.QuestionNumber))
+        {
+            if(QuestionnaireConfigurationModel.QuestionNumber.Trim().Length > 5)
+            {
+                ErrorMessage = "Question Number can only be 5 digits.";
+                toastService.ShowError(ErrorMessage);
+                return;
+            }
+        }
+
+        if (string.IsNullOrEmpty(QuestionnaireConfigurationModel.English))
+        {
+            ErrorMessage = "English is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        if(QuestionnaireConfigurationModel.InputTypeId == 0)
+        {
+            ErrorMessage = "Input Type is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(QuestionnaireConfigurationModel.EntityName))
+        {
+            ErrorMessage = "Entity is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(QuestionnaireConfigurationModel.EntityField))
+        {
+            ErrorMessage = "Field is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        var totalItems = await questionnaireConfigurationService.GetQCDuplicateCount(QuestionnaireConfigurationModel.EntityName, QuestionnaireConfigurationModel.EntityField, QuestionnaireConfigurationModel.Id);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same Questionnaire Configuration has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            QuestionnaireConfigurationModel.Alberta = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Alberta;
+            QuestionnaireConfigurationModel.BritishColumbia = questionnaireConfigurationform1.provinces.ProvinceConfigModel.BritishColumbia;
+            QuestionnaireConfigurationModel.Manitoba = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Manitoba;
+            QuestionnaireConfigurationModel.NewBrunswick = questionnaireConfigurationform1.provinces.ProvinceConfigModel.NewBrunswick;
+            QuestionnaireConfigurationModel.NewfoundlandandLabrador = questionnaireConfigurationform1.provinces.ProvinceConfigModel.NewfoundlandandLabrador;
+            QuestionnaireConfigurationModel.NovaScotia = questionnaireConfigurationform1.provinces.ProvinceConfigModel.NovaScotia;
+            QuestionnaireConfigurationModel.Nunavut = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Nunavut;
+            QuestionnaireConfigurationModel.Ontario = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Ontario;
+            QuestionnaireConfigurationModel.PrinceEdwardIsland = questionnaireConfigurationform1.provinces.ProvinceConfigModel.PrinceEdwardIsland;
+            QuestionnaireConfigurationModel.Quebec = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Quebec;
+            QuestionnaireConfigurationModel.Saskatchewan = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Saskatchewan;
+            QuestionnaireConfigurationModel.YukonTerritory = questionnaireConfigurationform1.provinces.ProvinceConfigModel.YukonTerritory;
+            QuestionnaireConfigurationModel.NorthwestTerritories = questionnaireConfigurationform1.provinces.ProvinceConfigModel.NorthwestTerritories;
+            
+            await questionnaireConfigurationService.UpdateQuestionnaireConfigurationAsync(QuestionnaireConfigurationModel);
+
+            Message = "Questionnaire Configuration updated successfully.";
+
+            toastService.ShowSuccess(Message);
+
+            StateHasChanged();
+        }
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./questionnaires/edit/"+ QuestionnaireId);
+    }
+
+    private async void Reset()
+    {
+        QuestionnaireConfigurationModel = await questionnaireConfigurationService.GetQuestionnaireConfigurationItem(Id);
+    }
+
+    private void Add()
+    {
+        NavigationManager.NavigateTo("./questionnaireConfigurations/new");
+    }
+}

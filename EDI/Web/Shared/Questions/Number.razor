@@ -1,0 +1,10 @@
+﻿@using Syncfusion.Blazor.Inputs
+
+<SfNumericTextBox TValue="int?" Min=0 Step=1 Format="##"  @bind-Value="@NumberModel.Value" Placeholder="@NumberModel.Placeholder" @onchange="@((ev) => OnChange.InvokeAsync(ev))"></SfNumericTextBox>
+
+@code {
+    [Parameter]
+    public NumberViewModel NumberModel { get; set; }
+    [Parameter]
+    public EventCallback<Microsoft.AspNetCore.Components.ChangeEventArgs> OnChange { get; set; }
+}

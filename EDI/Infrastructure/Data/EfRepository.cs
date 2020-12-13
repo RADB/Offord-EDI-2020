@@ -138,6 +138,21 @@ namespace EDI.Infrastructure.Data
             return _dbContext.Set<Teacher>().ToList();
         }
 
+        public IReadOnlyList<InputType> ListAllInputTypes()
+        {
+            return _dbContext.Set<InputType>().ToList();
+        }
+
+        public IReadOnlyList<Orientation> ListAllOrientations()
+        {
+            return _dbContext.Set<Orientation>().ToList();
+        }
+
+        public IReadOnlyList<LookupSet> ListAllLookups()
+        {
+            return _dbContext.Set<LookupSet>().ToList();
+        }
+
         public IReadOnlyList<FileImport> ListImportedData()
         {
             var statusid = _dbContext.FileImportStatuses.Where(p => p.English == "Imported").First().Id;

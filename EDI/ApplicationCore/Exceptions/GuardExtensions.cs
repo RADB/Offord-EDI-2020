@@ -163,4 +163,13 @@ namespace Ardalis.GuardClauses
                 throw new QuestionnaireNotFoundException(questionnaireid);
         }
     }
+
+    public static class QuestionnaireConfigurationGuards
+    {
+        public static void NullQuestionnaireConfiguration(this IGuardClause guardClause, int questionnaireConfigurationid, QuestionnairesConfiguration questionnaireConfigurations)
+        {
+            if (questionnaireConfigurations == null)
+                throw new QuestionnaireConfigurationNotFoundException(questionnaireConfigurationid);
+        }
+    }
 }

@@ -50,7 +50,7 @@
     <div class="form-group row">
         <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
         <div class="col-md-7 col-form-label">
-            <SelectBox @ref="@selectYear" SelectModel="@selectModelForYear" />
+            <CommonSelectBox @ref="@selectYear" SelectModel="@selectModelForYear" OnChange="@OptionChangeForYear"/>
         </div>
     </div>
 </div>
@@ -78,7 +78,7 @@
 
     private TextViewModel textModelForName { get; set; } = new TextViewModel();
 
-    public SelectBox selectYear = new SelectBox();
+    public CommonSelectBox selectYear = new CommonSelectBox();
 
     private SelectViewModel selectModelForYear { get; set; } = new SelectViewModel();
 
@@ -108,5 +108,17 @@
             selectModelForYear.ID = int.Parse(selectModelForYear.Options.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
         }
         selectModelForYear.Value = selectModelForYear.ID.HasValue ? selectModelForYear.ID.ToString() : string.Empty;
+    }
+
+    private void OptionChangeForYear(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        selectModelForYear.ID = 0;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            selectModelForYear.ID = newid;
+        }
     }
 }

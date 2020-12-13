@@ -1,0 +1,220 @@
+﻿@page "/QuestionnaireConfigurations/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IQuestionnaireService qcService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IModalService Modal
+@inject UserSettings UserSettings;
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>@Header</strong>
+                <div class="pull-right">
+
+                </div>
+            </div>
+            <div class="card-body">
+                @if (questionnaireConfigurations == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridQuestionnaireConfiguration" @ref="Grid" DataSource="@questionnaireConfigurations" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="QuestionnaireConfigurationItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        @*<GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="QuestionnaireConfigurationNumber" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>*@
+                    <GridColumns>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.InputType) HeaderText="Input Type" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Orientation) HeaderText="Orientation" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.QuestionNumber) HeaderText="Question #" Width="20"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.IsHeader) HeaderText="Header?" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.GroupName) HeaderText="Group Name" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.EntityName) HeaderText="Entity Name" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.VariableName) HeaderText="Variable Name" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.LookupEntity) HeaderText="Lookup Entity" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Condition) HeaderText="Condition" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Sequence) HeaderText="Sequence" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Alberta) HeaderText="AB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.BritishColumbia) HeaderText="BC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Manitoba) HeaderText="MB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewBrunswick) HeaderText="NB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewfoundlandandLabrador) HeaderText="NL" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NovaScotia) HeaderText="NS" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Nunavut) HeaderText="NU" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NorthwestTerritories) HeaderText="NT" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ontario) HeaderText="ON" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.PrinceEdwardIsland) HeaderText="PE" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Quebec) HeaderText="QC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Saskatchewan) HeaderText="SK" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.YukonTerritory) HeaderText="YT" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                    </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int QuestionnaireID { get; set; } = 0;
+    [Parameter]
+    public string Header { get; set; } = "Questionnaire Configurations";
+    [Parameter]
+    public bool AllowDelete { get; set; } = true;
+    [Parameter]
+    public bool AllowEdit { get; set; } = true;
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<QuestionnaireConfigurationItemViewModel> Grid;
+
+    IEnumerable<QuestionnaireConfigurationItemViewModel> questionnaireConfigurations;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            var allquestionnaireConfigurations = await Task.FromResult(dbContext.QuestionnairesConfigurations.OrderBy(p => p.QuestionNumber).ToList());
+
+            if (QuestionnaireID > 0)
+            {
+                allquestionnaireConfigurations = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(p => p.QuestionnaireId == QuestionnaireID).OrderBy(p => p.QuestionNumber).ToList());
+            }
+
+            List<QuestionnaireConfigurationItemViewModel> sivm = new List<QuestionnaireConfigurationItemViewModel>();
+
+            foreach (var questionnaireConfiguration in allquestionnaireConfigurations)
+            {
+                var aquestionnaireConfiguration = new QuestionnaireConfigurationItemViewModel();
+
+                aquestionnaireConfiguration.Id = questionnaireConfiguration.Id;
+
+                var inputtype = dbContext.InputTypes.Where(p => p.Id == questionnaireConfiguration.InputTypeId).FirstOrDefault();
+                aquestionnaireConfiguration.InputType = inputtype.English;
+
+                var orientation = dbContext.Orientations.Where(p => p.Id == questionnaireConfiguration.OrientationId).FirstOrDefault();
+                aquestionnaireConfiguration.Orientation = orientation.English;
+
+                aquestionnaireConfiguration.QuestionNumber = questionnaireConfiguration.QuestionNumber;
+                aquestionnaireConfiguration.IsHeader = questionnaireConfiguration.IsHeader;
+                aquestionnaireConfiguration.GroupName = questionnaireConfiguration.GroupName;
+                aquestionnaireConfiguration.EntityName = questionnaireConfiguration.EntityName;
+                aquestionnaireConfiguration.VariableName = questionnaireConfiguration.VariableName;
+                aquestionnaireConfiguration.LookupEntity = questionnaireConfiguration.LookupEntity;
+                aquestionnaireConfiguration.Condition = questionnaireConfiguration.Condition;
+                aquestionnaireConfiguration.Sequence = questionnaireConfiguration.Sequence;
+                aquestionnaireConfiguration.YearId = questionnaireConfiguration.YearId;
+                var year = dbContext.Years.Where(p => p.Id == questionnaireConfiguration.YearId).FirstOrDefault();
+                if (year != null && year.Ediyear.HasValue)
+                    aquestionnaireConfiguration.Ediyear = year.Ediyear.Value;
+
+                aquestionnaireConfiguration.Alberta = questionnaireConfiguration.Alberta.HasValue ? questionnaireConfiguration.Alberta.Value : false;
+                aquestionnaireConfiguration.BritishColumbia = questionnaireConfiguration.BritishColumbia.HasValue ? questionnaireConfiguration.BritishColumbia.Value : false;
+                aquestionnaireConfiguration.Manitoba = questionnaireConfiguration.Manitoba.HasValue ? questionnaireConfiguration.Manitoba.Value : false;
+                aquestionnaireConfiguration.NewBrunswick = questionnaireConfiguration.NewBrunswick.HasValue ? questionnaireConfiguration.NewBrunswick.Value : false;
+                aquestionnaireConfiguration.NewfoundlandandLabrador = questionnaireConfiguration.NewfoundlandandLabrador.HasValue ? questionnaireConfiguration.NewfoundlandandLabrador.Value : false;
+                aquestionnaireConfiguration.NovaScotia = questionnaireConfiguration.NovaScotia.HasValue ? questionnaireConfiguration.NovaScotia.Value : false;
+                aquestionnaireConfiguration.Nunavut = questionnaireConfiguration.Nunavut.HasValue ? questionnaireConfiguration.Nunavut.Value : false;
+                aquestionnaireConfiguration.Ontario = questionnaireConfiguration.Ontario.HasValue ? questionnaireConfiguration.Ontario.Value : false;
+                aquestionnaireConfiguration.PrinceEdwardIsland = questionnaireConfiguration.PrinceEdwardIsland.HasValue ? questionnaireConfiguration.PrinceEdwardIsland.Value : false;
+                aquestionnaireConfiguration.Quebec = questionnaireConfiguration.Quebec.HasValue ? questionnaireConfiguration.Quebec.Value : false;
+                aquestionnaireConfiguration.Saskatchewan = questionnaireConfiguration.Saskatchewan.HasValue ? questionnaireConfiguration.Saskatchewan.Value : false;
+                aquestionnaireConfiguration.YukonTerritory = questionnaireConfiguration.YukonTerritory.HasValue ? questionnaireConfiguration.YukonTerritory.Value : false;
+                aquestionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories.HasValue ? questionnaireConfiguration.NorthwestTerritories.Value : false;
+
+                sivm.Add(aquestionnaireConfiguration);
+            }
+
+            this.rowid = 0;
+            questionnaireConfigurations = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<QuestionnaireConfigurationItemViewModel> args)
+    {
+        rowid = args.Data.Id;
+    }
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridQuestionnaireConfiguration_pdfexport")
+        {
+            this.Grid.PdfExport();
+        }
+        if (args.Item.Id == "GridQuestionnaireConfiguration_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+        if (args.Item.Id == "GridQuestionnaireConfiguration_add")
+        {
+            NavigationManager.NavigateTo("./QuestionnaireConfigurations/new/" + QuestionnaireID);
+        }
+        if (args.Item.Id == "GridQuestionnaireConfiguration_edit")
+        {
+            NavigationManager.NavigateTo("./QuestionnaireConfigurations/edit/" + this.rowid + "/" + QuestionnaireID);
+        }
+        if (args.Item.Id == "GridQuestionnaireConfiguration_delete")
+        {
+            var options = new ModalOptions();
+            Modal.Show<ConfirmDelete>("Confirm Delete");
+
+            Modal.OnClose += ConfirmDeleteModalClosed;
+        }
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await qcService.DeleteQuestionnaireConfiguarionAsync(this.rowid);
+
+            var tmp = new List<QuestionnaireConfigurationItemViewModel>();
+            foreach (var item in questionnaireConfigurations)
+            {
+                if (item.Id != rowid)
+                    tmp.Add(item);
+            }
+            this.questionnaireConfigurations = tmp;
+            this.rowid = 0;
+
+            this.Grid.Refresh();
+            StateHasChanged();
+        }
+
+        Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+
+    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<QuestionnaireConfigurationItemViewModel> args)
+    {
+        NavigationManager.NavigateTo("./QuestionnaireConfigurations/edit/" + this.rowid + "/" + QuestionnaireID);
+    }
+}

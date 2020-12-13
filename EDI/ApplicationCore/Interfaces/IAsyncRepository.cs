@@ -25,6 +25,9 @@ namespace EDI.ApplicationCore.Interfaces
         IReadOnlyList<School> ListAllSchools();
         IReadOnlyList<Teacher> ListAllTeachers();
         IReadOnlyList<FileImport> ListImportedData();
+        IReadOnlyList<InputType> ListAllInputTypes();
+        IReadOnlyList<Orientation> ListAllOrientations();
+        IReadOnlyList<LookupSet> ListAllLookups();
         Task DeleteAllFileImports();
         Task ReseedFileImports();
     }
