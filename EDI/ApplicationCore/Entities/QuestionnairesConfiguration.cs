@@ -16,6 +16,7 @@ namespace EDI.ApplicationCore.Entities
         public bool IsHeader { get; set; }
         public bool ShowGroupName { get; set; }
         public string GroupName { get; set; }
+        public bool IsCollapsible { get; set; }
         public string English { get; set; }
         public string French { get; set; }
         /// <summary>

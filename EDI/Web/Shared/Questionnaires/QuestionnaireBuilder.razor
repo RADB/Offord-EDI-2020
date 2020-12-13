@@ -1,79 +1,88 @@
 ﻿@using static EDI.Web.Data.Enumerations
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
+@using Syncfusion.Blazor.Navigations
+
 
 @foreach (var config in configs)
 {
-    if (config.IsHeader)
-    {
-        _Text = sharedService.GetConfigText(config);
+    //if (CurrentGroup != config.GroupName)
+    //{
+        // get the current group
+        CurrentGroup = config.GroupName;
 
-        // process the header type
-        switch ((InputTypes)config.InputTypeId)
+        if (config.IsHeader)
         {
-            case InputTypes.Header:
-                <div class="card-header">
-                    <strong>@_Text</strong>
-                </div>
-                break;
-            case InputTypes.GroupHeader:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />@sharedService.GetConfigText(config)</p>
-                </div>
-                break;
-            case InputTypes.QuestionHeader:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Question Header<br />@sharedService.GetConfigText(config)</p>
-                </div>
-                break;
-            default:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
-                </div>
-                break;
-        }
-    }
-    else
-    {
+            // get the header text
+            _Text = sharedService.GetConfigText(config);
+
+            // process the header type
+            switch ((InputTypes)config.InputTypeId)
+            {
+                case InputTypes.Header:
+                    // loop throup questionnaire names - links for non active pages
+                        <div class="card-header">
+                            <p class="text-xl-left">@_Text</p><a href="" class="btn-outline-danger">Section A</a>
+                        </div>
+                    break;
+                case InputTypes.GroupHeader:
+                        <div class="card-body border">
+                            <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />_Text</p>
+                        </div>
+                    break;
+                case InputTypes.QuestionHeader:
+                        <div class="card-body border">
+                            <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Question Header<br />_Text</p>
+                        </div>
+                    break;
+                default:
+                        <div class="card-body border">
+                            <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
+                        </div>
+                    break;
+            }
+        }        
+        else
+        {
         // bind to value from demographic_data
 
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:
-                <RadioButtonsPart Config=@config CurrentValue=1></RadioButtonsPart>
-                break;
-            case InputTypes.DatePicker:
-                <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
-                break;
-            case InputTypes.TextBox:
-                <TextPart Config=@config data=@data CurrentValue="Change me"></TextPart>
-                break;
-            case InputTypes.SelectBox:
-                <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
-                break;
-            case InputTypes.CheckBox:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
-                </div>
-                break;
-            default:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                </div>
-                break;
+                    <RadioButtonsPart Config=@config CurrentValue=1></RadioButtonsPart>
+                    break;
+                case InputTypes.DatePicker:
+                    <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
+                    break;
+                case InputTypes.TextBox:
+                    <TextPart Config=@config data=@data CurrentValue="Change me"></TextPart>
+                    break;
+                case InputTypes.SelectBox:
+                    <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
+                    break;
+                case InputTypes.CheckBox:
+                    <div class="card-body border">
+                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
+                    </div>
+                    break;
+                default:
+                    <div class="card-body border">
+                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                    </div>
+                    break;
+            }
         }
     }
-}
 
-@code {
-    [Parameter]
-    public List<QuestionnairesConfiguration> configs { get; set; }
+    @code {
+        [Parameter]
+        public List<QuestionnairesConfiguration> configs { get; set; }
 
-    [Parameter]
-    public Teacher data { get; set; }
+        [Parameter]
+        public Teacher data { get; set; }
 
-    [Parameter]
-    public bool IsReadonly { get; set; }
-    private string _Text;
-
-}
+        [Parameter]
+        public bool IsReadonly { get; set; }
+        private string _Text;
+        private string CurrentGroup = "";
+    }

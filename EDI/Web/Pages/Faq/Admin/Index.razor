@@ -40,8 +40,10 @@
                                     <AccordionItems>
                                         @foreach (var faq in faqs)
                                         {
-
-                                            <AccordionItem Header="@faq.Question">
+                                            <AccordionItem>
+                                                <HeaderTemplate>
+                                                    @faq.Question
+                                                </HeaderTemplate>
                                                 <ContentTemplate>
                                                     @((MarkupString)faq.Answer)
                                                     <br />
@@ -53,7 +55,6 @@
                                                     </AuthorizeView>
                                                 </ContentTemplate>
                                             </AccordionItem>
-
                                         }
                                     </AccordionItems>
                                 </SfAccordion>

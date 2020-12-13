@@ -10,27 +10,27 @@ namespace EDI.ApplicationCore.Entities
     public partial class QuestionnairesDataSectionD:BaseEntityQuestionnaire
     {
         public int ChildId { get; set; }
-        public byte Problem { get; set; }
-        public byte Physical { get; set; }
-        public byte Visual { get; set; }
-        public byte Hearing { get; set; }
-        public byte Speech { get; set; }
-        public byte Learning { get; set; }
-        public byte Emotional { get; set; }
-        public byte Behavioural { get; set; }
-        public byte Language { get; set; }
-        public byte Chronic { get; set; }
-        public byte Dental { get; set; }
-        public byte Other { get; set; }
+        public byte? Problem { get; set; }
+        public byte? Physical { get; set; }
+        public byte? Visual { get; set; }
+        public byte? Hearing { get; set; }
+        public byte? Speech { get; set; }
+        public byte? Learning { get; set; }
+        public byte? Emotional { get; set; }
+        public byte? Behavioural { get; set; }
+        public byte? Language { get; set; }
+        public byte? Chronic { get; set; }
+        public byte? Dental { get; set; }
+        public byte? Other { get; set; }
         public string OtherSpecify { get; set; }
-        public byte SpecialProblem1 { get; set; }
-        public byte SpecialProblem2 { get; set; }
-        public byte SpecialProblem3 { get; set; }
+        public byte? SpecialProblem1 { get; set; }
+        public byte? SpecialProblem2 { get; set; }
+        public byte? SpecialProblem3 { get; set; }
         public string OtherSpecialProblem { get; set; }
-        public byte Support { get; set; }
-        public byte Further { get; set; }
-        public byte WaitList { get; set; }
-        public byte NeedsAssess { get; set; }
+        public byte? Support { get; set; }
+        public byte? Further { get; set; }
+        public byte? WaitList { get; set; }
+        public byte? NeedsAssess { get; set; }
         public string AssessSpecify { get; set; }
 
         public virtual Child Child { get; set; }

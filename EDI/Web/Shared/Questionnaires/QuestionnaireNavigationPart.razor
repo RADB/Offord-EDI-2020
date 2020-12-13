@@ -9,57 +9,54 @@
 @using Syncfusion.Blazor.Navigations
 @using System.Collections.Specialized;
 @using Microsoft.EntityFrameworkCore;
-
-<SfTab>
-    <TabEvents Selected="OnTabSelected" Selecting="OnTabSelecting"></TabEvents>
-    <TabItems>
-        @foreach (var item in questionnaires)
-        {
-            var _name = sharedService.GetQuestionnaireText(item);
-            <TabItem >
-                <ChildContent>
-                    <TabHeader Text=@_name><span class="badge badge-dark">4</span></TabHeader>
-                </ChildContent>
-                <ContentTemplate>
-                    @if (@configs != null)
+<!-- Prints the tabs -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <SfTab>
+                <TabEvents Selected="OnTabSelected" Selecting="OnTabSelecting"></TabEvents>
+                <TabItems>
+                    <!--loop through the questionnaires-->
+                    @foreach (var item in questionnaires)
                     {
-                        @if (IsAdmin)
-                        {
-                            <QuestionnaireBuilder configs=@configs data=@data IsReadonly="true"></QuestionnaireBuilder>
-                        }
-                        else if (IsTeacher)
-                        {
-                            <QuestionnaireBuilder configs=@configs data=@data IsReadonly="false"></QuestionnaireBuilder>
-                        }
-                        else
-                        {
-                            <div class="card-header">
-                                <strong>Sample for Coordinator</strong>
-                            </div>
-                            <div class="card-body">
-                            </div>
-                        }
-                    }
-                </ContentTemplate>
-            </TabItem>
-        }
-    </TabItems>
-</SfTab>
+                        var _name = sharedService.GetQuestionnaireText(item);                        
+                        <TabItem>                            
+                            <ChildContent>
+                                <TabHeader Text=@_name></TabHeader>
+                            </ChildContent>
+                            <ContentTemplate>
+                                @if (groups != null)
+                                {
+                                    <div><b>QuestionnaireId</b> = @item.Id</div>
 
+                                    <QuestionnaireGroups groups=@groups teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@ProvinceName QuestionnaireId=@QuestionnaireId></QuestionnaireGroups>
+                                }
+                            </ContentTemplate>
+                        </TabItem>
+                    }
+                </TabItems>
+            </SfTab>
+        </div>
+    </div>
+</div>
 @code {
     [Parameter]
-    public List<QuestionnairesConfiguration> configs { get; set; }
+    public Teacher teacherData { get; set; }
 
     [Parameter]
-    public Teacher data{ get; set; }
+    public bool IsReadOnly { get; set; }
+
+    [Parameter]
+    public string ProvinceName { get; set; }
+
+    [Parameter]
+    public int QuestionnaireId { get; set; }
 
     private int SelectedTab = 0;
+    private string predicate;
 
-    // look to move this to a session variable and carry throughout the session
-    private bool IsAdmin { get; set; }
-    private bool IsTeacher { get; set; }
-    private bool IsCoordinator { get; set; }
     private List<Questionnaire> questionnaires;
+    private List<QuestionnairesConfiguration> groups;
 
     public class TabObject
     {
@@ -77,28 +74,11 @@
         }
         else
         {
-            @if (UserSettings.IsAdmin)
-            {
-                IsAdmin = true;
-                //var configs = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(t => t.QuestionnaireId == 1).ToList());
-                var pred = "t => t.IsChildQuestionnaire == true && t.YearId ==1";
-                questionnaires = dbContext.Questionnaires.Where(pred).OrderBy(t=>t.Sequence).ToList();
+            // load the initial set of groups on load
+            //getData();
 
-
-            }
-            else if (UserSettings.IsTeacher)
-            {
-                IsTeacher = true;
-                // Add filter for province
-                //var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
-                //allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
-                var pred = "t => t.IsChildQuestionnaire == true && t.YearId ==1";
-                questionnaires = dbContext.Questionnaires.Where(pred).OrderBy(t => t.Sequence).ToList();
-            }
-            else
-            {
-                IsCoordinator = true;
-            }
+            predicate = "t => t.IsChildQuestionnaire == true && t.YearId ==1";
+            questionnaires = dbContext.Questionnaires.Where(predicate).OrderBy(t => t.Sequence).ToList();
 
             var count = questionnaires.Count();
 
@@ -127,6 +107,18 @@
         }
     }
 
+
+    private void getData()
+    {
+
+        // get the group headers - these will all be collapsible
+        predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 11 AND " + ProvinceName + " == true";
+        // get the configuration
+        groups = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+
+    }
+
+
     private string Translate(string word)
     {
         return sharedService.GetTranslate(word);
@@ -136,15 +128,14 @@
     {
         for (var i = 0; i < ListTab.Count; i++)
         {
-            if(args.SelectedIndex == ListTab[i].Index)
+            if (args.SelectedIndex == ListTab[i].Index)
             {
-                var pred = "t => t.QuestionnaireId == " + ListTab[i].Id;
+                QuestionnaireId = ListTab[i].Id;
+                // return the collection of group headers
+                //predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 11 AND " + ProvinceName + " == true";
+                //groups = dbContext.QuestionnairesConfigurations.Where(predicate).ToList();                
 
-                if (UserSettings.IsTeacher)
-                {
-                    pred = "t => t.QuestionnaireId == " + ListTab[i].Id +" && " + UserSettings.Province + "==true";
-                }
-                configs = dbContext.QuestionnairesConfigurations.Where(pred).ToList();
+                getData();
             }
         }
     }
@@ -154,4 +145,4 @@
 
     }
 
-    }
+}

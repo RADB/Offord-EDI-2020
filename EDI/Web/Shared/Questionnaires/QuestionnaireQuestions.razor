@@ -1,0 +1,61 @@
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+@inject ISharedService sharedService;
+@using Microsoft.EntityFrameworkCore;
+@using System.Linq.Dynamic.Core
+
+
+
+<!-- PRINT THE Questions -->
+<QuestionnaireBuilder configs=@questions data=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>
+<br />
+                
+@code {
+    //@((MarkupString)_Text)
+    [Parameter]
+    public Teacher teacherData { get; set; }
+
+    [Parameter]
+    public bool IsReadOnly { get; set; }
+
+    [Parameter]
+    public string ProvinceName { get; set; }
+
+    [Parameter]
+    public int QuestionnaireId { get; set; }
+
+    [Parameter]
+    public string GroupName { get; set; }
+
+
+    private List<QuestionnairesConfiguration> questions;
+
+    private string predicate;
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=9 AND InputTypeId !=11";
+        // get the configuration
+        questions = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+        //Console.WriteLine(questions);
+    }
+}

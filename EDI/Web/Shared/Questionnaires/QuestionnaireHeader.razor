@@ -1,0 +1,77 @@
+﻿@using static EDI.Web.Data.Enumerations
+@inject ISharedService sharedService;
+@inject ServiceContext dbContext;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+@inject ISharedService sharedService;
+@using Microsoft.EntityFrameworkCore;
+@using System.Linq.Dynamic.Core
+
+<!-- PRINT THE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <QuestionnaireBuilder configs=@headers data=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>
+        </div>
+    </div>
+</div>
+
+<QuestionnaireGroups teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@ProvinceName QuestionnaireId=@QuestionnaireId></QuestionnaireGroups>
+
+@code {
+    [Parameter]
+    public Teacher teacherData { get; set; }
+
+    [Parameter]
+    public bool IsReadOnly { get; set; }
+
+    [Parameter]
+    public string ProvinceName { get; set; }
+
+    [Parameter]
+    public int QuestionnaireId { get; set; }
+
+    private List<QuestionnairesConfiguration> headers;
+    private string _Text;
+    private string predicate;
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        if (UserSettings.IsAdmin)
+        {
+
+        }
+        else if (UserSettings.IsTeacher)
+        {
+
+        }
+        else
+        {
+
+        }
+        // need to determine the questionnaire ID based on the year
+        predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
+        // get the configuration
+        headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+    
+    }
+}

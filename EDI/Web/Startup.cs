@@ -29,6 +29,7 @@ using Blazored.Modal;
 using Blazored.Toast;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.Blazor;
+using System.Linq.Dynamic.Core;
 
 namespace EDI.Web
 {
