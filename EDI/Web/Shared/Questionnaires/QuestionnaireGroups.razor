@@ -28,7 +28,10 @@
                             </div>
                         </HeaderTemplate>
                         <ContentTemplate>
-                            <div class="col-6"><h4>@sharedService.GetConfigText(config)</h4></div>
+                            @if(aName.Length==0)
+                            { 
+                                <div class="col-6"><h4>@sharedService.GetConfigText(config)</h4></div>
+                            }
                             <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
 
                             <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
