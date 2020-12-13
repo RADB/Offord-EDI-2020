@@ -35,5 +35,10 @@ namespace EDI.Web.Interfaces
         string GetTranslate(string english);
         string GetImagePath();
         Task<string> SendEmail(EmailModel EmailModel);
+        IEnumerable<SelectListItem> GetInpuTypes();
+        IEnumerable<SelectListItem> GetEntities();
+        Task<IEnumerable<SelectListItem>> GetFields(string entityname);
+        IEnumerable<SelectListItem> GetOrientations();
+        IEnumerable<SelectListItem> GetLookups();
     }
 }

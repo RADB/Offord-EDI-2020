@@ -52,6 +52,9 @@
                     </AccordionItems>
                 </SfAccordion>
             </div>
+            <div class="col-md-12">
+                <EDI.Web.Pages.QuestionnaireConfigurations.Index QuestionnaireID=@Id Header="Questionnaire Configurations" AllowDelete=false AllowEdit=true></EDI.Web.Pages.QuestionnaireConfigurations.Index>
+            </div>
         </div>
     </div>
 </div>
@@ -104,7 +107,7 @@
             return;
         }
 
-        QuestionnaireModel.YearId = questionnaireform1.selectYear.OptionsModel.ID.HasValue ? questionnaireform1.selectYear.OptionsModel.ID.Value : 0;
+        QuestionnaireModel.YearId = questionnaireform1.selectYear.SelectModel.ID.HasValue ? questionnaireform1.selectYear.SelectModel.ID.Value : 0;
         if (QuestionnaireModel.YearId == 0)
         {
             ErrorMessage = "Year is required.";

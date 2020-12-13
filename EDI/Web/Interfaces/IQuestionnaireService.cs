@@ -10,6 +10,7 @@ namespace EDI.Web.Interfaces
     public interface IQuestionnaireService
     {
         Task DeleteQuestionnaireAsync(int Id);
+        Task DeleteQuestionnaireConfiguarionAsync(int Id);
 
         Task UpdateQuestionnaireAsync(QuestionnaireItemViewModel questionnaire);
 
@@ -19,5 +20,11 @@ namespace EDI.Web.Interfaces
 
         Task<int> GetDuplicateCount(string name);
         Task<int> GetDuplicateCount(string name, int id);
+
+        Task<QuestionnaireConfigurationItemViewModel> GetQuestionnaireConfigurationItem(int questionnaireConfigurationId);
+        Task UpdateQuestionnaireConfigurationAsync(QuestionnaireConfigurationItemViewModel questionnaireConfiguration);
+        Task<int> CreateQuestionnaireConfigurationAsync(QuestionnaireConfigurationItemViewModel questionnaireConfiguration);
+        Task<int> GetQCDuplicateCount(string entityname, string entityfield);
+        Task<int> GetQCDuplicateCount(string entityname, string entityfield, int id);
     }
 }

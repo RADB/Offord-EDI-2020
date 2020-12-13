@@ -57,6 +57,9 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<QuestionnairesDataSectionC> _questionnairesDataSectionC;
         private readonly IAsyncRepository<QuestionnairesDataSectionD> _questionnairesDataSectionD;
         private readonly IAsyncRepository<QuestionnairesDataSectionE> _questionnairesDataSectionE;
+        private readonly IAsyncRepository<InputType> _inputTypeRepository;
+        private readonly IAsyncRepository<Orientation> _orientationRepository;
+        private readonly IAsyncRepository<LookupSet> _lookupRepository;
         // private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
         private readonly IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
         private readonly IAsyncRepository<Translation> _tranRepository;
@@ -95,9 +98,12 @@ namespace EDI.Web.Services
             IAsyncRepository<QuestionnairesDataSectionC> questionnairesDataSectionC,
             IAsyncRepository<QuestionnairesDataSectionD> questionnairesDataSectionD,
             IAsyncRepository<QuestionnairesDataSectionE> questionnairesDataSectionE,
-            //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
-            // IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
-            //IAsyncRepository<TeacherParticipationForm> participationRepository,
+            IAsyncRepository<InputType> inputTypeRepository,
+            IAsyncRepository<Orientation> orientationRepository,
+            IAsyncRepository<LookupSet> lookupRepository,
+        //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
+        // IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
+        //IAsyncRepository<TeacherParticipationForm> participationRepository,
             IAsyncRepository<QuestionnairesDataTeacherProfile> profileRepository,
             IAsyncIdentityRepository accountRepository,
             IAsyncRepository<Translation> tranRepository,
@@ -134,6 +140,9 @@ namespace EDI.Web.Services
             _questionnairesDataSectionC = questionnairesDataSectionC;
             _questionnairesDataSectionD = questionnairesDataSectionD;
             _questionnairesDataSectionE = questionnairesDataSectionE;
+            _inputTypeRepository = inputTypeRepository;
+            _orientationRepository = orientationRepository;
+            _lookupRepository = lookupRepository;
             //_feedbackRepository = feedbackRepository;
             _profileRepository = profileRepository;
             _hostingEnvironment = hostingEnvironment;
@@ -1466,6 +1475,158 @@ namespace EDI.Web.Services
                 LanguageText = French;
 
             return LanguageText;
+        }
+
+        public IEnumerable<SelectListItem> GetInpuTypes()
+        {
+
+            Log.Information("GetInpuTypes started by:" + _userSettings.UserName);
+
+            try
+            {
+                var inputtypes = _inputTypeRepository.ListAllInputTypes().OrderBy(t => t.English);
+
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                foreach (var inputtype in inputtypes)
+                {
+                    items.Add(new SelectListItem() { Value = inputtype.Id.ToString(), Text = inputtype.English});
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetInpuTypes failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
+        public IEnumerable<SelectListItem> GetOrientations()
+        {
+            Log.Information("GetOrientations started by:" + _userSettings.UserName);
+
+            try
+            {
+                var orientations = _orientationRepository.ListAllOrientations().OrderBy(t => t.English);
+
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                foreach (var orientation in orientations)
+                {
+                    items.Add(new SelectListItem() { Value = orientation.Id.ToString(), Text = orientation.English });
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetOrientations failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
+        public IEnumerable<SelectListItem> GetLookups()
+        {
+            Log.Information("GetLookups started by:" + _userSettings.UserName);
+
+            try
+            {
+                var lookups = _lookupRepository.ListAllLookups().OrderBy(t => t.LookupName);
+
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                foreach (var lookup in lookups)
+                {
+                    items.Add(new SelectListItem() { Value = lookup.Id.ToString(), Text = lookup.LookupName });
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetLookups failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
+        public IEnumerable<SelectListItem> GetEntities()
+        {
+
+            Log.Information("GetEntities started by:" + _userSettings.UserName);
+
+            try
+            {
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true },
+                    new SelectListItem() { Value = "01", Text = "Demographics" },
+                    new SelectListItem() { Value = "02", Text = "Section A" },
+                    new SelectListItem() { Value = "03", Text = "Section B" },
+                    new SelectListItem() { Value = "04", Text = "Section C" },
+                    new SelectListItem() { Value = "05", Text = "Section D" },
+                    new SelectListItem() { Value = "06", Text = "Section E" },
+                    new SelectListItem() { Value = "07", Text = "Teacher FeedBack" }
+                };
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetEntities failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetFields(string entityname)
+        {
+
+            Log.Information("GetFields started by:" + _userSettings.UserName);
+
+            try
+            {
+                var fields = await Task.FromResult(_dbContext.QuestionnairesConfigurations.Where(t => t.EntityName == entityname && !string.IsNullOrEmpty(t.EntityField)).OrderBy(p => p.EntityField).ToList());
+               
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                foreach (var field in fields)
+                {
+                    items.Add(new SelectListItem() { Value = field.Id.ToString(), Text = field.EntityField });
+                }
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetFields failed:" + ex.Message);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
         }
     }
 }

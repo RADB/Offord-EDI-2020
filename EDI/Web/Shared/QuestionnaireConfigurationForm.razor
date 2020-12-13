@@ -1,0 +1,767 @@
+﻿@inject NavigationManager NavigationManager
+@inject IQuestionnaireService questionnaireService
+@inject ISharedService sharedService
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+@using Syncfusion.Blazor.Navigations;
+
+<div class="card-body">
+    <SfAccordion>
+        <AccordionItems>
+            <AccordionItem Header="Question" Expanded="true">
+                <ContentTemplate>
+                    <div class="content">
+                        <div class="form-group row">
+                            <div class="col-lg-3">
+                                <label for="QuestionNumber">Question Number: </label>
+                                <Text @ref="@textQuestionNumber" TextModel="@textModelForQuestionNumber" OnChange="@ChangeTextQuestionNumber" />
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="Entity">Entity: </label> <br />
+                                <CommonSelectBox @ref="@selectEntity" SelectModel="@selectModelForEntity" OnChange="@OptionChangeForEntity" />
+                            </div>
+                            @if (QuestionnaireConfigurationModel.Id > 0)
+                            {
+                                <div class="col-lg-3">
+                                    <label for="Field">Field: </label><br />
+                                    <CommonSelectBox @ref="@selectField" SelectModel="@selectModelForField" OnChange="@OptionChangeForField" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-3">
+                                    <label for="Field">Field: </label><br />
+                                    <Text @ref="@textFieldName" TextModel="@textModelForFieldName" OnChange="@ChangeTextFieldName" />
+                                </div>
+                            }
+                            <div class="col-lg-3">
+                                <label for="VariableName">Variable Name: </label>
+                                <Text @ref="@textVariableName" TextModel="@textModelForVariableName" OnChange="@ChangeTextVariableName" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label" for="English">English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                            <div class="col-md-10 col-form-label">
+                                <RichTextEditor @ref="rteEnglish" BindValue="@QuestionnaireConfigurationModel.English" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label" for="French">French: </label>
+                            <div class="col-md-10 col-form-label">
+                                <RichTextEditor @ref="rteFrench" BindValue="@QuestionnaireConfigurationModel.French" />
+                            </div>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </AccordionItem>
+        </AccordionItems>
+    </SfAccordion>
+    <br />
+    <SfAccordion>
+        <AccordionItems>
+            <AccordionItem Header="Help" Expanded="true">
+                <ContentTemplate>
+                    <div class="content">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label" for="HasHelp">Has Help: </label>
+                            <div class="col-md-3 col-form-label">
+                                <Switch @ref="switchHelp" SwitchModel="@switchModelForHelp" OnChange="@SwitchChangeForHelp" />
+                            </div>
+                        </div>
+                        @if (switchModelForHelp.Value)
+                        {
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label" for="English">Help Text: </label>
+                                <div class="col-md-10 col-form-label">
+                                    <RichTextEditor @ref="rteHelpEnglish" BindValue="@QuestionnaireConfigurationModel.HelpText" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label" for="French">Help Text French: </label>
+                                <div class="col-md-10 col-form-label">
+                                    <RichTextEditor @ref="rteHelpFrench" BindValue="@QuestionnaireConfigurationModel.HelpTextFrench" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </ContentTemplate>
+            </AccordionItem>
+        </AccordionItems>
+    </SfAccordion>
+    <br />
+    <SfAccordion>
+        <AccordionItems>
+            <AccordionItem Header="Group" Expanded="true">
+                <ContentTemplate>
+                    <div class="content">
+                        <div class="form-group row">
+                            <div class="col-lg-3">
+                                <label for="GroupName">Group Name: </label>
+                                <Text @ref="@textGroupName" TextModel="@textModelForGroupName" OnChange="@ChangeTextGroupName" />
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="Showheader">Show Group Header: </label><br />
+                                <Switch @ref="switchGroupHeader" SwitchModel="@switchModelForGroupHeader" OnChange="@SwitchChangeForGroupHeader" />
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="IsCollapsible">Is Collapsible: </label><br />
+                                <Switch @ref="switchCollapsible" SwitchModel="@switchModelForCollapsible" OnChange="@SwitchChangeForCollapsible" />
+                            </div>
+                            <div class="col-lg-3">
+                                <label for="Sequence">Sequence: </label>
+                                <Number @ref="@numberSequence" NumberModel="@numberModelForSequence" OnChange="@ChangeNumberSequence" />
+                            </div>
+
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label" for="Required">Required? </label>
+                                    <div class="col-md-3 col-form-label">
+                                        <Switch @ref="switchRequired" SwitchModel="@switchModelForRequired" OnChange="@SwitchChangeForRequired" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label" for="Conditional">Conditional? </label>
+                                    <div class="col-md-3 col-form-label">
+                                        <Switch @ref="switchConditional" SwitchModel="@switchModelForConditional" OnChange="@SwitchChangeForConditional" />
+                                    </div>
+                                    @if (switchModelForConditional.Value)
+                                    {
+                                        <label class="col-md-2 col-form-label" for="Conditions">Conditions: </label>
+                                        <div class="col-md-3 col-form-label">
+                                            <Text @ref="@textCondition" TextModel="@textModelForCondition" OnChange="@ChangeTextCondition" />
+                                        </div>
+                                    }
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label" for="Readonly">Readonly? </label>
+                                    <div class="col-md-3 col-form-label">
+                                        <Switch @ref="switchReadonly" SwitchModel="@switchModelForReadonly" OnChange="@SwitchChangeForReadonly" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-form-label" for="HasNotification">Notification? </label>
+                                    <div class="col-md-3 col-form-label">
+                                        <Switch @ref="switchNotification" SwitchModel="@switchModelForNotification" OnChange="@SwitchChangeForNotification" />
+                                    </div>
+                                    @if (switchModelForNotification.Value)
+                                    {
+                                        <label class="col-md-2 col-form-label" for="Conditions">Conditions: </label>
+                                        <div class="col-md-3 col-form-label">
+                                            <Text @ref="@textNotificationCondition" TextModel="@textModelForNotificationCondition" OnChange="@ChangeTextNotificationCondition" />
+                                        </div>
+                                    }
+                                </div>
+                                @if (switchModelForNotification.Value)
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" for="Notification">Notification: </label>
+                                        <div class="col-md-10 col-form-label">
+                                            <RichTextEditor @ref="rteNotificationEnglish" BindValue="@QuestionnaireConfigurationModel.Notification" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" for="NotificationFrench">Notification French: </label>
+                                        <div class="col-md-10 col-form-label">
+                                            <RichTextEditor @ref="rteNotificationFrench" BindValue="@QuestionnaireConfigurationModel.NotificationFrench" />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-lg-3">
+                                        <label for="Type">Type: </label> <br />
+                                        <CommonSelectBox @ref="@selectType" SelectModel="@selectModelForType" OnChange="@OptionChangeForType" />
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="RepeatHeader">Repeat Header: </label><br />
+                                        <Switch @ref="switchRepeatHeader" SwitchModel="@switchModelForRepeatHeader" OnChange="@SwitchChangeForRepeatHeader" />
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="Mask">Input Mask: </label>
+                                        <Text @ref="@textInputMask" TextModel="@textModelForInputMask" OnChange="@ChangeTextInputMask"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-3">
+                                        <label for="Orientation">Orientation: </label> <br />
+                                        <CommonSelectBox @ref="@selectOrientation" SelectModel="@selectModelForOrientation" OnChange="@OptionChangeForOrientation" />
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label for="Columns">Columns: </label>
+                                        <Number @ref="@numberColumns" NumberModel="@numberModelForColumns" OnChange="@ChangeNumberColumns"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-3">
+                                        <label for="HasLookup">Has Lookup: </label><br />
+                                        <Switch @ref="switchLookup" SwitchModel="@switchModelForLookup" OnChange="@SwitchChangeForLookup" />
+                                    </div>
+                                    @if (switchModelForLookup.Value)
+                                    {
+                                        <div class="col-lg-3">
+                                            <label for="Lookups">Lookups: </label><br />
+                                            <CommonSelectBox @ref="@selectLookup" SelectModel="@selectModelForLookup" OnChange="@OptionChangeForLookup" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </AccordionItem>
+        </AccordionItems>
+    </SfAccordion>
+    <br />
+    <SfAccordion>
+        <AccordionItems>
+            <AccordionItem Header="Provinces" Expanded="true">
+                <ContentTemplate>
+                    <Provinces @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" ShowHeader="false" />
+                </ContentTemplate>
+            </AccordionItem>
+        </AccordionItems>
+    </SfAccordion>
+</div>
+<div class="card-footer">
+    <button type="submit" class="savebutton" @onclick="HandleValidSubmit"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+</div>
+
+
+@code {
+    [Parameter]
+    public QuestionnaireConfigurationItemViewModel QuestionnaireConfigurationModel { get; set; }
+
+    [Parameter]
+    public EventCallback HandleValidSubmit { get; set; }
+
+    public RichTextEditor rteEnglish = new RichTextEditor();
+
+    public RichTextEditor rteHelpEnglish = new RichTextEditor();
+
+    public RichTextEditor rteNotificationEnglish = new RichTextEditor();
+
+    public RichTextEditor rteFrench = new RichTextEditor();
+
+    public RichTextEditor rteHelpFrench = new RichTextEditor();
+
+    public RichTextEditor rteNotificationFrench = new RichTextEditor();
+
+    public Text textQuestionNumber = new Text();
+
+    private TextViewModel textModelForQuestionNumber { get; set; } = new TextViewModel();
+
+    public Text textVariableName = new Text();
+
+    private TextViewModel textModelForVariableName { get; set; } = new TextViewModel();
+
+    public Text textFieldName = new Text();
+
+    private TextViewModel textModelForFieldName { get; set; } = new TextViewModel();
+
+    public Text textGroupName = new Text();
+
+    private TextViewModel textModelForGroupName { get; set; } = new TextViewModel();
+
+    public Text textCondition = new Text();
+
+    private TextViewModel textModelForCondition { get; set; } = new TextViewModel();
+
+    public Text textNotificationCondition = new Text();
+
+    private TextViewModel textModelForNotificationCondition { get; set; } = new TextViewModel();
+
+    public Text textInputMask = new Text();
+
+    private TextViewModel textModelForInputMask { get; set; } = new TextViewModel();
+
+    public Number numberSequence = new Number();
+
+    private NumberViewModel numberModelForSequence { get; set; } = new NumberViewModel();
+
+    public Number numberColumns = new Number();
+
+    private NumberViewModel numberModelForColumns { get; set; } = new NumberViewModel();
+
+    public CommonSelectBox selectEntity = new CommonSelectBox();
+
+    private SelectViewModel selectModelForEntity { get; set; } = new SelectViewModel();
+
+    public CommonSelectBox selectField = new CommonSelectBox();
+
+    private SelectViewModel selectModelForField { get; set; } = new SelectViewModel();
+
+    public CommonSelectBox selectType = new CommonSelectBox();
+
+    private SelectViewModel selectModelForType { get; set; } = new SelectViewModel();
+
+    public CommonSelectBox selectOrientation = new CommonSelectBox();
+
+    private SelectViewModel selectModelForOrientation { get; set; } = new SelectViewModel();
+
+    public CommonSelectBox selectLookup = new CommonSelectBox();
+
+    private SelectViewModel selectModelForLookup { get; set; } = new SelectViewModel();
+
+    public Switch switchHelp = new Switch();
+
+    private SwitchViewModel switchModelForHelp { get; set; } = new SwitchViewModel();
+
+    public Switch switchGroupHeader = new Switch();
+
+    private SwitchViewModel switchModelForGroupHeader { get; set; } = new SwitchViewModel();
+
+    public Switch switchCollapsible = new Switch();
+
+    private SwitchViewModel switchModelForCollapsible { get; set; } = new SwitchViewModel();
+
+    public Switch switchRequired = new Switch();
+
+    private SwitchViewModel switchModelForRequired { get; set; } = new SwitchViewModel();
+
+    public Switch switchConditional = new Switch();
+
+    private SwitchViewModel switchModelForConditional { get; set; } = new SwitchViewModel();
+
+    public Switch switchReadonly = new Switch();
+
+    private SwitchViewModel switchModelForReadonly { get; set; } = new SwitchViewModel();
+
+    public Switch switchNotification = new Switch();
+
+    private SwitchViewModel switchModelForNotification { get; set; } = new SwitchViewModel();
+
+    public Switch switchRepeatHeader = new Switch();
+
+    private SwitchViewModel switchModelForRepeatHeader { get; set; } = new SwitchViewModel();
+
+    public Switch switchLookup = new Switch();
+
+    private SwitchViewModel switchModelForLookup { get; set; } = new SwitchViewModel();
+
+    public Provinces provinces = new Provinces();
+    private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
+
+    protected override async Task OnInitializedAsync()
+    {
+        textModelForQuestionNumber.Name = "QuestionNumber";
+        textModelForQuestionNumber.Placeholder = "Question Number";
+        textModelForQuestionNumber.Value = QuestionnaireConfigurationModel.QuestionNumber;
+
+        textModelForVariableName.Name = "VariableName";
+        textModelForVariableName.Placeholder = "Variable Name";
+        textModelForVariableName.Value = QuestionnaireConfigurationModel.VariableName;
+
+        textModelForFieldName.Name = "FieldName";
+        textModelForFieldName.Placeholder = "Field Name";
+        textModelForFieldName.Value = QuestionnaireConfigurationModel.EntityField;
+
+        textModelForGroupName.Name = "GroupName";
+        textModelForGroupName.Placeholder = "Group Name";
+        textModelForGroupName.Value = QuestionnaireConfigurationModel.GroupName;
+
+        textModelForCondition.Name = "Condition";
+        textModelForCondition.Placeholder = "Condition";
+        textModelForCondition.Value = QuestionnaireConfigurationModel.Condition;
+
+        textModelForNotificationCondition.Name = "NotificationCondition";
+        textModelForNotificationCondition.Placeholder = "Notification Condition";
+        textModelForNotificationCondition.Value = QuestionnaireConfigurationModel.NotificationCondition;
+
+        textModelForInputMask.Name = "InputMask";
+        textModelForInputMask.Placeholder = "Input Mask";
+        textModelForInputMask.Value = QuestionnaireConfigurationModel.Mask;
+
+        numberModelForSequence.Name = "Sequence";
+        numberModelForSequence.Placeholder = "Sequence";
+        numberModelForSequence.Value = QuestionnaireConfigurationModel.Sequence;
+
+        numberModelForColumns.Name = "Columns";
+        numberModelForColumns.Placeholder = "Columns";
+        numberModelForColumns.Value = QuestionnaireConfigurationModel.Columns;
+
+        selectModelForEntity.Options = sharedService.GetEntities();
+
+        switch (QuestionnaireConfigurationModel.EntityName)
+        {
+            case "Questionnaires.Data.SectionDemographics":
+                selectModelForEntity.ID = 1;
+                selectModelForEntity.Value = "01";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.SectionDemographics");
+                break;
+            case "Questionnaires.Data.SectionA":
+                selectModelForEntity.ID = 2;
+                selectModelForEntity.Value = "02";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.SectionA");
+                break;
+            case "Questionnaires.Data.SectionB":
+                selectModelForEntity.ID = 3;
+                selectModelForEntity.Value = "03";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.SectionB");
+                break;
+            case "Questionnaires.Data.SectionC":
+                selectModelForEntity.ID = 4;
+                selectModelForEntity.Value = "04";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.SectionC");
+                break;
+            case "Questionnaires.Data.SectionD":
+                selectModelForEntity.ID = 5;
+                selectModelForEntity.Value = "05";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.SectionD");
+                break;
+            case "Questionnaires.Data.SectionE":
+                selectModelForEntity.ID = 6;
+                selectModelForEntity.Value = "06";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.SectionE");
+                break;
+            case "Questionnaires.Data.TeacherProfile":
+                selectModelForEntity.ID = 7;
+                selectModelForEntity.Value = "07";
+                selectModelForField.Options = await sharedService.GetFields("Questionnaires.Data.TeacherProfile");
+                break;
+            default:
+                selectModelForEntity.ID = null;
+                selectModelForEntity.Value = null;
+                break;
+        }
+
+        if (!string.IsNullOrEmpty(QuestionnaireConfigurationModel.EntityField))
+        {
+            var fieldid = dbContext.QuestionnairesConfigurations.Where(t => t.EntityName == QuestionnaireConfigurationModel.EntityName && t.EntityField == QuestionnaireConfigurationModel.EntityField).Select(t => t.Id).FirstOrDefault();
+            selectModelForField.ID = fieldid;
+            selectModelForField.Value = fieldid.ToString();
+        }
+
+        selectModelForType.Options = sharedService.GetInpuTypes();
+        selectModelForType.ID = QuestionnaireConfigurationModel.InputTypeId;
+        selectModelForType.Value = QuestionnaireConfigurationModel.InputTypeId.ToString();
+
+        selectModelForOrientation.Options = sharedService.GetOrientations();
+        selectModelForOrientation.ID = QuestionnaireConfigurationModel.OrientationId.HasValue ? QuestionnaireConfigurationModel.OrientationId.Value : 0;
+        selectModelForOrientation.Value = selectModelForOrientation.ID.ToString();
+
+        selectModelForLookup.Options = sharedService.GetLookups();
+        selectModelForLookup.ID = QuestionnaireConfigurationModel.LookupEntityId.HasValue ? QuestionnaireConfigurationModel.LookupEntityId.Value : 0;
+        selectModelForLookup.Value = selectModelForLookup.ID.ToString();
+
+        switchModelForHelp.Value = QuestionnaireConfigurationModel.HasHelp;
+        switchModelForGroupHeader.Value = QuestionnaireConfigurationModel.ShowGroupName;
+        //switchModelForCollapsible.Value = QuestionnaireConfigurationModel.;
+        switchModelForRequired.Value = QuestionnaireConfigurationModel.IsRequired;
+        switchModelForConditional.Value = QuestionnaireConfigurationModel.IsConditional.HasValue ? QuestionnaireConfigurationModel.IsConditional.Value : false;
+        switchModelForReadonly.Value = QuestionnaireConfigurationModel.IsReadOnly;
+        switchModelForNotification.Value = QuestionnaireConfigurationModel.HasNotification.HasValue ? QuestionnaireConfigurationModel.HasNotification.Value : false;
+        switchModelForRepeatHeader.Value = QuestionnaireConfigurationModel.IsHeader;
+        switchModelForLookup.Value = QuestionnaireConfigurationModel.HasLookupEntity;
+
+        ProvinceConfigModel.Alberta = QuestionnaireConfigurationModel.Alberta;
+        ProvinceConfigModel.BritishColumbia = QuestionnaireConfigurationModel.BritishColumbia;
+        ProvinceConfigModel.Manitoba = QuestionnaireConfigurationModel.Manitoba;
+        ProvinceConfigModel.NewBrunswick = QuestionnaireConfigurationModel.NewBrunswick;
+        ProvinceConfigModel.NewfoundlandandLabrador = QuestionnaireConfigurationModel.NewfoundlandandLabrador;
+        ProvinceConfigModel.NovaScotia = QuestionnaireConfigurationModel.NovaScotia;
+        ProvinceConfigModel.Nunavut = QuestionnaireConfigurationModel.Nunavut;
+        ProvinceConfigModel.Ontario = QuestionnaireConfigurationModel.Ontario;
+        ProvinceConfigModel.PrinceEdwardIsland = QuestionnaireConfigurationModel.PrinceEdwardIsland;
+        ProvinceConfigModel.Quebec = QuestionnaireConfigurationModel.Quebec;
+        ProvinceConfigModel.Saskatchewan = QuestionnaireConfigurationModel.Saskatchewan;
+        ProvinceConfigModel.YukonTerritory = QuestionnaireConfigurationModel.YukonTerritory;
+        ProvinceConfigModel.NorthwestTerritories = QuestionnaireConfigurationModel.NorthwestTerritories;
+    }
+
+    public void ChangeTextQuestionNumber(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForQuestionNumber.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.QuestionNumber = string.IsNullOrEmpty(textModelForQuestionNumber.Value) ? null : textModelForQuestionNumber.Value;
+    }
+
+    public void ChangeTextFieldName(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForFieldName.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.EntityField = string.IsNullOrEmpty(textModelForFieldName.Value) ? null : textModelForFieldName.Value;
+    }
+
+    public void ChangeTextVariableName(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForVariableName.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.VariableName = string.IsNullOrEmpty(textModelForVariableName.Value) ? null : textModelForVariableName.Value;
+    }
+
+    public void ChangeTextGroupName(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForGroupName.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.GroupName = string.IsNullOrEmpty(textModelForGroupName.Value) ? null : textModelForGroupName.Value;
+    }
+
+    public void ChangeTextCondition(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForCondition.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.Condition = string.IsNullOrEmpty(textModelForCondition.Value) ? null : textModelForCondition.Value;
+    }
+
+    public void ChangeTextNotificationCondition(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForNotificationCondition.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.NotificationCondition = string.IsNullOrEmpty(textModelForNotificationCondition.Value) ? null : textModelForNotificationCondition.Value;
+    }
+
+    public void ChangeTextInputMask(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForInputMask.Value = e.Value.ToString();
+        QuestionnaireConfigurationModel.Mask = string.IsNullOrEmpty(textModelForInputMask.Value) ? null : textModelForInputMask.Value;
+    }
+
+    public void ChangeNumberSequence(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        numberModelForSequence.Value = null;
+
+        if (int.TryParse(selectedString, out int newvalue))
+        {
+            numberModelForSequence.Value = newvalue;
+            QuestionnaireConfigurationModel.Sequence = newvalue;
+        }
+    }
+
+    public void ChangeNumberColumns(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        numberModelForColumns.Value = null;
+
+        if (byte.TryParse(selectedString, out byte newvalue))
+        {
+            numberModelForColumns.Value = newvalue;
+            QuestionnaireConfigurationModel.Columns = newvalue;
+        }
+    }
+
+    private void SwitchChangeForHelp(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForHelp.Value = true;
+        else
+            switchModelForHelp.Value = false;
+
+        QuestionnaireConfigurationModel.HasHelp = switchModelForHelp.Value;
+
+        if (!switchModelForHelp.Value)
+        {
+            QuestionnaireConfigurationModel.HelpText = null;
+            QuestionnaireConfigurationModel.HelpTextFrench = null;
+        }
+    }
+
+    private void SwitchChangeForGroupHeader(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForGroupHeader.Value = true;
+        else
+            switchModelForGroupHeader.Value = false;
+
+        QuestionnaireConfigurationModel.ShowGroupName = switchModelForGroupHeader.Value;
+    }
+
+    private void SwitchChangeForCollapsible(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForCollapsible.Value = true;
+        else
+            switchModelForCollapsible.Value = false;
+
+        //there is no collapsible
+    }
+
+    private void SwitchChangeForRequired(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForRequired.Value = true;
+        else
+            switchModelForRequired.Value = false;
+
+        QuestionnaireConfigurationModel.IsRequired = switchModelForRequired.Value;
+    }
+
+    private void SwitchChangeForConditional(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForConditional.Value = true;
+        else
+            switchModelForConditional.Value = false;
+
+        QuestionnaireConfigurationModel.IsConditional = switchModelForHelp.Value;
+
+        if (!switchModelForConditional.Value)
+        {
+            QuestionnaireConfigurationModel.Condition = null;
+            textModelForCondition.Value = string.Empty;
+        }
+    }
+
+    private void SwitchChangeForReadonly(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForReadonly.Value = true;
+        else
+            switchModelForReadonly.Value = false;
+
+        QuestionnaireConfigurationModel.IsReadOnly = switchModelForReadonly.Value;
+    }
+
+    private void SwitchChangeForNotification(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForNotification.Value = true;
+        else
+            switchModelForNotification.Value = false;
+
+        QuestionnaireConfigurationModel.HasNotification = switchModelForNotification.Value;
+
+        if (!switchModelForNotification.Value)
+        {
+            QuestionnaireConfigurationModel.NotificationCondition = null;
+            QuestionnaireConfigurationModel.Notification = null;
+            QuestionnaireConfigurationModel.NotificationFrench = null;
+            textModelForNotificationCondition.Value = string.Empty;
+        }
+    }
+
+    private void SwitchChangeForRepeatHeader(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForRepeatHeader.Value = true;
+        else
+            switchModelForRepeatHeader.Value = false;
+
+        QuestionnaireConfigurationModel.IsHeader = switchModelForRepeatHeader.Value;
+    }
+
+    private void SwitchChangeForLookup(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    {
+        if (e.Checked)
+            switchModelForLookup.Value = true;
+        else
+            switchModelForLookup.Value = false;
+
+        QuestionnaireConfigurationModel.HasLookupEntity = switchModelForLookup.Value;
+
+        if (!switchModelForLookup.Value)
+        {
+            QuestionnaireConfigurationModel.LookupEntityId = null;
+            selectModelForLookup.ID = 0;
+            selectModelForLookup.Value = selectModelForLookup.ID.ToString();
+        }
+    }
+
+    private void OptionChangeForField(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        selectModelForField.ID = 0;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            selectModelForField.ID = newid;
+            selectModelForField.Value = newid.ToString();
+            QuestionnaireConfigurationModel.EntityField = dbContext.QuestionnairesConfigurations.Where(t => t.Id == selectModelForField.ID).Select(t => t.EntityField).FirstOrDefault();
+        }
+    }
+
+    private async void OptionChangeForEntity(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        selectModelForEntity.ID = 0;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            selectModelForEntity.ID = newid;
+            selectModelForEntity.Value = newid.ToString();
+            selectModelForField.Options = new List<SelectListItem>();
+
+            switch (selectModelForEntity.ID)
+            {
+                case 1:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.SectionDemographics";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.SectionDemographics");
+                    break;
+                case 2:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.SectionA";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.SectionA");
+                    break;
+                case 3:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.SectionB";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.SectionB");
+                    break;
+                case 4:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.SectionC";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.SectionC");
+                    break;
+                case 5:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.SectionD";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.SectionD");
+                    break;
+                case 6:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.SectionE";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.SectionE");
+                    break;
+                case 7:
+                    QuestionnaireConfigurationModel.EntityName = "Questionnaires.Data.TeacherProfile";
+                    selectField.SelectModel.Options = await sharedService.GetFields("Questionnaires.Data.TeacherProfile");
+                    break;
+                default:
+                    QuestionnaireConfigurationModel.EntityName = null;
+                    break;
+            }
+        }
+    }
+
+    private void OptionChangeForType(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        selectModelForField.ID = 0;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            selectModelForType.ID = newid;
+            selectModelForType.Value = newid.ToString();
+            QuestionnaireConfigurationModel.InputTypeId = newid;
+        }
+    }
+
+    private void OptionChangeForOrientation(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        selectModelForOrientation.ID = 0;
+        QuestionnaireConfigurationModel.OrientationId = null;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            selectModelForOrientation.ID = newid;
+            selectModelForOrientation.Value = newid.ToString();
+            QuestionnaireConfigurationModel.OrientationId = newid;
+        }
+    }
+
+    private void OptionChangeForLookup(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        selectModelForLookup.ID = 0;
+        QuestionnaireConfigurationModel.LookupEntityId = null;
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            selectModelForLookup.ID = newid;
+            selectModelForLookup.Value = newid.ToString();
+            QuestionnaireConfigurationModel.LookupEntityId = newid;
+        }
+    }
+}
