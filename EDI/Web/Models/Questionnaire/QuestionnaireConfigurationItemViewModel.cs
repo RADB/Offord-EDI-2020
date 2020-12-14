@@ -27,6 +27,7 @@ namespace EDI.Web.Models
         public int? LookupEntityId { get; set; }
         public bool IsRequired { get; set; }
         public bool IsReadOnly { get; set; }
+        public bool IsCollapsible { get; set; }
         public bool? IsConditional { get; set; }
         public string Condition { get; set; }
         public bool? HasNotification { get; set; }

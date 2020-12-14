@@ -450,7 +450,7 @@
 
         switchModelForHelp.Value = QuestionnaireConfigurationModel.HasHelp;
         switchModelForGroupHeader.Value = QuestionnaireConfigurationModel.ShowGroupName;
-        //switchModelForCollapsible.Value = QuestionnaireConfigurationModel.;
+        switchModelForCollapsible.Value = QuestionnaireConfigurationModel.IsCollapsible;
         switchModelForRequired.Value = QuestionnaireConfigurationModel.IsRequired;
         switchModelForConditional.Value = QuestionnaireConfigurationModel.IsConditional.HasValue ? QuestionnaireConfigurationModel.IsConditional.Value : false;
         switchModelForReadonly.Value = QuestionnaireConfigurationModel.IsReadOnly;
@@ -574,7 +574,7 @@
         else
             switchModelForCollapsible.Value = false;
 
-        //there is no collapsible
+        QuestionnaireConfigurationModel.IsCollapsible = switchModelForCollapsible.Value;
     }
 
     private void SwitchChangeForRequired(Syncfusion.Blazor.Buttons.ChangeEventArgs e)

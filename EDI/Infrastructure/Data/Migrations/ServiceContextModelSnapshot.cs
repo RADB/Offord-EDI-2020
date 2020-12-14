@@ -1364,6 +1364,9 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnName("InputTypeId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsCollapsible")
+                        .HasColumnType("bit");
+
                     b.Property<bool?>("IsConditional")
                         .HasColumnType("bit");
 
@@ -1665,10 +1668,10 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("ClimbingStairs")
+                    b.Property<byte?>("ClimbingStairs")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Coordinated")
+                    b.Property<byte?>("Coordinated")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("CreatedBy")
@@ -1684,29 +1687,29 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<decimal>("Days")
+                    b.Property<decimal?>("Days")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<byte>("Energy")
+                    b.Property<byte?>("Energy")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("HandPreference")
+                    b.Property<byte?>("HandPreference")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Holding")
+                    b.Property<byte?>("Holding")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Hungry")
+                    b.Property<byte?>("Hungry")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<byte>("Late")
+                    b.Property<byte?>("Late")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Manipulating")
+                    b.Property<byte?>("Manipulating")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("ModifiedBy")
@@ -1722,16 +1725,16 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("PhysicalDevelopment")
+                    b.Property<byte?>("PhysicalDevelopment")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Tired")
+                    b.Property<byte?>("Tired")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("UnderDressed")
+                    b.Property<byte?>("UnderDressed")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WashroomHabits")
+                    b.Property<byte?>("WashroomHabits")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("YearId")
@@ -1753,25 +1756,25 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte>("Articulates")
+                    b.Property<byte?>("Articulates")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Bigger")
+                    b.Property<byte?>("Bigger")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Books")
+                    b.Property<byte?>("Books")
                         .HasColumnType("tinyint");
 
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Communicates")
+                    b.Property<byte?>("Communicates")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("ComplexWords")
+                    b.Property<byte?>("ComplexWords")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Count20")
+                    b.Property<byte?>("Count20")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("CreatedBy")
@@ -1787,28 +1790,28 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("Effective")
+                    b.Property<byte?>("Effective")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("GroupReading")
+                    b.Property<byte?>("GroupReading")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Handles")
+                    b.Property<byte?>("Handles")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Imagines")
+                    b.Property<byte?>("Imagines")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Letters10")
+                    b.Property<byte?>("Letters10")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Listens")
+                    b.Property<byte?>("Listens")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Mathematics")
+                    b.Property<byte?>("Mathematics")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("ModifiedBy")
@@ -1824,88 +1827,88 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("NumberGames")
+                    b.Property<byte?>("NumberGames")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("OneToOne")
+                    b.Property<byte?>("OneToOne")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("OtherSkills")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Reading")
+                    b.Property<byte?>("Reading")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Recognize10")
+                    b.Property<byte?>("Recognize10")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Remembers")
+                    b.Property<byte?>("Remembers")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Rhyming")
+                    b.Property<byte?>("Rhyming")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Shapes")
+                    b.Property<byte?>("Shapes")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SimpleSentences")
+                    b.Property<byte?>("SimpleSentences")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SimpleWords")
+                    b.Property<byte?>("SimpleWords")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Sorting")
+                    b.Property<byte?>("Sorting")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Sounds")
+                    b.Property<byte?>("Sounds")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialArtSkills")
+                    b.Property<byte?>("SpecialArtSkills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialAthSkills")
+                    b.Property<byte?>("SpecialAthSkills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialLitSkills")
+                    b.Property<byte?>("SpecialLitSkills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialMusSkills")
+                    b.Property<byte?>("SpecialMusSkills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialNumSkills")
+                    b.Property<byte?>("SpecialNumSkills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialOthSkills")
+                    b.Property<byte?>("SpecialOthSkills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialPblskills")
+                    b.Property<byte?>("SpecialPblskills")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Tells")
+                    b.Property<byte?>("Tells")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("TimeConcepts")
+                    b.Property<byte?>("TimeConcepts")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Understands")
+                    b.Property<byte?>("Understands")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Voluntarily")
+                    b.Property<byte?>("Voluntarily")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WriteSimpleSentences")
+                    b.Property<byte?>("WriteSimpleSentences")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WriteSimpleWords")
+                    b.Property<byte?>("WriteSimpleWords")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WritesName")
+                    b.Property<byte?>("WritesName")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Writing")
+                    b.Property<byte?>("Writing")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WritingDirections")
+                    b.Property<byte?>("WritingDirections")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("YearId")
@@ -1927,22 +1930,22 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte>("AnswersQuestions")
+                    b.Property<byte?>("AnswersQuestions")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("AssistOthers")
+                    b.Property<byte?>("AssistOthers")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Bullies")
+                    b.Property<byte?>("Bullies")
                         .HasColumnType("tinyint");
 
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Comforting")
+                    b.Property<byte?>("Comforting")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Cooperative")
+                    b.Property<byte?>("Cooperative")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("CreatedBy")
@@ -1958,80 +1961,80 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("Cries")
+                    b.Property<byte?>("Cries")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Curious")
+                    b.Property<byte?>("Curious")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Directions")
+                    b.Property<byte?>("Directions")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Disobedient")
+                    b.Property<byte?>("Disobedient")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Distactable")
+                    b.Property<byte?>("Distactable")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("EagerNewGame")
+                    b.Property<byte?>("EagerNewGame")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("EagerNewToy")
+                    b.Property<byte?>("EagerNewToy")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("EagerRead")
+                    b.Property<byte?>("EagerRead")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Fearful")
+                    b.Property<byte?>("Fearful")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Fidgets")
+                    b.Property<byte?>("Fidgets")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Fights")
+                    b.Property<byte?>("Fights")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("FollowInstruction1Step")
+                    b.Property<byte?>("FollowInstruction1Step")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("HelpHurt")
+                    b.Property<byte?>("HelpHurt")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("HelpPickUpObjects")
+                    b.Property<byte?>("HelpPickUpObjects")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("HelpSick")
+                    b.Property<byte?>("HelpSick")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Impulsive")
+                    b.Property<byte?>("Impulsive")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Inattentive")
+                    b.Property<byte?>("Inattentive")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("IncludesOthers")
+                    b.Property<byte?>("IncludesOthers")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Independent")
+                    b.Property<byte?>("Independent")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("KicksHits")
+                    b.Property<byte?>("KicksHits")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<byte>("LaughsAtOthers")
+                    b.Property<byte?>("LaughsAtOthers")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Listens")
+                    b.Property<byte?>("Listens")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Mediate")
+                    b.Property<byte?>("Mediate")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("MessCleanup")
+                    b.Property<byte?>("MessCleanup")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("ModifiedBy")
@@ -2047,91 +2050,91 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("Neat")
+                    b.Property<byte?>("Neat")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Nervous")
+                    b.Property<byte?>("Nervous")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("NoDecisions")
+                    b.Property<byte?>("NoDecisions")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Peers")
+                    b.Property<byte?>("Peers")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Play")
+                    b.Property<byte?>("Play")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("RespectsAdults")
+                    b.Property<byte?>("RespectsAdults")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("RespectsChildren")
+                    b.Property<byte?>("RespectsChildren")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("RespectsProperty")
+                    b.Property<byte?>("RespectsProperty")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Responsible")
+                    b.Property<byte?>("Responsible")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Restless")
+                    b.Property<byte?>("Restless")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("RoutineChanges")
+                    b.Property<byte?>("RoutineChanges")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Routines")
+                    b.Property<byte?>("Routines")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Rules")
+                    b.Property<byte?>("Rules")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SelfConfidence")
+                    b.Property<byte?>("SelfConfidence")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SelfControl")
+                    b.Property<byte?>("SelfControl")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Separation")
+                    b.Property<byte?>("Separation")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Settle")
+                    b.Property<byte?>("Settle")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Shy")
+                    b.Property<byte?>("Shy")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Social")
+                    b.Property<byte?>("Social")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SolvesProblem")
+                    b.Property<byte?>("SolvesProblem")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SucksThumb")
+                    b.Property<byte?>("SucksThumb")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Takes")
+                    b.Property<byte?>("Takes")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("TakesCard")
+                    b.Property<byte?>("TakesCard")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("TakingTurns")
+                    b.Property<byte?>("TakingTurns")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Temper")
+                    b.Property<byte?>("Temper")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Tolerance")
+                    b.Property<byte?>("Tolerance")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Unhappy")
+                    b.Property<byte?>("Unhappy")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WorkOnTime")
+                    b.Property<byte?>("WorkOnTime")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Worried")
+                    b.Property<byte?>("Worried")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("YearId")
@@ -2156,13 +2159,13 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("AssessSpecify")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Behavioural")
+                    b.Property<byte?>("Behavioural")
                         .HasColumnType("tinyint");
 
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Chronic")
+                    b.Property<byte?>("Chronic")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("CreatedBy")
@@ -2178,26 +2181,26 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("Dental")
+                    b.Property<byte?>("Dental")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Emotional")
+                    b.Property<byte?>("Emotional")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Further")
+                    b.Property<byte?>("Further")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Hearing")
+                    b.Property<byte?>("Hearing")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Language")
+                    b.Property<byte?>("Language")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<byte>("Learning")
+                    b.Property<byte?>("Learning")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("ModifiedBy")
@@ -2213,10 +2216,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("NeedsAssess")
+                    b.Property<byte?>("NeedsAssess")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Other")
+                    b.Property<byte?>("Other")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("OtherSpecialProblem")
@@ -2225,31 +2228,31 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("OtherSpecify")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte>("Physical")
+                    b.Property<byte?>("Physical")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Problem")
+                    b.Property<byte?>("Problem")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialProblem1")
+                    b.Property<byte?>("SpecialProblem1")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialProblem2")
+                    b.Property<byte?>("SpecialProblem2")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("SpecialProblem3")
+                    b.Property<byte?>("SpecialProblem3")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Speech")
+                    b.Property<byte?>("Speech")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Support")
+                    b.Property<byte?>("Support")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Visual")
+                    b.Property<byte?>("Visual")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("WaitList")
+                    b.Property<byte?>("WaitList")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("YearId")
@@ -2271,13 +2274,13 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<byte>("Birth1")
+                    b.Property<byte?>("Birth1")
                         .HasColumnType("tinyint");
 
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Clubs")
+                    b.Property<byte?>("Clubs")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Comments")
@@ -2296,26 +2299,26 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("Cultural")
+                    b.Property<byte?>("Cultural")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("FamilyLiteracy")
+                    b.Property<byte?>("FamilyLiteracy")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("FamilyResource")
+                    b.Property<byte?>("FamilyResource")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Four5")
+                    b.Property<byte?>("Four5")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Langauges")
+                    b.Property<byte?>("Langauges")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(10)")
                         .HasMaxLength(10);
 
-                    b.Property<byte>("LibraryReading")
+                    b.Property<byte?>("LibraryReading")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("ModifiedBy")
@@ -2331,28 +2334,28 @@ namespace EDI.Infrastructure.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<byte>("MusicArts")
+                    b.Property<byte?>("MusicArts")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("One2")
+                    b.Property<byte?>("One2")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Other")
+                    b.Property<byte?>("Other")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("OtherSpecify")
+                    b.Property<byte?>("OtherSpecify")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Religion")
+                    b.Property<byte?>("Religion")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Sports")
+                    b.Property<byte?>("Sports")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Three4")
+                    b.Property<byte?>("Three4")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Two3")
+                    b.Property<byte?>("Two3")
                         .HasColumnType("tinyint");
 
                     b.Property<int?>("YearId")

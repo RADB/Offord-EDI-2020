@@ -157,6 +157,7 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.ShowGroupName = questionnaireConfiguration.ShowGroupName;
                 _questionnaireConfiguration.Sequence = questionnaireConfiguration.Sequence;
                 _questionnaireConfiguration.IsRequired = questionnaireConfiguration.IsRequired;
+                _questionnaireConfiguration.IsCollapsible = questionnaireConfiguration.IsCollapsible;
                 _questionnaireConfiguration.IsConditional = questionnaireConfiguration.IsConditional;
                 _questionnaireConfiguration.Condition = questionnaireConfiguration.Condition;
                 _questionnaireConfiguration.IsReadOnly = questionnaireConfiguration.IsReadOnly;
@@ -253,6 +254,7 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.IsConditional = questionnaireConfiguration.IsConditional;
                 _questionnaireConfiguration.Condition = questionnaireConfiguration.Condition;
                 _questionnaireConfiguration.IsReadOnly = questionnaireConfiguration.IsReadOnly;
+                _questionnaireConfiguration.IsCollapsible = questionnaireConfiguration.IsCollapsible;
                 _questionnaireConfiguration.HasNotification = questionnaireConfiguration.HasNotification;
                 _questionnaireConfiguration.NotificationCondition = questionnaireConfiguration.NotificationCondition;
                 _questionnaireConfiguration.Notification = questionnaireConfiguration.Notification;
@@ -362,6 +364,7 @@ namespace EDI.Web.Services
                     IsConditional = questionnaireConfiguration.IsConditional,
                     Condition = questionnaireConfiguration.Condition,
                     IsReadOnly = questionnaireConfiguration.IsReadOnly,
+                    IsCollapsible = questionnaireConfiguration.IsCollapsible,
                     HasNotification = questionnaireConfiguration.HasNotification,
                     NotificationCondition = questionnaireConfiguration.NotificationCondition,
                     Notification = questionnaireConfiguration.Notification,

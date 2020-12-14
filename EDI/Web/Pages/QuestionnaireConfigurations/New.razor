@@ -118,6 +118,12 @@
         }
         else
         {
+            QuestionnaireConfigurationModel.English = questionnaireConfigurationform1.rteEnglish.BindValue;
+            QuestionnaireConfigurationModel.French = questionnaireConfigurationform1.rteFrench.BindValue;
+            QuestionnaireConfigurationModel.HelpText = questionnaireConfigurationform1.rteHelpEnglish.BindValue;
+            QuestionnaireConfigurationModel.HelpTextFrench = questionnaireConfigurationform1.rteHelpFrench.BindValue;
+            QuestionnaireConfigurationModel.Notification = questionnaireConfigurationform1.rteNotificationEnglish.BindValue;
+            QuestionnaireConfigurationModel.NotificationFrench = questionnaireConfigurationform1.rteNotificationFrench.BindValue;
             QuestionnaireConfigurationModel.Alberta = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Alberta;
             QuestionnaireConfigurationModel.BritishColumbia = questionnaireConfigurationform1.provinces.ProvinceConfigModel.BritishColumbia;
             QuestionnaireConfigurationModel.Manitoba = questionnaireConfigurationform1.provinces.ProvinceConfigModel.Manitoba;
