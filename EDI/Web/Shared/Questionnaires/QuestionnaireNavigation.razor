@@ -3,58 +3,112 @@
 @inject ServiceContext dbContext;
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+@inject ISharedService sharedService;
 
 <div class="row">
-    @{
-        foreach (var questionnaire in questionnaires)
-        {
-            if (questionnaire.Id == QuestionnaireId)
-            {
-                <div class="col-2">
-                    @questionnaire.QuestionnaireName
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        @{foreach (var questionnaire in questionnaires)
+                            {
+                                if (questionnaire.Id == QuestionnaireId)
+                                {
+                                    <div class="col-2">
+                                        <!-- check completion status - colour green or red-->
+                                        @{
+                                            var _name = questionnaire.QuestionnaireName;
+                                            <button type="button" class="btn btn-outline-secondary">
+                                                @_name <!--<span class="badge badge-light">97</span>-->
+                                            </button>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-2">
+                                        <!-- check completion status - colour green or red-->
+                                        @{
+                                            var _name = questionnaire.QuestionnaireName;
+                                            <button type="button" @onclick="@(() => gotoQuestionnaire(_name))" class="btn btn-outline-danger">
+                                                @_name <!--<span class="badge badge-light">97</span>-->
+                                            </button>
+                                        }
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
                 </div>
-            }
-            else
-            {
-            <div class="col-2">
-                <!-- check completion status - colour green or red-->
-                <button type="button" class="btn btn-outline-danger">
-                    @questionnaire.QuestionnaireName <!--<span class="badge badge-light">97</span>-->
-                </button>
-            </div>
-            }
-            }
-            }
+                    @if (!IsReadOnly)
+                    {
+                        <div class="col-1">
+                            <button class="savebutton" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>                      
+                        </div>
+                    }
+                </div>
+        </div>
     </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int QuestionnaireId { get; set; }
+    [Parameter]
+    public int ChildId { get; set; }
+    [Parameter]
+    public bool IsReadOnly { get; set; }
+
+    private bool isChildQuestionnaire;
+    private int numberOfQuestionnaires;
+    private int columns;
+
+    private List<Questionnaire> questionnaires;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == isChildQuestionnaire).OrderBy(c => c.Sequence).ToList();
+        numberOfQuestionnaires = questionnaires.Count();
+        columns = (int)(numberOfQuestionnaires / 12);
+    }
+
+    private void gotoQuestionnaire(string name)
+    {
+        switch (name)
+        {
+            case "Demographics":
+                NavigationManager.NavigateTo("./EDIQuestionnaires/SectionDemographics/" + ChildId);
+                break;
+            default:
+                NavigationManager.NavigateTo("./EDIQuestionnaires/" + name.Replace(" ", "") + "/" + ChildId);
+                break;
+        }
+    }
+
+    private async void Save()
+    {
+        await dbContext.SaveChangesAsync();
+
+        getData();
+
+        StateHasChanged();
+    }
+}
 
 
-                @code {
-                    [Parameter]
-                    public int QuestionnaireId { get; set; }
-
-        private bool isChildQuestionnaire;
-            private List<Questionnaire> questionnaires;
-            private int numberOfQuestionnaires;
-            private int columns;
-
-
-            protected override async Task OnInitializedAsync()
-            {
-                if (!UserSettings.IsAuthenticated)
-                {
-                    NavigationManager.NavigateTo("./login");
-                }
-                else
-                {
-                    isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
-                    getData();
-                }
-            }
-
-            private void getData()
-            {
-                questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == isChildQuestionnaire).OrderBy(c => c.Sequence).ToList();
-                numberOfQuestionnaires = questionnaires.Count();
-                columns = (int)(numberOfQuestionnaires / 12);
-            }
-                }
