@@ -53,13 +53,14 @@
                         NavigationManager.NavigateTo("./Dashboard/index");
                 }
             }
+            // get the data if use that has access
+            getData();
         }
         catch (Exception ex)
         {
             NavigationManager.NavigateTo("./Dashboard/index");
         }
-        // get the data if use that has access
-        getData();
+
     }
 
     private void getData()
