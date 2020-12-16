@@ -29,5 +29,9 @@ namespace EDI.Web.Models
         public string Language { get; set; }
 
         public string Province { get; set; }
+
+        public int TeacherId { get; set; }
+
+        public int YearId { get; set; }
     }
 }

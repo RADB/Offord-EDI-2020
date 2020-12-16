@@ -6,6 +6,7 @@
 @inject LanguageSettings LanguageSettings;
 @inject AppIdentityDbContext identityContext;
 @inject ServiceContext dbContext;
+@using System.Linq.Dynamic.Core
 
 <BlazoredModal DisableBackgroundCancel="true" />
 <BlazoredToasts Position="ToastPosition.BottomRight"
@@ -71,6 +72,12 @@ else
 
         isAuthenticated = user.Identity.IsAuthenticated;
 
+        // get the year id
+        var predicate = "FieldName==\"Year\"";
+        var year = dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
+        predicate = "EDIYear == " + year;
+        UserSettings.YearId = dbContext.Years.Where(predicate).Single().Id;
+
         if (user.Identity.IsAuthenticated)
         {
             var url = NavigationManager.Uri;
@@ -126,7 +133,7 @@ else
                                 .ThenInclude(ts => ts.Province).FirstOrDefault();
 
                 UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                //UserSettings.Id = teacher.Id;
+                UserSettings.TeacherId = teacher.Id;
                 LanguageSettings.Translations = sivm;
             }
             else

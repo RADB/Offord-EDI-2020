@@ -38,14 +38,28 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!UserSettings.IsAuthenticated)
+        try
         {
-            NavigationManager.NavigateTo("./login");
+            if (!UserSettings.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo("./login");
+            }
+            else
+            {
+                if (UserSettings.IsTeacher)
+                {
+                    // if the teacher tries to navigate to another teachers profile - send them back to dashboard
+                    if (TeacherId != UserSettings.TeacherId)
+                        NavigationManager.NavigateTo("./Dashboard/index");
+                }
+            }
         }
-        else
+        catch (Exception ex)
         {
-            getData();
+            NavigationManager.NavigateTo("./Dashboard/index");
         }
+        // get the data if use that has access
+        getData();
     }
 
     private void getData()

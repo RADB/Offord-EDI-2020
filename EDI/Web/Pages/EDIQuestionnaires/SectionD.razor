@@ -46,8 +46,22 @@
         }
         else
         {
-            QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Section D" && q.YearId == 1).Select(q => q.Id).Single();
-            getData();
+            try
+            {
+                if (UserSettings.IsTeacher)
+                {
+                    //check if child is not it teachers class    
+                    predicate = "Id = " + ChildId + " AND TeacherId = " + UserSettings.TeacherId;
+                    if (!dbContext.Children.Where(predicate).Any())
+                        NavigationManager.NavigateTo("./children/index");
+                }
+                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Section B" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
+                getData();
+            }
+            catch (Exception ex)
+            {
+                NavigationManager.NavigateTo("./children/index");
+            }
         }
     }
 
