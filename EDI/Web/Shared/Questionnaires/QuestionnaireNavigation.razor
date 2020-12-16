@@ -10,7 +10,7 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="row">
-                <div class="col">
+                <div class="col-10">
                     <div class="row">
                         @{foreach (var questionnaire in questionnaires)
                             {
@@ -44,8 +44,9 @@
                 </div>
                     @if (!IsReadOnly)
                     {
-                        <div class="col-1">
-                            <button class="savebutton" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>                      
+                        <div class="col-2">
+                            <button class="btn btn-success" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>                      
+                            <button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> Exit</button>                      
                         </div>
                     }
                 </div>
@@ -108,6 +109,11 @@
         getData();
 
         StateHasChanged();
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo("./children/index");
     }
 }
 

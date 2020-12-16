@@ -56,11 +56,12 @@
                     if (!dbContext.Children.Where(predicate).Any())
                         NavigationManager.NavigateTo("./children/index");
                 }
-                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Section B" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
+                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Demographics" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
                 getData();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 NavigationManager.NavigateTo("./children/index");
             }
         }

@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
+@inject ISharedService sharedService;
+
+<header class="app-header navbar">
+    <a class="navbar-brand" href="#"></a>
+    <div class="headertitle">
+        <h2 style="font-family: Arial;font-weight: bold;background-color: #fff;color: #294980;font-size: 25px;">@Translate("Early Development Instrument")</h2>
+        <h4 style="font-family: Arial;font-weight: bold;background-color: #fff;color: #294980;font-size: 15px;">@Translate("A Population-Based Measure for Communities")</h4>
+    </div>
+</header>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+}
