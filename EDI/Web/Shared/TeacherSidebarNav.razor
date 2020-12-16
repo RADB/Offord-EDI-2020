@@ -100,8 +100,8 @@
         }
         else if (args.NodeData.Id == "02")
         {
-            var TeacherId = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID).Single().Id;
-            NavigationManager.NavigateTo("./TeacherProfile/Index/"+TeacherId);
+            //var TeacherId = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID).Single().Id;
+            NavigationManager.NavigateTo("./TeacherProfile/Index/"+UserSettings.TeacherId);
         }
         else if (args.NodeData.Id == "07")
         {
