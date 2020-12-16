@@ -1,0 +1,111 @@
+﻿@page "/Test"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService toastService;
+@inject ISiteService SiteService
+@inject IModalService Modal
+@inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
+
+@if (!string.IsNullOrEmpty(@Message))
+{
+    <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(@ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @ErrorMessage
+    </div>
+}
+
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+            <div class="card-header">
+                <strong>New Test</strong>
+            </div>
+            <EditForm Model="@SiteModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+                <div class="card-body">
+                    <DataAnnotationsValidator />
+                    <div class="text-danger"><ValidationSummary /></div>
+
+                    @*<div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="SiteNumber">Site Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                        <input type="text" @bind-value="SiteModel.SiteNumber" class="col-md-7 form-control" placeholder="Site Number" />
+                    </div>*@
+
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="SiteNumber">Site Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                        <div class="col-md-7 col-form-label">
+                            <InputText @bind-Value="SiteModel.SiteNumber"/>
+                        </div>
+                    </div>
+
+                    @*<div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="SiteNumber">Site Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                        <div class="col-md-7 col-form-label">
+                            <Text @ref="@textSiteNumber" TextModel="@textModelForSiteNumber" OnChange="@ChangeTextSiteNumber" />
+                        </div>
+                    </div>*@
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+                </div>
+            </EditForm>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private SiteItemViewModel SiteModel { get; set; } 
+
+    SiteForm siteform1 = new SiteForm();
+
+    public Text textSiteNumber = new Text();
+
+    private TextViewModel textModelForSiteNumber { get; set; } = new TextViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        SiteModel = new SiteItemViewModel();
+        textModelForSiteNumber.Value = string.Empty;
+        SiteModel.SiteNumber = string.Empty;
+    }
+
+    private async void HandleValidSubmit()
+    {
+        //Console.WriteLine("OnValidSubmit");
+        var totalItems = await SiteService.GetDuplicateCount(SiteModel.SiteNumber);
+
+        if (totalItems > 0)
+        {
+            ErrorMessage = "The same Site has already existed.";
+            toastService.ShowError(ErrorMessage);
+        }
+        else
+        {
+            int id = await SiteService.CreateSiteAsync(siteform1.SiteModel);
+
+            Message = "New Site added successfully.";
+            toastService.ShowSuccess(Message);
+            NavigationManager.NavigateTo("./Sites/edit/" + id);
+        }
+    }
+
+    public void ChangeTextSiteNumber(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        textModelForSiteNumber.Value = e.Value.ToString();
+        SiteModel.SiteNumber = string.IsNullOrEmpty(textModelForSiteNumber.Value) ? null : textModelForSiteNumber.Value;
+    }
+}
