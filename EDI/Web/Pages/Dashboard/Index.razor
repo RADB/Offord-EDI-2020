@@ -145,9 +145,9 @@
                             <div class="col-lg-8 mb-4">
                                 <!-- EDI Questionnaires Status -->
                                 <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" />
-
-                                <QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Participation Questionaire") URL="/Dashboard/Index" />
-                                <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Training Feedback Questionaire") URL="/Dashboard/Index" />
+                                
+                                <QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Profile") URL="@url" />
+                                <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Profile") URL="@url" />
                             </div>
                             <div class="col-lg-4 mb-4">
                                 <EDI.Web.Pages.NewsFeeds.Newslist />
@@ -179,6 +179,7 @@
     private int schools { get; set; }
     private int teachers { get; set; }
     private int children { get; set; }
+    private string url { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -207,6 +208,7 @@
                     .Single();
                 // count of the children
                 children = teacher.Children.Count();
+                url = "/TeacherProfile/Index/" + UserSettings.TeacherId;
             }
             else
             {
