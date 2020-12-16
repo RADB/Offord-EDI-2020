@@ -5,231 +5,236 @@
 @inject UserSettings UserSettings;
 @using Syncfusion.Blazor.Navigations;
 
-<div class="card-body">
-    <SfAccordion>
-        <AccordionItems>
-            <AccordionItem Header="Question" Expanded="true">
-                <ContentTemplate>
-                    <div class="content">
-                        <div class="form-group row">
-                            <div class="col-lg-3">
-                                <label for="QuestionNumber">Question Number: </label>
-                                <Text @ref="@textQuestionNumber" TextModel="@textModelForQuestionNumber" OnChange="@ChangeTextQuestionNumber" />
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="Entity">Entity: </label> <br />
-                                <CommonSelectBox @ref="@selectEntity" SelectModel="@selectModelForEntity" OnChange="@OptionChangeForEntity" />
-                            </div>
-                            @if (QuestionnaireConfigurationModel.Id > 0)
-                            {
-                                <div class="col-lg-3">
-                                    <label for="Field">Field: </label><br />
-                                    <CommonSelectBox @ref="@selectField" SelectModel="@selectModelForField" OnChange="@OptionChangeForField" />
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-lg-3">
-                                    <label for="Field">Field: </label><br />
-                                    <Text @ref="@textFieldName" TextModel="@textModelForFieldName" OnChange="@ChangeTextFieldName" />
-                                </div>
-                            }
-                            <div class="col-lg-3">
-                                <label for="VariableName">Variable Name: </label>
-                                <Text @ref="@textVariableName" TextModel="@textModelForVariableName" OnChange="@ChangeTextVariableName" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label" for="English">English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-                            <div class="col-md-10 col-form-label">
-                                <RichTextEditor @ref="rteEnglish" BindValue="@QuestionnaireConfigurationModel.English" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label" for="French">French: </label>
-                            <div class="col-md-10 col-form-label">
-                                <RichTextEditor @ref="rteFrench" BindValue="@QuestionnaireConfigurationModel.French" />
-                            </div>
-                        </div>
-                    </div>
-                </ContentTemplate>
-            </AccordionItem>
-        </AccordionItems>
-    </SfAccordion>
-    <br />
-    <SfAccordion>
-        <AccordionItems>
-            <AccordionItem Header="Help" Expanded="true">
-                <ContentTemplate>
-                    <div class="content">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label" for="HasHelp">Has Help: </label>
-                            <div class="col-md-3 col-form-label">
-                                <Switch @ref="switchHelp" SwitchModel="@switchModelForHelp" OnChange="@SwitchChangeForHelp" />
-                            </div>
-                        </div>
-                        @if (switchModelForHelp.Value)
-                        {
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label" for="English">Help Text: </label>
-                                <div class="col-md-10 col-form-label">
-                                    <RichTextEditor @ref="rteHelpEnglish" BindValue="@QuestionnaireConfigurationModel.HelpText" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-2 col-form-label" for="French">Help Text French: </label>
-                                <div class="col-md-10 col-form-label">
-                                    <RichTextEditor @ref="rteHelpFrench" BindValue="@QuestionnaireConfigurationModel.HelpTextFrench" />
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </ContentTemplate>
-            </AccordionItem>
-        </AccordionItems>
-    </SfAccordion>
-    <br />
-    <SfAccordion>
-        <AccordionItems>
-            <AccordionItem Header="Group" Expanded="true">
-                <ContentTemplate>
-                    <div class="content">
-                        <div class="form-group row">
-                            <div class="col-lg-3">
-                                <label for="GroupName">Group Name: </label>
-                                <Text @ref="@textGroupName" TextModel="@textModelForGroupName" OnChange="@ChangeTextGroupName" />
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="Showheader">Show Group Header: </label><br />
-                                <Switch @ref="switchGroupHeader" SwitchModel="@switchModelForGroupHeader" OnChange="@SwitchChangeForGroupHeader" />
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="IsCollapsible">Is Collapsible: </label><br />
-                                <Switch @ref="switchCollapsible" SwitchModel="@switchModelForCollapsible" OnChange="@SwitchChangeForCollapsible" />
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="Sequence">Sequence: </label>
-                                <Number @ref="@numberSequence" NumberModel="@numberModelForSequence" OnChange="@ChangeNumberSequence" />
-                            </div>
+<EditForm Model="@QuestionnaireConfigurationModel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+    <div class="card-body">
+        <DataAnnotationsValidator />
+        <div class="text-danger"><ValidationSummary /></div>
 
+        <SfAccordion>
+            <AccordionItems>
+                <AccordionItem Header="Question" Expanded="true">
+                    <ContentTemplate>
+                        <div class="content">
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label for="QuestionNumber">Question Number: </label>
+                                    <Text @ref="@textQuestionNumber" TextModel="@textModelForQuestionNumber" OnChange="@ChangeTextQuestionNumber" />
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="Entity">Entity: </label> <br />
+                                    <CommonSelectBox @ref="@selectEntity" SelectModel="@selectModelForEntity" OnChange="@OptionChangeForEntity" />
+                                </div>
+                                @if (QuestionnaireConfigurationModel.Id > 0)
+                                {
+                                    <div class="col-lg-3">
+                                        <label for="Field">Field: </label><br />
+                                        <CommonSelectBox @ref="@selectField" SelectModel="@selectModelForField" OnChange="@OptionChangeForField" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-lg-3">
+                                        <label for="Field">Field: </label><br />
+                                        <Text @ref="@textFieldName" TextModel="@textModelForFieldName" OnChange="@ChangeTextFieldName" />
+                                    </div>
+                                }
+                                <div class="col-lg-3">
+                                    <label for="VariableName">Variable Name: </label>
+                                    <Text @ref="@textVariableName" TextModel="@textModelForVariableName" OnChange="@ChangeTextVariableName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label" for="English">English<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+                                <div class="col-md-10 col-form-label">
+                                    <RichTextEditor @ref="rteEnglish" BindValue="@QuestionnaireConfigurationModel.English" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label" for="French">French: </label>
+                                <div class="col-md-10 col-form-label">
+                                    <RichTextEditor @ref="rteFrench" BindValue="@QuestionnaireConfigurationModel.French" />
+                                </div>
+                            </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body">
+                    </ContentTemplate>
+                </AccordionItem>
+            </AccordionItems>
+        </SfAccordion>
+        <br />
+        <SfAccordion>
+            <AccordionItems>
+                <AccordionItem Header="Help" Expanded="true">
+                    <ContentTemplate>
+                        <div class="content">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-form-label" for="HasHelp">Has Help: </label>
+                                <div class="col-md-3 col-form-label">
+                                    <Switch @ref="switchHelp" SwitchModel="@switchModelForHelp" OnChange="@SwitchChangeForHelp" />
+                                </div>
+                            </div>
+                            @if (switchModelForHelp.Value)
+                            {
                                 <div class="form-group row">
-                                    <label class="col-md-2 col-form-label" for="Required">Required? </label>
-                                    <div class="col-md-3 col-form-label">
-                                        <Switch @ref="switchRequired" SwitchModel="@switchModelForRequired" OnChange="@SwitchChangeForRequired" />
+                                    <label class="col-md-2 col-form-label" for="English">Help Text: </label>
+                                    <div class="col-md-10 col-form-label">
+                                        <RichTextEditor @ref="rteHelpEnglish" BindValue="@QuestionnaireConfigurationModel.HelpText" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-2 col-form-label" for="Conditional">Conditional? </label>
-                                    <div class="col-md-3 col-form-label">
-                                        <Switch @ref="switchConditional" SwitchModel="@switchModelForConditional" OnChange="@SwitchChangeForConditional" />
+                                    <label class="col-md-2 col-form-label" for="French">Help Text French: </label>
+                                    <div class="col-md-10 col-form-label">
+                                        <RichTextEditor @ref="rteHelpFrench" BindValue="@QuestionnaireConfigurationModel.HelpTextFrench" />
                                     </div>
-                                    @if (switchModelForConditional.Value)
-                                    {
-                                        <label class="col-md-2 col-form-label" for="Conditions">Conditions: </label>
+                                </div>
+                            }
+                        </div>
+                    </ContentTemplate>
+                </AccordionItem>
+            </AccordionItems>
+        </SfAccordion>
+        <br />
+        <SfAccordion>
+            <AccordionItems>
+                <AccordionItem Header="Group" Expanded="true">
+                    <ContentTemplate>
+                        <div class="content">
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label for="GroupName">Group Name: </label>
+                                    <Text @ref="@textGroupName" TextModel="@textModelForGroupName" OnChange="@ChangeTextGroupName" />
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="Showheader">Show Group Header: </label><br />
+                                    <Switch @ref="switchGroupHeader" SwitchModel="@switchModelForGroupHeader" OnChange="@SwitchChangeForGroupHeader" />
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="IsCollapsible">Is Collapsible: </label><br />
+                                    <Switch @ref="switchCollapsible" SwitchModel="@switchModelForCollapsible" OnChange="@SwitchChangeForCollapsible" />
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="Sequence">Sequence: </label>
+                                    <Number @ref="@numberSequence" NumberModel="@numberModelForSequence" OnChange="@ChangeNumberSequence" />
+                                </div>
+
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" for="Required">Required? </label>
                                         <div class="col-md-3 col-form-label">
-                                            <Text @ref="@textCondition" TextModel="@textModelForCondition" OnChange="@ChangeTextCondition" />
+                                            <Switch @ref="switchRequired" SwitchModel="@switchModelForRequired" OnChange="@SwitchChangeForRequired" />
                                         </div>
-                                    }
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label" for="Readonly">Readonly? </label>
-                                    <div class="col-md-3 col-form-label">
-                                        <Switch @ref="switchReadonly" SwitchModel="@switchModelForReadonly" OnChange="@SwitchChangeForReadonly" />
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-md-2 col-form-label" for="HasNotification">Notification? </label>
-                                    <div class="col-md-3 col-form-label">
-                                        <Switch @ref="switchNotification" SwitchModel="@switchModelForNotification" OnChange="@SwitchChangeForNotification" />
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" for="Conditional">Conditional? </label>
+                                        <div class="col-md-3 col-form-label">
+                                            <Switch @ref="switchConditional" SwitchModel="@switchModelForConditional" OnChange="@SwitchChangeForConditional" />
+                                        </div>
+                                        @if (switchModelForConditional.Value)
+                                        {
+                                            <label class="col-md-2 col-form-label" for="Conditions">Conditions: </label>
+                                            <div class="col-md-3 col-form-label">
+                                                <Text @ref="@textCondition" TextModel="@textModelForCondition" OnChange="@ChangeTextCondition" />
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" for="Readonly">Readonly? </label>
+                                        <div class="col-md-3 col-form-label">
+                                            <Switch @ref="switchReadonly" SwitchModel="@switchModelForReadonly" OnChange="@SwitchChangeForReadonly" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label" for="HasNotification">Notification? </label>
+                                        <div class="col-md-3 col-form-label">
+                                            <Switch @ref="switchNotification" SwitchModel="@switchModelForNotification" OnChange="@SwitchChangeForNotification" />
+                                        </div>
+                                        @if (switchModelForNotification.Value)
+                                        {
+                                            <label class="col-md-2 col-form-label" for="Conditions">Conditions: </label>
+                                            <div class="col-md-3 col-form-label">
+                                                <Text @ref="@textNotificationCondition" TextModel="@textModelForNotificationCondition" OnChange="@ChangeTextNotificationCondition" />
+                                            </div>
+                                        }
                                     </div>
                                     @if (switchModelForNotification.Value)
                                     {
-                                        <label class="col-md-2 col-form-label" for="Conditions">Conditions: </label>
-                                        <div class="col-md-3 col-form-label">
-                                            <Text @ref="@textNotificationCondition" TextModel="@textModelForNotificationCondition" OnChange="@ChangeTextNotificationCondition" />
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label" for="Notification">Notification: </label>
+                                            <div class="col-md-10 col-form-label">
+                                                <RichTextEditor @ref="rteNotificationEnglish" BindValue="@QuestionnaireConfigurationModel.Notification" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label" for="NotificationFrench">Notification French: </label>
+                                            <div class="col-md-10 col-form-label">
+                                                <RichTextEditor @ref="rteNotificationFrench" BindValue="@QuestionnaireConfigurationModel.NotificationFrench" />
+                                            </div>
                                         </div>
                                     }
                                 </div>
-                                @if (switchModelForNotification.Value)
-                                {
-                                    <div class="form-group row">
-                                        <label class="col-md-2 col-form-label" for="Notification">Notification: </label>
-                                        <div class="col-md-10 col-form-label">
-                                            <RichTextEditor @ref="rteNotificationEnglish" BindValue="@QuestionnaireConfigurationModel.Notification" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-md-2 col-form-label" for="NotificationFrench">Notification French: </label>
-                                        <div class="col-md-10 col-form-label">
-                                            <RichTextEditor @ref="rteNotificationFrench" BindValue="@QuestionnaireConfigurationModel.NotificationFrench" />
-                                        </div>
-                                    </div>
-                                }
                             </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <div class="col-lg-3">
-                                        <label for="Type">Type: </label> <br />
-                                        <CommonSelectBox @ref="@selectType" SelectModel="@selectModelForType" OnChange="@OptionChangeForType" />
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="RepeatHeader">Repeat Header: </label><br />
-                                        <Switch @ref="switchRepeatHeader" SwitchModel="@switchModelForRepeatHeader" OnChange="@SwitchChangeForRepeatHeader" />
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="Mask">Input Mask: </label>
-                                        <Text @ref="@textInputMask" TextModel="@textModelForInputMask" OnChange="@ChangeTextInputMask"/>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-3">
-                                        <label for="Orientation">Orientation: </label> <br />
-                                        <CommonSelectBox @ref="@selectOrientation" SelectModel="@selectModelForOrientation" OnChange="@OptionChangeForOrientation" />
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <label for="Columns">Columns: </label>
-                                        <Number @ref="@numberColumns" NumberModel="@numberModelForColumns" OnChange="@ChangeNumberColumns"/>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-3">
-                                        <label for="HasLookup">Has Lookup: </label><br />
-                                        <Switch @ref="switchLookup" SwitchModel="@switchModelForLookup" OnChange="@SwitchChangeForLookup" />
-                                    </div>
-                                    @if (switchModelForLookup.Value)
-                                    {
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-group row">
                                         <div class="col-lg-3">
-                                            <label for="Lookups">Lookups: </label><br />
-                                            <CommonSelectBox @ref="@selectLookup" SelectModel="@selectModelForLookup" OnChange="@OptionChangeForLookup" />
+                                            <label for="Type">Type: </label> <br />
+                                            <CommonSelectBox @ref="@selectType" SelectModel="@selectModelForType" OnChange="@OptionChangeForType" />
                                         </div>
-                                    }
+                                        <div class="col-lg-3">
+                                            <label for="RepeatHeader">Repeat Header: </label><br />
+                                            <Switch @ref="switchRepeatHeader" SwitchModel="@switchModelForRepeatHeader" OnChange="@SwitchChangeForRepeatHeader" />
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <label for="Mask">Input Mask: </label>
+                                            <Text @ref="@textInputMask" TextModel="@textModelForInputMask" OnChange="@ChangeTextInputMask" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-3">
+                                            <label for="Orientation">Orientation: </label> <br />
+                                            <CommonSelectBox @ref="@selectOrientation" SelectModel="@selectModelForOrientation" OnChange="@OptionChangeForOrientation" />
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <label for="Columns">Columns: </label>
+                                            <Number @ref="@numberColumns" NumberModel="@numberModelForColumns" OnChange="@ChangeNumberColumns" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-3">
+                                            <label for="HasLookup">Has Lookup: </label><br />
+                                            <Switch @ref="switchLookup" SwitchModel="@switchModelForLookup" OnChange="@SwitchChangeForLookup" />
+                                        </div>
+                                        @if (switchModelForLookup.Value)
+                                        {
+                                            <div class="col-lg-3">
+                                                <label for="Lookups">Lookups: </label><br />
+                                                <CommonSelectBox @ref="@selectLookup" SelectModel="@selectModelForLookup" OnChange="@OptionChangeForLookup" />
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </ContentTemplate>
-            </AccordionItem>
-        </AccordionItems>
-    </SfAccordion>
-    <br />
-    <SfAccordion>
-        <AccordionItems>
-            <AccordionItem Header="Provinces" Expanded="true">
-                <ContentTemplate>
-                    <Provinces @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" ShowHeader="false" />
-                </ContentTemplate>
-            </AccordionItem>
-        </AccordionItems>
-    </SfAccordion>
-</div>
-<div class="card-footer">
-    <button type="submit" class="savebutton" @onclick="HandleValidSubmit"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
-</div>
+                    </ContentTemplate>
+                </AccordionItem>
+            </AccordionItems>
+        </SfAccordion>
+        <br />
+        <SfAccordion>
+            <AccordionItems>
+                <AccordionItem Header="Provinces" Expanded="true">
+                    <ContentTemplate>
+                        <Provinces @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel" ShowHeader="false" />
+                    </ContentTemplate>
+                </AccordionItem>
+            </AccordionItems>
+        </SfAccordion>
+    </div>
+    <div class="card-footer">
+        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+    </div>
+</EditForm>
 
 
 @code {
