@@ -71,12 +71,18 @@ else
         var user = authState.User;
 
         isAuthenticated = user.Identity.IsAuthenticated;
-
-        // get the year id
-        var predicate = "FieldName==\"Year\"";
-        var year = dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
-        predicate = "EDIYear == " + year;
-        UserSettings.YearId = dbContext.Years.Where(predicate).Single().Id;
+        try
+        {
+            // get the year id
+            var predicate = "FieldName==\"Year\"";
+            var year = dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
+            predicate = "EDIYear == " + year;
+            UserSettings.YearId = dbContext.Years.Where(predicate).Single().Id;
+        }
+        catch
+        {
+            Console.WriteLine("Import data - set the year variable - Restart the application");
+        }
 
         if (user.Identity.IsAuthenticated)
         {
@@ -127,25 +133,32 @@ else
                 //var teacher = await Task.FromResult(dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID).FirstOrDefault());
                 //dbContext.Entry(teacher).Reference(s => s.School).Load();
                 //dbContext.Entry(teacher.School).Reference(ts => ts.Province).Load();
+                try
+                {
+                    var teacher = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID)
+                                    .Include(s => s.School)
+                                    .ThenInclude(ts => ts.Province).FirstOrDefault();
 
-                var teacher = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID)
-                                .Include(s => s.School)
-                                .ThenInclude(ts => ts.Province).FirstOrDefault();
-
-                UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                UserSettings.TeacherId = teacher.Id;
-                LanguageSettings.Translations = sivm;
+                    UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
+                    UserSettings.TeacherId = teacher.Id;
+                    LanguageSettings.Translations = sivm;
+                }
+                catch
+                {
+                    Console.WriteLine("please login as an admin to setup the system");
+                    NavigationManager.NavigateTo("./login");
+                }
             }
             else
             {
                 UserSettings.IsCoordinator = true;
                 IsCoordinator = true;
             }
-        }
-        else
-        {
-            UserSettings.IsAuthenticated = false;
-        }
+            }
+            else
+            {
+                UserSettings.IsAuthenticated = false;
+            }
     }
 
     private void OnToggleClick()

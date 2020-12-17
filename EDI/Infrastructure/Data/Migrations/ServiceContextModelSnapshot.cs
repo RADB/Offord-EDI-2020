@@ -1546,6 +1546,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("Communicates")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<byte?>("ConsideredEsl")
                         .HasColumnName("ConsideredESL")
                         .HasColumnType("tinyint");
@@ -1596,6 +1601,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<bool?>("Inuvialuktun")
                         .HasColumnType("bit");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<byte?>("Jkteacher")
                         .HasColumnName("JKTeacher")
@@ -1671,6 +1681,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("ClimbingStairs")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<byte?>("Coordinated")
                         .HasColumnType("tinyint");
 
@@ -1701,6 +1716,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<byte?>("Hungry")
                         .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(10)")
@@ -1771,6 +1791,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("Communicates")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<byte?>("ComplexWords")
                         .HasColumnType("tinyint");
 
@@ -1801,6 +1826,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<byte?>("Imagines")
                         .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(max)");
@@ -1945,6 +1975,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("Comforting")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<byte?>("Cooperative")
                         .HasColumnType("tinyint");
 
@@ -2017,6 +2052,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<byte?>("Independent")
                         .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<byte?>("KicksHits")
                         .HasColumnType("tinyint");
@@ -2168,6 +2208,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("Chronic")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -2192,6 +2237,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<byte?>("Hearing")
                         .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<byte?>("Language")
                         .HasColumnType("tinyint");
@@ -2286,6 +2336,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -2310,6 +2365,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<byte?>("Four5")
                         .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<byte?>("Langauges")
                         .HasColumnType("tinyint");
@@ -2380,6 +2440,11 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("AgeCategory")
                         .HasColumnType("tinyint");
 
+                    b.Property<int>("CompletedQuestions")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("((0))");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -2449,6 +2514,11 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<byte?>("GuideUsefulness")
                         .HasColumnType("tinyint");
+
+                    b.Property<bool>("IsComplete")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("((0))");
 
                     b.Property<string>("LanguageCompleted")
                         .HasColumnType("nvarchar(10)")
