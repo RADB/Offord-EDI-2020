@@ -34,7 +34,7 @@
                             }
                             <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
 
-                            <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                            <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData teacherModel="@teacherModel" IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
                         </ContentTemplate>
                     </AccordionItem>
                     }
@@ -48,6 +48,8 @@
     //@((MarkupString)_Text)
     [Parameter]
     public Teacher teacherData { get; set; }
+    [Parameter]
+    public TeacherProfileItemViewModel teacherModel { get; set; }
 
     [Parameter]
     public bool IsReadOnly { get; set; }

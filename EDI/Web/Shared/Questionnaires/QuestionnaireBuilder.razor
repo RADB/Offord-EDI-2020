@@ -58,7 +58,7 @@
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:
-                <RadioButtonsPart Config=@config CurrentValue=1></RadioButtonsPart>
+                <RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>
                 break;
             case InputTypes.DatePicker:
                 <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
@@ -89,10 +89,16 @@
 
     [Parameter]
     public Teacher teacherData { get; set; }
+    [Parameter]
+    public TeacherProfileItemViewModel teacherModel { get; set; }
 
     [Parameter]
     public bool IsReadonly { get; set; }
 
     private string _Text;
     private string CurrentGroup = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
 }

@@ -9,6 +9,7 @@
     <div class="card-body">
         <DataAnnotationsValidator />
         <div class="text-danger"><ValidationSummary /></div>
+        <div asp-validation-summary="All" class="text-danger"></div>
 
         <SfAccordion>
             <AccordionItems>
@@ -180,6 +181,7 @@
                                         <div class="col-lg-3">
                                             <label for="Type">Type: </label> <br />
                                             <CommonSelectBox @ref="@selectType" SelectModel="@selectModelForType" OnChange="@OptionChangeForType" />
+                                            <div class="text-danger"><ValidationMessage For="@(() => QuestionnaireConfigurationModel.InputTypeId)" /></div>
                                         </div>
                                         <div class="col-lg-3">
                                             <label for="RepeatHeader">Repeat Header: </label><br />
@@ -731,6 +733,8 @@
         string selectedString = e.Value.ToString();
 
         selectModelForField.ID = 0;
+
+        QuestionnaireConfigurationModel.InputTypeId = 0;
 
         if (int.TryParse(selectedString, out int newid))
         {
