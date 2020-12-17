@@ -6,6 +6,9 @@ namespace EDI.Web.Models
     public class QuestionnaireConfigurationItemViewModel : BaseModelProvince
     {
         public int QuestionnaireId { get; set; }
+
+        [Required(ErrorMessage = "Input Type is required.")]
+        [Range(1, Int32.MaxValue, ErrorMessage = "Input Type is required.")]
         public int InputTypeId { get; set; }
         public string InputType { get; set; }
         public int? OrientationId { get; set; }

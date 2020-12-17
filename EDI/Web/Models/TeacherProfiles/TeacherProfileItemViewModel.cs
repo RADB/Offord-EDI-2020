@@ -19,6 +19,7 @@ namespace EDI.Web.Models
 
         public string GuideOtherComment { get; set; }
 
+        [Required(ErrorMessage = "Gender is required.")]
         public byte? Gender { get; set; }
         public byte? AgeCategory { get; set; }
 

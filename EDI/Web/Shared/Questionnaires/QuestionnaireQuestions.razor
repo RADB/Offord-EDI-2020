@@ -9,13 +9,15 @@
 
 
 <!-- PRINT THE Questions -->
-<QuestionnaireBuilder configs=@questions teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>
+<QuestionnaireBuilder configs=@questions teacherData=@teacherData teacherModel="@teacherModel" IsReadonly=@IsReadOnly></QuestionnaireBuilder>
 <br />
                 
 @code {
     //@((MarkupString)_Text)
     [Parameter]
     public Teacher teacherData { get; set; }
+    [Parameter]
+    public TeacherProfileItemViewModel teacherModel { get; set; }
 
     [Parameter]
     public bool IsReadOnly { get; set; }
