@@ -223,3 +223,11 @@ body {
     z-index: 1;
     background-color: #fff;
 }
+
+.nav-row {
+    position: sticky;
+    top:auto;
+    z-index: -1;
+    background-color:#000;
+    color:white;
+}

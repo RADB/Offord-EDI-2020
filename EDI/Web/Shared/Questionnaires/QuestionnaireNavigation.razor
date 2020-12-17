@@ -6,50 +6,39 @@
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 
-<div class="row">
+<div class="row nav-row">
     <div class="col-md-12">
-        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;">          
             <div class="row">
-                <div class="col-10">
-                    <div class="row">
-                        @{foreach (var questionnaire in questionnaires)
-                            {
-                                if (questionnaire.Id == QuestionnaireId)
-                                {
-                                    <div class="col-2">
-                                        <!-- check completion status - colour green or red-->
-                                        @{
-                                            var _name = questionnaire.QuestionnaireName;
-                                            <button type="button" class="btn btn-outline-secondary">
-                                                @_name <!--<span class="badge badge-light">97</span>-->
-                                            </button>
-                                        }
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="col-2">
-                                        <!-- check completion status - colour green or red-->
-                                        @{
-                                            var _name = questionnaire.QuestionnaireName;
-                                            <button type="button" @onclick="@(() => gotoQuestionnaire(_name))" class="btn btn-outline-danger">
-                                                @_name <!--<span class="badge badge-light">97</span>-->
-                                            </button>
-                                        }
-                                    </div>
-                                }
-                            }
-                        }
-                    </div>
-                </div>
-                    @if (!IsReadOnly)
+                @{foreach (var questionnaire in questionnaires)
                     {
-                        <div class="col-2">
-                                                 
-                            @*<button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> Exit</button>*@                      
-                        </div>
+                        if (questionnaire.Id == QuestionnaireId)
+                        {
+                            <div class="col-2">
+                                <!-- check completion status - colour green or red-->
+                                @{
+                                    var _name = questionnaire.QuestionnaireName;
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        @_name <!--<span class="badge badge-light">97</span>-->
+                                    </button>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-2">
+                                <!-- check completion status - colour green or red-->
+                                @{
+                                    var _name = questionnaire.QuestionnaireName;
+                                    <button type="button" @onclick="@(() => gotoQuestionnaire(_name))" class="btn btn-outline-danger">
+                                        @_name <!--<span class="badge badge-light">97</span>-->
+                                    </button>
+                                }
+                            </div>
+                        }
                     }
-                </div>
+                }
+            </div>
         </div>
     </div>
 </div>

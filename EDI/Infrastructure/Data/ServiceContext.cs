@@ -599,7 +599,10 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.Jkteacher).HasColumnName("JKTeacher");
 
-                entity.Property(e => e.PostalCode).HasMaxLength(10);                
+                entity.Property(e => e.PostalCode).HasMaxLength(10);
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
+
             });
 
             modelBuilder.Entity<QuestionnairesDataSectionA>(entity =>
@@ -615,6 +618,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
 
             });
             modelBuilder.Entity<QuestionnairesDataSectionB>(entity =>
@@ -628,6 +633,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
             });
             modelBuilder.Entity<QuestionnairesDataSectionC>(entity =>
             {
@@ -642,6 +649,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
 
             });
             modelBuilder.Entity<QuestionnairesDataSectionD>(entity =>
@@ -657,6 +666,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
 
             });
             modelBuilder.Entity<QuestionnairesDataSectionE>(entity =>
@@ -672,6 +683,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
 
             });
 
@@ -688,6 +701,8 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
+                entity.Property(e => e.CompletedQuestions).IsRequired().HasDefaultValueSql("((0))");
 
             });
             modelBuilder.Entity<School>(entity =>
