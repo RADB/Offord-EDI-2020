@@ -215,3 +215,11 @@ body {
     height: 40px; /* Height of the footer */
     background: #000000;
 }
+
+
+.top-row {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+}

@@ -45,8 +45,8 @@
                     @if (!IsReadOnly)
                     {
                         <div class="col-2">
-                            <button class="btn btn-success" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>                      
-                            <button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> Exit</button>                      
+                                                 
+                            @*<button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> Exit</button>*@                      
                         </div>
                     }
                 </div>
@@ -111,10 +111,7 @@
         StateHasChanged();
     }
 
-    private void Exit()
-    {
-        NavigationManager.NavigateTo("./children/index");
-    }
+
 }
 
 
