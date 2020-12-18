@@ -46,7 +46,7 @@ namespace EDI.Infrastructure.Data
 
                     await ServiceContext.SaveChangesAsync();
                 }
-                
+
                 if (!ServiceContext.Orientations.Any())
                 {
                     ServiceContext.Orientations.AddRange(
@@ -67,12 +67,12 @@ namespace EDI.Infrastructure.Data
                 {
                     var lus = ServiceContext.LookupSets.ToList();
                     foreach (var item in lus)
-                    {                       
+                    {
                         ServiceContext.LookupSetOptions.AddRange(
                         GetPreconfiguredLookupSetOption(item.Id, item.LookupName));
 
                         await ServiceContext.SaveChangesAsync();
-                    }                    
+                    }
                 }
 
                 if (!ServiceContext.InputTypes.Any())
@@ -312,7 +312,7 @@ namespace EDI.Infrastructure.Data
         }
 
         static IEnumerable<Year> GetPreconfiguredYear()
-        {           
+        {
             return new List<Year>()
             {
                 //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
@@ -2222,7 +2222,7 @@ namespace EDI.Infrastructure.Data
             }.OrderBy(t => t.FieldName);
         }
 
-       
+
 
 
         static IEnumerable<Gender> GetPreconfiguredGender()
@@ -2289,10 +2289,10 @@ namespace EDI.Infrastructure.Data
             var luso = new List<LookupSetOption>();
 
             switch (lookupsetname)
-           {
+            {
                 case "YesNo":
-                    luso.Add(new LookupSetOption() { English = "Yes", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Oui", Value = 1, Sequence = 10 });                    
-                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "non", Value = 0, Sequence = 20 });                    
+                    luso.Add(new LookupSetOption() { English = "Yes", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Oui", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "non", Value = 0, Sequence = 20 });
                     break;
                 case "YesNoDontKnow":
                     luso.Add(new LookupSetOption() { English = "Yes", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "oui", Value = 1, Sequence = 10 });
@@ -2549,7 +2549,7 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "Licensed Care in Somone's Home(e.g. dayhome)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde agréé dans un domicile privé", Value = 3, Sequence = 30 });
                     luso.Add(new LookupSetOption() { English = "Paid Unlicensed Care (e.g. babysitter)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde payant, non agréé (p. ex. gardien(ne))", Value = 4, Sequence = 40 });
                     luso.Add(new LookupSetOption() { English = "Unpaid Unlicensed Care(e.g. friend or relative)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde non payant, non agréé (ami(e) ou membre de la famille)", Value = 5, Sequence = 50 });
-                   
+
                     break;
                 case "MainCareJK":
                     luso.Add(new LookupSetOption() { English = "Parent/Guardian Care", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Garde assurée par les parents/tuteurs", Value = 1, Sequence = 10 });
@@ -2596,15 +2596,14 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "No, I didn't use the Guide, I'm already familiar with it", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No, I didn't use the Guide, I'm already familiar with it", Value = 6, Sequence = 60 });
                     luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Other", Value = 7, Sequence = 70 });
                     break;
-                default:                     
-                    Console.WriteLine("You need to add the lookupset options for {0} with id {1}.", lookupsetname,id );
+                default:
+                    Console.WriteLine("You need to add the lookupset options for {0} with id {1}.", lookupsetname, id);
                     break;
             }
-            return luso;            
+            return luso;
         }
-                    
-        static IEnumerable<
-            > GetPreconfiguredInputType()
+
+        static IEnumerable<InputType> GetPreconfiguredInputType()
         {
             return new List<InputType>()
             {
