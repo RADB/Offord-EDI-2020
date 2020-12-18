@@ -689,13 +689,13 @@ namespace EDI.Web.Services
                             string subyear = data.ChildEdiid.Substring(0, 2);
                             short numsubyear = short.Parse(subyear);
 
-                            string currentyear = DateTime.Now.Year.ToString().Substring(2, 2);
-                            short numcurrentyear = short.Parse(currentyear);
+                            //string currentyear = DateTime.Now.Year.ToString().Substring(2, 2);
+                            //short numcurrentyear = short.Parse(currentyear);
 
                             var ediyear = short.Parse("20" + subyear);
 
-                            if (numsubyear > numcurrentyear)
-                                ediyear = short.Parse("19" + subyear);
+                            //if (numsubyear > numcurrentyear)
+                            //    ediyear = short.Parse("19" + subyear);
 
                             var years = servicecontext.Years.Where(p => p.Ediyear == ediyear);
 
