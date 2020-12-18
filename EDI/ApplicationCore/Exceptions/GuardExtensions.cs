@@ -31,24 +31,6 @@ namespace Ardalis.GuardClauses
         }
     }
 
-    public static class SpecialProblemGuards
-    {
-        public static void NullSpecialProblem(this IGuardClause guardClause, int spid, SpecialProblem problems)
-        {
-            if (problems == null)
-                throw new SpecialProblemNotFoundException(spid);
-        }
-    }
-
-    public static class LanguageGuards
-    {
-        public static void NullLanguage(this IGuardClause guardClause, int languageid, Language languages)
-        {
-            if (languages == null)
-                throw new LanguageNotFoundException(languageid);
-        }
-    }
-
     public static class CountryGuards
     {
         public static void NullCountry(this IGuardClause guardClause, int countryid, Country countries)

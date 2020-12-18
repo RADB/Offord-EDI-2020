@@ -16,13 +16,12 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<InputType> InputTypes { get; set; }
-        public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<LookupSet> LookupSets { get; set; }
         public virtual DbSet<LookupSetOption> LookupSetOptions { get; set; }
         public virtual DbSet<Orientation> Orientations { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
-        public virtual DbSet<SpecialProblem> SpecialProblems { get; set; }
+        
         public virtual DbSet<Translation> Translations { get; set; }
         public virtual DbSet<Year> Years { get; set; }
         
@@ -325,23 +324,6 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.InputType).HasForeignKey(e => e.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_InputType_QuestionnairesConfigurations");
-            });
-
-            modelBuilder.Entity<Language>(entity =>
-            {
-                entity.ToTable("Languages", "LUData");
-
-                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.English).IsRequired().HasMaxLength(50);
-
-                entity.Property(e => e.French).HasMaxLength(50);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
             });
 
             modelBuilder.Entity<Link>(entity =>
@@ -765,24 +747,6 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
             });
         
-            modelBuilder.Entity<SpecialProblem>(entity =>
-            {
-                entity.ToTable("SpecialProblems", "LUData");
-
-                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.English).HasMaxLength(150);
-
-                entity.Property(e => e.French).HasMaxLength(150);
-            });
-
-
             modelBuilder.Entity<Teacher>(entity =>
             {
                 entity.ToTable("Teachers", "EDI");
