@@ -6,25 +6,9 @@
         <div class="main-menu">
             <div>
                 <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
+                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="icon" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
                     </TreeViewFieldsSettings>
                     <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
-                    <TreeViewTemplates>
-                        <NodeTemplate>
-                            @{
-                                var item = (context as TreeData);
-                                if (item.icon.ToString() == "question_answer icon")
-                                // use material icon for FAQ
-                                { <i class="material-icons-outlined icon">question_answer</i>}
-
-                                else
-                                // use base icons for other
-                                {<i class="@item.icon"></i>}
-
-                                <span class="nodeText">@item.nodeText</span>
-                            }
-                        </NodeTemplate>
-                    </TreeViewTemplates>
                 </SfTreeView>
             </div>
         </div>
