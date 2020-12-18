@@ -22,7 +22,7 @@
         {
             case InputTypes.Header:
                 var _label = "";
-                if (NavigationManager.Uri.Contains("TeacherProfile")) 
+                if (NavigationManager.Uri.Contains("TeacherProfile"))
                     // show the teacher name on the teacher profile
                     _label = " - " + teacherData.TeacherName;
                 else
@@ -68,6 +68,9 @@
                 break;
             case InputTypes.SelectBox:
                 <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
+                break;
+            case InputTypes.NumberBox:
+                <!--<NumberBoxPart Config=@config DataType="" -->
                 break;
             case InputTypes.CheckBox:
                 <div class="card-body border">
