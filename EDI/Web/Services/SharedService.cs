@@ -33,6 +33,7 @@ using EDI.Web.Extensions;
 using EDI.Infrastructure.Data;
 using Syncfusion.XlsIO;
 using EDI.ApplicationCore.Models;
+using static EDI.Web.Data.Enumerations;
 
 namespace EDI.Web.Services
 {
@@ -560,18 +561,19 @@ namespace EDI.Web.Services
                                         _file.GenderId = null;
                                     }
                                     else
-                                    {
-                                        int genderid = 0;
-                                        if (gender == "M")
-                                        {
-                                            genderid = servicecontext.Genders.Where(p => p.English == "Male").FirstOrDefault().Id;
-                                        }
-                                        else
-                                        {
-                                            genderid = servicecontext.Genders.Where(p => p.English == "Female").FirstOrDefault().Id;
-                                        }
+                                    {                                        
+                                        //int genderid = 
+                                        //int genderid = 0;
+                                        //if (genderid =="M")
+                                        //{
+                                        //    genderid = servicecontext.Genders.Where(p => p.English == "Male").FirstOrDefault().Id;                                            
+                                        //}
+                                        //else
+                                        //{
+                                        //    genderid = servicecontext.Genders.Where(p => p.English == "Female").FirstOrDefault().Id;
+                                        //}
 
-                                        _file.GenderId = genderid;
+                                        _file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
                                     }
 
 
@@ -590,10 +592,11 @@ namespace EDI.Web.Services
                                     _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
 
 
-                                    int statusid = 0;
-                                    statusid = servicecontext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault().Id;
+                                    //int statusid = 0;
+                                    //statusid = servicecontext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault().Id;
 
-                                    _file.FileImportStatusId = statusid;
+                                    //_file.FileImportStatusId = statusid;
+                                    _file.FileImportStatusId = (int)ImportStatus.Processed;
 
                                     _file.ModifiedDate = DateTime.Now;
                                     _file.ModifiedBy = _userSettings.UserName;

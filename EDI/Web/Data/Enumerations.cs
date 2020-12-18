@@ -52,5 +52,11 @@ namespace EDI.Web.Data
             Male=1,
             Female=2
         }
+
+        public enum ImportStatus: int
+        {
+            Imported = 1,
+            Processed = 2
+        }
     }
 }
