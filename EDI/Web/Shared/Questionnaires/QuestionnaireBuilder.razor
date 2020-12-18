@@ -70,38 +70,38 @@
                 <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
                 break;
             case InputTypes.NumberBox:
-                <!--<NumberBoxPart Config=@config DataType="" -->
-                break;
-            case InputTypes.CheckBox:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
-                </div>
-                break;
-            default:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                </div>
-                break;
-        }
-    }
-}
+                <NumberBoxPart Config=@config DataType=NumericDataTypes.Int32></NumberBoxPart>
+                    break;
+                    case InputTypes.CheckBox:
+                    <div class="card-body border">
+                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
+                    </div>
+                    break;
+                    default:
+                    <div class="card-body border">
+                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                    </div>
+                    break;
+                    }
+                    }
+                    }
 
-@code {
-    [Parameter]
-    public List<QuestionnairesConfiguration> configs { get; set; }
+                    @code {
+                        [Parameter]
+                        public List<QuestionnairesConfiguration> configs { get; set; }
 
-    [Parameter]
-    public Teacher teacherData { get; set; }
-    [Parameter]
-    public TeacherProfileItemViewModel teacherModel { get; set; }
+                        [Parameter]
+                        public Teacher teacherData { get; set; }
+                        [Parameter]
+                        public TeacherProfileItemViewModel teacherModel { get; set; }
 
-    [Parameter]
-    public bool IsReadonly { get; set; }
+                        [Parameter]
+                        public bool IsReadonly { get; set; }
 
-    private string _Text;
-    private string CurrentGroup = "";
+        private string _Text;
+            private string CurrentGroup = "";
 
-    protected override async Task OnInitializedAsync()
-    {
-    }
-}
+            protected override async Task OnInitializedAsync()
+            {
+            }
+                    }

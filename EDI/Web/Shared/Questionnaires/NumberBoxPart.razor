@@ -11,11 +11,13 @@
                     <div id="NumberBox" class="numberbox">
                         @if (DataType == NumericDataTypes.Int32)
                         {
-                            <SfNumericTextBox TValue="Int32?" Value=@IntValue Format="@NumberFormat" Step=@Convert.ToInt32(NumberStep)></SfNumericTextBox>
+                            <!--<SfNumericTextBox TValue="Int32?" Value=@IntValue Format="@NumberFormat" Step=@Convert.ToInt32(NumberStep) Min="0" Max="50"></SfNumericTextBox>-->
+                            <!--<label for="@Config.EntityField">Years:</label>-->
+                            Years<input type="number" id="@Config.EntityField" name="@Config.EntityField" min="0" max="50" step="0.5" class="form-control"/>
                         }
                         else if (DataType == NumericDataTypes.Double)
                         {
-                            <SfNumericTextBox TValue="Double?" Value=@DblValue Format="@NumberFormat" Step=@NumberStep></SfNumericTextBox>
+                            <SfNumericTextBox TValue="Double?" Value=@DblValue Format="@NumberFormat" Step=@NumberStep Min="0.0" Max="100.0"></SfNumericTextBox>
                         }
                     </div>
                 </div>
@@ -42,6 +44,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // get the question and help text for the language
+        GetQuestionText();
         //Enum.GetName(typeof(Colors), 3)
         //name = Enum.GetName(typeof(NumericDataTypes),1)
 
