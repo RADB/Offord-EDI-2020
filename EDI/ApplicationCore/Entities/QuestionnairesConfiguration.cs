@@ -46,6 +46,12 @@ namespace EDI.ApplicationCore.Entities
         public int Sequence { get; set; }
         public int? YearId { get; set; }
 
+        public int? Min { get; set; }
+        public int? Max { get; set; }
+        public double? NumberStep { get; set; }
+        public string NumberFormat { get; set; }
+        public string Label { get; set; }
+
         public virtual LookupSet LookupSet { get; set; }
         public virtual InputType InputType { get; set; }
         public virtual Orientation Orientation { get; set; }

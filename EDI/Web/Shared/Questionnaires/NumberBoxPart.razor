@@ -9,16 +9,17 @@
                 <div class="col-12">
                     <h4>@QuestionText</h4>
                     <div id="NumberBox" class="numberbox">
-                        @if (DataType == NumericDataTypes.Int32)
-                        {
+                        <!--if (DataType == NumericDataTypes.Int32)
+                        {-->
                             <!--<SfNumericTextBox TValue="Int32?" Value=@IntValue Format="@NumberFormat" Step=@Convert.ToInt32(NumberStep) Min="0" Max="50"></SfNumericTextBox>-->
-                            <!--<label for="@Config.EntityField">Years:</label>-->
-                            Years<input type="number" id="@Config.EntityField" name="@Config.EntityField" min="0" max="50" step="0.5" class="form-control"/>
+                            <!--<label for="@Config.EntityField">Label</label>
+                            <input type="number" id="@Config.EntityField" name="@Config.EntityField" min=@Min max=@Max step=@NumberStep />
                         }
                         else if (DataType == NumericDataTypes.Double)
                         {
                             <SfNumericTextBox TValue="Double?" Value=@DblValue Format="@NumberFormat" Step=@NumberStep Min="0.0" Max="100.0"></SfNumericTextBox>
-                        }
+                        }-->
+                        <Number NumberModel=@numberviewmodel></Number>
                     </div>
                 </div>
             </div>
@@ -27,27 +28,58 @@
 </div>
 
 @code {
-    [Parameter] // Number format n#- number d#decimals, c# currency, p# percent
-    public String NumberFormat { get; set; } = "n0";
+    //[Parameter] // Number format n#- number d#decimals, c# currency, p# percent
+    //public String NumberFormat { get; set; } = "n0";
 
-    [Parameter] // Number Box Counter
-    public Double NumberStep { get; set; } = 1;
+    //[Parameter] // Number Box 
+    //public Double NumberStep { get; set; } = 1;
 
-    [Parameter] // integer value
-    public Int32 IntValue { get; set; } = 0;
+    //[Parameter]
+    //public Int32 Value { get; set; } = 0;
 
-    [Parameter] // double value
-    public double DblValue { get; set; } = 0.00;
+    //[Parameter]
+    //public double Min { get; set; } = 0;
 
-    [Parameter] // Numeric Data Type
-    public NumericDataTypes DataType { get; set; }
+    //[Parameter]
+    //public double Max { get; set; } = 0;
+
+    //[Parameter]
+    //public string Label { get; set; }
+
+    //[Parameter] // Numeric Data Type
+    //public NumericDataTypes DataType { get; set; }
+    [Parameter]
+    public Teacher data { get; set; }
+
+    public NumberViewModel numberviewmodel { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
-        // get the question and help text for the language
         GetQuestionText();
-        //Enum.GetName(typeof(Colors), 3)
-        //name = Enum.GetName(typeof(NumericDataTypes),1)
+        numberviewmodel = new NumberViewModel();
+        numberviewmodel.Id = Config.Id;
+        numberviewmodel.Name = Config.EntityField;
+        numberviewmodel.Max = Config.Max;
+        numberviewmodel.Min = Config.Min;
+        numberviewmodel.NumberFormat = Config.NumberFormat;
+        numberviewmodel.NumberStep = Config.NumberStep;        
+        numberviewmodel.Placeholder = Config.Label;
+
+        numberviewmodel.Value = data....
+    }
+
+    public async void ChangeNumberModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        switch (Config.EntityName)
+        {
+            case "Questionnaires.Data.Demographics":
+                data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataDemographics, e.Value.ToString());
+                break;
+            case "Questionnaires.Data.SectionB":
+                data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionBs, e.Value.ToString());
+                break;
+        }
 
     }
 }
