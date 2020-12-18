@@ -25,6 +25,7 @@ namespace EDI.Web.Models
         public int? TeacherId { get; set; }
         public string TeacherName { get; set; }
         public string TeacherNumber { get; set; }
+        [Required(ErrorMessage = "Gender is required.")]
         public int? GenderId { get; set; }
         public string Gender { get; set; }
         [Required(ErrorMessage = "DOB is required.")]

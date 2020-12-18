@@ -18,7 +18,7 @@
     <div class="col-md-11">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             
-            <EditForm Model="@teacherprofileitemviewmodel" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
+            <EditForm Model="@teacherData" OnValidSubmit="@HandleValidSubmit" enctype="multipart/form-data" class="form-horizontal">
                 <div class="card-body">
                     <DataAnnotationsValidator />
                     <div class="text-danger"><ValidationSummary /></div>
@@ -121,17 +121,16 @@
 
         private async void Save()
         {
-            //await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
-            //getData();
+            getData();
 
-            //StateHasChanged();
+            StateHasChanged();
         }
 
         private void HandleValidSubmit()
         {
-            Console.WriteLine("This needs to be checked and implemented");
-            Save();            
+            Save();
         }
 
     }

@@ -21,12 +21,28 @@
                                         _optionCount += 1;
 
                                         _optionLabel = sharedService.GetOptionText(option);
-                                        
+
                                         //replace checked with value from object
-                                        <SfRadioButton Checked=@(CurrentValue.Equals(option.Value)) @onchange="@ChangeRadioModel" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
-                                        
+                                        @if (data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.QuestionnairesDataTeacherProfiles.First()) != null)
+                                        {
+                                            var datavalue = data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.QuestionnairesDataTeacherProfiles.First());
+
+                                            @if (datavalue.ToString() == "1")
+                                            {
+                                                <SfRadioButton Checked=true @onchange="@ChangeRadioModel" Label=@_optionLabel Value="1"></SfRadioButton>
+                                            }
+                                            else
+                                            {
+                                                <SfRadioButton Checked=false @onchange="@ChangeRadioModel" Label=@_optionLabel Value="0"></SfRadioButton>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <SfRadioButton Checked=false @onchange="@ChangeRadioModel" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
+                                        }
+
                                         if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
-                                        { 
+                                        {
                                             <br />
                                         }
                                     }
@@ -62,6 +78,9 @@
     // option set
     private List<LookupSetOption> _LookupSetOptions;
 
+    public bool ischecked { get; set; }
+    public string radiovalue { get; set; }
+
     private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
         // get the selected value
@@ -80,6 +99,43 @@
 
         // get the lookupset options
         _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+
+        switch (Config.EntityName)
+        {
+            case "Questionnaires.Data.Demographics":
+                ischecked = data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.Children.First().QuestionnairesDataDemographics).Equals(true);
+
+                break;
+            case "Questionnaires.Data.SectionA":
+                ischecked = data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.Children.First().QuestionnairesDataSectionAs).Equals(true);
+                break;
+            case "Questionnaires.Data.SectionB":
+                ischecked = data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.Children.First().QuestionnairesDataSectionBs).Equals(true);
+                break;
+            case "Questionnaires.Data.SectionC":
+                ischecked = data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.Children.First().QuestionnairesDataSectionCs).Equals(true);
+                break;
+            case "Questionnaires.Data.SectionD":
+                ischecked = data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.Children.First().QuestionnairesDataSectionDs).Equals(true);
+                break;
+            case "Questionnaires.Data.SectionE":
+                ischecked = data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.Children.First().QuestionnairesDataSectionEs).Equals(true);
+                break;
+            case "Questionnaires.Data.TeacherProfile":
+                var objectvalue = data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.QuestionnairesDataTeacherProfiles.First());
+                if(objectvalue == null || objectvalue.ToString() == "0")
+                {
+                    ischecked = false;
+                    radiovalue = "0";
+                }
+                else
+                {
+                    ischecked = true;
+                    radiovalue = "1";
+                }
+                break;
+        }
+
     }
 
     public async void ChangeRadioModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
@@ -93,11 +149,23 @@
                 case "Questionnaires.Data.Demographics":
                     data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataDemographics, newvalue);
                     break;
+                case "Questionnaires.Data.SectionA":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionAs, newvalue);
+                    break;
                 case "Questionnaires.Data.SectionB":
                     data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionBs, newvalue);
                     break;
+                case "Questionnaires.Data.SectionC":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionCs, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionD":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionDs, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionE":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionEs, newvalue);
+                    break;
                 case "Questionnaires.Data.TeacherProfile":
-                    teacherModel.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(teacherModel, newvalue);
+                    data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataTeacherProfiles.First(), newvalue);
                     break;
             }
         }
