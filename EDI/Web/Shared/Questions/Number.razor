@@ -1,6 +1,5 @@
 ﻿@using Syncfusion.Blazor.Inputs
-
-<SfNumericTextBox TValue="int32?" Min=@NumberModel.Min Max=@NumberModel.Max  Step=@NumberModel.NumberStep Format=@NumberModel.NumberFormat @bind-Value="@NumberModel.Value"  Placeholder="@NumberModel.Placeholder" @onchange="@((ev) => OnChange.InvokeAsync(ev))"></SfNumericTextBox>
+<SfNumericTextBox TValue="int?" Min=@NumberModel.Min Max=@NumberModel.Max  Step=@NumberModel.NumberStep Format=@NumberModel.NumberFormat @bind-Value="@NumberModel.Value"  Placeholder="@NumberModel.Placeholder" @onchange="@((ev) => OnChange.InvokeAsync(ev))"></SfNumericTextBox>
 @*<label for="@NumberModel.Id">@NumberModel.Placeholder</label><input type="number"  id="@NumberModel.Name" name="@NumberModel.Name" min=@NumberModel.Min max=@NumberModel.Max step=@NumberModel.NumberStep @onchange="@((ev) => OnChange.InvokeAsync(ev))" @bind-Value="@NumberModel.Value"/>*@
 @code {
     [Parameter]
