@@ -46,5 +46,11 @@ namespace EDI.Web.Data
             SectionE=5,
             TeacherProfile=6
         }
+
+        public enum Genders: int
+        {
+            Male=1,
+            Female=2
+        }
     }
 }
