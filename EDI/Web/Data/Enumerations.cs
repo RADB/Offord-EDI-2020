@@ -26,8 +26,8 @@ namespace EDI.Web.Data
             Header = 9,
             QuestionHeader = 10,
             GroupHeader = 11,
-            Toggle = 12
-
+            Toggle = 12,
+            NumberBoxDouble = 13
         }
         public enum NumericDataTypes : int
         {
