@@ -2603,10 +2603,12 @@ namespace EDI.Infrastructure.Data
             return luso;            
         }
                     
-        static IEnumerable<InputType> GetPreconfiguredInputType()
+        static IEnumerable<
+            > GetPreconfiguredInputType()
         {
             return new List<InputType>()
             {
+                new InputType() {French="NumberBoxDouble",English="NumberBoxDouble",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="Toggle",English="Toggle",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="GroupHeader",English="GroupHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="QuestionHeader",English="QuestionHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
