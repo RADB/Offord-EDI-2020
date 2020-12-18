@@ -119,9 +119,9 @@ namespace EDI.Web
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            //services.AddHealthChecks()
-            //    .AddCheck<HomePageHealthCheck>("home_page_health_check")
-            //    .AddCheck<ApiHealthCheck>("api_health_check");
+            services.AddHealthChecks()
+                .AddCheck<HomePageHealthCheck>("home_page_health_check")
+                .AddCheck<ApiHealthCheck>("api_health_check");
 
             services.AddHttpContextAccessor();
 
@@ -152,25 +152,25 @@ namespace EDI.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LinkGenerator linkGenerator)
         {
             //app.UseDeveloperExceptionPage();
-            //app.UseHealthChecks("/health",
-            //    new HealthCheckOptions
-            //    {
-            //        ResponseWriter = async (context, report) =>
-            //        {
-            //            var result = JsonConvert.SerializeObject(
-            //                new
-            //                {
-            //                    status = report.Status.ToString(),
-            //                    errors = report.Entries.Select(e => new
-            //                    {
-            //                        key = e.Key,
-            //                        value = Enum.GetName(typeof(HealthStatus), e.Value.Status)
-            //                    })
-            //                });
-            //            context.Response.ContentType = MediaTypeNames.Application.Json;
-            //            await context.Response.WriteAsync(result);
-            //        }
-            //    });
+            app.UseHealthChecks("/health",
+                new HealthCheckOptions
+                {
+                    ResponseWriter = async (context, report) =>
+                    {
+                        var result = JsonConvert.SerializeObject(
+                            new
+                            {
+                                status = report.Status.ToString(),
+                                errors = report.Entries.Select(e => new
+                                {
+                                    key = e.Key,
+                                    value = Enum.GetName(typeof(HealthStatus), e.Value.Status)
+                                })
+                            });
+                        context.Response.ContentType = MediaTypeNames.Application.Json;
+                        await context.Response.WriteAsync(result);
+                    }
+                });
 
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIyMjQzQDMxMzgyZTMyMmUzMG1aWllxb0tyN3paWGNGK2NZejZXVVl1WXFINzl6Y0FiWnBCTnJTcVJ6MjA9");
 
