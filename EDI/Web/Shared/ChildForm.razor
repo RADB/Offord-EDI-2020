@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-md-4 col-form-label" for="Gender">@Translate("Gender"): </label>
+            <label class="col-md-4 col-form-label" for="Gender">@Translate("Gender")<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
             <select class="col-md-7" value="@genderid" @onchange="@(e =>GenderChange(e))">
                 @if (Genders != null)
                 {
