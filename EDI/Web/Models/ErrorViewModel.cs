@@ -1,4 +1,3 @@
-using DocuSign.eSign.Model;
 using System;
 using System.Collections.Generic;
 
