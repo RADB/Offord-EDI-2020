@@ -162,12 +162,12 @@ namespace EDI.Infrastructure.Data
 
         public async Task DeleteAllFileImports()
         {
-            await _dbContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE [Staging].[FileImports]");
+            await _dbContext.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [Staging].[FileImports]");
         }
 
         public async Task ReseedFileImports()
         {
-            await _dbContext.Database.ExecuteSqlCommandAsync("DBCC CHECKIDENT ([staging.FileImports], RESEED, 0)");
+            await _dbContext.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ([staging.FileImports], RESEED, 0)");
         }
     }
 }
