@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazored.Modal" Version="5.1.0" />
+    <PackageReference Include="Blazored.Modal" Version="3.1.2" />
     <PackageReference Include="Blazored.Toast" Version="3.1.2" />
     <PackageReference Include="BlazorInputFile" Version="0.1.0-preview-00002" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.3" />
@@ -38,7 +38,7 @@
     <PackageReference Include="Syncfusion.Blazor.WordProcessor" Version="18.1.0.54" />
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="18.2.0.59" />
     <PackageReference Include="Syncfusion.HtmlToPdfConverter.QtWebKit.Net.Core" Version="18.1.0.52" />
-    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="18.1.0.57" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="18.4.0.30" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.6" />
     <PackageReference Include="TextCopy" Version="3.0.1" />
