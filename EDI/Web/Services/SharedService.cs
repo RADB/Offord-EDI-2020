@@ -426,7 +426,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file)
+        public async Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.UploadFiles file)
         {
             
             Log.Information("UploadFileData started by:" + _userSettings.UserName);
@@ -1260,7 +1260,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file)
+        public async Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.UploadFiles file)
         {
             Log.Information("UploadTranslationData started by:" + _userSettings.UserName);
             ErrorViewModel error = new ErrorViewModel();

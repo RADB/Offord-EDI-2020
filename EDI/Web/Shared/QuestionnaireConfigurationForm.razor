@@ -548,120 +548,165 @@
         }
     }
 
-    private void SwitchChangeForHelp(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    private void SwitchChangeForHelp(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        if (e.Checked)
-            switchModelForHelp.Value = true;
-        else
-            switchModelForHelp.Value = false;
+        string selectedString = e.Value.ToString();
 
-        QuestionnaireConfigurationModel.HasHelp = switchModelForHelp.Value;
-
-        if (!switchModelForHelp.Value)
+        if (bool.TryParse(selectedString, out bool newvalue))
         {
-            QuestionnaireConfigurationModel.HelpText = null;
-            QuestionnaireConfigurationModel.HelpTextFrench = null;
+            if (newvalue)
+                switchModelForHelp.Value = true;
+            else
+                switchModelForHelp.Value = false;
+
+            QuestionnaireConfigurationModel.HasHelp = switchModelForHelp.Value;
+
+            if (!switchModelForHelp.Value)
+            {
+                QuestionnaireConfigurationModel.HelpText = null;
+                QuestionnaireConfigurationModel.HelpTextFrench = null;
+            }
         }
     }
 
-    private void SwitchChangeForGroupHeader(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    private void SwitchChangeForGroupHeader(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        if (e.Checked)
-            switchModelForGroupHeader.Value = true;
-        else
-            switchModelForGroupHeader.Value = false;
+        string selectedString = e.Value.ToString();
 
-        QuestionnaireConfigurationModel.ShowGroupName = switchModelForGroupHeader.Value;
-    }
-
-    private void SwitchChangeForCollapsible(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
-    {
-        if (e.Checked)
-            switchModelForCollapsible.Value = true;
-        else
-            switchModelForCollapsible.Value = false;
-
-        QuestionnaireConfigurationModel.IsCollapsible = switchModelForCollapsible.Value;
-    }
-
-    private void SwitchChangeForRequired(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
-    {
-        if (e.Checked)
-            switchModelForRequired.Value = true;
-        else
-            switchModelForRequired.Value = false;
-
-        QuestionnaireConfigurationModel.IsRequired = switchModelForRequired.Value;
-    }
-
-    private void SwitchChangeForConditional(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
-    {
-        if (e.Checked)
-            switchModelForConditional.Value = true;
-        else
-            switchModelForConditional.Value = false;
-
-        QuestionnaireConfigurationModel.IsConditional = switchModelForHelp.Value;
-
-        if (!switchModelForConditional.Value)
+        if (bool.TryParse(selectedString, out bool newvalue))
         {
-            QuestionnaireConfigurationModel.Condition = null;
-            textModelForCondition.Value = string.Empty;
+            if (newvalue)
+                switchModelForGroupHeader.Value = true;
+            else
+                switchModelForGroupHeader.Value = false;
+
+            QuestionnaireConfigurationModel.ShowGroupName = switchModelForGroupHeader.Value;
         }
     }
 
-    private void SwitchChangeForReadonly(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    private void SwitchChangeForCollapsible(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        if (e.Checked)
-            switchModelForReadonly.Value = true;
-        else
-            switchModelForReadonly.Value = false;
+        string selectedString = e.Value.ToString();
 
-        QuestionnaireConfigurationModel.IsReadOnly = switchModelForReadonly.Value;
-    }
-
-    private void SwitchChangeForNotification(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
-    {
-        if (e.Checked)
-            switchModelForNotification.Value = true;
-        else
-            switchModelForNotification.Value = false;
-
-        QuestionnaireConfigurationModel.HasNotification = switchModelForNotification.Value;
-
-        if (!switchModelForNotification.Value)
+        if (bool.TryParse(selectedString, out bool newvalue))
         {
-            QuestionnaireConfigurationModel.NotificationCondition = null;
-            QuestionnaireConfigurationModel.Notification = null;
-            QuestionnaireConfigurationModel.NotificationFrench = null;
-            textModelForNotificationCondition.Value = string.Empty;
+            if (newvalue)
+                switchModelForCollapsible.Value = true;
+            else
+                switchModelForCollapsible.Value = false;
+
+            QuestionnaireConfigurationModel.IsCollapsible = switchModelForCollapsible.Value;
         }
     }
 
-    private void SwitchChangeForRepeatHeader(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    private void SwitchChangeForRequired(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        if (e.Checked)
-            switchModelForRepeatHeader.Value = true;
-        else
-            switchModelForRepeatHeader.Value = false;
+        string selectedString = e.Value.ToString();
 
-        QuestionnaireConfigurationModel.IsHeader = switchModelForRepeatHeader.Value;
+        if (bool.TryParse(selectedString, out bool newvalue))
+        {
+            if (newvalue)
+                switchModelForRequired.Value = true;
+            else
+                switchModelForRequired.Value = false;
+
+            QuestionnaireConfigurationModel.IsRequired = switchModelForRequired.Value;
+        }
     }
 
-    private void SwitchChangeForLookup(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    private void SwitchChangeForConditional(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        if (e.Checked)
-            switchModelForLookup.Value = true;
-        else
-            switchModelForLookup.Value = false;
+        string selectedString = e.Value.ToString();
 
-        QuestionnaireConfigurationModel.HasLookupEntity = switchModelForLookup.Value;
-
-        if (!switchModelForLookup.Value)
+        if (bool.TryParse(selectedString, out bool newvalue))
         {
-            QuestionnaireConfigurationModel.LookupEntityId = null;
-            selectModelForLookup.ID = 0;
-            selectModelForLookup.Value = selectModelForLookup.ID.ToString();
+            if (newvalue)
+                switchModelForConditional.Value = true;
+            else
+                switchModelForConditional.Value = false;
+
+            QuestionnaireConfigurationModel.IsConditional = switchModelForHelp.Value;
+
+            if (!switchModelForConditional.Value)
+            {
+                QuestionnaireConfigurationModel.Condition = null;
+                textModelForCondition.Value = string.Empty;
+            }
+        }
+    }
+
+    private void SwitchChangeForReadonly(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        if (bool.TryParse(selectedString, out bool newvalue))
+        {
+            if (newvalue)
+                switchModelForReadonly.Value = true;
+            else
+                switchModelForReadonly.Value = false;
+
+            QuestionnaireConfigurationModel.IsReadOnly = switchModelForReadonly.Value;
+        }
+    }
+
+    private void SwitchChangeForNotification(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        if (bool.TryParse(selectedString, out bool newvalue))
+        {
+            if (newvalue)
+                switchModelForNotification.Value = true;
+            else
+                switchModelForNotification.Value = false;
+
+            QuestionnaireConfigurationModel.HasNotification = switchModelForNotification.Value;
+
+            if (!switchModelForNotification.Value)
+            {
+                QuestionnaireConfigurationModel.NotificationCondition = null;
+                QuestionnaireConfigurationModel.Notification = null;
+                QuestionnaireConfigurationModel.NotificationFrench = null;
+                textModelForNotificationCondition.Value = string.Empty;
+            }
+        }
+    }
+
+    private void SwitchChangeForRepeatHeader(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        if (bool.TryParse(selectedString, out bool newvalue))
+        {
+            if (newvalue)
+                switchModelForRepeatHeader.Value = true;
+            else
+                switchModelForRepeatHeader.Value = false;
+
+            QuestionnaireConfigurationModel.IsHeader = switchModelForRepeatHeader.Value;
+        }
+    }
+
+    private void SwitchChangeForLookup(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        if (bool.TryParse(selectedString, out bool newvalue))
+        {
+            if (newvalue)
+                switchModelForLookup.Value = true;
+            else
+                switchModelForLookup.Value = false;
+
+            QuestionnaireConfigurationModel.HasLookupEntity = switchModelForLookup.Value;
+
+            if (!switchModelForLookup.Value)
+            {
+                QuestionnaireConfigurationModel.LookupEntityId = null;
+                selectModelForLookup.ID = 0;
+                selectModelForLookup.Value = selectModelForLookup.ID.ToString();
+            }
         }
     }
 

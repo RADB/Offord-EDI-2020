@@ -30,6 +30,7 @@ using Blazored.Toast;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.Blazor;
 using System.Linq.Dynamic.Core;
+using EDI.Web.Controllers;
 
 namespace EDI.Web
 {
@@ -107,6 +108,7 @@ namespace EDI.Web
             services.AddScoped<UserSettings>();
             services.AddScoped<LanguageSettings>();
             services.AddScoped<EDIAppSettings>();
+            services.AddScoped<FileManagerController>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
 

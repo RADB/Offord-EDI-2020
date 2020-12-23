@@ -7,14 +7,11 @@
 <SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
     <ChildContent>
         <div class="main-menu">
-            <div>
-                <!--<SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="icon" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
-                </TreeViewFieldsSettings>-->
+            <div>                
                 <SfTreeView CssClass="main-teachertreeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
                     <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata"></TreeViewFieldsSettings>
                     <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
-                    <TreeViewTemplates>
+                    <TreeViewTemplates TValue="TreeData">
                         <NodeTemplate>
                             @{
                                 var item = (context as TreeData);
@@ -39,7 +36,7 @@
 @code {
     SfTreeView<TreeData> TreeView;
     public SfSidebar Sidebar;
-    public ExpandOnSettings Expand = ExpandOnSettings.Click;
+    public ExpandAction Expand = ExpandAction.Click;
     Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
 {
         {"class", "sidebar-treeview" }

@@ -13,7 +13,7 @@
             <div class="float-right">
 
                 <!--Check English or French -->
-                <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="OnEnglishChange"></SfSwitch>
+                <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" @onchange="OnEnglishChange"></SfSwitch>
             </div>
         }
     </li>
@@ -50,18 +50,23 @@
         }
     }
 
-    private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs e)
+    private async void OnEnglishChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        if (e.Checked)
-            UserSettings.Language = "French";
-        else
-            UserSettings.Language = "English";
+        string selectedString = e.Value.ToString();
 
-        await accountService.UpdateUserLanguageAsync(UserSettings);
+        if (bool.TryParse(selectedString, out bool newvalue))
+        {
+            if(newvalue)
+                UserSettings.Language = "French";
+            else
+                UserSettings.Language = "English";
 
-        var url = NavigationManager.Uri;
-        NavigationManager.NavigateTo(url, true);
+            await accountService.UpdateUserLanguageAsync(UserSettings);
 
-        StateHasChanged();
+            var url = NavigationManager.Uri;
+            NavigationManager.NavigateTo(url, true);
+
+            StateHasChanged();
+        }
     }
 }
