@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using Serilog;
+using Microsoft.Extensions.Hosting;
 
 namespace EDI.Web
 {

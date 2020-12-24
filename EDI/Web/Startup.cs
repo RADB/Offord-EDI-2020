@@ -112,9 +112,9 @@ namespace EDI.Web
 
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
-
-            services.AddMvc(options => options.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            
+            //services.AddMvc(options => options.EnableEndpointRouting = false)
+            //    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -187,6 +187,7 @@ namespace EDI.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -196,10 +197,12 @@ namespace EDI.Web
 
             app.UseRouting();
 
-            app.UseMvcWithDefaultRoute();
+            //app.UseMvcWithDefaultRoute();
 
             app.UseEndpoints(endpoints =>
             {
+                // andrew 2020-12-21
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
