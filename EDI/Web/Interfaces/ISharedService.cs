@@ -22,9 +22,9 @@ namespace EDI.Web.Interfaces
         
        // List<LookupSetOption> GetLookupSetOptions(int LookupSetId);
 
-        Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
+        Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.UploadFiles file);
         Task<ErrorViewModel> ProcessFileData();
-        Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.Internal.UploadFiles file);
+        Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.UploadFiles file);
         string GetConfigText(QuestionnairesConfiguration config);
 
         string GetHelpText(QuestionnairesConfiguration config);

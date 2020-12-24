@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Buttons
 
-<SfSwitch CssClass="handle-text" OnLabel="@SwitchModel.OnLabel" OffLabel="@SwitchModel.OffLabel" @bind-Checked="@SwitchModel.Value" ValueChange="@((ev) => OnChange.InvokeAsync(ev))"/>
+<SfSwitch CssClass="handle-text" OnLabel="@SwitchModel.OnLabel" OffLabel="@SwitchModel.OffLabel" @bind-Checked="@SwitchModel.Value" @onchange="@((ev) => OnChange.InvokeAsync(ev))"/>
 
 @code {
     [Parameter]
     public SwitchViewModel SwitchModel { get; set; }
     [Parameter]
-    public EventCallback<Syncfusion.Blazor.Buttons.ChangeEventArgs> OnChange { get; set; }
+    public EventCallback<Microsoft.AspNetCore.Components.ChangeEventArgs> OnChange { get; set; }
 }

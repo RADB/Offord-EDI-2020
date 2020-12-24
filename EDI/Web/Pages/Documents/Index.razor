@@ -1,6 +1,10 @@
 ﻿@page "/documents/index"
+@using Microsoft.AspNetCore.Http
 @using Syncfusion.Blazor.FileManager;
 @inject ISharedService sharedService;
+@inject UserSettings UserSettings;
+@inject NavigationManager NavigationManager;
+@inject IHttpContextAccessor httpContextAccessor
 
 <div class="row">
     <div class="col-md-12">
@@ -12,7 +16,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <SfFileManager>
+                <SfFileManager TValue="FileManagerDirectoryContent" AjaxSettings="@settings">
                     <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
                                              GetImageUrl="/api/FileManager/GetImage"
                                              UploadUrl="/api/FileManager/Upload"
@@ -26,7 +30,21 @@
 </div>
 
 @code {
+    private FileManagerDirectoryUpdatedContent settings { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            var UserName = httpContextAccessor.HttpContext.User.Identity.Name;
+            settings = new FileManagerDirectoryUpdatedContent();
+            settings.UserName = UserName;
+        }
+    }
 
     private string Translate(string word)
     {

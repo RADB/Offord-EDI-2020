@@ -26,21 +26,25 @@ namespace EDI.Web.Controllers
         private readonly AppIdentityDbContext _identityContext;
         public PhysicalFileProvider operation;
         public string basePath;
+        private EDI.Web.Models.UserSettings _userSettings { get; set; }
 
         [Obsolete]
         public FileManagerController(IHostingEnvironment hostingEnvironment, 
             IHttpContextAccessor httpContextAccessor,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            EDI.Web.Models.UserSettings userSettings,
             UserManager<ApplicationUser> userManager)
         {
             this.basePath = hostingEnvironment.ContentRootPath;
             this.operation = new PhysicalFileProvider();
+            
 
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
             _identityContext = identityContext;
+            _userSettings = userSettings;
 
             var username = _httpContextAccessor.HttpContext.User.Identity.Name;
 
