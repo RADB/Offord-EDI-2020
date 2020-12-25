@@ -97,6 +97,7 @@ namespace EDI.Web
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IChildService, ChildService>();
             services.AddScoped<IMathService, MathService>();
+            services.AddScoped<IReflectionService, ReflectionService>();
             services.AddScoped<ILinkService, LinkService>();
             services.AddScoped<IFaqService, FaqService>();
             services.AddScoped<ILookupSetService, LookupSetService>();
