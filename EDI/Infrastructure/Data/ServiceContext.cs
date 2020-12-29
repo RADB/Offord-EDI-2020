@@ -157,13 +157,11 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 
-                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
+                entity.Property(e => e.Dob).HasColumnType("smalldatetime");
 
-                entity.Property(e => e.Ediid).HasColumnName("EDIID").HasMaxLength(15);
+                entity.Property(e => e.Ediid).HasMaxLength(15);
 
-                entity.Property(e => e.GenderId).HasColumnName("GenderID");
-
-                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
+                entity.Property(e => e.LocalId).HasMaxLength(40);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
@@ -171,9 +169,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ChildNumber).HasMaxLength(15);
 
-                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
-
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+                entity.Property(e => e.YearId).HasComment("Year of the EDI implementation");
 
                 entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.Demographics");
                 entity.HasMany(e => e.QuestionnairesDataSectionAs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionAs");
@@ -196,9 +192,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(14);
 
-                entity.Property(e => e.UserId).HasColumnName("UserID").HasMaxLength(40);
+                entity.Property(e => e.UserId).HasMaxLength(40);
 
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+                entity.Property(e => e.YearId).HasComment("Year of the EDI implementation");
 
                 entity.HasMany(e => e.Sites).WithOne(d => d.Coordinator).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.CoordinatorId).HasConstraintName("FK_Coordinators_Sites");
             });
@@ -208,11 +204,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256);
 
-                entity.Property(e => e.ISO2CountryCode).IsRequired().HasColumnName("ISO2CountryCode").HasMaxLength(2);
+                entity.Property(e => e.ISO2CountryCode).IsRequired().HasMaxLength(2);
 
-                entity.Property(e => e.ISO3CountryCode).IsRequired().HasColumnName("ISO3CountryCode").HasMaxLength(3);
-
-                entity.Property(e => e.Code).HasColumnName("Code");
+                entity.Property(e => e.ISO3CountryCode).IsRequired().HasMaxLength(3);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256);
 
@@ -230,24 +224,19 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.IsAdministratorFaq).HasColumnName("IsAdministratorFAQ");
 
-                entity.Property(e => e.IsCoordinatorFaq).HasColumnName("IsCoordinatorFAQ");
-
-                entity.Property(e => e.IsTeacherFaq).HasColumnName("IsTeacherFAQ");
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.YearId).HasColumnName("YearID");
             });
 
             modelBuilder.Entity<FileImport>(entity =>
             {
                 entity.ToTable("FileImports", "Staging");
 
-                entity.Property(e => e.ChildDob).HasColumnName("ChildDOB").HasColumnType("smalldatetime");
+                entity.Property(e => e.ChildDob).HasColumnType("smalldatetime");
 
-                entity.Property(e => e.ChildEdiid).HasColumnName("ChildEDIID").HasMaxLength(15);
+                entity.Property(e => e.ChildEdiid).HasMaxLength(15);
 
                 entity.Property(e => e.ChildPostalCodeZip).HasMaxLength(10);
 
@@ -257,17 +246,13 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 
-                entity.Property(e => e.FileImportStatusId).HasColumnName("FileImportStatusID");
 
                 entity.Property(e => e.FileName).HasMaxLength(256);
 
-                entity.Property(e => e.GenderId).HasColumnName("GenderID");
-
-                entity.Property(e => e.LocalId).HasColumnName("LocalID").HasMaxLength(40);
+                entity.Property(e => e.LocalId).HasMaxLength(40);
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
-                //entity.Property(e => e.SchoolProvinceId).HasColumnName("SchoolProvinceID");
 
                 entity.Property(e => e.TeacherEmail).HasMaxLength(100);
 
@@ -336,9 +321,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.Name).HasMaxLength(255);
 
-                entity.Property(e => e.Url).HasColumnName("URL").HasMaxLength(255);
-
-                entity.Property(e => e.YearId).HasColumnName("YearID");
+                entity.Property(e => e.Url).HasMaxLength(255);
             });
 
             modelBuilder.Entity<LookupSet>(entity =>
@@ -351,8 +334,6 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.LookupName).IsRequired().HasMaxLength(100);
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
-
-                entity.Property(e => e.YearId).HasColumnName("YearID");
                 entity.HasMany(d => d.LookupSetOptions).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupSetId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_LookupSetOptions");
                 entity.HasMany(p => p.QuestionnairesConfigurations).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupEntityId).HasConstraintName("FK_LookupSet_QuestionnaireConfiguration");
                 //entity.HasOne(d => d.Id).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.LookupEntityId).HasConstraintName("FK_Questionnaires.Configuration_LookupSets");
@@ -371,10 +352,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                //entity.Property(e => e.YearId).HasColumnName("YearID");
-
-                //entity.HasOne(d => d.LookupSet).WithMany(p => p.LookupSetOptions).HasForeignKey(d => d.LookupId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSetOptions_LookupSets");
-            });
+             });
             modelBuilder.Entity<Orientation>(entity =>
             {
                 entity.ToTable("Orientations", "LUData");
@@ -398,8 +376,6 @@ namespace EDI.Infrastructure.Data
                 entity.HasIndex(e => e.ProvinceTypeId);
 
                 entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
-
-                entity.Property(e => e.CountryID).HasColumnName("CountryID");
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(64);
 
@@ -451,8 +427,6 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ShowProgressBar).HasComment("Answered x of y Questions");
 
-                entity.Property(e => e.YearId).HasColumnName("YearID");
-
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Questionnaire).HasForeignKey(e => e.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaire_QuestionnairesConfigurations");
 
             });
@@ -475,11 +449,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.GroupName).HasMaxLength(100);
 
-                entity.Property(e => e.InputTypeId).HasColumnName("InputTypeId");
-
                 entity.Property(e => e.LookupEntity).HasMaxLength(100);
-
-                entity.Property(e => e.LookupEntityId).HasColumnName("LookupEntityID");
 
                 entity.Property(e => e.Mask).HasMaxLength(20);
 
@@ -489,15 +459,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.NotificationCondition).HasMaxLength(200);
 
-                entity.Property(e => e.NorthwestTerritories).HasColumnName("NorthwestTerritories");
-
-                entity.Property(e => e.OrientationId).HasColumnName("OrientationID");
-
-                entity.Property(e => e.PrinceEdwardIsland).HasColumnName("PrinceEdwardIsland");
-
                 entity.Property(e => e.QuestionNumber).HasMaxLength(5);
-
-                entity.Property(e => e.QuestionnaireId).HasColumnName("QuestionnaireID");
 
                 entity.Property(e => e.VariableName).HasMaxLength(50).HasComment("Variable Name for data dictionary");       
                 
@@ -563,10 +525,6 @@ namespace EDI.Infrastructure.Data
             {                
                 entity.ToTable("Questionnaires.Data.Demographics", "EDI");
 
-                entity.Property(e => e.AttendedJk).HasColumnName("AttendedJK");
-
-                entity.Property(e => e.ConsideredEsl).HasColumnName("ConsideredESL");
-
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
 
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
@@ -577,9 +535,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedDate).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Dob).HasColumnName("DOB").HasColumnType("smalldatetime");
-
-                entity.Property(e => e.Jkteacher).HasColumnName("JKTeacher");
+                entity.Property(e => e.Dob).HasColumnType("smalldatetime");
 
                 entity.Property(e => e.PostalCode).HasMaxLength(10);
                 entity.Property(e => e.IsComplete).IsRequired().HasDefaultValueSql("((0))");
@@ -708,7 +664,7 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.SchoolName).IsUnicode(false);
 
                 entity.Property(e => e.SchoolNumber).IsUnicode(false);
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+                entity.Property(e => e.YearId).HasComment("Year of the EDI implementation");
 
                 //entity.HasOne(d => d.Site).WithMany(p => p.Schools).HasForeignKey(d => d.SiteId).HasConstraintName("FK_Schools_Sites");
 
@@ -741,7 +697,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.HasMany(e => e.Schools).WithOne(e => e.Site).OnDelete(DeleteBehavior.Cascade).HasForeignKey(e => e.SiteId).HasConstraintName("FK_Sites_Schools");
 
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+                entity.Property(e => e.YearId).HasComment("Year of the EDI implementation");
 
                 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
@@ -761,15 +717,14 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(14);
 
-                entity.Property(e => e.SchoolId).HasColumnName("SchoolID");
 
                 entity.Property(e => e.TeacherName).HasMaxLength(100);
                 
                 entity.Property(e => e.TeacherNumber).HasMaxLength(15);
 
-                entity.Property(e => e.UserId).HasColumnName("UserID").HasMaxLength(40).HasComment("Links to user in EDI.Identity database");
+                entity.Property(e => e.UserId).HasMaxLength(40).HasComment("Links to user in EDI.Identity database");
 
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
+                entity.Property(e => e.YearId).HasComment("Year of the EDI implementation");
 
                 //entity.HasOne(d => d.School).WithMany(p => p.Teachers).HasForeignKey(d => d.SchoolId).HasConstraintName("FK_Teachers_Schools");
 
@@ -784,65 +739,6 @@ namespace EDI.Infrastructure.Data
             });
                      
        
-           /* modelBuilder.Entity<TeacherFeedbackForm>(entity =>
-            {
-                entity.ToTable("TeacherFeedbackForms", "EDI_Forms");
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.FirstTimeCompletingEdi).HasColumnName("FirstTimeCompletingEDI");
-
-                entity.Property(e => e.LanguageCompleted).HasMaxLength(20).HasComment("English or French");
-
-                entity.Property(e => e.MaterialsOtherSpecify).HasMaxLength(250);
-
-                entity.Property(e => e.MaterialsPastEdi).HasColumnName("MaterialsPastEDI");
-
-                entity.Property(e => e.MaterialsPpt).HasColumnName("MaterialsPPT");
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
-
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
-
-                //entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherFeedbackForms).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherFeedback_Teachers");
-
-               // entity.HasOne(d => d.Year).WithMany(p => p.TeacherFeedbackForms).HasForeignKey(d => d.YearId).HasConstraintName("FK_TeacherFeedback_Years");
-            });
-
-            modelBuilder.Entity<TeacherParticipationForm>(entity =>
-            {
-                entity.ToTable("TeacherParticipationForms", "EDI_Forms");
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.EducationOtherComment).HasMaxLength(255);
-
-                entity.Property(e => e.EducationPhd).HasColumnName("EducationPHD");
-
-                entity.Property(e => e.EducationPhdcourses).HasColumnName("EducationPHDCourses");
-
-                entity.Property(e => e.FirstTimeCompletingEdi).HasColumnName("FirstTimeCompletingEDI");
-
-                entity.Property(e => e.GenderId).HasColumnName("GenderID");
-
-                entity.Property(e => e.GuideOtherComment).HasMaxLength(255);
-
-                entity.Property(e => e.LanguageCompleted).HasMaxLength(20).HasComment("English or French");
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-
-                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
-
-                entity.Property(e => e.TimesCompletedEdi).HasColumnName("TimesCompletedEDI").HasComment("1-4 or more");
-
-                entity.Property(e => e.YearId).HasColumnName("YearID").HasComment("Year of the EDI implementation");
-
-                //entity.HasOne(d => d.Teacher).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.TeacherId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_TeacherParticipation_Teachers");
-                //entity.HasOne(d => d.Gender).WithMany(p => p.TeacherParticipationForms).HasForeignKey(d => d.GenderId).HasConstraintName("FK_TeacherParticipationForms_Gender");
-
-            });*/
             modelBuilder.Entity<Translation>(entity =>
             {
                 entity.ToTable("Translations", "LUData");
@@ -859,11 +755,8 @@ namespace EDI.Infrastructure.Data
             modelBuilder.Entity<Year>(entity =>
             {
                 entity.ToTable("Years", "LUData");
-                //entity.Property(e => e.Id).HasColumnName("ID").ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.Ediyear).HasColumnName("EDIYear");
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 

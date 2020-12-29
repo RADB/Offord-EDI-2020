@@ -12,7 +12,10 @@ namespace EDI.Web.Services
         //abstract for generic future use
         public void SetFieldValue(object obj, string fieldName, string value)
         {
-            obj.GetType().GetProperty(fieldName).SetValue(obj, value);
+            if (obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName == "System.Byte")
+            { 
+                obj.GetType().GetProperty(fieldName.Trim()).SetValue(obj, byte.Parse(value));
+            }            
         }
 
         //abstract for generic future use
