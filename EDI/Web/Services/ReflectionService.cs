@@ -46,13 +46,13 @@ namespace EDI.Web.Services
         {
             return entityName switch
             {
-                "Questionnaires.Data.Demographics" => data.Children.First().QuestionnairesDataDemographics.FirstOrDefault(),
-                "Questionnaires.Data.SectionA" => data.Children.First().QuestionnairesDataSectionAs.FirstOrDefault(),
-                "Questionnaires.Data.SectionB" => data.Children.First().QuestionnairesDataSectionBs.FirstOrDefault(),
-                "Questionnaires.Data.SectionC" => data.Children.First().QuestionnairesDataSectionCs.FirstOrDefault(),
-                "Questionnaires.Data.SectionD" => data.Children.First().QuestionnairesDataSectionDs.FirstOrDefault(),
-                "Questionnaires.Data.SectionE" => data.Children.First().QuestionnairesDataSectionEs.FirstOrDefault(),
-                "Questionnaires.Data.TeacherProfile" => data.QuestionnairesDataTeacherProfiles.FirstOrDefault(),
+                "Questionnaires.Data.Demographics" => data.Children.First().QuestionnairesDataDemographics.Single(),
+                "Questionnaires.Data.SectionA" => data.Children.First().QuestionnairesDataSectionAs.Single(),
+                "Questionnaires.Data.SectionB" => data.Children.First().QuestionnairesDataSectionBs.Single(),
+                "Questionnaires.Data.SectionC" => data.Children.First().QuestionnairesDataSectionCs.Single(),
+                "Questionnaires.Data.SectionD" => data.Children.First().QuestionnairesDataSectionDs.Single(),
+                "Questionnaires.Data.SectionE" => data.Children.First().QuestionnairesDataSectionEs.Single(),
+                "Questionnaires.Data.TeacherProfile" => data.QuestionnairesDataTeacherProfiles.Single(),
                 _ => null,
             };
         }
