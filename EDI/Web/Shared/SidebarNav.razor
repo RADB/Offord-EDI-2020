@@ -5,10 +5,34 @@
     <ChildContent>
         <div class="main-menu">
             <div>
-                <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData">
-                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" IconCss="icon" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
+                <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData" >
+                    <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
                     </TreeViewFieldsSettings>
                     <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
+                    <TreeViewTemplates TValue="TreeData">
+                        <NodeTemplate>
+                            @{
+                                var item = (context as TreeData);
+                                if (item.icon.ToString().StartsWith("icon-"))
+                                // use base icons - https://simplelineicons.github.io/
+                                {<i class="@item.icon"></i>}
+
+                                else
+                                    switch (item.icon)
+                                    {
+                                        case "newspaper icon":
+                                            // fontawesome.com
+                                            <i class="far fa-newspaper icon"></i>
+                                            break;
+                                        case "question_answer icon":
+                                            // use material icon for FAQ - https://material.io/resources/icons/?style=baseline
+                                            <i class="material-icons-outlined admin-icon">question_answer</i>
+                                            break;
+                                    }
+                                <span class="e-list-text"> @item.nodeText</span>
+                            }
+                        </NodeTemplate>
+                    </TreeViewTemplates>
                 </SfTreeView>
             </div>
         </div>

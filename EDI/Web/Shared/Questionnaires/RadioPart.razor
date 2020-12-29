@@ -1,0 +1,135 @@
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Buttons;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IModalService Modal
+@inject ServiceContext dbContext;
+
+<div class="card-body border border-primary rounded">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>@QuestionText</h4>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-9">
+                                    @foreach (var option in _LookupSetOptions)
+                                    {
+                                        _optionCount += 1;
+
+                                        _optionLabel = sharedService.GetOptionText(option);
+
+                                        //replace checked with value from object
+                                        @if (data.QuestionnairesDataTeacherProfiles.Count() > 0 && data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.QuestionnairesDataTeacherProfiles.First()) != null)
+                                        {
+                                            var datavalue = data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).GetValue(data.QuestionnairesDataTeacherProfiles.First());
+
+                                            @if (datavalue.ToString() == "1")
+                                            {
+                                                <SfRadioButton Checked=true @onchange="@ChangeRadioModel" Label=@_optionLabel Value="1"></SfRadioButton>
+                                            }
+                                            else
+                                            {
+                                                <SfRadioButton Checked=false @onchange="@ChangeRadioModel" Label=@_optionLabel Value="0"></SfRadioButton>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <SfRadioButton Checked=false @onchange="@ChangeRadioModel" Label=@_optionLabel Value=@option.Value.ToString()></SfRadioButton>
+                                        }
+
+                                        if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
+                                        {
+                                            <br />
+                                        }
+                                    }
+                                </div>
+
+                                <div class="col-2">
+                                    @if (Config.HasHelp)
+                                    {
+                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                                    }
+                                </div>
+                            </div>
+                            <!--<div>
+                                <label>Selected Value is @StringValue</label>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@code
+{
+    [Parameter]
+    public TeacherProfileItemViewModel teacherModel { get; set; }
+
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
+
+    public bool ischecked { get; set; }
+    public string radiovalue { get; set; }
+
+    private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        // get the selected value
+        //StringValue = args.Value.ToString();
+
+        // reset the optioncount
+        _optionCount = 0;
+
+        // update the currentvalue -- TODO
+        ///CurrentValue = (byte)args.Value;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetQuestionText();
+
+        // get the lookupset options
+        _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+
+       
+
+    }
+
+    public async void ChangeRadioModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        if (byte.TryParse(selectedString, out byte newvalue))
+        {
+            switch (Config.EntityName)
+            {
+                case "Questionnaires.Data.Demographics":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataDemographics, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionA":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionAs, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionB":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionBs, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionC":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionCs, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionD":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionDs, newvalue);
+                    break;
+                case "Questionnaires.Data.SectionE":
+                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionEs, newvalue);
+                    break;
+                case "Questionnaires.Data.TeacherProfile":
+                    data.QuestionnairesDataTeacherProfiles.First().GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.QuestionnairesDataTeacherProfiles.First(), newvalue);
+                    break;
+            }
+        }
+    }
+}
+

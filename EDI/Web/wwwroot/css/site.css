@@ -1169,14 +1169,41 @@ a {
 /*END Teacher Left Side Menu*/
 
 .teachericon {
-    font-size: 36px;    
+    font-size: 36px;
     color: grey;
+    padding: 0 10px 0 0;
+}
+
+/* Fontawesome Overrides */
+.teacher-menu-icon {
+    color: #95989a;
+    font-size: 36px;
+    padding: 0 10px 0 0;
+    /*display: inline-block;
+    height: 18px;
+    margin: 0 0 0 5px;*/
 }
 
 .icon {
     font-size: 16px;
     color: grey;
+    padding: 0 10px 0 0;
+    /* display: inline-block; */
+    /* vertical-align: middle; */
+    /* height: 18px; */
+    /* margin: 0 10px 0 0;*/
 }
+
+/* Fontawesome Overrides */
+.admin-icon {
+    color: #95989a;
+    font-size: 18px;
+    padding: 0 10px 0 0;
+    /*display: inline-block;
+    height: 18px;
+    margin: 0 0 0 5px;*/
+}
+
 .nodeText {
     padding-top: 16px;
     font-size: 20px;
@@ -1192,7 +1219,7 @@ a {
 }
 
 /* Styles for syncfusion form controls - AR*/
-.datepicker {
+    .datepicker {
     max-width:250px;    
 }
 
@@ -1220,8 +1247,3 @@ a {
     width: 108px;
 }
 
-/* Fontawesome Overrides */
-.teacher-menu-icon {
-    color: #95989a;
-    font-size: 36px;
-}

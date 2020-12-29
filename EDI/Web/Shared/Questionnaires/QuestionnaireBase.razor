@@ -12,6 +12,9 @@
     [Parameter]
     public QuestionnairesConfiguration Config { get; set; }
 
+    [Parameter]
+    public Teacher data { get; set; }
+
     public ModalPartViewModel ModalPartModel { get; set; }
 
     public string QuestionText { get; set; }
@@ -20,23 +23,6 @@
     public int _optionCount = 0;
     public string _optionLabel;
 
-    /*[Parameter] // column to store responses
-    public string DataColumn { get; set; } = "";
-
-    [Parameter] // string value
-    public string StringValue { get; set; } = "";
-
-    [Parameter] // integer value
-    public Int32 IntValue { get; set; } = 0;
-
-    [Parameter] // double value
-    public double DblValue { get; set; } = 0.00;
-
-    [Parameter] // Data Type String
-    public String DataTypeString { get; set; } = "Int32";
-
-    //[Parameter] // Data Type
-    //public System.Type DataType { get; set; } = typeof(String);*/
 
     public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
     {
@@ -61,7 +47,7 @@
         var options = new ModalOptions();
         options.HideHeader = false;
         options.HideCloseButton = false;
-   
+
         ModalService.Show<ModalPart>(ModalTitle, parameters,options);
     }
 
@@ -78,5 +64,5 @@
         // get the Help Text if the question has help
         if (Config.HasHelp)
             HelpText = sharedService.GetHelpText(Config);
-    }    
+    }
 }
