@@ -1214,7 +1214,8 @@ a {
 }
 
 .e-treeview .e-list-item.e-active > .e-fullrow {
-    background-color: #00b8ff;
+    /*background-color: #00b8ff;
+    background-color:Highlight;*/
     border-color: #007bff;
 }
 
