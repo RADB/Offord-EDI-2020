@@ -58,13 +58,14 @@
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:                
-                <RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>
+                @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
+                <RadioPart Config="@config" data="@teacherData"></RadioPart>
                 break;
             case InputTypes.DatePicker:
                 <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
                 break;
             case InputTypes.TextBox:
-                <TextPart Config=@config data=@teacherData CurrentValue="Change me"></TextPart>
+                <TextPart Config=@config data=@teacherData CurrentValue=""></TextPart>
                 break;
             case InputTypes.SelectBox:
                 <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
