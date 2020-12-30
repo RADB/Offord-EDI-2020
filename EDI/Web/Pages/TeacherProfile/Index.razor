@@ -23,7 +23,7 @@
                     <DataAnnotationsValidator />
                     <div class="text-danger"><ValidationSummary /></div>
 
-                    <QuestionnaireHeader teacherModel="@teacherprofileitemviewmodel" teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="95px"></QuestionnaireHeader>
+                    <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="0px"></QuestionnaireHeader>
 
                 </div>
                 <div class="card-footer">
@@ -41,7 +41,7 @@
         [Parameter]
         public int TeacherId { get; set; }
 
-        private TeacherProfileItemViewModel teacherprofileitemviewmodel { get; set; }
+        //private TeacherProfileItemViewModel teacherprofileitemviewmodel { get; set; }
         private List<QuestionnairesConfiguration> headers;
         //private QuestionnairesDataDemographic data;
         private Teacher teacherData;
@@ -68,7 +68,7 @@
                     }
                 }
 
-                teacherprofileitemviewmodel = new TeacherProfileItemViewModel();
+                //teacherprofileitemviewmodel = new TeacherProfileItemViewModel();
                 // get the data if use that has access
                 getData();
             }

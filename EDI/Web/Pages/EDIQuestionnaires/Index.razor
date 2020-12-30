@@ -75,6 +75,7 @@
                 .Include(c => c.QuestionnairesDataSectionCs)
                 .Include(c => c.QuestionnairesDataSectionDs)
                 .Include(c => c.QuestionnairesDataSectionEs)
+                .Include(c => c.Gender)
                 .Include(c => c.Teacher)
                 .ThenInclude(t => t.School)
                 .ThenInclude(ts => ts.Province)

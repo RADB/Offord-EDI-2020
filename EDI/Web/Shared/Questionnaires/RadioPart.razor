@@ -6,83 +6,47 @@
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 
-<div class="card-body border border-primary rounded">
+
     <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>@QuestionText</h4>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-9">
-                                    @foreach (var option in _LookupSetOptions)
-                                    {
-                                        //_optionCount += 1;
+        <h4>@QuestionText</h4>
+    </div>
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-9">
+            @foreach (var option in _LookupSetOptions)
+            {
+                <SfRadioButton @bind-Checked="currentValue" @onchange="@ChangeRadioModel" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
-                                        //_optionLabel = sharedService.GetOptionText(option);
+                if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
+                {
+                    <br />
+                }
+            }
+        </div>
 
-                                        //replace checked with value from object
-
-                                        <SfRadioButton @bind-Checked="currentValue" @onchange="@ChangeRadioModel" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
-
-                                        if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
-                                        {
-                                            <br />
-                                        }
-                                    }
-                                </div>
-
-                                <div class="col-2">
-                                    @if (Config.HasHelp)
-                                    {
-                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
-                                    }
-                                </div>
-                            </div>
-                            <!--<div>
-                                <label>Selected Value is @StringValue</label>
-                            </div>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-2">
+            @if (Config.HasHelp)
+            {
+                <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+            }
         </div>
     </div>
-</div>
+
 @code
 {
-    //[Parameter]
-    //public TeacherProfileItemViewModel teacherModel { get; set; }
 
     // option set
     private List<LookupSetOption> _LookupSetOptions;
 
-    //public bool ischecked { get; set; }
-    //public string radiovalue { get; set; }
-
     private string currentValue { get; set; }
-
-    private void RadioSelection(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-        // get the selected value
-        //StringValue = args.Value.ToString();
-
-        // reset the optioncount
-        _optionCount = 0;
-
-        // update the currentvalue -- TODO
-        ///CurrentValue = (byte)args.Value;
-    }
 
     protected override async Task OnInitializedAsync()
     {
         // get the question and help text
         GetQuestionText();
 
-        // Get the current value of the question       
-        currentValue = reflectionService.GetFieldValue(data,Config.EntityName,Config.EntityField);
+        // Get the current value of the question
+        currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
 
         // get the lookupset options
         _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
@@ -90,12 +54,8 @@
 
     public async void ChangeRadioModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        //string selectedString = e.Value.ToString();
-
-        //if (byte.TryParse(selectedString, out byte newvalue))
-        //{
-            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-        //}
+        // save the data back to the object
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
     }
 }
 

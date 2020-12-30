@@ -16,6 +16,10 @@ namespace EDI.Web.Services
             { 
                 obj.GetType().GetProperty(fieldName.Trim()).SetValue(obj, byte.Parse(value));
             }            
+            else
+            {
+                Console.WriteLine("Set the value of type {0}", obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName);
+            }
         }
 
         //abstract for generic future use

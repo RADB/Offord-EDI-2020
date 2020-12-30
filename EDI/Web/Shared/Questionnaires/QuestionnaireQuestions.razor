@@ -9,9 +9,21 @@
 
 
 <!-- PRINT THE Questions -->
-<QuestionnaireBuilder configs=@questions teacherData=@teacherData teacherModel="@teacherModel" IsReadonly=@IsReadOnly></QuestionnaireBuilder>
-<br />
-                
+<div class="card-body border border-primary rounded">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <QuestionnaireBuilder configs=@questions teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @code {
     //@((MarkupString)_Text)
     [Parameter]
@@ -55,6 +67,7 @@
 
     private void getData()
     {
+        // need to filter by yearid as well
         predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=9 AND InputTypeId !=11";
         // get the configuration
         questions = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();

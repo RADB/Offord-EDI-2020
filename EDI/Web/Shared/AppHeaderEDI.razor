@@ -53,9 +53,7 @@
     private async void Save()
     {
         await dbContext.SaveChangesAsync();
-
-        //getData();
-
+        
         StateHasChanged();
     }
 }
