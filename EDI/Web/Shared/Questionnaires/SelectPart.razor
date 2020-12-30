@@ -1,0 +1,62 @@
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Buttons;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IModalService Modal;
+@inject IReflectionService reflectionService;
+@inject ServiceContext dbContext;
+@inject UserSettings _userSettings;
+
+<div class="row">
+    <h4>@QuestionText</h4>
+</div>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-9">
+        @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
+
+        <SfDropDownList TValue="string" Placeholder="@Config.Label" TItem="LookupSetOption" @bind-Value="@currentValue" DataSource="@_LookupSetOptions" PopupWidth="auto">
+            <DropDownListFieldSettings Value="Value" Text="@_userSettings.Language"></DropDownListFieldSettings>
+            <DropDownListEvents TValue="string" TItem="LookupSetOption" ValueChange="onChange"></DropDownListEvents>
+        </SfDropDownList>
+    </div>
+    @*sharedService.GetLanguageText(English,French)*@
+    <div class="col-2">
+        @if (Config.HasHelp)
+        {
+            <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+        }
+    </div>
+</div>
+
+@code
+{
+
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
+
+    private string currentValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get the question and help text
+        GetQuestionText();
+
+        // Get the current value of the question
+        currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+
+        // get the lookupset options
+        _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+    }
+
+    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    private void onChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, LookupSetOption> e)
+    {
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+        }
+    }
+}
+

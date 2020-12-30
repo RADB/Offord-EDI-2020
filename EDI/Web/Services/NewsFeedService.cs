@@ -128,32 +128,33 @@ namespace EDI.Web.Services
 
             try
             {
-                var _newsFeed = new NewsFeed();
-
-                _newsFeed.Title = newsFeed.Title;
-                _newsFeed.Text = newsFeed.Text;
-                _newsFeed.Summary = newsFeed.Summary;
-                _newsFeed.Author = newsFeed.Author;
-                _newsFeed.YearId = newsFeed.YearId;
-                _newsFeed.ValidFrom = newsFeed.ValidFrom;
-                _newsFeed.ValidTo = newsFeed.ValidTo;
-                _newsFeed.Alberta = newsFeed.Alberta;
-                _newsFeed.BritishColumbia = newsFeed.BritishColumbia;
-                _newsFeed.Manitoba = newsFeed.Manitoba;
-                _newsFeed.NewBrunswick = newsFeed.NewBrunswick;
-                _newsFeed.NewfoundlandandLabrador = newsFeed.NewfoundlandandLabrador;
-                _newsFeed.NovaScotia = newsFeed.NovaScotia;
-                _newsFeed.Nunavut = newsFeed.Nunavut;
-                _newsFeed.Ontario = newsFeed.Ontario;
-                _newsFeed.PrinceEdwardIsland = newsFeed.PrinceEdwardIsland;
-                _newsFeed.Quebec = newsFeed.Quebec;
-                _newsFeed.Saskatchewan = newsFeed.Saskatchewan;
-                _newsFeed.YukonTerritory = newsFeed.YukonTerritory;
-                _newsFeed.NorthwestTerritories = newsFeed.NorthwestTerritories;
-                _newsFeed.CreatedDate = DateTime.Now;
-                _newsFeed.CreatedBy = _userSettings.UserName;
-                _newsFeed.ModifiedDate = DateTime.Now;
-                _newsFeed.ModifiedBy = _userSettings.UserName;
+                var _newsFeed = new NewsFeed
+                {
+                    Title = newsFeed.Title,
+                    Text = newsFeed.Text,
+                    Summary = newsFeed.Summary,
+                    Author = newsFeed.Author,
+                    YearId = newsFeed.YearId,
+                    ValidFrom = newsFeed.ValidFrom,
+                    ValidTo = newsFeed.ValidTo,
+                    Alberta = newsFeed.Alberta,
+                    BritishColumbia = newsFeed.BritishColumbia,
+                    Manitoba = newsFeed.Manitoba,
+                    NewBrunswick = newsFeed.NewBrunswick,
+                    NewfoundlandandLabrador = newsFeed.NewfoundlandandLabrador,
+                    NovaScotia = newsFeed.NovaScotia,
+                    Nunavut = newsFeed.Nunavut,
+                    Ontario = newsFeed.Ontario,
+                    PrinceEdwardIsland = newsFeed.PrinceEdwardIsland,
+                    Quebec = newsFeed.Quebec,
+                    Saskatchewan = newsFeed.Saskatchewan,
+                    YukonTerritory = newsFeed.YukonTerritory,
+                    NorthwestTerritories = newsFeed.NorthwestTerritories,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = _userSettings.UserName,
+                    ModifiedDate = DateTime.Now,
+                    ModifiedBy = _userSettings.UserName
+                };
 
                 await _newsFeedRepository.AddAsync(_newsFeed);
                 return _newsFeed.Id;

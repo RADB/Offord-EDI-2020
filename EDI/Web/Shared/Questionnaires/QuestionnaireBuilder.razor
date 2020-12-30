@@ -68,7 +68,7 @@
                     <TextPart Config=@config data=@teacherData CurrentValue=""></TextPart>
                     break;
                 case InputTypes.SelectBox:
-                    <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
+                    <SelectPart Config="@config" data="@teacherData"></SelectPart>
                     break;
                 case InputTypes.RadioMatrix:
                     <div class="card-body border">
