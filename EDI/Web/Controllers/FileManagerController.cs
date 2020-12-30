@@ -14,6 +14,7 @@ using EDI.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Data;
+using EDI.Web.Lib;
 
 namespace EDI.Web.Controllers
 {
@@ -28,9 +29,12 @@ namespace EDI.Web.Controllers
         public string basePath;
         private EDI.Web.Models.UserSettings _userSettings { get; set; }
 
+        private StateContainer _StateContainer { get; set; }
+
         [Obsolete]
         public FileManagerController(IHostingEnvironment hostingEnvironment, 
             IHttpContextAccessor httpContextAccessor,
+            StateContainer StateContainer,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
             EDI.Web.Models.UserSettings userSettings,
@@ -38,15 +42,17 @@ namespace EDI.Web.Controllers
         {
             this.basePath = hostingEnvironment.ContentRootPath;
             this.operation = new PhysicalFileProvider();
-            
 
+            _StateContainer = StateContainer;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
             _identityContext = identityContext;
             _userSettings = userSettings;
 
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            //var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+
+            var username = _StateContainer.UserName;
 
             var user = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
 

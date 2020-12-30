@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDI.Web.Models
 {
-    public class FileManagerDirectoryUpdatedContent: FileManagerAjaxSettings
+    public class FileManagerDirectoryUpdatedContent: FileManagerDirectoryContent
     {
         public string UserName { get; set; }
     }

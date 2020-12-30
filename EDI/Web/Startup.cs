@@ -115,7 +115,9 @@ namespace EDI.Web
 
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
-            
+
+            services.AddSingleton<StateContainer>();
+
             //services.AddMvc(options => options.EnableEndpointRouting = false)
             //    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 

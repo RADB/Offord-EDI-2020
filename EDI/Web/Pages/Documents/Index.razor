@@ -5,6 +5,8 @@
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor httpContextAccessor
+@inject StateContainer StateContainer
+@implements IDisposable
 
 <div class="row">
     <div class="col-md-12">
@@ -16,7 +18,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <SfFileManager TValue="FileManagerDirectoryContent" AjaxSettings="@settings">
+                <SfFileManager TValue="FileManagerDirectoryContent">
                     <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
                                              GetImageUrl="/api/FileManager/GetImage"
                                              UploadUrl="/api/FileManager/Upload"
@@ -30,7 +32,6 @@
 </div>
 
 @code {
-    private FileManagerDirectoryUpdatedContent settings { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,14 +41,20 @@
         }
         else
         {
+            StateContainer.OnChange += StateHasChanged;
             var UserName = httpContextAccessor.HttpContext.User.Identity.Name;
-            settings = new FileManagerDirectoryUpdatedContent();
-            settings.UserName = UserName;
+
+            StateContainer.SetUsername(UserName);
         }
     }
 
     private string Translate(string word)
     {
         return sharedService.GetTranslate(word);
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }
