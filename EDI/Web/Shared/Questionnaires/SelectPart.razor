@@ -20,7 +20,7 @@
             <DropDownListEvents TValue="string" TItem="LookupSetOption" ValueChange="onChange"></DropDownListEvents>
         </SfDropDownList>
     </div>
-    @*sharedService.GetLanguageText(English,French)*@
+    
     <div class="col-2">
         @if (Config.HasHelp)
         {
@@ -45,8 +45,11 @@
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
 
-        // get the lookupset options
-        _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        if (Config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        }
     }
 
     //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)

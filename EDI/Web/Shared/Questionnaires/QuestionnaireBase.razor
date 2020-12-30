@@ -20,7 +20,7 @@
     public string QuestionText { get; set; }
     public string HelpText { get; set; }
 
-    public int _optionCount = 0;
+    //public int _optionCount = 0;
     public string _optionLabel;
 
 
@@ -32,7 +32,7 @@
 
     public void ShowModal(string ModalTitle, string ModalBody)
     {
-        _optionCount = 0;
+        //_optionCount = 0;
         ModalPartModel = new ModalPartViewModel();
         ModalPartModel.ModalTitle = ModalTitle;
         ModalPartModel.ModalBody = ModalBody;

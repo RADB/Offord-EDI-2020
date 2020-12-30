@@ -15,9 +15,9 @@
         <div class="col-9">
             @foreach (var option in _LookupSetOptions)
             {
-                <SfRadioButton @bind-Checked="currentValue" @onchange="@ChangeRadioModel" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+                <SfRadioButton @bind-Checked="currentValue" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
-                if ((Orientations)Config.OrientationId == Orientations.Vertical && _optionCount < _LookupSetOptions.Count)
+                if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
                 {
                     <br />
                 }
@@ -48,11 +48,14 @@
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
 
-        // get the lookupset options
-        _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        if (Config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        }
     }
 
-    public async void ChangeRadioModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         // save the data back to the object
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());

@@ -1,60 +1,68 @@
-﻿@inherits QuestionnaireBase
-@using EDI.Web.Shared.Questions
-<div class="card-body border border-primary rounded">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>@QuestionText</h4>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-9">
-                                    <Text TextModel=@TextModel OnChange="ChangeTextModel"  />
-                                </div>
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Inputs;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IModalService Modal;
+@inject IReflectionService reflectionService;
+@inject ServiceContext dbContext;
+@inject UserSettings _userSettings;
 
-                                <div class="col-2">
-                                    @if (Config.HasHelp)
-                                    {
-                                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
-                                    }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="row">
+    <h4>@QuestionText</h4>
+</div>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-9">
+        @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
+
+        <SfTextBox @bind-Value="@currentValue" @onchange="onChange"></SfTextBox>
     </div>
 
-    @code {
-        [Parameter]
-        public string CurrentValue { get; set; }
-
-        public TextViewModel TextModel { get; set; }
-
-        protected override async Task OnInitializedAsync()
+    <div class="col-2">
+        @if (Config.HasHelp)
         {
-            GetQuestionText();
-            TextModel = new TextViewModel();
-            TextModel.Name = Config.EntityField;
-            TextModel.Placeholder = QuestionText;
-            TextModel.Value = CurrentValue;
+            <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+        }
+    </div>
+</div>
+
+@code
+{
+
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
+
+    private string currentValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get the question and help text
+        GetQuestionText();
+
+        // Get the current value of the question
+        currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+
+        if (Config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
 
-        public async void ChangeTextModel(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-        {
-            switch (Config.EntityName)
-            {
-                case "Questionnaires.Data.Demographics":
-                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataDemographics, e.Value.ToString());
-                    break;
-                case "Questionnaires.Data.SectionB":
-                    data.GetType().GetProperty((Config.EntityField).Replace(" ", "")).SetValue(data.Children.First().QuestionnairesDataSectionBs, e.Value.ToString());
-                    break;
-            }
+    }
 
+    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
         }
     }
+}
+
+
+
+
+
+
