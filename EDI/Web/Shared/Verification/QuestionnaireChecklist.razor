@@ -1,9 +1,37 @@
-﻿<div class="row no-gutters align-items-center">
-    <div class="col-1 text-center">
-        <i i class="@iconCSS" style="color:@color"></i>
-    </div>
-    <div class="col-11">
-        <NavLink class="small font-weight-bold align-middle p-2" href="@URL">@QuestionnaireName</NavLink>        
+﻿@inject ISharedService sharedService;
+    @*<div class="row no-gutters align-items-center">
+        <div class="col-1 text-center">
+            <i i class="@iconCSS" style="color:@color"></i>
+        </div>
+        <div class="col-11">
+            <NavLink class="small font-weight-bold align-middle p-2" href="@URL">@QuestionnaireName</NavLink>
+        </div>
+    </div>*@
+
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>@Translate(@Header)</strong>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <strong></strong>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-1 text-center">
+                        <i i class="@iconCSS" style="color:@color"></i>
+                    </div>
+                    <div class="col-11">
+                        <NavLink class="small font-weight-bold align-middle p-2" href="@URL">@QuestionnaireName</NavLink>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -15,6 +43,8 @@
     public string URL { get; set; }
     [Parameter]
     public string QuestionnaireName { get; set; }
+    [Parameter]
+    public string Header { get; set; } = "Teacher Profile Status";
 
     private string iconCSS = "";
     private string color = "";
@@ -32,5 +62,9 @@
             iconCSS = "far fa-square fa-2x";
             color = "red";
         }
+    }
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

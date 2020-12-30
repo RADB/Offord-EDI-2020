@@ -9,40 +9,39 @@
 
 
 <!-- PRINT THE GROUPS IN ACCORDIONS-->
-<div class="row">
+@*<div class="row">
     <div class="col-md-12">
-        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 12px;margin-left:30px;">
-            <SfAccordion ExpandMode="ExpandMode.Multiple"  Width="100%">
-                <AccordionItems>
-                    @foreach (var config in groups)
-                    {
-                        // show text - otherwise show group name in accordion if showgroupname = true
-                        var aName = sharedService.GetConfigText(config).Length > 0 ? sharedService.GetConfigText(config) : config.ShowGroupName?config.GroupName:"";
-                    <AccordionItem Expanded="true" CssClass="border border-primary">
-                        <HeaderTemplate>
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <!--<div class="col-6 border border-info"><h4>@sharedService.GetConfigText(config)</h4></div><div class="col-6 text-right border border-warning"><h4>Complete Status</h4></div>-->
-                                    <div class="col-6"><h4>@aName</h4></div>
-                                </div>
-                            </div>
-                        </HeaderTemplate>
-                        <ContentTemplate>
-                            @if(aName.Length==0)
-                            { 
-                                <div class="col-6"><h4>@sharedService.GetConfigText(config)</h4></div>
-                            }
-                            <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 12px;margin-left:30px;">*@
 
-                            <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
-                        </ContentTemplate>
-                    </AccordionItem>
-                    }
-                </AccordionItems>
-            </SfAccordion>
-        </div>
-    </div>
-</div>
+    <SfAccordion ExpandMode="ExpandMode.Multiple" Width="100%">
+        <AccordionItems>
+            @foreach (var config in groups)
+            {
+                // show text - otherwise show group name in accordion if showgroupname = true
+                var aName = sharedService.GetConfigText(config).Length > 0 ? sharedService.GetConfigText(config) : config.ShowGroupName ? config.GroupName : "";
+                <AccordionItem Expanded="true" CssClass="border border-primary">
+                    <HeaderTemplate>
+                        <div class="container-fluid">
+                            <div class="row">
+                                <!--<div class="col-6 border border-info"><h4>@sharedService.GetConfigText(config)</h4></div><div class="col-6 text-right border border-warning"><h4>Complete Status</h4></div>-->
+                                <div class="col-6"><h4>@aName</h4></div>
+                            </div>
+                        </div>
+                    </HeaderTemplate>
+                    <ContentTemplate>
+                        @if (aName.Length == 0)
+                        {
+                            <div class="col-6"><h4>@sharedService.GetConfigText(config)</h4></div>
+                        }
+                        <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
+
+                        <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                    </ContentTemplate>
+                </AccordionItem>
+            }
+        </AccordionItems>
+    </SfAccordion>
+@*</div>*@
 
 @code {
     //@((MarkupString)_Text)
@@ -78,7 +77,7 @@
         }
         else
         {
-            if (groups==null)
+            if (groups == null)
             {
                 getData();
             }

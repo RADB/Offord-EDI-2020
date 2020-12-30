@@ -1,7 +1,8 @@
 ﻿@using static EDI.Web.Data.Enumerations
+@using Syncfusion.Blazor.Navigations
+
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
-@using Syncfusion.Blazor.Navigations
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
 
@@ -25,15 +26,13 @@
                 //NavigationManager.Uri.Contains
                 if (config.EntityName.Contains("TeacherProfile"))
                     // show the teacher name on the teacher profile
-                    _label = " - " + teacherData.TeacherName;
+                    _label = teacherData.TeacherName;
                 else
                 {
                     // show the child EDI ID
                     _label = string.Format("{0} - {1:yyyy-MM-dd} - ({2})", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob, teacherData.Children.Single().Gender.English);
                 }
-                <div class="card-header">
-                    <b>@_Text</b>: @_label
-                </div>
+                @((MarkupString)string.Format("<strong>{0}</strong>: {1}", _Text, _label));
                 break;
             case InputTypes.GroupHeader:
                 <div class="card-body border">
@@ -50,71 +49,71 @@
                     <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
                 </div>
                 break;
+            }
         }
-    }
-    else
-    {
-        // bind to value from demographic_data
-
-        switch ((InputTypes)config.InputTypeId)
+        else
         {
-            case InputTypes.RadioButtons:
-                @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
-                <RadioPart Config="@config" data="@teacherData"></RadioPart>
-                break;
-            case InputTypes.DatePicker:
-                <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
-                break;
-            case InputTypes.TextBox:
-                <TextPart Config=@config data=@teacherData CurrentValue=""></TextPart>
-                break;
-            case InputTypes.SelectBox:
-                <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
-                break;
-            case InputTypes.RadioMatrix:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                </div>
-                break;
-                @*case InputTypes.NumberBox:
-                    <NumberBoxPart Config=@config Min="0" Max="50" Label="" ></NumberBoxPart>
-                        break;
-                            case InputTypes.CheckBox:
-                        <div class="card-body border">
-                            <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
-                        </div>
-                        break;
-                        default:
-                        <div class="card-body border">
-                            <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                        </div>
-                        break;*@
-        }
+            // bind to value from demographic_data
 
-        // check to see if last config
-        if (configs.IndexOf(config) != configs.Count - 1)
-        {
-            <hr />
-        }
-    }
+            switch ((InputTypes)config.InputTypeId)
+            {
+                case InputTypes.RadioButtons:
+                    @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
+                    <RadioPart Config="@config" data="@teacherData"></RadioPart>
+                    break;
+                case InputTypes.DatePicker:
+                    <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
+                    break;
+                case InputTypes.TextBox:
+                    <TextPart Config=@config data=@teacherData CurrentValue=""></TextPart>
+                    break;
+                case InputTypes.SelectBox:
+                    <SelectBoxPart Config=@config CurrentValue="2"></SelectBoxPart>
+                    break;
+                case InputTypes.RadioMatrix:
+                    <div class="card-body border">
+                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                    </div>
+                    break;
+                    @*case InputTypes.NumberBox:
+                        <NumberBoxPart Config=@config Min="0" Max="50" Label="" ></NumberBoxPart>
+                            break;
+                                case InputTypes.CheckBox:
+                            <div class="card-body border">
+                                <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
+                            </div>
+                            break;
+                            default:
+                            <div class="card-body border">
+                                <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                            </div>
+                            break;*@
+            }
+
+            // check to see if last config
+            if (configs.IndexOf(config) != configs.Count - 1)
+            {
+                <hr />
 }
+                    }
+                }
 
 @code {
-    [Parameter]
-    public List<QuestionnairesConfiguration> configs { get; set; }
+        [Parameter]
+public List<QuestionnairesConfiguration> configs { get; set; }
 
-    [Parameter]
-    public Teacher teacherData { get; set; }
-    //[Parameter]
-    //public TeacherProfileItemViewModel teacherModel { get; set; }
+[Parameter]
+public Teacher teacherData { get; set; }
+//[Parameter]
+//public TeacherProfileItemViewModel teacherModel { get; set; }
 
-    [Parameter]
-    public bool IsReadonly { get; set; }
+[Parameter]
+public bool IsReadonly { get; set; }
 
-    private string _Text;
-    private string CurrentGroup = "";
+private string _Text;
+private string CurrentGroup = "";
 
-    protected override async Task OnInitializedAsync()
-    {
-    }
+protected override async Task OnInitializedAsync()
+{
+}
 }

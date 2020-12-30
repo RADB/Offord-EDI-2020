@@ -16,9 +16,9 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
-            <div class="card-header">
-                <div class="row">
-                    <h2>News Feed</h2>
+            <div class="card-header">     
+                <div class="row cardHeader">
+                    <strong>@Translate("News Feed")</strong>
                 </div>
             </div>
             <div class="card-body">
@@ -54,7 +54,7 @@
             NavigationManager.NavigateTo("./login");
         }
         else
-        {            
+        {
             var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.OrderBy(p => p.Title).ToList());
 
             List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
@@ -146,6 +146,10 @@
     {
 
     }
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
 
     private int newsid { get; set; }
 
@@ -153,8 +157,4 @@
     {
 
     }
-}
-
-@code {
-
 }
