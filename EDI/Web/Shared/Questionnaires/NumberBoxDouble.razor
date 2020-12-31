@@ -1,11 +1,11 @@
 ﻿@inherits QuestionnaireBase;
-@using Syncfusion.Blazor.Calendars;
-@using static EDI.Web.Data.Enumerations;
+@using Syncfusion.Blazor.Inputs
+@using static EDI.Web.Data.Enumerations
 @inject ISharedService sharedService;
 @inject IModalService Modal;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
-
+@inject UserSettings _userSettings;
 
 <div class="row">
     <h4>@QuestionText</h4>
@@ -13,11 +13,11 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-9">
-        <div id="datepicker-control" class="datepicker">
-            <SfDatePicker @bind-Value="currentValue" TValue="DateTime?" Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
-                <DatePickerEvents TValue="DateTime?" ValueChange="@OnChange"></DatePickerEvents>
-            </SfDatePicker>
-        </div>
+        @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
+
+        <SfNumericTextBox TValue="double?" Min=@Config.Min Max=@Config.Max Step=@Config.NumberStep Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
+          @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
+        </SfNumericTextBox>
     </div>
 
     <div class="col-2">
@@ -47,40 +47,58 @@
     // option set
     private List<LookupSetOption> _LookupSetOptions;
 
-    private DateTime? currentValue { get; set; }
+    private double? currentValue { get; set; }
+    
 
     protected override async Task OnInitializedAsync()
-    {
+    {        
         // get the question and help text
         GetQuestionText();
+
+        // Get the current value of the question - parse will throw null value exception - otherwise use Convert.ToInt32
         try
         {
-            // Get the current value of the question
-            currentValue = DateTime.Parse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField));
+            currentValue = double.Parse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField));
         }
         catch (Exception)
         {
+
             currentValue = null;
         }
+
 
         if (Config.HasLookupEntity)
         {
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
+
+    }
+
+    public void OnChange(Syncfusion.Blazor.Inputs.ChangeEventArgs<int?> e)
+    {
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            StateHasChanged();
+        }
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        // save the data back to the object
-        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-
-        StateHasChanged();
-    }
-    private void OnChange(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> e)
-    {
-        // save the data back to the object
-        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-        StateHasChanged();
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            StateHasChanged();
+        }
     }
 }
+
+
+
+
+
+
+

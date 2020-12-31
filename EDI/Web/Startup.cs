@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Mvc;
 using Syncfusion.Blazor;
 using System.Linq.Dynamic.Core;
 using EDI.Web.Controllers;
+using Blazored.SessionStorage;
 
 namespace EDI.Web
 {
@@ -130,6 +131,7 @@ namespace EDI.Web
 
             services.AddHttpContextAccessor();
 
+            services.AddBlazoredSessionStorage();
             services.AddBlazoredToast();
             services.AddBlazoredModal();
             services.AddSyncfusionBlazor();

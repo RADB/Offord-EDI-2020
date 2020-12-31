@@ -14,7 +14,7 @@
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 
-<QuestionnaireNavigation QuestionnaireId=@QuestionnaireId ChildId=@ChildId IsReadOnly=@IsReadOnly></QuestionnaireNavigation>
+@*<QuestionnaireNavigation QuestionnaireId=@QuestionnaireId ChildId=@ChildId IsReadOnly=@IsReadOnly></QuestionnaireNavigation>*@
 
 <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="0px"></QuestionnaireHeader>
 
@@ -31,8 +31,7 @@
     [Parameter]
     public int ChildId { get; set; }
 
-    private List<QuestionnairesConfiguration> headers;
-    //private QuestionnairesDataDemographic data;
+    private List<QuestionnairesConfiguration> headers;    
     private Teacher teacherData;
     private Boolean IsReadOnly;
     private string predicate;

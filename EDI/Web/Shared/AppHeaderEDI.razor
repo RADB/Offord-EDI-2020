@@ -4,6 +4,7 @@
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
+@inject IToastService toastService;
 
 
 <div class="container-fluid p-1 border border-secondary top-row">
@@ -53,7 +54,9 @@
     private async void Save()
     {
         await dbContext.SaveChangesAsync();
-        
+
+        toastService.ShowSuccess("Data Saved Successfully!");
+
         StateHasChanged();
     }
 }

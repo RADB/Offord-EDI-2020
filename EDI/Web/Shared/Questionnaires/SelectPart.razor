@@ -14,18 +14,31 @@
     <div class="col-1"></div>
     <div class="col-9">
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
-
-        <SfDropDownList TValue="string" Placeholder="@Config.Label" TItem="LookupSetOption" @bind-Value="@currentValue" DataSource="@_LookupSetOptions" PopupWidth="auto">
+        @*@onchange="@onChange"*@
+        <SfDropDownList TValue="string" Placeholder="@Config.Label" TItem="LookupSetOption" @bind-Value="@currentValue" DataSource="@_LookupSetOptions" PopupWidth="auto" Width="50%">
             <DropDownListFieldSettings Value="Value" Text="@_userSettings.Language"></DropDownListFieldSettings>
-            <DropDownListEvents TValue="string" TItem="LookupSetOption" ValueChange="onChange"></DropDownListEvents>
+            <DropDownListEvents TValue="string" TItem="LookupSetOption" ValueChange="OnChange"></DropDownListEvents>
         </SfDropDownList>
     </div>
     
     <div class="col-2">
-        @if (Config.HasHelp)
-        {
-            <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
-        }
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-success btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpText))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Teacher"> 
+            <Authorized>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>
     </div>
 </div>
 
@@ -53,12 +66,22 @@
     }
 
     //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    private void onChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, LookupSetOption> e)
+    private void OnChange(Syncfusion.Blazor.DropDowns.ChangeEventArgs<string, LookupSetOption> e)
     {
         if (e.Value != null)
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+        }
+    }
+
+    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            StateHasChanged();
         }
     }
 }

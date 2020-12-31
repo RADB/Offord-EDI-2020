@@ -29,8 +29,14 @@
                     _label = teacherData.TeacherName;
                 else
                 {
+                    var _gender = string.Empty;
                     // show the child EDI ID
-                    _label = string.Format("{0} - {1:yyyy-MM-dd} - ({2})", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob, teacherData.Children.Single().Gender.English);
+                    if (teacherData.Children.Single().Gender != null)
+                    {
+                        _gender = teacherData.Children.Single().Gender.English;
+                    }
+
+                    _label = string.Format("{0} - {1:yyyy-MM-dd} - ({2})", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob, _gender);
                 }
                 @((MarkupString)string.Format("<strong>{0}</strong>: {1}", _Text, _label));
                 break;
@@ -49,71 +55,74 @@
                     <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
                 </div>
                 break;
-            }
         }
-        else
+    }
+    else
+    {
+        // bind to value from demographic_data
+
+        switch ((InputTypes)config.InputTypeId)
         {
-            // bind to value from demographic_data
+            case InputTypes.RadioButtons:
+                @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
+                <RadioPart Config="@config" data="@teacherData"></RadioPart>
+                break;
+            case InputTypes.DatePicker:
+                <DatePickerPart Config=@config data="@teacherData"></DatePickerPart>
+                break;
+            case InputTypes.TextBox:
+                <TextPart Config=@config data=@teacherData></TextPart>
+                break;
+            case InputTypes.SelectBox:
+                <SelectPart Config="@config" data="@teacherData"></SelectPart>
+                break;
+            case InputTypes.RadioMatrix:
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                </div>
+                break;
+            case InputTypes.NumberBox:
+                <NumberBox Config=@config data="@teacherData"></NumberBox>
+                break;
+            case InputTypes.NumberBoxDouble:
+                <NumberBoxDouble Config=@config data="@teacherData"></NumberBoxDouble>
+                break;
+            case InputTypes.CheckBox:
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
+                </div>
+                break;
+            default:
+                <div class="card-body border">
+                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                </div>
+                break;
+        }
 
-            switch ((InputTypes)config.InputTypeId)
-            {
-                case InputTypes.RadioButtons:
-                    @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
-                    <RadioPart Config="@config" data="@teacherData"></RadioPart>
-                    break;
-                case InputTypes.DatePicker:
-                    <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
-                    break;
-                case InputTypes.TextBox:
-                    <TextPart Config=@config data=@teacherData></TextPart>
-                    break;
-                case InputTypes.SelectBox:
-                    <SelectPart Config="@config" data="@teacherData"></SelectPart>
-                    break;
-                case InputTypes.RadioMatrix:
-                    <div class="card-body border">
-                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                    </div>
-                    break;
-                    @*case InputTypes.NumberBox:
-                        <NumberBoxPart Config=@config Min="0" Max="50" Label="" ></NumberBoxPart>
-                            break;
-                                case InputTypes.CheckBox:
-                            <div class="card-body border">
-                                <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
-                            </div>
-                            break;
-                            default:
-                            <div class="card-body border">
-                                <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                            </div>
-                            break;*@
-            }
-
-            // check to see if last config
-            if (configs.IndexOf(config) != configs.Count - 1)
-            {
-                <hr />
+        // check to see if last config
+        if (configs.IndexOf(config) != configs.Count - 1)
+        {
+            <hr />
+        }
+    }
 }
-                    }
-                }
 
 @code {
-        [Parameter]
-public List<QuestionnairesConfiguration> configs { get; set; }
+    [Parameter]
+    public List<QuestionnairesConfiguration> configs { get; set; }
 
-[Parameter]
-public Teacher teacherData { get; set; }
-//[Parameter]
-//public TeacherProfileItemViewModel teacherModel { get; set; }
+    [Parameter]
+    public Teacher teacherData { get; set; }
+    //[Parameter]
+    //public TeacherProfileItemViewModel teacherModel { get; set; }
 
-[Parameter]
-public bool IsReadonly { get; set; }
+    [Parameter]
+    public bool IsReadonly { get; set; }
 
-private string _Text;
-private string CurrentGroup = "";
+    private string _Text;
+    private string CurrentGroup = "";
 
-protected override async Task OnInitializedAsync()
-{
-}
+    protected override async Task OnInitializedAsync()
+    {
+    }
 }

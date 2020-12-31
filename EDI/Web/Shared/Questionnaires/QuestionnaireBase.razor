@@ -1,14 +1,15 @@
 ﻿<!-- https://chrissainty.com/building-custom-input-components-for-blazor-using-inputbase/
     https://blazor-university.com/templating-components-with-renderfragements/
     -->
+@using System.Linq.Dynamic.Core;
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
-@using System.Linq.Dynamic.Core;
 @inject IModalService ModalService
+@inject NavigationManager NavigationManager
 
-@code 
-{   
+@code
+{
     [Parameter]
     public QuestionnairesConfiguration Config { get; set; }
 
@@ -48,7 +49,7 @@
         options.HideHeader = false;
         options.HideCloseButton = false;
 
-        ModalService.Show<ModalPart>(ModalTitle, parameters,options);
+        ModalService.Show<ModalPart>(ModalTitle, parameters, options);
     }
 
     public string Translate(string word)
@@ -64,5 +65,11 @@
         // get the Help Text if the question has help
         if (Config.HasHelp)
             HelpText = sharedService.GetHelpText(Config);
+    }
+
+    public void gotoURL()
+    {
+        string url = string.Format("./QuestionnaireConfigurations/edit/{0}/{1}", Config.Id, Config.QuestionnaireId);
+        NavigationManager.NavigateTo(url);
     }
 }

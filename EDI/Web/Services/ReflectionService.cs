@@ -12,17 +12,32 @@ namespace EDI.Web.Services
         //abstract for generic future use
         public void SetFieldValue(object obj, string fieldName, string value)
         {
-            if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.String")
+            if (value == "")
             {
-                obj.GetType().GetProperty(fieldName).SetValue(obj, value);
-            }
-            else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Byte")
-            { 
-                obj.GetType().GetProperty(fieldName).SetValue(obj, byte.Parse(value));
-            }            
+                obj.GetType().GetProperty(fieldName).SetValue(obj, null);
+            }   
             else
             {
-                Console.WriteLine("Set the value of type {0}", obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName);
+                if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.String")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, value);
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Byte")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, byte.Parse(value));
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Decimal")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, decimal.Parse(value));
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.DateTime")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, DateTime.Parse(value));
+                }
+                else
+                {
+                    Console.WriteLine("Set the value of type {0}", obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName);
+                }
             }
         }
 
