@@ -15,10 +15,10 @@ namespace EDI.Web
     public class Program
     {
         public static async Task Main(string[] args)
+        //public static void Main(string[] args)
         {
             Log.Information("Starting web host");
-            var host = CreateHostBuilder(args)
-                        .Build();
+            var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
             {
@@ -27,10 +27,12 @@ namespace EDI.Web
                 try
                 {
                     var serviceContext = services.GetRequiredService<ServiceContext>();
+                    //ServiceContextSeed.SeedAsync(serviceContext, loggerFactory).Wait();
                     await ServiceContextSeed.SeedAsync(serviceContext, loggerFactory);
 
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    //AppIdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();
                     await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);
                 }
                 catch (Exception ex)

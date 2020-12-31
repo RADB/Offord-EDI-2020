@@ -101,15 +101,14 @@ namespace EDI.Web
             // Requires LocalDB which can be installed with SQL Server Express 2016
             // https://www.microsoft.com/en-us/download/details.aspx?id=54284
             services.AddDbContext<ServiceContext>(c =>
-                c.UseSqlServer(Configuration.GetConnectionString("ServiceConnection")));
-            //, ServiceLifetime.Transient);
+                c.UseSqlServer(Configuration.GetConnectionString("ServiceConnection")), ServiceLifetime.Transient);
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
             // TODO 2020-12-31 Andrew Renner - publish issue - potentially as this was not being called
-            ConfigureServices(services);
+            //ConfigureServices(services);
         }
         //public void ConfigureTestingServices(IServiceCollection services)
         //{
@@ -122,10 +121,11 @@ namespace EDI.Web
         {
             // this is used in eshop instead of configureCookie
             //services.AddCookieSettings();
-            ConfigureCookieSettings(services);
 
             ConfigureDBContextServices(services);
-                        
+
+            ConfigureCookieSettings(services);
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                         .AddEntityFrameworkStores<AppIdentityDbContext>()
                         //.AddDefaultUI()
@@ -236,48 +236,48 @@ namespace EDI.Web
 
         private static void ConfigureCookieSettings(IServiceCollection services)
         {
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    //options.HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always; //
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.Lax; // was none                
-            //});
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                //TODO need to check that.
-                //options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+                //options.HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always; //
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None; // was none                
             });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    //TODO need to check that.
+            //    //options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                options.LoginPath = "/Login";
-                options.LogoutPath = "/Logout";
-                options.Cookie = new CookieBuilder
-                {
-                    IsEssential = true // required for auth to work without explicit user consent; adjust to suit your privacy policy
-                };
-            });
+            //services.ConfigureApplicationCookie(options =>
+            //{
+            //    options.Cookie.HttpOnly = true;
+            //    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+            //    options.LoginPath = "/Login";
+            //    options.LogoutPath = "/Logout";
+            //    options.Cookie = new CookieBuilder
+            //    {
+            //        IsEssential = true // required for auth to work without explicit user consent; adjust to suit your privacy policy
+            //    };
+            //});
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;  // TODO: change to always once in production on SSL
-                    options.Cookie.SameSite = SameSiteMode.Lax;
-                });
-            //services.AddAuthentication(
-            //    CookieAuthenticationDefaults.AuthenticationScheme)
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             //    .AddCookie(options =>
             //    {
             //        options.Cookie.HttpOnly = true;
-            //        options.ExpireTimeSpan = TimeSpan.FromHours(1);
-            //        options.LoginPath = "/Login";
-            //        options.LogoutPath = "/Logout";                    
+            //        //options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;  // TODO: change to always once in production on SSL
+            //        options.Cookie.SameSite = SameSiteMode.Lax;
             //    });
+            services.AddAuthentication(
+                CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.HttpOnly = true;
+                    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+                    options.LoginPath = "/Login";
+                    options.LogoutPath = "/Logout";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -322,7 +322,7 @@ namespace EDI.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
 
             app.UseHttpsRedirection();
             //app.UseBlazorFrameworkFiles(); // webassembly

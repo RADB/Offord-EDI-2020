@@ -5,6 +5,8 @@
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
+@inject StateContainer StateContainer;
+@implements IDisposable;
 
 
 <div class="container-fluid p-1 border border-secondary top-row">
@@ -39,6 +41,8 @@
         {
             NavigationManager.NavigateTo("./login");
         }
+
+        StateContainer.OnChange += StateHasChanged;
     }
 
     private string Translate(string word)
@@ -53,10 +57,17 @@
 
     private async void Save()
     {
+                    
+        dbContext.Update(StateContainer.TeacherData);
         await dbContext.SaveChangesAsync();
 
         toastService.ShowSuccess("Data Saved Successfully!");
 
         StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }

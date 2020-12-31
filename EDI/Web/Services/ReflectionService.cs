@@ -4,11 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using EDI.Web.Interfaces;
 using EDI.ApplicationCore.Entities;
+using EDI.Web.Lib;
 
 namespace EDI.Web.Services
 {
     public class ReflectionService : IReflectionService
     {
+        private StateContainer _StateContainer { get; set; }
+
+        public ReflectionService(StateContainer StateContainer)
+        {
+            _StateContainer = StateContainer;
+        }
+
         //abstract for generic future use
         public void SetFieldValue(object obj, string fieldName, string value)
         {
@@ -39,6 +47,7 @@ namespace EDI.Web.Services
                     Console.WriteLine("Set the value of type {0}", obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName);
                 }
             }
+
         }
 
         //abstract for generic future use
@@ -84,6 +93,8 @@ namespace EDI.Web.Services
         {
             var obj = GetEntity(data, entityName);
             SetFieldValue(obj, fieldName, value);
+
+            _StateContainer.SetTeacher(data);
         }
 
         public string GetFieldValue(Teacher data, string entityName, string fieldName)
