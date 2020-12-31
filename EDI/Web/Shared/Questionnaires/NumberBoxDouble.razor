@@ -1,12 +1,11 @@
 ﻿@inherits QuestionnaireBase;
-@using Syncfusion.Blazor.Inputs;
-@using static EDI.Web.Data.Enumerations;
+@using Syncfusion.Blazor.Inputs
+@using static EDI.Web.Data.Enumerations
 @inject ISharedService sharedService;
 @inject IModalService Modal;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
-
 
 <div class="row">
     <h4>@QuestionText</h4>
@@ -16,8 +15,9 @@
     <div class="col-9">
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
 
-        <SfTextBox @bind-Value="@currentValue" @onchange="onChange" Width="75%">
-        </SfTextBox>
+        <SfNumericTextBox TValue="double?" Min=@Config.Min Max=@Config.Max Step=@Config.NumberStep Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
+          @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
+        </SfNumericTextBox>
     </div>
 
     <div class="col-2">
@@ -28,7 +28,7 @@
                 {
                     <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpText))"><i class="icon-question"></i> Help</button>
                 }
-                </Authorized>
+            </Authorized>
         </AuthorizeView>
         <AuthorizeView Roles="Teacher">
             <Authorized>
@@ -37,7 +37,7 @@
                     <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
                 }
             </Authorized>
-        </AuthorizeView>        
+        </AuthorizeView>
     </div>
 </div>
 
@@ -47,15 +47,25 @@
     // option set
     private List<LookupSetOption> _LookupSetOptions;
 
-    private string currentValue { get; set; }
+    private double? currentValue { get; set; }
+    
 
     protected override async Task OnInitializedAsync()
-    {
+    {        
         // get the question and help text
         GetQuestionText();
 
-        // Get the current value of the question
-        currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+        // Get the current value of the question - parse will throw null value exception - otherwise use Convert.ToInt32
+        try
+        {
+            currentValue = double.Parse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField));
+        }
+        catch (Exception)
+        {
+
+            currentValue = null;
+        }
+
 
         if (Config.HasLookupEntity)
         {
@@ -65,7 +75,16 @@
 
     }
 
-    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    public void OnChange(Syncfusion.Blazor.Inputs.ChangeEventArgs<int?> e)
+    {
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            StateHasChanged();
+        }
+    }
+
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         if (e.Value != null)
@@ -76,6 +95,7 @@
         }
     }
 }
+
 
 
 

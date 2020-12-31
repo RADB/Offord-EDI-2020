@@ -25,10 +25,23 @@
         </div>
 
         <div class="col-2">
-            @if (Config.HasHelp)
-            {
-                <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
-            }
+            <AuthorizeView Roles="Administrator">
+                <Authorized>
+                    <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                    @if (Config.HasHelp)
+                    {
+                        <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpText))"><i class="icon-question"></i> Help</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="Teacher">
+                <Authorized>
+                    @if (Config.HasHelp)
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
         </div>
     </div>
 
@@ -59,6 +72,8 @@
     {
         // save the data back to the object
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+
+        StateHasChanged();
     }
 }
 
