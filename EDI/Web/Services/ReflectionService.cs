@@ -30,6 +30,10 @@ namespace EDI.Web.Services
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, decimal.Parse(value));
                 }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.DateTime")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, DateTime.Parse(value));
+                }
                 else
                 {
                     Console.WriteLine("Set the value of type {0}", obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName);

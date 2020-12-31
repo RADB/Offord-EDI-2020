@@ -68,7 +68,7 @@
                 <RadioPart Config="@config" data="@teacherData"></RadioPart>
                 break;
             case InputTypes.DatePicker:
-                <DatePickerPart Config=@config CurrentValue=@(new DateTime(2011, 01, 18))></DatePickerPart>
+                <DatePickerPart Config=@config data="@teacherData"></DatePickerPart>
                 break;
             case InputTypes.TextBox:
                 <TextPart Config=@config data=@teacherData></TextPart>

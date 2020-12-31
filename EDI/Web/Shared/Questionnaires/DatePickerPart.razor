@@ -1,47 +1,86 @@
-﻿@inherits QuestionnaireBase
-@using Syncfusion.Blazor.Calendars
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Calendars;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IModalService Modal;
+@inject IReflectionService reflectionService;
+@inject ServiceContext dbContext;
 
 
-<div class="card-body border border-primary rounded">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>@QuestionText</h4>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-9">                                    
-                                    <div id="datepicker-control" class="datepicker">
-                                        <SfDatePicker Value="@DateValue" TValue="DateTime?" Placeholder="@QuestionText" Format="yyyy-MM-dd"></SfDatePicker>
-                                    </div>
-                                </div>
-
-                                <div class="col-2">
-                                    @if (Config.HasHelp)
-                                    {
-                                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row">
+    <h4>@QuestionText</h4>
+</div>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-9">
+        <div id="datepicker-control" class="datepicker">
+            <SfDatePicker @bind-Value="currentValue" TValue="DateTime?" Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
+                <DatePickerEvents TValue="DateTime?" ValueChange="@OnChange"></DatePickerEvents>
+            </SfDatePicker>
         </div>
+    </div>
+
+    <div class="col-2">
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpText))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Teacher">
+            <Authorized>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>
     </div>
 </div>
 
-    @code {
-        [Parameter]
-        public DateTime CurrentValue { get; set; }
+@code
+{
 
-        public DateTime DateValue { get; set; } = DateTime.Now;
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
 
-        protected override async Task OnInitializedAsync()
+    private DateTime? currentValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get the question and help text
+        GetQuestionText();
+        try
         {
-            GetQuestionText();
-            DateValue = Convert.ToDateTime(CurrentValue);
+            // Get the current value of the question
+            currentValue = DateTime.Parse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField));
+        }
+        catch (Exception)
+        {
+            currentValue = null;
+        }
+
+        if (Config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
     }
+
+    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        // save the data back to the object
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+
+        StateHasChanged();
+    }
+    private void OnChange(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> e)
+    {
+        // save the data back to the object
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+        StateHasChanged();
+    }
+}
