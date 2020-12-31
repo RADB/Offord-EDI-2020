@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EDI.ApplicationCore.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace EDI.Web.Lib
 
         public string UserName { get; set; }
 
+        public Teacher TeacherData { get; set; }
+
         public event Action OnChange;
 
         public void SetProperty(string value)
@@ -21,6 +24,11 @@ namespace EDI.Web.Lib
         public void SetUsername(string value)
         {
             UserName = value;
+            NotifyStateChanged();
+        }
+        public void SetTeacher(Teacher value)
+        {
+            TeacherData = value;
             NotifyStateChanged();
         }
 

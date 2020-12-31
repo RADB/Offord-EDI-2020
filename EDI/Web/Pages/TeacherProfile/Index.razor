@@ -12,6 +12,8 @@
 @inject UserSettings UserSettings;
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
+@inject StateContainer StateContainer
+@implements IDisposable
 
             @*<div class="row">
                 <div class="col-md-12">
@@ -70,6 +72,7 @@
                         //teacherprofileitemviewmodel = new TeacherProfileItemViewModel();
                         // get the data if use that has access
                         getData();
+                        StateContainer.OnChange += StateHasChanged;
                     }
                     catch (Exception ex)
                     {
@@ -113,6 +116,8 @@
 
                 private async void Save()
                 {
+                    //StateContainer.SetTeacher(teacherData);
+                    //dbContext.Teachers.Update(StateContainer.TeacherData);
                     await dbContext.SaveChangesAsync();
 
                     getData();
@@ -123,6 +128,11 @@
                 private void HandleValidSubmit()
                 {
                     Save();
+                }
+
+                public void Dispose()
+                {
+                    StateContainer.OnChange -= StateHasChanged;
                 }
 
             }
