@@ -10,17 +10,17 @@ namespace EDI.Infrastructure.Interfaces
 {
     public interface IAsyncIdentityRepository
     {
-        IReadOnlyList<ApplicationUser> ListAllUsers();
+        IReadOnlyList<EDIApplicationUser> ListAllUsers();
         IReadOnlyList<IdentityRole> ListAllRoles();
 
         int GetDuplicateCount(string email, string phonenumber);
         int GetDuplicateCount(string email);
         int GetOtherDuplicateCount(string email, string accountId);
 
-        Task<ApplicationUser> GetByIdAsync(string id);
+        Task<EDIApplicationUser> GetByIdAsync(string id);
 
-        Task DeleteAsync(ApplicationUser entity);
-        Task UpdateAsync(ApplicationUser entity);
+        Task DeleteAsync(EDIApplicationUser entity);
+        Task UpdateAsync(EDIApplicationUser entity);
         Task<IdentityRole> GetRoleByIdAsync(string id);
         string GetRoleIDByname(string name);
         Task DeleteRoleAsync(IdentityRole entity);

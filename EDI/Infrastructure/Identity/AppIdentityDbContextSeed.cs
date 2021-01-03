@@ -12,8 +12,8 @@ namespace EDI.Infrastructure.Identity
             await CreateRoleAsync(roleManager, "Teacher");
             await CreateRoleAsync(roleManager, "Coordinator");
 
-            await CreateUserAsync(userManager, "andrew.renner@phri.ca", "EDI&ict2020", "Adminsitrator");
-            await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Adminsitrator"); 
+            await CreateUserAsync(userManager, "andrew.renner@phri.ca", "EDI&ict2020", "Administrator");
+            await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Teacher"); 
         }
 
         private static async Task CreateUserAsync(UserManager<EDIApplicationUser> userManager, string User, string Password, string Role)
@@ -22,7 +22,7 @@ namespace EDI.Infrastructure.Identity
 
             if (adminuser == null)
             {
-                var defaultUser = new EDIApplicationUser { UserName = User, Email = User };
+                var defaultUser = new EDIApplicationUser { UserName = User, Email = User };                
                 await userManager.CreateAsync(defaultUser, Password);
                 await userManager.SetLockoutEnabledAsync(defaultUser, false);
                 await userManager.AddToRoleAsync(defaultUser, Role);

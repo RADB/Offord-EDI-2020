@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{9E7A80E3-D2BD-40F1-8C9F-A5745CCEFC2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDIWeb", "EDIWeb\EDIWeb.csproj", "{5F959E3E-5523-4762-9861-D0E39DC7D61C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDIWeb", "EDIWeb\EDIWeb.csproj", "{5F959E3E-5523-4762-9861-D0E39DC7D61C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
