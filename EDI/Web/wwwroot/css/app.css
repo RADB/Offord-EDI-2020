@@ -236,3 +236,10 @@ body {
 {
     padding:0 0 0 10px;
 }
+
+.cardHeaderSticky 
+{
+    padding: 0 0 0 10px;
+    position: sticky;
+    top: 0;
+}

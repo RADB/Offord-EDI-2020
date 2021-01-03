@@ -64,7 +64,7 @@ namespace EDI.Web.Services
         // private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
         private readonly IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
         private readonly IAsyncRepository<Translation> _tranRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<EDIApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -81,7 +81,7 @@ namespace EDI.Web.Services
 
         public SharedService(
             ILoggerFactory loggerFactory,
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IAsyncRepository<Country> countryRepository,
             IAsyncRepository<Province> provinceRepository,
@@ -759,7 +759,7 @@ namespace EDI.Web.Services
                                                 string firstname = names[0];
                                                 string lastname = names[1];
 
-                                                var newuser = new ApplicationUser
+                                                var newuser = new EDIApplicationUser
                                                 {
                                                     UserName = data.CoordinatorEmail,
                                                     Email = data.CoordinatorEmail,
@@ -967,7 +967,7 @@ namespace EDI.Web.Services
                                                     string firstname = names[0];
                                                     string lastname = names[1];
 
-                                                    var newuser = new ApplicationUser
+                                                    var newuser = new EDIApplicationUser
                                                     {
                                                         UserName = data.TeacherEmail,
                                                         Email = data.TeacherEmail,

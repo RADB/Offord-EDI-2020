@@ -40,7 +40,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public FaqService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Faq> faqRepository,
             IAsyncIdentityRepository accountRepository,

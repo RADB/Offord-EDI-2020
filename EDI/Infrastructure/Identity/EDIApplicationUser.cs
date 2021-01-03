@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EDI.Infrastructure.Identity
 {
-    public class ApplicationUser : IdentityUser
+    public class EDIApplicationUser : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -40,7 +40,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public ProvinceService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Province> provinceRepository,
             IAsyncIdentityRepository accountRepository,

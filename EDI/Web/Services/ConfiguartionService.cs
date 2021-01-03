@@ -40,7 +40,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public ConfigurationService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<SystemConfigurations> configurationRepository,
             IAsyncIdentityRepository accountRepository,

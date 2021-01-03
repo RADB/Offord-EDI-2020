@@ -30,7 +30,7 @@ namespace EDI.Web
                     //ServiceContextSeed.SeedAsync(serviceContext, loggerFactory).Wait();
                     await ServiceContextSeed.SeedAsync(serviceContext, loggerFactory);
 
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = services.GetRequiredService<UserManager<EDIApplicationUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     //AppIdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();
                     await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);
@@ -63,7 +63,7 @@ namespace EDI.Web
         //                ServiceContextSeed.SeedAsync(ServiceContext, loggerFactory)
         //                                    .Wait();
 
-        //                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        //                var userManager = services.GetRequiredService<UserManager<EDIApplicationUser>>();
 
         //                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         //                AppIdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();

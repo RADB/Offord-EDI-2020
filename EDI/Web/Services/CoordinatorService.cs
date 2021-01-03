@@ -36,7 +36,7 @@ namespace EDI.Web.Services
         private IHostEnvironment _hostingEnvironment;
         private readonly ServiceContext _dbContext;
         private readonly AppIdentityDbContext _identityContext;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<EDIApplicationUser> _userManager;
         private UserSettings _userSettings { get; set; }
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
@@ -44,7 +44,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public CoordinatorService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Coordinator> coordinatorRepository,
             IAsyncIdentityRepository accountRepository,
@@ -136,7 +136,7 @@ namespace EDI.Web.Services
                         string firstname = names[0];
                         string lastname = names[1];
 
-                        var newuser = new ApplicationUser
+                        var newuser = new EDIApplicationUser
                         {
                             UserName = coordinator.Email,
                             Email = coordinator.Email,

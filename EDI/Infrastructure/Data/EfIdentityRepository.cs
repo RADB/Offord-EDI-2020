@@ -26,9 +26,9 @@ namespace EDI.Infrastructure.Data
             _identityContext = identityContext;
         }
 
-        public virtual async Task<ApplicationUser> GetByIdAsync(string id)
+        public virtual async Task<EDIApplicationUser> GetByIdAsync(string id)
         {
-            return await _identityContext.Set<ApplicationUser>().FindAsync(id);
+            return await _identityContext.Set<EDIApplicationUser>().FindAsync(id);
         }
 
         public virtual async Task<IdentityRole> GetRoleByIdAsync(string id)
@@ -36,13 +36,13 @@ namespace EDI.Infrastructure.Data
             return await _identityContext.Set<IdentityRole>().FindAsync(id);
         }
 
-        public async Task DeleteAsync(ApplicationUser entity)
+        public async Task DeleteAsync(EDIApplicationUser entity)
         {
-            _identityContext.Set<ApplicationUser>().Remove(entity);
+            _identityContext.Set<EDIApplicationUser>().Remove(entity);
             await _identityContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(ApplicationUser entity)
+        public async Task UpdateAsync(EDIApplicationUser entity)
         {
             _identityContext.Entry(entity).State = EntityState.Modified;
             await _identityContext.SaveChangesAsync();
@@ -60,9 +60,9 @@ namespace EDI.Infrastructure.Data
             await _identityContext.SaveChangesAsync();
         }
 
-        public IReadOnlyList<ApplicationUser> ListAllUsers()
+        public IReadOnlyList<EDIApplicationUser> ListAllUsers()
         {
-            return _identityContext.Set<ApplicationUser>().ToList();
+            return _identityContext.Set<EDIApplicationUser>().ToList();
         }
 
         public IReadOnlyList<IdentityRole> ListAllRoles()

@@ -40,7 +40,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public LookupSetService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<LookupSet> lookupSetRepository,
             IAsyncIdentityRepository accountRepository,

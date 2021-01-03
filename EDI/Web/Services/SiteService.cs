@@ -40,7 +40,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public SiteService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Site> siteRepository,
             IAsyncIdentityRepository accountRepository,

@@ -15,15 +15,15 @@ namespace Web.Controllers
 {
     public class SignInController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<EDIApplicationUser> _userManager;
+        private readonly SignInManager<EDIApplicationUser> _signInManager;
         private IModalService _modal;
         private readonly IEmailSender _emailSender;
         private EDIAppSettings EDIAppSettings { get; set; }
 
         public SignInController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            UserManager<EDIApplicationUser> userManager,
+            SignInManager<EDIApplicationUser> signInManager,
             IEmailSender emailSender,
             IOptions<EDIAppSettings> settings,
             IModalService modal)

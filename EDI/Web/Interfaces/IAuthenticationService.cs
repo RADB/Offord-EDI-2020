@@ -8,6 +8,6 @@ namespace EDI.Web.Interfaces
 {
     public interface IAuthenticationService
     {
-        ApplicationUser Login(string username, string password, string domain);
+        EDIApplicationUser Login(string username, string password, string domain);
     }
 }

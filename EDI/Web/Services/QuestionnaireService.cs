@@ -42,7 +42,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public QuestionnaireService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Questionnaire> questionnaireRepository,
             IAsyncRepository<QuestionnairesConfiguration> questionnairesConfigurationRepository,

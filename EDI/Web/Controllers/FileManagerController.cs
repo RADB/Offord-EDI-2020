@@ -21,7 +21,7 @@ namespace EDI.Web.Controllers
     [Route("api/[controller]")]
     public class FileManagerController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<EDIApplicationUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ServiceContext _dbContext;
         private readonly AppIdentityDbContext _identityContext;
@@ -38,7 +38,7 @@ namespace EDI.Web.Controllers
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
             EDI.Web.Models.UserSettings userSettings,
-            UserManager<ApplicationUser> userManager)
+            UserManager<EDIApplicationUser> userManager)
         {
             this.basePath = hostingEnvironment.ContentRootPath;
             this.operation = new PhysicalFileProvider();

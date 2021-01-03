@@ -36,7 +36,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public SchoolService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<School> schoolRepository,
             IAsyncIdentityRepository accountRepository,

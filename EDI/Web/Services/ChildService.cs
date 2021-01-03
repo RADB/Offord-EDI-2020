@@ -42,7 +42,7 @@ namespace EDI.Web.Services
         private static int expiresIn;
 
         public ChildService(
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             ILoggerFactory loggerFactory,
             IAsyncRepository<Child> childRepository,
             IAsyncRepository<QuestionnairesDataDemographic> questionnairesDataDemographic,

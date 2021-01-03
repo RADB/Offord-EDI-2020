@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EDI.Infrastructure.Identity
 {
-    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser>
+    public class AppIdentityDbContext : IdentityDbContext<EDIApplicationUser>
     {
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
             : base(options)
@@ -23,7 +23,7 @@ namespace EDI.Infrastructure.Identity
             //builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Manager", NormalizedName = "Manager".ToUpper() });
             //builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "User", NormalizedName = "User".ToUpper() });
 
-            builder.Entity<ApplicationUser>(entity =>
+            builder.Entity<EDIApplicationUser>(entity =>
             {
                 entity.Property(e => e.FirstName)
                     .HasColumnName("FirstName")

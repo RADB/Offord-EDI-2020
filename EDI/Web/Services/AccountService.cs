@@ -39,7 +39,7 @@ namespace EDI.Web.Services
         private readonly IAsyncIdentityRepository _accountRepository;
         private readonly IAsyncRepository<Country> _countryRepository;
         private readonly IAsyncRepository<Province> _provinceRepository;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<EDIApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
@@ -55,7 +55,7 @@ namespace EDI.Web.Services
 
         public AccountService(
             ILoggerFactory loggerFactory,
-            UserManager<ApplicationUser> userManager,
+            UserManager<EDIApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IAsyncRepository<Country> countryRepository,
             IAsyncRepository<Province> provinceRepository,
@@ -100,7 +100,7 @@ namespace EDI.Web.Services
                     }
                 }
 
-                var user = new ApplicationUser 
+                var user = new EDIApplicationUser 
                             { 
                                 UserName = account.Email, 
                                 Email = account.Email, 
@@ -296,7 +296,7 @@ namespace EDI.Web.Services
 
                 var ordered = users.OrderBy(t => t.FirstName);
 
-                foreach (ApplicationUser user in ordered)
+                foreach (EDIApplicationUser user in ordered)
                 {
                     items.Add(new SelectListItem() { Value = user.Id, Text = user.FirstName + " " + user.LastName});
                 }
@@ -326,7 +326,7 @@ namespace EDI.Web.Services
 
                 var coordusers = _identityContext.UserRoles.Where(p => p.RoleId == role.Id).ToList();
 
-                var userlist = new List<ApplicationUser>();
+                var userlist = new List<EDIApplicationUser>();
 
                 foreach(var user in users)
                 {
@@ -345,7 +345,7 @@ namespace EDI.Web.Services
 
                 var ordered = userlist.OrderBy(t => t.FirstName);
 
-                foreach (ApplicationUser user in ordered)
+                foreach (EDIApplicationUser user in ordered)
                 {
                     items.Add(new SelectListItem() { Value = user.Id, Text = user.FirstName + " " + user.LastName });
                 }
@@ -375,7 +375,7 @@ namespace EDI.Web.Services
 
                 var teacherusers = _identityContext.UserRoles.Where(p => p.RoleId == role.Id).ToList();
 
-                var userlist = new List<ApplicationUser>();
+                var userlist = new List<EDIApplicationUser>();
 
                 foreach (var user in users)
                 {
@@ -394,7 +394,7 @@ namespace EDI.Web.Services
 
                 var ordered = userlist.OrderBy(t => t.FirstName);
 
-                foreach (ApplicationUser user in ordered)
+                foreach (EDIApplicationUser user in ordered)
                 {
                     items.Add(new SelectListItem() { Value = user.Id, Text = user.FirstName + " " + user.LastName });
                 }

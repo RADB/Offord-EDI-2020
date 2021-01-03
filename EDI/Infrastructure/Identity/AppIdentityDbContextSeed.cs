@@ -5,36 +5,38 @@ namespace EDI.Infrastructure.Identity
 {
     public class AppIdentityDbContextSeed
     {
-        public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedAsync(UserManager<EDIApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            bool roleExist = await roleManager.RoleExistsAsync("Administrator");
+            // add the 3 roles
+            await CreateRoleAsync(roleManager, "Administrator");
+            await CreateRoleAsync(roleManager, "Teacher");
+            await CreateRoleAsync(roleManager, "Coordinator");
 
-            if (!roleExist)
-            {
-                var role = new IdentityRole("Administrator");
-                await roleManager.CreateAsync(role);
-            }
-            
-            var adminuser = await userManager.FindByNameAsync("andrew.renner@phri.ca");
+            await CreateUserAsync(userManager, "andrew.renner@phri.ca", "EDI&ict2020", "Adminsitrator");
+            await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Adminsitrator"); 
+        }
+
+        private static async Task CreateUserAsync(UserManager<EDIApplicationUser> userManager, string User, string Password, string Role)
+        {
+            var adminuser = await userManager.FindByNameAsync("");
 
             if (adminuser == null)
             {
-                var defaultUser = new ApplicationUser { UserName = "andrew.renner@phri.ca", Email = "andrew.renner@phri.ca" };
-                await userManager.CreateAsync(defaultUser, "Andrew&ict2020");
+                var defaultUser = new EDIApplicationUser { UserName = User, Email = User };
+                await userManager.CreateAsync(defaultUser, Password);
                 await userManager.SetLockoutEnabledAsync(defaultUser, false);
-
-                await userManager.AddToRoleAsync(defaultUser, "Administrator");
+                await userManager.AddToRoleAsync(defaultUser, Role);
             }
+        }
 
-            var adminuser2 = await userManager.FindByNameAsync("bryan.deng@phri.ca");
+        private static async Task CreateRoleAsync(RoleManager<IdentityRole> roleManager, string RoleName)
+        {           
+            bool roleExist = await roleManager.RoleExistsAsync(RoleName);
 
-            if (adminuser2 == null)
+            if (!roleExist)
             {
-                var defaultUser = new ApplicationUser { UserName = "bryan.deng@phri.ca", Email = "bryan.deng@phri.ca" };
-                await userManager.CreateAsync(defaultUser, "EDI&ict2020");
-                await userManager.SetLockoutEnabledAsync(defaultUser, false);
-
-                await userManager.AddToRoleAsync(defaultUser, "Administrator");
+                var role = new IdentityRole(RoleName);
+                await roleManager.CreateAsync(role);
             }
         }
     }
