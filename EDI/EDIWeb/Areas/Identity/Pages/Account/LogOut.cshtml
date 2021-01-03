@@ -1,7 +1,9 @@
 ﻿@page
 @using Microsoft.AspNetCore.Identity
+@using EDI.Infrastructure.Identity;
+
 @attribute [IgnoreAntiforgeryToken]
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<EDIApplicationUser> SignInManager
 @functions {
     public async Task<IActionResult> OnPost()
     {

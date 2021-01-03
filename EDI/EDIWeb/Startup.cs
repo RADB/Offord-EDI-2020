@@ -1,5 +1,7 @@
 using EDIWeb.Areas.Identity;
 using EDIWeb.Data;
+using EDI.Infrastructure.Data;
+using EDI.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -31,13 +33,9 @@ namespace EDIWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
-        {
-            //services.AddLogging();
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+        {            
+            ConfigureDBServices(services);
+            
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -45,12 +43,38 @@ namespace EDIWeb
             services.AddSingleton<WeatherForecastService>();            
         }
 
+        private void ConfigureDBServices(IServiceCollection services)
+        {
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //.AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDbContext<ServiceContext>(c =>
+               c.UseSqlServer(Configuration.GetConnectionString("ServiceConnection")), ServiceLifetime.Transient);
+
+            //// Add Identity DbContext
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+
+            services.AddIdentity<EDIApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<AppIdentityDbContext>();            
+
+            //services.AddIdentity<EDIApplicationUser, IdentityRole>()
+            //.AddEntityFrameworkStores<AppIdentityDbContext>()            
+            //.AddRoles<IdentityRole>()
+            //.AddRoleManager<RoleManager<IdentityRole>>()            
+            //.AddEntityFrameworkStores<AppIdentityDbContext>()
+            //                .AddDefaultTokenProviders();
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //app.UseDatabaseErrorPage();
                 app.UseMigrationsEndPoint();
             }
             else

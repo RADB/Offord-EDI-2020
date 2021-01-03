@@ -4,13 +4,36 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        <h4>Hello, @context.User.Identity.Name!</h4>
+        <p>This content is only visible if user is authenticated.</p>
+        <p>Checking Role Status:</p>
+        <p>IsAdministrator:@context.User.IsInRole("Administrator")</p>
+        <p>IsTeacher:@context.User.IsInRole("Teacher")</p>
+        
+    </Authorized>
+    <NotAuthorized>
+        <p>Please signed in.</p>
+    </NotAuthorized>
+</AuthorizeView>
 
+<AuthorizeView Roles="Coordinator">
+    <p> Logged-in user is in Coordinator Role</p>
+</AuthorizeView>
+
+<AuthorizeView Roles="Teacher">
+    <p> Logged-in user is in Teacher Role</p>
+</AuthorizeView>
+<AuthorizeView Roles="Administrator">
+    <p> Logged-in user is in Admin Role</p>
+</AuthorizeView>
 <SurveyPrompt Title="How is Blazor working for you?" />
 @code {
-    
+
 
     protected override async Task OnInitializedAsync()
     {
-        Log.Information("Index Page Loaded");        
+        Log.Information("Index Page Loaded");
     }
 }
