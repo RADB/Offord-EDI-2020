@@ -32,9 +32,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
-using Newtonsoft.Json;
-
 using Syncfusion.Blazor;
+
+using Serilog; 
 
 using System;
 using System.Collections.Generic;
@@ -44,6 +44,7 @@ using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace EDI.Web
 {
@@ -57,82 +58,46 @@ namespace EDI.Web
 
         public IConfiguration Configuration { get; }
 
-        //public void ConfigureDevelopmentServices(IServiceCollection services)
-        //{
-        //    // use in-memory database
-        //    ConfigureInMemoryDatabases(services);
-
-        //    // use real database
-        //    //ConfigureProductionServices(services);
-        //}
-
-        //public void ConfigureDockerServices(IServiceCollection services)
-        //{
-        //    services.AddDataProtection()
-        //        .SetApplicationName("EDI")
-        //        .PersistKeysToFileSystem(new DirectoryInfo(@"./"));
-
-        //    ConfigureDevelopmentServices(services);
-        //}
-        //private void ConfigureInMemoryDatabases(IServiceCollection services)
-        //{
-        //    // use in-memory database
-        //    services.AddDbContext<CatalogContext>(c =>
-        //        c.UseInMemoryDatabase("Catalog"));
-
-        //    // Add Identity DbContext
-        //    services.AddDbContext<AppIdentityDbContext>(options =>
-        //        options.UseInMemoryDatabase("Identity"));
-
-        //    ConfigureServices(services);
-        //}
+        
         private void ConfigureDBContextServices(IServiceCollection services)
         {
             // use in-memory database
             //ConfigureInMemoryDatabases(services);
 
             // use real database
-            ConfigureProductionServices(services);
-        }
-
-        public void ConfigureProductionServices(IServiceCollection services)
-        {
-            // use real database
-            // Requires LocalDB which can be installed with SQL Server Express 2016
-            // https://www.microsoft.com/en-us/download/details.aspx?id=54284
             services.AddDbContext<ServiceContext>(c =>
-                c.UseSqlServer(Configuration.GetConnectionString("ServiceConnection")), ServiceLifetime.Transient);
+             c.UseSqlServer(Configuration.GetConnectionString("ServiceConnection")), ServiceLifetime.Transient);
 
             // Add Identity DbContext
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
-            // TODO 2020-12-31 Andrew Renner - publish issue - potentially as this was not being called
-            //ConfigureServices(services);
+            services.AddIdentity<EDIApplicationUser, IdentityRole>()
+                        .AddEntityFrameworkStores<AppIdentityDbContext>();
+                        //.AddDefaultUI()
+                        //.AddRoles<IdentityRole>()
+                        //.AddRoleManager<RoleManager<IdentityRole>>()
+                        //.AddEntityFrameworkStores<AppIdentityDbContext>()
+                        //                .AddDefaultTokenProviders();
+            // use for debugging at db level
+            services.AddDatabaseDeveloperPageExceptionFilter();
         }
-        //public void ConfigureTestingServices(IServiceCollection services)
-        //{
-        //    ConfigureInMemoryDatabases(services);
-        //}
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             // this is used in eshop instead of configureCookie
-            //services.AddCookieSettings();
+            //services.AddCookieSettings();            
+            //ConfigureSession(services)           
 
             ConfigureDBContextServices(services);
-
-            ConfigureCookieSettings(services);
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                        .AddEntityFrameworkStores<AppIdentityDbContext>()
-                        //.AddDefaultUI()
-                        .AddRoles<IdentityRole>()
-                        .AddRoleManager<RoleManager<IdentityRole>>()
-                        .AddEntityFrameworkStores<AppIdentityDbContext>()
-                                        .AddDefaultTokenProviders();
+            
+            //2021
+            //ConfigureCookieSettings(services);
+            //2021
+            //services.AddAuthorization();
 
             /* Core Services */
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
@@ -140,6 +105,88 @@ namespace EDI.Web
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddTransient<IEmailSender, EmailSender>();
 
+            ConfigureApplicationServices(services);
+            
+
+            // Added
+            services.AddMemoryCache();
+
+            services.AddRazorPages();
+            //services.AddRazorPages()
+            //.AddRazorPagesOptions(options =>
+            //{
+            //    options.Conventions.AuthorizePage("/LearningResources/Create");
+            //    options.Conventions.AuthorizePage("/LearningResources/Edit");
+            //    options.Conventions.AuthorizePage("/LearningResources/Delete");
+            //    options.Conventions.AuthorizePage("/ResourceLists/Create");
+            //    options.Conventions.AuthorizePage("/ResourceLists/Edit");
+            //    options.Conventions.AuthorizePage("/ResourceLists/Delete");
+            //    options.Conventions.AllowAnonymousToPage("/Index");
+            //});
+
+            services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
+
+            // changed to Add method
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
+      
+            /* Blazor Services */
+            services.AddServerSideBlazor();
+            //2021 Added 
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<EDIApplicationUser>>();
+            services.AddBlazoredSessionStorage();
+            services.AddBlazoredToast();
+            services.AddBlazoredModal();
+            services.AddSyncfusionBlazor();
+        }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        //public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LinkGenerator linkGenerator)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {                    
+            //18.4.0.30 License
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzY5MjI0QDMxMzgyZTM0MmUzMEVzM1hPUDZQWmV1ZnJZaTNweWh5Rit3NkxqQ2Nnd0RPbTRKb2FLbmg3MTA9");
+
+            // Verified
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseShowAllServicesMiddleware(); // Ardalis.ListStartupServices
+                app.UseMigrationsEndPoint();    // .net5 upgrade
+                //app.UseWebAssemblyDebugging(); // doesnt exist in serverside 
+
+                //ListAllRegisteredServices(app, linkGenerator);
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+                //app.UseHttpsRedirection();
+            }
+            // This will make the HTTP requests log as rich logs instead of plain text.  must be before userouting
+            app.UseSerilogRequestLogging();
+
+            //app.UseBlazorFrameworkFiles(); // webassembly
+            app.UseStaticFiles();
+            app.UseRouting();
+            
+            //2021
+            //app.UseCookiePolicy();
+            app.UseAuthentication();            
+            app.UseAuthorization();
+            //app.UseSession();
+                        
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+            });
+
+        }
+        private static void ConfigureApplicationServices(IServiceCollection services)
+        {
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IConfigurationService, ConfigurationService>();
             services.AddScoped<IFormService, FormService>();
@@ -165,73 +212,21 @@ namespace EDI.Web
             services.AddScoped<LanguageSettings>();
             services.AddScoped<EDIAppSettings>();
             services.AddScoped<FileManagerController>();
-
-            // Added
-            services.AddMemoryCache();
-
-            //services.AddRouting(options =>
-            //{
-            //    // Replace the type and the name used to refer to it with your own
-            //    // IOutboundParameterTransformer implementation
-            //    options.ConstraintMap["slugify"] = typeof(SlugifyParameterTransformer);
-            //});
-            //services.AddMvc(options =>
-            //{
-            //    options.Conventions.Add(new RouteTokenTransformerConvention(
-            //             new SlugifyParameterTransformer()));
-
-            //});
-            //services.AddControllersWithViews();
-
-            services.AddRazorPages();
-            //(options =>
-            //{
-            //    options.Conventions.AuthorizePage("/Basket/Checkout");
-            //});
-
-            // changed to Add method
-            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddHttpContextAccessor();
-
-
-
-
-            //services.AddHealthChecks();
-            //    .AddCheck<HomePageHealthCheck>("home_page_health_check")
-            //    .AddCheck<ApiHealthCheck>("api_health_check");            
-            //services.Configure<ServiceConfig>(config =>
-            //{
-            //    config.Services = new List<ServiceDescriptor>(services);
-
-            //    config.Path = "/allservices";
-            //});
-            services.Configure<EDIAppSettings>(Configuration.GetSection("EDIAppSettings"));
-
-            //var baseUrlConfig = new BaseUrlConfiguration();
-            //Configuration.Bind(BaseUrlConfiguration.CONFIG_NAME, baseUrlConfig);
-            //services.AddScoped<BaseUrlConfiguration>(sp => baseUrlConfig);
-            //// Blazor Admin Required Services for Prerendering
-            //services.AddScoped<HttpClient>(s => new HttpClient
-            //{
-            //    BaseAddress = new Uri(baseUrlConfig.WebBase)
-            //});
-
             // used to store various states
             services.AddSingleton<StateContainer>();
 
-            //services.AddMvc(options => options.EnableEndpointRouting = false)
-            //    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+        }
+        private static void ConfigureSession(IServiceCollection services)
+        {
+            services.AddDistributedMemoryCache();
 
-            /* Blazor Services */
-            services.AddServerSideBlazor();
-            services.AddBlazoredSessionStorage();
-            services.AddBlazoredToast();
-            services.AddBlazoredModal();
-            services.AddSyncfusionBlazor();
-
-            // use for debugging at db level
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "EDI";
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.IsEssential = true;
+            });
         }
 
         private static void ConfigureCookieSettings(IServiceCollection services)
@@ -279,83 +274,6 @@ namespace EDI.Web
                     options.LogoutPath = "/Logout";
                 });
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        //public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LinkGenerator linkGenerator)
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            //app.UseHealthChecks("/health",
-            //    new HealthCheckOptions
-            //    {
-            //        ResponseWriter = async (context, report) =>
-            //        {
-            //            var result = new
-            //            {
-            //                status = report.Status.ToString(),
-            //                errors = report.Entries.Select(e => new
-            //                {
-            //                    key = e.Key,
-            //                    value = Enum.GetName(typeof(HealthStatus), e.Value.Status)
-            //                })
-            //            }.ToJson();
-            //            context.Response.ContentType = MediaTypeNames.Application.Json;
-            //            await context.Response.WriteAsync(result);
-            //        }
-            //    });
-            //18.2.0.x license
-            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzIyMjQzQDMxMzgyZTMyMmUzMG1aWllxb0tyN3paWGNGK2NZejZXVVl1WXFINzl6Y0FiWnBCTnJTcVJ6MjA9");
-            //18.4.0.30 License
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzY5MjI0QDMxMzgyZTM0MmUzMEVzM1hPUDZQWmV1ZnJZaTNweWh5Rit3NkxqQ2Nnd0RPbTRKb2FLbmg3MTA9");
-
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseShowAllServicesMiddleware(); // Ardalis.ListStartupServices
-                app.UseMigrationsEndPoint();
-                //app.UseWebAssemblyDebugging(); // doesnt exist in serverside 
-
-                //ListAllRegisteredServices(app, linkGenerator);
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-
-            app.UseHttpsRedirection();
-            //app.UseBlazorFrameworkFiles(); // webassembly
-            app.UseStaticFiles();
-            app.UseRouting();
-
-            app.UseCookiePolicy();
-            app.UseAuthentication();
-            // added 2020-12-31
-            app.UseAuthorization();
-
-
-            //app.UseMvcWithDefaultRoute();
-
-            app.UseEndpoints(endpoints =>
-            {
-                // andrew 2020-12-21
-                endpoints.MapControllers();
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
-
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute("default", "{controller:slugify=Home}/{action:slugify=Index}/{id?}");
-            //    endpoints.MapRazorPages();
-            //    endpoints.MapHealthChecks("home_page_health_check");
-            //    endpoints.MapHealthChecks("api_health_check");
-            //    //endpoints.MapBlazorHub("/admin");
-            //    endpoints.MapFallbackToFile("index.html");
-            //});
-        }
-
         private void ListAllRegisteredServices(IApplicationBuilder app, LinkGenerator linkGenerator)
         {
             var homePageLink = linkGenerator.GetPathByPage("/Index");

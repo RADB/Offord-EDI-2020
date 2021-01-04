@@ -243,3 +243,21 @@ body {
     position: sticky;
     top: 0;
 }
+
+/*Template Download Button*/
+
+a.btn-purple {
+    font-weight: 500;
+    color: #7952b3;
+    border-color: #7952b3
+}
+
+    a.btn-purple:active, a.btn-purple:hover {
+        color: #fff;
+        background-color: #7952b3;
+        border-color: #7952b3
+    }
+
+    a.btn-purple:focus {
+        box-shadow: 0 0 0 3px rgba(121,82,179,.25)
+    }

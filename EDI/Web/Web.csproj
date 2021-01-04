@@ -49,13 +49,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
-    <ProjectReference Include="..\EDIWeb\EDIWeb.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Files\" />
-    <Folder Include="wwwroot\data\" />
     <Folder Include="wwwroot\Download\" />
     <Folder Include="wwwroot\UploadImages\" />
     <Folder Include="wwwroot\Upload\" />

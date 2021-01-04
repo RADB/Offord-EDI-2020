@@ -17,12 +17,24 @@ namespace EDI.Web
         public static async Task Main(string[] args)
         //public static void Main(string[] args)
         {
-            Log.Information("Starting web host");
+            ConfigureSeriLog();
+
+            //CreateHostBuilder(args).Build().Run();
+
+            // seed the database
             var host = CreateHostBuilder(args).Build();
 
+            await SeedDatabases(host);
+
+            host.Run();
+        }
+
+        private static async Task SeedDatabases(IHost host)
+        {
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
@@ -37,71 +49,28 @@ namespace EDI.Web
                 }
                 catch (Exception ex)
                 {
-                    var logger = loggerFactory.CreateLogger<Program>();
-                    logger.LogError(ex, "An error occurred seeding the DB.");
+                    //var logger = loggerFactory.CreateLogger<Program>();
+                    //logger.LogError(ex, "An error occurred seeding the DB.");
                     Log.Error(ex, "An error occurred seeding the DB.");
                 }
             }
-
-            host.Run();
         }
-        //public static void Main(string[] args)
-        //{
-        //    try
-        //    {
-        //        Log.Information("Starting web host");
-
-        //        var host = CreateHostBuilder(args).Build();
-
-        //        using (var scope = host.Services.CreateScope())
-        //        {
-        //            var services = scope.ServiceProvider;
-        //            var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-        //            try
-        //            {
-        //                var ServiceContext = services.GetRequiredService<ServiceContext>();
-        //                ServiceContextSeed.SeedAsync(ServiceContext, loggerFactory)
-        //                                    .Wait();
-
-        //                var userManager = services.GetRequiredService<UserManager<EDIApplicationUser>>();
-
-        //                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        //                AppIdentityDbContextSeed.SeedAsync(userManager, roleManager).Wait();
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                var logger = loggerFactory.CreateLogger<Program>();
-        //                logger.LogError(ex, "An error occurred seeding the DB.");
-        //            }
-        //        }
-
-        //        host.Run();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Fatal(ex, "Host terminated unexpectedly");
-        //    }
-        //    finally
-        //    {
-        //        Log.CloseAndFlush();
-        //    }
-
-        //}
-
-        //public static IWebHostBuilder CreateHostBuilder(string[] args) =>
-        //    WebHost.CreateDefaultBuilder(args)
-        //        .UseSerilog((context, config) =>
-        //        {
-        //            config.ReadFrom.Configuration(context.Configuration);
-        //        })
-        //        .UseSetting(WebHostDefaults.DetailedErrorsKey, "true")
-        //        .UseStartup<Startup>();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
           Host.CreateDefaultBuilder(args)
+              .UseSerilog()
               .ConfigureWebHostDefaults(webBuilder =>
               {
                   webBuilder.UseStartup<Startup>();
               });
+        private static void ConfigureSeriLog()
+        {
+            //https://github.com/serilog/serilog/wiki/Configuration-Basics
+            Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.File(@".\\logs\\logs.txt", Serilog.Events.LogEventLevel.Information, rollingInterval: RollingInterval.Day)
+            //.WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning, outputTemplate: "{Timestamp:HH:mm} [{Level}] ({ThreadId}) {Message}{NewLine}{Exception}")
+            .CreateLogger();
+        }
     }
 }

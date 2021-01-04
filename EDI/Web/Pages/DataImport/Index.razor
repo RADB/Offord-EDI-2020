@@ -72,6 +72,8 @@
                 }
                 else
                 {
+                    <a href="data/EDI Upload Template.xlsx" class="btn btn-purple">Download Template</a>
+                    <br />
                     <div id="container">
                         <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Excel Import","Process", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                             <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>

@@ -7,10 +7,12 @@ namespace EDI.Infrastructure.Identity
     {
         public static async Task SeedAsync(UserManager<EDIApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            // add the 3 roles
-            await CreateRoleAsync(roleManager, "Administrator");
-            await CreateRoleAsync(roleManager, "Teacher");
-            await CreateRoleAsync(roleManager, "Coordinator");
+            // add the roles
+            string[] roleNames={ "Administrator","Teacher","Coordinator"};
+            foreach (string roleName in roleNames)
+            {
+                await CreateRoleAsync(roleManager, roleName);
+            }                       
 
             await CreateUserAsync(userManager, "andrew.renner@phri.ca", "EDI&ict2020", "Administrator");
             await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Teacher"); 

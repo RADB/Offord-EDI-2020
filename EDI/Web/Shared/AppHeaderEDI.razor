@@ -57,7 +57,7 @@
 
     private async void Save()
     {
-                    
+        // update the dbcontext with the teacherdata             
         dbContext.Update(StateContainer.TeacherData);
         await dbContext.SaveChangesAsync();
 

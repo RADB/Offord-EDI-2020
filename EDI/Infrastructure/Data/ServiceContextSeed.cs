@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EDI.ApplicationCore.Entities;
+using Serilog;
 
 namespace EDI.Infrastructure.Data
 {
@@ -306,7 +307,9 @@ namespace EDI.Infrastructure.Data
                     retryForAvailability++;
                     var log = loggerFactory.CreateLogger<ServiceContextSeed>();
                     log.LogError(ex.Message);
+                    Log.Error("ServiceContextSeedError({0}): {1}", retryForAvailability, ex.Message);
                     await SeedAsync(ServiceContext, loggerFactory, retryForAvailability);
+                    
                 }
             }
         }
