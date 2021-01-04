@@ -1,0 +1,79 @@
+﻿@inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        @foreach (var questionnaire in questionnaires)
+            {
+            string url = string.Format("EDIQuestionnaires/{0}/{1}", questionnaire.QuestionnaireName.Replace(" ", ""), ChildId);
+            <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="@url" Match="NavLinkMatch.All">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> @questionnaire.QuestionnaireName
+                    </NavLink>
+            </li>
+            }            
+    </ul>
+</div>
+
+@code {
+
+    private int ChildId { get; set; }
+
+    private bool isChildQuestionnaire;
+    private List<Questionnaire> questionnaires;
+    bool collapseNavMenu = false;
+
+    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            GetChildId();
+            //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
+    }
+
+    private void GetChildId()
+    {
+        Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (uri.Segments.Count() != 4)
+        {
+            NavigationManager.NavigateTo("./children/index");
+        }
+        else
+        {
+            if (!Int32.TryParse(uri.Segments[3], out int studentId))
+            {
+                NavigationManager.NavigateTo("./children/index");
+            }
+            else
+            {
+                ChildId = studentId;
+            }
+        }
+
+    }
+    //var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+    //    if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("initialCount", out var _initialCount))
+    //    {
+    //        currentCount = Convert.ToInt32(_initialCount);
+    //    }
+}
+}

@@ -1,5 +1,7 @@
-﻿@page "/EDIQuestionnaires/SectionD/{ChildId:int}"
-@page  "/EDIQuestionnaires/SectionD/"
+﻿@page "/EDIQuestionnaires/Demographics/{ChildId:int}"
+@page "/EDIQuestionnaires/Demographics/"
+@page "/EDIQuestionnaires/{ChildId:int}"
+@page "/EDIQuestionnaires/"
 @inherits SectionBase;
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
@@ -14,7 +16,6 @@
 @inject UserSettings UserSettings;
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
-
 @*<QuestionnaireNavigation QuestionnaireId=@QuestionnaireId ChildId=@ChildId IsReadOnly=@IsReadOnly></QuestionnaireNavigation>*@
 
 <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="0px"></QuestionnaireHeader>
@@ -49,11 +50,12 @@
                     if (!dbContext.Children.Where(predicate).Any())
                         NavigationManager.NavigateTo("./children/index");
                 }
-                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Section D" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
+                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Demographics" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
                 getData();
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 NavigationManager.NavigateTo("./children/index");
             }
         }

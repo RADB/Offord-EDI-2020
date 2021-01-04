@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using EDI.Web.Shared.Questionnaires
+@using static EDI.Web.Data.Enumerations
+@using System.Linq.Dynamic.Core
+@using Blazored.Modal
+@using Blazored.Modal.Services
+@using Syncfusion.Blazor.Navigations
+
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+@inject ISharedService sharedService;
+@code {
+    [Parameter]
+    public int ChildId { get; set; }
+
+    protected List<QuestionnairesConfiguration> headers;
+    protected Teacher teacherData;
+    protected Boolean IsReadOnly;
+    protected string predicate;
+    protected string province;
+    protected int QuestionnaireId;
+
+    protected void getData()
+    {
+        predicate = "t=>t.Id == " + ChildId;
+        //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+        teacherData = dbContext.Children.Where(predicate)
+                .Include(c => c.QuestionnairesDataDemographics)
+                .Include(c => c.QuestionnairesDataSectionAs)
+                .Include(c => c.QuestionnairesDataSectionBs)
+                .Include(c => c.QuestionnairesDataSectionCs)
+                .Include(c => c.QuestionnairesDataSectionDs)
+                .Include(c => c.QuestionnairesDataSectionEs)
+                .Include(c => c.Teacher)
+                .ThenInclude(t => t.School)
+                .ThenInclude(ts => ts.Province)
+                .Single().Teacher;
+
+        if (UserSettings.IsAdmin)
+        {
+            IsReadOnly = true;
+
+            //get the teachers province
+            /*var teacher = dbContext.Teachers.Where(s => s.Id == TeacherId)
+                              .Include(s => s.School)
+                              .ThenInclude(ts => ts.Province).Single();*/
+
+            province = teacherData.School.Province.English.Replace(" ", "");
+
+
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            IsReadOnly = false;
+            province = UserSettings.Province;
+        }
+        else
+        {
+            IsReadOnly = true;
+            province = teacherData.School.Province.English.Replace(" ", "");
+        }
+    }
+
+    protected string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    protected void checkChildId()
+    {
+        if(!Int32.TryParse(ChildId.ToString(),out int studentId))
+        {
+            NavigationManager.NavigateTo("./children/index");
+        }
+    }
+
+    /* private async void Save()
+     {
+         await dbContext.SaveChangesAsync();
+
+         getData();
+
+         StateHasChanged();
+     }*/
+
+}

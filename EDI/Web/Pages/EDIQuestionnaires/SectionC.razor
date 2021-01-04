@@ -1,4 +1,6 @@
 ﻿@page "/EDIQuestionnaires/SectionC/{ChildId:int}"
+@page  "/EDIQuestionnaires/SectionC/"
+@inherits SectionBase;
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
 @using static EDI.Web.Data.Enumerations
@@ -7,13 +9,13 @@
 @using Blazored.Modal.Services
 @using Syncfusion.Blazor.Navigations
 
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 
-<QuestionnaireNavigation QuestionnaireId=@QuestionnaireId ChildId=@ChildId IsReadOnly=@IsReadOnly></QuestionnaireNavigation>
+@*<QuestionnaireNavigation QuestionnaireId=@QuestionnaireId ChildId=@ChildId IsReadOnly=@IsReadOnly></QuestionnaireNavigation>*@
 
 <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="0px"></QuestionnaireHeader>
 
@@ -27,16 +29,6 @@
     -->
 @code {
 
-    [Parameter]
-    public int ChildId { get; set; }
-
-    private List<QuestionnairesConfiguration> headers;
-    //private QuestionnairesDataDemographic data;
-    private Teacher teacherData;
-    private Boolean IsReadOnly;
-    private string predicate;
-    private string province;
-    private int QuestionnaireId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,9 +40,11 @@
         {
             try
             {
+                checkChildId();
+
                 if (UserSettings.IsTeacher)
                 {
-                    //check if child is not it teachers class    
+                    //check if child is not it teachers class
                     predicate = "Id = " + ChildId + " AND TeacherId = " + UserSettings.TeacherId;
                     if (!dbContext.Children.Where(predicate).Any())
                         NavigationManager.NavigateTo("./children/index");
@@ -65,59 +59,6 @@
         }
     }
 
-    private void getData()
-    {
-        predicate = "t=>t.Id == " + ChildId;
-        //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
-        teacherData = dbContext.Children.Where(predicate)
-                .Include(c => c.QuestionnairesDataDemographics)
-                .Include(c => c.QuestionnairesDataSectionAs)
-                .Include(c => c.QuestionnairesDataSectionBs)
-                .Include(c => c.QuestionnairesDataSectionCs)
-                .Include(c => c.QuestionnairesDataSectionDs)
-                .Include(c => c.QuestionnairesDataSectionEs)
-                .Include(c => c.Teacher)
-                .ThenInclude(t => t.School)
-                .ThenInclude(ts => ts.Province)
-                .Single().Teacher;
 
-        if (UserSettings.IsAdmin)
-        {
-            IsReadOnly = true;
-
-            //get the teachers province
-            /*var teacher = dbContext.Teachers.Where(s => s.Id == TeacherId)
-                              .Include(s => s.School)
-                              .ThenInclude(ts => ts.Province).Single();*/
-
-            province = teacherData.School.Province.English.Replace(" ", "");
-
-
-        }
-        else if (UserSettings.IsTeacher)
-        {
-            IsReadOnly = false;
-            province = UserSettings.Province;
-        }
-        else
-        {
-            IsReadOnly = true;
-            province = teacherData.School.Province.English.Replace(" ", "");
-        }
-    }
-
-    private string Translate(string word)
-    {
-        return sharedService.GetTranslate(word);
-    }
-
-    /* private async void Save()
-     {
-         await dbContext.SaveChangesAsync();
-
-         getData();
-
-         StateHasChanged();
-     }*/
 
 }
