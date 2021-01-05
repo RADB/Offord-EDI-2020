@@ -10,83 +10,94 @@
 @using System.Linq.Dynamic.Core
 
 <!-- PRINT THE HEADER-->
-
-<div class="container-fluid EDIChildHeader">
-    <div class="row">    
-            <QuestionnaireBuilder configs=@headers teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>    
+@if (NavigationManager.Uri.Contains("EDIQuestionnaire"))
+{
+    <div class="container-fluid EDIChildHeader">
+        <div class="row">
+            <QuestionnaireBuilder configs=@headers teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>
+        </div>
     </div>
-</div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top:@marginTop;margin-left:0px;">
-                <div class="card-body">
-                    <div class="container-fluid">
-                        <QuestionnaireGroups teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@ProvinceName QuestionnaireId=@QuestionnaireId></QuestionnaireGroups>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top:@marginTop;margin-left:0px;">
+            @if (NavigationManager.Uri.Contains("TeacherProfile"))
+            {
+                <div class="card-header">
+                    <div class="row cardHeaderSticky">
+                        <QuestionnaireBuilder configs=@headers teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>
                     </div>
+                </div>
+            }
+            <div class="card-body">
+                <div class="container-fluid">
+                    <QuestionnaireGroups teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@ProvinceName QuestionnaireId=@QuestionnaireId></QuestionnaireGroups>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
 
-    @code {
-        [Parameter]
-        public Teacher teacherData { get; set; }
-        //[Parameter]
-        //public TeacherProfileItemViewModel teacherModel { get; set; }
+@code {
+    [Parameter]
+    public Teacher teacherData { get; set; }
+    //[Parameter]
+    //public TeacherProfileItemViewModel teacherModel { get; set; }
 
-        [Parameter]
-        public bool IsReadOnly { get; set; }
+    [Parameter]
+    public bool IsReadOnly { get; set; }
 
-        [Parameter]
-        public string ProvinceName { get; set; }
+    [Parameter]
+    public string ProvinceName { get; set; }
 
-        [Parameter]
-        public int QuestionnaireId { get; set; }
+    [Parameter]
+    public int QuestionnaireId { get; set; }
 
-        [Parameter]
-        public string marginTop { get; set; } = "56px";
+    [Parameter]
+    public string marginTop { get; set; } = "56px";
 
-        private List<QuestionnairesConfiguration> headers;
-        private string _Text;
-        private string predicate;
+    private List<QuestionnairesConfiguration> headers;
+    private string _Text;
+    private string predicate;
 
-        private string Translate(string word)
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
         {
-            return sharedService.GetTranslate(word);
+            NavigationManager.NavigateTo("./login");
         }
-
-        protected override async Task OnInitializedAsync()
+        else
         {
-            if (!UserSettings.IsAuthenticated)
-            {
-                NavigationManager.NavigateTo("./login");
-            }
-            else
-            {
-                getData();
-            }
-        }
-
-        private void getData()
-        {
-            if (UserSettings.IsAdmin)
-            {
-
-            }
-            else if (UserSettings.IsTeacher)
-            {
-
-            }
-            else
-            {
-
-            }
-            // need to determine the questionnaire ID based on the year
-            predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
-            // get the configuration
-            headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
-
+            getData();
         }
     }
+
+    private void getData()
+    {
+        if (UserSettings.IsAdmin)
+        {
+
+        }
+        else if (UserSettings.IsTeacher)
+        {
+
+        }
+        else
+        {
+
+        }
+        // need to determine the questionnaire ID based on the year
+        predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
+        // get the configuration
+        headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+
+    }
+}
