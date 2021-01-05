@@ -17,6 +17,16 @@
     <EmbeddedResource Remove="applogs\**" />
     <None Remove="applogs\**" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Remove="Shared\EDIHeader.razor.css" />
+    <None Remove="Shared\Questionnaires\QuestionnaireHeader.razor.css" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="Shared\EDIHeader.razor.css" />
+    <Content Include="Shared\Questionnaires\QuestionnaireHeader.razor.css" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.ListStartupServices" Version="1.1.3" />

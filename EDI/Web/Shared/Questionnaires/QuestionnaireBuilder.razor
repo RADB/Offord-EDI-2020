@@ -36,11 +36,12 @@
                         _gender = teacherData.Children.Single().Gender.English;
                     }
 
-                    _label = string.Format("{0} - {1:yyyy-MM-dd} - ({2})", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob, _gender);
+                    //_label = string.Format("{0} - {1:yyyy-MM-dd} - ({2})", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob, _gender);
+                    _label = string.Format("{0} - {1:yyyy-MM-dd}", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob);
                 }
-                @((MarkupString)string.Format("<strong>{0}</strong>: {1}", _Text, _label));
+                @((MarkupString)string.Format("<div class=\"col\">{0}</div><div class=\"col-5 text-right\">{1}</div>", _Text, _label));
                 break;
-            case InputTypes.GroupHeader:
+                        case InputTypes.GroupHeader:
                 <div class="card-body border">
                     <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />_Text</p>
                 </div>
@@ -56,14 +57,14 @@
                 </div>
                 break;
         }
-    }
+}
     else
-    {
-        // bind to value from demographic_data
+{
+    // bind to value from demographic_data
 
-        switch ((InputTypes)config.InputTypeId)
-        {
-            case InputTypes.RadioButtons:
+    switch ((InputTypes)config.InputTypeId)
+    {
+        case InputTypes.RadioButtons:
                 @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
                 <RadioPart Config="@config" data="@teacherData"></RadioPart>
                 break;

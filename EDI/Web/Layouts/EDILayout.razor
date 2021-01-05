@@ -9,25 +9,24 @@
 @inject ServiceContext dbContext;
 @using System.Linq.Dynamic.Core
 
-
      <EDIHeader />
-    <div class="EDIsidebar">
-        <EDIMenu />
-    </div>
+     <div class="page">
+         <div class="EDIsidebar">
+             <EDIMenu />
+         </div>
 
-    <div class="main">
-        <div class="top-row px-4 auth">
-            <a href="#">Child Information</a>
-        </div>
+         <div class="EDImain">
+             @*<div class="sidebar-top-row px-4 auth">
+        <p>Child Information</p>
+            </div>*@
 
-        <div class="content px-4">
-            @Body
-        </div>
-        <footer class="app-footer">
-            <span class="ml-auto">© <a href="http://www.offordcentre.com/readiness/index.html">Offord Centre for Child Studies</a> | McMaster University & Hamilton Health Sciences, Hamilton ON, Canada | Tel. (905)525-9140 27051</span>
-        </footer>
-    </div>
-
+             @*<div class="content px-4">
+        </div>*@
+             <div class="container-fluid">
+                 @Body
+             </div>
+         </div>
+     </div>
 
 @code{
     private bool isAuthenticated { get; set; }

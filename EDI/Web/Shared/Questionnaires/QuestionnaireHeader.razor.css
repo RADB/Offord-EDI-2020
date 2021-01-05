@@ -1,0 +1,14 @@
+﻿.EDIChildHeader
+{
+    position: fixed;
+    /*margin-right: 30px;*/
+    margin-left: -15px;
+    background-image: linear-gradient(90deg, #48516b 50%, #1c326f 100%);
+    /*color: #051f67;*/
+    padding: 15px 245px 15px 45px;
+    /*flex:1;*/
+    z-index: 1;
+    top: 109px;
+    color: white;
+}
+
