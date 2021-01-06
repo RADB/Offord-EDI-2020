@@ -68,6 +68,8 @@
         treedata.Add(new TreeData { nodeId = "02-03", nodeText = "Teachers", icon = "icon-graduation icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-04", nodeText = "Class List", icon = "icon-people icon", pid = "02" });
         //treedata.Add(new TreeData { nodeId = "02-05", nodeText = "Coordinator-Sites", icon = "icon-organization icon", pid = "02" });
+        //treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" });
+        //treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" });
         treedata.Add(new TreeData { nodeId = "02-09", nodeText = "News", icon = "icon-globe icon", pid = "02" });
@@ -86,7 +88,7 @@
         treedata.Add(new TreeData { nodeId = "04-17", nodeText = "Orientation", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-11", nodeText = "Provinces", icon = "icon-location-pin icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-12", nodeText = "Province Types", icon = "icon-list icon", pid = "04-05" });
-       // treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
+        // treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-14", nodeText = "Translations", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-15", nodeText = "Years", icon = "icon-calendar icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "05", nodeText = "Accounts", icon = "icon-list icon", hasChild = true});
@@ -97,8 +99,8 @@
         treedata.Add(new TreeData { nodeId = "06-01", nodeText = "Guide", icon = "icon-notebook icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "06-03", nodeText = "Reports", icon = "icon-chart icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "06-04", nodeText = "Documents", icon = "icon-folder-alt icon", pid = "06" });
-        treedata.Add(new TreeData { nodeId = "06-05", nodeText = "FAQ", icon = "question_answer icon", pid = "06" });
-        treedata.Add(new TreeData { nodeId = "06-06", nodeText = "Links", icon = "icon-link icon", pid = "06" });
+        //treedata.Add(new TreeData { nodeId = "06-05", nodeText = "FAQ", icon = "question_answer icon", pid = "06" });
+        //treedata.Add(new TreeData { nodeId = "06-06", nodeText = "Links", icon = "icon-link icon", pid = "06" });
         treedata.Add(new TreeData { nodeId = "07", nodeText = "Contact", icon = "icon-envelope-open icon", hasChild = false });
         //treedata.Add(new TreeData { nodeId = "08", nodeText = "Questions", icon = "icon-list icon" });
 
@@ -126,13 +128,21 @@
         {
             NavigationManager.NavigateTo("./coordinators/index");
         }
+        //else if (args.NodeData.Id == "02-06")
+        //{
+        //    NavigationManager.NavigateTo("./faq/index");
+        //}
+        //else if (args.NodeData.Id == "02-07")
+        //{
+        //    NavigationManager.NavigateTo("./links/index");
+        //}
         else if (args.NodeData.Id == "02-06")
         {
-            NavigationManager.NavigateTo("./faq/index");
+            NavigationManager.NavigateTo("./faq/admin");
         }
         else if (args.NodeData.Id == "02-07")
         {
-            NavigationManager.NavigateTo("./links/index");
+            NavigationManager.NavigateTo("./links/admin");
         }
         else if (args.NodeData.Id == "02-08")
         {
@@ -174,10 +184,10 @@
         {
             NavigationManager.NavigateTo("./Genders/index");
         }
-       /*else if (args.NodeData.Id == "04-09")
-        {
-            NavigationManager.NavigateTo("./languages/index");
-        }*/
+        /*else if (args.NodeData.Id == "04-09")
+         {
+             NavigationManager.NavigateTo("./languages/index");
+         }*/
         else if (args.NodeData.Id == "04-10")
         {
             NavigationManager.NavigateTo("./lookupsets/index");
@@ -214,14 +224,14 @@
         {
             NavigationManager.NavigateTo("./documents/index");
         }
-        else if (args.NodeData.Id == "06-05")
-        {
-            NavigationManager.NavigateTo("./faq/admin");
-        }
-        else if (args.NodeData.Id == "06-06")
-        {
-            NavigationManager.NavigateTo("./links/admin");
-        }
+        //else if (args.NodeData.Id == "06-05")
+        //{
+        //    NavigationManager.NavigateTo("./faq/admin");
+        //}
+        //else if (args.NodeData.Id == "06-06")
+        //{
+        //    NavigationManager.NavigateTo("./links/admin");
+        //}
         else if (args.NodeData.Id == "01")
         {
             NavigationManager.NavigateTo("./dashboard/index");
