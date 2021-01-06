@@ -1113,6 +1113,8 @@ namespace EDI.Web.Services
                                 var _demographics = new QuestionnairesDataDemographic();
 
                                 _demographics.ChildId = childid;
+                                _demographics.Gender = (byte?)data.GenderId;
+                                _demographics.Dob = data.ChildDob;
                                 _demographics.CreatedDate = DateTime.Now;
                                 _demographics.CreatedBy = _userSettings.UserName;
                                 _demographics.ModifiedDate = DateTime.Now;
