@@ -13,7 +13,6 @@ namespace EDI.Web.Models
         public string InputType { get; set; }
         public int? OrientationId { get; set; }
         public string Orientation { get; set; }
-        [Required(ErrorMessage = "Question Number is required.")]
         public string QuestionNumber { get; set; }
         public bool IsHeader { get; set; }
         public bool ShowGroupName { get; set; }
