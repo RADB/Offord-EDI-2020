@@ -15,7 +15,7 @@
     <div class="col-9">
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
 
-        <SfNumericTextBox TValue="double?" Min=@Config.Min Max=@Config.Max Step=@Config.NumberStep Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
+        <SfNumericTextBox TValue="double?" Readonly="@ReadonlyQuestion" Min=@Config.Min Max=@Config.Max Step=@Config.NumberStep Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
           @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
         </SfNumericTextBox>
     </div>
@@ -48,13 +48,14 @@
     private List<LookupSetOption> _LookupSetOptions;
 
     private double? currentValue { get; set; }
-    
+
 
     protected override async Task OnInitializedAsync()
-    {        
+    {
         // get the question and help text
         GetQuestionText();
-
+        // check to see if question is readonly 
+        ReadonlyQuestion = Config.IsReadOnly;
         // Get the current value of the question - parse will throw null value exception - otherwise use Convert.ToInt32
         try
         {

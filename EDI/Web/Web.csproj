@@ -20,6 +20,7 @@
   
   <ItemGroup>
     <None Remove="Shared\EDIHeader.razor.css" />
+    <None Remove="Shared\Questionnaires\QuestionnaireHeader - Copy.razor.css" />
     <None Remove="Shared\Questionnaires\QuestionnaireHeader.razor.css" />
   </ItemGroup>
   

@@ -10,16 +10,17 @@
 
 @code
 {
-    [Parameter]
-    public QuestionnairesConfiguration Config { get; set; }
+        [Parameter]
+        public QuestionnairesConfiguration Config { get; set; }
 
-    [Parameter]
-    public Teacher data { get; set; }
+        [Parameter]
+        public Teacher data { get; set; }
 
     public ModalPartViewModel ModalPartModel { get; set; }
 
     public string QuestionText { get; set; }
     public string HelpText { get; set; }
+    public bool ReadonlyQuestion { get; set; }
 
     //public int _optionCount = 0;
     public string _optionLabel;

@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-9">
-        <SfCheckBox Label=@QuestionText @bind-Checked="@currentValue" @onchange="onChange" Width="75%">
+        <SfCheckBox Label=@QuestionText @bind-Checked="@currentValue" @onchange="onChange" Disabled="@ReadonlyQuestion" Width="75%">
         </SfCheckBox>
     </div>
 
@@ -49,12 +49,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // get the question and help text
-        GetQuestionText();
-
         bool flag;
         currentValue = false;
-        
+
+        // get the question and help text
+        GetQuestionText();
+        // check to see if question is readonly 
+        ReadonlyQuestion = Config.IsReadOnly;
+
         // Get the current value of the question
         bool.TryParse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField),out flag);
 

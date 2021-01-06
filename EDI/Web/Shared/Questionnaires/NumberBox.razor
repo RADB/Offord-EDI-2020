@@ -15,7 +15,7 @@
     <div class="col-9">
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
 
-        <SfNumericTextBox TValue="int?" Min=@Config.Min Max=@Config.Max Step=@step Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
+        <SfNumericTextBox TValue="int?" Readonly="@ReadonlyQuestion" Min=@Config.Min Max=@Config.Max Step=@step Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
           @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
         </SfNumericTextBox>
     </div>
@@ -57,6 +57,9 @@
 
         // get the question and help text
         GetQuestionText();
+
+        // check to see if question is readonly 
+        ReadonlyQuestion = Config.IsReadOnly;
 
         // Get the current value of the question - parse will throw null value exception - otherwise use Convert.ToInt32
         try

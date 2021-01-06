@@ -40,10 +40,12 @@
         {
             // get the question and help text for the language
             GetQuestionText();
+            // check to see if question is readonly 
+            ReadonlyQuestion = Config.IsReadOnly;
 
-            OptionsViewModel = new OptionsViewModel();            
+            OptionsViewModel = new OptionsViewModel();
             OptionsViewModel.LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
             OptionsViewModel.Placeholder = QuestionText;
-            OptionsViewModel.Value = CurrentValue;            
+            OptionsViewModel.Value = CurrentValue;
         }
     }

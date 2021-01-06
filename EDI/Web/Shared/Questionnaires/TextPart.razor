@@ -54,6 +54,9 @@
         // get the question and help text
         GetQuestionText();
 
+        // check to see if question is readonly 
+        ReadonlyQuestion = Config.IsReadOnly;
+
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
 

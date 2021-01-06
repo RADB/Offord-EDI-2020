@@ -9,19 +9,28 @@
 @inject ServiceContext dbContext;
 @using System.Linq.Dynamic.Core
 
-     <EDIHeader />
-     <div class="page">
-         <div class="EDIsidebar">
-             <EDIMenu />
-         </div>
 
-         <div class="EDImain">
-             <div class="container-fluid">
-                 @Body
-             </div>
-         </div>
-     </div>
 
+<EDIHeader />
+<div class="page">
+    <div class="EDIsidebar">
+        <EDIMenu />
+    </div>
+
+    <div class="EDImain">
+        <div class="container-fluid">
+            @Body
+        </div>
+    </div>
+</div>
+
+<BlazoredModal DisableBackgroundCancel="true" />
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="10"
+                SuccessClass="success-toast-override"
+                SuccessIcon="fa fa-thumbs-up"
+                IconType="IconType.FontAwesome"
+                ErrorIcon="fa fa-bug" />
 @code{
     private bool isAuthenticated { get; set; }
 
@@ -90,7 +99,7 @@
                                     .ThenInclude(ts => ts.Province).FirstOrDefault();
 
                     UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                    UserSettings.TeacherId = teacher.Id;                    
+                    UserSettings.TeacherId = teacher.Id;
                 }
                 catch
                 {

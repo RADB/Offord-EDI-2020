@@ -14,7 +14,7 @@
     <div class="col-1"></div>
     <div class="col-9">
         <div id="datepicker-control" class="datepicker">
-            <SfDatePicker @bind-Value="currentValue" TValue="DateTime?" Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
+            <SfDatePicker @bind-Value="currentValue" Readonly="@ReadonlyQuestion" TValue="DateTime?" Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
                 <DatePickerEvents TValue="DateTime?" ValueChange="@OnChange"></DatePickerEvents>
             </SfDatePicker>
         </div>
@@ -53,6 +53,10 @@
     {
         // get the question and help text
         GetQuestionText();
+
+        // check to see if question is readonly 
+        ReadonlyQuestion = Config.IsReadOnly;
+
         try
         {
             // Get the current value of the question

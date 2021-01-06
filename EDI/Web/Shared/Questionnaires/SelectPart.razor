@@ -15,7 +15,7 @@
     <div class="col-9">
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
         @*@onchange="@onChange"*@
-        <SfDropDownList TValue="string" Placeholder="@Config.Label" TItem="LookupSetOption" @bind-Value="@currentValue" DataSource="@_LookupSetOptions" PopupWidth="auto" Width="50%">
+        <SfDropDownList TValue="string" Readonly="@ReadonlyQuestion" Placeholder="@Config.Label" TItem="LookupSetOption" @bind-Value="@currentValue" DataSource="@_LookupSetOptions" PopupWidth="auto" Width="50%">
             <DropDownListFieldSettings Value="Value" Text="@_userSettings.Language"></DropDownListFieldSettings>
             <DropDownListEvents TValue="string" TItem="LookupSetOption" ValueChange="OnChange"></DropDownListEvents>
         </SfDropDownList>
@@ -54,6 +54,8 @@
     {
         // get the question and help text
         GetQuestionText();
+        // check to see if question is readonly 
+        ReadonlyQuestion = Config.IsReadOnly;
 
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);

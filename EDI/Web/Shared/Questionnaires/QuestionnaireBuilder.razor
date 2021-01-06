@@ -47,9 +47,7 @@
                 </div>
                 break;
             case InputTypes.QuestionHeader:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Question Header<br />_Text</p>
-                </div>
+                <QuestionHeaderPart Config=@config data="@teacherData"></QuestionHeaderPart>
                 break;
             default:
                 <div class="card-body border">
