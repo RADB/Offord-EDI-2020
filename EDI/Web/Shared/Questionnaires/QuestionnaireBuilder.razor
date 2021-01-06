@@ -89,9 +89,7 @@
                 <NumberBoxDouble Config=@config data="@teacherData"></NumberBoxDouble>
                 break;
             case InputTypes.CheckBox:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted</p>
-                </div>
+                <CheckBoxPart Config=@config data="@teacherData"></CheckBoxPart>
                 break;
             default:
                 <div class="card-body border">

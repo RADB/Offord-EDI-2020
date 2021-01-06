@@ -1,0 +1,92 @@
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Buttons;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IModalService Modal;
+@inject IReflectionService reflectionService;
+@inject ServiceContext dbContext;
+@inject UserSettings _userSettings;
+
+
+@*<div class="row">
+    <h4>@QuestionText</h4>
+</div>*@
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-9">
+        <SfCheckBox Label=@QuestionText @bind-Checked="@currentValue" @onchange="onChange" Width="75%">
+        </SfCheckBox>
+    </div>
+
+    <div class="col-2">
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpText))"><i class="icon-question"></i> Help</button>
+                }
+                </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Teacher">
+            <Authorized>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>        
+    </div>
+</div>
+
+@code
+{
+
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
+
+    private bool currentValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get the question and help text
+        GetQuestionText();
+
+        bool flag;
+        currentValue = false;
+        
+        // Get the current value of the question
+        bool.TryParse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField),out flag);
+
+        if (flag)
+        {
+            currentValue = flag;
+        }
+
+
+
+        if (Config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        }
+
+    }
+
+    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        if (e.Value != null)
+        {
+            // save the data back to the object
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            StateHasChanged();
+        }
+    }
+}
+
+
+
+
+
+

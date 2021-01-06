@@ -65,10 +65,12 @@
         flex-direction: row;
     }
 
-    .EDIsidebar {
-        width: 250px;        
+    .EDIsidebar {       
         position: fixed;
         top: 109px;
+        background-image: linear-gradient(180deg, rgb(5 31 103) 0%, #cec9d0 70%);
+        height: 100vh;
+        width: 202.125px;
     }
 
     .sidebar-top-row {
