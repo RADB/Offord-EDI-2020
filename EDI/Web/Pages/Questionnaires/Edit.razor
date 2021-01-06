@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Navigations;
+@using EDI.Web.Shared.Questionnaires; 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
 @inject IQuestionnaireService questionnaireService
@@ -56,8 +57,15 @@
                 }
             </div>
             <div class="col-md-12">
-                <EDI.Web.Pages.QuestionnaireConfigurations.Index QuestionnaireID=@Id Header="Questionnaire Configurations" AllowDelete=false AllowEdit=true></EDI.Web.Pages.QuestionnaireConfigurations.Index>
+                @*<EDI.Web.Pages.QuestionnaireConfigurations.Index QuestionnaireID=@Id Header="Questionnaire Configurations" AllowDelete=false AllowEdit=true></EDI.Web.Pages.QuestionnaireConfigurations.Index>*@
+                @*
+                    TODO Andrew
+                    Seed dummy Teacher
+                    get the province like in sectionbase
+
+                    <QuestionnaireHeader teacherData=@teacherData IsReadOnly=true ProvinceName=@province QuestionnaireId=@QuestionnaireModel.Id marginTop="56px"></QuestionnaireHeader>*@
             </div>
+            
         </div>
     </div>
 </div>
