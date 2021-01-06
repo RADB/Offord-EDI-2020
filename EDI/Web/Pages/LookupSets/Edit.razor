@@ -41,15 +41,18 @@
             </div>
             <br />
             <div class="col-md-7" style="margin-left: 24px;">
-                <SfAccordion>
-                    <AccordionItems>
-                        <AccordionItem Header="Details" Expanded="true">
-                            <ContentTemplate>
-                                <LookupSetForm @ref="lookupSetform1" LookupSetModel="@LookupSetModel" HandleValidSubmit="HandleValidSubmit" />
-                            </ContentTemplate>
-                        </AccordionItem>
-                    </AccordionItems>
-                </SfAccordion>
+                @if (LookupSetModel.Id > 0)
+                {
+                    <SfAccordion>
+                        <AccordionItems>
+                            <AccordionItem Header="Details" Expanded="true">
+                                <ContentTemplate>
+                                    <LookupSetForm @ref="lookupSetform1" LookupSetModel="@LookupSetModel" HandleValidSubmit="HandleValidSubmit" />
+                                </ContentTemplate>
+                            </AccordionItem>
+                        </AccordionItems>
+                    </SfAccordion>
+                }
             </div>
             <div class="col-md-12">
                 <EDI.Web.Pages.LookupSets.OptionIndex LookupSetId=@Id Header="LookupSet Options" AllowDelete=true AllowEdit=true></EDI.Web.Pages.LookupSets.OptionIndex>

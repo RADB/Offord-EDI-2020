@@ -39,7 +39,11 @@
                 </div>
             </div>
             <br />
-            <RoleForm @ref="roleform1" RoleModel="@RoleModel" HandleValidSubmit="HandleValidSubmit" />
+            @if (!string.IsNullOrEmpty(RoleModel.Id))
+            {
+                <RoleForm @ref="roleform1" RoleModel="@RoleModel" HandleValidSubmit="HandleValidSubmit" />
+            }
+
         </div>
     </div>
 </div>

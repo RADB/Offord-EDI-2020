@@ -39,7 +39,11 @@
                 </div>
             </div>
             <br />
-            <ProfileForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />
+            @if (!string.IsNullOrEmpty(AccountModel.Id))
+            {
+                <ProfileForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />
+            }
+
         </div>
     </div>
 </div>

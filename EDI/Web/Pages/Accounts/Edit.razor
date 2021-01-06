@@ -41,7 +41,10 @@
                 </div>
             </div>
             <br />
-            <UserForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />
+            @if (!string.IsNullOrEmpty(AccountModel.Id))
+            {
+                <UserForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />
+            }
         </div>
     </div>
 </div>
