@@ -46,7 +46,7 @@
 
         if (user.Identity.IsAuthenticated)
         {
-        
+
             UserSettings.UserName = user.Identity.Name;
             UserSettings.IsAuthenticated = true;
 
@@ -59,6 +59,22 @@
             UserSettings.IsTeacher = false;
             UserSettings.Language = user1.Language == null ? "English" : user1.Language;
 
+            var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
+
+            List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
+
+            foreach (var translation in alltranslations)
+            {
+                var atranslation = new TranslationItemViewModel();
+
+                atranslation.Id = translation.Id;
+                atranslation.English = translation.English;
+                atranslation.French = translation.French;
+
+                sivm.Add(atranslation);
+            }
+            LanguageSettings.Translations = sivm;
+
             @if (user.IsInRole("Administrator"))
             {
                 UserSettings.IsAdmin = true;
@@ -67,21 +83,6 @@
             {
                 UserSettings.IsTeacher = true;
 
-                var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
-
-                List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
-
-                foreach (var translation in alltranslations)
-                {
-                    var atranslation = new TranslationItemViewModel();
-
-                    atranslation.Id = translation.Id;
-                    atranslation.English = translation.English;
-                    atranslation.French = translation.French;
-
-                    sivm.Add(atranslation);
-                }
-
                 try
                 {
                     var teacher = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID)
@@ -89,8 +90,7 @@
                                     .ThenInclude(ts => ts.Province).FirstOrDefault();
 
                     UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                    UserSettings.TeacherId = teacher.Id;
-                    LanguageSettings.Translations = sivm;
+                    UserSettings.TeacherId = teacher.Id;                    
                 }
                 catch
                 {

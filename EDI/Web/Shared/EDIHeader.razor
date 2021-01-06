@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Buttons;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
@@ -6,6 +7,7 @@
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
 @inject StateContainer StateContainer;
+@inject IAccountService accountService;
 @implements IDisposable;
 
 
@@ -21,11 +23,12 @@
             </div>
         </div>
         <div class="col-4 text-right align-self-center  text-nowrap">
+            <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
             <AuthorizeView Roles="Administrator,Teacher">
                 <Authorized>
                     <button class="btn btn-success" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
                 </Authorized>
-            </AuthorizeView>>
+            </AuthorizeView>
             <button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> Exit</button>
         </div>
     </div>
@@ -38,6 +41,7 @@
 
 @code {
 
+    private Boolean isFrench { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,7 +49,10 @@
         {
             NavigationManager.NavigateTo("./login");
         }
-
+        if (UserSettings.Language == "English")
+            isFrench = false;
+        else
+            isFrench = true;
         StateContainer.OnChange += StateHasChanged;
     }
 
@@ -61,7 +68,7 @@
 
     private async void Save()
     {
-        // update the dbcontext with the teacherdata             
+        // update the dbcontext with the teacherdata
         dbContext.Update(StateContainer.TeacherData);
         await dbContext.SaveChangesAsync();
 
@@ -73,5 +80,22 @@
     public void Dispose()
     {
         StateContainer.OnChange -= StateHasChanged;
+    }
+
+    private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            UserSettings.Language = "French";
+        }
+        else
+            UserSettings.Language = "English";
+
+        await accountService.UpdateUserLanguageAsync(UserSettings);
+
+        var url = NavigationManager.Uri;
+        NavigationManager.NavigateTo(url, true);
+
+        StateHasChanged();
     }
 }
