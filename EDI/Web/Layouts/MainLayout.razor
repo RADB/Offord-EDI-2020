@@ -101,6 +101,22 @@ else
             UserSettings.IsTeacher = false;
             UserSettings.Language = user1.Language == null ? "English" : user1.Language;
 
+            var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
+
+            List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
+
+            foreach (var translation in alltranslations)
+            {
+                var atranslation = new TranslationItemViewModel();
+
+                atranslation.Id = translation.Id;
+                atranslation.English = translation.English;
+                atranslation.French = translation.French;
+
+                sivm.Add(atranslation);
+            }
+            LanguageSettings.Translations = sivm;
+
             @if (user.IsInRole("Administrator"))
             {
                 UserSettings.IsAdmin = true;
@@ -111,20 +127,7 @@ else
                 UserSettings.IsTeacher = true;
                 IsTeacher = true;
 
-                var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
-
-                List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
-
-                foreach (var translation in alltranslations)
-                {
-                    var atranslation = new TranslationItemViewModel();
-
-                    atranslation.Id = translation.Id;
-                    atranslation.English = translation.English;
-                    atranslation.French = translation.French;
-
-                    sivm.Add(atranslation);
-                }
+                
                 /*data = dbContext.Children.Where(pred)
                        .Include(c => c.QuestionnairesDataDemographics)
                        .Include(c => c.QuestionnairesDataSectionBs)
@@ -141,8 +144,7 @@ else
                                     .ThenInclude(ts => ts.Province).FirstOrDefault();
 
                     UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                    UserSettings.TeacherId = teacher.Id;
-                    LanguageSettings.Translations = sivm;
+                    UserSettings.TeacherId = teacher.Id;                    
                 }
                 catch
                 {
