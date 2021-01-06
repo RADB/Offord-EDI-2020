@@ -15,7 +15,9 @@ namespace EDI.Infrastructure.Identity
             }                       
 
             await CreateUserAsync(userManager, "andrew.renner@phri.ca", "EDI&ict2020", "Administrator");
-            await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Administrator");            
+            await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Administrator");
+            await CreateUserAsync(userManager, "aofford@mcmaster.ca", "McMaster2021", "Administrator");
+            await CreateUserAsync(userManager, "agaskin@mcmaster.ca", "McMaster2021", "Administrator");
         }
 
         private static async Task CreateUserAsync(UserManager<EDIApplicationUser> userManager, string User, string Password, string Role)
