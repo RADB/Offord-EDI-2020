@@ -83,7 +83,19 @@ namespace EDI.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
-
+        private static void ConfigureIdentityPasswordComplexity(IServiceCollection services)
+        {
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Default Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequiredUniqueChars = 1;
+            });
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -93,7 +105,8 @@ namespace EDI.Web
             //ConfigureSession(services)           
 
             ConfigureDBContextServices(services);
-            
+
+            ConfigureIdentityPasswordComplexity(services);
             //2021
             //ConfigureCookieSettings(services);
             //2021
@@ -140,6 +153,7 @@ namespace EDI.Web
             services.AddSyncfusionBlazor();
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         //public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LinkGenerator linkGenerator)
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -185,6 +199,8 @@ namespace EDI.Web
             });
 
         }
+
+
         private static void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountService>();
