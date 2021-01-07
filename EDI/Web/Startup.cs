@@ -87,6 +87,7 @@ namespace EDI.Web
         {
             services.Configure<IdentityOptions>(options =>
             {
+                //https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-configuration?view=aspnetcore-5.0
                 // Default Password settings.
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = false;

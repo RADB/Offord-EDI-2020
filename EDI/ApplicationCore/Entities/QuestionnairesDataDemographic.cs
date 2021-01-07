@@ -39,5 +39,6 @@ namespace EDI.ApplicationCore.Entities
         public byte? LandAgreement { get; set; }
 
         public virtual Child Child { get; set; }
+        public virtual Gender Gender { get; set; }
     }
 }
