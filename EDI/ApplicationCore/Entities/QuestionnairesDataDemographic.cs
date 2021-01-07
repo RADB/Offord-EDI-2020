@@ -15,7 +15,7 @@ namespace EDI.ApplicationCore.Entities
         public DateTime? Dob { get; set; }
         public byte? AttendedJk { get; set; }
         public byte? Jkteacher { get; set; }
-        public byte? Gender { get; set; }
+        public int? GenderId { get; set; }
         public string PostalCode { get; set; }
         public byte? ClassType { get; set; }
         public byte? SpecialNeeds { get; set; }
@@ -39,5 +39,6 @@ namespace EDI.ApplicationCore.Entities
         public byte? LandAgreement { get; set; }
 
         public virtual Child Child { get; set; }
+        public virtual Gender Gender { get; set; }
     }
 }
