@@ -671,6 +671,8 @@ namespace EDI.Web.Services
                     var totalteachers = 0;
                     var totalstudents = 0;
 
+                    var password = string.Empty;
+
                     foreach (var data in alldata)
                     {
                         var haserror = false;
@@ -687,6 +689,8 @@ namespace EDI.Web.Services
                         }
                         else
                         {
+                            password = data.ChildEdiid.Substring(4, 8);
+
                             ///<summary>process year
                             ///</summary>
                             string subyear = data.ChildEdiid.Substring(0, 2);
@@ -766,7 +770,7 @@ namespace EDI.Web.Services
                                                     FirstName = firstname,
                                                     LastName = lastname
                                                 };
-                                                var result = await _userManager.CreateAsync(newuser);
+                                                var result = await _userManager.CreateAsync(newuser, "EDI&"+lastname+"26");
 
                                                 var role = _identityContext.Roles.Where(p => p.Name == "Coordinator").FirstOrDefault();
 
@@ -974,7 +978,7 @@ namespace EDI.Web.Services
                                                         FirstName = firstname,
                                                         LastName = lastname
                                                     };
-                                                    var result = await _userManager.CreateAsync(newuser);
+                                                    var result = await _userManager.CreateAsync(newuser, password);
 
                                                     var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
 
@@ -1113,7 +1117,7 @@ namespace EDI.Web.Services
                                 var _demographics = new QuestionnairesDataDemographic();
 
                                 _demographics.ChildId = childid;
-                                _demographics.Gender = (byte?)data.GenderId;
+                                _demographics.GenderID = (byte?)data.GenderId;
                                 _demographics.Dob = data.ChildDob;
                                 _demographics.CreatedDate = DateTime.Now;
                                 _demographics.CreatedBy = _userSettings.UserName;

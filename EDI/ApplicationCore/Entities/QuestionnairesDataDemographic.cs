@@ -15,7 +15,7 @@ namespace EDI.ApplicationCore.Entities
         public DateTime? Dob { get; set; }
         public byte? AttendedJk { get; set; }
         public byte? Jkteacher { get; set; }
-        public byte? Gender { get; set; }
+        public int? GenderID { get; set; }
         public string PostalCode { get; set; }
         public byte? ClassType { get; set; }
         public byte? SpecialNeeds { get; set; }
