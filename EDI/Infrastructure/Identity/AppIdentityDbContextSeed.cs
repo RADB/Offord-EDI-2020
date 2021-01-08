@@ -14,12 +14,12 @@ namespace EDI.Infrastructure.Identity
                 await CreateRoleAsync(roleManager, roleName);
             }                       
 
-            await CreateUserAsync(userManager, "andrew.renner@phri.ca", "McMaster2021", "Administrator");
+            await CreateUserAsync(userManager, "andrew.renner@phri.ca", "McMaster2021!", "Administrator");
             await CreateUserAsync(userManager, "bryan.deng@phri.ca", "EDI&ict2020", "Administrator");
-            await CreateUserAsync(userManager, "aofford@mcmaster.ca", "McMaster2021", "Administrator");
-            await CreateUserAsync(userManager, "agaskin@mcmaster.ca", "McMaster2021", "Administrator");
-            await CreateUserAsync(userManager, "paraso@mcmaster.ca", "McMaster2021", "Administrator");
-            await CreateUserAsync(userManager, "ashlynn@renner.ca", "McMaster2021", "Teacher");
+            await CreateUserAsync(userManager, "aofford@mcmaster.ca", "McMaster2021!", "Administrator");
+            await CreateUserAsync(userManager, "agaskin@mcmaster.ca", "McMaster2021!", "Administrator");
+            await CreateUserAsync(userManager, "paraso@mcmaster.ca", "McMaster2021!", "Administrator");
+            await CreateUserAsync(userManager, "ashlynn@renner.ca", "McMaster2021!", "Teacher");
 
         }
 
