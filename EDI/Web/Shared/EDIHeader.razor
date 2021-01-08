@@ -94,7 +94,7 @@
         await accountService.UpdateUserLanguageAsync(UserSettings);
 
         var url = NavigationManager.Uri;
-        NavigationManager.NavigateTo(url, true);
+        NavigationManager.NavigateTo(url);
 
         StateHasChanged();
     }
