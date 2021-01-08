@@ -12,6 +12,10 @@ namespace EDI.Web.Lib
 
         public string UserName { get; set; }
 
+        public string BackURL { get; set; }
+
+        public string CurrentURL { get; set; }
+
         public Teacher TeacherData { get; set; }
 
         public event Action OnChange;
@@ -29,6 +33,16 @@ namespace EDI.Web.Lib
         public void SetTeacher(Teacher value)
         {
             TeacherData = value;
+            NotifyStateChanged();
+        }
+        public void SetBackURL(string value)
+        {
+            BackURL = value;
+            NotifyStateChanged();
+        }
+        public void SetCurrentURL(string value)
+        {
+            CurrentURL = value;
             NotifyStateChanged();
         }
 

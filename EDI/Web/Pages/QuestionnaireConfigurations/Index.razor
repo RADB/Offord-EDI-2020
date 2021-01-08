@@ -10,6 +10,9 @@
 @inject AppIdentityDbContext identityContext;
 @inject IModalService Modal
 @inject UserSettings UserSettings;
+@inject StateContainer StateContainer
+@implements IDisposable
+
 
 <div class="row">
     <div class="col-md-12">
@@ -33,36 +36,36 @@
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         @*<GridSortSettings>
-                            <GridSortColumns>
-                                <GridSortColumn Field="QuestionnaireConfigurationNumber" Direction="SortDirection.Ascending"></GridSortColumn>
-                            </GridSortColumns>
-                        </GridSortSettings>*@
-                    <GridColumns>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.InputType) HeaderText="Input Type" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Orientation) HeaderText="Orientation" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.QuestionNumber) HeaderText="Question #" Width="20"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.IsHeader) HeaderText="Header?" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.GroupName) HeaderText="Group Name" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.EntityName) HeaderText="Entity Name" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.VariableName) HeaderText="Variable Name" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.LookupEntity) HeaderText="Lookup Entity" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Condition) HeaderText="Condition" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Sequence) HeaderText="Sequence" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Alberta) HeaderText="AB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.BritishColumbia) HeaderText="BC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Manitoba) HeaderText="MB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewBrunswick) HeaderText="NB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewfoundlandandLabrador) HeaderText="NL" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NovaScotia) HeaderText="NS" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Nunavut) HeaderText="NU" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NorthwestTerritories) HeaderText="NT" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ontario) HeaderText="ON" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.PrinceEdwardIsland) HeaderText="PE" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Quebec) HeaderText="QC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Saskatchewan) HeaderText="SK" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.YukonTerritory) HeaderText="YT" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
-                    </GridColumns>
+                                <GridSortColumns>
+                                    <GridSortColumn Field="QuestionnaireConfigurationNumber" Direction="SortDirection.Ascending"></GridSortColumn>
+                                </GridSortColumns>
+                            </GridSortSettings>*@
+                        <GridColumns>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.InputType) HeaderText="Input Type" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Orientation) HeaderText="Orientation" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.QuestionNumber) HeaderText="Question #" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.IsHeader) HeaderText="Header?" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.GroupName) HeaderText="Group Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.EntityName) HeaderText="Entity Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.VariableName) HeaderText="Variable Name" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.LookupEntity) HeaderText="Lookup Entity" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Condition) HeaderText="Condition" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Sequence) HeaderText="Sequence" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Alberta) HeaderText="AB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.BritishColumbia) HeaderText="BC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Manitoba) HeaderText="MB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewBrunswick) HeaderText="NB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewfoundlandandLabrador) HeaderText="NL" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NovaScotia) HeaderText="NS" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Nunavut) HeaderText="NU" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NorthwestTerritories) HeaderText="NT" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ontario) HeaderText="ON" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.PrinceEdwardIsland) HeaderText="PE" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Quebec) HeaderText="QC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Saskatchewan) HeaderText="SK" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.YukonTerritory) HeaderText="YT" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        </GridColumns>
                     </SfGrid>
                 }
 
@@ -216,5 +219,10 @@
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<QuestionnaireConfigurationItemViewModel> args)
     {
         NavigationManager.NavigateTo("./QuestionnaireConfigurations/edit/" + this.rowid + "/" + QuestionnaireID);
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }
