@@ -78,7 +78,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-2 col-form-label" for="English">Help Text: </label>
                                     <div class="col-md-10 col-form-label">
-                                        <RichTextEditor @ref="rteHelpEnglish" BindValue="@QuestionnaireConfigurationModel.HelpText" />
+                                        <RichTextEditor @ref="rteHelpEnglish" BindValue="@QuestionnaireConfigurationModel.HelpTextEnglish" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -556,7 +556,7 @@
 
         if (!switchModelForHelp.Value)
         {
-            QuestionnaireConfigurationModel.HelpText = null;
+            QuestionnaireConfigurationModel.HelpTextEnglish = null;
             QuestionnaireConfigurationModel.HelpTextFrench = null;
         }
     }

@@ -151,7 +151,7 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.English = questionnaireConfiguration.English;
                 _questionnaireConfiguration.French = questionnaireConfiguration.French;
                 _questionnaireConfiguration.HasHelp = questionnaireConfiguration.HasHelp;
-                _questionnaireConfiguration.HelpText = questionnaireConfiguration.HelpText;
+                _questionnaireConfiguration.HelpTextEnglish = questionnaireConfiguration.HelpTextEnglish;
                 _questionnaireConfiguration.HelpTextFrench = questionnaireConfiguration.HelpTextFrench;
                 _questionnaireConfiguration.GroupName = questionnaireConfiguration.GroupName;
                 _questionnaireConfiguration.ShowGroupName = questionnaireConfiguration.ShowGroupName;
@@ -245,7 +245,7 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.English = questionnaireConfiguration.English;
                 _questionnaireConfiguration.French = questionnaireConfiguration.French;
                 _questionnaireConfiguration.HasHelp = questionnaireConfiguration.HasHelp;
-                _questionnaireConfiguration.HelpText = questionnaireConfiguration.HelpText;
+                _questionnaireConfiguration.HelpTextEnglish = questionnaireConfiguration.HelpTextEnglish;
                 _questionnaireConfiguration.HelpTextFrench = questionnaireConfiguration.HelpTextFrench;
                 _questionnaireConfiguration.GroupName = questionnaireConfiguration.GroupName;
                 _questionnaireConfiguration.ShowGroupName = questionnaireConfiguration.ShowGroupName;
@@ -355,7 +355,7 @@ namespace EDI.Web.Services
                     English = questionnaireConfiguration.English,
                     French = questionnaireConfiguration.French,
                     HasHelp = questionnaireConfiguration.HasHelp,
-                    HelpText = questionnaireConfiguration.HelpText,
+                    HelpTextEnglish = questionnaireConfiguration.HelpTextEnglish,
                     HelpTextFrench = questionnaireConfiguration.HelpTextFrench,
                     GroupName = questionnaireConfiguration.GroupName,
                     ShowGroupName = questionnaireConfiguration.ShowGroupName,

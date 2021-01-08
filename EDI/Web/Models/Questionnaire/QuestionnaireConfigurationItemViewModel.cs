@@ -38,7 +38,7 @@ namespace EDI.Web.Models
         public string Notification { get; set; }
         public string NotificationFrench { get; set; }
         public bool HasHelp { get; set; }
-        public string HelpText { get; set; }
+        public string HelpTextEnglish { get; set; }
         public string HelpTextFrench { get; set; }
         public string Mask { get; set; }
         public byte? MaxLength { get; set; }

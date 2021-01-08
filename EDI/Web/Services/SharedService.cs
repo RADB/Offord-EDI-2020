@@ -1462,7 +1462,7 @@ namespace EDI.Web.Services
 
         public string GetHelpText(QuestionnairesConfiguration config)
         {
-            return GetLanguageText(config.HelpText, config.HelpTextFrench);
+            return GetLanguageText(config.HelpTextEnglish, config.HelpTextFrench);
         }
 
         public string GetOptionText(LookupSetOption option)

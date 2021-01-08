@@ -27,7 +27,7 @@
                 <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
                 @if (Config.HasHelp)
                 {
-                    <button type="button" class="btn btn-success btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpText))"><i class="icon-question"></i> Help</button>
+                    <button type="button" class="btn btn-success btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
             </Authorized>
         </AuthorizeView>
@@ -35,7 +35,7 @@
             <Authorized>
                 @if (Config.HasHelp)
                 {
-                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpText))"><i class="icon-question"></i> Help</button>
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
             </Authorized>
         </AuthorizeView>
