@@ -11,6 +11,8 @@
 @inject IModalService Modal;
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
+@inject StateContainer StateContainer
+@implements IDisposable
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -87,6 +89,12 @@
         else
         {
             QuestionnaireConfigurationModel = await questionnaireConfigurationService.GetQuestionnaireConfigurationItem(Id);
+
+            StateContainer.OnChange += StateHasChanged;
+
+            StateContainer.SetBackURL(StateContainer.CurrentURL);
+
+            StateContainer.SetCurrentURL(NavigationManager.Uri);
         }
     }
 
@@ -94,7 +102,7 @@
     {
         if (!string.IsNullOrEmpty(QuestionnaireConfigurationModel.QuestionNumber))
         {
-            if(QuestionnaireConfigurationModel.QuestionNumber.Trim().Length > 5)
+            if (QuestionnaireConfigurationModel.QuestionNumber.Trim().Length > 5)
             {
                 ErrorMessage = "Question Number can only be 5 digits.";
                 toastService.ShowError(ErrorMessage);
@@ -102,7 +110,7 @@
             }
         }
 
-        if(QuestionnaireConfigurationModel.InputTypeId == 0)
+        if (QuestionnaireConfigurationModel.InputTypeId == 0)
         {
             ErrorMessage = "Input Type is required.";
             toastService.ShowError(ErrorMessage);
@@ -123,7 +131,7 @@
         //    return;
         //}
 
-        if(!string.IsNullOrEmpty(QuestionnaireConfigurationModel.EntityField))
+        if (!string.IsNullOrEmpty(QuestionnaireConfigurationModel.EntityField))
         {
             var totalItems = await questionnaireConfigurationService.GetQCDuplicateCount(QuestionnaireConfigurationModel.EntityName, QuestionnaireConfigurationModel.EntityField, QuestionnaireConfigurationModel.Id);
             if (totalItems > 0)
@@ -171,7 +179,8 @@
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./questionnaires/edit/"+ QuestionnaireId);
+        //NavigationManager.NavigateTo("./questionnaires/edit/" + QuestionnaireId);
+        NavigationManager.NavigateTo(StateContainer.BackURL);
     }
 
     private async void Reset()
@@ -182,5 +191,10 @@
     private void Add()
     {
         NavigationManager.NavigateTo("./questionnaireConfigurations/new");
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }

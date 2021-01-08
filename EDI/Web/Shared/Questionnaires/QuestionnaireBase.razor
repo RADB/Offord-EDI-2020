@@ -7,6 +7,8 @@
 @inject ISharedService sharedService;
 @inject IModalService ModalService
 @inject NavigationManager NavigationManager
+@inject StateContainer StateContainer
+@implements IDisposable
 
 @code
 {
@@ -25,6 +27,10 @@
     //public int _optionCount = 0;
     public string _optionLabel;
 
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
 
     public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
     {
@@ -70,7 +76,14 @@
 
     public void gotoURL()
     {
+        StateContainer.OnChange += StateHasChanged;
+        StateContainer.SetCurrentURL(NavigationManager.Uri);
         string url = string.Format("./QuestionnaireConfigurations/edit/{0}/{1}", Config.Id, Config.QuestionnaireId);
         NavigationManager.NavigateTo(url);
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }
