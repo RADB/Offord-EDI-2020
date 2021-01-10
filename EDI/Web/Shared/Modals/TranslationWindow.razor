@@ -1,5 +1,4 @@
 ﻿@inject ITranslationService translationService
-@inject IModalService ModalService
 @inject ServiceContext dbContext;
 
 
@@ -26,6 +25,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     TranslationItemViewModel TranslationModel { get; set; }
@@ -87,7 +87,7 @@
             }
         }
 
-        ModalService.Close(ModalResult.Ok<TranslationItemViewModel>(TranslationModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<TranslationItemViewModel>(TranslationModel));
     }
 
     void Reset()
@@ -97,10 +97,7 @@
         TranslationModel = new TranslationItemViewModel();
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     private void EnglishChange(ChangeEventArgs e)
     {

@@ -9,7 +9,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -50,6 +50,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 

@@ -3,7 +3,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
 @inject IQuestionnaireService questionnaireConfigurationService
-@inject IModalService Modal
+
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
 @inject ServiceContext dbContext;
@@ -43,6 +43,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public int QuestionnaireId { get; set; }
 

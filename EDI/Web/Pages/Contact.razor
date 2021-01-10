@@ -1,9 +1,10 @@
 ﻿@using EDI.ApplicationCore.Models;
+@using EDI.Web.Shared.Modals; 
 @using System.Text.RegularExpressions;
 @inject IToastService toastService;
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
-@inject IModalService Modal;
+
 @inject UserSettings UserSettings;
 @inject EDIAppSettings AppSettings;
 
@@ -74,10 +75,10 @@
 
 
 @code {
-
+    [CascadingParameter] public IModalService ModalService { get; set; }
     EmailModel EmailModel { get; set; }
 
-    private void SendMessage()
+    private async void SendMessage()
     {
         var parameters = new ModalParameters();
 
@@ -92,8 +93,10 @@
 
         parameters.Add("EmailModel", EmailModel);
 
-        Modal.Show<SendEmailWindow>("Contact EDI", parameters);
-        Modal.OnClose += EmailWindowModalClosed;
+        var modal = ModalService.Show<SendEmailWindow>("Contact EDI", parameters);
+        var result = await modal.Result;
+        EmailWindowModalClosed(result);
+        //*Modal.OnClose += EmailWindowModalClosed;
     }
 
     async void EmailWindowModalClosed(Blazored.Modal.Services.ModalResult modalResult)
@@ -122,7 +125,7 @@
             }
         }
 
-        Modal.OnClose -= EmailWindowModalClosed;
+        //*Modal.OnClose -= EmailWindowModalClosed;
 
         StateHasChanged();
     }

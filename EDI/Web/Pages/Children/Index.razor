@@ -1,4 +1,5 @@
 ﻿@page "/Children/index"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -9,7 +10,6 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal;
 @inject IMathService mathService;
 @inject UserSettings UserSettings;
 
@@ -23,67 +23,68 @@
                     </div>
                 </div>
             </div>
-                <div class="card-body">
-                    @if (children == null)
+            <div class="card-body">
+                @if (children == null)
                     {
-                        <p><em>Loading...</em></p>
+                <p><em>Loading...</em></p>
                     }
                     else
                     {
-                        <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                            <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
-                            <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
-                            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
-                            <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                            <GridSortSettings>
-                                <GridSortColumns>
-                                    <GridSortColumn Field="Ediid" Direction="SortDirection.Ascending"></GridSortColumn>
-                                </GridSortColumns>
-                            </GridSortSettings>
-                            <GridColumns>
-                                <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText=@Translate("EDI_ID") TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText=@Translate("Child's Local ID") Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText=@Translate("Year") Width="15"></GridColumn>
-                                <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText=@Translate("Teacher") Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
-                                <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
-                                <GridColumn HeaderText=@Translate("Status") Width="15">
-                                    <Template>
-                                        @{
-                                            <h6>@Translate("In Progress")</h6>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn HeaderText=@Translate("% Complete") Width="25">
-                                    <Template>
-                                        @{
+                <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                    <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
+                    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridSortSettings>
+                        <GridSortColumns>
+                            <GridSortColumn Field="Ediid" Direction="SortDirection.Ascending"></GridSortColumn>
+                        </GridSortColumns>
+                    </GridSortSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText=@Translate("EDI_ID") TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText=@Translate("Child's Local ID") Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText=@Translate("Year") Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText=@Translate("Teacher") Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
+                        <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
+                        <GridColumn HeaderText=@Translate("Status") Width="15">
+                            <Template>
+                                @{
+                                    <h6>@Translate("In Progress")</h6>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn HeaderText=@Translate("% Complete") Width="25">
+                            <Template>
+                                @{
                                             var comm = (context as ChildItemViewModel);
-                                            <div id="myProgress" class="pbar">
-                                                <div id="myBar" style="width:@comm.Progress%" class="bar">
-                                                    <div id="label" class="barlabel">@comm.Progress % </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                                <GridColumn HeaderText="" Width="20">
-                                    <Template>
-                                        @{
+                                    <div id="myProgress" class="pbar">
+                                        <div id="myBar" style="width:@comm.Progress%" class="bar">
+                                            <div id="label" class="barlabel">@comm.Progress % </div>
+                                        </div>
+                                    </div>
+                                }
+                            </Template>
+                        </GridColumn>
+                        <GridColumn HeaderText="" Width="20">
+                            <Template>
+                                @{
                                             var comm = (context as ChildItemViewModel);
-                                            <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                            </GridColumns>
-                        </SfGrid>
+                                    <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                }
+                            </Template>
+                        </GridColumn>
+                    </GridColumns>
+                </SfGrid>
                     }
-                </div>
             </div>
+        </div>
     </div>
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public int TeacherID { get; set; } = 0;
     [Parameter]
@@ -172,7 +173,7 @@
         rowid = args.Data.Id;
     }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "GridChild_pdfexport")
         {
@@ -197,8 +198,10 @@
         }
         if (args.Item.Id == "GridChild_delete" || args.Item.Id == "GridChild_Supprimer")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+
+            ConfirmDeleteModalClosed(result);
         }
     }
 
@@ -221,7 +224,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<ChildItemViewModel> args)

@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.Inputs
 @inject ISharedService sharedService
-@inject IModalService ModalService
+
+
 
 
 <div class="simple-form" style="width:600px;">
@@ -20,6 +21,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     IFileListEntry file;
@@ -45,7 +47,7 @@
                 if (string.IsNullOrEmpty(result.errormessage))
                 {
                     result.message = "Data uploaded successfully.";
-                    ModalService.Close(ModalResult.Ok<ErrorViewModel>(result));
+                    await ModalInstance.CloseAsync(ModalResult.Ok<ErrorViewModel>(result));
                 }
                 else
                 {
@@ -58,13 +60,10 @@
                 ErrorViewModel result = new ErrorViewModel();
 
                 result.message = "Data uploaded successfully.";
-                ModalService.Close(ModalResult.Ok<ErrorViewModel>(result));
+                await ModalInstance.CloseAsync(ModalResult.Ok<ErrorViewModel>(result));
             }
         }
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 }

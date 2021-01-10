@@ -1,10 +1,11 @@
 ﻿@page "/Links/Admin";
 @using EDI.ApplicationCore.Entities;
+@using EDI.Web.Shared.Modals;
 @inject ServiceContext edi;
 @inject UserSettings UserSettings;
 @inject ILinkService linkService;
 @inject NavigationManager NavigationManager;
-@inject IModalService Modal;
+
 @inject ISharedService sharedService;
 
 <div class="row">
@@ -44,6 +45,7 @@
 
 @code
 {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private List<EDI.ApplicationCore.Entities.Link> Links;
 
     protected override Task OnInitializedAsync()
@@ -79,11 +81,13 @@
 
     private int linkid { get; set; }
 
-    private void Delete(int id)
+    private async void Delete(int id)
     {
         linkid = id;
-        Modal.Show<ConfirmDelete>("Confirm Delete");
-        Modal.OnClose += ConfirmDeleteModalClosed;
+        var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+        var result = await modal.Result;
+        ConfirmDeleteModalClosed(result);
+        //*Modal.OnClose += ConfirmDeleteModalClosed;
     }
 
     async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
@@ -103,7 +107,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private string Translate(string word)

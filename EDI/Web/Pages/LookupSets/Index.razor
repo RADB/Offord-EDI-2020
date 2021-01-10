@@ -1,4 +1,5 @@
 ﻿@page "/LookupSets/index"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using Syncfusion.Blazor.Grids;
@@ -10,7 +11,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal;
+
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -55,6 +56,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -116,7 +118,7 @@
 
     LookupSetItemViewModel LookupSetModel { get; set; }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridLookupSet_pdfexport")
@@ -141,8 +143,9 @@
         }
         if (args.Item.Id == "GridLookupSet_delete")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result);
         }
     }
 
@@ -165,7 +168,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<LookupSetItemViewModel> args)

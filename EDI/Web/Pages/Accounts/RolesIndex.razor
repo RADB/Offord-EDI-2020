@@ -1,4 +1,5 @@
 ﻿@page "/Accounts/rolesindex"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Components.Authorization;
@@ -13,7 +14,6 @@
 @using Syncfusion.Blazor.Navigations;
 @using Syncfusion.Blazor.Popups
 @using Syncfusion.Blazor.Buttons
-@inject IModalService Modal
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -27,25 +27,25 @@
                 <br />
                 @if (roles == null)
                 {
-                    <p><em>Loading...</em></p>
+                <p><em>Loading...</em></p>
                 }
                 else
                 {
-                    <SfGrid ID="GridRole" @ref="Grid" DataSource="@roles" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
-                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="RoleItemViewModel"></GridEvents>
-                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
-                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                        <GridSortSettings>
-                            <GridSortColumns>
-                                <GridSortColumn Field="Name" Direction="SortDirection.Ascending"></GridSortColumn>
-                            </GridSortColumns>
-                        </GridSortSettings>
-                        <GridColumns>
-                            <GridColumn Field=@nameof(RoleItemViewModel.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="40"></GridColumn>
-                            <GridColumn Field=@nameof(RoleItemViewModel.Users) HeaderText="Users" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25"></GridColumn>
-                        </GridColumns>
-                    </SfGrid>
+                <SfGrid ID="GridRole" @ref="Grid" DataSource="@roles" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                    <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="RoleItemViewModel"></GridEvents>
+                    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridSortSettings>
+                        <GridSortColumns>
+                            <GridSortColumn Field="Name" Direction="SortDirection.Ascending"></GridSortColumn>
+                        </GridSortColumns>
+                    </GridSortSettings>
+                    <GridColumns>
+                        <GridColumn Field=@nameof(RoleItemViewModel.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="40"></GridColumn>
+                        <GridColumn Field=@nameof(RoleItemViewModel.Users) HeaderText="Users" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="25"></GridColumn>
+                    </GridColumns>
+                </SfGrid>
                 }
 
             </div>
@@ -55,6 +55,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -106,7 +107,7 @@
         rowid = args.Data.Id;
     }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "GridRole_pdfexport")
         {
@@ -130,8 +131,11 @@
         }
         if (args.Item.Id == "GridRole_delete")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+
+            ConfirmDeleteModalClosed(result);
+            //*Modal.OnClose += ConfirmDeleteModalClosed;
         }
     }
 
@@ -154,7 +158,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<RoleItemViewModel> args)

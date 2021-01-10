@@ -7,7 +7,7 @@
 @inject INewsFeedService newsFeedService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime;
-@inject IModalService Modal;
+
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 
@@ -59,6 +59,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public int Id { get; set; }
     [Parameter]

@@ -1,8 +1,9 @@
 ﻿@page "/LookupSetOptions/optionindex"
 @using Microsoft.AspNetCore.Http;
+@using EDI.Web.Shared.Modals; 
 @using Microsoft.AspNetCore.Components.Authorization;
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.Navigations;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ILookupSetOptionService lookupSetOptionService;
@@ -10,7 +11,6 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -57,6 +57,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -124,7 +125,7 @@
 
     LookupSetOptionItemViewModel LookupSetOptionModel { get; set; }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridLookupSetOption_pdfexport")
@@ -145,8 +146,9 @@
             LookupSetOptionModel.LookupSetId = LookupSetId;
             parameters.Add("LookupSetOptionModel", LookupSetOptionModel);
 
-            Modal.Show<LookupSetOptionWindow>("New EDI LookupSetOption", parameters);
-            Modal.OnClose += NewWindowModalClosed;
+            var modal = ModalService.Show<LookupSetOptionWindow>("New EDI LookupSetOption", parameters);
+            var result = await modal.Result;
+            NewWindowModalClosed(result);
         }
         if (args.Item.Id == "Edit")
         {
@@ -164,14 +166,16 @@
                 LookupSetOptionModel.Id = rowdata.Id;
                 parameters.Add("LookupSetOptionModel", LookupSetOptionModel);
 
-                Modal.Show<LookupSetOptionWindow>("Edit EDI LookupSetOption", parameters);
-                Modal.OnClose += ExistWindowModalClosed;
+                var modal = ModalService.Show<LookupSetOptionWindow>("Edit EDI LookupSetOption", parameters);
+                var result = await modal.Result;
+                ExistWindowModalClosed(result);
             }
         }
         if (args.Item.Id == "GridLookupSetOption_delete")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result);
         }
     }
 
@@ -206,7 +210,7 @@
 
             lookupSetOptions = sivm;
         }
-        Modal.OnClose -= NewWindowModalClosed;
+        //*Modal.OnClose -= NewWindowModalClosed;
         this.Grid.Refresh();
 
         StateHasChanged();
@@ -240,7 +244,7 @@
 
             this.lookupSetOptions = tmp;
         }
-        Modal.OnClose -= ExistWindowModalClosed;
+        //*Modal.OnClose -= ExistWindowModalClosed;
 
         this.rowid = 0;
         this.Grid.Refresh();
@@ -267,10 +271,10 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
-    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<LookupSetOptionItemViewModel> args)
+    private async void RecordDoubleClickHandler(RecordDoubleClickEventArgs<LookupSetOptionItemViewModel> args)
     {
         var parameters = new ModalParameters();
         LookupSetOptionModel = new LookupSetOptionItemViewModel();
@@ -287,8 +291,9 @@
             LookupSetOptionModel.Id = rowdata.Id;
             parameters.Add("LookupSetOptionModel", LookupSetOptionModel);
 
-            Modal.Show<LookupSetOptionWindow>("Edit EDI LookupSetOption", parameters);
-            Modal.OnClose += ExistWindowModalClosed;
+            var modal = ModalService.Show<LookupSetOptionWindow>("Edit EDI LookupSetOption", parameters);
+            var result = await modal.Result;
+            ExistWindowModalClosed(result); ;
         }
     }
 }

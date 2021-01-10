@@ -1,5 +1,5 @@
 ﻿@inject IProvinceService provinceService
-@inject IModalService ModalService
+
 @inject ServiceContext dbContext;
 
 
@@ -38,6 +38,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     ProvinceItemViewModel ProvinceModel { get; set; }
@@ -106,7 +107,7 @@
             }
         }
 
-        ModalService.Close(ModalResult.Ok<ProvinceItemViewModel>(ProvinceModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<ProvinceItemViewModel>(ProvinceModel));
     }
 
     void Reset()
@@ -119,10 +120,7 @@
         country = ProvinceModel.Country;
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     private void CodeChange(ChangeEventArgs e)
     {

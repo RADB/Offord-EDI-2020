@@ -8,7 +8,7 @@
 @inject ISchoolService schoolService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime;
-@inject IModalService Modal;
+
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 
@@ -64,6 +64,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public int Id { get; set; }
     private string Message { get; set; }
@@ -87,7 +88,7 @@
         }
         else
         {
-            SchoolModel = await schoolService.GetSchoolItem(Id);            
+            SchoolModel = await schoolService.GetSchoolItem(Id);
         }
     }
 

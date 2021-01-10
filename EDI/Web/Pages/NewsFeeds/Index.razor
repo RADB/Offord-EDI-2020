@@ -1,4 +1,5 @@
 ﻿@page "/NewsFeeds/Index";
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -8,7 +9,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 
@@ -48,6 +49,7 @@
 
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -100,11 +102,12 @@
 
     private int newsid { get; set; }
 
-    private void Delete(int id)
+    private async void Delete(int id)
     {
         newsid = id;
-        Modal.Show<ConfirmDelete>("Confirm Delete");
-        Modal.OnClose += ConfirmDeleteModalClosed;
+        var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+        var result = await modal.Result;
+        ConfirmDeleteModalClosed(result);
     }
 
     async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
@@ -124,6 +127,6 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 }

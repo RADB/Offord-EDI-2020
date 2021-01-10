@@ -1,5 +1,5 @@
 ﻿@inject IYearService yearService
-@inject IModalService ModalService
+
 @inject ServiceContext dbContext;
 
 
@@ -23,6 +23,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     YearItemViewModel YearModel { get; set; }
@@ -139,7 +140,7 @@
             }
         }
 
-        ModalService.Close(ModalResult.Ok<YearItemViewModel>(YearModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<YearItemViewModel>(YearModel));
     }
 
     void Reset()
@@ -149,8 +150,5 @@
         YearModel = new YearItemViewModel();
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 }

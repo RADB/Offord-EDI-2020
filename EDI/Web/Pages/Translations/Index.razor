@@ -1,10 +1,11 @@
 ﻿@page "/Translations/index/{ChangeNumber:int}"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Spinner
+@using Syncfusion.Blazor.Inputs;
+@using Syncfusion.Blazor.Grids;
+@using Syncfusion.Blazor.Navigations;
+@using Syncfusion.Blazor.Spinner;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ITranslationService translationService;
@@ -12,7 +13,6 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 
@@ -65,6 +65,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -149,7 +150,7 @@
 
     TranslationItemViewModel TranslationModel { get; set; }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridTranslation_pdfexport")
@@ -173,8 +174,9 @@
             TranslationModel = new TranslationItemViewModel();
             parameters.Add("TranslationModel", TranslationModel);
 
-            Modal.Show<TranslationWindow>("New EDI Translation", parameters);
-            Modal.OnClose += NewWindowModalClosed;
+            var modal = ModalService.Show<TranslationWindow>("New EDI Translation", parameters);
+            var result = await modal.Result;
+            NewWindowModalClosed(result);
         }
         if (args.Item.Id == "Edit")
         {
@@ -188,14 +190,16 @@
                 TranslationModel.Id = rowdata.Id;
                 parameters.Add("TranslationModel", TranslationModel);
 
-                Modal.Show<TranslationWindow>("Edit EDI Translation", parameters);
-                Modal.OnClose += ExistWindowModalClosed;
+                var modal = ModalService.Show<TranslationWindow>("Edit EDI Translation", parameters);
+                var result = await modal.Result;
+                ExistWindowModalClosed(result);
             }
         }
         if (args.Item.Id == "GridTranslation_delete")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result); ;
         }
     }
 
@@ -223,7 +227,7 @@
 
             translations = sivm;
         }
-        Modal.OnClose -= NewWindowModalClosed;
+        //*Modal.OnClose -= NewWindowModalClosed;
         this.Grid.Refresh();
 
         StateHasChanged();
@@ -250,7 +254,7 @@
 
             this.translations = tmp;
         }
-        Modal.OnClose -= ExistWindowModalClosed;
+        //*Modal.OnClose -= ExistWindowModalClosed;
 
         this.rowid = 0;
         this.Grid.Refresh();
@@ -277,10 +281,10 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
-    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<TranslationItemViewModel> args)
+    private async void RecordDoubleClickHandler(RecordDoubleClickEventArgs<TranslationItemViewModel> args)
     {
         var parameters = new ModalParameters();
         TranslationModel = new TranslationItemViewModel();
@@ -293,8 +297,9 @@
             TranslationModel.Id = rowdata.Id;
             parameters.Add("TranslationModel", TranslationModel);
 
-            Modal.Show<TranslationWindow>("Edit EDI Translation", parameters);
-            Modal.OnClose += ExistWindowModalClosed;
+            var modal = ModalService.Show<TranslationWindow>("Edit EDI Translation", parameters);
+            var result = await modal.Result;
+            ExistWindowModalClosed(result);
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿@inject ILanguageService languageService
-@inject IModalService ModalService
+
 @inject ServiceContext dbContext;
 
 
@@ -34,6 +34,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     LanguageItemViewModel LanguageModel { get; set; }
@@ -121,7 +122,7 @@
             }
         }
 
-        ModalService.Close(ModalResult.Ok<LanguageItemViewModel>(LanguageModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<LanguageItemViewModel>(LanguageModel));
     }
 
     void Reset()
@@ -131,10 +132,7 @@
         LanguageModel = new LanguageItemViewModel();
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     private void CodeChange(ChangeEventArgs e)
     {

@@ -1,4 +1,5 @@
 ﻿@page "/DataImport/index/{ChangeNumber:int}"
+@using EDI.Web.Shared.Modals; 
 @using Microsoft.EntityFrameworkCore;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using EDI.Web.Extensions;
@@ -11,7 +12,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -107,7 +108,7 @@
 </div>
 
 @code {
-
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -338,14 +339,16 @@
     }
 
 
-    private void UploadFile1()
+    private async void UploadFile1()
     {
         var parameters = new ModalParameters();
 
         parameters.Add("DataName", "Files");
 
-        Modal.Show<UploadFileWindow>("Upload File data: ", parameters);
-        Modal.OnClose += UploadWindowModalClosed;
+        var modal = ModalService.Show<UploadFileWindow>("Upload File data: ", parameters);
+        var result = await modal.Result;
+        UploadWindowModalClosed(result);
+        //*Modal.OnClose += UploadWindowModalClosed;
     }
 
     private async void UploadWindowModalClosed(ModalResult modalResult)
@@ -402,7 +405,7 @@
 
             this.Grid.Refresh();
         }
-        Modal.OnClose -= UploadWindowModalClosed;
+        //*Modal.OnClose -= UploadWindowModalClosed;
 
         StateHasChanged();
     }

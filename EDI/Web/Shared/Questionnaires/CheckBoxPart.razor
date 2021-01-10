@@ -2,7 +2,7 @@
 @using Syncfusion.Blazor.Buttons;
 @using static EDI.Web.Data.Enumerations;
 @inject ISharedService sharedService;
-@inject IModalService Modal;
+
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
@@ -40,8 +40,7 @@
 </div>
 
 @code
-{
-
+{    
     // option set
     private List<LookupSetOption> _LookupSetOptions;
 

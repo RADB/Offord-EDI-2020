@@ -1,5 +1,4 @@
 ﻿@inject IConfigurationService configurationService
-@inject IModalService ModalService
 @inject ServiceContext dbContext;
 
 
@@ -37,6 +36,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     ConfigurationItemViewModel ConfigurationModel { get; set; }
@@ -102,21 +102,18 @@
             }
         }
 
-        ModalService.Close(ModalResult.Ok<ConfigurationItemViewModel>(ConfigurationModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<ConfigurationItemViewModel>(ConfigurationModel));
     }
 
     void Reset()
     {
         ConfigurationModel = new ConfigurationItemViewModel();
-        
+
         FieldName = ConfigurationModel.FieldName;
         FieldValue = ConfigurationModel.FieldValue;
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     private void FieldNameChange(ChangeEventArgs e)
     {

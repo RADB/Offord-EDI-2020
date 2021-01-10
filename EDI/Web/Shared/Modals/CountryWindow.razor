@@ -1,5 +1,4 @@
 ﻿@inject ICountryService countryService
-@inject IModalService ModalService
 @inject ServiceContext dbContext;
 
 
@@ -38,6 +37,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     CountryItemViewModel CountryModel { get; set; }
@@ -107,7 +107,7 @@
             }
         }
 
-        ModalService.Close(ModalResult.Ok<CountryItemViewModel>(CountryModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<CountryItemViewModel>(CountryModel));
     }
 
     void Reset()
@@ -121,10 +121,7 @@
         iso3CountryCode = CountryModel.ISO3CountryCode;
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     private void CodeChange(ChangeEventArgs e)
     {

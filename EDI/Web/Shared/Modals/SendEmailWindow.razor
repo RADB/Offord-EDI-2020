@@ -1,5 +1,6 @@
-﻿@inject IModalService ModalService
+﻿
 @inject ServiceContext dbContext;
+@using EDI.Web.Shared.Modals; 
 @using EDI.Web.Extensions;
 @using EDI.ApplicationCore.Models;
 
@@ -34,6 +35,7 @@
     </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     EmailModel EmailModel { get; set; }
@@ -163,7 +165,7 @@
             return;
         }
 
-        ModalService.Close(ModalResult.Ok<EmailModel>(EmailModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<EmailModel>(EmailModel));
     }
 
     void Reset()
@@ -179,8 +181,5 @@
         EmailModel.UseAttachment = useattachment;
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 }

@@ -1,4 +1,5 @@
 ﻿@page "/Years/index"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using Syncfusion.Blazor.Grids
@@ -10,7 +11,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -32,9 +33,9 @@
                 else
                 {
                     <SfGrid ID="GridYear" @ref="Grid" DataSource="@years" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="Toolbaritems" AllowExcelExport="true" AllowPdfExport="true">
-                        <GridEditSettings AllowAdding="true" AllowEditOnDblClick="true"  AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEditSettings AllowAdding="true" AllowEditOnDblClick="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                         <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="YearItemViewModel"></GridEvents>
-                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"  ></GridFilterSettings>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(YearItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20" AutoFit="true"></GridColumn>
@@ -51,7 +52,7 @@
                             <GridColumn Field=@nameof(YearItemViewModel.Quebec) HeaderText="QC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Saskatchewan) HeaderText="SK" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.YukonTerritory) HeaderText="YT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
-                            
+
                         </GridColumns>
                     </SfGrid>
                 }
@@ -63,6 +64,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -126,7 +128,7 @@
 
     YearItemViewModel YearModel { get; set; }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridYear_pdfexport")
@@ -146,8 +148,10 @@
             YearModel = new YearItemViewModel();
             parameters.Add("YearModel", YearModel);
 
-            Modal.Show<YearWindow>("New EDI Year", parameters);
-            Modal.OnClose += NewWindowModalClosed;
+            var modal = ModalService.Show<YearWindow>("New EDI Year", parameters);
+            var result = await modal.Result;
+            NewWindowModalClosed(result);
+            //Modal.OnClose += NewWindowModalClosed;
         }
         if (args.Item.Id == "Edit")
         {
@@ -173,14 +177,18 @@
                 YearModel.NorthwestTerritories = rowdata.NorthwestTerritories;
                 parameters.Add("YearModel", YearModel);
 
-                Modal.Show<YearWindow>("Edit EDI Year", parameters);
-                Modal.OnClose += ExistWindowModalClosed;
+                var modal = ModalService.Show<YearWindow>("Edit EDI Year", parameters);
+                var result = await modal.Result;
+                ExistWindowModalClosed(result);
+                //*Modal.OnClose += ExistWindowModalClosed;
             }
         }
         if (args.Item.Id == "GridYear_delete")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+
+            ConfirmDeleteModalClosed(result);
         }
     }
 
@@ -221,7 +229,7 @@
             years = sivm;
         }
 
-        Modal.OnClose -= NewWindowModalClosed;
+        //*Modal.OnClose -= NewWindowModalClosed;
         this.Grid.Refresh();
 
         StateHasChanged();
@@ -253,14 +261,14 @@
                     item.Quebec = YearModel.Quebec;
                     item.Saskatchewan = YearModel.Saskatchewan;
                     item.YukonTerritory = YearModel.YukonTerritory;
-                    item.NorthwestTerritories= YearModel.NorthwestTerritories;
+                    item.NorthwestTerritories = YearModel.NorthwestTerritories;
                 }
                 tmp.Add(item);
             }
 
             this.years = tmp;
         }
-        Modal.OnClose -= ExistWindowModalClosed;
+        //*Modal.OnClose -= ExistWindowModalClosed;
 
         this.rowid = 0;
         this.Grid.Refresh();
@@ -296,10 +304,10 @@
             }
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
-    private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<YearItemViewModel> args)
+    private async void RecordDoubleClickHandler(RecordDoubleClickEventArgs<YearItemViewModel> args)
     {
         var parameters = new ModalParameters();
         YearModel = new YearItemViewModel();
@@ -324,8 +332,9 @@
             YearModel.NorthwestTerritories = rowdata.NorthwestTerritories;
             parameters.Add("YearModel", YearModel);
 
-            Modal.Show<YearWindow>("Edit EDI Year", parameters);
-            Modal.OnClose += ExistWindowModalClosed;
+            var modal = ModalService.Show<YearWindow>("Edit EDI Year", parameters);
+            var result = await modal.Result;
+            ExistWindowModalClosed(result);
         }
     }
 }

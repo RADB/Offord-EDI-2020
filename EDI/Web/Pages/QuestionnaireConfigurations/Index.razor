@@ -1,4 +1,5 @@
 ﻿@page "/QuestionnaireConfigurations/index"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
@@ -8,7 +9,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+
 @inject UserSettings UserSettings;
 @inject StateContainer StateContainer
 @implements IDisposable
@@ -76,6 +77,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public int QuestionnaireID { get; set; } = 0;
     [Parameter]
@@ -167,7 +169,7 @@
         rowid = args.Data.Id;
     }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "GridQuestionnaireConfiguration_pdfexport")
         {
@@ -188,9 +190,10 @@
         if (args.Item.Id == "GridQuestionnaireConfiguration_delete")
         {
             var options = new ModalOptions();
-            Modal.Show<ConfirmDelete>("Confirm Delete");
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
 
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result);
         }
     }
 
@@ -213,7 +216,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<QuestionnaireConfigurationItemViewModel> args)

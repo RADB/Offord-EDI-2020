@@ -1,4 +1,5 @@
 ﻿@page "/Faq/Admin"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using System.Linq.Dynamic.Core;
@@ -10,7 +11,6 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 
@@ -37,28 +37,28 @@
 
                             @if (faqs != null)
                             {
-                                <SfAccordion ExpandMode="ExpandMode.Single">
-                                    <AccordionItems>
-                                        @foreach (var faq in faqs)
+                            <SfAccordion ExpandMode="ExpandMode.Single">
+                                <AccordionItems>
+                                    @foreach (var faq in faqs)
                                         {
-                                            <AccordionItem>
-                                                <HeaderTemplate>
-                                                    @faq.Question
-                                                </HeaderTemplate>
-                                                <ContentTemplate>
-                                                    @((MarkupString)faq.Answer)
-                                                    <br />
-                                                    <AuthorizeView Roles="Administrator">
-                                                        <Authorized Context="EditDelete">
-                                                            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-                                                            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
-                                                        </Authorized>
-                                                    </AuthorizeView>
-                                                </ContentTemplate>
-                                            </AccordionItem>
+                                    <AccordionItem>
+                                        <HeaderTemplate>
+                                            @faq.Question
+                                        </HeaderTemplate>
+                                        <ContentTemplate>
+                                            @((MarkupString)faq.Answer)
+                                            <br />
+                                            <AuthorizeView Roles="Administrator">
+                                                <Authorized Context="EditDelete">
+                                                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
+                                                    <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                </Authorized>
+                                            </AuthorizeView>
+                                        </ContentTemplate>
+                                    </AccordionItem>
                                         }
-                                    </AccordionItems>
-                                </SfAccordion>
+                                </AccordionItems>
+                            </SfAccordion>
                             }
                         </Authorized>
                         <NotAuthorized>
@@ -72,6 +72,8 @@
 </div>
 
 @code {
+    //    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
     private List<Faq> allfaqs { get; set; }
@@ -128,7 +130,7 @@
                 sivm.Add(afaq);
             }
 
-            faqs = sivm;            
+            faqs = sivm;
         }
     }
 
@@ -144,11 +146,15 @@
 
     private int faqid { get; set; }
 
-    private void Delete(int id)
+    private async void Delete(int id)
     {
         faqid = id;
-        Modal.Show<ConfirmDelete>("Confirm Delete");
-        Modal.OnClose += ConfirmDeleteModalClosed;
+
+        var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+        var result = await modal.Result;
+
+        ConfirmDeleteModalClosed(result);
+        //*Modal.OnClose += ConfirmDeleteModalClosed;
     }
 
     async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
@@ -169,7 +175,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private string Translate(string word)

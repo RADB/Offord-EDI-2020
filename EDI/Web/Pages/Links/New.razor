@@ -3,7 +3,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
 @inject ILinkService LinkService
-@inject IModalService Modal
+
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
 
@@ -42,6 +42,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public string Sender { get; set; }
 

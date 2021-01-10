@@ -1,4 +1,4 @@
-﻿@inject IModalService ModalService;
+﻿
 @inject IJSRuntime JsRuntime;
 @using EDI.Web.Extensions;
 @using TextCopy;
@@ -15,6 +15,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     private ElementReference _url;
@@ -37,8 +38,5 @@
         await JsRuntime.InvokeVoidAsync("WriteText", link);
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 }

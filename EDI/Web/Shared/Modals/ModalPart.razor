@@ -1,10 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Http;
-@using Blazored.Modal
-@inject IModalService ModalService
-<!-- Modal -->
-
-
-
 <div class="simple-form">
     <div class="container">
         <div class="modal-content">
@@ -21,6 +15,7 @@
 
 @code 
 {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     ModalPartViewModel ModalPartModel { get; set; }
@@ -31,10 +26,7 @@
     [Parameter]
     public string ModalBody { get; set; }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,7 +34,7 @@
         ModalBody = ModalPartModel.ModalBody;
         ModalTitle = ModalPartModel.ModalTitle;
 
-        //ModalTitle = Parameters.Get<ModalParameters>
-        //("ModalTitle").ToString();
+        //*ModalTitle = Parameters.Get<ModalParameters>
+        //*("ModalTitle").ToString();
     }
 }

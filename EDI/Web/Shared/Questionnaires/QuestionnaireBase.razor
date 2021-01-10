@@ -2,16 +2,19 @@
     https://blazor-university.com/templating-components-with-renderfragements/
     -->
 @using System.Linq.Dynamic.Core;
+@using EDI.Web.Shared.Modals;
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
-@inject IModalService ModalService
+
 @inject NavigationManager NavigationManager
 @inject StateContainer StateContainer
 @implements IDisposable
 
 @code
 {
+    [CascadingParameter] public IModalService ModalService { get; set; }
+    
     [Parameter]
     public QuestionnairesConfiguration Config { get; set; }
 
@@ -38,25 +41,39 @@
         return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
     }
 
-    public void ShowModal(string ModalTitle, string ModalBody)
+    //public void ShowModalPreviousVersion(string ModalTitle, string ModalBody)
+    //{
+    //    //_optionCount = 0;
+    //    ModalPartModel = new ModalPartViewModel();
+    //    ModalPartModel.ModalTitle = ModalTitle;
+    //    ModalPartModel.ModalBody = ModalBody;
+
+    //    var parameters = new ModalParameters();
+    //    parameters.Add("ModalPartModel", ModalPartModel);
+
+    //    /*parameters.Add("ModalTitle", ModalTitle);
+    //    parameters.Add("ModalBody", ModalBody);*/
+
+
+    //    var options = new ModalOptions();
+    //    options.HideHeader = false;
+    //    options.HideCloseButton = false;
+
+    //    var modal = ModalService.Show<ModalPart>(ModalTitle, parameters, options);
+    //}
+
+    protected async void ShowModal(string ModalTitle, string ModalBody)
     {
-        //_optionCount = 0;
-        ModalPartModel = new ModalPartViewModel();
-        ModalPartModel.ModalTitle = ModalTitle;
-        ModalPartModel.ModalBody = ModalBody;
-
-        var parameters = new ModalParameters();
-        parameters.Add("ModalPartModel", ModalPartModel);
-
-        /*parameters.Add("ModalTitle", ModalTitle);
-        parameters.Add("ModalBody", ModalBody);*/
-
-
         var options = new ModalOptions();
         options.HideHeader = false;
         options.HideCloseButton = false;
+        options.UseCustomLayout = true;
 
-        ModalService.Show<ModalPart>(ModalTitle, parameters, options);
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(CustomBootstrapModal.ModalBody), ModalBody);
+        parameters.Add(nameof(CustomBootstrapModal.ModalTitle), ModalTitle);
+        var modal = ModalService.Show<CustomBootstrapModal>(ModalTitle,parameters, options);
+        var result = await modal.Result;
     }
 
     public string Translate(string word)

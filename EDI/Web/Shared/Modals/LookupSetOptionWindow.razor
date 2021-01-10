@@ -1,6 +1,6 @@
 ﻿@inject ILookupSetOptionService lookupSetOptionService
 @inject ISharedService sharedService
-@inject IModalService ModalService
+
 @inject ServiceContext dbContext;
 
 
@@ -36,6 +36,7 @@
 </div>
 
 @code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
     LookupSetOptionItemViewModel LookupSetOptionModel { get; set; }
@@ -154,7 +155,7 @@
             StateHasChanged();
         }
 
-        ModalService.Close(ModalResult.Ok<LookupSetOptionItemViewModel>(LookupSetOptionModel));
+        await ModalInstance.CloseAsync(ModalResult.Ok<LookupSetOptionItemViewModel>(LookupSetOptionModel));
     }
 
     void Reset()
@@ -164,10 +165,7 @@
         LookupSetOptionModel = new LookupSetOptionItemViewModel();
     }
 
-    void Cancel()
-    {
-        ModalService.Cancel();
-    }
+    async Task Cancel() => await ModalInstance.CancelAsync();
 
     private void EnglishChange(ChangeEventArgs e)
     {

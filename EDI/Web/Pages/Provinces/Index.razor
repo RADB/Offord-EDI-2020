@@ -1,4 +1,5 @@
 ﻿@page "/Provinces/index"
+@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using Syncfusion.Blazor.Grids
@@ -10,7 +11,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
-@inject IModalService Modal
+
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -59,6 +60,7 @@
 </div>
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
@@ -119,7 +121,7 @@
 
     ProvinceItemViewModel ProvinceModel { get; set; }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridProvince_pdfexport")
@@ -139,8 +141,10 @@
             ProvinceModel = new ProvinceItemViewModel();
             parameters.Add("ProvinceModel", ProvinceModel);
 
-            Modal.Show<ProvinceWindow>("New EDI Province", parameters);
-            Modal.OnClose += NewWindowModalClosed;
+            var modal = ModalService.Show<ProvinceWindow>("New EDI Province", parameters);
+            var result = await modal.Result;
+            NewWindowModalClosed(result);
+            //*Modal.OnClose += NewWindowModalClosed;
         }
         if (args.Item.Id == "Edit")
         {
@@ -158,14 +162,18 @@
                 ProvinceModel.Id = rowdata.Id;
                 parameters.Add("ProvinceModel", ProvinceModel);
 
-                Modal.Show<ProvinceWindow>("Edit Province", parameters);
-                Modal.OnClose += ExistWindowModalClosed;
+                var modal = ModalService.Show<ProvinceWindow>("Edit Province", parameters);
+                var result = await modal.Result;
+                ExistWindowModalClosed(result);
+                //*Modal.OnClose += ExistWindowModalClosed;
             }
         }
         if (args.Item.Id == "GridProvince_delete")
         {
-            Modal.Show<ConfirmDelete>("Confirm Delete");
-            Modal.OnClose += ConfirmDeleteModalClosed;
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result);
+            //*Modal.OnClose += ConfirmDeleteModalClosed;
         }
     }
 
@@ -202,7 +210,7 @@
 
             provinces = sivm;
         }
-        Modal.OnClose -= NewWindowModalClosed;
+        //*Modal.OnClose -= NewWindowModalClosed;
         this.Grid.Refresh();
 
         StateHasChanged();
@@ -233,7 +241,7 @@
 
             this.provinces = tmp;
         }
-        Modal.OnClose -= ExistWindowModalClosed;
+        //*Modal.OnClose -= ExistWindowModalClosed;
 
         this.rowid = 0;
         this.Grid.Refresh();
@@ -260,7 +268,7 @@
             StateHasChanged();
         }
 
-        Modal.OnClose -= ConfirmDeleteModalClosed;
+        //*Modal.OnClose -= ConfirmDeleteModalClosed;
     }
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<ProvinceItemViewModel> args)
@@ -280,8 +288,8 @@
             ProvinceModel.Id = rowdata.Id;
             parameters.Add("ProvinceModel", ProvinceModel);
 
-            Modal.Show<ProvinceWindow>("Edit Province", parameters);
-            Modal.OnClose += ExistWindowModalClosed;
+            var modal = ModalService.Show<ProvinceWindow>("Edit Province", parameters);
+            //*Modal.OnClose += ExistWindowModalClosed;
         }
     }
 }
