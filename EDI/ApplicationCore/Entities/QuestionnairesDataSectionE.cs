@@ -24,7 +24,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? Langauges { get; set; }
         public byte? Religion { get; set; }
         public byte? Other { get; set; }
-        public byte? OtherSpecify { get; set; }
+        public string OtherSpecify { get; set; }
         public string Comments { get; set; }
 
         public virtual Child Child { get; set; }        
