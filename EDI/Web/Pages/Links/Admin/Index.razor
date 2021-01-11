@@ -1,7 +1,8 @@
 ﻿@page "/Links/Admin";
 @using EDI.ApplicationCore.Entities;
 @using EDI.Web.Shared.Modals;
-@inject ServiceContext edi;
+@using System.Linq.Dynamic.Core;
+@inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @inject ILinkService linkService;
 @inject NavigationManager NavigationManager;
@@ -48,25 +49,28 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private List<EDI.ApplicationCore.Entities.Link> Links;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         if (UserSettings.IsAdmin)
         {
             //get the list of links ordered by sequence for admins
             //Links = edi.Links.OrderBy(p => p.Sequence).ToList();
-            Links = edi.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
+            Links = dbContext.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
         }
         else if (UserSettings.IsTeacher)
         {
             //get the list of links ordered by sequence for teachers
-            Links = edi.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Sequence).ToList();
+            var predicate = "p => p.IsTeacherLink.Value && p." + UserSettings.Province + ".Value";
+            //Links = dbContext.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Sequence).ToList();
+            Links = await Task.FromResult(dbContext.Links.Where(predicate).OrderBy(p => p.Sequence).ToList());
+            //Links = dbContext.Links.Where(predicate).OrderBy(p => p.Sequence).ToList();
         }
         else if (UserSettings.IsCoordinator)
         {
             //get the list of links ordered by sequence for coordinators
-            Links = edi.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList();
+            Links = dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList();
         }
-        return base.OnInitializedAsync();
+        //return base.OnInitializedAsync();
     }
 
     private void Add()

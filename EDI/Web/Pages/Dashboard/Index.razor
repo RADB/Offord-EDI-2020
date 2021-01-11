@@ -5,7 +5,7 @@
 @using EDI.Web.Shared.Questionnaires
 @using EDI.Web.Pages.NewsFeeds
 @using System.Linq.Dynamic.Core
-
+@using Serilog; 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject ServiceContext dbContext;
@@ -13,6 +13,7 @@
 @inject IMathService MathService;
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
+@inject IToastService toastService;
 
 <div class="row">
     <div class="col-md-12">
@@ -210,11 +211,23 @@
             else if (UserSettings.IsTeacher)
             {
                 IsTeacher = true;
-                var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID  && t.YearId == UserSettings.YearId)
+                try
+                {
+                    var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID && t.YearId == UserSettings.YearId)
                     .Include(c => c.Children)
                     .Single();
-                // count of the children
-                children = teacher.Children.Count();
+
+                    // count of the children
+                    children = teacher.Children.Count();
+                }
+                catch (Exception ex)
+                {
+                    //toastService.ShowError(string.Format("{0}", ex.Message), "No Teacher Data");
+
+                    Log.Error(string.Format("{0}", ex.Message));
+                    children = 0;
+                }
+
                 url = "/TeacherProfile/Index/" + UserSettings.TeacherId;
             }
             else

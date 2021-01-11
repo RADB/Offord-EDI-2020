@@ -6,7 +6,9 @@
 @inject LanguageSettings LanguageSettings;
 @inject AppIdentityDbContext identityContext;
 @inject ServiceContext dbContext;
+@inject IToastService toastService;
 @using System.Linq.Dynamic.Core
+@using Serilog;
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
                 Timeout="10"
@@ -126,7 +128,7 @@ else
                 UserSettings.IsTeacher = true;
                 IsTeacher = true;
 
-                
+
                 /*data = dbContext.Children.Where(pred)
                        .Include(c => c.QuestionnairesDataDemographics)
                        .Include(c => c.QuestionnairesDataSectionBs)
@@ -142,12 +144,23 @@ else
                                     .Include(s => s.School)
                                     .ThenInclude(ts => ts.Province).FirstOrDefault();
 
-                    UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                    UserSettings.TeacherId = teacher.Id;                    
+                    if (teacher != null)
+                    {
+                        UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
+                        UserSettings.TeacherId = teacher.Id;
+                    }
+                    else
+                    {
+                        string warning = "The teacher has an account but no data associated at this time.  Please import data.";
+                        Log.Warning(warning);
+                        //throw new NullReferenceException(warning);
+                        //toastService.ShowWarning(warning, "No Teacher Data");
+
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Console.WriteLine("please login as an admin to setup the system");
+                    Log.Warning(ex.Message);                    
                     NavigationManager.NavigateTo("./login");
                 }
             }
@@ -156,11 +169,11 @@ else
                 UserSettings.IsCoordinator = true;
                 IsCoordinator = true;
             }
-            }
-            else
-            {
-                UserSettings.IsAuthenticated = false;
-            }
+        }
+        else
+        {
+            UserSettings.IsAuthenticated = false;
+        }
     }
 
     private void OnToggleClick()

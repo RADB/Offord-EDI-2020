@@ -114,8 +114,8 @@
 
         if (UserSettings.IsTeacher)
         {
-            var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
-            TeacherID = teacher.Id;
+         //   var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();            
+         //   TeacherID = teacher.Id;
             AllowEdit = true;
             AllowDelete = false;
         }

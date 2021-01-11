@@ -63,7 +63,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Files\" />
     <Folder Include="wwwroot\Download\" />
     <Folder Include="wwwroot\UploadImages\" />
     <Folder Include="wwwroot\Upload\" />

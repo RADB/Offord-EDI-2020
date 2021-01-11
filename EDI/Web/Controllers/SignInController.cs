@@ -48,6 +48,7 @@ namespace Web.Controllers
                 }
                 else
                 {
+                    // TODO get user role and load statemanager here - send error back to user so they know what is going on
                     return Redirect("./Dashboard/index");
                 }
             }
