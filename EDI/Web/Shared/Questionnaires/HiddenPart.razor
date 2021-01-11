@@ -1,0 +1,58 @@
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Inputs;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IReflectionService reflectionService;
+@inject ServiceContext dbContext;
+@inject UserSettings _userSettings;
+@*@oninput=@(args => onChange(args.Value.ToString(), Config.EntityField))*@
+<input type="hidden" id="@Config.EntityField" @bind="currentValue" />
+
+@code
+{
+
+    private string currentValue { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current value of the question
+        currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+        if (currentValue != _userSettings.Language)
+        {
+            currentValue = _userSettings.Language;
+            try
+            {
+                reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
+            }
+            catch (Exception ex )
+            {
+                // invoke async error on change - then goes through second time.
+                Console.WriteLine("Binding Hidden Object", ex);
+            }
+        }
+    }
+
+    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    //{
+    //    if (e.Value != null)
+    //    {
+    //        // save the data back to the object
+    //        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+    //        StateHasChanged();
+    //    }
+    //}
+
+    //public async void onChange(string value, string name)
+    //{
+    //    reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, value);
+    //    // StateHasChanged();
+    //}
+
+}
+
+
+
+
+
+

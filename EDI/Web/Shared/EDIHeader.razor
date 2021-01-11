@@ -68,13 +68,17 @@
 
     private async void Save()
     {
-        // update the dbcontext with the teacherdata
-        dbContext.Update(StateContainer.TeacherData);
-        await dbContext.SaveChangesAsync();
+        if (StateContainer.TeacherData != null)
+        {
+            // update the dbcontext with the teacherdata
+            //dbContext.Set()
+            dbContext.Update(StateContainer.TeacherData);
+            await dbContext.SaveChangesAsync();
 
-        toastService.ShowSuccess("Data Saved Successfully!");
+            toastService.ShowSuccess("Data Saved Successfully!");
 
-        StateHasChanged();
+            StateHasChanged();
+        }
     }
 
     public void Dispose()
@@ -96,6 +100,8 @@
         var url = NavigationManager.Uri;
         NavigationManager.NavigateTo(url);
 
-        StateHasChanged();
+        //StateHasChanged();
+        await InvokeAsync(() => StateHasChanged());
+        //await InvokeAsync(StateHasChanged); or await InvokeAsync(() => StateHasChanged());
     }
 }

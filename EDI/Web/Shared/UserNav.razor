@@ -63,6 +63,8 @@
         var url = NavigationManager.Uri;
         NavigationManager.NavigateTo(url, true);
 
-        StateHasChanged();
+        //StateHasChanged();
+        await InvokeAsync(() => StateHasChanged());
+        //await InvokeAsync(StateHasChanged); or 
     }
 }

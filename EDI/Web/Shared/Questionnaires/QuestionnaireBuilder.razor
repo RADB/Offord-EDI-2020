@@ -41,7 +41,7 @@
                 }
                 @((MarkupString)string.Format("<div class=\"col\">{0}</div><div class=\"col-5 text-right\">{1}</div>", _Text, _label));
                 break;
-                        case InputTypes.GroupHeader:
+            case InputTypes.GroupHeader:
                 <div class="card-body border">
                     <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />_Text</p>
                 </div>
@@ -55,14 +55,14 @@
                 </div>
                 break;
         }
-}
+    }
     else
-{
-    // bind to value from demographic_data
-
-    switch ((InputTypes)config.InputTypeId)
     {
-        case InputTypes.RadioButtons:
+        // bind to value from demographic_data
+
+        switch ((InputTypes)config.InputTypeId)
+        {
+            case InputTypes.RadioButtons:
                 @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
                 <RadioPart Config="@config" data="@teacherData"></RadioPart>
                 break;
@@ -88,6 +88,9 @@
                 break;
             case InputTypes.CheckBox:
                 <CheckBoxPart Config=@config data="@teacherData"></CheckBoxPart>
+                break;
+            case InputTypes.Hidden:
+                <HiddenPart Config=@config data="@teacherData"></HiddenPart>
                 break;
             default:
                 <div class="card-body border">
