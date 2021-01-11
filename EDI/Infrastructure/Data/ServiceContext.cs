@@ -756,6 +756,7 @@ namespace EDI.Infrastructure.Data
             modelBuilder.Entity<Year>(entity =>
             {
                 entity.ToTable("Years", "LUData");
+                entity.HasIndex(e => e.Ediyear, "IX_Years").IsUnique();
 
                 entity.Property(e => e.CreatedBy).IsUnicode(false);
 

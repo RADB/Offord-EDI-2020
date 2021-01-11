@@ -16,7 +16,7 @@ namespace EDI.Infrastructure.Data
             int retryForAvailability = retry.Value;
             try
             {
-                if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.AddYears(1).Year).FirstOrDefault() == null)
+                if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.AddYears(0).Year).FirstOrDefault() == null)
                 {
                     ServiceContext.Years.AddRange(
                         GetPreconfiguredYear());
@@ -2610,6 +2610,7 @@ namespace EDI.Infrastructure.Data
         {
             return new List<InputType>()
             {
+                new InputType() {French="Hidden",English="Hidden",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="NumberBoxDouble",English="NumberBoxDouble",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="Toggle",English="Toggle",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new InputType() {French="GroupHeader",English="GroupHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
