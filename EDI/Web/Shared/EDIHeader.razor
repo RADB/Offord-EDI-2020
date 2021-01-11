@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Buttons;
+@using EDI.Web.Extensions;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
@@ -70,14 +71,19 @@
     {
         if (StateContainer.TeacherData != null)
         {
-            // update the dbcontext with the teacherdata
-            //dbContext.Set()
-            dbContext.Update(StateContainer.TeacherData);
-            await dbContext.SaveChangesAsync();
+            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            {
+                servicecontext.Update(StateContainer.TeacherData);
+                await servicecontext.SaveChangesAsync();
 
-            toastService.ShowSuccess("Data Saved Successfully!");
+                StateContainer.SetTeacher(null);
 
-            StateHasChanged();
+                toastService.ShowSuccess("Data Saved Successfully!");
+
+                StateHasChanged();
+            }
         }
     }
 
