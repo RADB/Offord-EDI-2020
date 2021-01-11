@@ -90,6 +90,7 @@
                 {
                     toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException.Message), "Error Saving Data");
                     Log.Error(string.Format("{0}:{1}", ex.Message, ex.InnerException.Message));
+                    // Consider email - and central service for this.
                     
                 }
             }
