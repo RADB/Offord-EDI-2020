@@ -38,8 +38,8 @@
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
-
-    LookupSetOptionItemViewModel LookupSetOptionModel { get; set; }
+    [Parameter]
+    public LookupSetOptionItemViewModel LookupSetOptionModel { get; set; }
 
     public string Name { get; set; }
     public string English { get; set; }
@@ -56,7 +56,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LookupSetOptionModel = Parameters.Get<LookupSetOptionItemViewModel>("LookupSetOptionModel");
+        //LookupSetOptionModel = Parameters.Get<LookupSetOptionItemViewModel>("LookupSetOptionModel");
 
         Years = await sharedService.GetYears();
 

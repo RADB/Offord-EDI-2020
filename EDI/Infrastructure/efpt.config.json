@@ -13,152 +13,118 @@
    "SelectedToBeGenerated": 1,
    "Tables": [
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Children]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Coordinators]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[FAQ]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Links]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[NewsFeed]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Configuration]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.Demographics]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.SectionA]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.SectionB]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.SectionC]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.SectionD]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
-         "Name": "[EDI].[Questionnaires.Data.SectionE]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Questionnaires]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
+         "Name": "[EDI].[Questionnaires.Configuration]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.Demographics]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.SectionA]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.SectionB]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.SectionC]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.SectionD]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.SectionE]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[EDI].[Questionnaires.Data.TeacherProfile]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[EDI].[Schools]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Sites]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[EDI].[Teachers]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[Countries]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[FileImportStatus]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[Genders]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[InputTypes]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
-         "Name": "[LUData].[Languages]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[LookupSetOptions]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[LookupSets]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[Orientations]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[Provinces]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[ProvinceType]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
-         "Name": "[LUData].[SpecialProblems]",
-         "ObjectType": 0
-      },
-      {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[Translations]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[LUData].[Years]",
          "ObjectType": 0
       },
       {
-         "HasPrimaryKey": true,
          "Name": "[Staging].[FileImports]",
          "ObjectType": 0
       }

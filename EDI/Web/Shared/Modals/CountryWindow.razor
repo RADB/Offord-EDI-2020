@@ -40,7 +40,8 @@
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
-    CountryItemViewModel CountryModel { get; set; }
+    [Parameter]
+    public CountryItemViewModel CountryModel { get; set; }
 
     public int Code { get; set; }
     public string English { get; set; }
@@ -55,7 +56,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        CountryModel = Parameters.Get<CountryItemViewModel>("CountryModel");
+        //CountryModel = Parameters.Get<CountryItemViewModel>("CountryModel");
 
         Code = CountryModel.Code;
         English = CountryModel.English;

@@ -37,8 +37,8 @@
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
-
-    EmailModel EmailModel { get; set; }
+    [Parameter]
+    public EmailModel EmailModel { get; set; }
 
     public string from { get; set; }
 
@@ -57,7 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        EmailModel = Parameters.Get<EmailModel>("EmailModel");
+        //EmailModel = Parameters.Get<EmailModel>("EmailModel");
 
         from = EmailModel.From;
         to = EmailModel.To;

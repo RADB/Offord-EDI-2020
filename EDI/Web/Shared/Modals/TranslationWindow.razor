@@ -28,7 +28,8 @@
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
-    TranslationItemViewModel TranslationModel { get; set; }
+    [Parameter]
+    public TranslationItemViewModel TranslationModel { get; set; }
     public string English { get; set; }
     public string French { get; set; }
 
@@ -39,7 +40,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        TranslationModel = Parameters.Get<TranslationItemViewModel>("TranslationModel");
+        //TranslationModel = Parameters.Get<TranslationItemViewModel>("TranslationModel");
         English = TranslationModel.English;
         French = TranslationModel.French;
     }

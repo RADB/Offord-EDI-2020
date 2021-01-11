@@ -36,8 +36,8 @@
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
-
-    LanguageItemViewModel LanguageModel { get; set; }
+    [Parameter]
+    public LanguageItemViewModel LanguageModel { get; set; }
 
     public string Code { get; set; }
     public string English { get; set; }
@@ -50,7 +50,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        LanguageModel = Parameters.Get<LanguageItemViewModel>("LanguageModel");
+        //LanguageModel = Parameters.Get<LanguageItemViewModel>("LanguageModel");
 
         if (LanguageModel.Sequence.HasValue)
         {

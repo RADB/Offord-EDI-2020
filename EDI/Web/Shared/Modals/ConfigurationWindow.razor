@@ -39,7 +39,8 @@
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
-    ConfigurationItemViewModel ConfigurationModel { get; set; }
+    [Parameter]
+    public ConfigurationItemViewModel ConfigurationModel { get; set; }
 
     public string FieldName { get; set; }
     public string FieldValue { get; set; }
@@ -53,7 +54,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ConfigurationModel = Parameters.Get<ConfigurationItemViewModel>("ConfigurationModel");
+        //ConfigurationModel = Parameters.Get<ConfigurationItemViewModel>("ConfigurationModel");
 
         FieldName = ConfigurationModel.FieldName;
         FieldValue = ConfigurationModel.FieldValue;

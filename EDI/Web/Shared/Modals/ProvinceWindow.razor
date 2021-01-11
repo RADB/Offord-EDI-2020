@@ -40,8 +40,8 @@
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
-
-    ProvinceItemViewModel ProvinceModel { get; set; }
+    [Parameter]
+    public ProvinceItemViewModel ProvinceModel { get; set; }
 
     public string Code { get; set; }
     public byte? EDICode { get; set; }
@@ -55,7 +55,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ProvinceModel = Parameters.Get<ProvinceItemViewModel>("ProvinceModel");
+        //ProvinceModel = Parameters.Get<ProvinceItemViewModel>("ProvinceModel");
 
         Code = ProvinceModel.Code;
         EDICode = ProvinceModel.EDICode;

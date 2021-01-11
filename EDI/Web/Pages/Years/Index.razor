@@ -148,7 +148,7 @@
             YearModel = new YearItemViewModel();
             parameters.Add("YearModel", YearModel);
 
-            var modal = ModalService.Show<YearWindow>("New EDI Year", parameters);
+            var modal = ModalService.Show<YearWindow>("New EDI Year", parameters);            
             var result = await modal.Result;
             NewWindowModalClosed(result);
             //Modal.OnClose += NewWindowModalClosed;

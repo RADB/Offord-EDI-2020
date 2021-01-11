@@ -36,8 +36,8 @@
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
-
-    SpecialProblemItemViewModel SpecialProblemModel { get; set; }
+    [Parameter]
+    public SpecialProblemItemViewModel SpecialProblemModel { get; set; }
 
     public string Code { get; set; }
     public string English { get; set; }
@@ -50,7 +50,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        SpecialProblemModel = Parameters.Get<SpecialProblemItemViewModel>("SpecialProblemModel");
+        //SpecialProblemModel = Parameters.Get<SpecialProblemItemViewModel>("SpecialProblemModel");
 
         if (SpecialProblemModel.Sequence.HasValue)
         {

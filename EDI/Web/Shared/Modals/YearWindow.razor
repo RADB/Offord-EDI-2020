@@ -26,7 +26,8 @@
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
 
-    YearItemViewModel YearModel { get; set; }
+    [Parameter]
+    public YearItemViewModel YearModel { get; set; }
 
     public int year { get; set; }
 
@@ -38,7 +39,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        YearModel = Parameters.Get<YearItemViewModel>("YearModel");
+        //YearModel = Parameters.Get<YearItemViewModel>("YearModel");
 
         if (YearModel.Ediyear.HasValue)
         {
