@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Blazored.Modal.Services;
 using EDI.ApplicationCore.Interfaces;
 using EDI.ApplicationCore.Models;
+using EDI.Infrastructure.Data;
 using EDI.Infrastructure.Identity;
 using EDI.Web.Extensions;
 using EDI.Web.Models;
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Linq;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Web.Controllers
 {
@@ -20,12 +23,16 @@ namespace Web.Controllers
         private IModalService _modal;
         private readonly IEmailSender _emailSender;
         private EDIAppSettings EDIAppSettings { get; set; }
+        private readonly ServiceContext _dbContext;
+        private readonly AppIdentityDbContext _identityContext;
 
         public SignInController(
             UserManager<EDIApplicationUser> userManager,
             SignInManager<EDIApplicationUser> signInManager,
             IEmailSender emailSender,
             IOptions<EDIAppSettings> settings,
+            ServiceContext dbContext,
+            AppIdentityDbContext identityContext,
             IModalService modal)
         {
             _userManager = userManager;
@@ -33,6 +40,8 @@ namespace Web.Controllers
             _modal = modal;
             _emailSender = emailSender;
             EDIAppSettings = settings.Value;
+            _dbContext = dbContext;
+            _identityContext = identityContext;
         }
 
         [HttpPost("/signin")]
@@ -48,8 +57,32 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    // TODO get user role and load statemanager here - send error back to user so they know what is going on
-                    return Redirect("./Dashboard/index");
+                    var user1 = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
+                    var userrole = _identityContext.UserRoles.Where(p => p.UserId == user1.Id).FirstOrDefault();
+
+                    var role = _identityContext.Roles.Where(p => p.Id == userrole.RoleId).FirstOrDefault();
+
+
+                    if (role.Name == "Teacher")
+                    {
+                        var teacher = await Task.FromResult(_dbContext.Teachers.Where(s => s.UserId == user1.Id).FirstOrDefault());
+
+                        if (teacher == null)
+                        {
+                            await Logout();
+                            return Redirect("./LoginError/This teacher account doesnt exist.");
+                        }
+                        else
+                        {
+                            // TODO get user role and load statemanager here - send error back to user so they know what is going on
+                            return Redirect("./Dashboard/index");
+                        }
+                    }
+                    else
+                    {
+                        // TODO get user role and load statemanager here - send error back to user so they know what is going on
+                        return Redirect("./Dashboard/index");
+                    }                    
                 }
             }
             catch (Exception ex)
