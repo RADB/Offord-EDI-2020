@@ -1119,6 +1119,7 @@ namespace EDI.Web.Services
                                 _demographics.ChildId = childid;
                                 _demographics.GenderId = (int?)data.GenderId;
                                 _demographics.Dob = data.ChildDob;
+                                _demographics.PostalCode = data.ChildPostalCodeZip;
                                 _demographics.CreatedDate = DateTime.Now;
                                 _demographics.CreatedBy = _userSettings.UserName;
                                 _demographics.ModifiedDate = DateTime.Now;

@@ -114,18 +114,23 @@
 
         if (UserSettings.IsTeacher)
         {
-         //   var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();            
-         //   TeacherID = teacher.Id;
+            //   var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();            
+            //   TeacherID = teacher.Id;
             AllowEdit = true;
             AllowDelete = false;
         }
 
-        var allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
 
-        if (TeacherID > 0)
+        List<Child> allchildren;
+        if (UserSettings.TeacherId > 0)
         {
             // SchoolId specified - get all teachers at school
-            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == TeacherID).OrderBy(p => p.Ediid).ToList());
+            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == UserSettings.TeacherId).OrderBy(p => p.Ediid).ToList());
+        }
+        else
+        {
+            // SchoolId specified - get all teachers at school
+            allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
         }
 
         List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();

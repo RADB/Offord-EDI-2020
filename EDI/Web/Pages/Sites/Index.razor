@@ -109,7 +109,7 @@
         rowid = args.Data.Id;
     }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "GridSite_pdfexport")
         {
@@ -135,7 +135,8 @@
         if (args.Item.Id == "GridSite_delete")
         {
             var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
-            //Modal.OnClose += ConfirmDeleteModalClosed;
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result);
         }
     }
 
