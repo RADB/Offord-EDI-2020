@@ -68,7 +68,7 @@ namespace EDI.Web.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
-        private EDIAppSettings POAppSettings { get; set; }
+        private EDIAppSettings EDIAppSettings { get; set; }
         private readonly ServiceContext _dbContext;
         private readonly AppIdentityDbContext _identityContext;
         private IHostEnvironment _hostingEnvironment;
@@ -153,7 +153,7 @@ namespace EDI.Web.Services
             _emailSender = emailSender;
             _userSettings = UserSettings;
             _languageSettings = languageSettings;
-            POAppSettings = settings.Value;
+            EDIAppSettings = settings.Value;
         }
         /*public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
         {
@@ -1449,12 +1449,56 @@ namespace EDI.Web.Services
         {
             string message = string.Empty;
 
-            EmailModel.To = POAppSettings.EmailTo;
+            EmailModel.To = EDIAppSettings.EmailTo;
 
             message = await _emailSender.SendEmailAsync(EmailModel);
 
             return message;
         }
+
+        public async void SendException(string exceptionmsg, string innermsg, string filename, string methodname)
+        {
+            var errorslog = await Task.FromResult(_dbContext.SystemConfigurations.Where(s => s.FieldName == "Errors-Log").FirstOrDefault());
+
+            if(bool.TryParse(errorslog.FieldValue, out bool value))
+            {
+                Log.Error(string.Format("{0}:{1}:{2}:{3}", filename, methodname, exceptionmsg, innermsg));
+            }
+
+            var errorsemail = await Task.FromResult(_dbContext.SystemConfigurations.Where(s => s.FieldName == "Errors-Email").FirstOrDefault());
+
+            if (bool.TryParse(errorsemail.FieldValue, out bool value2))
+            {
+                var EmailModel = new EmailModel();
+
+                EmailModel.Subject = "System Exception";
+
+                EmailModel.From = EDIAppSettings.EmailFrom;
+                EmailModel.To = EDIAppSettings.EmailTo;
+                //EmailModel.To = "Bryan.Deng@phri.ca";
+
+                string htmlString = "<html><body><p>";
+                string htmlString2 = "File: " + filename + "<br />";
+                string htmlString3 = "Method: " + methodname + "<br />";
+                string htmlString4 = exceptionmsg + "<br />";
+                string htmlString5 = Regex.Replace(innermsg, "\r\\D\n?|\n\\D\r?", "</p><p>");
+                string htmlString6 = "</p></body></html>";
+
+                string htmlString7 = htmlString + htmlString2 + htmlString3 + htmlString4 + htmlString5 + htmlString6;
+
+                EmailModel.Body = htmlString7;
+                try
+                {
+                    await _emailSender.SendEmailAsync(EmailModel);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("SendException failed:" + ex.Message);
+                }
+
+            }
+        }
+
         public string GetConfigText(QuestionnairesConfiguration config)
         {
             return GetLanguageText(config.English, config.French);
