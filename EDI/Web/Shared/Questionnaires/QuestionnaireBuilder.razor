@@ -92,6 +92,9 @@
             case InputTypes.Hidden:
                 <HiddenPart Config=@config data="@teacherData"></HiddenPart>
                 break;
+            case InputTypes.TextArea:
+                <TextAreaPart Config=@config data="@teacherData"></TextAreaPart>
+                break;
             default:
                 <div class="card-body border">
                     <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
