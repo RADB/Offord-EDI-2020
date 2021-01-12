@@ -114,7 +114,12 @@
         await accountService.UpdateUserLanguageAsync(UserSettings);
 
         var url = NavigationManager.Uri;
-        NavigationManager.NavigateTo(url);
+        //NavigationManager.NavigateTo(url);
+        StateContainer.SetCurrentURL(url);
+        StateContainer.SetEnglishSwitchChangeNaviBack(true);
+
+        Save();
+        NavigationManager.NavigateTo("./children/index");
 
         //StateHasChanged();
         await InvokeAsync(() => StateHasChanged());

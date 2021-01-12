@@ -12,6 +12,8 @@
 @inject AppIdentityDbContext identityContext;
 @inject IMathService mathService;
 @inject UserSettings UserSettings;
+@inject StateContainer StateContainer;
+@implements IDisposable;
 
 <div class="row">
     <div class="col-md-12">
@@ -25,59 +27,59 @@
             </div>
             <div class="card-body">
                 @if (children == null)
-                    {
-                <p><em>Loading...</em></p>
-                    }
-                    else
-                    {
-                <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                    <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
-                    <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
-                    <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
-                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                    <GridSortSettings>
-                        <GridSortColumns>
-                            <GridSortColumn Field="Ediid" Direction="SortDirection.Ascending"></GridSortColumn>
-                        </GridSortColumns>
-                    </GridSortSettings>
-                    <GridColumns>
-                        <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText=@Translate("EDI_ID") TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText=@Translate("Child's Local ID") Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText=@Translate("Year") Width="15"></GridColumn>
-                        <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText=@Translate("Teacher") Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
-                        <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
-                        <GridColumn HeaderText=@Translate("Status") Width="15">
-                            <Template>
-                                @{
-                                    <h6>@Translate("In Progress")</h6>
-                                }
-                            </Template>
-                        </GridColumn>
-                        <GridColumn HeaderText=@Translate("% Complete") Width="25">
-                            <Template>
-                                @{
-                                            var comm = (context as ChildItemViewModel);
-                                    <div id="myProgress" class="pbar">
-                                        <div id="myBar" style="width:@comm.Progress%" class="bar">
-                                            <div id="label" class="barlabel">@comm.Progress % </div>
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridSortSettings>
+                            <GridSortColumns>
+                                <GridSortColumn Field="Ediid" Direction="SortDirection.Ascending"></GridSortColumn>
+                            </GridSortColumns>
+                        </GridSortSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediid) HeaderText=@Translate("EDI_ID") TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.LocalId) HeaderText=@Translate("Child's Local ID") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText=@Translate("Year") Width="15"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText=@Translate("Teacher") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
+                            <GridColumn HeaderText=@Translate("Status") Width="15">
+                                <Template>
+                                    @{
+                                        <h6>@Translate("In Progress")</h6>
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText=@Translate("% Complete") Width="25">
+                                <Template>
+                                    @{
+                                        var comm = (context as ChildItemViewModel);
+                                        <div id="myProgress" class="pbar">
+                                            <div id="myBar" style="width:@comm.Progress%" class="bar">
+                                                <div id="label" class="barlabel">@comm.Progress % </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
-                            </Template>
-                        </GridColumn>
-                        <GridColumn HeaderText="" Width="20">
-                            <Template>
-                                @{
-                                            var comm = (context as ChildItemViewModel);
-                                    <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
-                                }
-                            </Template>
-                        </GridColumn>
-                    </GridColumns>
-                </SfGrid>
-                    }
+                                    }
+                                </Template>
+                            </GridColumn>
+                            <GridColumn HeaderText="" Width="20">
+                                <Template>
+                                    @{
+                                        var comm = (context as ChildItemViewModel);
+                                        <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                    }
+                                </Template>
+                            </GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
             </div>
         </div>
     </div>
@@ -112,9 +114,18 @@
             NavigationManager.NavigateTo("./dashboard/index");
         }
 
+        if(StateContainer.OnEnglishSwitchChangeNaviBack)
+        {
+            StateContainer.SetBackURL(StateContainer.CurrentURL);
+            StateContainer.SetCurrentURL(NavigationManager.Uri);
+            StateContainer.SetEnglishSwitchChangeNaviBack(false);
+
+            NavigationManager.NavigateTo(StateContainer.BackURL);
+        }
+
         if (UserSettings.IsTeacher)
         {
-            //   var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();            
+            //   var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
             //   TeacherID = teacher.Id;
             AllowEdit = true;
             AllowDelete = false;
@@ -239,6 +250,11 @@
 
     private void GotoQuestionnaire(int id)
     {
-        NavigationManager.NavigateTo("./EDIQuestionnaires/Demographics/" + id );
+        NavigationManager.NavigateTo("./EDIQuestionnaires/Demographics/" + id);
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }

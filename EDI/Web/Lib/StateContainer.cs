@@ -16,6 +16,8 @@ namespace EDI.Web.Lib
 
         public string CurrentURL { get; set; }
 
+        public bool OnEnglishSwitchChangeNaviBack { get; set; }
+
         public Teacher TeacherData { get; set; }
 
         public event Action OnChange;
@@ -43,6 +45,11 @@ namespace EDI.Web.Lib
         public void SetCurrentURL(string value)
         {
             CurrentURL = value;
+            NotifyStateChanged();
+        }
+        public void SetEnglishSwitchChangeNaviBack(bool value)
+        {
+            OnEnglishSwitchChangeNaviBack = value;
             NotifyStateChanged();
         }
 
