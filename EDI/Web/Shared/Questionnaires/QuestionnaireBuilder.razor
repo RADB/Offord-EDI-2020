@@ -49,6 +49,10 @@
             case InputTypes.QuestionHeader:
                 <QuestionHeaderPart Config=@config data="@teacherData"></QuestionHeaderPart>
                 break;
+            case InputTypes.RadioMatrix:
+                GetRadioMatrixHeader(config, teacherData);
+                <RadioMatrixPart RadioMatrixHeader="@RadioMatrixHeader" Config=@config data="@teacherData" ></RadioMatrixPart>
+                break;
             default:
                 <div class="card-body border">
                     <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
@@ -76,9 +80,7 @@
                 <SelectPart Config="@config" data="@teacherData"></SelectPart>
                 break;
             case InputTypes.RadioMatrix:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
-                </div>
+                // skip til we figure out how to filter more appropriately in RadioMatrixHeader
                 break;
             case InputTypes.NumberBox:
                 <NumberBox Config=@config data="@teacherData"></NumberBox>
@@ -125,7 +127,35 @@
     private string _Text;
     private string CurrentGroup = "";
 
+    private string RadioMatrixHeader = "";
+
+    private string RadioMatrixBody = "";
+
     protected override async Task OnInitializedAsync()
     {
+    }
+
+    protected void GetRadioMatrixHeader(QuestionnairesConfiguration config, Teacher data)
+    {
+
+        List<LookupSetOption> _LookupSetOptions = null;
+
+        if (config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(config.LookupEntityId.GetValueOrDefault(1));
+        }
+        RadioMatrixHeader = "<tr><th></th>";
+        foreach (var option in _LookupSetOptions)
+        {
+            RadioMatrixHeader += string.Format("{0}{1}{2}", "<th>", sharedService.GetOptionText(option), "</th>");
+        }
+        RadioMatrixHeader += "</tr>";
+    }
+
+    protected List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
+    {
+        // convert to loading the object rather than another list
+        return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
     }
 }

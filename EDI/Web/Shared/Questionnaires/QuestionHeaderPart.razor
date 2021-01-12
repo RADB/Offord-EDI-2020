@@ -4,22 +4,22 @@
     <h4>@((MarkupString)QuestionText)</h4>
 </div>
 
-@code
+    @code
 {
 
-    // option set
-    private List<LookupSetOption> _LookupSetOptions;
+        // option set
+        private List<LookupSetOption> _LookupSetOptions;
 
-    protected override async Task OnInitializedAsync()
-    {
-        // get the question and help text
-        GetQuestionText();
-        // check to see if question is readonly 
-        ReadonlyQuestion = Config.IsReadOnly;
-        if (Config.HasLookupEntity)
+        protected override async Task OnInitializedAsync()
         {
-            // get the lookupset options
-            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+            // get the question and help text
+            GetQuestionText();
+            // check to see if question is readonly
+            ReadonlyQuestion = Config.IsReadOnly;
+            if (Config.HasLookupEntity)
+            {
+                // get the lookupset options
+                _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+            }
         }
     }
-}

@@ -1,0 +1,90 @@
+﻿@inherits QuestionnaireBase;
+@using Syncfusion.Blazor.Buttons;
+@using static EDI.Web.Data.Enumerations;
+@inject ISharedService sharedService;
+@inject IReflectionService reflectionService;
+@inject ServiceContext dbContext;
+
+
+
+<tr>
+    <td>
+        @((MarkupString)QuestionText)
+    </td>
+    @foreach (var option in _LookupSetOptions)
+    {
+        <td>
+            @*@radioTitle = new Dictionary<string, object>(){{ "title", @sharedService.GetOptionText(option)}};*@
+            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+        </td>
+    }
+</tr>
+
+@*<div class="col-2">
+            <AuthorizeView Roles="Administrator">
+                <Authorized>
+                    <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                    @if (Config.HasHelp)
+                    {
+                        <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="Teacher">
+                <Authorized>
+                    @if (Config.HasHelp)
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
+        </div>
+    </div>*@
+
+@code
+{
+    [Parameter]
+    public string ProvinceName { get; set; }
+
+    [Parameter]
+    public int QuestionnaireId { get; set; }
+
+    [Parameter]
+    public string GroupName { get; set; }
+
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
+
+    private string currentValue { get; set; }
+
+    private Dictionary<string, object> radioTitle;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get the question and help text
+        GetQuestionText();
+        // check to see if question is readonly
+        ReadonlyQuestion = Config.IsReadOnly;
+
+        // Get the current value of the question
+        currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+
+        if (Config.HasLookupEntity)
+        {
+            // get the lookupset options
+            _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+        }
+    }
+
+    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        // save the data back to the object
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+
+        StateHasChanged();
+    }
+}
+
+
+
+

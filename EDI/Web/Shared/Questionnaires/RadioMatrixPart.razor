@@ -1,0 +1,74 @@
+﻿@inherits QuestionnaireBase;
+@inject IReflectionService reflectionService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+@inject ISharedService sharedService;
+@using Microsoft.EntityFrameworkCore;
+@using System.Linq.Dynamic.Core
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-9">
+        <table class="table table-striped">
+            <thead>
+                @((MarkupString)RadioMatrixHeader)
+            </thead>
+            <tbody>
+                @foreach(var config in matrixbodies)
+                { 
+                    <RadioMatrixBody Config="@config" data="@data" QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName></RadioMatrixBody>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public string RadioMatrixHeader { get; set; }
+
+
+    private string ProvinceName { get; set; }
+
+
+    private int QuestionnaireId { get; set; }
+
+
+    private string GroupName { get; set; }
+
+
+    private string predicate;
+
+
+    protected List<QuestionnairesConfiguration> matrixbodies { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            // set the groupname
+            ProvinceName = data.School.Province.English.Replace(" ", "");
+            GroupName = Config.GroupName;
+            QuestionnaireId = Config.QuestionnaireId;
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        // need to filter by yearid as well
+        predicate = "GroupName =\"" + GroupName + "\" AND QuestionnaireId = " + QuestionnaireId + " AND " + ProvinceName + " = true AND InputTypeId =2 AND IsHeader =false";
+        
+        // get the configuration
+        matrixbodies = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+        //Console.WriteLine(matrixbodies);
+    }
+
+}
