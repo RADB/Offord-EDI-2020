@@ -46,7 +46,7 @@
             StateContainer.OnChange += StateHasChanged;
             //var UserName = httpContextAccessor.HttpContext.User.Identity.Name;
 
-            //StateContainer.SetUsername(UserName);
+            StateContainer.SetUsername(UserSettings.UserName);
         }
     }
 
