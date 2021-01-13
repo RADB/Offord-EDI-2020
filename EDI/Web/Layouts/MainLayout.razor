@@ -7,6 +7,8 @@
 @inject AppIdentityDbContext identityContext;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
+@inject StateContainer StateContainer
+@implements IDisposable
 @using System.Linq.Dynamic.Core
 @using Serilog;
 
@@ -93,6 +95,10 @@ else
             UserSettings.UserName = user.Identity.Name;
             UserSettings.IsAuthenticated = true;
 
+            StateContainer.OnChange += StateHasChanged;
+
+            StateContainer.SetUsername(UserSettings.UserName);
+
             var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
             UserSettings.UserID = user1.Id;
             UserSettings.FirstName = user1.FirstName;
@@ -160,7 +166,7 @@ else
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex.Message);                    
+                    Log.Warning(ex.Message);
                     NavigationManager.NavigateTo("./login");
                 }
             }
@@ -190,5 +196,10 @@ else
         {
             this.CoordinatorSidebarObject.Sidebar.Toggle();
         }
+    }
+
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
     }
 }
