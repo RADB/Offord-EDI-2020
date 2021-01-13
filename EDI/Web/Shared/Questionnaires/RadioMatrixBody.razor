@@ -18,6 +18,28 @@
             <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
         </td>
     }
+    <AuthorizeView Roles="Administrator">
+        <Authorized>
+            <td>
+                <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                }
+            </td>
+        </Authorized>
+    </AuthorizeView>
+    <AuthorizeView Roles="Teacher">
+        <Authorized>
+
+            @if (Config.HasHelp)
+            {
+                <td>
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                </td>
+            }
+        </Authorized>
+    </AuthorizeView>
 </tr>
 
 @*<div class="col-2">
