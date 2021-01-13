@@ -2,6 +2,7 @@
 @using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject INewsFeedService newsFeedService;
@@ -63,7 +64,14 @@
         }
         else
         {
-            var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.OrderBy(p => p.Title).ToList());
+            var predicate = "p => p.YearId == " + UserSettings.YearId;
+            var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.Where(predicate).OrderBy(p => p.Title).ToList());
+
+            if (!UserSettings.IsAdmin)
+            {
+                predicate = "p => p." + UserSettings.Province + ".Value && p.YearId == " + UserSettings.YearId;
+                allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.Where(predicate).OrderBy(p => p.Title).ToList());
+            }
 
             List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
 

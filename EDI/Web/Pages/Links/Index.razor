@@ -2,6 +2,7 @@
 @using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ILinkService linkService;
@@ -64,6 +65,7 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private List<EDI.ApplicationCore.Entities.Link> alllinks { get; set; }
 
     SfGrid<LinkItemViewModel> Grid;
 
@@ -77,15 +79,19 @@
         }
         else
         {
-            var alllinks = await Task.FromResult(dbContext.Links.OrderBy(p => p.Sequence).ToList());
-
             if (UserSettings.IsCoordinator)
             {
-                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList());
+                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value && p.YearId == UserSettings.YearId).OrderBy(p => p.Sequence).ToList());
             }
             else if (UserSettings.IsTeacher)
             {
-                alllinks = await Task.FromResult(dbContext.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Sequence).ToList());
+                var predicate = "p => p.IsTeacherLink.Value && p." + UserSettings.Province + ".Value && p.YearId == " + UserSettings.YearId;
+                alllinks = await Task.FromResult(dbContext.Links.Where(predicate).OrderBy(p => p.Sequence).ToList());
+            }
+            else if (UserSettings.IsAdmin)
+            {
+                var predicate = "p => p.YearId == " + UserSettings.YearId;
+                alllinks = await Task.FromResult(dbContext.Links.Where(predicate).OrderBy(p => p.Sequence).ToList());
             }
 
             List<LinkItemViewModel> sivm = new List<LinkItemViewModel>();
@@ -151,7 +157,7 @@
         }
         if (args.Item.Id == "GridLink_delete")
         {
-            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");   
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
             var result = await modal.Result;
             ConfirmDeleteModalClosed(result);
         }

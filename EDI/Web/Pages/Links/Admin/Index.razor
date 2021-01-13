@@ -55,12 +55,12 @@
         {
             //get the list of links ordered by sequence for admins
             //Links = edi.Links.OrderBy(p => p.Sequence).ToList();
-            Links = dbContext.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value).OrderBy(p => p.Sequence).ToList();
+            Links = dbContext.Links.Where(p => p.IsAdminLink.HasValue && p.IsAdminLink.Value && p.YearId == UserSettings.YearId).OrderBy(p => p.Sequence).ToList();
         }
         else if (UserSettings.IsTeacher)
         {
             //get the list of links ordered by sequence for teachers
-            var predicate = "p => p.IsTeacherLink.Value && p." + UserSettings.Province + ".Value";
+            var predicate = "p => p.IsTeacherLink.Value && p." + UserSettings.Province + ".Value && p.YearId == " + UserSettings.YearId;
             //Links = dbContext.Links.Where(p => p.IsTeacherLink.HasValue && p.IsTeacherLink.Value).OrderBy(p => p.Sequence).ToList();
             Links = await Task.FromResult(dbContext.Links.Where(predicate).OrderBy(p => p.Sequence).ToList());
             //Links = dbContext.Links.Where(predicate).OrderBy(p => p.Sequence).ToList();
@@ -68,7 +68,7 @@
         else if (UserSettings.IsCoordinator)
         {
             //get the list of links ordered by sequence for coordinators
-            Links = dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value).OrderBy(p => p.Sequence).ToList();
+            Links = dbContext.Links.Where(p => p.IsCoordinatorLink.HasValue && p.IsCoordinatorLink.Value && p.YearId == UserSettings.YearId).OrderBy(p => p.Sequence).ToList();
         }
         //return base.OnInitializedAsync();
     }

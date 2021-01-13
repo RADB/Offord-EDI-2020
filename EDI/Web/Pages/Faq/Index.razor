@@ -82,17 +82,18 @@
         {
             if (UserSettings.IsCoordinator)
             {
-                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value).OrderBy(p => p.Sequence).ToList());
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsCoordinatorFaq.HasValue && p.IsCoordinatorFaq.Value && p.YearId == UserSettings.YearId).OrderBy(p => p.Sequence).ToList());
             }
             else if (UserSettings.IsTeacher)
             {
-                var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value";
+                var predicate = "p => p.IsTeacherFaq.Value && p." + UserSettings.Province + ".Value && p.YearId == " + UserSettings.YearId;
                 allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
                 //allfaqs = await Task.FromResult(dbContext.Faqs.Where(p => p.IsTeacherFaq.HasValue && p.IsTeacherFaq.Value).OrderBy(p => p.Sequence).ToList());
             }
             else if (UserSettings.IsAdmin)
             {
-                allfaqs = await Task.FromResult(dbContext.Faqs.OrderBy(p => p.Sequence).ToList());
+                var predicate = "p => p.YearId == " + UserSettings.YearId;
+                allfaqs = await Task.FromResult(dbContext.Faqs.Where(predicate).OrderBy(p => p.Sequence).ToList());
             }
 
             List<FaqItemViewModel> sivm = new List<FaqItemViewModel>();
