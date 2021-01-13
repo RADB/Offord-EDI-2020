@@ -22,10 +22,13 @@
                 <AccordionItem Expanded="true" CssClass="border border-primary">
                     <HeaderTemplate>
                         <div class="container-fluid">
-                            <div class="row">
-                                <!--<div class="col-6 border border-info"><h4>@sharedService.GetConfigText(config)</h4></div><div class="col-6 text-right border border-warning"><h4>Complete Status</h4></div>-->
-                                <div class="col-6"><h4>@aName</h4></div>
-                            </div>
+                            @if (aName.Length == 0)
+                            { 
+                                <div class="row">
+                                    <!--<div class="col-6 border border-info"><h4>@sharedService.GetConfigText(config)</h4></div><div class="col-6 text-right border border-warning"><h4>Complete Status</h4></div>-->
+                                    <div class="col-6"><h4>@aName</h4></div>
+                                </div>
+                             }
                         </div>
                     </HeaderTemplate>
                     <ContentTemplate>
@@ -35,7 +38,7 @@
                         }
                         <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
 
-                        <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                        <QuestionnaireQuestionHeader QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestionHeader>
                     </ContentTemplate>
                 </AccordionItem>
             }

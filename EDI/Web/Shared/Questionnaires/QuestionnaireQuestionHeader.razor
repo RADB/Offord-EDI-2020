@@ -1,0 +1,67 @@
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
+@inject ServiceContext dbContext;
+@inject ISharedService sharedService;
+@using Microsoft.EntityFrameworkCore;
+@using System.Linq.Dynamic.Core
+
+@if (questionHeaders.Count > 0)
+{
+    @foreach (var config in questionHeaders)
+    {
+        <div class="row">
+            <h4>@((MarkupString)sharedService.GetConfigText(config))</h4>
+        </div>
+        <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+    }
+}
+else
+{
+    // pass groupname that was passed in
+    <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+}
+
+
+@code
+{
+    [Parameter]
+    public Teacher teacherData { get; set; }
+
+    [Parameter]
+    public bool IsReadOnly { get; set; }
+
+    [Parameter]
+    public string ProvinceName { get; set; }
+
+    [Parameter]
+    public int QuestionnaireId { get; set; }
+
+    [Parameter]
+    public string GroupName { get; set; }
+
+    private List<QuestionnairesConfiguration> questionHeaders;
+
+    private string predicate;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        // need to filter by yearid as well
+        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId ==10";
+        // get the configuration
+        questionHeaders = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+        //Console.WriteLine(questions);
+    }
+}

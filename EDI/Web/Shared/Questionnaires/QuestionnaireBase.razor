@@ -21,7 +21,7 @@
     [Parameter]
     public Teacher data { get; set; }
 
-    public ModalPartViewModel ModalPartModel { get; set; }
+    //public ModalPartViewModel ModalPartModel { get; set; }
 
     public string QuestionText { get; set; }
     public string HelpTextEnglish { get; set; }
@@ -41,26 +41,7 @@
         return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
     }
 
-    //public void ShowModalPreviousVersion(string ModalTitle, string ModalBody)
-    //{
-    //    //_optionCount = 0;
-    //    ModalPartModel = new ModalPartViewModel();
-    //    ModalPartModel.ModalTitle = ModalTitle;
-    //    ModalPartModel.ModalBody = ModalBody;
-
-    //    var parameters = new ModalParameters();
-    //    parameters.Add("ModalPartModel", ModalPartModel);
-
-    //    /*parameters.Add("ModalTitle", ModalTitle);
-    //    parameters.Add("ModalBody", ModalBody);*/
-
-
-    //    var options = new ModalOptions();
-    //    options.HideHeader = false;
-    //    options.HideCloseButton = false;
-
-    //    var modal = ModalService.Show<ModalPart>(ModalTitle, parameters, options);
-    //}
+   
 
     protected async void ShowModal(string ModalTitle, string ModalBody)
     {

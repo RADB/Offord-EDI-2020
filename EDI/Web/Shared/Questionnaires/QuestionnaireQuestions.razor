@@ -66,7 +66,7 @@
     private void getData()
     {
         // need to filter by yearid as well
-        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=9 AND InputTypeId !=11";
+        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=9 AND InputTypeId !=10 AND InputTypeId !=11";
         // get the configuration
         questions = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
         //Console.WriteLine(questions);

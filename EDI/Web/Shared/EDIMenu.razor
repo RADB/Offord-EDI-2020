@@ -14,7 +14,7 @@
             string url = string.Format("EDIQuestionnaires/{0}/{1}", questionnaire.QuestionnaireName.Replace(" ", ""), ChildId);
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="@url" Match="NavLinkMatch.All">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> @questionnaire.QuestionnaireName
+                    <span class="@iconCSS" style="color:@color" aria-hidden="true"></span> @questionnaire.QuestionnaireName
                 </NavLink>
             </li>                    
         }
@@ -22,6 +22,9 @@
 </div>
 
 @code {
+    
+    private bool IsComplete { get; set; } = false;
+    // get this value from the entity field IsComplete on each 
 
     private int ChildId { get; set; }
 
@@ -29,6 +32,8 @@
     private List<Questionnaire> questionnaires;
     private bool collapseNavMenu = false;
     private bool expandMenu;
+    private string iconCSS = "";
+    private string color = "";
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -43,6 +48,7 @@
         expandMenu = !expandMenu;
     }
 
+
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -51,6 +57,17 @@
         }
         else
         {
+            if (IsComplete)
+            {
+                iconCSS = "far fa-check-square fa-2x";
+                color = "green";
+            }
+            else
+            {
+                iconCSS = "far fa-square fa-2x";
+                color = "red";
+            }
+
             GetChildId();
             //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
             getData();

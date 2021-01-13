@@ -5,7 +5,17 @@
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
-
+@*
+    Questionnaire Flow:
+        EDI Questionnaires\Section
+            QuestionnaireHeader (Type 9)
+                Questionnaire Groups (Type 11)
+                    Questionnaire Question Headers (Type 10)
+                        Questionnaire Questions (All other types)
+                            Questionnaire Builder
+                                Parts
+                                    Questions
+*@
 
 @foreach (var config in configs)
 {
@@ -44,16 +54,19 @@
                 @((MarkupString)string.Format("<div class=\"col\">{0}</div><div class=\"col-5 text-right\">{1}</div>", _Text, _label));
                 break;
             case InputTypes.GroupHeader:
-                <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />_Text</p>
-                </div>
+                @*<div class="card-body border">
+                        <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />_Text</p>
+                    </div>
+                        \\**implemented in QuestionnaireHeader
+                *@
+                Linebreak = false;
                 break;
             case InputTypes.QuestionHeader:
-                <QuestionHeaderPart Config=@config data="@teacherData"></QuestionHeaderPart>
+                <QuestionnaireQuestionHeader Config=@config data="@teacherData"></QuestionnaireQuestionHeader>
                 break;
             case InputTypes.RadioMatrix:
                 GetRadioMatrixHeader(config, teacherData);
-                <RadioMatrixPart RadioMatrixHeader="@RadioMatrixHeader" Config=@config data="@teacherData" ></RadioMatrixPart>
+                <RadioMatrixPart RadioMatrixHeader="@RadioMatrixHeader" Config=@config data="@teacherData"></RadioMatrixPart>
                 break;
             default:
                 <div class="card-body border">
@@ -68,8 +81,7 @@
 
         switch ((InputTypes)config.InputTypeId)
         {
-            case InputTypes.RadioButtons:
-                @*<RadioButtonsPart Config=@config data=@teacherData teacherModel="@teacherModel" CurrentValue=1></RadioButtonsPart>*@
+            case InputTypes.RadioButtons:                
                 <RadioPart Config="@config" data="@teacherData"></RadioPart>
                 break;
             case InputTypes.DatePicker:
@@ -111,7 +123,7 @@
         if ((configs.IndexOf(config) != configs.Count - 1) && Linebreak)
         {
             <hr />
-        }      
+        }
     }
 }
 
