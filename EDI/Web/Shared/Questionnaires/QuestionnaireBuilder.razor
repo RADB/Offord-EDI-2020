@@ -6,8 +6,10 @@
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
 
+
 @foreach (var config in configs)
 {
+    Linebreak = true;
     //if (CurrentGroup != config.GroupName)
     //{
     // get the current group
@@ -81,6 +83,7 @@
                 break;
             case InputTypes.RadioMatrix:
                 // skip til we figure out how to filter more appropriately in RadioMatrixHeader
+                Linebreak = false;
                 break;
             case InputTypes.NumberBox:
                 <NumberBox Config=@config data="@teacherData"></NumberBox>
@@ -105,10 +108,10 @@
         }
 
         // check to see if last config
-        if (configs.IndexOf(config) != configs.Count - 1)
+        if ((configs.IndexOf(config) != configs.Count - 1) && Linebreak)
         {
             <hr />
-        }
+        }      
     }
 }
 
@@ -130,6 +133,7 @@
     private string RadioMatrixHeader = "";
 
     private string RadioMatrixBody = "";
+    private bool Linebreak;
 
     protected override async Task OnInitializedAsync()
     {
