@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Data;
 using EDI.Web.Lib;
+using Blazored.SessionStorage;
 
 namespace EDI.Web.Controllers
 {
@@ -52,7 +53,8 @@ namespace EDI.Web.Controllers
 
             //var username = _httpContextAccessor.HttpContext.User.Identity.Name;
 
-            var username = _StateContainer.UserName;
+            //var username = _StateContainer.UserName;
+            var username = await sessionStorage.GetItemAsync<string>("Username");
 
             var user = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
 
