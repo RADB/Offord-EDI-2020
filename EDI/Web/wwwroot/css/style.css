@@ -2643,7 +2643,7 @@ tbody.collapse.show {
 
 .nav-link, .navbar .dropdown-toggle {
   display: block;
-  padding: 0.5rem 1rem; }
+  padding: 0.5rem 0.5rem; }
   .nav-link:focus, .navbar .dropdown-toggle:focus, .nav-link:hover, .navbar .dropdown-toggle:hover {
     text-decoration: none; }
   .nav-link.disabled, .navbar .disabled.dropdown-toggle {

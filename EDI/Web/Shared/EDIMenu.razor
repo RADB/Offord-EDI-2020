@@ -14,14 +14,29 @@
             string url = string.Format("EDIQuestionnaires/{0}/{1}", questionnaire.QuestionnaireName.Replace(" ", ""), ChildId);
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="@url" Match="NavLinkMatch.All">
-                    <span class="@iconCSS" style="color:@color" aria-hidden="true"></span> @questionnaire.QuestionnaireName
+                    <span class="@iconCSS" style="color:@color" aria-hidden="true"></span>&nbsp; @questionnaire.QuestionnaireName
                 </NavLink>
             </li>                    
         }
     </ul>
 </div>
+<div class="flex-column">
+    <input id="ShowLabels" type="checkbox" />
+    <label for="ShowLabels" title="Show Radio Labels">Show Radio Labels</label>
+    <br />
+    <select name="fontsize" id="fontsize">
+        <option value="1em">1</option>
+        <option value="1.25em">1.25</option>
+        <option value="1.5em">1.5</option>
+        <option value="1.75em">1.75</option>
+    </select>
+    <label for="fontsize" title="Font Size">Font Size</label>
+
+</div>
+
 
 @code {
+    // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
     
     private bool IsComplete { get; set; } = false;
     // get this value from the entity field IsComplete on each 
@@ -59,12 +74,12 @@
         {
             if (IsComplete)
             {
-                iconCSS = "far fa-check-square fa-2x";
+                iconCSS = "far fa-check-square fa-lg";
                 color = "green";
             }
             else
             {
-                iconCSS = "far fa-square fa-2x";
+                iconCSS = "far fa-square fa-lg";
                 color = "red";
             }
 
