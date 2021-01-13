@@ -136,12 +136,12 @@
         if (UserSettings.TeacherId > 0)
         {
             // SchoolId specified - get all teachers at school
-            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == UserSettings.TeacherId).OrderBy(p => p.Ediid).ToList());
+            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == UserSettings.TeacherId && p.YearId == UserSettings.YearId).OrderBy(p => p.Ediid).ToList());
         }
         else
         {
             // SchoolId specified - get all teachers at school
-            allchildren = await Task.FromResult(dbContext.Children.OrderBy(p => p.Ediid).ToList());
+            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.Ediid).ToList());
         }
 
         List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();

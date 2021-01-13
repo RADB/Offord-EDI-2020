@@ -77,7 +77,7 @@
         }
         else
         {
-            var allcoordinators = await Task.FromResult(dbContext.Coordinators.OrderBy(p => p.CoordinatorName).ToList());
+            var allcoordinators = await Task.FromResult(dbContext.Coordinators.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.CoordinatorName).ToList());
 
             List<CoordinatorItemViewModel> sivm = new List<CoordinatorItemViewModel>();
 

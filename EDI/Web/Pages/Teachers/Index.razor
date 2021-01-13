@@ -2,6 +2,7 @@
 @using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ITeacherService teacherService;
@@ -115,11 +116,12 @@
         }
         else
         {
-            var allteachers = await Task.FromResult(dbContext.Teachers.OrderBy(p => p.TeacherNumber).ToList());
+            var predicate = "p => p.YearId == " + UserSettings.YearId;
+            var allteachers = await Task.FromResult(dbContext.Teachers.Where(predicate).OrderBy(p => p.TeacherNumber).ToList());
 
             if (SchoolID > 0)
             {
-                allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == SchoolID).OrderBy(p => p.TeacherNumber).ToList());
+                allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == SchoolID && p.YearId == UserSettings.YearId).OrderBy(p => p.TeacherNumber).ToList());
             }
 
             List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();

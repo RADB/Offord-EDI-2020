@@ -2,6 +2,7 @@
 @using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IQuestionnaireService qcService;
@@ -106,7 +107,8 @@
         }
         else
         {
-            var allquestionnaireConfigurations = await Task.FromResult(dbContext.QuestionnairesConfigurations.OrderBy(p => p.QuestionNumber).ToList());
+            var predicate = "p => p.YearId == " + UserSettings.YearId;
+            var allquestionnaireConfigurations = await Task.FromResult(dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(p => p.QuestionNumber).ToList());
 
             if (QuestionnaireID > 0)
             {
