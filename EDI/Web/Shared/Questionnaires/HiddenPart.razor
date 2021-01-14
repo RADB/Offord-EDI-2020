@@ -7,6 +7,8 @@
 @inject UserSettings _userSettings;
 @*@oninput=@(args => onChange(args.Value.ToString(), Config.EntityField))*@
 <input type="hidden" id="@Config.EntityField" @bind="currentValue" />
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@using Newtonsoft.Json;
 
 @code
 {
@@ -23,8 +25,14 @@
             try
             {
                 reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
+                string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+                StateHasChanged();
             }
-            catch (Exception ex )
+            catch (Exception ex)
             {
                 // invoke async error on change - then goes through second time.
                 Console.WriteLine("Binding Hidden Object", ex);

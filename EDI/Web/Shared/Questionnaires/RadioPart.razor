@@ -1,48 +1,50 @@
 ﻿@inherits QuestionnaireBase;
 @using Syncfusion.Blazor.Buttons;
+@using Newtonsoft.Json;
 @using static EDI.Web.Data.Enumerations;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 
-    <div class="row">
-        <h4>@((MarkupString)QuestionText)</h4>
-    </div>
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-9">
-            @foreach (var option in _LookupSetOptions)
+<div class="row">
+    <h4>@((MarkupString)QuestionText)</h4>
+</div>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-9">
+        @foreach (var option in _LookupSetOptions)
+        {
+            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+
+            if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
             {
-                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
-
-                if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
-                {
-                    <br />
-                }
+                <br />
             }
-        </div>
-
-        <div class="col-2">
-            <AuthorizeView Roles="Administrator">
-                <Authorized>
-                    <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
-                    @if (Config.HasHelp)
-                    {
-                        <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
-                    }
-                </Authorized>
-            </AuthorizeView>
-            <AuthorizeView Roles="Teacher">
-                <Authorized>
-                    @if (Config.HasHelp)
-                    {
-                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
-                    }
-                </Authorized>
-            </AuthorizeView>
-        </div>
+        }
     </div>
+
+    <div class="col-2">
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+                <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Teacher">
+            <Authorized>
+                @if (Config.HasHelp)
+                {
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                }
+            </Authorized>
+        </AuthorizeView>
+    </div>
+</div>
 
 @code
 {
@@ -56,7 +58,7 @@
     {
         // get the question and help text
         GetQuestionText();
-        // check to see if question is readonly 
+        // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
 
         // Get the current value of the question
@@ -72,8 +74,15 @@
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         // save the data back to the object
-        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+       // JsonConvert.SerializeObject(data, Formatting.Indented,
 
+
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore     
+        });
+        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         StateHasChanged();
     }
 }

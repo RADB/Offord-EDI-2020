@@ -27,16 +27,16 @@
         predicate = "t=>t.Id == " + ChildId;
         //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
         teacherData = dbContext.Children.Where(predicate)
-                .Include(c => c.QuestionnairesDataDemographics)
-                .Include(c => c.QuestionnairesDataSectionAs)
-                .Include(c => c.QuestionnairesDataSectionBs)
-                .Include(c => c.QuestionnairesDataSectionCs)
-                .Include(c => c.QuestionnairesDataSectionDs)
-                .Include(c => c.QuestionnairesDataSectionEs)
-                .Include(c => c.Teacher)
-                .ThenInclude(t => t.School)
-                .ThenInclude(ts => ts.Province)
-                .Single().Teacher;
+             .Include(c => c.QuestionnairesDataDemographics)
+             .Include(c => c.QuestionnairesDataSectionAs)
+             .Include(c => c.QuestionnairesDataSectionBs)
+             .Include(c => c.QuestionnairesDataSectionCs)
+             .Include(c => c.QuestionnairesDataSectionDs)
+             .Include(c => c.QuestionnairesDataSectionEs)
+             .Include(c => c.Teacher)
+             .ThenInclude(t => t.School)
+             .ThenInclude(ts => ts.Province)
+             .Single().Teacher;
 
         if (UserSettings.IsAdmin)
         {
@@ -53,6 +53,8 @@
         }
         else if (UserSettings.IsTeacher)
         {
+
+
             IsReadOnly = false;
             province = UserSettings.Province;
         }

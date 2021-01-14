@@ -1,10 +1,12 @@
 ﻿@inherits QuestionnaireBase;
 @using Syncfusion.Blazor.Inputs;
 @using static EDI.Web.Data.Enumerations;
+@using Newtonsoft.Json;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 
 <div class="row">
@@ -27,7 +29,7 @@
                 {
                     <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
-                </Authorized>
+            </Authorized>
         </AuthorizeView>
         <AuthorizeView Roles="Teacher">
             <Authorized>
@@ -36,7 +38,7 @@
                     <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
             </Authorized>
-        </AuthorizeView>        
+        </AuthorizeView>
     </div>
 </div>
 
@@ -53,7 +55,7 @@
         // get the question and help text
         GetQuestionText();
 
-        // check to see if question is readonly 
+        // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
 
         // Get the current value of the question
@@ -74,6 +76,11 @@
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
             StateHasChanged();
         }
     }

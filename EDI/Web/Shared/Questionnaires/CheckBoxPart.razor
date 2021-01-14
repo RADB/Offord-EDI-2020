@@ -6,11 +6,12 @@
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
-
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@using Newtonsoft.Json;
 
 @*<div class="row">
-    <h4>@((MarkupString)QuestionText)</h4>
-</div>*@
+        <h4>@((MarkupString)QuestionText)</h4>
+    </div>*@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-9">
@@ -26,7 +27,7 @@
                 {
                     <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
-                </Authorized>
+            </Authorized>
         </AuthorizeView>
         <AuthorizeView Roles="Teacher">
             <Authorized>
@@ -35,13 +36,13 @@
                     <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
             </Authorized>
-        </AuthorizeView>        
+        </AuthorizeView>
     </div>
 </div>
 
 @code
-{    
-    // option set
+{
+        // option set
     private List<LookupSetOption> _LookupSetOptions;
 
     private bool currentValue { get; set; }
@@ -53,11 +54,11 @@
 
         // get the question and help text
         GetQuestionText();
-        // check to see if question is readonly 
+        // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
 
         // Get the current value of the question
-        bool.TryParse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField),out flag);
+        bool.TryParse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField), out flag);
 
         if (flag)
         {
@@ -81,6 +82,12 @@
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented);
+            //string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //});
+            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
             StateHasChanged();
         }
     }
