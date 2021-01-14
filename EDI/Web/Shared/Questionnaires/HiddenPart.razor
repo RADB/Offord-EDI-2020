@@ -19,7 +19,7 @@
     {
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
-        if (currentValue != _userSettings.Language)
+        if (currentValue != _userSettings.Language && Config.EntityField == "LanguageCompleted")
         {
             currentValue = _userSettings.Language;
             try
@@ -39,7 +39,6 @@
             }
         }
     }
-
     //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     //{
