@@ -26,7 +26,7 @@ namespace EDI.Web.Controllers
         public string basePath;
 
         [Obsolete]
-        public FileManagerController(IHostingEnvironment hostingEnvironment)
+        public FileManagerController(IWebHostEnvironment hostingEnvironment)
         {
             this.basePath = hostingEnvironment.WebRootPath;
             this.operation = new PhysicalFileProvider();

@@ -9,7 +9,7 @@
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor httpContextAccessor
-@inject IHostingEnvironment hostingEnvironment
+@inject IWebHostEnvironment hostingEnvironment
 @inject ServiceContext _dbContext
 @inject AppIdentityDbContext _identityContext
 
@@ -26,7 +26,7 @@
             </div>
             <div class="card-body">
                 <SfFileManager TValue="FileManagerDirectoryContent">
-                    <FileManagerToolbarSettings Items="@items" ></FileManagerToolbarSettings>
+                    <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
                     <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
                     <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
                                              GetImageUrl="/api/FileManager/GetImage"
@@ -71,7 +71,7 @@
 
                 string folderName = @"Data\Files\" + UserSettings.Province;
 
-                if(string.IsNullOrEmpty(UserSettings.Province))
+                if (string.IsNullOrEmpty(UserSettings.Province))
                     folderName = @"Data\Files\Others";
 
                 newPath = Path.Combine(basePath, folderName);
