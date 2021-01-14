@@ -71,7 +71,7 @@
 
                 string folderName = @"Data\Files\" + UserSettings.Province;
 
-                if(string.IsNullOrEmpty(UserSettings.Province))
+                if (string.IsNullOrEmpty(UserSettings.Province))
                     folderName = @"Data\Files\Others";
 
                 newPath = Path.Combine(basePath, folderName);
