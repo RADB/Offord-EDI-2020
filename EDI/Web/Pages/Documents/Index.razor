@@ -48,53 +48,57 @@
         }
         else
         {
-            var username = httpContextAccessor.HttpContext.User.Identity.Name;
+
+            //var username = httpContextAccessor.HttpContext.User.Identity.Name;
 
             string basePath = hostingEnvironment.ContentRootPath;
 
-            var user = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
+            //var user = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
 
-            var roleid = _identityContext.UserRoles.Where(p => p.UserId == user.Id).First().RoleId;
+            //var roleid = _identityContext.UserRoles.Where(p => p.UserId == user.Id).First().RoleId;
 
-            var role = _identityContext.Roles.Where(p => p.Id == roleid).FirstOrDefault();
+            //var role = _identityContext.Roles.Where(p => p.Id == roleid).FirstOrDefault();
 
-            var rolename = role.Name;
+            //var rolename = role.Name;
 
             string newPath = string.Empty;
 
-            if (rolename == "Administrator" || rolename == "Coordinator")
+            //if (rolename == "Administrator" || rolename == "Coordinator")
+            if (UserSettings.IsAdmin || UserSettings.IsCoordinator)
             {
                 string folderName = @"Data\Files\";
                 newPath = Path.Combine(basePath, folderName);
             }
-            else if (rolename == "Teacher")
+            else if (UserSettings.IsTeacher)
             {
-                var teacher = _dbContext.Teachers.Where(c => c.UserId == user.Id).FirstOrDefault();
+                string folderName = @"Data\Files\" + UserSettings.Province;
+                newPath = Path.Combine(basePath, folderName);
+                //var teacher = _dbContext.Teachers.Where(c => c.UserId == user.Id).FirstOrDefault();
 
-                if (teacher != null)
-                {
-                    var school = _dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
+                //if (teacher != null)
+                //{
+                //    var school = _dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
 
-                    var province = _dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+                //    var province = _dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
 
-                    string folderName = @"Data\Files\" + province.English;
-                    newPath = Path.Combine(basePath, folderName);
-                }
-                else
-                {
-                    if (user.ProvinceID.HasValue)
-                    {
-                        var province = _dbContext.Provinces.Where(p => p.Id == user.ProvinceID).FirstOrDefault();
+                //    string folderName = @"Data\Files\" + province.English;
+                //    newPath = Path.Combine(basePath, folderName);
+                //}
+                //else
+                //{
+                //    if (user.ProvinceID.HasValue)
+                //    {
+                //        var province = _dbContext.Provinces.Where(p => p.Id == user.ProvinceID).FirstOrDefault();
 
-                        string folderName = @"Data\Files\" + province.English;
-                        newPath = Path.Combine(basePath, folderName);
-                    }
-                    else
-                    {
-                        string folderName = @"Data\Files\Others";
-                        newPath = Path.Combine(basePath, folderName);
-                    }
-                }
+                //        string folderName = @"Data\Files\" + province.English;
+                //        newPath = Path.Combine(basePath, folderName);
+                //    }
+                //    else
+                //    {
+                //        string folderName = @"Data\Files\Others";
+                //        newPath = Path.Combine(basePath, folderName);
+                //    }
+                //}
             }
 
             if (!Directory.Exists(newPath))
@@ -103,7 +107,8 @@
             }
 
             string[] filesindirectory = Directory.GetDirectories(newPath);
-            if (rolename == "Administrator")
+            //if (rolename == "Administrator")
+            if (UserSettings.IsAdmin || UserSettings.IsCoordinator)
             {
                 foreach (string subdir in filesindirectory)
                 {
@@ -111,7 +116,8 @@
                     di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
                 }
             }
-            else if (rolename == "Coordinator")
+            //else if (rolename == "Coordinator")
+            else if (UserSettings.IsTeacher)
             {
                 foreach (string subdir in filesindirectory)
                 {
@@ -120,7 +126,10 @@
                 }
 
                 List<int> provinces = new List<int>();
-                var coordinate = _dbContext.Coordinators.Where(c => c.UserId == user.Id).FirstOrDefault();
+                //var coordinate = _dbContext.Coordinators.Where(c => c.UserId == user.Id).FirstOrDefault();
+
+
+                var coordinate = _dbContext.Coordinators.Where(c => c.UserId == UserSettings.TeacherId.ToString()).FirstOrDefault();
 
                 if (coordinate != null)
                 {

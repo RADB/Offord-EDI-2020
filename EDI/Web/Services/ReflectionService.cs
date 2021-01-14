@@ -34,6 +34,10 @@ namespace EDI.Web.Services
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, byte.Parse(value));
                 }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Int16")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, short.Parse(value));
+                }
                 else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Decimal")
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, decimal.Parse(value));
