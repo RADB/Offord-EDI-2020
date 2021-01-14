@@ -9,9 +9,9 @@
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor httpContextAccessor
-@inject IHostingEnvironment hostingEnvironment
-@inject ServiceContext _dbContext
-@inject AppIdentityDbContext _identityContext
+@inject IWebHostEnvironment hostingEnvironment
+@inject ServiceContext dbContext
+
 
 <div class="row">
     <div class="col-md-12">
@@ -26,7 +26,7 @@
             </div>
             <div class="card-body">
                 <SfFileManager TValue="FileManagerDirectoryContent">
-                    <FileManagerToolbarSettings Items="@items" ></FileManagerToolbarSettings>
+                    <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
                     <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
                     <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
                                              GetImageUrl="/api/FileManager/GetImage"
@@ -83,7 +83,7 @@
             }
 
             string[] filesindirectory = Directory.GetDirectories(newPath);
-            if (UserSettings.IsAdmin || UserSettings.IsCoordinator)
+            if (UserSettings.IsAdmin)
             {
                 foreach (string subdir in filesindirectory)
                 {
@@ -91,7 +91,7 @@
                     di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
                 }
             }
-            else if (UserSettings.IsTeacher)
+            else if (UserSettings.IsCoordinator)
             {
                 foreach (string subdir in filesindirectory)
                 {
@@ -99,47 +99,41 @@
                     di.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
                 }
 
-                List<int> provinces = new List<int>();
+                // get all provinces
+                List<string> provinces = new List<string>();
 
-                var coordinate = _dbContext.Coordinators.Where(c => c.UserId == UserSettings.TeacherId.ToString()).FirstOrDefault();
+                var coordinator = dbContext.Coordinators.Where(c => c.UserId == UserSettings.UserID)
+                         .Include(s => s.Sites)
+                         .ThenInclude(s => s.Schools)
+                         .ThenInclude(sp => sp.Province).Single();
 
-                if (coordinate != null)
+
+                foreach (var site in coordinator.Sites.ToList())
                 {
-                    var sites = _dbContext.Sites.Where(s => s.CoordinatorId == coordinate.Id).ToList();
-
-                    foreach (var site in sites)
+                    foreach (var school in site.Schools.ToList())
                     {
-                        var provinceids = _dbContext.Schools.Where(s => s.SiteId == site.Id).Select(s => s.ProvinceId).ToList();
-
-                        foreach (var pid in provinceids)
-                        {
-                            provinces.Add(pid);
-                        }
+                        provinces.Add(school.Province.English.Replace(" ", ""));
                     }
+                }
 
-                    var distinctprovinces = provinces.Distinct();
+                var distinctprovinces = provinces.Distinct();
 
-                    foreach (var pid in distinctprovinces)
+                foreach (var province in distinctprovinces)
+                {
+                    string folderName = @"Data\Files\" + province;
+                    string subfolder = Path.Combine(basePath, folderName);
+
+                    if (!Directory.Exists(subfolder))
                     {
-                        var province = _dbContext.Provinces.Where(p => p.Id == pid).FirstOrDefault();
-
-                        string folderName = @"Data\Files\" + province.English;
-                        string subfolder = Path.Combine(basePath, folderName);
-
-                        if (!Directory.Exists(subfolder))
-                        {
-                            Directory.CreateDirectory(subfolder);
-                        }
-                        else
-                        {
-                            DirectoryInfo di = new DirectoryInfo(subfolder);
-                            di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
-                        }
+                        Directory.CreateDirectory(subfolder);
+                    }
+                    else
+                    {
+                        DirectoryInfo di = new DirectoryInfo(subfolder);
+                        di.Attributes = FileAttributes.Directory | FileAttributes.Normal;
                     }
                 }
             }
-
-
             hostingEnvironment.WebRootPath = newPath;
         }
     }
