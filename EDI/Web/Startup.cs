@@ -228,7 +228,6 @@ namespace EDI.Web
             services.AddScoped<UserSettings>();
             services.AddScoped<LanguageSettings>();
             services.AddScoped<EDIAppSettings>();
-            services.AddScoped<FileManagerController>();
             // used to store various states
             services.AddSingleton<StateContainer>();
 

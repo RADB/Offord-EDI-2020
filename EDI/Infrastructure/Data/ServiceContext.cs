@@ -33,6 +33,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<FormConfigurations> FormConfigurations { get; set; }
         public virtual DbSet<SystemConfigurations> SystemConfigurations { get; set; }
         public virtual DbSet<MenuConfigurations> MenuConfigurations { get; set; }
+        public virtual DbSet<UserSessions> UserSessions { get; set; }
 
 
         /*EDI Data*/
@@ -116,6 +117,26 @@ namespace EDI.Infrastructure.Data
                 .IsUnicode(false);
 
             modelBuilder.Entity<SystemConfigurations>()
+                .Property(e => e.ModifiedBy)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserSessions>()
+                .Property(e => e.FieldName)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserSessions>()
+                .Property(e => e.FieldValue)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserSessions>()
+                .Property(e => e.UserID)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserSessions>()
+                .Property(e => e.CreatedBy)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<UserSessions>()
                 .Property(e => e.ModifiedBy)
                 .IsUnicode(false);
 

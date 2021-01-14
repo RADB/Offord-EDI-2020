@@ -7,6 +7,7 @@
 @inject AppIdentityDbContext identityContext;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
+@inject ISharedService sharedService;
 @using System.Linq.Dynamic.Core
 @using Serilog;
 
@@ -102,6 +103,8 @@ else
             UserSettings.IsTeacher = false;
             UserSettings.Language = user1.Language == null ? "English" : user1.Language;
 
+            //await sharedService.SaveUserSessions("UserName", UserSettings.UserName, UserSettings.UserID);
+
             var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
 
             List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
@@ -160,7 +163,7 @@ else
                 }
                 catch (Exception ex)
                 {
-                    Log.Warning(ex.Message);                    
+                    Log.Warning(ex.Message);
                     NavigationManager.NavigateTo("./login");
                 }
             }

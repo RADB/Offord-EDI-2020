@@ -63,6 +63,7 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<LookupSet> _lookupRepository;
         // private readonly IAsyncRepository<TeacherFeedbackForm> _feedbackRepository;
         private readonly IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
+        private readonly IAsyncRepository<UserSessions> _usersessionsRepository;
         private readonly IAsyncRepository<Translation> _tranRepository;
         private readonly UserManager<EDIApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -102,6 +103,7 @@ namespace EDI.Web.Services
             IAsyncRepository<InputType> inputTypeRepository,
             IAsyncRepository<Orientation> orientationRepository,
             IAsyncRepository<LookupSet> lookupRepository,
+            IAsyncRepository<UserSessions> usersessionsRepository,
         //    IAsyncRepository<LookupSetOption> lookupSetOptionsRepository,
         // IAsyncRepository<TeacherFeedbackForm> feedbackRepository,
         //IAsyncRepository<TeacherParticipationForm> participationRepository,
@@ -143,6 +145,7 @@ namespace EDI.Web.Services
             _questionnairesDataSectionE = questionnairesDataSectionE;
             _inputTypeRepository = inputTypeRepository;
             _orientationRepository = orientationRepository;
+            _usersessionsRepository = usersessionsRepository;
             _lookupRepository = lookupRepository;
             //_feedbackRepository = feedbackRepository;
             _profileRepository = profileRepository;
@@ -1419,7 +1422,7 @@ namespace EDI.Web.Services
                 return string.Empty;
             else
             {
-                if (_userSettings.Language == "French")
+                if (_userSettings.Language == "French" && _languageSettings.Translations != null)
                 {
                     var translate = _languageSettings.Translations.Where(e => e.English == english).FirstOrDefault();
                     if (translate == null || string.IsNullOrEmpty(translate.French))
@@ -1680,6 +1683,61 @@ namespace EDI.Web.Services
                 var vm = new List<SelectListItem>();
 
                 return vm;
+            }
+        }
+
+        public async Task SaveUserSessions(string fieldname, string fieldvalue, string userid)
+        {
+            Log.Information("SaveUserSessions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var usersession = await Task.FromResult(_dbContext.UserSessions.Where(s => s.FieldName == fieldname && s.UserID == userid).FirstOrDefault());
+
+                if(usersession != null)
+                {
+                    usersession.FieldValue = fieldvalue;
+                    await _usersessionsRepository.UpdateAsync(usersession);
+                }
+                else
+                {
+                    var session = new UserSessions();
+                    session.UserID = userid;
+                    session.FieldName = fieldname;
+                    session.FieldValue = fieldvalue;
+                    session.CreatedDate = DateTime.Now;
+                    session.CreatedBy = _userSettings.UserName;
+                    session.ModifiedDate = DateTime.Now;
+                    session.ModifiedBy = _userSettings.UserName;
+
+                    await _usersessionsRepository.AddAsync(session);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("SaveUserSessions failed:" + ex.Message);                
+            }
+        }
+
+        public async Task DeleteUserSessions( string userid)
+        {
+            Log.Information("DeleteUserSessions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var usersessions = await Task.FromResult(_dbContext.UserSessions.Where(s => s.UserID == userid).ToList());
+
+                if (usersessions != null && usersessions.Count > 0)
+                {
+                    foreach(var session in usersessions)
+                    {
+                        await _usersessionsRepository.DeleteAsync(session);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("DeleteUserSessions failed:" + ex.Message);
             }
         }
     }

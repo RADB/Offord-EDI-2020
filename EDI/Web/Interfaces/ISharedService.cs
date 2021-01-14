@@ -41,5 +41,7 @@ namespace EDI.Web.Interfaces
         Task<IEnumerable<SelectListItem>> GetFields(string entityname);
         IEnumerable<SelectListItem> GetOrientations();
         IEnumerable<SelectListItem> GetLookups();
+        Task SaveUserSessions(string fieldname, string fieldvalue, string userid);
+        Task DeleteUserSessions(string userid);
     }
 }

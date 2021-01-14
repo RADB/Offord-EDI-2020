@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Microsoft.AspNetCore.Components.Authorization;
+using EDI.Web.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace Web.Controllers
 {
@@ -25,14 +27,18 @@ namespace Web.Controllers
         private EDIAppSettings EDIAppSettings { get; set; }
         private readonly ServiceContext _dbContext;
         private readonly AppIdentityDbContext _identityContext;
+        private readonly ISharedService _sharedService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public SignInController(
             UserManager<EDIApplicationUser> userManager,
             SignInManager<EDIApplicationUser> signInManager,
             IEmailSender emailSender,
+            ISharedService sharedService,
             IOptions<EDIAppSettings> settings,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            IHttpContextAccessor httpContextAccessor,
             IModalService modal)
         {
             _userManager = userManager;
@@ -42,6 +48,8 @@ namespace Web.Controllers
             EDIAppSettings = settings.Value;
             _dbContext = dbContext;
             _identityContext = identityContext;
+            _sharedService = sharedService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("/signin")]
@@ -95,6 +103,13 @@ namespace Web.Controllers
         [HttpPost("/signout")]
         public async Task<IActionResult> Logout()
         {
+            //var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            //if(!string.IsNullOrEmpty(username))
+            //{
+            //    var user = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
+            //    await _sharedService.DeleteUserSessions(user.Id);
+            //}
+
             await _signInManager.SignOutAsync();
             return Redirect("./");
         }
