@@ -61,12 +61,12 @@
                 string folderName = @"Data\Files\";
                 newPath = Path.Combine(basePath, folderName);
 
-                items = new string[] { "New folder", "Upload", "Sort By", "Refresh" };
+                items = new string[] { "New folder", "Upload", "Delete", "Rename", "Sort By", "Refresh", "View", "Details" };
                 showcontext = false;
             }
             else if (UserSettings.IsTeacher)
             {
-                items = new string[] { "Sort By", "Refresh" };
+                items = new string[] { "Sort By", "Refresh", "View", "Details" };
                 showcontext = false;
 
                 string folderName = @"Data\Files\" + UserSettings.Province;
