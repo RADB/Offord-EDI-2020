@@ -1,6 +1,18 @@
-﻿@inject NavigationManager NavigationManager;
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Syncfusion.Blazor.Buttons;
+@using EDI.Web.Extensions;
+@using EDI.ApplicationCore.Models;
+@using Newtonsoft.Json;
+@using Serilog;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 @inject ServiceContext dbContext;
+@inject IToastService toastService;
+@inject IAccountService accountService;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+
 <div class="pl-4 navbar navbar-dark">
     <p class="navbar-brand">Questionnaires</p>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -16,7 +28,8 @@
                 <NavLink class="nav-link" href="@url" Match="NavLinkMatch.All">
                     <span class="@iconCSS" style="color:@color" aria-hidden="true"></span>&nbsp; @questionnaire.QuestionnaireName
                 </NavLink>
-            </li>                    
+            </li>
+
         }
     </ul>
 </div>
@@ -34,8 +47,9 @@
     <label for="fontsize" title="Font Size">Font Size</label>
     <br />
 
-    <input id="Language" type="checkbox" />
-    <label for="Language" title="English\French">English\French</label>
+
+    <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
+    @*<label for="Language" title="English\French">English\French</label>*@
     <br />
 
     <input id="Validation" type="checkbox" />
@@ -46,9 +60,10 @@
 
 @code {
     // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
-    
+    private Boolean isFrench { get; set; }
+
     private bool IsComplete { get; set; } = false;
-    // get this value from the entity field IsComplete on each 
+    // get this value from the entity field IsComplete on each
 
     private int ChildId { get; set; }
 
@@ -91,6 +106,10 @@
                 iconCSS = "far fa-square fa-lg";
                 color = "red";
             }
+            if (UserSettings.Language == "English")
+                isFrench = false;
+            else
+                isFrench = true;
 
             GetChildId();
             //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
@@ -123,9 +142,64 @@
         }
 
     }
-    //var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-    //    if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("initialCount", out var _initialCount))
-    //    {
-    //        currentCount = Convert.ToInt32(_initialCount);
-    //    }
+
+
+    private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            UserSettings.Language = "French";
+        }
+        else
+            UserSettings.Language = "English";
+
+        await accountService.UpdateUserLanguageAsync(UserSettings);
+
+        var url = NavigationManager.Uri;
+        //NavigationManager.NavigateTo(url);
+
+        await sessionStorage.SetItemAsync<string>("CurrentURL", url);
+        await sessionStorage.SetItemAsync<bool>("SetEnglishSwitchChangeNaviBack", true);
+
+        //StateContainer.SetCurrentURL(url);
+        //StateContainer.SetEnglishSwitchChangeNaviBack(true);
+
+        Save();
+        NavigationManager.NavigateTo("./children/index");
+        await InvokeAsync(() => StateHasChanged());
+    }
+
+    private async void Save()
+    {
+        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+        //if (StateContainer.TeacherData != null)
+        if (teacherJson != null && teacherJson.Length > 0)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            {
+                //servicecontext.Update(StateContainer.TeacherData);
+
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                servicecontext.Update(tempTeacher);
+                try
+                {
+                    await servicecontext.SaveChangesAsync();
+                    //StateContainer.SetTeacher(null);
+                    await sessionStorage.SetItemAsync<string>("Teacher", "");
+
+                    toastService.ShowSuccess("Data Saved Successfully!");
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+                }
+            }
+        }
+    }
 }

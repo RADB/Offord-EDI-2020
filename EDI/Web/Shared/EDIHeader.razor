@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="col-4 text-right align-self-center  text-nowrap">
-            <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
+            @*<SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>*@
             <AuthorizeView Roles="Teacher">
                 <Authorized>
                     <button class="btn btn-success" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
@@ -75,7 +75,7 @@
     {
         var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
         //if (StateContainer.TeacherData != null)
-        if (teacherJson.Length > 0)
+        if (teacherJson != null && teacherJson.Length > 0)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
             optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
@@ -123,14 +123,15 @@
 
         var url = NavigationManager.Uri;
         //NavigationManager.NavigateTo(url);
-        StateContainer.SetCurrentURL(url);
-        StateContainer.SetEnglishSwitchChangeNaviBack(true);
+
+        await sessionStorage.SetItemAsync<string>("CurrentURL", "");
+        await sessionStorage.SetItemAsync<bool>("SetEnglishSwitchChangeNaviBack", true);
+
+        //StateContainer.SetCurrentURL(url);
+        //StateContainer.SetEnglishSwitchChangeNaviBack(true);
 
         Save();
         NavigationManager.NavigateTo("./children/index");
-
-        //StateHasChanged();
         await InvokeAsync(() => StateHasChanged());
-        //await InvokeAsync(StateHasChanged); or await InvokeAsync(() => StateHasChanged());
     }
 }

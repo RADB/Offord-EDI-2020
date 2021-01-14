@@ -12,8 +12,7 @@
 @inject AppIdentityDbContext identityContext;
 @inject IMathService mathService;
 @inject UserSettings UserSettings;
-@inject StateContainer StateContainer;
-@implements IDisposable;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 <div class="row">
     <div class="col-md-12">
@@ -114,13 +113,19 @@
             NavigationManager.NavigateTo("./dashboard/index");
         }
 
-        if(StateContainer.OnEnglishSwitchChangeNaviBack)
-        {
-            StateContainer.SetBackURL(StateContainer.CurrentURL);
-            StateContainer.SetCurrentURL(NavigationManager.Uri);
-            StateContainer.SetEnglishSwitchChangeNaviBack(false);
 
-            NavigationManager.NavigateTo(StateContainer.BackURL);
+        var OnEnglishSwitchChangeNaviBack = await sessionStorage.GetItemAsync<bool>("SetEnglishSwitchChangeNaviBack");
+
+        if (OnEnglishSwitchChangeNaviBack)
+        {
+            var backurl = await sessionStorage.GetItemAsync<string>("CurrentURL");
+
+            await sessionStorage.SetItemAsync<string>("BackURL", backurl);
+            await sessionStorage.SetItemAsync<string>("CurrentURL", NavigationManager.Uri);
+
+            await sessionStorage.SetItemAsync<bool>("SetEnglishSwitchChangeNaviBack", false);
+
+            NavigationManager.NavigateTo(backurl);
         }
 
         if (UserSettings.IsTeacher)
@@ -251,10 +256,5 @@
     private void GotoQuestionnaire(int id)
     {
         NavigationManager.NavigateTo("./EDIQuestionnaires/Demographics/" + id);
-    }
-
-    public void Dispose()
-    {
-        StateContainer.OnChange -= StateHasChanged;
     }
 }
