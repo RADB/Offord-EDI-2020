@@ -2,6 +2,7 @@
 @using Syncfusion.Blazor.Buttons;
 @using EDI.Web.Extensions;
 @using EDI.ApplicationCore.Models;
+@using Newtonsoft.Json;
 @using Serilog;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
@@ -11,8 +12,8 @@
 @inject IToastService toastService;
 @inject StateContainer StateContainer;
 @inject IAccountService accountService;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @implements IDisposable;
-
 
 
 <div class="container-fluid p-1 border border-secondary EDIHeader">
@@ -72,17 +73,24 @@
 
     private async void Save()
     {
-        if (StateContainer.TeacherData != null)
+        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+        //if (StateContainer.TeacherData != null)
+        if (teacherJson.Length > 0)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
             optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
             using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
             {
-                servicecontext.Update(StateContainer.TeacherData);
+                //servicecontext.Update(StateContainer.TeacherData);
+
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                servicecontext.Update(tempTeacher);
                 try
                 {
                     await servicecontext.SaveChangesAsync();
-                    StateContainer.SetTeacher(null);
+                    //StateContainer.SetTeacher(null);
+                    await sessionStorage.SetItemAsync<string>("Teacher", "");
 
                     toastService.ShowSuccess("Data Saved Successfully!");
                     StateHasChanged();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,6 +30,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual Country Country { get; set; }
 
         public virtual ProvinceType ProvinceType { get; set; }
+        [JsonIgnore]
         public virtual ICollection<School> Schools { get; set; }
         //public virtual ICollection<FileImport> FileImports { get; set; }
     }

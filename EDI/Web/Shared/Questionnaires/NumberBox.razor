@@ -5,7 +5,8 @@
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
-
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@using Newtonsoft.Json;
 <div class="row">
     <h4>@((MarkupString)QuestionText)</h4>
 </div>
@@ -15,7 +16,7 @@
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
 
         <SfNumericTextBox TValue="int?" Readonly="@ReadonlyQuestion" Min=@Config.Min Max=@Config.Max Step=@step Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
-          @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
+            @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
         </SfNumericTextBox>
     </div>
 
@@ -57,7 +58,7 @@
         // get the question and help text
         GetQuestionText();
 
-        // check to see if question is readonly 
+        // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
 
         // Get the current value of the question - parse will throw null value exception - otherwise use Convert.ToInt32
@@ -80,12 +81,17 @@
 
     }
 
-    public void OnChange(Syncfusion.Blazor.Inputs.ChangeEventArgs<int?> e)
+    public async void OnChange(Syncfusion.Blazor.Inputs.ChangeEventArgs<int?> e)
     {
         if (e.Value != null)
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
             StateHasChanged();
         }
     }
@@ -96,6 +102,11 @@
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
             StateHasChanged();
         }
     }

@@ -6,6 +6,8 @@
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
 @inject NavigationManager NavigationManager
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@using Newtonsoft.Json;
 
 
 <div class="row">
@@ -57,8 +59,8 @@
 
     public string[] header { get; set; }
 
-    private List<ToolbarItemModel>Tools = new List<ToolbarItemModel>()
-        {
+    private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
+    {
         new ToolbarItemModel() { Command = ToolbarCommand.Bold },
         new ToolbarItemModel() { Command = ToolbarCommand.Italic },
         new ToolbarItemModel() { Command = ToolbarCommand.Underline },
@@ -136,10 +138,15 @@
         }
     }
 
-    private void OnChange()
+    private async void OnChange()
     {
         // save the data back to the object
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, RteObj.Value.ToString());
+        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         StateHasChanged();
     }
 }

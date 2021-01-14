@@ -44,10 +44,10 @@
         }
         else
         {
-            await sessionStorage.SetItemAsync("Username", UserSettings.UserName);
+            //await sessionStorage.SetItemAsync("Username", UserSettings.UserName);
             
-            //StateContainer.OnChange += StateHasChanged;
-            //var UserName = httpContextAccessor.HttpContext.User.Identity.Name;
+            StateContainer.OnChange += StateHasChanged;
+            var UserName = httpContextAccessor.HttpContext.User.Identity.Name;
 
             //StateContainer.SetUsername(UserSettings.UserName);
         }

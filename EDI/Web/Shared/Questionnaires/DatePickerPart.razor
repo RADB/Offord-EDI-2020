@@ -5,7 +5,8 @@
 
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
-
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@using Newtonsoft.Json;
 
 <div class="row">
     <h4>@((MarkupString)QuestionText)</h4>
@@ -54,7 +55,7 @@
         // get the question and help text
         GetQuestionText();
 
-        // check to see if question is readonly 
+        // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
 
         try
@@ -81,10 +82,15 @@
 
         StateHasChanged();
     }
-    private void OnChange(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> e)
+    private async void OnChange(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> e)
     {
         // save the data back to the object
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         StateHasChanged();
     }
 }

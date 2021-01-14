@@ -6,7 +6,6 @@
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
-
 @inject NavigationManager NavigationManager
 @inject StateContainer StateContainer
 @implements IDisposable
@@ -14,7 +13,7 @@
 @code
 {
     [CascadingParameter] public IModalService ModalService { get; set; }
-    
+
     [Parameter]
     public QuestionnairesConfiguration Config { get; set; }
 
@@ -41,7 +40,7 @@
         return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
     }
 
-   
+
 
     protected async void ShowModal(string ModalTitle, string ModalBody)
     {
@@ -53,7 +52,7 @@
         var parameters = new ModalParameters();
         parameters.Add(nameof(CustomBootstrapModal.ModalBody), ModalBody);
         parameters.Add(nameof(CustomBootstrapModal.ModalTitle), ModalTitle);
-        var modal = ModalService.Show<CustomBootstrapModal>(ModalTitle,parameters, options);
+        var modal = ModalService.Show<CustomBootstrapModal>(ModalTitle, parameters, options);
         var result = await modal.Result;
     }
 

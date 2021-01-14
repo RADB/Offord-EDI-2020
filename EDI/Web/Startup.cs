@@ -18,6 +18,7 @@ using EDI.Web.Lib;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
+using Newtonsoft.Json.Serialization;
+
 using Syncfusion.Blazor;
 
 using Serilog; 
@@ -44,7 +47,8 @@ using System.Linq.Dynamic.Core;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
-using Microsoft.AspNetCore.Components.Authorization;
+
+
 
 namespace EDI.Web
 {
@@ -117,7 +121,8 @@ namespace EDI.Web
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddScoped(typeof(IAsyncIdentityRepository), typeof(EfIdentityRepository));
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, EmailSender>();            
+            //services.AddControllers().AddJsonOptions(option => { option.JsonSerializerOptions.PropertyNamingPolicy = null; option.JsonSerializerOptions.MaxDepth = 256; });
 
             ConfigureApplicationServices(services);
             
@@ -152,6 +157,10 @@ namespace EDI.Web
             services.AddBlazoredToast();
             services.AddBlazoredModal();
             services.AddSyncfusionBlazor();
+            services.AddControllers().AddNewtonsoftJson(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;                                
+            });                            
         }
 
 
@@ -230,9 +239,7 @@ namespace EDI.Web
             services.AddScoped<EDIAppSettings>();
             services.AddScoped<FileManagerController>();
             // used to store various states
-            services.AddSingleton<StateContainer>();
-
-
+            services.AddScoped<StateContainer>();
         }
         private static void ConfigureSession(IServiceCollection services)
         {

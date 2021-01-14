@@ -10,12 +10,12 @@ namespace EDI.Web.Services
 {
     public class ReflectionService : IReflectionService
     {
-        private StateContainer _StateContainer { get; set; }
+        //private StateContainer _StateContainer { get; set; }
 
-        public ReflectionService(StateContainer StateContainer)
-        {
-            _StateContainer = StateContainer;
-        }
+        //public ReflectionService(StateContainer StateContainer)
+        //{
+        //    _StateContainer = StateContainer;
+        //}
 
         //abstract for generic future use
         public void SetFieldValue(object obj, string fieldName, string value)
@@ -98,7 +98,7 @@ namespace EDI.Web.Services
             var obj = GetEntity(data, entityName);
             SetFieldValue(obj, fieldName, value);
 
-            _StateContainer.SetTeacher(data);
+            //_StateContainer.SetTeacher(data);
         }
 
         public string GetFieldValue(Teacher data, string entityName, string fieldName)
