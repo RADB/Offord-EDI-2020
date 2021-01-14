@@ -9,11 +9,9 @@
 @inject UserSettings UserSettings;
 @inject NavigationManager NavigationManager;
 @inject IHttpContextAccessor httpContextAccessor
-@inject StateContainer StateContainer
 @inject IHostingEnvironment hostingEnvironment
 @inject ServiceContext _dbContext
 @inject AppIdentityDbContext _identityContext
-@implements IDisposable
 
 <div class="row">
     <div class="col-md-12">
@@ -168,10 +166,5 @@
     private string Translate(string word)
     {
         return sharedService.GetTranslate(word);
-    }
-
-    public void Dispose()
-    {
-        StateContainer.OnChange -= StateHasChanged;
     }
 }
