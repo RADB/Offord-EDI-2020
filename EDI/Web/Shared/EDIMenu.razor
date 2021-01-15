@@ -33,233 +33,267 @@
         }
     </ul>
 </div>
-<div class="flex-column">
-    <input id="ShowLabels" type="checkbox" />
-    <label for="ShowLabels" title="Radio Labels">Radio Labels</label>
 
-    <SfCheckBox CssClass="handle-text" @bind-Checked="@RadioLabels" @onchange="@((ev) => CheckBoxValueChange(ev))" />
-
-    <br />
-
-    <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e =>OptionChange(e))">
-        <option value="1em">1</option>
-        <option value="1.25em">1.25</option>
-        <option value="1.5em">1.5</option>
-        <option value="1.75em">1.75</option>
-    </select>
-    <label for="fontsize" title="Font Size">Font Size</label>
-    <br />
-
-
-    <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
-
-    <br />
-
-    <input id="Validation" type="checkbox" />
-    <label for="Validation" title="Show Validation">Validation</label>
-    <br />
+<div class="d-flex flex-column p-3">
+    <div class="p-2">
+        <h3>Options:</h3>
+    </div>
+    <div class="p-2">
+        <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnLanguageChange(e))"></SfSwitch>
+    </div>
+    <div class="p-2">
+        <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
+    </div>
+    <div class="p-2">
+        <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch>
+    </div>
+    <div class="p-2">
+        <label for="fontsize" title="Font Size">Font Size:</label>
+        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e =>OptionChange(e))">
+            <option value="1em">1</option>
+            <option value="1.25em">1.25</option>
+            <option value="1.5em">1.5</option>
+            <option value="1.75em">1.75</option>
+        </select>
+    </div>
 </div>
 
 
-@code {
-    // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
-    private Boolean isFrench { get; set; }
+    @code {
+        // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
+        private Boolean isFrench { get; set; }
 
-    private Boolean RadioLabels { get; set; }
+        private Boolean RadioLabels { get; set; }
+        private Boolean Validation { get; set; }
 
-    private string LabelFonts { get; set; }
+        private string LabelFonts { get; set; }
 
-    private bool IsComplete { get; set; } = false;
-    // get this value from the entity field IsComplete on each
+        private bool IsComplete { get; set; } = false;
+        // get this value from the entity field IsComplete on each
 
-    private int ChildId { get; set; }
+        private int ChildId { get; set; }
 
-    private bool isChildQuestionnaire;
-    private List<Questionnaire> questionnaires;
-    private bool collapseNavMenu = false;
-    private bool expandMenu;
-    private string iconCSS = "";
-    private string color = "";
+        private bool isChildQuestionnaire;
+        private List<Questionnaire> questionnaires;
+        private bool collapseNavMenu = false;
+        private bool expandMenu;
+        private string iconCSS = "";
+        private string color = "";
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-        expandMenu = false;
-    }
-
-    private void ToggleSubmenu()
-    {
-        expandMenu = !expandMenu;
-    }
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (!UserSettings.IsAuthenticated)
+        private void ToggleNavMenu()
         {
-            NavigationManager.NavigateTo("./login");
+            collapseNavMenu = !collapseNavMenu;
+            expandMenu = false;
         }
-        else
+
+        private void ToggleSubmenu()
         {
-            if (IsComplete)
+            expandMenu = !expandMenu;
+        }
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            if (!UserSettings.IsAuthenticated)
             {
-                iconCSS = "far fa-check-square fa-lg";
-                color = "green";
+                NavigationManager.NavigateTo("./login");
             }
             else
             {
-                iconCSS = "far fa-square fa-lg";
-                color = "red";
+                if (IsComplete)
+                {
+                    iconCSS = "far fa-check-square fa-lg";
+                    color = "green";
+                }
+                else
+                {
+                    iconCSS = "far fa-square fa-lg";
+                    color = "red";
+                }
+
+                if (UserSettings.Language == "English")
+                    isFrench = false;
+                else
+                    isFrench = true;
+
+                RadioLabels = UserSettings.RadioLabels;
+
+                LabelFonts = UserSettings.LabelFonts;
+
+                GetChildId();
+                //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+                getData();
             }
-
-            if (UserSettings.Language == "English")
-                isFrench = false;
-            else
-                isFrench = true;
-
-            RadioLabels = UserSettings.RadioLabels;
-
-            LabelFonts = UserSettings.LabelFonts;
-
-            GetChildId();
-            //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
-            getData();
         }
-    }
 
-    private void getData()
-    {
-        questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
-    }
-
-    private void GetChildId()
-    {
-        Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (uri.Segments.Count() != 4)
+        private void getData()
         {
-            NavigationManager.NavigateTo("./children/index");
+            questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
         }
-        else
+
+        private void GetChildId()
         {
-            if (!Int32.TryParse(uri.Segments[3], out int studentId))
+            Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            if (uri.Segments.Count() != 4)
             {
                 NavigationManager.NavigateTo("./children/index");
             }
             else
             {
-                ChildId = studentId;
+                if (!Int32.TryParse(uri.Segments[3], out int studentId))
+                {
+                    NavigationManager.NavigateTo("./children/index");
+                }
+                else
+                {
+                    ChildId = studentId;
+                }
             }
+
         }
 
-    }
 
 
-    private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
-    {
-        if (e.Checked)
+
+        private async void Save()
         {
-            UserSettings.Language = "French";
-        }
-        else
-            UserSettings.Language = "English";
-
-        await accountService.UpdateUserLanguageAsync(UserSettings);
-
-        var url = NavigationManager.Uri;
-
-        UserSettings.CurrentURL = url;
-        UserSettings.RequiredNaviBack = true;
-
-        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
-        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
-
-        Save();
-        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
-        await InvokeAsync(() => StateHasChanged());
-    }
-
-    private async void Save()
-    {
-        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-        //if (StateContainer.TeacherData != null)
-        if (teacherJson != null && teacherJson.Length > 0)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+            //if (StateContainer.TeacherData != null)
+            if (teacherJson != null && teacherJson.Length > 0)
             {
-                //servicecontext.Update(StateContainer.TeacherData);
-
-                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
-
-                servicecontext.Update(tempTeacher);
-                try
+                var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+                optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+                using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
                 {
-                    await servicecontext.SaveChangesAsync();
-                    //StateContainer.SetTeacher(null);
-                    await sessionStorage.SetItemAsync<string>("Teacher", "");
+                    //servicecontext.Update(StateContainer.TeacherData);
 
-                    toastService.ShowSuccess("Data Saved Successfully!");
-                    StateHasChanged();
-                }
-                catch (Exception ex)
-                {
-                    toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+                    servicecontext.Update(tempTeacher);
+                    try
+                    {
+                        await servicecontext.SaveChangesAsync();
+                        //StateContainer.SetTeacher(null);
+                        await sessionStorage.SetItemAsync<string>("Teacher", "");
+
+                        toastService.ShowSuccess("Data Saved Successfully!");
+                        StateHasChanged();
+                    }
+                    catch (Exception ex)
+                    {
+                        toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+                        sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+                    }
                 }
             }
         }
-    }
 
-    private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
-
-        RadioLabels = false;
-
-        if (bool.TryParse(selectedString, out bool value))
+        private async void BounceBack(Boolean UseSession)
         {
-            RadioLabels = value;
+            var url = NavigationManager.Uri;
+            string navigateTo;
+
+            if(UseSession)
+            {
+                await sessionStorage.SetItemAsync<string>("CurrentUrl", url);
+                //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
+                //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
+                navigateTo = "./EDIQuestionnaires/SectionZ";
+            }
+            else
+            {
+                UserSettings.CurrentURL = url;
+                UserSettings.RequiredNaviBack = true;
+                navigateTo = "./EDIQuestionnaires/SectionX";
+            }
+
+            Save();
+            NavigationManager.NavigateTo(navigateTo);
+            //await InvokeAsync(() => StateHasChanged());
+
+        }
+
+
+        private async void OnLabelsChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+        {
+            if (e.Checked)
+            {
+                RadioLabels = true;
+            }
+            else
+                RadioLabels = false;
 
             UserSettings.RadioLabels = RadioLabels;
 
-            var url = NavigationManager.Uri;
+            BounceBack(true);
+        }
 
-            UserSettings.CurrentURL = url;
-            UserSettings.RequiredNaviBack = true;
+        private async void OnLanguageChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+        {
+            if (e.Checked)
+            {
+                UserSettings.Language = "French";
+            }
+            else
+                UserSettings.Language = "English";
 
-            //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
-            //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
-            //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
+            await accountService.UpdateUserLanguageAsync(UserSettings);
 
-            Save();
-            NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
-            await InvokeAsync(() => StateHasChanged());
+            BounceBack(true);
+        }
+
+        private async void OnValidationChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+        {
+            if (e.Checked)
+            {
+                Validation = true;
+            }
+            else
+                Validation = false;
+
+            UserSettings.Validation = Validation;
+
+            BounceBack(true);
+        }
+
+        //private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+        //{
+        //    string selectedString = e.Value.ToString();
+
+        //    RadioLabels = false;
+
+        //    if (bool.TryParse(selectedString, out bool value))
+        //    {
+        //        RadioLabels = value;
+
+        //        UserSettings.RadioLabels = RadioLabels;
+
+        //        var url = NavigationManager.Uri;
+
+        //        UserSettings.CurrentURL = url;
+        //        UserSettings.RequiredNaviBack = true;
+
+        //        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
+        //        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
+        //        //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
+
+        //        Save();
+        //        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
+        //        await InvokeAsync(() => StateHasChanged());
+        //    }
+        //}
+
+        private async void OptionChange(ChangeEventArgs e)
+        {
+            string selectedString = e.Value.ToString();
+
+            LabelFonts = selectedString;
+
+            UserSettings.LabelFonts = LabelFonts;
+
+            BounceBack(true);
         }
     }
-
-    private async void OptionChange(ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
-
-        LabelFonts = selectedString;
-
-        UserSettings.LabelFonts = LabelFonts;
-
-        var url = NavigationManager.Uri;
-
-        UserSettings.CurrentURL = url;
-        UserSettings.RequiredNaviBack = true;
-
-        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
-        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
-        //await sessionStorage.SetItemAsync<string>("LabelFonts", LabelFonts);
-
-        Save();
-        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
-        await InvokeAsync(() => StateHasChanged());
-    }
-}

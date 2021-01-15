@@ -27,6 +27,7 @@ namespace EDI.Web.Models
         public bool IsCoordinator { get; set; }
 
         public string Language { get; set; }
+        public bool Validation { get; set; }
 
         public string Province { get; set; }
 

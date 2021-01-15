@@ -1,0 +1,14 @@
+﻿@page "/EDIQuestionnaires/SectionZ/{ChildId:int}"
+@page  "/EDIQuestionnaires/SectionZ/"
+@inherits SectionBase;
+@inject NavigationManager NavigationManager;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var url = await sessionStorage.GetItemAsync<string>("CurrentUrl");
+        NavigationManager.NavigateTo(url);
+    }
+}

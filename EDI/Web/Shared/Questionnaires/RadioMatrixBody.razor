@@ -10,18 +10,18 @@
 
 
 <tr>
-    @if (string.IsNullOrEmpty(LabelFonts))
+    @*@if (string.IsNullOrEmpty(LabelFonts))
     {
         <td>
             @((MarkupString)QuestionText)
         </td>
     }
     else
-    {
+    {*@
         <td style="font-size: @LabelFonts;">
             @((MarkupString)QuestionText)
         </td>
-    }
+    @*}*@
 
     @foreach (var option in _LookupSetOptions)
     {
@@ -125,6 +125,8 @@
 
         RadioLabels = UserSettings.RadioLabels;
         LabelFonts = UserSettings.LabelFonts;
+        if (String.IsNullOrEmpty(LabelFonts))
+            LabelFonts = "1em";
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
