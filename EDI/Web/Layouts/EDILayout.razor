@@ -8,8 +8,7 @@
 @inject AppIdentityDbContext identityContext;
 @inject ServiceContext dbContext;
 @using System.Linq.Dynamic.Core
-
-
+@inject ISharedService sharedService;
 
 <EDIHeader />
 <div class="page">
@@ -39,81 +38,7 @@
         var user = authState.User;
 
         isAuthenticated = user.Identity.IsAuthenticated;
-        try
-        {
-            // get the year id
-            var predicate = "FieldName==\"Year\"";
-            var year = dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
-            predicate = "EDIYear == " + year;
-            UserSettings.YearId = dbContext.Years.Where(predicate).Single().Id;
-        }
-        catch
-        {
-            Console.WriteLine("Import data - set the year variable - Restart the application");
-        }
 
-        if (user.Identity.IsAuthenticated)
-        {
-
-            UserSettings.UserName = user.Identity.Name;
-            UserSettings.IsAuthenticated = true;
-
-            var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
-            UserSettings.UserID = user1.Id;
-            UserSettings.FirstName = user1.FirstName;
-            UserSettings.LastName = user1.LastName;
-            UserSettings.IsAdmin = false;
-            UserSettings.IsCoordinator = false;
-            UserSettings.IsTeacher = false;
-            UserSettings.Language = user1.Language == null ? "English" : user1.Language;
-
-            var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
-
-            List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
-
-            foreach (var translation in alltranslations)
-            {
-                var atranslation = new TranslationItemViewModel();
-
-                atranslation.Id = translation.Id;
-                atranslation.English = translation.English;
-                atranslation.French = translation.French;
-
-                sivm.Add(atranslation);
-            }
-            LanguageSettings.Translations = sivm;
-
-            @if (user.IsInRole("Administrator"))
-            {
-                UserSettings.IsAdmin = true;
-            }
-            else if (user.IsInRole("Teacher"))
-            {
-                UserSettings.IsTeacher = true;
-
-                try
-                {
-                    var teacher = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID)
-                                    .Include(s => s.School)
-                                    .ThenInclude(ts => ts.Province).FirstOrDefault();
-
-                    UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                    UserSettings.TeacherId = teacher.Id;
-                }
-                catch
-                {
-                    Console.WriteLine("please login as an admin to setup the system");
-                    NavigationManager.NavigateTo("./login");
-                }
-            }
-            else
-            {
-                UserSettings.IsCoordinator = true;
-            }
-        }
-        else
-        {
-            UserSettings.IsAuthenticated = false;
-        }
+        sharedService.InitializeUserSettings(user.Identity.Name);
     }
 }

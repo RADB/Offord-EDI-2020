@@ -22,11 +22,11 @@
 {
     <AppHeader OnToggleClick="@OnToggleClick" />
     <div class="app-body">
-        @if (IsAdmin)
+        @if (UserSettings.IsAdmin)
         {
             <SidebarNav @ref="SidebarObject" />
         }
-        else if (IsTeacher)
+        else if (UserSettings.IsTeacher)
         {
             <TeacherSidebarNav @ref="TeacherSidebarObject" />
         }
@@ -74,109 +74,8 @@ else
         var user = authState.User;
 
         isAuthenticated = user.Identity.IsAuthenticated;
-        try
-        {
-            // get the year id
-            var predicate = "FieldName==\"Year\"";
-            var year = dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
-            predicate = "EDIYear == " + year;
-            UserSettings.YearId = dbContext.Years.Where(predicate).Single().Id;
-        }
-        catch
-        {
-            Console.WriteLine("Import data - set the year variable - Restart the application");
-        }
 
-        if (user.Identity.IsAuthenticated)
-        {
-            var url = NavigationManager.Uri;
-
-            UserSettings.UserName = user.Identity.Name;
-            UserSettings.IsAuthenticated = true;
-
-            var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
-            UserSettings.UserID = user1.Id;
-            UserSettings.FirstName = user1.FirstName;
-            UserSettings.LastName = user1.LastName;
-            UserSettings.IsAdmin = false;
-            UserSettings.IsCoordinator = false;
-            UserSettings.IsTeacher = false;
-            UserSettings.Language = user1.Language == null ? "English" : user1.Language;
-
-            //await sharedService.SaveUserSessions("UserName", UserSettings.UserName, UserSettings.UserID);
-
-            var alltranslations = await Task.FromResult(dbContext.Translations.OrderBy(p => p.English).ToList());
-
-            List<TranslationItemViewModel> sivm = new List<TranslationItemViewModel>();
-
-            foreach (var translation in alltranslations)
-            {
-                var atranslation = new TranslationItemViewModel();
-
-                atranslation.Id = translation.Id;
-                atranslation.English = translation.English;
-                atranslation.French = translation.French;
-
-                sivm.Add(atranslation);
-            }
-            LanguageSettings.Translations = sivm;
-
-            @if (user.IsInRole("Administrator"))
-            {
-                UserSettings.IsAdmin = true;
-                IsAdmin = true;
-            }
-            else if (user.IsInRole("Teacher"))
-            {
-                UserSettings.IsTeacher = true;
-                IsTeacher = true;
-
-
-                /*data = dbContext.Children.Where(pred)
-                       .Include(c => c.QuestionnairesDataDemographics)
-                       .Include(c => c.QuestionnairesDataSectionBs)
-                       .Single();*/
-
-                // get the teacher record - which contains the school and the province
-                //var teacher = await Task.FromResult(dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID).FirstOrDefault());
-                //dbContext.Entry(teacher).Reference(s => s.School).Load();
-                //dbContext.Entry(teacher.School).Reference(ts => ts.Province).Load();
-                try
-                {
-                    var teacher = dbContext.Teachers.Where(s => s.UserId == UserSettings.UserID)
-                                    .Include(s => s.School)
-                                    .ThenInclude(ts => ts.Province).FirstOrDefault();
-
-                    if (teacher != null)
-                    {
-                        UserSettings.Province = teacher.School.Province.English.Replace(" ", "");
-                        UserSettings.TeacherId = teacher.Id;
-                    }
-                    else
-                    {
-                        string warning = "The teacher has an account but no data associated at this time.  Please import data.";
-                        Log.Warning(warning);
-                        //throw new NullReferenceException(warning);
-                        //toastService.ShowWarning(warning, "No Teacher Data");
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex.Message);
-                    NavigationManager.NavigateTo("./login");
-                }
-            }
-            else
-            {
-                UserSettings.IsCoordinator = true;
-                IsCoordinator = true;
-            }
-        }
-        else
-        {
-            UserSettings.IsAuthenticated = false;
-        }
+        sharedService.InitializeUserSettings(user.Identity.Name);
     }
 
     private void OnToggleClick()

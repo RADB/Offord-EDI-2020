@@ -43,5 +43,6 @@ namespace EDI.Web.Interfaces
         IEnumerable<SelectListItem> GetLookups();
         Task SaveUserSessions(string fieldname, string fieldvalue, string userid);
         Task DeleteUserSessions(string userid);
+        void InitializeUserSettings(string username);
     }
 }

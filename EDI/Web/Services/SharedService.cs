@@ -34,6 +34,7 @@ using EDI.Infrastructure.Data;
 using Syncfusion.XlsIO;
 using EDI.ApplicationCore.Models;
 using static EDI.Web.Data.Enumerations;
+using System.Linq.Dynamic.Core;
 
 namespace EDI.Web.Services
 {
@@ -1422,9 +1423,9 @@ namespace EDI.Web.Services
                 return string.Empty;
             else
             {
-                if (_userSettings.Language == "French" && _languageSettings.Translations != null)
+                if (_userSettings.Language == "French")
                 {
-                    var translate = _languageSettings.Translations.Where(e => e.English == english).FirstOrDefault();
+                    var translate = _dbContext.Translations.Where(e => e.English == english).FirstOrDefault();
                     if (translate == null || string.IsNullOrEmpty(translate.French))
                         return english;
                     else
@@ -1738,6 +1739,51 @@ namespace EDI.Web.Services
             catch (Exception ex)
             {
                 Log.Error("DeleteUserSessions failed:" + ex.Message);
+            }
+        }
+
+        public void InitializeUserSettings(string username)
+        {
+            var user1 = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
+            var userrole = _identityContext.UserRoles.Where(p => p.UserId == user1.Id).FirstOrDefault();
+
+            var role = _identityContext.Roles.Where(p => p.Id == userrole.RoleId).FirstOrDefault();
+
+            var predicate = "FieldName==\"Year\"";
+            var year = _dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
+            predicate = "EDIYear == " + year;
+            _userSettings.YearId = _dbContext.Years.Where(predicate).Single().Id;
+            _userSettings.UserName = user1.UserName;
+            _userSettings.IsAuthenticated = true;
+            _userSettings.UserID = user1.Id;
+            _userSettings.FirstName = user1.FirstName;
+            _userSettings.LastName = user1.LastName;
+            _userSettings.IsAdmin = false;
+            _userSettings.IsCoordinator = false;
+            _userSettings.IsTeacher = false;
+            _userSettings.Language = user1.Language == null ? "English" : user1.Language;
+
+            if (role.Name == "Teacher")
+            {
+                var teacher = _dbContext.Teachers.Where(s => s.UserId == _userSettings.UserID)
+                            .Include(s => s.School)
+                            .ThenInclude(ts => ts.Province).FirstOrDefault();
+
+                if (teacher != null)
+                {
+                    _userSettings.IsTeacher = true;
+                    _userSettings.Province = teacher.School.Province.English.Replace(" ", "");
+                    _userSettings.TeacherId = teacher.Id;
+                }
+            }
+            else
+            {
+                if (role.Name == "Administrator")
+                {
+                    _userSettings.IsAdmin = true;
+                }
+                else
+                    _userSettings.IsCoordinator = true;
             }
         }
     }
