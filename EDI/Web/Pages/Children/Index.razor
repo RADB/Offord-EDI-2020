@@ -102,6 +102,11 @@
 
     IEnumerable<ChildItemViewModel> children;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+    }
+
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -113,28 +118,13 @@
             NavigationManager.NavigateTo("./dashboard/index");
         }
 
-
-        var OnEnglishSwitchChangeNaviBack = await sessionStorage.GetItemAsync<bool>("SetEnglishSwitchChangeNaviBack");
-
-        if (OnEnglishSwitchChangeNaviBack)
-        {
-            var backurl = await sessionStorage.GetItemAsync<string>("CurrentURL");
-
-            await sessionStorage.SetItemAsync<string>("BackURL", backurl);
-            await sessionStorage.SetItemAsync<string>("CurrentURL", NavigationManager.Uri);
-
-            await sessionStorage.SetItemAsync<bool>("SetEnglishSwitchChangeNaviBack", false);
-
-            NavigationManager.NavigateTo(backurl);
-        }
-
         if (UserSettings.IsTeacher)
         {
             //   var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
             //   TeacherID = teacher.Id;
             AllowEdit = true;
             AllowDelete = false;
-        }
+        }        
 
 
         List<Child> allchildren;

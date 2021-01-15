@@ -4,19 +4,40 @@
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
 
 <tr>
-    <td>
-        @((MarkupString)QuestionText)
-    </td>
+    @if (string.IsNullOrEmpty(LabelFonts))
+    {
+        <td>
+            @((MarkupString)QuestionText)
+        </td>
+    }
+    else
+    {
+        <td style="font-size: @LabelFonts;">
+            @((MarkupString)QuestionText)
+        </td>
+    }
+
     @foreach (var option in _LookupSetOptions)
     {
         <td>
             @*@radioTitle = new Dictionary<string, object>(){{ "title", @sharedService.GetOptionText(option)}};*@
-            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+            @if (RadioLabels)
+            {
+                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+
+            }
+            else
+            {
+                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Value="@option.Value.ToString()"></SfRadioButton>
+
+            }
+
         </td>
     }
     <AuthorizeView Roles="Administrator">
@@ -82,6 +103,10 @@
 
     private Dictionary<string, object> radioTitle;
 
+    private Boolean RadioLabels { get; set; } = true;
+
+    private string LabelFonts { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         // get the question and help text
@@ -97,6 +122,9 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
+
+        RadioLabels = UserSettings.RadioLabels;
+        LabelFonts = UserSettings.LabelFonts;
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)

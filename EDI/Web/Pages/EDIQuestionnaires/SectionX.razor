@@ -1,0 +1,36 @@
+﻿@page "/EDIQuestionnaires/SectionX/"
+@inherits SectionBase;
+@using EDI.Web.Shared.Modals;
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject IChildService childService;
+@inject ISharedService sharedService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+@inject IMathService mathService;
+@inject UserSettings UserSettings;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var RequiredNaviBack = UserSettings.RequiredNaviBack;
+
+        if (RequiredNaviBack)
+        {
+            var backurl = UserSettings.CurrentURL;
+
+            UserSettings.BackURL = backurl;
+            UserSettings.CurrentURL = NavigationManager.Uri;
+            UserSettings.RequiredNaviBack = false;
+
+            NavigationManager.NavigateTo(backurl);
+        }
+    }
+}

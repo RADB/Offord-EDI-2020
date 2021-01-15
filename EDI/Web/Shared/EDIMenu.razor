@@ -36,9 +36,12 @@
 <div class="flex-column">
     <input id="ShowLabels" type="checkbox" />
     <label for="ShowLabels" title="Radio Labels">Radio Labels</label>
+
+    <SfCheckBox CssClass="handle-text" @bind-Checked="@RadioLabels" @onchange="@((ev) => CheckBoxValueChange(ev))" />
+
     <br />
 
-    <select name="fontsize" id="fontsize">
+    <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e =>OptionChange(e))">
         <option value="1em">1</option>
         <option value="1.25em">1.25</option>
         <option value="1.5em">1.5</option>
@@ -49,7 +52,7 @@
 
 
     <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
-    @*<label for="Language" title="English\French">English\French</label>*@
+
     <br />
 
     <input id="Validation" type="checkbox" />
@@ -61,6 +64,10 @@
 @code {
     // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
     private Boolean isFrench { get; set; }
+
+    private Boolean RadioLabels { get; set; }
+
+    private string LabelFonts { get; set; }
 
     private bool IsComplete { get; set; } = false;
     // get this value from the entity field IsComplete on each
@@ -106,10 +113,15 @@
                 iconCSS = "far fa-square fa-lg";
                 color = "red";
             }
+
             if (UserSettings.Language == "English")
                 isFrench = false;
             else
                 isFrench = true;
+
+            RadioLabels = UserSettings.RadioLabels;
+
+            LabelFonts = UserSettings.LabelFonts;
 
             GetChildId();
             //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
@@ -156,16 +168,15 @@
         await accountService.UpdateUserLanguageAsync(UserSettings);
 
         var url = NavigationManager.Uri;
-        //NavigationManager.NavigateTo(url);
 
-        await sessionStorage.SetItemAsync<string>("CurrentURL", url);
-        await sessionStorage.SetItemAsync<bool>("SetEnglishSwitchChangeNaviBack", true);
+        UserSettings.CurrentURL = url;
+        UserSettings.RequiredNaviBack = true;
 
-        //StateContainer.SetCurrentURL(url);
-        //StateContainer.SetEnglishSwitchChangeNaviBack(true);
+        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
+        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
 
         Save();
-        NavigationManager.NavigateTo("./children/index");
+        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
         await InvokeAsync(() => StateHasChanged());
     }
 
@@ -201,5 +212,54 @@
                 }
             }
         }
+    }
+
+    private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        RadioLabels = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            RadioLabels = value;
+
+            UserSettings.RadioLabels = RadioLabels;
+
+            var url = NavigationManager.Uri;
+
+            UserSettings.CurrentURL = url;
+            UserSettings.RequiredNaviBack = true;
+
+            //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
+            //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
+            //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
+
+            Save();
+            NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
+            await InvokeAsync(() => StateHasChanged());
+        }
+    }
+
+    private async void OptionChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LabelFonts = selectedString;
+
+        UserSettings.LabelFonts = LabelFonts;
+
+        var url = NavigationManager.Uri;
+
+        UserSettings.CurrentURL = url;
+        UserSettings.RequiredNaviBack = true;
+
+        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
+        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
+        //await sessionStorage.SetItemAsync<string>("LabelFonts", LabelFonts);
+
+        Save();
+        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
+        await InvokeAsync(() => StateHasChanged());
     }
 }

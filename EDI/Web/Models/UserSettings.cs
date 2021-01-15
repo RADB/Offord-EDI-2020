@@ -33,5 +33,15 @@ namespace EDI.Web.Models
         public int TeacherId { get; set; }
 
         public int YearId { get; set; }
+
+        public bool RadioLabels { get; set; }
+
+        public string LabelFonts { get; set; }
+
+        public string CurrentURL { get; set; }
+
+        public string BackURL { get; set; }
+
+        public bool RequiredNaviBack { get; set; }
     }
 }

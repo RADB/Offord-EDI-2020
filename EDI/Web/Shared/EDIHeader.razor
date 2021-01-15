@@ -13,7 +13,6 @@
 @inject StateContainer StateContainer;
 @inject IAccountService accountService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
-@implements IDisposable;
 
 
 <div class="container-fluid p-1 border border-secondary EDIHeader">
@@ -105,11 +104,6 @@
         }
     }
 
-    public void Dispose()
-    {
-        StateContainer.OnChange -= StateHasChanged;
-    }
-
     private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
     {
         if (e.Checked)
@@ -125,10 +119,10 @@
         //NavigationManager.NavigateTo(url);
 
         await sessionStorage.SetItemAsync<string>("CurrentURL", "");
-        await sessionStorage.SetItemAsync<bool>("SetEnglishSwitchChangeNaviBack", true);
+        await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
 
         //StateContainer.SetCurrentURL(url);
-        //StateContainer.SetEnglishSwitchChangeNaviBack(true);
+        //StateContainer.RequiredNaviBack(true);
 
         Save();
         NavigationManager.NavigateTo("./children/index");
