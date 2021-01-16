@@ -17,7 +17,26 @@
     <div class="col-9">
         @foreach (var option in _LookupSetOptions)
         {
-            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+            <div class="form-check">
+                @{
+                    bool ischecked = false;
+
+                    @if (@currentValue == @option.Value.ToString())
+                    {
+                        ischecked = true;
+                    }
+
+                    <input class="form-check-input" type="radio" disabled="@ReadonlyQuestion" name="@Config.EntityField" checked="@ischecked" value="@option.Value.ToString()" @onchange="@onChange" data-toggle="tooltip" data-placement="bottom" title="@sharedService.GetOptionText(option)">
+
+                }
+            <label class="form-check-label" style="font-size: @LabelFonts;">
+                @if (RadioLabels)
+                {
+                    @sharedService.GetOptionText(option)
+                }
+            </label>
+            </div>
+            @*<SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>*@
 
             if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
             {
@@ -50,10 +69,14 @@
 @code
 {
 
-        // option set
+    // option set
     private List<LookupSetOption> _LookupSetOptions;
 
     private string currentValue { get; set; }
+
+    private Boolean RadioLabels { get; set; } = true;
+
+    private string LabelFonts { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -70,6 +93,10 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
+        RadioLabels = _userSettings.RadioLabels;
+        LabelFonts = _userSettings.LabelFonts;
+        if (String.IsNullOrEmpty(LabelFonts))
+            LabelFonts = "1em";
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
