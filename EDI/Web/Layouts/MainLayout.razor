@@ -75,7 +75,8 @@ else
 
         isAuthenticated = user.Identity.IsAuthenticated;
 
-        sharedService.InitializeUserSettings(user.Identity.Name);
+        if (isAuthenticated)
+            sharedService.InitializeUserSettings(user.Identity.Name);
     }
 
     private void OnToggleClick()
