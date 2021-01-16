@@ -1,42 +1,65 @@
 ﻿@inherits QuestionnaireBase;
 @using Syncfusion.Blazor.Buttons;
 @using static EDI.Web.Data.Enumerations;
+@using EDI.Web.Extensions;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
-@inject UserSettings _userSettings;
+@inject UserSettings UserSettings;
+@inject NavigationManager NavigationManager
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
-
 <tr>
     @*@if (string.IsNullOrEmpty(LabelFonts))
-    {
-        <td>
-            @((MarkupString)QuestionText)
-        </td>
-    }
-    else
-    {*@
-        <td style="font-size: @LabelFonts;">
-            @((MarkupString)QuestionText)
-        </td>
+        {
+            <td>
+                @((MarkupString)QuestionText)
+            </td>
+        }
+        else
+        {*@
+    <td style="font-size: @LabelFonts;">
+        @((MarkupString)QuestionText)
+    </td>
     @*}*@
 
     @foreach (var option in _LookupSetOptions)
     {
         <td>
             @*@radioTitle = new Dictionary<string, object>(){{ "title", @sharedService.GetOptionText(option)}};*@
-            @if (RadioLabels)
-            {
-                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
-            }
-            else
-            {
-                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Value="@option.Value.ToString()"></SfRadioButton>
+            <div class="form-check">
+                @{
+                    bool ischecked = false;
 
-            }
+                    @if (@currentValue == @option.Value.ToString())
+                    {
+                        ischecked = true;
+                    }
+
+                    <input class="form-check-input" type="radio" disabled="@ReadonlyQuestion" name="@Config.EntityField" checked="@ischecked" value="@option.Value.ToString()" @onchange="@onChange" data-toggle="tooltip" data-placement="bottom" title="@sharedService.GetOptionText(option)">
+
+                }
+                <label class="form-check-label">
+                    @if (RadioLabels)
+                    {
+                        @sharedService.GetOptionText(option)
+                    }
+                </label>
+            </div>
+
+
+            @*@if (RadioLabels)
+                {
+                    <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+
+                }
+                else
+                {
+                    <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Value="@option.Value.ToString()"></SfRadioButton>
+
+                }*@
 
         </td>
     }
@@ -123,8 +146,8 @@
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
 
-        RadioLabels = _userSettings.RadioLabels;
-        LabelFonts = _userSettings.LabelFonts;
+        RadioLabels = UserSettings.RadioLabels;
+        LabelFonts = UserSettings.LabelFonts;
         if (String.IsNullOrEmpty(LabelFonts))
             LabelFonts = "1em";
     }
@@ -133,7 +156,7 @@
     {
 
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-        if (_userSettings.UseJSON)
+        if (UserSettings.UseJSON)
         {
             // save the data back to the object
             string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
@@ -143,6 +166,54 @@
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
         StateHasChanged();
+    }
+
+    public async void onDoubleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)
+    {
+
+        currentValue = "0";
+        // save the data back to the object
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, string.Empty);
+        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        {
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        });
+        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+        Save();
+        StateHasChanged();
+
+        var url = NavigationManager.Uri;
+        NavigationManager.NavigateTo(url, true);
+    }
+
+    private async void Save()
+    {
+        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+        //if (StateContainer.TeacherData != null)
+        if (teacherJson != null && teacherJson.Length > 0)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            {
+                //servicecontext.Update(StateContainer.TeacherData);
+
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                servicecontext.Update(tempTeacher);
+                try
+                {
+                    await servicecontext.SaveChangesAsync();
+                    //StateContainer.SetTeacher(null);
+                    await sessionStorage.SetItemAsync<string>("Teacher", "");
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+                }
+            }
+        }
     }
 }
 
