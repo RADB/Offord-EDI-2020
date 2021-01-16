@@ -11,25 +11,16 @@
 @using Newtonsoft.Json;
 
 <tr>
-    @*@if (string.IsNullOrEmpty(LabelFonts))
-        {
-            <td>
-                @((MarkupString)QuestionText)
-            </td>
-        }
-        else
-        {*@
     <td style="font-size: @LabelFonts;">
         @((MarkupString)QuestionText)
     </td>
-    @*}*@
-
+    
     @foreach (var option in _LookupSetOptions)
     {
         <td>
             @*@radioTitle = new Dictionary<string, object>(){{ "title", @sharedService.GetOptionText(option)}};*@
 
-            <div class="form-check">
+            @*<div class="form-check">
                 @{
                     bool ischecked = false;
 
@@ -47,20 +38,17 @@
                         @sharedService.GetOptionText(option)
                     }
                 </label>
-            </div>
+            </div>*@
 
 
-            @*@if (RadioLabels)
+            @if (RadioLabels)
                 {
                     <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
-
                 }
                 else
                 {
                     <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Value="@option.Value.ToString()"></SfRadioButton>
-
-                }*@
-
+                }
         </td>
     }
     <AuthorizeView Roles="Administrator">
@@ -86,27 +74,6 @@
         </Authorized>
     </AuthorizeView>
 </tr>
-
-@*<div class="col-2">
-            <AuthorizeView Roles="Administrator">
-                <Authorized>
-                    <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
-                    @if (Config.HasHelp)
-                    {
-                        <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
-                    }
-                </Authorized>
-            </AuthorizeView>
-            <AuthorizeView Roles="Teacher">
-                <Authorized>
-                    @if (Config.HasHelp)
-                    {
-                        <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
-                    }
-                </Authorized>
-            </AuthorizeView>
-        </div>
-    </div>*@
 
 @code
 {
@@ -168,53 +135,53 @@
         StateHasChanged();
     }
 
-    public async void onDoubleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)
-    {
+    //public async void onDoubleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)
+    //{
 
-        currentValue = "0";
-        // save the data back to the object
-        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, string.Empty);
-        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        });
-        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
-        Save();
-        StateHasChanged();
+    //    currentValue = "0";
+    //    // save the data back to the object
+    //    reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, string.Empty);
+    //    string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+    //    {
+    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+    //    });
+    //    await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+    //    Save();
+    //    StateHasChanged();
 
-        var url = NavigationManager.Uri;
-        NavigationManager.NavigateTo(url, true);
-    }
+    //    var url = NavigationManager.Uri;
+    //    NavigationManager.NavigateTo(url, true);
+    //}
 
-    private async void Save()
-    {
-        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-        //if (StateContainer.TeacherData != null)
-        if (teacherJson != null && teacherJson.Length > 0)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
-            {
-                //servicecontext.Update(StateContainer.TeacherData);
+    //private async void Save()
+    //{
+    //    var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+    //    //if (StateContainer.TeacherData != null)
+    //    if (teacherJson != null && teacherJson.Length > 0)
+    //    {
+    //        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+    //        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+    //        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+    //        {
+    //            //servicecontext.Update(StateContainer.TeacherData);
 
-                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+    //            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                servicecontext.Update(tempTeacher);
-                try
-                {
-                    await servicecontext.SaveChangesAsync();
-                    //StateContainer.SetTeacher(null);
-                    await sessionStorage.SetItemAsync<string>("Teacher", "");
-                    StateHasChanged();
-                }
-                catch (Exception ex)
-                {
-                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
-                }
-            }
-        }
-    }
+    //            servicecontext.Update(tempTeacher);
+    //            try
+    //            {
+    //                await servicecontext.SaveChangesAsync();
+    //                //StateContainer.SetTeacher(null);
+    //                await sessionStorage.SetItemAsync<string>("Teacher", "");
+    //                StateHasChanged();
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+    //            }
+    //        }
+    //    }
+    //}
 }
 
 

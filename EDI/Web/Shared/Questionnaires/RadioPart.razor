@@ -17,7 +17,7 @@
     <div class="col-9">
         @foreach (var option in _LookupSetOptions)
         {
-            <div class="form-check">
+            @*<div class="form-check">
                 @{
                     bool ischecked = false;
 
@@ -35,8 +35,8 @@
                     @sharedService.GetOptionText(option)
                 }
             </label>
-            </div>
-            @*<SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>*@
+            </div>*@
+            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
             if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
             {
