@@ -5,21 +5,49 @@
 @inject ISharedService sharedService;
 @using Microsoft.EntityFrameworkCore;
 @using System.Linq.Dynamic.Core
-
+@*<div class="row">
+        <h4>@((MarkupString)sharedService.GetConfigText(config))</h4>
+    </div>*@
 @if (questionHeaders.Count > 0)
 {
     @foreach (var config in questionHeaders)
     {
-        <div class="row">
-            <h4>@((MarkupString)sharedService.GetConfigText(config))</h4>
+        <div class="card-body border border-primary rounded">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4>@((MarkupString)sharedService.GetConfigText(config))</h4>
+                                </div>
+                            </div>
+                            <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
     }
 }
 else
 {
-    // pass groupname that was passed in
-    <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+    <div class="card-body border border-primary rounded">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        @*<div class="row">
+                            <div class="col-12">*@
+                                @* pass groupname that was passed in*@
+                                <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                            @*</div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 

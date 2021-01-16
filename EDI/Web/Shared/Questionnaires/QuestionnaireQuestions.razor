@@ -7,21 +7,21 @@
 @using System.Linq.Dynamic.Core
 
 <!-- PRINT THE Questions -->
-<div class="card-body rounded">
+@*<div class="card-body rounded">
     <div class="row">
         <div class="col-12">
             <div class="card shadow">
-                <div class="card-body">
+                <div class="card-body">*@
                     <div class="row">
                         <div class="col-12">
                             <QuestionnaireBuilder configs=@questions teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>                            
                         </div>
                     </div>
-                </div>
+                @*</div>
             </div>
         </div>
     </div>
-</div>
+</div>*@
 @code {
     //@((MarkupString)_Text)
     [Parameter]

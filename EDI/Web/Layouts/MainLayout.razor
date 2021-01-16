@@ -75,7 +75,7 @@ else
 
         isAuthenticated = user.Identity.IsAuthenticated;
 
-        if (isAuthenticated)
+        if (isAuthenticated && UserSettings.UserID is null)
             sharedService.InitializeUserSettings(user.Identity.Name);
     }
 
