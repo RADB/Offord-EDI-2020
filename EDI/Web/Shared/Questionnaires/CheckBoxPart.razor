@@ -2,7 +2,6 @@
 @using Syncfusion.Blazor.Buttons;
 @using static EDI.Web.Data.Enumerations;
 @inject ISharedService sharedService;
-
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
@@ -82,12 +81,16 @@
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented);
-            //string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //});
-            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+
+            if (_userSettings.UseJSON)
+            {
+                string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented);
+                //string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                //{
+                //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                //});
+                await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+            }
             StateHasChanged();
         }
     }

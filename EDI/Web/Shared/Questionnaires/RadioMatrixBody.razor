@@ -4,7 +4,7 @@
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
-@inject UserSettings UserSettings;
+@inject UserSettings _userSettings;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
@@ -123,21 +123,25 @@
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
 
-        RadioLabels = UserSettings.RadioLabels;
-        LabelFonts = UserSettings.LabelFonts;
+        RadioLabels = _userSettings.RadioLabels;
+        LabelFonts = _userSettings.LabelFonts;
         if (String.IsNullOrEmpty(LabelFonts))
             LabelFonts = "1em";
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        // save the data back to the object
+
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        if (_userSettings.UseJSON)
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        });
-        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+            // save the data back to the object
+            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+        }
         StateHasChanged();
     }
 }

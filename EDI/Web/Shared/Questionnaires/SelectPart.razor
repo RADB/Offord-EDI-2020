@@ -36,7 +36,7 @@
             <Authorized>
                 @if (Config.HasHelp)
                 {
-                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
                 }
             </Authorized>
         </AuthorizeView>
@@ -46,7 +46,7 @@
 @code
 {
 
-    // option set
+        // option set
     private List<LookupSetOption> _LookupSetOptions;
 
     private string currentValue { get; set; }
@@ -75,11 +75,15 @@
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+
+            if (_userSettings.UseJSON)
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+                string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+            }
             StateHasChanged();
         }
     }
@@ -90,13 +94,15 @@
         {
             // save the data back to the object
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            if (_userSettings.UseJSON)
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
-            StateHasChanged();
+                string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+                StateHasChanged();
+            }
         }
     }
 }
-

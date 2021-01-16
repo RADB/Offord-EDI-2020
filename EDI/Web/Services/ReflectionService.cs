@@ -4,18 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using EDI.Web.Interfaces;
 using EDI.ApplicationCore.Entities;
-using EDI.Web.Lib;
+//using EDI.Web.Lib;
+using EDI.Web.Models;
 
 namespace EDI.Web.Services
 {
     public class ReflectionService : IReflectionService
     {
-        //private StateContainer _StateContainer { get; set; }
 
-        //public ReflectionService(StateContainer StateContainer)
-        //{
-        //    _StateContainer = StateContainer;
-        //}
+        private UserSettings _UserSettings { get; set; }
+
+        public ReflectionService(UserSettings UserSettings)
+        {
+            _UserSettings = UserSettings;
+        }
 
         //abstract for generic future use
         public void SetFieldValue(object obj, string fieldName, string value)
@@ -102,7 +104,10 @@ namespace EDI.Web.Services
             var obj = GetEntity(data, entityName);
             SetFieldValue(obj, fieldName, value);
 
-            //_StateContainer.SetTeacher(data);
+            // store the teacher data entity changes for saving
+            if(!_UserSettings.UseJSON)
+                _UserSettings.TeacherData = data;
+            
         }
 
         public string GetFieldValue(Teacher data, string entityName, string fieldName)

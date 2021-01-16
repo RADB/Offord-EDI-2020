@@ -60,133 +60,149 @@
 
 
     @code {
-        // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
-        private Boolean isFrench { get; set; }
+            // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
+            private Boolean isFrench { get; set; }
 
-        private Boolean RadioLabels { get; set; }
-        private Boolean Validation { get; set; }
+            private Boolean RadioLabels { get; set; }
+            private Boolean Validation { get; set; }
 
-        private string LabelFonts { get; set; }
+            private string LabelFonts { get; set; }
 
-        private bool IsComplete { get; set; } = false;
-        // get this value from the entity field IsComplete on each
+            private bool IsComplete { get; set; } = false;
+            // get this value from the entity field IsComplete on each
 
-        private int ChildId { get; set; }
+            private int ChildId { get; set; }
 
-        private bool isChildQuestionnaire;
-        private List<Questionnaire> questionnaires;
-        private bool collapseNavMenu = false;
-        private bool expandMenu;
-        private string iconCSS = "";
-        private string color = "";
+            private bool isChildQuestionnaire;
+            private List<Questionnaire> questionnaires;
+            private bool collapseNavMenu = false;
+            private bool expandMenu;
+            private string iconCSS = "";
+            private string color = "";
 
-        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+            private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-        private void ToggleNavMenu()
-        {
-            collapseNavMenu = !collapseNavMenu;
-            expandMenu = false;
-        }
-
-        private void ToggleSubmenu()
-        {
-            expandMenu = !expandMenu;
-        }
-
-
-        protected override async Task OnInitializedAsync()
-        {
-            if (!UserSettings.IsAuthenticated)
+            private void ToggleNavMenu()
             {
-                NavigationManager.NavigateTo("./login");
+                collapseNavMenu = !collapseNavMenu;
+                expandMenu = false;
             }
-            else
+
+            private void ToggleSubmenu()
             {
-                if (IsComplete)
+                expandMenu = !expandMenu;
+            }
+
+
+            protected override async Task OnInitializedAsync()
+            {
+                if (!UserSettings.IsAuthenticated)
                 {
-                    iconCSS = "far fa-check-square fa-lg";
-                    color = "green";
+                    NavigationManager.NavigateTo("./login");
                 }
                 else
                 {
-                    iconCSS = "far fa-square fa-lg";
-                    color = "red";
+                    if (IsComplete)
+                    {
+                        iconCSS = "far fa-check-square fa-lg";
+                        color = "green";
+                    }
+                    else
+                    {
+                        iconCSS = "far fa-square fa-lg";
+                        color = "red";
+                    }
+
+                    if (UserSettings.Language == "English")
+                        isFrench = false;
+                    else
+                        isFrench = true;
+
+                    RadioLabels = UserSettings.RadioLabels;
+
+                    LabelFonts = UserSettings.LabelFonts;
+
+                    GetChildId();
+                    //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+                    getData();
                 }
-
-                if (UserSettings.Language == "English")
-                    isFrench = false;
-                else
-                    isFrench = true;
-
-                RadioLabels = UserSettings.RadioLabels;
-
-                LabelFonts = UserSettings.LabelFonts;
-
-                GetChildId();
-                //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
-                getData();
             }
-        }
 
-        private void getData()
-        {
-            questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
-        }
-
-        private void GetChildId()
-        {
-            Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-            if (uri.Segments.Count() != 4)
+            private void getData()
             {
-                NavigationManager.NavigateTo("./children/index");
+                questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
             }
-            else
+
+            private void GetChildId()
             {
-                if (!Int32.TryParse(uri.Segments[3], out int studentId))
+                Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+                if (uri.Segments.Count() != 4)
                 {
                     NavigationManager.NavigateTo("./children/index");
                 }
                 else
                 {
-                    ChildId = studentId;
+                    if (!Int32.TryParse(uri.Segments[3], out int studentId))
+                    {
+                        NavigationManager.NavigateTo("./children/index");
+                    }
+                    else
+                    {
+                        ChildId = studentId;
+                    }
                 }
+
             }
 
-        }
 
 
 
-
-        private async void Save()
+private async void Save(bool useJSON)
+{
+    if (useJSON)
+    {
+        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+        if (teacherJson != null && teacherJson.Length > 0)
         {
-            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-            //if (StateContainer.TeacherData != null)
-            if (teacherJson != null && teacherJson.Length > 0)
+            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+            await SaveDisconnectedTeacher(tempTeacher);
+
+            await sessionStorage.RemoveItemAsync("Teacher");
+        }
+    }
+    else
+    {
+        if (UserSettings.TeacherData != null)
+        {
+            await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+            UserSettings.TeacherData = null;
+        }
+    }
+            
+}
+
+        private async Task SaveDisconnectedTeacher(Teacher TeacherData)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
             {
-                var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-                optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-                using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+                // load the disconnected data into the context
+                servicecontext.Update(TeacherData);
+                try
                 {
-                    //servicecontext.Update(StateContainer.TeacherData);
+                    await servicecontext.SaveChangesAsync();
 
-                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                    toastService.ShowSuccess("Data Saved Successfully!");
+                    StateHasChanged();
+                }
+                catch (Exception ex)
+                {
+                    toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
 
-                    servicecontext.Update(tempTeacher);
-                    try
-                    {
-                        await servicecontext.SaveChangesAsync();
-                        //StateContainer.SetTeacher(null);
-                        await sessionStorage.SetItemAsync<string>("Teacher", "");
-
-                        toastService.ShowSuccess("Data Saved Successfully!");
-                        StateHasChanged();
-                    }
-                    catch (Exception ex)
-                    {
-                        toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
-
-                        sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
-                    }
+                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
                 }
             }
         }
@@ -210,7 +226,7 @@
                 navigateTo = "./EDIQuestionnaires/SectionX";
             }
 
-            Save();
+            Save(UserSettings.UseJSON);
             NavigationManager.NavigateTo(navigateTo);
             //await InvokeAsync(() => StateHasChanged());
 

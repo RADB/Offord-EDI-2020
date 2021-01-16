@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EDI.ApplicationCore.Entities;
 
 namespace EDI.Web.Models
 {
@@ -44,5 +45,8 @@ namespace EDI.Web.Models
         public string BackURL { get; set; }
 
         public bool RequiredNaviBack { get; set; }
+
+        public Teacher TeacherData { get; set; }
+        public bool UseJSON { get; set; } = false;
     }
 }

@@ -29,8 +29,8 @@
         <div class="col-4 text-right align-self-center  text-nowrap">
             @*<SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>*@
             <AuthorizeView Roles="Teacher">
-                <Authorized>
-                    <button class="btn btn-success" @onclick="Save"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
+                <Authorized>                    
+                    <button class="btn btn-success" @onclick="@(() => Save(UserSettings.UseJSON))"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
                 </Authorized>
             </AuthorizeView>
             <button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> Exit</button>
@@ -70,39 +70,89 @@
         NavigationManager.NavigateTo("./children/index");
     }
 
-    private async void Save()
+    private async Task Save(bool useJSON)
     {
-        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-        //if (StateContainer.TeacherData != null)
-        if (teacherJson != null && teacherJson.Length > 0)
+        if (useJSON)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+            if (teacherJson != null && teacherJson.Length > 0)
             {
-                //servicecontext.Update(StateContainer.TeacherData);
-
                 var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                servicecontext.Update(tempTeacher);
-                try
-                {
-                    await servicecontext.SaveChangesAsync();
-                    //StateContainer.SetTeacher(null);
-                    await sessionStorage.SetItemAsync<string>("Teacher", "");
+                await SaveDisconnectedTeacher(tempTeacher);
 
-                    toastService.ShowSuccess("Data Saved Successfully!");
-                    StateHasChanged();
-                }
-                catch (Exception ex)
-                {
-                    toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+                await sessionStorage.RemoveItemAsync("Teacher");
+            }
+        }
+        else
+        {
+            if (UserSettings.TeacherData != null)
+            {
+                await SaveDisconnectedTeacher(UserSettings.TeacherData);
 
-                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
-                }
+                UserSettings.TeacherData = null;
+            }
+        }
+
+    }
+
+    private async Task SaveDisconnectedTeacher(Teacher TeacherData)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+        {
+            // load the disconnected data into the context
+            servicecontext.Update(TeacherData);
+            try
+            {
+                await servicecontext.SaveChangesAsync();
+
+                toastService.ShowSuccess("Data Saved Successfully!");
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
             }
         }
     }
+
+    //private async void Save()
+    //{
+    //    var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+    //    //if (StateContainer.TeacherData != null)
+    //    if (teacherJson != null && teacherJson.Length > 0)
+    //    {
+    //        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+    //        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+    //        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+    //        {
+    //            //servicecontext.Update(StateContainer.TeacherData);
+
+    //            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+    //            servicecontext.Update(tempTeacher);
+    //            try
+    //            {
+    //                await servicecontext.SaveChangesAsync();
+    //                //StateContainer.SetTeacher(null);
+    //                await sessionStorage.SetItemAsync<string>("Teacher", "");
+
+    //                toastService.ShowSuccess("Data Saved Successfully!");
+    //                StateHasChanged();
+    //            }
+    //            catch (Exception ex)
+    //            {
+    //                toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+    //                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+    //            }
+    //        }
+    //    }
+    //}
 
     private async void OnEnglishChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
     {
@@ -124,7 +174,7 @@
         //StateContainer.SetCurrentURL(url);
         //StateContainer.RequiredNaviBack(true);
 
-        Save();
+        await Save(UserSettings.UseJSON);
         NavigationManager.NavigateTo("./children/index");
         await InvokeAsync(() => StateHasChanged());
     }

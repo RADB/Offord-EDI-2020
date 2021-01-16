@@ -5,6 +5,7 @@
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
+@inject UserSettings _userSettings; 
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 
@@ -49,7 +50,7 @@
 @code
 {
 
-    // option set
+        // option set
     private List<LookupSetOption> _LookupSetOptions;
 
     private string currentValue { get; set; }
@@ -74,16 +75,20 @@
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         // save the data back to the object
-       // JsonConvert.SerializeObject(data, Formatting.Indented,
+        // JsonConvert.SerializeObject(data, Formatting.Indented,
 
 
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-        string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        if (_userSettings.UseJSON)
         {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore     
-        });
-        await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+        }
         StateHasChanged();
+
     }
 }
 

@@ -25,12 +25,15 @@
             try
             {
                 reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
-                string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                if (_userSettings.UseJSON)
                 {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
-                await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
-                StateHasChanged();
+                    string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    });
+                    await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+                    StateHasChanged();
+                }
             }
             catch (Exception ex)
             {
