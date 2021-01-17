@@ -11,6 +11,7 @@
 @inject IJSRuntime JsRuntime;
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
+@inject IToastService toastService;
 
 @inject UserSettings UserSettings;
 @inject IMathService mathService;
@@ -68,6 +69,17 @@
                                     }
                                 </Template>
                             </GridColumn>
+                            @if (UserSettings.IsAdmin)
+                            {
+                                <GridColumn HeaderText="" Width="10">
+                                    <Template>
+                                        @{
+                                            var comm = (context as TeacherItemViewModel);
+                                            <button data-toggle="tooltip" data-placement="bottom" title="Reset Password" @onclick="@(() => ResetPassword(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/reset-password.png" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                            }
                             <GridColumn HeaderText="" Width="20">
                                 <Template>
                                     @{
@@ -227,5 +239,13 @@
     private string Translate(string word)
     {
         return sharedService.GetTranslate(word);
+    }
+
+    private async void ResetPassword(int id)
+    {
+        await sharedService.ResetPassord(id);
+        toastService.ShowSuccess("Password reset successfully.");
+
+        StateHasChanged();
     }
 }

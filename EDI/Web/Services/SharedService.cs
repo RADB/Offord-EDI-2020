@@ -1786,5 +1786,23 @@ namespace EDI.Web.Services
                     _userSettings.IsCoordinator = true;
             }
         }
+
+        public async Task ResetPassord(int id)
+        {
+            var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
+
+            var password = string.Empty;
+
+            var child = _dbContext.Children.Where(p => p.TeacherId == teacher.Id).FirstOrDefault();
+
+            password = child.Ediid.Substring(4, 8);
+
+            var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+
+            var newPassword = _userManager.PasswordHasher.HashPassword(_account, password);
+            _account.PasswordHash = newPassword;
+
+            await _userManager.UpdateAsync(_account);
+        }
     }
 }
