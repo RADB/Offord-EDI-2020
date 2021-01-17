@@ -32,10 +32,10 @@
                         </div>
                     </HeaderTemplate>
                     <ContentTemplate>
-                        @if (aName.Length != 0)
+                        @*@if (aName.Length != 0)
                         {
                             <div class="col-6"><h4>@sharedService.GetConfigText(config)</h4></div>
-                        }
+                        }*@
                         <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
 
                         <QuestionnaireQuestionHeader QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestionHeader>

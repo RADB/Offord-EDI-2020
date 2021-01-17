@@ -64,10 +64,6 @@ else
     public TeacherSidebarNav TeacherSidebarObject { get; set; }
     public CoordinatorSidebarNav CoordinatorSidebarObject { get; set; }
 
-    private bool IsAdmin { get; set; }
-    private bool IsTeacher { get; set; }
-    private bool IsCoordinator { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -81,15 +77,15 @@ else
 
     private void OnToggleClick()
     {
-        if (IsAdmin)
+        if (UserSettings.IsAdmin)
         {
             this.SidebarObject.Sidebar.Toggle();
         }
-        else if (IsTeacher)
+        else if (UserSettings.IsTeacher)
         {
             this.TeacherSidebarObject.Sidebar.Toggle();
         }
-        else
+        else if (UserSettings.IsCoordinator)
         {
             this.CoordinatorSidebarObject.Sidebar.Toggle();
         }
