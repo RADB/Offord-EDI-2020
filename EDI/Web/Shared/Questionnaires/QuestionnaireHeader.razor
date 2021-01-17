@@ -17,6 +17,11 @@
             <QuestionnaireBuilder configs=@headers teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>
         </div>
     </div>
+    <div class="row" style="margin-top:70px;">
+        <div class="col-md-12">
+            <QuestionnaireNavigation></QuestionnaireNavigation>
+        </div>
+    </div>
 }
 
 <div class="row">
@@ -38,28 +43,33 @@
         </div>
     </div>
 </div>
+@if (NavigationManager.Uri.Contains("EDIQuestionnaire"))
+{
+    <div class="row" style="margin-top:0px;">
+        <div class="col-md-12">
+            <QuestionnaireNavigation></QuestionnaireNavigation>
+        </div>
+    </div>
+}
+    @code {
+        [Parameter]
+        public Teacher teacherData { get; set; }
+        //[Parameter]
+        //public TeacherProfileItemViewModel teacherModel { get; set; }
 
+        [Parameter]
+        public bool IsReadOnly { get; set; }
 
+        [Parameter]
+        public string ProvinceName { get; set; }
 
-@code {
-    [Parameter]
-    public Teacher teacherData { get; set; }
-    //[Parameter]
-    //public TeacherProfileItemViewModel teacherModel { get; set; }
+        [Parameter]
+        public int QuestionnaireId { get; set; }
 
-    [Parameter]
-    public bool IsReadOnly { get; set; }
+        [Parameter]
+        public string marginTop { get; set; } = "56px";
 
-    [Parameter]
-    public string ProvinceName { get; set; }
-
-    [Parameter]
-    public int QuestionnaireId { get; set; }
-
-    [Parameter]
-    public string marginTop { get; set; } = "56px";
-
-    private List<QuestionnairesConfiguration> headers;
+private List<QuestionnairesConfiguration> headers;
     private string _Text;
     private string predicate;
 
@@ -100,4 +110,4 @@
         headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
 
     }
-}
+    }

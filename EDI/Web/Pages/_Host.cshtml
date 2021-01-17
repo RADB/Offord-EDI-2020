@@ -21,14 +21,14 @@
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link href="https://cdn.syncfusion.com/ej2/17.4.43/fabric.css" rel="stylesheet" />
-
+    <link rel="stylesheet" href="~/css/style.css">
     <!--********************END ICONS********************-->
     <!--********************STYLES********************-->
-    <link href="_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />    
+    <link href="_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />
     <link href="_content/Blazored.Toast/blazored-toast.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <!-- Shelf this - replace style.css -->
-    <link rel="stylesheet" href="~/css/style.css">
+    @*<link rel="stylesheet" href="~/css/style.css"> moved above modal*@
     @*<link rel="stylesheet" href="~/css/CoreUI3.css" />*@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/app.css" />
@@ -85,12 +85,13 @@ else
     <link href="https://cdn.syncfusion.com/ej2/17.4.43/fabric.css" rel="stylesheet" />
 
     <!--********************END ICONS********************-->
+    <!-- Shelf this - replace style.css -->
+    <link rel="stylesheet" href="~/css/style.css">
     <!--********************STYLES********************-->
     <link href="_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />
     <link href="_content/Blazored.Toast/blazored-toast.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <!-- Shelf this - replace style.css -->
-    <link rel="stylesheet" href="~/css/style.css">
+
 
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/app.css" />
@@ -105,7 +106,6 @@ else
 
 
     <link href="_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />-->
-
     <!--********************ICONS********************-->
     <!--<link href="~/vendors/css/simple-line-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
@@ -119,7 +119,7 @@ else
 <body>
     <component type="typeof(App)" render-mode="ServerPrerendered" />
 
-    <div id="blazor-error-ui">
+    @*<div id="blazor-error-ui">
         <environment include="Staging,Production">
             An error has occurred. This application may no longer respond until reloaded.
         </environment>
@@ -128,7 +128,7 @@ else
         </environment>
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
-    </div>
+    </div>*@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Blazored.Modal/blazored.modal.js"></script>

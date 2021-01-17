@@ -1,0 +1,162 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using EDI.Web.Extensions;
+@using Newtonsoft.Json;
+@inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
+@inject ISharedService sharedService;
+@inject ServiceContext dbContext;
+@inject IToastService toastService;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+
+<div class="d-flex justify-content-between">
+    
+    <button class="btn btn-info" disabled=@PreviousDisable @onclick="@(() => gotoURL("Previous"))">
+        <i class="fas fa-chevron-left"></i> @PreviousPage
+    </button>
+    <button class="btn btn-info" disabled=@NextDisable @onclick="@(() => gotoURL("Next"))" >
+        @NextPage <i class="fas fa-chevron-right"></i>
+    </button>
+</div>
+@code {
+    private int ChildId { get; set; }
+    private bool PreviousDisable { get; set; }
+    private string PreviousPage { get; set; }
+    private bool NextDisable { get; set; }
+    private string NextPage { get; set; }
+    private string CurrentPage { get; set; }
+    private List<Questionnaire> questionnaires;
+
+    protected void gotoURL(string Direction)
+    {
+        // get the URL
+        string url = string.Format("EDIQuestionnaires/{0}/{1}", Direction == "Previous"?PreviousPage:NextPage, ChildId);
+        // save the questionnaire
+        Save(UserSettings.UseJSON);
+        // navigate to the new page
+        NavigationManager.NavigateTo(url);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else
+        {
+            GetChildId();
+
+            SetPreviousNext();
+        }
+    }
+
+    private void GetChildId()
+    {
+        Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (uri.Segments.Count() != 4)
+        {
+            NavigationManager.NavigateTo("./children/index");
+        }
+        else
+        {
+            if (!Int32.TryParse(uri.Segments[3], out int studentId))
+            {
+                NavigationManager.NavigateTo("./children/index");
+            }
+            else
+            {
+                ChildId = studentId;
+                CurrentPage = uri.Segments[2].ToString();
+            }
+        }
+    }
+
+    private void SetPreviousNext()
+    {
+        PreviousDisable = false;
+        NextDisable = false;
+
+        switch (CurrentPage)
+        {
+            case "Demographics/":
+                PreviousDisable = true;
+                PreviousPage = string.Empty;
+                NextPage = "SectionA";
+                break;
+
+            case "SectionA/":
+                PreviousPage = "Demographics";
+                NextPage = "SectionB";
+                break;
+            case "SectionB/":
+                PreviousPage = "SectionA";
+                NextPage = "SectionC";
+
+                break;
+            case "SectionC/":
+                PreviousPage = "SectionB";
+                NextPage = "SectionD";
+                break;
+            case "SectionD/":
+                PreviousPage = "SectionC";
+                NextPage = "SectionE";
+                break;
+
+            case "SectionE/":
+                NextDisable = true;
+                PreviousPage = "SectionD";
+                NextPage = string.Empty;
+                break;
+        }
+    }
+
+    private async void Save(bool useJSON)
+    {
+        if (useJSON)
+        {
+            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+            if (teacherJson != null && teacherJson.Length > 0)
+            {
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                await SaveDisconnectedTeacher(tempTeacher);
+
+                await sessionStorage.RemoveItemAsync("Teacher");
+            }
+        }
+        else
+        {
+            if (UserSettings.TeacherData != null)
+            {
+                await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                UserSettings.TeacherData = null;
+            }
+        }
+
+    }
+
+    private async Task SaveDisconnectedTeacher(Teacher TeacherData)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+        {
+            // load the disconnected data into the context
+            servicecontext.Update(TeacherData);
+            try
+            {
+                await servicecontext.SaveChangesAsync();
+
+                toastService.ShowSuccess("Data Saved Successfully!");
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+            }
+        }
+    }
+}

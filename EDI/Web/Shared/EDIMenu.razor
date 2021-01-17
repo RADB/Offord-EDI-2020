@@ -60,128 +60,125 @@
 
 
     @code {
-            // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
-            private Boolean isFrench { get; set; }
+        // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
+        private Boolean isFrench { get; set; }
 
-            private Boolean RadioLabels { get; set; }
-            private Boolean Validation { get; set; }
+        private Boolean RadioLabels { get; set; }
+        private Boolean Validation { get; set; }
 
-            private string LabelFonts { get; set; }
+        private string LabelFonts { get; set; }
 
-            private bool IsComplete { get; set; } = false;
-            // get this value from the entity field IsComplete on each
+        private bool IsComplete { get; set; } = false;
+        // get this value from the entity field IsComplete on each
 
-            private int ChildId { get; set; }
+        private int ChildId { get; set; }
 
-            private bool isChildQuestionnaire;
-            private List<Questionnaire> questionnaires;
-            private bool collapseNavMenu = false;
-            private bool expandMenu;
-            private string iconCSS = "";
-            private string color = "";
+        private bool isChildQuestionnaire;
+        private List<Questionnaire> questionnaires;
+        private bool collapseNavMenu = false;
+        private bool expandMenu;
+        private string iconCSS = "";
+        private string color = "";
 
-            private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-            private void ToggleNavMenu()
+        private void ToggleNavMenu()
+        {
+            collapseNavMenu = !collapseNavMenu;
+            expandMenu = false;
+        }
+
+        private void ToggleSubmenu()
+        {
+            expandMenu = !expandMenu;
+        }
+
+
+        protected override async Task OnInitializedAsync()
+        {
+            if (!UserSettings.IsAuthenticated)
             {
-                collapseNavMenu = !collapseNavMenu;
-                expandMenu = false;
+                NavigationManager.NavigateTo("./login");
             }
-
-            private void ToggleSubmenu()
+            else
             {
-                expandMenu = !expandMenu;
-            }
-
-
-            protected override async Task OnInitializedAsync()
-            {
-                if (!UserSettings.IsAuthenticated)
+                if (IsComplete)
                 {
-                    NavigationManager.NavigateTo("./login");
+                    iconCSS = "far fa-check-square fa-lg";
+                    color = "green";
                 }
                 else
                 {
-                    if (IsComplete)
-                    {
-                        iconCSS = "far fa-check-square fa-lg";
-                        color = "green";
-                    }
-                    else
-                    {
-                        iconCSS = "far fa-square fa-lg";
-                        color = "red";
-                    }
-
-                    if (UserSettings.Language == "English")
-                        isFrench = false;
-                    else
-                        isFrench = true;
-
-                    RadioLabels = UserSettings.RadioLabels;
-
-                    LabelFonts = UserSettings.LabelFonts;
-
-                    GetChildId();
-                    //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
-                    getData();
+                    iconCSS = "far fa-square fa-lg";
+                    color = "red";
                 }
-            }
 
-            private void getData()
-            {
-                questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
-            }
+                if (UserSettings.Language == "English")
+                    isFrench = false;
+                else
+                    isFrench = true;
 
-            private void GetChildId()
+                RadioLabels = UserSettings.RadioLabels;
+
+                LabelFonts = UserSettings.LabelFonts;
+
+                GetChildId();
+                //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+                getData();
+            }
+        }
+
+        private void getData()
+        {
+            questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
+        }
+
+        private void GetChildId()
+        {
+            Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            if (uri.Segments.Count() != 4)
             {
-                Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-                if (uri.Segments.Count() != 4)
+                NavigationManager.NavigateTo("./children/index");
+            }
+            else
+            {
+                if (!Int32.TryParse(uri.Segments[3], out int studentId))
                 {
                     NavigationManager.NavigateTo("./children/index");
                 }
                 else
                 {
-                    if (!Int32.TryParse(uri.Segments[3], out int studentId))
-                    {
-                        NavigationManager.NavigateTo("./children/index");
-                    }
-                    else
-                    {
-                        ChildId = studentId;
-                    }
+                    ChildId = studentId;
                 }
-
             }
 
-
-
-
-private async void Save(bool useJSON)
-{
-    if (useJSON)
-    {
-        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-        if (teacherJson != null && teacherJson.Length > 0)
-        {
-            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
-
-            await SaveDisconnectedTeacher(tempTeacher);
-
-            await sessionStorage.RemoveItemAsync("Teacher");
         }
-    }
-    else
-    {
-        if (UserSettings.TeacherData != null)
-        {
-            await SaveDisconnectedTeacher(UserSettings.TeacherData);
 
-            UserSettings.TeacherData = null;
+        private async void Save(bool useJSON)
+        {
+            if (useJSON)
+            {
+                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                if (teacherJson != null && teacherJson.Length > 0)
+                {
+                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                    await SaveDisconnectedTeacher(tempTeacher);
+
+                    await sessionStorage.RemoveItemAsync("Teacher");
+                }
+            }
+            else
+            {
+                if (UserSettings.TeacherData != null)
+                {
+                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                    UserSettings.TeacherData = null;
+                }
+            }
+
         }
-    }
-            
-}
 
         private async Task SaveDisconnectedTeacher(Teacher TeacherData)
         {
@@ -212,7 +209,7 @@ private async void Save(bool useJSON)
             var url = NavigationManager.Uri;
             string navigateTo;
 
-            if(UseSession)
+            if (UseSession)
             {
                 await sessionStorage.SetItemAsync<string>("CurrentUrl", url);
                 //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
@@ -228,6 +225,7 @@ private async void Save(bool useJSON)
 
             Save(UserSettings.UseJSON);
             NavigationManager.NavigateTo(navigateTo);
+            //NavigationManager.NavigateTo(url,Force);
             //await InvokeAsync(() => StateHasChanged());
 
         }
@@ -244,7 +242,9 @@ private async void Save(bool useJSON)
 
             UserSettings.RadioLabels = RadioLabels;
 
-            BounceBack(true);
+            StateHasChanged();
+
+            BounceBack(false);
         }
 
         private async void OnLanguageChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
@@ -258,7 +258,7 @@ private async void Save(bool useJSON)
 
             await accountService.UpdateUserLanguageAsync(UserSettings);
 
-            BounceBack(true);
+            BounceBack(false);
         }
 
         private async void OnValidationChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
@@ -272,7 +272,9 @@ private async void Save(bool useJSON)
 
             UserSettings.Validation = Validation;
 
-            BounceBack(true);
+            StateHasChanged();
+
+            BounceBack(false);
         }
 
         //private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
