@@ -299,5 +299,61 @@ namespace EDI.Web.Services
                 return -1;
             }
         }
+
+        public int GetCompletedQuestions(int id)
+        {
+
+            Log.Information("GetCompletedQuestions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var profile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == id).FirstOrDefault();
+
+                var totalItems = profile.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : profile.CompletedQuestions;
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetCompletedQuestions failed:" + ex.Message);
+                return -1;
+            }
+        }
+
+        public int GetRequiredQuestions(int id)
+        {
+
+            Log.Information("GetRequiredQuestions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var profile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == id).FirstOrDefault();
+
+                var totalItems = profile.RequiredQuestions == 0 ? 10 : profile.RequiredQuestions;
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetRequiredQuestions failed:" + ex.Message);
+                return -1;
+            }
+        }
+        private int GetRandomNumber(int minimum, int maximum)
+        {
+            try
+            {
+                Random rnd = new Random();
+                int number = rnd.Next(minimum, maximum);
+
+                return number;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetRandomNumber failed:" + ex.Message);
+
+                return -1;
+            }
+        }
     }
 }

@@ -172,7 +172,10 @@
             var childstatus = dbContext.ChildStatuses.Where(p => p.Id == child.ChildStatusId).FirstOrDefault();
             achild.ChildStatus = childstatus.English;
 
-            achild.Progress = mathService.GetRandomPercent(1, 99);
+            var totaolcompleted = childService.GetCompletedQuestions(child.Id);
+            var totalrequired = childService.GetRequiredQuestions(child.Id);
+
+            achild.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
 
             sivm.Add(achild);
         }

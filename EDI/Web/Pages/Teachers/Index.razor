@@ -157,7 +157,10 @@
                 var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
                 ateacher.SchoolName = school.SchoolName;
                 ateacher.SchoolNumber = school.SchoolNumber;
-                ateacher.Progress = mathService.GetRandomPercent(1, 99);
+
+                var totaolcompleted = teacherService.GetCompletedQuestions(teacher.Id);
+                var totalrequired = teacherService.GetRequiredQuestions(teacher.Id);
+                ateacher.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
                 sivm.Add(ateacher);
             }
 

@@ -340,5 +340,81 @@ namespace EDI.Web.Services
                 return -1;
             }
         }
+
+        public int GetCompletedQuestions(int id)
+        {
+
+            Log.Information("GetCompletedQuestions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var demog = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiona = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiond = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectione = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == id).FirstOrDefault();
+
+                var totalItems = (demog.CompletedQuestions == 0 ? GetRandomNumber(1,10) : demog.CompletedQuestions) +
+                                    (sectiona.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectiona.CompletedQuestions) +
+                                    (sectionb.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectionb.CompletedQuestions) +
+                                    (sectionc.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectionc.CompletedQuestions) +
+                                    (sectiond.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectiond.CompletedQuestions) +
+                                    (sectione.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectione.CompletedQuestions);
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetCompletedQuestions failed:" + ex.Message);
+                return -1;
+            }
+        }
+
+        public int GetRequiredQuestions(int id)
+        {
+
+            Log.Information("GetRequiredQuestions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var demog = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiona = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiond = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectione = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == id).FirstOrDefault();
+
+                var totalItems = (demog.RequiredQuestions == 0 ? 10 : demog.RequiredQuestions) +
+                                    (sectiona.RequiredQuestions == 0 ? 10 : sectiona.RequiredQuestions) +
+                                    (sectionb.RequiredQuestions == 0 ? 10 : sectionb.RequiredQuestions) +
+                                    (sectionc.RequiredQuestions == 0 ? 10 : sectionc.RequiredQuestions) +
+                                    (sectiond.RequiredQuestions == 0 ? 10 : sectiond.RequiredQuestions) +
+                                    (sectione.RequiredQuestions == 0 ? 10 : sectione.RequiredQuestions);
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetRequiredQuestions failed:" + ex.Message);
+                return -1;
+            }
+        }
+        private int GetRandomNumber(int minimum, int maximum)
+        {
+            try
+            {
+                Random rnd = new Random();
+                int number = rnd.Next(minimum, maximum);
+
+                return number;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetRandomNumber failed:" + ex.Message);
+
+                return -1;
+            }
+        }
     }
 }
