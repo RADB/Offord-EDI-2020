@@ -111,7 +111,7 @@ namespace EDI.Web.Services
                 _child.TeacherId = child.TeacherId;
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
-                _child.PostalCodeZip = child.PostalCodeZip;
+                _child.PostalCode = child.PostalCode;
                 _child.ModifiedDate = DateTime.Now;
                 _child.ModifiedBy = _userSettings.UserName;
 
@@ -139,7 +139,7 @@ namespace EDI.Web.Services
                 _child.TeacherId = child.TeacherId;
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
-                _child.PostalCodeZip = child.PostalCodeZip;
+                _child.PostalCode = child.PostalCode;
                 _child.CreatedDate = DateTime.Now;
                 _child.CreatedBy = _userSettings.UserName;
                 _child.ModifiedDate = DateTime.Now;
@@ -240,7 +240,7 @@ namespace EDI.Web.Services
                     TeacherId = child.TeacherId,
                     GenderId = child.GenderId,
                     Dob = child.Dob,
-                    PostalCodeZip = child.PostalCodeZip,
+                    PostalCode = child.PostalCode,
                     CreatedDate = child.CreatedDate,
                     CreatedBy = child.CreatedBy,
                     ModifiedDate = child.ModifiedDate,

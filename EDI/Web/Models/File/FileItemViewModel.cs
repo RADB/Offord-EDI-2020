@@ -19,7 +19,7 @@ namespace EDI.Web.Models
         public int? GenderId { get; set; }
         public string Gender { get; set; }
         public DateTime? ChildDob { get; set; }
-        public string ChildPostalCodeZip { get; set; }
+        public string ChildPostalCode { get; set; }
         public string ChildEdiid { get; set; }
         public int? FileImportStatusId { get; set; }
         public string FileImportStatus { get; set; }

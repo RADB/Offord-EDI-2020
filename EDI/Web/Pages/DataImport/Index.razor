@@ -92,7 +92,7 @@
                                 <GridColumn Field=@nameof(FileItemViewModel.LocalId) HeaderText="Child's Local ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.Gender) HeaderText="Gender" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.ChildDob) HeaderText="DOB" Format="yyyy-MM-dd" Type="ColumnType.Date" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
-                                <GridColumn Field=@nameof(FileItemViewModel.ChildPostalCodeZip) HeaderText="Postal" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                                <GridColumn Field=@nameof(FileItemViewModel.ChildPostalCode) HeaderText="Postal" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
                                 <GridColumn Field=@nameof(FileItemViewModel.ChildEdiid) HeaderText="EDI_ID" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             </GridColumns>
                         </SfGrid>
@@ -159,7 +159,7 @@
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
                 afile.ChildDob = file.ChildDob;
-                afile.ChildPostalCodeZip = file.ChildPostalCodeZip;
+                afile.ChildPostalCode = file.ChildPostalCode;
                 afile.ChildEdiid = file.ChildEdiid;
 
                 sivm.Add(afile);
@@ -212,7 +212,7 @@
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
                 afile.ChildDob = file.ChildDob;
-                afile.ChildPostalCodeZip = file.ChildPostalCodeZip;
+                afile.ChildPostalCode = file.ChildPostalCode;
                 afile.ChildEdiid = file.ChildEdiid;
 
                 sivm.Add(afile);
@@ -285,7 +285,7 @@
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
                 afile.ChildDob = nfile.ChildDob;
-                afile.ChildPostalCodeZip = nfile.ChildPostalCodeZip;
+                afile.ChildPostalCode = nfile.ChildPostalCode;
                 afile.ChildEdiid = nfile.ChildEdiid;
 
                 sivm.Add(afile);
@@ -393,7 +393,7 @@
                 var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
                 afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
                 afile.ChildDob = file.ChildDob;
-                afile.ChildPostalCodeZip = file.ChildPostalCodeZip;
+                afile.ChildPostalCode = file.ChildPostalCode;
                 afile.ChildEdiid = file.ChildEdiid;
 
                 sivm.Add(afile);

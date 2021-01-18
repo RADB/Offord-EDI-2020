@@ -110,6 +110,9 @@
         {
             await childService.UpdateChildAsync(childform1.ChildModel);
 
+            // TODO update demographics with DOB, Province, Gender
+            
+
             Message = "Child updated successfully.";
 
             toastService.ShowSuccess(Message);

@@ -30,7 +30,7 @@ namespace EDI.Web.Models
         public string Gender { get; set; }
         [Required(ErrorMessage = "DOB is required.")]
         public DateTime? Dob { get; set; }
-        public string PostalCodeZip { get; set; }
+        public string PostalCode { get; set; }
         public string ChildNumber { get; set; }
         public int? Progress { get; set; }
         public bool? IsAdmin { get; set; }

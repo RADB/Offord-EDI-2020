@@ -48,7 +48,7 @@
                             <GridColumn Field=@nameof(ChildItemViewModel.TeacherName) HeaderText=@Translate("Teacher") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.PostalCodeZip) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.PostalCode) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
                             <GridColumn HeaderText=@Translate("Status") Width="15">
                                 <Template>
                                     @{
@@ -149,7 +149,7 @@
             achild.Ediid = child.Ediid;
             achild.LocalId = child.LocalId;
             achild.Dob = child.Dob;
-            achild.PostalCodeZip = child.PostalCodeZip;
+            achild.PostalCode = child.PostalCode;
             achild.YearId = child.YearId;
 
             var year = dbContext.Years.Where(p => p.Id == child.YearId).FirstOrDefault();

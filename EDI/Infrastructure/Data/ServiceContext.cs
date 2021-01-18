@@ -186,7 +186,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
-                entity.Property(e => e.PostalCodeZip).HasMaxLength(10);
+                entity.Property(e => e.PostalCode).HasMaxLength(10);
 
                 entity.Property(e => e.ChildNumber).HasMaxLength(15);
 
@@ -259,7 +259,7 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ChildEdiid).HasMaxLength(15);
 
-                entity.Property(e => e.ChildPostalCodeZip).HasMaxLength(10);
+                entity.Property(e => e.ChildPostalCode).HasMaxLength(10);
 
                 entity.Property(e => e.CoordinatorEmail).HasMaxLength(100);
 

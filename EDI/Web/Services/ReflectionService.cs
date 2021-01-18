@@ -32,6 +32,10 @@ namespace EDI.Web.Services
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, value);
                 }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.Int32")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, int.Parse(value));
+                }
                 else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Byte")
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, string.IsNullOrEmpty(value) ? null : byte.Parse(value));
@@ -40,6 +44,7 @@ namespace EDI.Web.Services
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, short.Parse(value));
                 }
+                
                 else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Decimal")
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, decimal.Parse(value));
@@ -104,8 +109,12 @@ namespace EDI.Web.Services
             var obj = GetEntity(data, entityName);
             SetFieldValue(obj, fieldName, value);
 
+            // update the child table with DOB, Postal and Gender
+            if (entityName == "Questionnaires.Data.Demographics" && (fieldName == "Dob" || fieldName == "GenderId" || fieldName =="PostalCode"))
+                SetFieldValue(data.Children.First(), fieldName, value);
+
             // store the teacher data entity changes for saving
-            if(!_UserSettings.UseJSON)
+            if (!_UserSettings.UseJSON)
                 _UserSettings.TeacherData = data;
             
         }

@@ -48,5 +48,10 @@ namespace EDI.Web.Models
 
         public Teacher TeacherData { get; set; }
         public bool UseJSON { get; set; } = false;
+
+        /* Questionnaire Stats*/
+        public int QuestionsRequired { get; set; } = 0;
+        public int QuestionsCompleted { get; set; } = 0;
+        public int QuestionsTotal { get; set; } = 0;
     }
 }

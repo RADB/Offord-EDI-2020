@@ -592,7 +592,7 @@ namespace EDI.Web.Services
                                         _file.ChildDob = DateTime.Parse(dob);
                                     }
 
-                                    _file.ChildPostalCodeZip = row.Cells[9]?.CalculatedValue.Trim();
+                                    _file.ChildPostalCode = row.Cells[9]?.CalculatedValue.Trim();
                                     _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
 
 
@@ -1087,7 +1087,7 @@ namespace EDI.Web.Services
                                             _child.TeacherId = teacherid;
                                             _child.GenderId = data.GenderId;
                                             _child.Dob = data.ChildDob;
-                                            _child.PostalCodeZip = data.ChildPostalCodeZip;
+                                            _child.PostalCode = data.ChildPostalCode;
                                             _child.CreatedDate = DateTime.Now;
                                             _child.CreatedBy = _userSettings.UserName;
                                             _child.ModifiedDate = DateTime.Now;
@@ -1123,7 +1123,7 @@ namespace EDI.Web.Services
                                 _demographics.ChildId = childid;
                                 _demographics.GenderId = (int?)data.GenderId;
                                 _demographics.Dob = data.ChildDob;
-                                _demographics.PostalCode = data.ChildPostalCodeZip;
+                                _demographics.PostalCode = data.ChildPostalCode;
                                 _demographics.CreatedDate = DateTime.Now;
                                 _demographics.CreatedBy = _userSettings.UserName;
                                 _demographics.ModifiedDate = DateTime.Now;

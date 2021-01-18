@@ -20,7 +20,7 @@ namespace EDI.ApplicationCore.Entities
         //public byte? ClassTime { get; set; }
         public int? GenderId { get; set; }
         public DateTime? ChildDob { get; set; }
-        public string ChildPostalCodeZip { get; set; }
+        public string ChildPostalCode { get; set; }
         public string ChildEdiid { get; set; }
         public int? FileImportStatusId { get; set; }
         public virtual Gender Gender { get; set; }
