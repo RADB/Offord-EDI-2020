@@ -94,6 +94,9 @@
         }
         else
         {
+            var childstatus = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+            childform1.ChildModel.ChildStatusId = childstatus.Id;
+
             int id = await ChildService.CreateChildAsync(childform1.ChildModel);
 
             Message = "New Child added successfully.";

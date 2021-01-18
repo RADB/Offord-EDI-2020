@@ -4,6 +4,9 @@ using EDI.ApplicationCore.Specifications;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using Ardalis.GuardClauses;
 using EDI.Web.Models;
 using EDI.Web.Interfaces;
@@ -17,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
+using EDI.Infrastructure.Data;
 
 namespace EDI.Web.Services
 {
@@ -36,6 +40,7 @@ namespace EDI.Web.Services
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
         private UserSettings _userSettings { get; set; }
+        private readonly ServiceContext _dbContext;
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -52,6 +57,7 @@ namespace EDI.Web.Services
             IAsyncRepository<QuestionnairesDataSectionD> questionnairesDataSectionD,
             IAsyncRepository<QuestionnairesDataSectionE> questionnairesDataSectionE,
             IAsyncIdentityRepository accountRepository,
+            ServiceContext dbContext,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
@@ -68,6 +74,7 @@ namespace EDI.Web.Services
             _questionnairesDataSectionD = questionnairesDataSectionD;
             _questionnairesDataSectionE = questionnairesDataSectionE;
             _accountRepository = accountRepository;
+            _dbContext = dbContext;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
@@ -93,6 +100,30 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task UnlockChildAsync(int id)
+        {
+            Log.Information("UnlockChildAsync started by:" + _userSettings.UserName);
+
+            try
+            {
+                var _child = await _childRepository.GetByIdAsync(id);
+
+                Guard.Against.NullChild(id, _child);
+
+                var childstatus = _dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+
+                _child.ChildStatusId = childstatus.Id;
+                _child.ModifiedDate = DateTime.Now;
+                _child.ModifiedBy = _userSettings.UserName;
+
+                await _childRepository.UpdateAsync(_child);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("UnlockChildAsync failed:" + ex.Message);
+            }
+        }
+
         public async Task UpdateChildAsync(ChildItemViewModel child)
         {
             
@@ -112,10 +143,19 @@ namespace EDI.Web.Services
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
                 _child.PostalCode = child.PostalCode;
+                _child.ChildStatusId = child.ChildStatusId;
                 _child.ModifiedDate = DateTime.Now;
                 _child.ModifiedBy = _userSettings.UserName;
 
                 await _childRepository.UpdateAsync(_child);
+
+                var childdemog = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == child.Id).FirstOrDefault();
+
+                childdemog.Dob = child.Dob;
+                childdemog.PostalCode = child.PostalCode;
+                childdemog.GenderId = child.GenderId;
+
+                await _questionnairesDataDemographic.UpdateAsync(childdemog);
             }
             catch (Exception ex)
             {
@@ -140,6 +180,7 @@ namespace EDI.Web.Services
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
                 _child.PostalCode = child.PostalCode;
+                _child.ChildStatusId = child.ChildStatusId;
                 _child.CreatedDate = DateTime.Now;
                 _child.CreatedBy = _userSettings.UserName;
                 _child.ModifiedDate = DateTime.Now;
@@ -239,6 +280,7 @@ namespace EDI.Web.Services
                     YearId = child.YearId,
                     TeacherId = child.TeacherId,
                     GenderId = child.GenderId,
+                    ChildStatusId = child.ChildStatusId,
                     Dob = child.Dob,
                     PostalCode = child.PostalCode,
                     CreatedDate = child.CreatedDate,
@@ -295,6 +337,82 @@ namespace EDI.Web.Services
             catch (Exception ex)
             {
                 Log.Error("GetDuplicateCount failed:" + ex.Message);
+                return -1;
+            }
+        }
+
+        public int GetCompletedQuestions(int id)
+        {
+
+            Log.Information("GetCompletedQuestions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var demog = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiona = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiond = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectione = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == id).FirstOrDefault();
+
+                var totalItems = (demog.CompletedQuestions == 0 ? GetRandomNumber(1,10) : demog.CompletedQuestions) +
+                                    (sectiona.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectiona.CompletedQuestions) +
+                                    (sectionb.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectionb.CompletedQuestions) +
+                                    (sectionc.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectionc.CompletedQuestions) +
+                                    (sectiond.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectiond.CompletedQuestions) +
+                                    (sectione.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectione.CompletedQuestions);
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetCompletedQuestions failed:" + ex.Message);
+                return -1;
+            }
+        }
+
+        public int GetRequiredQuestions(int id)
+        {
+
+            Log.Information("GetRequiredQuestions started by:" + _userSettings.UserName);
+
+            try
+            {
+                var demog = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiona = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectionc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectiond = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == id).FirstOrDefault();
+                var sectione = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == id).FirstOrDefault();
+
+                var totalItems = (demog.RequiredQuestions == 0 ? 10 : demog.RequiredQuestions) +
+                                    (sectiona.RequiredQuestions == 0 ? 10 : sectiona.RequiredQuestions) +
+                                    (sectionb.RequiredQuestions == 0 ? 10 : sectionb.RequiredQuestions) +
+                                    (sectionc.RequiredQuestions == 0 ? 10 : sectionc.RequiredQuestions) +
+                                    (sectiond.RequiredQuestions == 0 ? 10 : sectiond.RequiredQuestions) +
+                                    (sectione.RequiredQuestions == 0 ? 10 : sectione.RequiredQuestions);
+
+                return totalItems;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetRequiredQuestions failed:" + ex.Message);
+                return -1;
+            }
+        }
+        private int GetRandomNumber(int minimum, int maximum)
+        {
+            try
+            {
+                Random rnd = new Random();
+                int number = rnd.Next(minimum, maximum);
+
+                return number;
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetRandomNumber failed:" + ex.Message);
+
                 return -1;
             }
         }

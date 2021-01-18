@@ -49,13 +49,7 @@
                             <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.PostalCode) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
-                            <GridColumn HeaderText=@Translate("Status") Width="15">
-                                <Template>
-                                    @{
-                                        <h6>@Translate("In Progress")</h6>
-                                    }
-                                </Template>
-                            </GridColumn>
+                            <GridColumn Field=@nameof(ChildItemViewModel.ChildStatus) HeaderText=@Translate("Status") Width="30"></GridColumn>
                             <GridColumn HeaderText=@Translate("% Complete") Width="25">
                                 <Template>
                                     @{
@@ -68,6 +62,17 @@
                                     }
                                 </Template>
                             </GridColumn>
+                            @if (UserSettings.IsAdmin)
+                            {
+                                <GridColumn HeaderText="" Width="10">
+                                    <Template>
+                                        @{
+                                            var comm = (context as ChildItemViewModel);
+                                            <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/unlock.png" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                        }
+                                    </Template>
+                                </GridColumn>
+                            }
                             <GridColumn HeaderText="" Width="20">
                                 <Template>
                                     @{
@@ -124,7 +129,7 @@
             //   TeacherID = teacher.Id;
             AllowEdit = true;
             AllowDelete = false;
-        }        
+        }
 
 
         List<Child> allchildren;
@@ -163,7 +168,14 @@
             var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
             achild.TeacherName = teacher.TeacherName;
 
-            achild.Progress = mathService.GetRandomPercent(1, 99);
+            achild.ChildStatusId = child.ChildStatusId;
+            var childstatus = dbContext.ChildStatuses.Where(p => p.Id == child.ChildStatusId).FirstOrDefault();
+            achild.ChildStatus = childstatus.English;
+
+            var totaolcompleted = childService.GetCompletedQuestions(child.Id);
+            var totalrequired = childService.GetRequiredQuestions(child.Id);
+
+            achild.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
 
             sivm.Add(achild);
         }
@@ -246,5 +258,29 @@
     private void GotoQuestionnaire(int id)
     {
         NavigationManager.NavigateTo("./EDIQuestionnaires/Demographics/" + id);
+    }
+
+    private async void Unlock(int id)
+    {
+        await childService.UnlockChildAsync(id);
+
+        toastService.ShowSuccess("Child unlocked successfully.");
+
+        var tmp = new List<ChildItemViewModel>();
+        foreach (var item in children)
+        {
+            if (item.Id == id)
+            {
+                var childstatus = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                item.ChildStatusId = childstatus.Id;
+                item.ChildStatus = "In Progress";
+            }
+            tmp.Add(item);
+        }
+        this.children = tmp;
+        this.rowid = 0;
+
+        this.Grid.Refresh();
+        StateHasChanged();
     }
 }

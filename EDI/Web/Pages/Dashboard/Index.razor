@@ -98,7 +98,7 @@
                         <div class="row">
                             <div class="col-lg-8 mb-4">
                                 <!-- EDI Questionnaires Status -->
-                                <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" />
+                                <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted"/>
 
                                 <!-- Participation Questionnaires Status -->
                                 <QuestionnaireStatusBar Header="Teacher Participation Questionnaires" Total="@teachers" />
@@ -189,6 +189,10 @@
     private int children { get; set; }
     private string url { get; set; }
 
+    private int ChildrenNew { get; set; } = 0;
+    private int ChildrenInprogress { get; set; } = 0;
+    private int ChildrenCompleted { get; set; } = 0;
+
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -207,6 +211,19 @@
                 schools = dbContext.Schools.Where(predicate).Count();
                 teachers = dbContext.Teachers.Where(predicate).Count();
                 children = dbContext.Children.Where(predicate).Count();
+
+                var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+                var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                var statuscompleted = dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+
+                var predicatenew = predicate + "&& ChildStatusId == " + statusnew.Id;
+                ChildrenNew = dbContext.Children.Where(predicatenew).Count();
+
+                var predicateinprogess = predicate + "&& ChildStatusId == " + statusinprogress.Id;
+                ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
+
+                var predicatecomplete = predicate + "&& ChildStatusId == " + statuscompleted.Id;
+                ChildrenCompleted = dbContext.Children.Where(predicateinprogess).Count();
             }
             else if (UserSettings.IsTeacher)
             {

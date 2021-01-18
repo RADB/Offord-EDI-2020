@@ -17,7 +17,7 @@ namespace EDI.ApplicationCore.Entities
             QuestionnairesDataSectionBs = new HashSet<QuestionnairesDataSectionB>();
             QuestionnairesDataSectionCs = new HashSet<QuestionnairesDataSectionC>();
             QuestionnairesDataSectionDs = new HashSet<QuestionnairesDataSectionD>();
-            QuestionnairesDataSectionEs = new HashSet<QuestionnairesDataSectionE>();            
+            QuestionnairesDataSectionEs = new HashSet<QuestionnairesDataSectionE>();
         }
 
         public string Ediid { get; set; }
@@ -28,6 +28,7 @@ namespace EDI.ApplicationCore.Entities
         public int? YearId { get; set; }
         public int? TeacherId { get; set; }
         public int? GenderId { get; set; }
+        public int? ChildStatusId { get; set; }
         public DateTime? Dob { get; set; }
         public string PostalCode { get; set; }
         public string ChildNumber { get; set; }
@@ -36,6 +37,7 @@ namespace EDI.ApplicationCore.Entities
         [JsonIgnore]
         public virtual Teacher Teacher { get; set; }
         public virtual Year Year { get; set; }
+        public virtual ChildStatus ChildStatus { get; set; }
         public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
         public virtual ICollection<QuestionnairesDataSectionA> QuestionnairesDataSectionAs { get; set; }
         public virtual ICollection<QuestionnairesDataSectionB> QuestionnairesDataSectionBs { get; set; }

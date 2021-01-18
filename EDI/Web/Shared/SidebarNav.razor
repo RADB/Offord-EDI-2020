@@ -79,6 +79,7 @@
         treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Configuration", icon = "icon-settings icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Data Import", icon = "icon-cloud-upload icon", pid = "04" });
         treedata.Add(new TreeData { nodeId = "04-05", nodeText = "Lookup Data", icon = "icon-list icon", pid = "04", hasChild = true });
+        treedata.Add(new TreeData { nodeId = "04-18", nodeText = "Child Status", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-06", nodeText = "Countries", icon = "icon-flag icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-07", nodeText = "File Import Status", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-08", nodeText = "Genders", icon = "icon-symbol-female icon", pid = "04-05" });
@@ -183,6 +184,10 @@
         else if (args.NodeData.Id == "04-08")
         {
             NavigationManager.NavigateTo("./Genders/index");
+        }
+        else if (args.NodeData.Id == "04-18")
+        {
+            NavigationManager.NavigateTo("./ChildStatus/index");
         }
         /*else if (args.NodeData.Id == "04-09")
          {

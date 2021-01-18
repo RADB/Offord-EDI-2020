@@ -32,6 +32,8 @@ namespace EDI.Web.Models
         public DateTime? Dob { get; set; }
         public string PostalCode { get; set; }
         public string ChildNumber { get; set; }
+        public int? ChildStatusId { get; set; }
+        public string ChildStatus { get; set; }
         public int? Progress { get; set; }
         public bool? IsAdmin { get; set; }
     }

@@ -108,10 +108,13 @@
         }
         else
         {
+            var childstatus = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+            childform1.ChildModel.ChildStatusId = childstatus.Id;
+
             await childService.UpdateChildAsync(childform1.ChildModel);
 
             // TODO update demographics with DOB, Province, Gender
-            
+
 
             Message = "Child updated successfully.";
 
