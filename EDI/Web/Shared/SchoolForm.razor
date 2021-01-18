@@ -55,10 +55,10 @@
             <textarea class="col-md-7 col-form-label" rows="8" @bind="SchoolModel.Description" />
         </div>
 
-        <div class="form-group row">
+        @*<div class="form-group row">
             <label class="col-md-4 col-form-label" for="Elpschool">Elp School: </label>
             <input type="checkbox" value="@SchoolModel.Elpschool" @onchange="@(e =>CheckElpschoolChange(e))" />
-        </div>
+        </div>*@
 
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="Site">Site<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
@@ -88,7 +88,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
     </div>
 </EditForm>
 
@@ -195,17 +195,17 @@
         }
     }
 
-    private void CheckElpschoolChange(ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
+    //private void CheckElpschoolChange(ChangeEventArgs e)
+    //{
+    //    string selectedString = e.Value.ToString();
 
-        SchoolModel.Elpschool = null;
+    //    SchoolModel.Elpschool = null;
 
-        if (bool.TryParse(selectedString, out bool elpschool))
-        {
-            SchoolModel.Elpschool = elpschool;
-        }
-    }
+    //    if (bool.TryParse(selectedString, out bool elpschool))
+    //    {
+    //        SchoolModel.Elpschool = elpschool;
+    //    }
+    //}
 
     private void YearChange(ChangeEventArgs e)
     {

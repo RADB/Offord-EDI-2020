@@ -23,8 +23,8 @@ namespace EDI.Web.Models
         public string Country { get; set; }
         public string Province { get; set; }
         public string City { get; set; }
-        public bool? Elpschool { get; set; }
-        public string ElpschoolValue { get; set; }
+        //public bool? Elpschool { get; set; }
+        //public string ElpschoolValue { get; set; }
         public string Description { get; set; }
         public string SiteNumber { get; set; }
         public int Teachers { get; set; }

@@ -92,6 +92,7 @@ namespace EDI.Web.Services
 
                 _site.SiteNumber = site.SiteNumber;
                 _site.SiteName = site.SiteName;
+                _site.IsTestSite = site.IsTestSite;
                 _site.Description = site.Description;
                 _site.CoordinatorId = site.CoordinatorId;
                 _site.YearId = site.YearId;
@@ -119,6 +120,7 @@ namespace EDI.Web.Services
                 _site.SiteName = site.SiteName;
                 _site.Description = site.Description;
                 _site.CoordinatorId = site.CoordinatorId;
+                _site.IsTestSite = site.IsTestSite;
                 _site.YearId = site.YearId;
                 _site.CreatedDate = DateTime.Now;
                 _site.CreatedBy = _userSettings.UserName;
@@ -152,6 +154,7 @@ namespace EDI.Web.Services
                     SiteNumber = site.SiteNumber,
                     SiteName = site.SiteName,
                     Description = site.Description,
+                    IsTestSite = site.IsTestSite,
                     CoordinatorId = site.CoordinatorId,
                     YearId = site.YearId,
                     CreatedDate = site.CreatedDate,

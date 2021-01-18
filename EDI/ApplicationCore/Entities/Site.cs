@@ -22,7 +22,9 @@ namespace EDI.ApplicationCore.Entities
         /// guid from EDI.Identity.dbo.ASPNETUsers
         /// </summary>
         public int CoordinatorId { get; set; }
-        
+
+        public bool? IsTestSite { get; set; }
+
         public virtual ICollection<School> Schools { get; set; }
         public virtual Coordinator Coordinator { get; set; }
         public virtual Year Year { get; set; }

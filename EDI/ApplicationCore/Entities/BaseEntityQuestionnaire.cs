@@ -12,6 +12,8 @@ namespace EDI.ApplicationCore.Entities
 
         public int CompletedQuestions {get;set;}
 
+        public int RequiredQuestions { get; set; }
+
         public bool IsComplete { get; set; }
 
         public virtual Year Year { get; set; }

@@ -1,4 +1,5 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using Syncfusion.Blazor.Buttons 
+@inject NavigationManager NavigationManager
 @inject ISiteService siteService
 @inject ISharedService sharedService
 @inject IAccountService accountService
@@ -12,6 +13,13 @@
         <div class="form-group row">
             <label class="col-md-4 col-form-label" for="SiteNumber">Site Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
             <input type="text" @bind-value="SiteModel.SiteNumber" class="col-md-7 form-control" placeholder="Site Number" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="TestSite">Test Site: </label>
+            @*<input type="checkbox" @bind-value="SiteModel.IsTestSite" class="col-md-7 form-control" placeholder="Test Site" />*@
+            @*<input type="checkbox" value="@SiteModel.IsTestSite" @onchange="@(e =>CheckTestSiteChange(e))" class="col-md-7 form-control" />*@
+            <SfCheckBox ID="TestSite" CssClass="handle-text" @bind-Checked="@SiteModel.IsTestSite" @onchange="@((ev) => CheckTestSiteChange(ev))" />
         </div>
 
         <div class="form-group row">
@@ -51,7 +59,7 @@
         </div>
     </div>
     <div class="card-footer">
-        <button type="submit" class="savebutton"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
+        <button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
     </div>
 </EditForm>
 
@@ -106,6 +114,18 @@
         if (int.TryParse(selectedString, out int newyearid))
         {
             SiteModel.YearId = newyearid;
+        }
+    }    
+
+    private void CheckTestSiteChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        SiteModel.IsTestSite = false;
+
+        if (bool.TryParse(selectedString, out bool value))
+        {
+            SiteModel.IsTestSite = value;
         }
     }
 }

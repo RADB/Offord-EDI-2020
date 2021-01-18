@@ -43,6 +43,7 @@
                         </GridSortSettings>
                         <GridColumns>
                             <GridColumn Field=@nameof(SiteItemViewModel.SiteNumber) HeaderText="Site #" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(SiteItemViewModel.IsTestSite) HeaderText="Test Site" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Right" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SiteItemViewModel.SiteName) HeaderText="Name" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(SiteItemViewModel.Schools) HeaderText="# of Schools" Width="15"></GridColumn>
                             <GridColumn Field=@nameof(SiteItemViewModel.Description) HeaderText="Description" Width="30"></GridColumn>
@@ -91,6 +92,7 @@
                 asite.SiteName = site.SiteName;
                 asite.Schools = dbContext.Schools.Where(p => p.SiteId == site.Id).Count();
                 asite.SiteNumber = site.SiteNumber;
+                asite.IsTestSite = site.IsTestSite;
                 asite.Description = site.Description;
                 var coordinator = dbContext.Coordinators.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
                 asite.CoordinatorName = coordinator.CoordinatorName;
