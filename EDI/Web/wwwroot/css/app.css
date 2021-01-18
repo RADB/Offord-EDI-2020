@@ -357,17 +357,16 @@ a.btn-purple {
     width: 108px;
 }
 
-div.Valid
-{
-    border-style:solid;
-    border-color:darkgreen;
-    border-width:thin;
-    background-color:lightgreen;
+div.Valid, tr.Valid {
+    border-style: solid;
+    border-color: darkgreen;
+    border-width: thin;
+    background-color: #dce6df !important;
 }
 
-div.InValid {
+div.InValid, tr.InValid {
     border-style: solid;
     border-color: darkred;
     border-width: thin;
-    background-color: rosybrown ;
+    background-color: #e3c8c8 !important;
 }

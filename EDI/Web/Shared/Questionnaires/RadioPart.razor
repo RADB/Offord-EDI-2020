@@ -9,11 +9,20 @@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 
-<div class="row">
+<div class="row @ValidationCss">
     <h4>@((MarkupString)QuestionText)</h4>
 </div>
-<div class="row">
-    <div class="col-1"></div>
+<div class="row @ValidationCss">
+    <div class="col-1">
+       @if (Valid==true)
+        {
+        <i class="far fa-check-circle" style="font-size:50px;color:darkgreen"></i>
+        }
+        else if (Valid==false)
+        {
+        <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
+        }
+    </div>
     <div class="col-9">
         @foreach (var option in _LookupSetOptions)
         {
@@ -78,6 +87,8 @@
 
     private string LabelFonts { get; set; }
 
+
+
     protected override async Task OnInitializedAsync()
     {
         // get the question and help text
@@ -97,6 +108,15 @@
         LabelFonts = _userSettings.LabelFonts;
         if (String.IsNullOrEmpty(LabelFonts))
             LabelFonts = "1em";
+
+
+        Validation(currentValue);
+
+        //if(Config.IsRequired)
+        //    reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", e.Value.ToString());
+        //string RequiredQuestions = reflectionService.GetFieldValue(data, Config.EntityName, "RequiredQuestions");
+        //string CompletedQuestions = reflectionService.GetFieldValue(data, Config.EntityName, "CompletedQuestions");
+        //CompletionCheck(reqQuestions, );
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
@@ -114,6 +134,7 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
+        CompletedQuestion(e.Value.ToString());
         StateHasChanged();
 
     }

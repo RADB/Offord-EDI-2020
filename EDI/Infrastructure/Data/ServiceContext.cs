@@ -587,7 +587,7 @@ namespace EDI.Infrastructure.Data
                 entity.ToTable("Questionnaires.Data.SectionB", "EDI");
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");
-
+                //entity.Property(e => e.SpecialPblskills).HasColumnName("SpecialPBLskills");
                 entity.Property(e => e.CreatedDate).HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false).HasDefaultValueSql("('admin')");

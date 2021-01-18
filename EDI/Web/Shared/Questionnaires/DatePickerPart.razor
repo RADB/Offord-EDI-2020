@@ -8,11 +8,20 @@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
-<div class="row">
+<div class="row @ValidationCss">
     <h4>@((MarkupString)QuestionText)</h4>
 </div>
-<div class="row">
-    <div class="col-1"></div>
+<div class="row @ValidationCss">
+    <div class="col-1">
+        @if (Valid == true)
+        {
+            <i class="far fa-check-circle" style="font-size:50px;color:darkgreen"></i>
+        }
+        else if (Valid == false)
+        {
+            <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
+        }
+    </div>
     <div class="col-9">
         <div id="datepicker-control" class="datepicker">
             <SfDatePicker @bind-Value="currentValue" Readonly="@ReadonlyQuestion" TValue="DateTime?" Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
@@ -73,6 +82,7 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
+        Validation(currentValue.ToString());
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
@@ -80,6 +90,7 @@
         // save the data back to the object
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
 
+        CompletedQuestion(e.Value.ToString());
         StateHasChanged();
     }
 
@@ -95,6 +106,7 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
+        CompletedQuestion(e.Value.ToString());
         StateHasChanged();
     }
 }

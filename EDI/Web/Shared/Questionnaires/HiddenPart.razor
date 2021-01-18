@@ -6,7 +6,9 @@
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
 @*@oninput=@(args => onChange(args.Value.ToString(), Config.EntityField))*@
-<input type="hidden" id="@Config.EntityField" @bind="currentValue" />
+@Config.EntityField
+<input type="text" id="@Config.EntityField" @bind="currentValue" />
+<br />
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
@@ -14,33 +16,76 @@
 {
 
     private string currentValue { get; set; }
-
+    
     protected override async Task OnInitializedAsync()
     {
+        bool rebind = false;
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
-        if (currentValue != _userSettings.Language && Config.EntityField == "LanguageCompleted")
+        switch (Config.EntityField)
         {
-            currentValue = _userSettings.Language;
-            try
-            {
-                reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
-                if (_userSettings.UseJSON)
+            case "LanguageCompleted":
+                if (currentValue != _userSettings.Language)
                 {
-                    string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                    });
-                    await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
-                    StateHasChanged();
+                    currentValue = _userSettings.Language;
+                    rebind = true;
                 }
-            }
-            catch (Exception ex)
+                break;
+            case "CompletedQuestions":
+                if (int.Parse(currentValue) != _userSettings.QuestionsCompleted)
+                {
+                    currentValue = _userSettings.QuestionsCompleted.ToString();
+                    rebind = true;
+                }
+                break;
+            case "RequiredQuestions":
+                if (int.Parse(currentValue) != _userSettings.QuestionsRequired)
+                {
+                    currentValue = _userSettings.QuestionsRequired.ToString();
+                    rebind = true;
+                }
+                break;
+            case "IsComplete":
+
+                break;
+        }
+
+        if(rebind)
+        {
+            reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
+            if (_userSettings.UseJSON)
             {
-                // invoke async error on change - then goes through second time.
-                Console.WriteLine("Binding Hidden Object", ex);
+                string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
+                await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+                StateHasChanged();
             }
         }
+
+        //if (Config.EntityField == "LanguageCompleted" && currentValue != _userSettings.Language )
+        //{
+        //    currentValue = _userSettings.Language;
+        //    try
+        //    {
+        //        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
+        //        if (_userSettings.UseJSON)
+        //        {
+        //            string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+        //            {
+        //                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+        //            });
+        //            await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
+        //            StateHasChanged();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // invoke async error on change - then goes through second time.
+        //        Console.WriteLine("Binding Hidden Object", ex);
+        //    }
+        //}
     }
     //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)

@@ -4,34 +4,44 @@
 @using System.Linq.Dynamic.Core;
 @using EDI.Web.Shared.Modals;
 @inject ServiceContext dbContext;
-@inject UserSettings UserSettings;
+@inject UserSettings _userSettings;
 @inject ISharedService sharedService;
 @inject NavigationManager NavigationManager
-@inject StateContainer StateContainer
+@inject IReflectionService reflectionService;
 @implements IDisposable
 
 @code
 {
-    [CascadingParameter] public IModalService ModalService { get; set; }
+        [CascadingParameter] public IModalService ModalService { get; set; }
 
-    [Parameter]
-    public QuestionnairesConfiguration Config { get; set; }
+        [Parameter]
+        public QuestionnairesConfiguration Config { get; set; }
 
-    [Parameter]
-    public Teacher data { get; set; }
+        [Parameter]
+        public Teacher data { get; set; }
 
     //public ModalPartViewModel ModalPartModel { get; set; }
 
     public string QuestionText { get; set; }
     public string HelpTextEnglish { get; set; }
+    public string ValidationCss { get; set; }
     public bool ReadonlyQuestion { get; set; }
+    public bool? Valid { get; set; }
+    public byte CompletionPercentage { get; set; }
+
+
 
     //public int _optionCount = 0;
     public string _optionLabel;
 
     protected override async Task OnInitializedAsync()
     {
-
+        //CompletionCheck(0,0);
+        //if (Config.IsRequired)
+        //{
+        //    UserSettings.QuestionsRequired += 1;
+        //    reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", UserSettings.QuestionsRequired.ToString());
+        //}
     }
 
     public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
@@ -40,7 +50,21 @@
         return dbContext.LookupSetOptions.Where(o => o.LookupSetId == LookupSetId).OrderBy(o => o.Sequence).ToList();
     }
 
+    public int CompletionCheck(decimal Required, decimal Completed)
+    {
+        int percentComplete;
+        try
+        {
+            percentComplete = (int)(Math.Round((Completed / Required), 0, MidpointRounding.AwayFromZero));
+        }
+        catch (Exception)
+        {
 
+            percentComplete = 0;
+        }
+
+        return percentComplete;
+    }
 
     protected async void ShowModal(string ModalTitle, string ModalBody)
     {
@@ -73,14 +97,86 @@
 
     public void gotoURL()
     {
-        StateContainer.OnChange += StateHasChanged;
-        StateContainer.SetCurrentURL(NavigationManager.Uri);
+        //StateContainer.OnChange += StateHasChanged;
+        //UserSettings.SetCurrentURL(NavigationManager.Uri);
         string url = string.Format("./QuestionnaireConfigurations/edit/{0}/{1}", Config.Id, Config.QuestionnaireId);
         NavigationManager.NavigateTo(url);
     }
 
     public void Dispose()
     {
-        StateContainer.OnChange -= StateHasChanged;
+        //StateContainer.OnChange -= StateHasChanged;
     }
-}
+
+    public void CompletedQuestion(string currentValue)
+    {
+        if (!string.IsNullOrEmpty(currentValue))
+        {
+            // only count answers to required quesions
+            _userSettings.QuestionsCompleted++;
+
+            if(_userSettings.Validation)
+            {
+                ValidationCss = "Valid";
+                Valid = true;
+            }
+        }
+        else
+        {
+            _userSettings.QuestionsCompleted--;
+            if (_userSettings.Validation)
+            {
+
+                ValidationCss = "InValid";
+                Valid = false;
+            }
+        }
+        reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+        StateHasChanged();
+    }
+
+        public void Validation(string currentValue)
+        {
+            // add 1 to the total questions
+            _userSettings.QuestionsTotal++;
+            if (Config.IsRequired)
+            {
+                // add 1 to required questions
+                _userSettings.QuestionsRequired++;
+                if (!string.IsNullOrEmpty(currentValue))
+                {
+                    // only count answers to required quesions
+                    _userSettings.QuestionsCompleted++;
+                }
+                else
+                {
+
+                }
+                reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
+                //reflectionService.SetFieldValue(teacherData, config.EntityName, "TotalQuestions", UserSettings.QuestionsTotal.ToString());
+                reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+            }
+
+            if (_userSettings.Validation)
+            {
+                if (Config.IsRequired)
+                {
+                    if (!string.IsNullOrEmpty(currentValue))
+                    {
+                        ValidationCss = "Valid";
+                        Valid = true;
+                    }
+                    else
+                    {
+                        ValidationCss = "InValid";
+                        Valid = false;
+                    }
+                }
+                else
+                {
+                    Valid = null;
+                }
+            }
+        }
+    }
+

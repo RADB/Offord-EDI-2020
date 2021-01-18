@@ -78,6 +78,13 @@
         }
     }
 
+    protected void initializeCounts()
+    {
+        UserSettings.QuestionsCompleted = 0;
+        UserSettings.QuestionsRequired = 0;
+        UserSettings.QuestionsTotal = 0;
+    }
+
     /* private async void Save()
      {
          await dbContext.SaveChangesAsync();

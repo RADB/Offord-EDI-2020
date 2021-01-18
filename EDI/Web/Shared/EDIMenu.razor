@@ -122,6 +122,8 @@
 
                 LabelFonts = UserSettings.LabelFonts;
 
+                Validation = UserSettings.Validation;
+
                 GetChildId();
                 //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
                 getData();
@@ -192,7 +194,7 @@
                 {
                     await servicecontext.SaveChangesAsync();
 
-                    toastService.ShowSuccess("Data Saved Successfully!");
+                    //toastService.ShowSuccess("Data Saved Successfully!");
                     StateHasChanged();
                 }
                 catch (Exception ex)

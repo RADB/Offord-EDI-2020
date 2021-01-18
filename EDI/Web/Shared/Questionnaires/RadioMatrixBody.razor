@@ -10,7 +10,17 @@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
-<tr>
+<tr class="@ValidationCss">
+    <td>
+        @if (Valid == true)
+        {
+            <i class="far fa-check-circle" style="font-size:50px;color:darkgreen"></i>
+        }
+        else if (Valid == false)
+        {
+            <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
+        }
+    </td>
     <td style="font-size: @LabelFonts;">
         @((MarkupString)QuestionText)
     </td>
@@ -117,6 +127,8 @@
         LabelFonts = UserSettings.LabelFonts;
         if (String.IsNullOrEmpty(LabelFonts))
             LabelFonts = "1em";
+
+        Validation(currentValue);
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
@@ -132,6 +144,8 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
+
+        CompletedQuestion(e.Value.ToString());
         StateHasChanged();
     }
 

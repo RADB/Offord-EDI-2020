@@ -1761,6 +1761,9 @@ namespace EDI.Web.Services
             _userSettings.IsAdmin = false;
             _userSettings.IsCoordinator = false;
             _userSettings.IsTeacher = false;
+            _userSettings.QuestionsCompleted = 0;
+            _userSettings.QuestionsRequired = 0;
+            _userSettings.QuestionsTotal = 0;
             _userSettings.Language = user1.Language == null ? "English" : user1.Language;
 
             if (role.Name == "Teacher")

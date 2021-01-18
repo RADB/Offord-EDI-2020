@@ -4,6 +4,7 @@
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
+@inject IReflectionService reflectionService;
 @inject NavigationManager NavigationManager;
 @*
     Questionnaire Flow:
@@ -81,7 +82,7 @@
 
         switch ((InputTypes)config.InputTypeId)
         {
-            case InputTypes.RadioButtons:                
+            case InputTypes.RadioButtons:
                 <RadioPart Config="@config" data="@teacherData"></RadioPart>
                 break;
             case InputTypes.DatePicker:
@@ -162,7 +163,7 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(config.LookupEntityId.GetValueOrDefault(1));
         }
-        RadioMatrixHeader = "<tr><th></th>";
+        RadioMatrixHeader = string.Format("<tr><th style={0}></th><th></th>","width:8.3%");
         foreach (var option in _LookupSetOptions)
         {
             RadioMatrixHeader += string.Format("{0}{1}{2}", "<th>", sharedService.GetOptionText(option), "</th>");

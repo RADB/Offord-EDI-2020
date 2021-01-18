@@ -74,16 +74,24 @@
                 }
             }
 
-                        //teacherprofileitemviewmodel = new TeacherProfileItemViewModel();
-                        // get the data if use that has access
-                        getData();
-                        StateContainer.OnChange += StateHasChanged;
-                    }
-                    catch (Exception ex)
-                    {
-                        NavigationManager.NavigateTo("./Dashboard/index");
-                    }
+            //teacherprofileitemviewmodel = new TeacherProfileItemViewModel();
+            // get the data if use that has access
+            InitializeCounts();
+            getData();
+            StateContainer.OnChange += StateHasChanged;
+        }
+        catch (Exception ex)
+        {
+            NavigationManager.NavigateTo("./Dashboard/index");
+        }
 
+    }
+
+    protected void InitializeCounts()
+    {
+        UserSettings.QuestionsCompleted = 0;
+        UserSettings.QuestionsRequired = 0;
+        UserSettings.QuestionsTotal = 0;
     }
 
     private void getData()
@@ -119,11 +127,11 @@
         return sharedService.GetTranslate(word);
     }
 
-                private async void Save()
-                {
-                    //StateContainer.SetTeacher(teacherData);
-                    //dbContext.Teachers.Update(StateContainer.TeacherData);
-                    await dbContext.SaveChangesAsync();
+    private async void Save()
+    {
+        //StateContainer.SetTeacher(teacherData);
+        //dbContext.Teachers.Update(StateContainer.TeacherData);
+        await dbContext.SaveChangesAsync();
 
         toastService.ShowSuccess("Data saved successfully.");
 
@@ -137,9 +145,9 @@
         Save();
     }
 
-                public void Dispose()
-                {
-                    StateContainer.OnChange -= StateHasChanged;
-                }
+    public void Dispose()
+    {
+        StateContainer.OnChange -= StateHasChanged;
+    }
 
             }
