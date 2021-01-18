@@ -4,6 +4,9 @@ using EDI.ApplicationCore.Specifications;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Dynamic.Core;
 using Ardalis.GuardClauses;
 using EDI.Web.Models;
 using EDI.Web.Interfaces;
@@ -17,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Components.Authorization;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
+using EDI.Infrastructure.Data;
 
 namespace EDI.Web.Services
 {
@@ -36,6 +40,7 @@ namespace EDI.Web.Services
         private readonly IAsyncIdentityRepository _accountRepository;
         private IHostEnvironment _hostingEnvironment;
         private UserSettings _userSettings { get; set; }
+        private readonly ServiceContext _dbContext;
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -52,6 +57,7 @@ namespace EDI.Web.Services
             IAsyncRepository<QuestionnairesDataSectionD> questionnairesDataSectionD,
             IAsyncRepository<QuestionnairesDataSectionE> questionnairesDataSectionE,
             IAsyncIdentityRepository accountRepository,
+            ServiceContext dbContext,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
@@ -68,6 +74,7 @@ namespace EDI.Web.Services
             _questionnairesDataSectionD = questionnairesDataSectionD;
             _questionnairesDataSectionE = questionnairesDataSectionE;
             _accountRepository = accountRepository;
+            _dbContext = dbContext;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
@@ -116,6 +123,14 @@ namespace EDI.Web.Services
                 _child.ModifiedBy = _userSettings.UserName;
 
                 await _childRepository.UpdateAsync(_child);
+
+                var childdemog = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == child.Id).FirstOrDefault();
+
+                childdemog.Dob = child.Dob;
+                childdemog.PostalCode = child.PostalCode;
+                childdemog.GenderId = child.GenderId;
+
+                await _questionnairesDataDemographic.UpdateAsync(childdemog);
             }
             catch (Exception ex)
             {
