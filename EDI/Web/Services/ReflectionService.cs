@@ -28,13 +28,35 @@ namespace EDI.Web.Services
             }   
             else
             {
+                // nullable types must be discovered via Generictype - non nullable through propertytype
                 if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.String")
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, value);
                 }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.Byte")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, string.IsNullOrEmpty(value) ? null : byte.Parse(value));
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.Int16")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, short.Parse(value));
+                }
                 else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.Int32")
                 {
+                    //non-nullable
                     obj.GetType().GetProperty(fieldName).SetValue(obj, int.Parse(value));
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.Decimal")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, decimal.Parse(value));
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.DateTime")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, DateTime.Parse(value));
+                }
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.Boolean")
+                {
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, bool.Parse(value));
                 }
                 else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Byte")
                 {
@@ -44,7 +66,11 @@ namespace EDI.Web.Services
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, short.Parse(value));
                 }
-                
+                else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Int32")
+                {
+                    //nullable
+                    obj.GetType().GetProperty(fieldName).SetValue(obj, int.Parse(value));
+                }
                 else if (obj.GetType().GetProperty(fieldName).PropertyType.GenericTypeArguments[0].FullName == "System.Decimal")
                 {
                     obj.GetType().GetProperty(fieldName).SetValue(obj, decimal.Parse(value));
@@ -61,6 +87,10 @@ namespace EDI.Web.Services
                 {
                     Console.WriteLine("Set the value of type {0}", obj.GetType().GetProperty(fieldName.Trim()).PropertyType.GenericTypeArguments[0].FullName);
                 }
+                //if (fieldName =="GenderId")
+                //{
+                //    Console.WriteLine("Break Here for testing.");
+                //}
             }
 
         }
@@ -115,8 +145,7 @@ namespace EDI.Web.Services
 
             // store the teacher data entity changes for saving
             if (!_UserSettings.UseJSON)
-                _UserSettings.TeacherData = data;
-            
+                _UserSettings.TeacherData = data;            
         }
 
         public string GetFieldValue(Teacher data, string entityName, string fieldName)
