@@ -1080,6 +1080,8 @@ namespace EDI.Web.Services
                                             string childnumber = data.ChildEdiid.Substring(13, 2);
                                             var _child = new Child();
 
+                                            var childstatus = _dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+
                                             _child.Ediid = data.ChildEdiid;
                                             _child.LocalId = data.LocalId;
                                             _child.ChildNumber = childnumber;
@@ -1088,6 +1090,7 @@ namespace EDI.Web.Services
                                             _child.GenderId = data.GenderId;
                                             _child.Dob = data.ChildDob;
                                             _child.PostalCode = data.ChildPostalCode;
+                                            _child.ChildStatusId = childstatus.Id;
                                             _child.CreatedDate = DateTime.Now;
                                             _child.CreatedBy = _userSettings.UserName;
                                             _child.ModifiedDate = DateTime.Now;

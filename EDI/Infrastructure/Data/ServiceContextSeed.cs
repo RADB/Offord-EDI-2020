@@ -48,6 +48,14 @@ namespace EDI.Infrastructure.Data
                     await ServiceContext.SaveChangesAsync();
                 }
 
+                if (!ServiceContext.ChildStatuses.Any())
+                {
+                    ServiceContext.ChildStatuses.AddRange(
+                        GetPreconfiguredChildStatus());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
                 if (!ServiceContext.Orientations.Any())
                 {
                     ServiceContext.Orientations.AddRange(
@@ -2227,8 +2235,17 @@ namespace EDI.Infrastructure.Data
             }.OrderBy(t => t.FieldName);
         }
 
+        static IEnumerable<ChildStatus> GetPreconfiguredChildStatus()
+        {
+            return new List<ChildStatus>()
+            {
+                new ChildStatus() { Code = "1", English = "New", French = "Nouveau",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new ChildStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new ChildStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new ChildStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
 
-
+            };
+        }
 
         static IEnumerable<Gender> GetPreconfiguredGender()
         {

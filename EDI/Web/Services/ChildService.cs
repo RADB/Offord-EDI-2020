@@ -100,6 +100,30 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task UnlockChildAsync(int id)
+        {
+            Log.Information("UnlockChildAsync started by:" + _userSettings.UserName);
+
+            try
+            {
+                var _child = await _childRepository.GetByIdAsync(id);
+
+                Guard.Against.NullChild(id, _child);
+
+                var childstatus = _dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+
+                _child.ChildStatusId = childstatus.Id;
+                _child.ModifiedDate = DateTime.Now;
+                _child.ModifiedBy = _userSettings.UserName;
+
+                await _childRepository.UpdateAsync(_child);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("UnlockChildAsync failed:" + ex.Message);
+            }
+        }
+
         public async Task UpdateChildAsync(ChildItemViewModel child)
         {
             
@@ -119,6 +143,7 @@ namespace EDI.Web.Services
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
                 _child.PostalCode = child.PostalCode;
+                _child.ChildStatusId = child.ChildStatusId;
                 _child.ModifiedDate = DateTime.Now;
                 _child.ModifiedBy = _userSettings.UserName;
 
@@ -155,6 +180,7 @@ namespace EDI.Web.Services
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
                 _child.PostalCode = child.PostalCode;
+                _child.ChildStatusId = child.ChildStatusId;
                 _child.CreatedDate = DateTime.Now;
                 _child.CreatedBy = _userSettings.UserName;
                 _child.ModifiedDate = DateTime.Now;
@@ -254,6 +280,7 @@ namespace EDI.Web.Services
                     YearId = child.YearId,
                     TeacherId = child.TeacherId,
                     GenderId = child.GenderId,
+                    ChildStatusId = child.ChildStatusId,
                     Dob = child.Dob,
                     PostalCode = child.PostalCode,
                     CreatedDate = child.CreatedDate,
