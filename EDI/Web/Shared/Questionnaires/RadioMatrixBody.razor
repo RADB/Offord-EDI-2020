@@ -5,7 +5,7 @@
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
-@inject UserSettings UserSettings;
+@inject UserSettings _userSettings;
 @inject NavigationManager NavigationManager
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
@@ -21,7 +21,7 @@
             <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
         }
     </td>
-    <td style="font-size: @LabelFonts;">
+    <td style="font-size: @_userSettings.LabelFonts;">
         @((MarkupString)QuestionText)
     </td>
     
@@ -51,7 +51,7 @@
             </div>*@
 
 
-            @if (RadioLabels)
+            @if (_userSettings.RadioLabels)
                 {
                     <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
                 }
@@ -103,10 +103,21 @@
 
     private Dictionary<string, object> radioTitle;
 
-    private Boolean RadioLabels { get; set; } = true;
+    //private Boolean RadioLabels { get; set; } = true;
 
-    private string LabelFonts { get; set; }
+    //private string LabelFonts { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Validation(currentValue, true);
+        if (firstRender)
+        {
 
+        }
+        else
+        {
+
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
         // get the question and help text
@@ -123,19 +134,16 @@
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
 
-        RadioLabels = UserSettings.RadioLabels;
-        LabelFonts = UserSettings.LabelFonts;
-        if (String.IsNullOrEmpty(LabelFonts))
-            LabelFonts = "1em";
+        //RadioLabels = UserSettings.RadioLabels;
+        //LabelFonts = UserSettings.LabelFonts;
 
-        Validation(currentValue);
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
 
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
-        if (UserSettings.UseJSON)
+        if (_userSettings.UseJSON)
         {
             // save the data back to the object
             string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
@@ -144,7 +152,7 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
-
+        
         CompletedQuestion(e.Value.ToString());
         StateHasChanged();
     }
@@ -167,35 +175,7 @@
     //    NavigationManager.NavigateTo(url, true);
     //}
 
-    //private async void Save()
-    //{
-    //    var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-    //    //if (StateContainer.TeacherData != null)
-    //    if (teacherJson != null && teacherJson.Length > 0)
-    //    {
-    //        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-    //        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-    //        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
-    //        {
-    //            //servicecontext.Update(StateContainer.TeacherData);
 
-    //            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
-
-    //            servicecontext.Update(tempTeacher);
-    //            try
-    //            {
-    //                await servicecontext.SaveChangesAsync();
-    //                //StateContainer.SetTeacher(null);
-    //                await sessionStorage.SetItemAsync<string>("Teacher", "");
-    //                StateHasChanged();
-    //            }
-    //            catch (Exception ex)
-    //            {
-    //                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
-    //            }
-    //        }
-    //    }
-    //}
 }
 
 

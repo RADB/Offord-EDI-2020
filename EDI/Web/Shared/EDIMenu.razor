@@ -121,6 +121,8 @@
                 RadioLabels = UserSettings.RadioLabels;
 
                 LabelFonts = UserSettings.LabelFonts;
+                if (String.IsNullOrEmpty(UserSettings.LabelFonts))
+                    UserSettings.LabelFonts = "1em";
 
                 Validation = UserSettings.Validation;
 

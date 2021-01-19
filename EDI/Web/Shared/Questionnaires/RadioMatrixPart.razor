@@ -2,7 +2,7 @@
 @inject IReflectionService reflectionService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
-@inject UserSettings UserSettings;
+@inject UserSettings _userSettings;
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 @using Microsoft.EntityFrameworkCore;
@@ -49,7 +49,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!UserSettings.IsAuthenticated)
+        if (!_userSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }

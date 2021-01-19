@@ -3,11 +3,15 @@
     -->
 @using System.Linq.Dynamic.Core;
 @using EDI.Web.Shared.Modals;
+@using Newtonsoft.Json;
+@using EDI.Web.Extensions;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
 @inject ISharedService sharedService;
 @inject NavigationManager NavigationManager
 @inject IReflectionService reflectionService;
+@inject IToastService toastService;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @implements IDisposable
 
 @code
@@ -28,8 +32,6 @@
     public bool ReadonlyQuestion { get; set; }
     public bool? Valid { get; set; }
     public byte CompletionPercentage { get; set; }
-
-
 
     //public int _optionCount = 0;
     public string _optionLabel;
@@ -108,14 +110,16 @@
         //StateContainer.OnChange -= StateHasChanged;
     }
 
-    public void CompletedQuestion(string currentValue)
+    public async void CompletedQuestion(string currentValue)
     {
         if (!string.IsNullOrEmpty(currentValue))
         {
             // only count answers to required quesions
             _userSettings.QuestionsCompleted++;
+            //var comp = await sessionStorage.GetItemAsync<int>("QuestionsCompleted");
+            //await sessionStorage.SetItemAsync<int>("QuestionsCompleted", comp++);
 
-            if(_userSettings.Validation)
+            if (_userSettings.Validation)
             {
                 ValidationCss = "Valid";
                 Valid = true;
@@ -123,7 +127,7 @@
         }
         else
         {
-            _userSettings.QuestionsCompleted--;
+            //_userSettings.QuestionsCompleted--;
             if (_userSettings.Validation)
             {
 
@@ -135,48 +139,105 @@
         StateHasChanged();
     }
 
-        public void Validation(string currentValue)
+    public async void Validation(string currentValue, bool addition)
+    {
+        if (addition)
         {
             // add 1 to the total questions
             _userSettings.QuestionsTotal++;
+
             if (Config.IsRequired)
             {
                 // add 1 to required questions
                 _userSettings.QuestionsRequired++;
+
                 if (!string.IsNullOrEmpty(currentValue))
                 {
                     // only count answers to required quesions
                     _userSettings.QuestionsCompleted++;
+
                 }
                 else
                 {
 
                 }
-                reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
+                //reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
+
                 //reflectionService.SetFieldValue(teacherData, config.EntityName, "TotalQuestions", UserSettings.QuestionsTotal.ToString());
-                reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+                //reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+                //StateHasChanged();
             }
-
-            if (_userSettings.Validation)
+        }
+        if (_userSettings.Validation)
+        {
+            if (Config.IsRequired)
             {
-                if (Config.IsRequired)
+                if (!string.IsNullOrEmpty(currentValue))
                 {
-                    if (!string.IsNullOrEmpty(currentValue))
-                    {
-                        ValidationCss = "Valid";
-                        Valid = true;
-                    }
-                    else
-                    {
-                        ValidationCss = "InValid";
-                        Valid = false;
-                    }
+                    ValidationCss = "Valid";
+                    Valid = true;
                 }
                 else
                 {
-                    Valid = null;
+                    ValidationCss = "InValid";
+                    Valid = false;
                 }
+            }
+            else
+            {
+                Valid = null;
             }
         }
     }
+
+    public async void Save(bool useJSON)
+    {
+        if (useJSON)
+        {
+            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+            if (teacherJson != null && teacherJson.Length > 0)
+            {
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                await SaveDisconnectedTeacher(tempTeacher);
+
+                await sessionStorage.RemoveItemAsync("Teacher");
+            }
+        }
+        else
+        {
+            if (_userSettings.TeacherData != null)
+            {
+                await SaveDisconnectedTeacher(_userSettings.TeacherData);
+
+                _userSettings.TeacherData = null;
+            }
+        }
+
+    }
+
+    protected async Task SaveDisconnectedTeacher(Teacher TeacherData)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+        {
+            // load the disconnected data into the context
+            servicecontext.Update(TeacherData);
+            try
+            {
+                await servicecontext.SaveChangesAsync();
+
+                //toastService.ShowSuccess("Data Saved Successfully!");
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+            }
+        }
+    }
+}
 
