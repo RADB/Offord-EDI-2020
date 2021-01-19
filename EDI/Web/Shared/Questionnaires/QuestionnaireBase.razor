@@ -10,19 +10,17 @@
 @inject ISharedService sharedService;
 @inject NavigationManager NavigationManager
 @inject IReflectionService reflectionService;
-@inject IToastService toastService;
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
-@implements IDisposable
+@inject UserSettings UserSettings;
 
 @code
 {
-        [CascadingParameter] public IModalService ModalService { get; set; }
+    [CascadingParameter] public IModalService ModalService { get; set; }
 
-        [Parameter]
-        public QuestionnairesConfiguration Config { get; set; }
+    [Parameter]
+    public QuestionnairesConfiguration Config { get; set; }
 
-        [Parameter]
-        public Teacher data { get; set; }
+    [Parameter]
+    public Teacher data { get; set; }
 
     //public ModalPartViewModel ModalPartModel { get; set; }
 
@@ -99,18 +97,12 @@
 
     public void gotoURL()
     {
-        //StateContainer.OnChange += StateHasChanged;
-        //UserSettings.SetCurrentURL(NavigationManager.Uri);
+        UserSettings.CurrentURL = NavigationManager.Uri;
         string url = string.Format("./QuestionnaireConfigurations/edit/{0}/{1}", Config.Id, Config.QuestionnaireId);
         NavigationManager.NavigateTo(url);
     }
 
-    public void Dispose()
-    {
-        //StateContainer.OnChange -= StateHasChanged;
-    }
-
-    public async void CompletedQuestion(string currentValue)
+    public void CompletedQuestion(string currentValue)
     {
         if (!string.IsNullOrEmpty(currentValue))
         {
