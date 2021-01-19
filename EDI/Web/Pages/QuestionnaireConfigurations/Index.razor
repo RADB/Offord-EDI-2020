@@ -12,8 +12,6 @@
 @inject AppIdentityDbContext identityContext;
 
 @inject UserSettings UserSettings;
-@inject StateContainer StateContainer
-@implements IDisposable
 
 
 <div class="row">
@@ -224,10 +222,5 @@
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<QuestionnaireConfigurationItemViewModel> args)
     {
         NavigationManager.NavigateTo("./QuestionnaireConfigurations/edit/" + this.rowid + "/" + QuestionnaireID);
-    }
-
-    public void Dispose()
-    {
-        StateContainer.OnChange -= StateHasChanged;
     }
 }

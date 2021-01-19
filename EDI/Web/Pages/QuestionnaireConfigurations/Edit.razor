@@ -11,8 +11,6 @@
 
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
-@inject StateContainer StateContainer
-@implements IDisposable
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -91,11 +89,9 @@
         {
             QuestionnaireConfigurationModel = await questionnaireConfigurationService.GetQuestionnaireConfigurationItem(Id);
 
-            StateContainer.OnChange += StateHasChanged;
+            UserSettings.BackURL = UserSettings.CurrentURL;
 
-            StateContainer.SetBackURL(StateContainer.CurrentURL);
-
-            StateContainer.SetCurrentURL(NavigationManager.Uri);
+            UserSettings.CurrentURL = NavigationManager.Uri;
         }
     }
 
@@ -181,7 +177,7 @@
     private void Exit()
     {
         //NavigationManager.NavigateTo("./questionnaires/edit/" + QuestionnaireId);
-        NavigationManager.NavigateTo(StateContainer.BackURL);
+        NavigationManager.NavigateTo(UserSettings.BackURL);
     }
 
     private async void Reset()
@@ -192,10 +188,5 @@
     private void Add()
     {
         NavigationManager.NavigateTo("./questionnaireConfigurations/new");
-    }
-
-    public void Dispose()
-    {
-        StateContainer.OnChange -= StateHasChanged;
     }
 }

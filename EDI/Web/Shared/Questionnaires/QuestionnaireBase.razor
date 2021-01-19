@@ -8,17 +8,17 @@
 @inject ISharedService sharedService;
 @inject NavigationManager NavigationManager
 @inject IReflectionService reflectionService;
-@implements IDisposable
+@inject UserSettings UserSettings;
 
 @code
 {
-        [CascadingParameter] public IModalService ModalService { get; set; }
+    [CascadingParameter] public IModalService ModalService { get; set; }
 
-        [Parameter]
-        public QuestionnairesConfiguration Config { get; set; }
+    [Parameter]
+    public QuestionnairesConfiguration Config { get; set; }
 
-        [Parameter]
-        public Teacher data { get; set; }
+    [Parameter]
+    public Teacher data { get; set; }
 
     //public ModalPartViewModel ModalPartModel { get; set; }
 
@@ -97,15 +97,9 @@
 
     public void gotoURL()
     {
-        //StateContainer.OnChange += StateHasChanged;
-        //UserSettings.SetCurrentURL(NavigationManager.Uri);
+        UserSettings.CurrentURL = NavigationManager.Uri;
         string url = string.Format("./QuestionnaireConfigurations/edit/{0}/{1}", Config.Id, Config.QuestionnaireId);
         NavigationManager.NavigateTo(url);
-    }
-
-    public void Dispose()
-    {
-        //StateContainer.OnChange -= StateHasChanged;
     }
 
     public void CompletedQuestion(string currentValue)
@@ -115,7 +109,7 @@
             // only count answers to required quesions
             _userSettings.QuestionsCompleted++;
 
-            if(_userSettings.Validation)
+            if (_userSettings.Validation)
             {
                 ValidationCss = "Valid";
                 Valid = true;
@@ -135,48 +129,48 @@
         StateHasChanged();
     }
 
-        public void Validation(string currentValue)
+    public void Validation(string currentValue)
+    {
+        // add 1 to the total questions
+        _userSettings.QuestionsTotal++;
+        if (Config.IsRequired)
         {
-            // add 1 to the total questions
-            _userSettings.QuestionsTotal++;
+            // add 1 to required questions
+            _userSettings.QuestionsRequired++;
+            if (!string.IsNullOrEmpty(currentValue))
+            {
+                // only count answers to required quesions
+                _userSettings.QuestionsCompleted++;
+            }
+            else
+            {
+
+            }
+            reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
+            //reflectionService.SetFieldValue(teacherData, config.EntityName, "TotalQuestions", UserSettings.QuestionsTotal.ToString());
+            reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+        }
+
+        if (_userSettings.Validation)
+        {
             if (Config.IsRequired)
             {
-                // add 1 to required questions
-                _userSettings.QuestionsRequired++;
                 if (!string.IsNullOrEmpty(currentValue))
                 {
-                    // only count answers to required quesions
-                    _userSettings.QuestionsCompleted++;
+                    ValidationCss = "Valid";
+                    Valid = true;
                 }
                 else
                 {
-
+                    ValidationCss = "InValid";
+                    Valid = false;
                 }
-                reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
-                //reflectionService.SetFieldValue(teacherData, config.EntityName, "TotalQuestions", UserSettings.QuestionsTotal.ToString());
-                reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
             }
-
-            if (_userSettings.Validation)
+            else
             {
-                if (Config.IsRequired)
-                {
-                    if (!string.IsNullOrEmpty(currentValue))
-                    {
-                        ValidationCss = "Valid";
-                        Valid = true;
-                    }
-                    else
-                    {
-                        ValidationCss = "InValid";
-                        Valid = false;
-                    }
-                }
-                else
-                {
-                    Valid = null;
-                }
+                Valid = null;
             }
         }
     }
+}
 
