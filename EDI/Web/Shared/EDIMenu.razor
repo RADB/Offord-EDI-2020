@@ -206,6 +206,9 @@
                     sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
                 }
             }
+            UserSettings.QuestionsCompleted = 0;
+            UserSettings.QuestionsRequired = 0;
+            UserSettings.QuestionsTotal = 0;
         }
 
         private async void BounceBack(Boolean UseSession)

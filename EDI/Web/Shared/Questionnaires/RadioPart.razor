@@ -124,7 +124,7 @@
         // save the data back to the object
         // JsonConvert.SerializeObject(data, Formatting.Indented,
 
-
+        var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
         if (_userSettings.UseJSON)
         {
@@ -134,7 +134,7 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
-        CompletedQuestion(e.Value.ToString());
+        CompletedQuestion(previousValue.ToString(), e.Value.ToString());
         StateHasChanged();
 
     }

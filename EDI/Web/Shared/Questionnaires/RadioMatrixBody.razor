@@ -108,7 +108,6 @@
     //private string LabelFonts { get; set; }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Validation(currentValue, true);
         if (firstRender)
         {
 
@@ -133,7 +132,7 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
-
+        Validation(currentValue);
         //RadioLabels = UserSettings.RadioLabels;
         //LabelFonts = UserSettings.LabelFonts;
 
@@ -141,7 +140,7 @@
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-
+        var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
         if (_userSettings.UseJSON)
         {
@@ -152,9 +151,9 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
-        
-        CompletedQuestion(e.Value.ToString());
-        StateHasChanged();
+
+        CompletedQuestion(previousValue,e.Value.ToString());
+       // StateHasChanged();
     }
 
     //public async void onDoubleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)

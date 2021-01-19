@@ -6,9 +6,14 @@
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
 @*@oninput=@(args => onChange(args.Value.ToString(), Config.EntityField))*@
-@Config.EntityField
-<input type="text" id="@Config.EntityField" @bind="currentValue" />
-<br />
+<!--@Config.EntityField-->
+@*<input type="text" id="@Config.EntityField" @bind="currentValue" />
+@if (Config.EntityField == "CompletedQuestions")
+{
+    <p>Competed from usersettings: @_userSettings.QuestionsCompleted</p>
+}
+
+<br />*@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
 
@@ -16,7 +21,7 @@
 {
 
     private string currentValue { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         bool rebind = false;
@@ -50,7 +55,7 @@
                 break;
         }
 
-        if(rebind)
+        if (rebind)
         {
             reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
             if (_userSettings.UseJSON)

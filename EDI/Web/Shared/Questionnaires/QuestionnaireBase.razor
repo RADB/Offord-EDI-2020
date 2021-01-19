@@ -11,7 +11,8 @@
 @inject NavigationManager NavigationManager
 @inject IReflectionService reflectionService;
 @inject UserSettings UserSettings;
-
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@inject IToastService toastService;
 @code
 {
     [CascadingParameter] public IModalService ModalService { get; set; }
@@ -102,9 +103,9 @@
         NavigationManager.NavigateTo(url);
     }
 
-    public void CompletedQuestion(string currentValue)
+    public void CompletedQuestion(string previousValue, string currentValue)
     {
-        if (!string.IsNullOrEmpty(currentValue))
+        if (!string.IsNullOrEmpty(currentValue) && string.IsNullOrEmpty(previousValue))
         {
             // only count answers to required quesions
             _userSettings.QuestionsCompleted++;
@@ -117,9 +118,9 @@
                 Valid = true;
             }
         }
-        else
+        else if(!string.IsNullOrEmpty(previousValue) && string.IsNullOrEmpty(currentValue))
         {
-            //_userSettings.QuestionsCompleted--;
+            _userSettings.QuestionsCompleted--;
             if (_userSettings.Validation)
             {
 
@@ -127,39 +128,36 @@
                 Valid = false;
             }
         }
-        reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
-        StateHasChanged();
+        reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());        
     }
 
-    public async void Validation(string currentValue, bool addition)
+    public async void Validation(string currentValue)
     {
-        if (addition)
+        // add 1 to the total questions
+        _userSettings.QuestionsTotal++;
+
+        if (Config.IsRequired)
         {
-            // add 1 to the total questions
-            _userSettings.QuestionsTotal++;
+            // add 1 to required questions
+            _userSettings.QuestionsRequired++;
 
-            if (Config.IsRequired)
+            if (!string.IsNullOrEmpty(currentValue))
             {
-                // add 1 to required questions
-                _userSettings.QuestionsRequired++;
+                // only count answers to required quesions
+                _userSettings.QuestionsCompleted++;
 
-                if (!string.IsNullOrEmpty(currentValue))
-                {
-                    // only count answers to required quesions
-                    _userSettings.QuestionsCompleted++;
-
-                }
-                else
-                {
-
-                }
-                //reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
-
-                //reflectionService.SetFieldValue(teacherData, config.EntityName, "TotalQuestions", UserSettings.QuestionsTotal.ToString());
-                //reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
-                //StateHasChanged();
             }
+            else
+            {
+
+            }
+            //reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", _userSettings.QuestionsRequired.ToString());
+
+            //reflectionService.SetFieldValue(teacherData, config.EntityName, "TotalQuestions", UserSettings.QuestionsTotal.ToString());
+            //reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+            //StateHasChanged();
         }
+
         if (_userSettings.Validation)
         {
             if (Config.IsRequired)

@@ -85,17 +85,18 @@
         Validation(currentValue.ToString());
     }
 
-    public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    {
-        // save the data back to the object
-        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
+    //public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    //{
+    //    // save the data back to the object
+    //    reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
 
-        CompletedQuestion(e.Value.ToString());
-        StateHasChanged();
-    }
+    //    CompletedQuestion(e.Value.ToString());
+    //    StateHasChanged();
+    //}
 
     private async void OnChange(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> e)
     {
+        var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
         // save the data back to the object
         reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, e.Value.ToString());
         if (_userSettings.UseJSON)
@@ -106,7 +107,7 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
-        CompletedQuestion(e.Value.ToString());
+        CompletedQuestion(previousValue,e.Value.ToString());
         StateHasChanged();
     }
 }

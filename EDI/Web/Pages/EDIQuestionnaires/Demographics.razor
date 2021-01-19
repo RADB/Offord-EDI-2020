@@ -28,8 +28,23 @@
     </div>
 }
     -->
-@code {
+@code {      
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
 
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        initializeCounts();
+        return base.OnParametersSetAsync();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,8 +56,8 @@
         {
             try
             {
-                initializeCounts();
-                
+                //                initializeCounts();
+
                 checkChildId();
 
 

@@ -3,7 +3,7 @@
 
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
-@inject UserSettings UserSettings;
+@inject UserSettings _userSettings;
 @inject IReflectionService reflectionService;
 @inject NavigationManager NavigationManager;
 @*
@@ -107,8 +107,8 @@
             case InputTypes.CheckBox:
                 <CheckBoxPart Config=@config data="@teacherData"></CheckBoxPart>
                 break;
-            case InputTypes.Hidden:
-                <HiddenPart Config=@config data="@teacherData"></HiddenPart>
+            case InputTypes.Hidden:                
+                    <HiddenPart Config=@config data="@teacherData"></HiddenPart>                
                 Linebreak = false;
                 break;
             case InputTypes.TextArea:

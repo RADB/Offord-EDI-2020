@@ -16,7 +16,8 @@
 @inject ISharedService sharedService;
 
 <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="15px"></QuestionnaireHeader>
-
+<button @onclick="@(()=>StateHasChanged())"></button>
+<p>@UserSettings.QuestionsCompleted</p>
 <!--Convert this to a component with readonly parameter
 @if (!IsReadOnly)
 {
