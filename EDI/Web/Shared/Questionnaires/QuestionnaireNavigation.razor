@@ -9,22 +9,33 @@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 <div class="d-flex justify-content-between">
-    
+
     <button class="btn btn-info" disabled=@PreviousDisable @onclick="@(() => gotoURL("Previous"))">
         <i class="fas fa-chevron-left"></i> @PreviousPage
     </button>
-    <button class="btn btn-info" disabled=@NextDisable @onclick="@(() => gotoURL("Next"))" >
+    <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => lockChild())">
+        <i class="fas fa-lock"></i> @LockText 
+    </button>
+    <button class="btn btn-info" disabled=@NextDisable @onclick="@(() => gotoURL("Next"))">
         @NextPage <i class="fas fa-chevron-right"></i>
     </button>
 </div>
 @code {
     private int ChildId { get; set; }
     private bool PreviousDisable { get; set; }
+    private bool LockHidden { get; set; }
     private string PreviousPage { get; set; }
     private bool NextDisable { get; set; }
     private string NextPage { get; set; }
+    private string LockText { get; set; }
     private string CurrentPage { get; set; }
     private List<Questionnaire> questionnaires;
+
+    protected void lockChild()
+    {
+        // show modal confirming locking child (YES NO)
+
+    }
 
     protected void gotoURL(string Direction)
     {
@@ -75,6 +86,7 @@
     {
         PreviousDisable = false;
         NextDisable = false;
+        LockHidden = true;
 
         switch (CurrentPage)
         {
@@ -106,6 +118,8 @@
                 NextDisable = true;
                 PreviousPage = "SectionD";
                 NextPage = string.Empty;
+                LockText = "Lock Child";
+                LockHidden = false;
                 break;
         }
     }
