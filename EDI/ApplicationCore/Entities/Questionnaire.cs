@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EDI.ApplicationCore.Entities
 {
     [Table("Questionnaires", Schema = "EDI")]
-    public partial class Questionnaire:BaseEntity
+    public partial class Questionnaire:BaseEntityProvinceConfiguration
     {
         public Questionnaire()
         {
@@ -26,6 +26,7 @@ namespace EDI.ApplicationCore.Entities
         public int Sequence { get; set; } 
         public bool IsChildQuestionnaire { get; set; }
         public bool IsTeacherQuestionnaire { get; set; } 
+        public int QuestionsRequired { get; set; }
         public virtual Year Year { get; set; }
         public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
     }
