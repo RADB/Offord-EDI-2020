@@ -451,8 +451,8 @@ namespace EDI.Web.Services
                     {
                         Directory.CreateDirectory(newPath);
                     }
-
-                    string fullPath = Path.Combine(newPath, "Customers.xlsx");
+                    string fileName = string.Format("Sites{0}.xlsx",DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                    string fullPath = Path.Combine(newPath, fileName);
 
                     var comlumHeadrs = new string[]
                     {
@@ -1294,8 +1294,8 @@ namespace EDI.Web.Services
                     {
                         Directory.CreateDirectory(newPath);
                     }
-
-                    string fullPath = Path.Combine(newPath, "Translation.xlsx");
+                    string fileName = string.Format("Translations{0}.xlsx", DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                    string fullPath = Path.Combine(newPath, fileName);
 
                     var comlumHeadrs = new string[]
                     {
