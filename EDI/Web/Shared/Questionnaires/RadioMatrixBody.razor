@@ -51,7 +51,7 @@
             </div>*@
 
 
-            @if (_userSettings.RadioLabels.Value)
+            @if (_userSettings.RadioLabels.HasValue && _userSettings.RadioLabels.Value)
                 {
                     <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
                 }

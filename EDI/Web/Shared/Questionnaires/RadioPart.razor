@@ -104,7 +104,7 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
         }
-        RadioLabels = _userSettings.RadioLabels.Value;
+        RadioLabels = _userSettings.RadioLabels.HasValue ? _userSettings.RadioLabels.Value : false;
         LabelFonts = _userSettings.LabelFonts;
         if (String.IsNullOrEmpty(LabelFonts))
             LabelFonts = "1em";
