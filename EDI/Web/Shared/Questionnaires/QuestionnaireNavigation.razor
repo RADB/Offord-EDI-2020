@@ -24,6 +24,9 @@
     </button>
 </div>
 @code {
+    [Parameter]
+    public Teacher teacherData { get; set; }
+
     [CascadingParameter]
     public IModalService ModalService { get; set; }
     private int ChildId { get; set; }
