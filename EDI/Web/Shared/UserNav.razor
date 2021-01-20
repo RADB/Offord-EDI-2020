@@ -20,8 +20,9 @@
         <div class="cf-identity-name">@username</div>
     </li>
     <li class="nav-item d-md-down-none" style="padding-top:13px;">
-        <form asp-area="" method="post" action="./signout">
-            <button style="border:none;" type="submit" href="#" data-toggle="tooltip" data-placement="bottom" title="Log Out"><i class="fas fa-sign-out-alt"></i></button>
+        <form asp-area="" method="post" action="./signout">            
+            @*<button style="border:none;" type="submit" href="#" data-toggle="tooltip" data-placement="bottom" title="Log Out"><i class="fas fa-sign-out-alt"></i></button>*@
+            <button class="btn btn-danger" type="submit" href="#" data-toggle="tooltip" data-placement="bottom" title="Log Out"><i class="fas fa-sign-out-alt"></i>Log Out</button>
         </form>
     </li>
 }
