@@ -119,7 +119,7 @@
             return;
         }
 
-        QuestionnaireModel.YearId = questionnaireform1.selectYear.SelectModel.ID.HasValue ? questionnaireform1.selectYear.SelectModel.ID.Value : 0;
+        QuestionnaireModel.YearId = questionnaireform1.provinces.ProvinceConfigModel.YearID;
         if (QuestionnaireModel.YearId == 0)
         {
             ErrorMessage = "Year is required.";
@@ -141,6 +141,20 @@
             QuestionnaireModel.DescriptionFrench = questionnaireform1.rteDescriptionFrench.BindValue;
             QuestionnaireModel.ShowProgressBar = questionnaireform1.checkProgressBar.CheckModel.Value;
             QuestionnaireModel.ShowQuestionNumbers = questionnaireform1.checkQuestionNumer.CheckModel.Value;
+
+            QuestionnaireModel.Alberta = questionnaireform1.provinces.ProvinceConfigModel.Alberta;
+            QuestionnaireModel.BritishColumbia = questionnaireform1.provinces.ProvinceConfigModel.BritishColumbia;
+            QuestionnaireModel.Manitoba = questionnaireform1.provinces.ProvinceConfigModel.Manitoba;
+            QuestionnaireModel.NewBrunswick = questionnaireform1.provinces.ProvinceConfigModel.NewBrunswick;
+            QuestionnaireModel.NewfoundlandandLabrador = questionnaireform1.provinces.ProvinceConfigModel.NewfoundlandandLabrador;
+            QuestionnaireModel.NovaScotia = questionnaireform1.provinces.ProvinceConfigModel.NovaScotia;
+            QuestionnaireModel.Nunavut = questionnaireform1.provinces.ProvinceConfigModel.Nunavut;
+            QuestionnaireModel.Ontario = questionnaireform1.provinces.ProvinceConfigModel.Ontario;
+            QuestionnaireModel.PrinceEdwardIsland = questionnaireform1.provinces.ProvinceConfigModel.PrinceEdwardIsland;
+            QuestionnaireModel.Quebec = questionnaireform1.provinces.ProvinceConfigModel.Quebec;
+            QuestionnaireModel.Saskatchewan = questionnaireform1.provinces.ProvinceConfigModel.Saskatchewan;
+            QuestionnaireModel.YukonTerritory = questionnaireform1.provinces.ProvinceConfigModel.YukonTerritory;
+            QuestionnaireModel.NorthwestTerritories = questionnaireform1.provinces.ProvinceConfigModel.NorthwestTerritories;
 
             await questionnaireService.UpdateQuestionnaireAsync(questionnaireform1.QuestionnaireModel);
 

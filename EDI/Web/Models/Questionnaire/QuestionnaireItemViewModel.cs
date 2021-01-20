@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EDI.Web.Models
 {
-    public class QuestionnaireItemViewModel : BaseModel
+    public class QuestionnaireItemViewModel : BaseModelProvince
     {
         [Required(ErrorMessage = "Year is required.")]
         public int YearId { get; set; }

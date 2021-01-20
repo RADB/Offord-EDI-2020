@@ -2,6 +2,7 @@
 @using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using EDI.Web.Data;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IChildService childService;
@@ -49,7 +50,22 @@
                             <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.PostalCode) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
-                            <GridColumn Field=@nameof(ChildItemViewModel.ChildStatus) HeaderText=@Translate("Status") Width="30"></GridColumn>
+                            <GridColumn HeaderText=@Translate("Status") Width="20">
+                                <Template>
+                                    @{
+                                        var comm = (context as ChildItemViewModel);
+                                        if (UserSettings.IsAdmin && comm.ChildStatusId == (int)Enumerations.ChildStatus.Locked)
+                                        {
+                                            <div>@comm.ChildStatus <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><i class="fas fa-lock-open fa-2x" style="color:darkgreen; margin-top: -8px;"></i></button></div>
+
+                                        }
+                                        else
+                                        {
+                                            <div>@comm.ChildStatus</div>
+                                        }
+                                    }
+                                </Template>
+                            </GridColumn>
                             <GridColumn HeaderText=@Translate("% Complete") Width="25">
                                 <Template>
                                     @{
@@ -62,22 +78,15 @@
                                     }
                                 </Template>
                             </GridColumn>
-                            @if (UserSettings.IsAdmin)
-                            {
-                                <GridColumn HeaderText="" Width="10">
-                                    <Template>
-                                        @{
-                                            var comm = (context as ChildItemViewModel);
-                                            <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><i class="fas fa-lock-open fa-2x" style="color:darkgreen; margin-top: -8px;"></i></button>
-                                        }
-                                    </Template>
-                                </GridColumn>
-                            }
                             <GridColumn HeaderText="" Width="20">
                                 <Template>
                                     @{
                                         var comm = (context as ChildItemViewModel);
-                                        <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                        if (UserSettings.IsAdmin || comm.ChildStatusId == (int)Enumerations.ChildStatus.New || comm.ChildStatusId == (int)Enumerations.ChildStatus.InProgress)
+                                        {
+                                            <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+
+                                        }
                                     }
                                 </Template>
                             </GridColumn>
@@ -176,7 +185,7 @@
             var totalrequired = childService.GetRequiredQuestions(child.Id);
 
             achild.Progress = 0;
-            
+
             if (totalrequired > 0)
                 achild.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
 

@@ -47,12 +47,7 @@
             <CheckBox @ref="checkQuestionNumer" CheckModel="@checkModelForQuestionNumer" />
         </div>
     </div>
-    <div class="form-group row">
-        <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
-        <div class="col-md-7 col-form-label">
-            <CommonSelectBox @ref="@selectYear" SelectModel="@selectModelForYear" OnChange="@OptionChangeForYear"/>
-        </div>
-    </div>
+    <ProvincesYears @ref="provinces" ProvinceConfigModel="@ProvinceConfigModel"></ProvincesYears>
 </div>
 <div class="card-footer">
     <button type="submit" class="savebutton" @onclick="HandleValidSubmit"><i class="fa fa-save bg whiteiconcolor"></i> Submit</button>
@@ -90,6 +85,9 @@
 
     private CheckViewModel checkModelForQuestionNumer { get; set; } = new CheckViewModel();
 
+    public ProvincesYears provinces = new ProvincesYears();
+    private BaseModelProvince ProvinceConfigModel { get; set; } = new BaseModelProvince();
+
     protected override async Task OnInitializedAsync()
     {
         textModelForName.Name = "QuestionnaireName";
@@ -108,6 +106,21 @@
             selectModelForYear.ID = int.Parse(selectModelForYear.Options.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
         }
         selectModelForYear.Value = selectModelForYear.ID.HasValue ? selectModelForYear.ID.ToString() : string.Empty;
+
+        ProvinceConfigModel.YearID = QuestionnaireModel.YearId;
+        ProvinceConfigModel.Alberta = QuestionnaireModel.Alberta;
+        ProvinceConfigModel.BritishColumbia = QuestionnaireModel.BritishColumbia;
+        ProvinceConfigModel.Manitoba = QuestionnaireModel.Manitoba;
+        ProvinceConfigModel.NewBrunswick = QuestionnaireModel.NewBrunswick;
+        ProvinceConfigModel.NewfoundlandandLabrador = QuestionnaireModel.NewfoundlandandLabrador;
+        ProvinceConfigModel.NovaScotia = QuestionnaireModel.NovaScotia;
+        ProvinceConfigModel.Nunavut = QuestionnaireModel.Nunavut;
+        ProvinceConfigModel.Ontario = QuestionnaireModel.Ontario;
+        ProvinceConfigModel.PrinceEdwardIsland = QuestionnaireModel.PrinceEdwardIsland;
+        ProvinceConfigModel.Quebec = QuestionnaireModel.Quebec;
+        ProvinceConfigModel.Saskatchewan = QuestionnaireModel.Saskatchewan;
+        ProvinceConfigModel.YukonTerritory = QuestionnaireModel.YukonTerritory;
+        ProvinceConfigModel.NorthwestTerritories = QuestionnaireModel.NorthwestTerritories;
     }
 
     private void OptionChangeForYear(Microsoft.AspNetCore.Components.ChangeEventArgs e)
