@@ -100,11 +100,8 @@
                                 <!-- EDI Questionnaires Status -->
                                 <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted"/>
 
-                                <!-- Participation Questionnaires Status -->
-                                <QuestionnaireStatusBar Header="Teacher Participation Questionnaires" Total="@teachers" />
-
-                                <!-- Teacher Training Questionnaires Status -->
-                                <QuestionnaireStatusBar Header="Teacher Training Questionnaires" Total="@teachers" />
+                                <!-- Profile Questionnaires Status -->
+                                <QuestionnaireStatusBar Header="Teacher Profiles" Total="@teachers" />                                
                             </div>
                             <div class="col-lg-4 mb-4">
                                 <!--<div class="card shadow mb-4">
@@ -155,7 +152,7 @@
                                 <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted" />
 
                                 @*<QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Profile") URL="@url" />*@
-                                <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Profile") Header="Teacher Profile Status" URL="@url" />
+                                <QuestionnaireChecklist IsComplete=@ProfileComplete QuestionnaireName=@Translate("Teacher Profile") Header="Teacher Profile Status" URL="@url" />
                             </div>
                             <div class="col-lg-4 mb-4">
                                 <EDI.Web.Pages.NewsFeeds.Newslist />
@@ -192,6 +189,7 @@
     private int ChildrenNew { get; set; } = 0;
     private int ChildrenInprogress { get; set; } = 0;
     private int ChildrenCompleted { get; set; } = 0;
+    private bool ProfileComplete { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -250,7 +248,9 @@
 
                     var predicatecomplete = predicate2 + "&& ChildStatusId == " + statuscompleted.Id;
                     ChildrenCompleted = dbContext.Children.Where(predicateinprogess).Count();
-                }
+
+                    // return whether or not they have completed the profile
+                    ProfileComplete = dbContext.QuestionnairesDataTeacherFeedbacks.Where(predicate2).Select(t => t.IsComplete).Single();                }
                 catch (Exception ex)
                 {
                     //toastService.ShowError(string.Format("{0}", ex.Message), "No Teacher Data");
