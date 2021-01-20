@@ -52,17 +52,7 @@
     protected override async Task OnInitializedAsync()
     {
         if (Total > 0)
-        {
-            if (Complete == 0)
-                Complete = MathService.GetRandomNumber(1, Total);
-
-            if (Inprogress == 0)
-            {
-                if (Total - Complete > 0)
-                    Inprogress = MathService.GetRandomNumber(1, Total - Complete);
-            }
-
-
+        {            
             CompletePercent = MathService.GetPercent(Complete, Total);
             InprogressPercent = MathService.GetPercent(Inprogress, Total);
             NotStartedPercent = MathService.GetPercent(New, Total);

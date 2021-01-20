@@ -28,7 +28,7 @@ namespace EDI.Web.Models
         public bool IsCoordinator { get; set; }
 
         public string Language { get; set; }
-        public bool Validation { get; set; }
+        public bool? Validation { get; set; }
 
         public string Province { get; set; }
 
@@ -36,7 +36,7 @@ namespace EDI.Web.Models
 
         public int YearId { get; set; }
 
-        public bool RadioLabels { get; set; }
+        public bool? RadioLabels { get; set; }
 
         public string LabelFonts { get; set; }
 

@@ -112,7 +112,7 @@
             //var comp = await sessionStorage.GetItemAsync<int>("QuestionsCompleted");
             //await sessionStorage.SetItemAsync<int>("QuestionsCompleted", comp++);
 
-            if (_userSettings.Validation)
+            if (_userSettings.Validation.Value)
             {
                 ValidationCss = "Valid";
                 Valid = true;
@@ -121,7 +121,7 @@
         else if(!string.IsNullOrEmpty(previousValue) && string.IsNullOrEmpty(currentValue))
         {
             _userSettings.QuestionsCompleted--;
-            if (_userSettings.Validation)
+            if (_userSettings.Validation.Value)
             {
 
                 ValidationCss = "InValid";
@@ -158,7 +158,7 @@
             //StateHasChanged();
         }
 
-        if (_userSettings.Validation)
+        if (_userSettings.Validation.Value)
         {
             if (Config.IsRequired)
             {

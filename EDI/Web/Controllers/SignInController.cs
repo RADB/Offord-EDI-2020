@@ -104,7 +104,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Logout()
         {
             //var username = _httpContextAccessor.HttpContext.User.Identity.Name;
-            //if(!string.IsNullOrEmpty(username))
+            //if (!string.IsNullOrEmpty(username))
             //{
             //    var user = _identityContext.Users.Where(p => p.UserName == username).FirstOrDefault();
             //    await _sharedService.DeleteUserSessions(user.Id);

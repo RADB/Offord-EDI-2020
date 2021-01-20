@@ -309,7 +309,7 @@ namespace EDI.Web.Services
             {
                 var profile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == id).FirstOrDefault();
 
-                var totalItems = profile.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : profile.CompletedQuestions;
+                var totalItems = profile.CompletedQuestions;
 
                 return totalItems;
             }
@@ -329,7 +329,7 @@ namespace EDI.Web.Services
             {
                 var profile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == id).FirstOrDefault();
 
-                var totalItems = profile.RequiredQuestions == 0 ? 10 : profile.RequiredQuestions;
+                var totalItems = profile.RequiredQuestions;
 
                 return totalItems;
             }

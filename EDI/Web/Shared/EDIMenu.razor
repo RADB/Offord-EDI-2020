@@ -118,13 +118,49 @@
                 else
                     isFrench = true;
 
-                RadioLabels = UserSettings.RadioLabels;
+                if(UserSettings.RadioLabels.HasValue)
+                    RadioLabels = UserSettings.RadioLabels.Value;
+                else
+                {
+                    var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
+                    if(!string.IsNullOrEmpty(radiolabels))
+                    {
+                        RadioLabels = bool.Parse(radiolabels);
+                    }
+                    else
+                    {
+                        RadioLabels = false;
+                    }
+                    UserSettings.RadioLabels = RadioLabels;
+                }
 
-                LabelFonts = UserSettings.LabelFonts;
+                if(!string.IsNullOrEmpty(UserSettings.LabelFonts))
+                    LabelFonts = UserSettings.LabelFonts;
+                else
+                {
+                    var labelfonts = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "LabelFonts").Select(p => p.FieldValue).FirstOrDefault();
+                    LabelFonts = labelfonts;
+                    UserSettings.LabelFonts = labelfonts;
+                }
+
                 if (String.IsNullOrEmpty(UserSettings.LabelFonts))
                     UserSettings.LabelFonts = "1em";
 
-                Validation = UserSettings.Validation;
+                if (UserSettings.Validation.HasValue)
+                    Validation = UserSettings.Validation.Value;
+                else
+                {
+                    var validation = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "Validation").Select(p => p.FieldValue).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(validation))
+                    {
+                        Validation = bool.Parse(validation);
+                    }
+                    else
+                    {
+                        Validation = false;
+                    }
+                    UserSettings.Validation = Validation;
+                }
 
                 GetChildId();
                 //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
@@ -249,6 +285,8 @@
 
             UserSettings.RadioLabels = RadioLabels;
 
+            await sharedService.SaveUserSessions("RadioLabels", RadioLabels.ToString(), UserSettings.UserID);
+
             StateHasChanged();
 
             BounceBack(false);
@@ -278,6 +316,8 @@
                 Validation = false;
 
             UserSettings.Validation = Validation;
+
+            await sharedService.SaveUserSessions("Validation", Validation.ToString(), UserSettings.UserID);
 
             StateHasChanged();
 
@@ -318,6 +358,8 @@
             LabelFonts = selectedString;
 
             UserSettings.LabelFonts = LabelFonts;
+
+            await sharedService.SaveUserSessions("LabelFonts", LabelFonts, UserSettings.UserID);
 
             BounceBack(true);
         }

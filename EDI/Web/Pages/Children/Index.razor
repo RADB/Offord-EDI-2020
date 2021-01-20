@@ -175,7 +175,10 @@
             var totaolcompleted = childService.GetCompletedQuestions(child.Id);
             var totalrequired = childService.GetRequiredQuestions(child.Id);
 
-            achild.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
+            achild.Progress = 0;
+            
+            if (totalrequired > 0)
+                achild.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
 
             sivm.Add(achild);
         }

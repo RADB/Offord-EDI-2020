@@ -355,12 +355,8 @@ namespace EDI.Web.Services
                 var sectiond = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == id).FirstOrDefault();
                 var sectione = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == id).FirstOrDefault();
 
-                var totalItems = (demog.CompletedQuestions == 0 ? GetRandomNumber(1,10) : demog.CompletedQuestions) +
-                                    (sectiona.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectiona.CompletedQuestions) +
-                                    (sectionb.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectionb.CompletedQuestions) +
-                                    (sectionc.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectionc.CompletedQuestions) +
-                                    (sectiond.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectiond.CompletedQuestions) +
-                                    (sectione.CompletedQuestions == 0 ? GetRandomNumber(1, 10) : sectione.CompletedQuestions);
+                var totalItems = demog.CompletedQuestions + sectiona.CompletedQuestions + sectionb.CompletedQuestions +
+                                    sectionc.CompletedQuestions + sectiond.CompletedQuestions + sectione.CompletedQuestions;
 
                 return totalItems;
             }
@@ -385,12 +381,8 @@ namespace EDI.Web.Services
                 var sectiond = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == id).FirstOrDefault();
                 var sectione = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == id).FirstOrDefault();
 
-                var totalItems = (demog.RequiredQuestions == 0 ? 10 : demog.RequiredQuestions) +
-                                    (sectiona.RequiredQuestions == 0 ? 10 : sectiona.RequiredQuestions) +
-                                    (sectionb.RequiredQuestions == 0 ? 10 : sectionb.RequiredQuestions) +
-                                    (sectionc.RequiredQuestions == 0 ? 10 : sectionc.RequiredQuestions) +
-                                    (sectiond.RequiredQuestions == 0 ? 10 : sectiond.RequiredQuestions) +
-                                    (sectione.RequiredQuestions == 0 ? 10 : sectione.RequiredQuestions);
+                var totalItems = demog.RequiredQuestions + sectiona.RequiredQuestions + sectionb.RequiredQuestions +
+                                    sectionc.RequiredQuestions + sectiond.RequiredQuestions + sectione.RequiredQuestions;
 
                 return totalItems;
             }
