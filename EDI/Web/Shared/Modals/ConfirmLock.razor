@@ -1,0 +1,14 @@
+﻿<div class="simple-form" style="width:350px;">
+    <p><img src="./images/auth-lock.png" style="width:30px;" /> Are you sure you want to lock this student?</p> <br />
+    <button @onclick="@ConfirmYes" class="btn btn-primary">Yes</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+
+    async Task ConfirmYes() => await ModalInstance.CloseAsync(ModalResult.Ok($"Confirmed"));
+    //async Task ConfirmYes() => await ModalService.CloseAsync(ModalResult.Ok(true));
+
+    async Task Cancel() => await ModalInstance.CancelAsync();
+}

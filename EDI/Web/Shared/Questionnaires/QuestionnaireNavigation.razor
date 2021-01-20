@@ -1,13 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Extensions;
 @using EDI.Web.Data;
+@using EDI.Web.Shared.Modals;
 @using Newtonsoft.Json;
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
-@inject IReflectionService reflectionService; 
+@inject IReflectionService reflectionService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 <div class="d-flex justify-content-between">
@@ -16,13 +17,15 @@
         <i class="fas fa-chevron-left"></i> @PreviousPage
     </button>
     <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => lockChild())">
-        <i class="fas fa-lock"></i> @LockText 
+        <i class="fas fa-lock"></i> @LockText
     </button>
     <button class="btn btn-info" disabled=@NextDisable @onclick="@(() => gotoURL("Next"))">
         @NextPage <i class="fas fa-chevron-right"></i>
     </button>
 </div>
 @code {
+    [CascadingParameter]
+    public IModalService ModalService { get; set; }
     private int ChildId { get; set; }
     private bool PreviousDisable { get; set; }
     private bool LockHidden { get; set; }
@@ -33,20 +36,40 @@
     private string CurrentPage { get; set; }
     private List<Questionnaire> questionnaires;
 
-    protected void lockChild()
+    protected async void lockChild()
     {
-        // show modal confirming locking child (YES NO)
-        var currentStatus = int.Parse(reflectionService.GetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId"));
-        if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.New)
+        var modal = ModalService.Show<ConfirmLock>("Confirm Lock");
+        var result = await modal.Result;
+        ConfirmLockModalClosed(result);
+    }
+
+    async void ConfirmLockModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
         {
-            reflectionService.SetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
+            // show modal confirming locking child (YES NO)
+            try
+            {
+                var currentStatus = int.Parse(reflectionService.GetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId"));
+                if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.New)
+                {
+                    reflectionService.SetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
+                }
+                StateHasChanged();
+                toastService.ShowSuccess("Student locked successfully.");
+
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 
     protected void gotoURL(string Direction)
     {
         // get the URL
-        string url = string.Format("EDIQuestionnaires/{0}/{1}", Direction == "Previous"?PreviousPage:NextPage, ChildId);
+        string url = string.Format("EDIQuestionnaires/{0}/{1}", Direction == "Previous" ? PreviousPage : NextPage, ChildId);
         // save the questionnaire
         Save(UserSettings.UseJSON);
         // navigate to the new page
