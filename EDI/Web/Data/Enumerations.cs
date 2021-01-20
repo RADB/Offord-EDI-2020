@@ -59,5 +59,13 @@ namespace EDI.Web.Data
             Imported = 1,
             Processed = 2
         }
+
+        public enum ChildStatus: int 
+        {            
+            New = 2,
+            InProgress = 1,
+            Complete = 3,
+            Locked = 4
+        }
     }
 }

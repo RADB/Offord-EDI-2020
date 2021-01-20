@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Buttons;
+@using EDI.Web.Data;  
 @using EDI.Web.Extensions;
 @using EDI.ApplicationCore.Models;
 @using Newtonsoft.Json;
@@ -11,6 +12,7 @@
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
 @inject IAccountService accountService;
+@inject IReflectionService reflectionService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 <div class="pl-4 navbar navbar-dark">
@@ -59,308 +61,315 @@
 </div>
 
 
-    @code {
-        // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
-        private Boolean isFrench { get; set; }
+@code {
+    // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
+    private Boolean isFrench { get; set; }
 
-        private Boolean RadioLabels { get; set; }
-        private Boolean Validation { get; set; }
+    private Boolean RadioLabels { get; set; }
+    private Boolean Validation { get; set; }
 
-        private string LabelFonts { get; set; }
+    private string LabelFonts { get; set; }
 
-        private bool IsComplete { get; set; } = false;
-        // get this value from the entity field IsComplete on each
+    private bool IsComplete { get; set; } = false;
+    // get this value from the entity field IsComplete on each
 
-        private int ChildId { get; set; }
+    private int ChildId { get; set; }
 
-        private bool isChildQuestionnaire;
-        private List<Questionnaire> questionnaires;
-        private bool collapseNavMenu = false;
-        private bool expandMenu;
-        private string iconCSS = "";
-        private string color = "";
+    private bool isChildQuestionnaire;
+    private List<Questionnaire> questionnaires;
+    private bool collapseNavMenu = false;
+    private bool expandMenu;
+    private string iconCSS = "";
+    private string color = "";
 
-        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-        private void ToggleNavMenu()
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+        expandMenu = false;
+    }
+
+    private void ToggleSubmenu()
+    {
+        expandMenu = !expandMenu;
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
         {
-            collapseNavMenu = !collapseNavMenu;
-            expandMenu = false;
+            NavigationManager.NavigateTo("./login");
         }
-
-        private void ToggleSubmenu()
+        else
         {
-            expandMenu = !expandMenu;
-        }
-
-
-        protected override async Task OnInitializedAsync()
-        {
-            if (!UserSettings.IsAuthenticated)
+            if (IsComplete)
             {
-                NavigationManager.NavigateTo("./login");
+                iconCSS = "far fa-check-square fa-lg";
+                color = "green";
             }
             else
             {
-                if (IsComplete)
-                {
-                    iconCSS = "far fa-check-square fa-lg";
-                    color = "green";
-                }
-                else
-                {
-                    iconCSS = "far fa-square fa-lg";
-                    color = "red";
-                }
-
-                if (UserSettings.Language == "English")
-                    isFrench = false;
-                else
-                    isFrench = true;
-
-                if(UserSettings.RadioLabels.HasValue)
-                    RadioLabels = UserSettings.RadioLabels.Value;
-                else
-                {
-                    var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
-                    if(!string.IsNullOrEmpty(radiolabels))
-                    {
-                        RadioLabels = bool.Parse(radiolabels);
-                    }
-                    else
-                    {
-                        RadioLabels = false;
-                    }
-                    UserSettings.RadioLabels = RadioLabels;
-                }
-
-                if(!string.IsNullOrEmpty(UserSettings.LabelFonts))
-                    LabelFonts = UserSettings.LabelFonts;
-                else
-                {
-                    var labelfonts = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "LabelFonts").Select(p => p.FieldValue).FirstOrDefault();
-                    LabelFonts = labelfonts;
-                    UserSettings.LabelFonts = labelfonts;
-                }
-
-                if (String.IsNullOrEmpty(UserSettings.LabelFonts))
-                    UserSettings.LabelFonts = "1em";
-
-                if (UserSettings.Validation.HasValue)
-                    Validation = UserSettings.Validation.Value;
-                else
-                {
-                    var validation = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "Validation").Select(p => p.FieldValue).FirstOrDefault();
-                    if (!string.IsNullOrEmpty(validation))
-                    {
-                        Validation = bool.Parse(validation);
-                    }
-                    else
-                    {
-                        Validation = false;
-                    }
-                    UserSettings.Validation = Validation;
-                }
-
-                GetChildId();
-                //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
-                getData();
+                iconCSS = "far fa-square fa-lg";
+                color = "red";
             }
-        }
 
-        private void getData()
-        {
-            questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
-        }
+            if (UserSettings.Language == "English")
+                isFrench = false;
+            else
+                isFrench = true;
 
-        private void GetChildId()
+            if (UserSettings.RadioLabels.HasValue)
+                RadioLabels = UserSettings.RadioLabels.Value;
+            else
+            {
+                var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
+                if (!string.IsNullOrEmpty(radiolabels))
+                {
+                    RadioLabels = bool.Parse(radiolabels);
+                }
+                else
+                {
+                    RadioLabels = false;
+                }
+                UserSettings.RadioLabels = RadioLabels;
+            }
+
+            if (!string.IsNullOrEmpty(UserSettings.LabelFonts))
+                LabelFonts = UserSettings.LabelFonts;
+            else
+            {
+                var labelfonts = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "LabelFonts").Select(p => p.FieldValue).FirstOrDefault();
+                LabelFonts = labelfonts;
+                UserSettings.LabelFonts = labelfonts;
+            }
+
+            if (String.IsNullOrEmpty(UserSettings.LabelFonts))
+                UserSettings.LabelFonts = "1em";
+
+            if (UserSettings.Validation.HasValue)
+                Validation = UserSettings.Validation.Value;
+            else
+            {
+                var validation = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "Validation").Select(p => p.FieldValue).FirstOrDefault();
+                if (!string.IsNullOrEmpty(validation))
+                {
+                    Validation = bool.Parse(validation);
+                }
+                else
+                {
+                    Validation = false;
+                }
+                UserSettings.Validation = Validation;
+            }
+
+            GetChildId();
+            //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+            getData();
+        }
+    }
+
+    private void getData()
+    {
+        questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
+    }
+
+    private void GetChildId()
+    {
+        Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (uri.Segments.Count() != 4)
         {
-            Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-            if (uri.Segments.Count() != 4)
+            NavigationManager.NavigateTo("./children/index");
+        }
+        else
+        {
+            if (!Int32.TryParse(uri.Segments[3], out int studentId))
             {
                 NavigationManager.NavigateTo("./children/index");
             }
             else
             {
-                if (!Int32.TryParse(uri.Segments[3], out int studentId))
-                {
-                    NavigationManager.NavigateTo("./children/index");
-                }
-                else
-                {
-                    ChildId = studentId;
-                }
+                ChildId = studentId;
             }
-
         }
 
-        private async void Save(bool useJSON)
-        {
-            if (useJSON)
-            {
-                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-                if (teacherJson != null && teacherJson.Length > 0)
-                {
-                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
-
-                    await SaveDisconnectedTeacher(tempTeacher);
-
-                    await sessionStorage.RemoveItemAsync("Teacher");
-                }
-            }
-            else
-            {
-                if (UserSettings.TeacherData != null)
-                {
-                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                    UserSettings.TeacherData = null;
-                }
-            }
-
-        }
-
-        private async Task SaveDisconnectedTeacher(Teacher TeacherData)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
-            {
-                // load the disconnected data into the context
-                servicecontext.Update(TeacherData);
-                try
-                {
-                    await servicecontext.SaveChangesAsync();
-
-                    //toastService.ShowSuccess("Data Saved Successfully!");
-                    StateHasChanged();
-                }
-                catch (Exception ex)
-                {
-                    toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
-
-                    sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
-                }
-            }
-            UserSettings.QuestionsCompleted = 0;
-            UserSettings.QuestionsRequired = 0;
-            UserSettings.QuestionsTotal = 0;
-        }
-
-        private async void BounceBack(Boolean UseSession)
-        {
-            var url = NavigationManager.Uri;
-            string navigateTo;
-
-            if (UseSession)
-            {
-                await sessionStorage.SetItemAsync<string>("CurrentUrl", url);
-                //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
-                //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
-                navigateTo = "./EDIQuestionnaires/SectionZ";
-            }
-            else
-            {
-                UserSettings.CurrentURL = url;
-                UserSettings.RequiredNaviBack = true;
-                navigateTo = "./EDIQuestionnaires/SectionX";
-            }
-
-            Save(UserSettings.UseJSON);
-            NavigationManager.NavigateTo(navigateTo);
-            //NavigationManager.NavigateTo(url,Force);
-            //await InvokeAsync(() => StateHasChanged());
-
-        }
-
-
-        private async void OnLabelsChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
-        {
-            if (e.Checked)
-            {
-                RadioLabels = true;
-            }
-            else
-                RadioLabels = false;
-
-            UserSettings.RadioLabels = RadioLabels;
-
-            await sharedService.SaveUserSessions("RadioLabels", RadioLabels.ToString(), UserSettings.UserID);
-
-            StateHasChanged();
-
-            BounceBack(false);
-        }
-
-        private async void OnLanguageChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
-        {
-            if (e.Checked)
-            {
-                UserSettings.Language = "French";
-            }
-            else
-                UserSettings.Language = "English";
-
-            await accountService.UpdateUserLanguageAsync(UserSettings);
-
-            BounceBack(false);
-        }
-
-        private async void OnValidationChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
-        {
-            if (e.Checked)
-            {
-                Validation = true;
-            }
-            else
-                Validation = false;
-
-            UserSettings.Validation = Validation;
-
-            await sharedService.SaveUserSessions("Validation", Validation.ToString(), UserSettings.UserID);
-
-            StateHasChanged();
-
-            BounceBack(false);
-        }
-
-        //private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-        //{
-        //    string selectedString = e.Value.ToString();
-
-        //    RadioLabels = false;
-
-        //    if (bool.TryParse(selectedString, out bool value))
-        //    {
-        //        RadioLabels = value;
-
-        //        UserSettings.RadioLabels = RadioLabels;
-
-        //        var url = NavigationManager.Uri;
-
-        //        UserSettings.CurrentURL = url;
-        //        UserSettings.RequiredNaviBack = true;
-
-        //        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
-        //        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
-        //        //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
-
-        //        Save();
-        //        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
-        //        await InvokeAsync(() => StateHasChanged());
-        //    }
-        //}
-
-        private async void OptionChange(ChangeEventArgs e)
-        {
-            string selectedString = e.Value.ToString();
-
-            LabelFonts = selectedString;
-
-            UserSettings.LabelFonts = LabelFonts;
-
-            await sharedService.SaveUserSessions("LabelFonts", LabelFonts, UserSettings.UserID);
-
-            BounceBack(true);
-        }
     }
+
+    private async void Save(bool useJSON)
+    {
+        if (useJSON)
+        {
+            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+            if (teacherJson != null && teacherJson.Length > 0)
+            {
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                await SaveDisconnectedTeacher(tempTeacher);
+
+                await sessionStorage.RemoveItemAsync("Teacher");
+            }
+        }
+        else
+        {
+            if (UserSettings.TeacherData != null)
+            {
+                await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                UserSettings.TeacherData = null;
+            }
+        }
+
+    }
+
+    private async Task SaveDisconnectedTeacher(Teacher TeacherData)
+    {
+        // update new to In progress on save
+        var currentStatus = int.Parse(reflectionService.GetFieldValue(TeacherData, "Child", "ChildStatusId"));
+        if((Enumerations.ChildStatus)currentStatus==Enumerations.ChildStatus.New)
+        {
+            reflectionService.SetFieldValue(TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.InProgress).ToString());
+        }
+
+        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+        {
+            // load the disconnected data into the context
+            servicecontext.Update(TeacherData);
+            try
+            {
+                await servicecontext.SaveChangesAsync();
+
+                //toastService.ShowSuccess("Data Saved Successfully!");
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+
+                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+            }
+        }
+        UserSettings.QuestionsCompleted = 0;
+        UserSettings.QuestionsRequired = 0;
+        UserSettings.QuestionsTotal = 0;
+    }
+
+    private async void BounceBack(Boolean UseSession)
+    {
+        var url = NavigationManager.Uri;
+        string navigateTo;
+
+        if (UseSession)
+        {
+            await sessionStorage.SetItemAsync<string>("CurrentUrl", url);
+            //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
+            //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
+            navigateTo = "./EDIQuestionnaires/SectionZ";
+        }
+        else
+        {
+            UserSettings.CurrentURL = url;
+            UserSettings.RequiredNaviBack = true;
+            navigateTo = "./EDIQuestionnaires/SectionX";
+        }
+
+        Save(UserSettings.UseJSON);
+        NavigationManager.NavigateTo(navigateTo);
+        //NavigationManager.NavigateTo(url,Force);
+        //await InvokeAsync(() => StateHasChanged());
+
+    }
+
+
+    private async void OnLabelsChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            RadioLabels = true;
+        }
+        else
+            RadioLabels = false;
+
+        UserSettings.RadioLabels = RadioLabels;
+
+        await sharedService.SaveUserSessions("RadioLabels", RadioLabels.ToString(), UserSettings.UserID);
+
+        StateHasChanged();
+
+        BounceBack(false);
+    }
+
+    private async void OnLanguageChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            UserSettings.Language = "French";
+        }
+        else
+            UserSettings.Language = "English";
+
+        await accountService.UpdateUserLanguageAsync(UserSettings);
+
+        BounceBack(false);
+    }
+
+    private async void OnValidationChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            Validation = true;
+        }
+        else
+            Validation = false;
+
+        UserSettings.Validation = Validation;
+
+        await sharedService.SaveUserSessions("Validation", Validation.ToString(), UserSettings.UserID);
+
+        StateHasChanged();
+
+        BounceBack(false);
+    }
+
+    //private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    //{
+    //    string selectedString = e.Value.ToString();
+
+    //    RadioLabels = false;
+
+    //    if (bool.TryParse(selectedString, out bool value))
+    //    {
+    //        RadioLabels = value;
+
+    //        UserSettings.RadioLabels = RadioLabels;
+
+    //        var url = NavigationManager.Uri;
+
+    //        UserSettings.CurrentURL = url;
+    //        UserSettings.RequiredNaviBack = true;
+
+    //        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
+    //        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
+    //        //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
+
+    //        Save();
+    //        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
+    //        await InvokeAsync(() => StateHasChanged());
+    //    }
+    //}
+
+    private async void OptionChange(ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        LabelFonts = selectedString;
+
+        UserSettings.LabelFonts = LabelFonts;
+
+        await sharedService.SaveUserSessions("LabelFonts", LabelFonts, UserSettings.UserID);
+
+        BounceBack(true);
+    }
+}

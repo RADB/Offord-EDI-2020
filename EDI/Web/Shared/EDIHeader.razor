@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using EDI.Web.Data;
 @using Syncfusion.Blazor.Buttons;
 @using EDI.Web.Extensions;
 @using EDI.ApplicationCore.Models;
@@ -12,6 +13,7 @@
 @inject IToastService toastService;
 @inject StateContainer StateContainer;
 @inject IAccountService accountService;
+@inject IReflectionService reflectionService; 
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 
@@ -98,6 +100,11 @@
 
     private async Task SaveDisconnectedTeacher(Teacher TeacherData)
     {
+        var currentStatus = int.Parse(reflectionService.GetFieldValue(TeacherData, "Child", "ChildStatusId"));
+        if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.New)
+        {
+            reflectionService.SetFieldValue(TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.InProgress).ToString());
+        }
         var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
         optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
         using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))

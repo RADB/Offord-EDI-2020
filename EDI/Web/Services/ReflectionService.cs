@@ -130,6 +130,7 @@ namespace EDI.Web.Services
                 "Questionnaires.Data.SectionD" => data.Children.First().QuestionnairesDataSectionDs.Single(),
                 "Questionnaires.Data.SectionE" => data.Children.First().QuestionnairesDataSectionEs.Single(),
                 "Questionnaires.Data.TeacherProfile" => data.QuestionnairesDataTeacherProfiles.Single(),
+                "Child" => data.Children.Single(),
                 _ => null,
             };
         }

@@ -1,11 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Extensions;
+@using EDI.Web.Data;
 @using Newtonsoft.Json;
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
+@inject IReflectionService reflectionService; 
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 <div class="d-flex justify-content-between">
@@ -34,7 +36,11 @@
     protected void lockChild()
     {
         // show modal confirming locking child (YES NO)
-
+        var currentStatus = int.Parse(reflectionService.GetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId"));
+        if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.New)
+        {
+            reflectionService.SetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
+        }
     }
 
     protected void gotoURL(string Direction)
