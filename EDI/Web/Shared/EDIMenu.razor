@@ -198,28 +198,34 @@
 
     private async void Save(bool useJSON)
     {
-        if (useJSON)
+        if(UserSettings.IsTeacher)
         {
-            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-            if (teacherJson != null && teacherJson.Length > 0)
+            if (useJSON)
             {
-                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                if (teacherJson != null && teacherJson.Length > 0)
+                {
+                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                await SaveDisconnectedTeacher(tempTeacher);
+                    await SaveDisconnectedTeacher(tempTeacher);
 
-                await sessionStorage.RemoveItemAsync("Teacher");
+                    await sessionStorage.RemoveItemAsync("Teacher");
+                }
+            }
+            else
+            {
+                if (UserSettings.TeacherData != null)
+                {
+                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                    UserSettings.TeacherData = null;
+                }
             }
         }
         else
         {
-            if (UserSettings.TeacherData != null)
-            {
-                await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                UserSettings.TeacherData = null;
-            }
+            UserSettings.TeacherData = null;
         }
-
     }
 
     private async Task SaveDisconnectedTeacher(Teacher TeacherData)

@@ -75,8 +75,16 @@
     {
         // get the URL
         string url = string.Format("EDIQuestionnaires/{0}/{1}", Direction == "Previous" ? PreviousPage : NextPage, ChildId);
-        // save the questionnaire
-        Save(UserSettings.UseJSON);
+        // save the questionnaire if teacher
+        if (UserSettings.IsTeacher)
+        {
+            Save(UserSettings.UseJSON);
+        }
+        else
+        {
+            UserSettings.TeacherData = null;
+        }
+
         // navigate to the new page
         NavigationManager.NavigateTo(url);
     }
