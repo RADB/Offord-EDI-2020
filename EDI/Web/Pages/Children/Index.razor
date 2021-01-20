@@ -68,7 +68,7 @@
                                     <Template>
                                         @{
                                             var comm = (context as ChildItemViewModel);
-                                            <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/unlock.png" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                            <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><i class="fas fa-lock-open fa-2x" style="color:darkgreen; margin-top: -8px;"></i></button>
                                         }
                                     </Template>
                                 </GridColumn>
