@@ -53,13 +53,15 @@
             // show modal confirming locking child (YES NO)
             try
             {
-                var currentStatus = int.Parse(reflectionService.GetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId"));
-                if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.New)
+                var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Child", "ChildStatusId"));
+                if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.InProgress)
                 {
-                    reflectionService.SetFieldValue(UserSettings.TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
+                    reflectionService.SetFieldValue(teacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
+                    UserSettings.TeacherData = teacherData;
+                    Save(false);
+                    StateHasChanged();
+                    toastService.ShowSuccess("Student locked successfully.");
                 }
-                StateHasChanged();
-                toastService.ShowSuccess("Student locked successfully.");
 
             }
             catch (Exception ex)

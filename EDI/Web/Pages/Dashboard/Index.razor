@@ -152,10 +152,10 @@
                         <div class="row">
                             <div class="col-lg-8 mb-4">
                                 <!-- EDI Questionnaires Status -->
-                                <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" />
-                                
+                                <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted" />
+
                                 @*<QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Profile") URL="@url" />*@
-                                <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Profile")  Header="Teacher Profile Status" URL="@url" />
+                                <QuestionnaireChecklist IsComplete=true QuestionnaireName=@Translate("Teacher Profile") Header="Teacher Profile Status" URL="@url" />
                             </div>
                             <div class="col-lg-4 mb-4">
                                 <EDI.Web.Pages.NewsFeeds.Newslist />
@@ -236,6 +236,20 @@
 
                     // count of the children
                     children = teacher.Children.Count();
+
+                    var predicate2 = "TeacherId == " + teacher.Id + "&& yearid ==" + UserSettings.YearId;
+                    var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+                    var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                    var statuscompleted = dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+
+                    var predicatenew = predicate2 + "&& ChildStatusId == " + statusnew.Id;
+                    ChildrenNew = dbContext.Children.Where(predicatenew).Count();
+
+                    var predicateinprogess = predicate2 + "&& ChildStatusId == " + statusinprogress.Id;
+                    ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
+
+                    var predicatecomplete = predicate2 + "&& ChildStatusId == " + statuscompleted.Id;
+                    ChildrenCompleted = dbContext.Children.Where(predicateinprogess).Count();
                 }
                 catch (Exception ex)
                 {
