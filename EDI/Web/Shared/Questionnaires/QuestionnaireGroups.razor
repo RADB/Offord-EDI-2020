@@ -13,14 +13,14 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 12px;margin-left:30px;">*@
 
-    <SfAccordion ExpandMode="ExpandMode.Multiple" Width="100%">
-        <AccordionItems>
+    @*<SfAccordion ExpandMode="ExpandMode.Multiple" Width="100%">
+        <AccordionItems>*@
             @foreach (var config in groups)
             {
                 // show text - otherwise show group name in accordion if showgroupname = true
                 var aName = sharedService.GetConfigText(config).Length > 0 ? sharedService.GetConfigText(config) : config.ShowGroupName ? config.GroupName : "";
-                <AccordionItem Expanded="true" CssClass="border border-primary">
-                    <HeaderTemplate>
+                @*<AccordionItem Expanded="true" CssClass="border border-primary">
+                    <HeaderTemplate>*@
                         <div class="container-fluid">
                             @if (aName.Length != 0)
                             { 
@@ -30,8 +30,8 @@
                                 </div>
                              }
                         </div>
-                    </HeaderTemplate>
-                    <ContentTemplate>
+                    @*</HeaderTemplate>
+                    <ContentTemplate>*@
                         @*@if (aName.Length != 0)
                         {
                             <div class="col-6"><h4>@sharedService.GetConfigText(config)</h4></div>
@@ -39,11 +39,11 @@
                         <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
 
                         <QuestionnaireQuestionHeader QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestionHeader>
-                    </ContentTemplate>
-                </AccordionItem>
+                    @*</ContentTemplate>
+                </AccordionItem>*@
             }
-        </AccordionItems>
-    </SfAccordion>
+        @*</AccordionItems>
+    </SfAccordion>*@
 @*</div>*@
 
 @code {
