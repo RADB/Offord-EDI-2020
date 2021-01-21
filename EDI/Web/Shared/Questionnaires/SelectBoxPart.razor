@@ -42,6 +42,7 @@
             GetQuestionText();
             // check to see if question is readonly 
             ReadonlyQuestion = Config.IsReadOnly;
+            IsRequired = Config.IsRequired;
 
             OptionsViewModel = new OptionsViewModel();
             OptionsViewModel.LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));

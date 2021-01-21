@@ -29,21 +29,25 @@
     public string HelpTextEnglish { get; set; }
     public string ValidationCss { get; set; }
     public bool ReadonlyQuestion { get; set; }
+    public bool IsRequired { get; set; }
     public bool? Valid { get; set; }
     public byte CompletionPercentage { get; set; }
 
     //public int _optionCount = 0;
     public string _optionLabel;
-
-    protected override async Task OnInitializedAsync()
-    {
-        //CompletionCheck(0,0);
-        //if (Config.IsRequired)
-        //{
-        //    UserSettings.QuestionsRequired += 1;
-        //    reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", UserSettings.QuestionsRequired.ToString());
-        //}
-    }
+    //public int c;
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    c++;
+    //    System.Diagnostics.Debug.Print(string.Format("{0} - QB:OnInitializedAsync fired for variable {1} and required = {2}", c, Config.VariableName, Config.IsReadOnly));
+    //    Console.WriteLine(string.Format("{0} - QB:OnInitializedAsync fired for variable {1} and required = {2}", c, Config.VariableName, Config.IsReadOnly));
+    //    //CompletionCheck(0,0);
+    //    //if (Config.IsRequired)
+    //    //{
+    //    //    UserSettings.QuestionsRequired += 1;
+    //    //    reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", UserSettings.QuestionsRequired.ToString());
+    //    //}
+    //}
 
     public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
     {
@@ -128,15 +132,16 @@
                 Valid = false;
             }
         }
-        reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());        
+        reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
     }
 
     public async void Validation(string currentValue)
     {
         // add 1 to the total questions
         _userSettings.QuestionsTotal++;
-
-        if (Config.IsRequired)
+        Console.WriteLine(string.Format("{0} - QB:OnInitializedAsync fired for variable {1} and required = {2}", _userSettings.QuestionsTotal, Config.VariableName, Config.IsReadOnly));
+        //if (Config.IsRequired)
+        if (IsRequired)
         {
             // add 1 to required questions
             _userSettings.QuestionsRequired++;

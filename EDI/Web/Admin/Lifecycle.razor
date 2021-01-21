@@ -1,0 +1,80 @@
+﻿@page "/Admin/Lifecycle"
+@using Newtonsoft.Json
+<div class="page">
+    <h1 @ref=MyElementReference>Component Lifecycle!</h1>
+    <button @onclick=ButtonClicked type="button" class="btn btn-primary">Show serialized reference</button>
+    <button type="button" class="btn btn-primary">Just a Button</button>
+    <button @onclick=ChangeState type="button" class="btn btn-primary">Change State</button>
+    <code><pre>@output</pre></code>
+    Welcome to your new app.
+</div>
+@code {
+    string output;
+    object btnState;
+    ElementReference MyElementReference;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        output += "OnAfterRender: ";
+        ShowSerializedReference();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        output += "OnAfterRenderAsync: ";
+        ShowSerializedReference();
+        return base.OnAfterRenderAsync(firstRender);
+    }
+    protected override void OnParametersSet()
+    {
+        output += "OnParameterSet: ";
+        ShowSerializedReference();
+        base.OnParametersSet();
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        output += "OnParameterSetAsync: ";
+        ShowSerializedReference();
+        return base.OnParametersSetAsync();
+    }
+
+    protected override bool ShouldRender()
+    {
+        output += "ShouldRender: ";
+        ShowSerializedReference();
+        return base.ShouldRender();
+    }
+
+    protected override void OnInitialized()
+    {
+        output += "OnInitialized: ";
+        ShowSerializedReference();
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        output += "OnInitializedAsync: ";
+        ShowSerializedReference();
+        return base.OnInitializedAsync();
+    }
+
+    private void ButtonClicked()
+    {
+        output += "Button clicked: ";
+        ShowSerializedReference();
+    }
+    private void ShowSerializedReference()
+    {
+        //output += System.Text.Json.JsonSerializer.Serialize(MyElementReference) + "\r\n";
+        output += JsonConvert.SerializeObject(MyElementReference) + "\r\n";
+    }
+
+    private void ChangeState()
+    {
+        output += "StateHasChanged: ";
+        ShowSerializedReference();
+        StateHasChanged();
+    }
+
+}

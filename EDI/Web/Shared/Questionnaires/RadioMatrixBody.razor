@@ -123,6 +123,7 @@
         GetQuestionText();
         // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
+        IsRequired = Config.IsRequired;
 
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
@@ -153,7 +154,7 @@
         }
 
         CompletedQuestion(previousValue,e.Value.ToString());
-       // StateHasChanged();
+        // StateHasChanged();
     }
 
     //public async void onDoubleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)

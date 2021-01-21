@@ -8,20 +8,37 @@
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
+@inject IMathService mathService;
 @inject IReflectionService reflectionService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
-<div class="d-flex justify-content-between">
-
-    <button class="btn btn-info" disabled=@PreviousDisable @onclick="@(() => gotoURL("Previous"))">
-        <i class="fas fa-chevron-left"></i> @PreviousPage
-    </button>
-    <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => lockChild())">
-        <i class="fas fa-lock"></i> @LockText
-    </button>
-    <button class="btn btn-info" disabled=@NextDisable @onclick="@(() => gotoURL("Next"))">
-        @NextPage <i class="fas fa-chevron-right"></i>
-    </button>
+<div class="d-flex justify-content-between align-items-center">    
+        <div class="col-2">
+            <button class="btn btn-info" disabled=@PreviousDisable @onclick="@(() => gotoURL("Previous"))">
+                <i class="fas fa-chevron-left"></i> @PreviousPage
+            </button>
+        </div>
+        <div class="col-8 text-center d-inline">
+            @*<div class="row">*@
+            
+            <div class="col-12">
+                <button class="btn btn-warning" @onclick="@checkCompleteNess" type="button"><i class="fas fa-search"></i> Check Completeness</button>
+                <br />
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated @barColor" style="width:@percentComplete%;">@percentComplete%</div>
+                </div>
+            </div>
+            
+            @*</div>*@
+        </div>
+        <div class="col-2 text-right">
+            <button class="btn btn-info" disabled=@NextDisable  hidden=@EHidden @onclick="@(() => gotoURL("Next"))">
+                @NextPage <i class="fas fa-chevron-right"></i>
+            </button>
+            <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => lockChild())">
+                <i class="fas fa-lock"></i> @LockText
+            </button>
+        </div>    
 </div>
 @code {
     [Parameter]
@@ -32,11 +49,16 @@
     private int ChildId { get; set; }
     private bool PreviousDisable { get; set; }
     private bool LockHidden { get; set; }
+    private bool EHidden { get; set; }
     private string PreviousPage { get; set; }
     private bool NextDisable { get; set; }
     private string NextPage { get; set; }
     private string LockText { get; set; }
     private string CurrentPage { get; set; }
+    private int completed { get; set; }
+    private int required { get; set; }
+    private int percentComplete { get; set; }
+    private string barColor { get; set; }
     private List<Questionnaire> questionnaires;
 
     protected async void lockChild()
@@ -61,6 +83,8 @@
                     Save(false);
                     StateHasChanged();
                     toastService.ShowSuccess("Student locked successfully.");
+                    
+                    NavigationManager.NavigateTo("./children/index");
                 }
 
             }
@@ -71,6 +95,35 @@
         }
     }
 
+    private void checkCompleteNess()
+    {
+        completed = UserSettings.QuestionsCompleted;
+        required = UserSettings.QuestionsRequired;
+        percentComplete = mathService.GetPercent(completed, required);
+
+        if (percentComplete > 100)
+            percentComplete = 100;
+
+        switch (percentComplete)
+        {
+            case < 30:
+                barColor = "bg-danger";
+                break;
+            case < 50:
+                barColor = "bg-warning";
+                break;
+            case < 75:
+                barColor = "bg-secondary";
+                break;
+            case < 99:
+                barColor = "bg-info";
+                break;
+            case 100:
+                barColor = "bg-success";
+                break;
+        }
+        //StateHasChanged();
+    }
     protected void gotoURL(string Direction)
     {
         // get the URL
@@ -129,6 +182,7 @@
         PreviousDisable = false;
         NextDisable = false;
         LockHidden = true;
+        EHidden = false;
 
         switch (CurrentPage)
         {
@@ -162,6 +216,7 @@
                 NextPage = string.Empty;
                 LockText = "Lock Child";
                 LockHidden = false;
+                EHidden = true;
                 break;
         }
     }

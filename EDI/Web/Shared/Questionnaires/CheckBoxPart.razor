@@ -55,6 +55,7 @@
         GetQuestionText();
         // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
+        IsRequired = Config.IsRequired;
 
         // Get the current value of the question
         bool.TryParse(reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField), out flag);

@@ -65,6 +65,7 @@
         GetQuestionText();
         // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
+        IsRequired = Config.IsRequired;
         // Get the current value of the question - parse will throw null value exception - otherwise use Convert.ToInt32
         try
         {

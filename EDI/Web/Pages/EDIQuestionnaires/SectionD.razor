@@ -19,27 +19,7 @@
 
 <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="15px"></QuestionnaireHeader>
 
-<div class="justify-content-center"><button class="btn btn-warning" @onclick="@checkCompleteNess">Check Complete</button></div>
-<div class="justify-content-center">
-    Completed= @completed
-    <br />
-    Required= @required
-    <br />
-    %Done= @percentComplete
-</div>
-
 @code {
-    private int completed { get; set; }
-    private int required { get; set; }
-    private int percentComplete { get; set; }
-
-    private void checkCompleteNess()
-    {
-        completed = UserSettings.QuestionsCompleted;
-        required = UserSettings.QuestionsRequired;
-        percentComplete = mathService.GetPercent(completed, required);
-        StateHasChanged();
-    }
     protected override Task OnParametersSetAsync()
     {
         initializeCounts();
