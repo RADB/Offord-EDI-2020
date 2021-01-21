@@ -1,6 +1,7 @@
 ﻿@page "/TeacherProfile/index/{TeacherId:int}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Shared.Questionnaires
+@using EDI.Web.Data 
 @using static EDI.Web.Data.Enumerations
 @using System.Linq.Dynamic.Core
 @using Blazored.Modal
@@ -11,6 +12,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
+@inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 @inject IToastService toastService;
@@ -68,31 +70,7 @@
     private int percentComplete { get; set; }
     private string barColor { get; set; }
 
-    private void checkCompleteNess()
-    {
-        completed = UserSettings.QuestionsCompleted;
-        required = UserSettings.QuestionsRequired;
-        percentComplete = mathService.GetPercent(completed, required);
-        switch(percentComplete)
-        {
-            case < 30:
-                barColor = "bg-danger";
-                break;
-            case < 50:
-                barColor = "bg-warning";
-                break;
-            case < 75:
-                barColor = "bg-secondary";
-                break;
-            case < 99:
-                barColor = "bg-info";
-                break;
-            case 100:
-                barColor = "bg-succes";
-                break;
-        }
-        //StateHasChanged();
-    }
+
 
     [Parameter]
     public int TeacherId { get; set; }
@@ -154,7 +132,31 @@
         }
 
     }
-
+    private void checkCompleteNess()
+    {
+        completed = UserSettings.QuestionsCompleted;
+        required = UserSettings.QuestionsRequired;
+        percentComplete = mathService.GetPercent(completed, required);
+        switch (percentComplete)
+        {
+            case < 30:
+                barColor = "bg-danger";
+                break;
+            case < 50:
+                barColor = "bg-warning";
+                break;
+            case < 75:
+                barColor = "bg-secondary";
+                break;
+            case < 99:
+                barColor = "bg-info";
+                break;
+            case 100:
+                barColor = "bg-succes";
+                break;
+        }
+        //StateHasChanged();
+    }
     protected void InitializeCounts()
     {
         UserSettings.QuestionsCompleted = 0;
@@ -197,6 +199,23 @@
 
     private async void Save()
     {
+        checkCompleteNess();
+
+        //var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Teacher", "TeacherStatusId"));
+        var currentStatus = teacherData.TeacherStatusId;
+        if ((Enumerations.TeacherStatus)currentStatus != Enumerations.TeacherStatus.Complete)
+        {
+            if(percentComplete == 100)
+            {
+                //reflectionService.SetFieldValue(teacherData, "Teacher", "TeacherStatusId", ((int)Enumerations.TeacherStatus.Complete).ToString());
+                teacherData.TeacherStatusId = (int)Enumerations.TeacherStatus.Complete;
+            }
+            else
+            {
+                //reflectionService.SetFieldValue(teacherData, "Teacher", "TeacherStatusId", ((int)Enumerations.TeacherStatus.InProgress).ToString());
+                teacherData.TeacherStatusId = (int)Enumerations.TeacherStatus.InProgress;
+            }
+        }
         //StateContainer.SetTeacher(teacherData);
         //dbContext.Teachers.Update(StateContainer.TeacherData);
         await dbContext.SaveChangesAsync();

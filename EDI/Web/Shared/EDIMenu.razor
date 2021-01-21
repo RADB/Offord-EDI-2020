@@ -236,12 +236,7 @@
         {
             reflectionService.SetFieldValue(TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.InProgress).ToString());
         }
-        var currentStatus2 = int.Parse(reflectionService.GetFieldValue(TeacherData, "Teacher", "TeacherStatusId"));
-        if ((Enumerations.TeacherStatus)currentStatus2 == Enumerations.TeacherStatus.New)
-        {
-            reflectionService.SetFieldValue(TeacherData, "Teacher", "TeacherStatusId", ((int)Enumerations.TeacherStatus.InProgress).ToString());
-        }
-
+     
         var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
         optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
         using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
