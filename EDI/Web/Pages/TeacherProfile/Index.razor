@@ -14,7 +14,8 @@
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 @inject IToastService toastService;
-@inject StateContainer StateContainer
+@inject StateContainer StateContainer;
+@inject IMathService mathService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @implements IDisposable
 @*<div class="row">
@@ -33,8 +34,21 @@
         <Authorized Context="AuthContext">
             <div class="card-footer">
                 <div class="row d-flex align-items-center">
-                    <div class="col-2"><SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch></div>
-                    <div class="col-2"><button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button></div>
+                    <div class="col-1"><button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button></div>
+                    <div class="col-1"><SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch></div>
+                    <div class="col-2"><button class="btn btn-warning" @onclick="@checkCompleteNess" type="button">Check Completeness</button></div>
+                    <div class="col-4">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated @barColor" style="width:@percentComplete%">@percentComplete%</div>
+                        </div>
+                    </div>
+                    <div class="col-2" hidden="@true">
+                        Completed= @completed
+                        <br />
+                        Required= @required
+                        <br />
+                        %Done= @percentComplete
+                    </div>
                 </div>
             </div>
         </Authorized>
@@ -46,7 +60,39 @@
     </div>*@
 
 
+
+
 @code {
+    private int completed { get; set; }
+    private int required { get; set; }
+    private int percentComplete { get; set; }
+    private string barColor { get; set; }
+
+    private void checkCompleteNess()
+    {
+        completed = UserSettings.QuestionsCompleted;
+        required = UserSettings.QuestionsRequired;
+        percentComplete = mathService.GetPercent(completed, required);
+        switch(percentComplete)
+        {
+            case < 30:
+                barColor = "bg-danger";
+                break;
+            case < 50:
+                barColor = "bg-warning";
+                break;
+            case < 75:
+                barColor = "bg-secondary";
+                break;
+            case < 99:
+                barColor = "bg-info";
+                break;
+            case 100:
+                barColor = "bg-succes";
+                break;
+        }
+        //StateHasChanged();
+    }
 
     [Parameter]
     public int TeacherId { get; set; }
@@ -206,7 +252,7 @@
         {
             UserSettings.CurrentURL = url;
             UserSettings.RequiredNaviBack = true;
-            navigateTo = "./EDIQuestionnaires/SectionX";
+            navigateTo = "./TeacherProfile/ProfileX";
         }
 
         Save();
