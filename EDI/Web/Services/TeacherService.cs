@@ -85,6 +85,30 @@ namespace EDI.Web.Services
             }
         }
 
+        public async Task UnlockTeacherAsync(int id)
+        {
+            Log.Information("UnlockTeacherAsync started by:" + _userSettings.UserName);
+
+            try
+            {
+                var _teacher = await _teacherRepository.GetByIdAsync(id);
+
+                Guard.Against.NullTeacher(id, _teacher);
+
+                var teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+
+                _teacher.TeacherStatusId = teacherstatus.Id;
+                _teacher.ModifiedDate = DateTime.Now;
+                _teacher.ModifiedBy = _userSettings.UserName;
+
+                await _teacherRepository.UpdateAsync(_teacher);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("UnlockTeacherAsync failed:" + ex.Message);
+            }
+        }
+
         public async Task UpdateTeacherAsync(TeacherItemViewModel teacher)
         {
             
@@ -102,6 +126,7 @@ namespace EDI.Web.Services
                 _teacher.TeacherName = teacher.TeacherName;
                 _teacher.Email = teacher.Email;
                 _teacher.PhoneNumber = teacher.PhoneNumber;
+                _teacher.TeacherStatusId = teacher.TeacherStatusId;
                 _teacher.ModifiedDate = DateTime.Now;
                 _teacher.ModifiedBy = _userSettings.UserName;
 
@@ -165,6 +190,7 @@ namespace EDI.Web.Services
                 _teacher.TeacherName = teacher.TeacherName;
                 _teacher.Email = teacher.Email;
                 _teacher.PhoneNumber = teacher.PhoneNumber;
+                _teacher.TeacherStatusId = teacher.TeacherStatusId;
                 _teacher.CreatedDate = DateTime.Now;
                 _teacher.CreatedBy = _userSettings.UserName;
                 _teacher.ModifiedDate = DateTime.Now;
@@ -202,6 +228,7 @@ namespace EDI.Web.Services
                     TeacherName = teacher.TeacherName,
                     Email = teacher.Email,
                     PhoneNumber = teacher.PhoneNumber,
+                    TeacherStatusId = teacher.TeacherStatusId,
                     CreatedDate = teacher.CreatedDate,
                     CreatedBy = teacher.CreatedBy,
                     ModifiedDate = teacher.ModifiedDate,

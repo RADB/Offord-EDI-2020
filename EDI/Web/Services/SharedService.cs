@@ -1003,6 +1003,7 @@ namespace EDI.Web.Services
 
                                             try
                                             {
+                                                var teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
                                                 var _teacher = new Teacher();
 
                                                 _teacher.UserId = userid;
@@ -1011,6 +1012,7 @@ namespace EDI.Web.Services
                                                 _teacher.Email = data.TeacherEmail;
                                                 _teacher.SchoolId = schoolid;
                                                 _teacher.YearId = yearid;
+                                                _teacher.TeacherStatusId = teacherstatus.Id;
                                                 _teacher.CreatedDate = DateTime.Now;
                                                 _teacher.CreatedBy = _userSettings.UserName;
                                                 _teacher.ModifiedDate = DateTime.Now;

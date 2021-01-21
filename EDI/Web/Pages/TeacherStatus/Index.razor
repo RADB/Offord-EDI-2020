@@ -1,0 +1,109 @@
+﻿@page "/TeacherStatus/index"
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Syncfusion.Blazor.Inputs
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject IToastService toastService;
+@inject ISharedService sharedService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
+@inject ServiceContext dbContext;
+@inject AppIdentityDbContext identityContext;
+
+@inject UserSettings UserSettings;
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>TeacherStatuss</strong>
+            </div>
+            <div class="card-body">
+                @if (!string.IsNullOrEmpty(@Message))
+                {
+                    <div class="text-success">@Message</div><br /><br />
+                }
+
+                @if (!string.IsNullOrEmpty(@ErrorMessage))
+                {
+                    <div class="text-danger">@ErrorMessage</div><br /><br />
+                }
+                <div class="row"></div>
+                <br />
+                @if (files == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true">
+                        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                        <GridEvents RowSelected="RowSelect" TValue="TeacherStatus"></GridEvents>
+                        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
+                        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                        <GridColumns>
+                            <GridColumn Field=@nameof(TeacherStatus.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherStatus.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(TeacherStatus.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                        </GridColumns>
+                    </SfGrid>
+                }
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    SfGrid<TeacherStatus> Grid;
+
+    IEnumerable<TeacherStatus> files;
+
+    private bool ShowFileupload { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!UserSettings.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("./login");
+        }
+        else if (!UserSettings.IsAdmin)
+        {
+            NavigationManager.NavigateTo("./dashboard/index");
+        }
+        else
+        {
+            var allfiles = await Task.FromResult(dbContext.TeacherStatuses.OrderBy(p => p.Code).ToList());
+
+            List<TeacherStatus> sivm = new List<TeacherStatus>();
+
+            foreach (var file in allfiles)
+            {
+                var afile = new TeacherStatus();
+
+                afile.Id = file.Id;
+                afile.English = file.English;
+                afile.French = file.French;
+                afile.Code = file.Code;
+
+                sivm.Add(afile);
+            }
+
+            this.rowid = 0;
+
+            files = sivm;
+        }
+    }
+
+    private int rowid { get; set; }
+
+    private void RowSelect(RowSelectEventArgs<TeacherStatus> args)
+    {
+        rowid = args.Data.Id;
+    }
+}
