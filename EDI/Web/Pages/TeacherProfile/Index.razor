@@ -137,6 +137,10 @@
         completed = UserSettings.QuestionsCompleted;
         required = UserSettings.QuestionsRequired;
         percentComplete = mathService.GetPercent(completed, required);
+
+        if (percentComplete > 100)
+            percentComplete = 100;
+
         switch (percentComplete)
         {
             case < 30:
@@ -152,7 +156,7 @@
                 barColor = "bg-info";
                 break;
             case 100:
-                barColor = "bg-succes";
+                barColor = "bg-success";
                 break;
         }
         //StateHasChanged();
@@ -209,11 +213,13 @@
             {
                 //reflectionService.SetFieldValue(teacherData, "Teacher", "TeacherStatusId", ((int)Enumerations.TeacherStatus.Complete).ToString());
                 teacherData.TeacherStatusId = (int)Enumerations.TeacherStatus.Complete;
+                teacherData.QuestionnairesDataTeacherProfiles.Single().IsComplete = true;
             }
             else
             {
                 //reflectionService.SetFieldValue(teacherData, "Teacher", "TeacherStatusId", ((int)Enumerations.TeacherStatus.InProgress).ToString());
                 teacherData.TeacherStatusId = (int)Enumerations.TeacherStatus.InProgress;
+                teacherData.QuestionnairesDataTeacherProfiles.Single().IsComplete = false;
             }
         }
         //StateContainer.SetTeacher(teacherData);
