@@ -35,6 +35,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public FormService(
             ILoggerFactory loggerFactory,
@@ -43,6 +44,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -54,12 +56,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             POAppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteFormAsync(int Id)
         {
             
-            Log.Information("DeleteFormAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteFormAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -69,14 +72,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteFormAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteFormAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateFormAsync(FormItemViewModel form)
         {
             
-            Log.Information("UpdateFormAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateFormAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -95,14 +98,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateFormAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateFormAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task CreateFormAsync(FormItemViewModel form)
         {
             
-            Log.Information("CreateFormAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateFormAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -123,14 +126,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateFormAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateFormAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<FormItemViewModel> GetFormItem(string formname, string fieldname, int order)
         {
             
-            Log.Information("GetFormItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetFormItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -177,7 +180,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetFormItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetFormItem failed:" + ex.Message, false);
 
                 var vm = new FormItemViewModel();
 

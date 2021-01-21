@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public SiteService(
             UserManager<EDIApplicationUser> userManager,
@@ -47,6 +48,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -58,12 +60,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteSiteAsync(int Id)
         {
             
-            Log.Information("DeleteSiteAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteSiteAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -75,14 +78,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteSiteAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteSiteAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateSiteAsync(SiteItemViewModel site)
         {
             
-            Log.Information("UpdateSiteAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateSiteAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -103,14 +106,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateSiteAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateSiteAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<int> CreateSiteAsync(SiteItemViewModel site)
         {
             
-            Log.Information("CreateSiteAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateSiteAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -132,7 +135,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateSiteAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateSiteAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -140,7 +143,7 @@ namespace EDI.Web.Services
         public async Task<SiteItemViewModel> GetSiteItem(int siteId)
         {
             
-            Log.Information("GetSiteItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetSiteItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -167,7 +170,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetSiteItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetSiteItem failed:" + ex.Message, false);
 
                 var vm = new SiteItemViewModel();
 
@@ -178,7 +181,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string sitenumber)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -190,7 +193,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -198,7 +201,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string sitenumber, int id)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -210,7 +213,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }

@@ -9,6 +9,13 @@ namespace EDI.Web.Services
 {
     public class MathService : IMathService
     {
+        private readonly ISharedService _sharedService;
+
+        public MathService(
+            ISharedService sharedService)
+        {            
+            _sharedService = sharedService;
+        }
         public int GetRandomPercent(int minimum, int maximum)
         {
             try
@@ -20,7 +27,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetRandomPercent failed:" + ex.Message);
+                _sharedService.WriteLogs("GetRandomPercent failed:" + ex.Message, false);
 
                 return -1;
             }
@@ -36,7 +43,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetRandomNumber failed:" + ex.Message);
+                _sharedService.WriteLogs("GetRandomNumber failed:" + ex.Message, false);
 
                 return -1;
             }
@@ -52,7 +59,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetPercent failed:" + ex.Message);
+                _sharedService.WriteLogs("GetPercent failed:" + ex.Message, false);
 
                 return -1;
             }

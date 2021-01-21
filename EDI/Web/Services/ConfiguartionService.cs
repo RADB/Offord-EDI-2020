@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public ConfigurationService(
             UserManager<EDIApplicationUser> userManager,
@@ -47,6 +48,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -58,12 +60,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteConfigurationAsync(int Id)
         {
             
-            Log.Information("DeleteConfigurationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteConfigurationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -75,14 +78,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteConfigurationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteConfigurationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateConfigurationAsync(ConfigurationItemViewModel configuration)
         {
             
-            Log.Information("UpdateConfigurationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateConfigurationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -98,14 +101,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateConfigurationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateConfigurationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task CreateConfigurationAsync(ConfigurationItemViewModel configuration)
         {
             
-            Log.Information("CreateConfigurationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateConfigurationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -122,14 +125,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateConfigurationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateConfigurationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<ConfigurationItemViewModel> GetConfigurationItem(int configurationId)
         {
             
-            Log.Information("GetConfigurationItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetConfigurationItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -152,7 +155,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetConfigurationItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetConfigurationItem failed:" + ex.Message, false);
 
                 var vm = new ConfigurationItemViewModel();
 
@@ -163,7 +166,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string name)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -175,7 +178,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -183,7 +186,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string name, int id)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -195,7 +198,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }

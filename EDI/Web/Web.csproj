@@ -68,6 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="logs\" />
     <Folder Include="wwwroot\Download\" />
     <Folder Include="wwwroot\UploadImages\" />
     <Folder Include="wwwroot\Upload\" />

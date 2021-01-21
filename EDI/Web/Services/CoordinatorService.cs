@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private readonly AppIdentityDbContext _identityContext;
         private readonly UserManager<EDIApplicationUser> _userManager;
         private UserSettings _userSettings { get; set; }
+        private readonly ISharedService _sharedService;
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -53,6 +54,7 @@ namespace EDI.Web.Services
             AuthenticationStateProvider authenticationStateProvider,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -65,6 +67,7 @@ namespace EDI.Web.Services
             _userManager = userManager;
             _dbContext = dbContext;
             _identityContext = identityContext;
+            _sharedService = sharedService;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
         }
@@ -72,7 +75,7 @@ namespace EDI.Web.Services
         public async Task DeleteCoordinatorAsync(int Id)
         {
             
-            Log.Information("DeleteCoordinatorAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteCoordinatorAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -84,14 +87,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteCoordinatorAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteCoordinatorAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateCoordinatorAsync(CoordinatorItemViewModel coordinator)
         {
             
-            Log.Information("UpdateCoordinatorAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateCoordinatorAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -112,14 +115,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateCoordinatorAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateCoordinatorAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<int> CreateCoordinatorAsync(CoordinatorItemViewModel coordinator)
         {
             
-            Log.Information("CreateCoordinatorAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateCoordinatorAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -153,7 +156,7 @@ namespace EDI.Web.Services
                     }
                     catch (Exception ex)
                     {
-                        Log.Error("CreateCoordinatorAsync failed:" + ex.Message);
+                        _sharedService.WriteLogs("CreateCoordinatorAsync failed:" + ex.Message, false);
                     }
                 }
                 else
@@ -177,7 +180,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateCoordinatorAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateCoordinatorAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -185,7 +188,7 @@ namespace EDI.Web.Services
         public async Task<CoordinatorItemViewModel> GetCoordinatorItem(int coordinatorId)
         {
             
-            Log.Information("GetCoordinatorItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetCoordinatorItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -212,7 +215,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetCoordinatorItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetCoordinatorItem failed:" + ex.Message, false);
 
                 var vm = new CoordinatorItemViewModel();
 
@@ -223,7 +226,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string name, string email)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -235,7 +238,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -243,7 +246,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string name, string email, int id)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -255,7 +258,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }

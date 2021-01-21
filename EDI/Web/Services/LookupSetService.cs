@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public LookupSetService(
             UserManager<EDIApplicationUser> userManager,
@@ -47,6 +48,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -58,12 +60,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteLookupSetAsync(int Id)
         {
 
-            Log.Information("DeleteLookupSetAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteLookupSetAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -75,14 +78,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteLookupSetAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteLookupSetAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateLookupSetAsync(LookupSetItemViewModel lookupSet)
         {
 
-            Log.Information("UpdateLookupSetAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateLookupSetAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -99,14 +102,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateLookupSetAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateLookupSetAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<int> CreateLookupSetAsync(LookupSetItemViewModel lookupSet)
         {
 
-            Log.Information("CreateLookupSetAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateLookupSetAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -124,7 +127,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateLookupSetAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateLookupSetAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -132,7 +135,7 @@ namespace EDI.Web.Services
         public async Task<LookupSetItemViewModel> GetLookupSetItem(int lookupSetId)
         {
 
-            Log.Information("GetLookupSetItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetLookupSetItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -155,7 +158,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetLookupSetItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetLookupSetItem failed:" + ex.Message, false);
 
                 var vm = new LookupSetItemViewModel();
 

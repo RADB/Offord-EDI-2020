@@ -33,5 +33,9 @@ namespace EDI.Web.Models
 
         public string AuthServer { get; set; }
 
+        public bool LogInformation { get; set; }
+
+        public bool LogError { get; set; }
+
     }
 }

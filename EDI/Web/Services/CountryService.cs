@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public CountryService(
             UserManager<EDIApplicationUser> userManager,
@@ -47,6 +48,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -58,12 +60,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteCountryAsync(int Id)
         {
             
-            Log.Information("DeleteCountryAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteCountryAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -75,14 +78,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteCountryAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteCountryAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateCountryAsync(CountryItemViewModel country)
         {
             
-            Log.Information("UpdateCountryAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateCountryAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -102,14 +105,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateCountryAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateCountryAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task CreateCountryAsync(CountryItemViewModel country)
         {
             
-            Log.Information("CreateCountryAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateCountryAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -129,14 +132,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateCountryAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateCountryAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<CountryItemViewModel> GetCountryItem(int countryId)
         {
             
-            Log.Information("GetCountryItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetCountryItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -162,7 +165,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetCountryItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetCountryItem failed:" + ex.Message, false);
 
                 var vm = new CountryItemViewModel();
 
@@ -173,7 +176,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(int Code, string name)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -185,7 +188,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -193,7 +196,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(int Code, string name, int id)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -205,7 +208,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }

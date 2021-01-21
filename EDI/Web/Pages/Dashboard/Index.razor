@@ -273,7 +273,7 @@
                 {
                     //toastService.ShowError(string.Format("{0}", ex.Message), "No Teacher Data");
 
-                    Log.Error(string.Format("{0}", ex.Message));
+                    sharedService.WriteLogs(string.Format("{0}", ex.Message), false);
                     children = 0;
                 }
 

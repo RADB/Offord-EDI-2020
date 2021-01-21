@@ -40,6 +40,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public QuestionnaireService(
             UserManager<EDIApplicationUser> userManager,
@@ -50,6 +51,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -62,12 +64,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteQuestionnaireAsync(int Id)
         {
 
-            Log.Information("DeleteQuestionnaireAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteQuestionnaireAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -79,14 +82,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteQuestionnaireAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteQuestionnaireAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task DeleteQuestionnaireConfiguarionAsync(int Id)
         {
 
-            Log.Information("DeleteQuestionnaireConfiguarionAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteQuestionnaireConfiguarionAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -98,14 +101,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteQuestionnaireConfiguarionAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteQuestionnaireConfiguarionAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateQuestionnaireAsync(QuestionnaireItemViewModel questionnaire)
         {
 
-            Log.Information("UpdateQuestionnaireAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateQuestionnaireAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -141,14 +144,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateQuestionnaireAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateQuestionnaireAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateQuestionnaireConfigurationAsync(QuestionnaireConfigurationItemViewModel questionnaireConfiguration)
         {
 
-            Log.Information("UpdateQuestionnaireConfigurationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateQuestionnaireConfigurationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -205,14 +208,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateQuestionnaireConfigurationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateQuestionnaireConfigurationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<int> CreateQuestionnaireAsync(QuestionnaireItemViewModel questionnaire)
         {
 
-            Log.Information("CreateQuestionnaireAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateQuestionnaireAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -249,7 +252,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateQuestionnaireAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateQuestionnaireAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -257,7 +260,7 @@ namespace EDI.Web.Services
         public async Task<int> CreateQuestionnaireConfigurationAsync(QuestionnaireConfigurationItemViewModel questionnaireConfiguration)
         {
 
-            Log.Information("CreateQuestionnaireConfigurationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateQuestionnaireConfigurationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -315,7 +318,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateQuestionnaireConfigurationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateQuestionnaireConfigurationAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -323,7 +326,7 @@ namespace EDI.Web.Services
         public async Task<QuestionnaireItemViewModel> GetQuestionnaireItem(int questionnaireId)
         {
 
-            Log.Information("GetQuestionnaireItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetQuestionnaireItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -365,7 +368,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetQuestionnaireItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetQuestionnaireItem failed:" + ex.Message, false);
 
                 var vm = new QuestionnaireItemViewModel();
 
@@ -376,7 +379,7 @@ namespace EDI.Web.Services
         public async Task<QuestionnaireConfigurationItemViewModel> GetQuestionnaireConfigurationItem(int questionnaireConfigurationId)
         {
 
-            Log.Information("GetQuestionnaireConfigurationItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetQuestionnaireConfigurationItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -438,7 +441,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetQuestionnaireConfigurationItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetQuestionnaireConfigurationItem failed:" + ex.Message, false);
 
                 var vm = new QuestionnaireConfigurationItemViewModel();
 
@@ -449,7 +452,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string name)
         {
 
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -461,7 +464,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -469,7 +472,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string name, int id)
         {
 
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -481,7 +484,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -489,7 +492,7 @@ namespace EDI.Web.Services
         public async Task<int> GetQCDuplicateCount(string entityname, string entityfield)
         {
 
-            Log.Information("GetQCDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetQCDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -501,7 +504,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetQCDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetQCDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -509,7 +512,7 @@ namespace EDI.Web.Services
         public async Task<int> GetQCDuplicateCount(string entityname, string entityfield, int id)
         {
 
-            Log.Information("GeQCtDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GeQCtDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -521,7 +524,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GeQCtDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GeQCtDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }

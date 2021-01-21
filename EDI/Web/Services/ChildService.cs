@@ -45,6 +45,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public ChildService(
             UserManager<EDIApplicationUser> userManager,
@@ -61,6 +62,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -79,12 +81,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteChildAsync(int Id)
         {
             
-            Log.Information("DeleteChildAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteChildAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -96,13 +99,13 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteChildAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteChildAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UnlockChildAsync(int id)
         {
-            Log.Information("UnlockChildAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UnlockChildAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -120,14 +123,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UnlockChildAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UnlockChildAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateChildAsync(ChildItemViewModel child)
         {
             
-            Log.Information("UpdateChildAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateChildAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -159,14 +162,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateChildAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateChildAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<int> CreateChildAsync(ChildItemViewModel child)
         {
             
-            Log.Information("CreateChildAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateChildAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -255,7 +258,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateChildAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateChildAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -263,7 +266,7 @@ namespace EDI.Web.Services
         public async Task<ChildItemViewModel> GetChildItem(int childId)
         {
             
-            Log.Information("GetChildItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetChildItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -293,7 +296,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetChildItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetChildItem failed:" + ex.Message, false);
 
                 var vm = new ChildItemViewModel();
 
@@ -304,7 +307,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string ediid)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -316,7 +319,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -324,7 +327,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string ediid, int id)
         {
             
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -336,7 +339,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -344,7 +347,7 @@ namespace EDI.Web.Services
         public int GetCompletedQuestions(int id)
         {
 
-            Log.Information("GetCompletedQuestions started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetCompletedQuestions started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -362,7 +365,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetCompletedQuestions failed:" + ex.Message);
+                _sharedService.WriteLogs("GetCompletedQuestions failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -370,7 +373,7 @@ namespace EDI.Web.Services
         public int GetRequiredQuestions(int id)
         {
 
-            Log.Information("GetRequiredQuestions started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetRequiredQuestions started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -388,7 +391,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetRequiredQuestions failed:" + ex.Message);
+                _sharedService.WriteLogs("GetRequiredQuestions failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -403,7 +406,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetRandomNumber failed:" + ex.Message);
+                _sharedService.WriteLogs("GetRandomNumber failed:" + ex.Message, false);
 
                 return -1;
             }

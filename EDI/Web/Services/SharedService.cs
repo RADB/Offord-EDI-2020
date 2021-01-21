@@ -167,7 +167,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetCountries()
         {
             
-            Log.Information("GetCountries started by:" + _userSettings.UserName);
+            WriteLogs("GetCountries started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -188,7 +188,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetCountries failed:" + ex.Message);
+                WriteLogs("GetCountries failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -199,7 +199,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetProvinces(int countryid)
         {
             
-            Log.Information("GetProvinces started by:" + _userSettings.UserName);
+            WriteLogs("GetProvinces started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -225,7 +225,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetProvinces failed:" + ex.Message);
+                WriteLogs("GetProvinces failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -236,7 +236,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetSites()
         {
             
-            Log.Information("GetSites started by:" + _userSettings.UserName);
+            WriteLogs("GetSites started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -256,7 +256,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetSites failed:" + ex.Message);
+                WriteLogs("GetSites failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -267,7 +267,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetCoordinators()
         {
             
-            Log.Information("GetCoordinators started by:" + _userSettings.UserName);
+            WriteLogs("GetCoordinators started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -287,7 +287,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetCoordinators failed:" + ex.Message);
+                WriteLogs("GetCoordinators failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -298,7 +298,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetYears()
         {
             
-            Log.Information("GetYears started by:" + _userSettings.UserName);
+            WriteLogs("GetYears started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -318,7 +318,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetYears failed:" + ex.Message);
+                WriteLogs("GetYears failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -329,7 +329,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetGenders()
         {
             
-            Log.Information("GetGenders started by:" + _userSettings.UserName);
+            WriteLogs("GetGenders started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -349,7 +349,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetGenders failed:" + ex.Message);
+                WriteLogs("GetGenders failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -360,7 +360,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetSchools(int siteid)
         {
             
-            Log.Information("GetSchools started by:" + _userSettings.UserName);
+            WriteLogs("GetSchools started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -386,7 +386,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetSchools failed:" + ex.Message);
+                WriteLogs("GetSchools failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -397,7 +397,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetTeachers(int schoolid)
         {
             
-            Log.Information("GetTeachers started by:" + _userSettings.UserName);
+            WriteLogs("GetTeachers started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -422,7 +422,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetTeachers failed:" + ex.Message);
+                WriteLogs("GetTeachers failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -433,7 +433,7 @@ namespace EDI.Web.Services
         public async Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.UploadFiles file)
         {
             
-            Log.Information("UploadFileData started by:" + _userSettings.UserName);
+            WriteLogs("UploadFileData started by:" + _userSettings.UserName, true);
             ErrorViewModel error = new ErrorViewModel();
 
             string errormessage = string.Empty;
@@ -638,7 +638,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UploadFileData failed:" + ex.Message);
+                WriteLogs("UploadFileData failed:" + ex.Message, false);
 
                 errormessage = "File imports failed. Please check the log file for more information.";
 
@@ -651,7 +651,7 @@ namespace EDI.Web.Services
         public async Task<ErrorViewModel> ProcessFileData()
         {
             
-            Log.Information("UploadFileData started by:" + _userSettings.UserName);
+            WriteLogs("UploadFileData started by:" + _userSettings.UserName, true);
             ErrorViewModel error = new ErrorViewModel();
 
             string errormessage = string.Empty;
@@ -1265,7 +1265,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("ProcessFileData failed:" + ex.Message);
+                WriteLogs("ProcessFileData failed:" + ex.Message, false);
 
                 errormessage = "Processing data failed. Please check the log file for more information.";
                 errormessages.Add("ProcessFileData failed:" + ex.Message);
@@ -1278,7 +1278,7 @@ namespace EDI.Web.Services
 
         public async Task<ErrorViewModel> UploadTranslationData(Syncfusion.Blazor.Inputs.UploadFiles file)
         {
-            Log.Information("UploadTranslationData started by:" + _userSettings.UserName);
+            WriteLogs("UploadTranslationData started by:" + _userSettings.UserName, true);
             ErrorViewModel error = new ErrorViewModel();
 
             string errormessage = string.Empty;
@@ -1412,7 +1412,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UploadTranslationData failed:" + ex.Message);
+                WriteLogs("UploadTranslationData failed:" + ex.Message, false);
 
                 errormessage = "File imports failed. Please check the log file for more information.";
 
@@ -1472,7 +1472,7 @@ namespace EDI.Web.Services
 
             if(bool.TryParse(errorslog.FieldValue, out bool value))
             {
-                Log.Error(string.Format("{0}:{1}:{2}:{3}", filename, methodname, exceptionmsg, innermsg));
+                WriteLogs(string.Format("{0}:{1}:{2}:{3}", filename, methodname, exceptionmsg, innermsg), false);
             }
 
             var errorsemail = await Task.FromResult(_dbContext.SystemConfigurations.Where(s => s.FieldName == "Errors-Email").FirstOrDefault());
@@ -1503,7 +1503,7 @@ namespace EDI.Web.Services
                 }
                 catch (Exception ex)
                 {
-                    Log.Error("SendException failed:" + ex.Message);
+                    WriteLogs("SendException failed:" + ex.Message, false);
                 }
 
             }
@@ -1543,7 +1543,7 @@ namespace EDI.Web.Services
         public IEnumerable<SelectListItem> GetInpuTypes()
         {
 
-            Log.Information("GetInpuTypes started by:" + _userSettings.UserName);
+            WriteLogs("GetInpuTypes started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1563,7 +1563,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetInpuTypes failed:" + ex.Message);
+                WriteLogs("GetInpuTypes failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -1573,7 +1573,7 @@ namespace EDI.Web.Services
 
         public IEnumerable<SelectListItem> GetOrientations()
         {
-            Log.Information("GetOrientations started by:" + _userSettings.UserName);
+            WriteLogs("GetOrientations started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1593,7 +1593,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetOrientations failed:" + ex.Message);
+                WriteLogs("GetOrientations failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -1603,7 +1603,7 @@ namespace EDI.Web.Services
 
         public IEnumerable<SelectListItem> GetLookups()
         {
-            Log.Information("GetLookups started by:" + _userSettings.UserName);
+            WriteLogs("GetLookups started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1623,7 +1623,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetLookups failed:" + ex.Message);
+                WriteLogs("GetLookups failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -1634,7 +1634,7 @@ namespace EDI.Web.Services
         public IEnumerable<SelectListItem> GetEntities()
         {
 
-            Log.Information("GetEntities started by:" + _userSettings.UserName);
+            WriteLogs("GetEntities started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1653,7 +1653,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetEntities failed:" + ex.Message);
+                WriteLogs("GetEntities failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -1664,7 +1664,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetFields(string entityname)
         {
 
-            Log.Information("GetFields started by:" + _userSettings.UserName);
+            WriteLogs("GetFields started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1684,7 +1684,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetFields failed:" + ex.Message);
+                WriteLogs("GetFields failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -1694,7 +1694,7 @@ namespace EDI.Web.Services
 
         public async Task SaveUserSessions(string fieldname, string fieldvalue, string userid)
         {
-            Log.Information("SaveUserSessions started by:" + _userSettings.UserName);
+            WriteLogs("SaveUserSessions started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1721,13 +1721,13 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("SaveUserSessions failed:" + ex.Message);                
+                WriteLogs("SaveUserSessions failed:" + ex.Message, false);                
             }
         }
 
         public async Task DeleteUserSessions( string userid)
         {
-            Log.Information("DeleteUserSessions started by:" + _userSettings.UserName);
+            WriteLogs("DeleteUserSessions started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -1743,7 +1743,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteUserSessions failed:" + ex.Message);
+                WriteLogs("DeleteUserSessions failed:" + ex.Message, false);
             }
         }
 
@@ -1811,6 +1811,24 @@ namespace EDI.Web.Services
             _account.PasswordHash = newPassword;
 
             await _userManager.UpdateAsync(_account);
+        }
+
+        public void WriteLogs(string message, bool isinfo)
+        {
+            if(isinfo)
+            {
+                if (EDIAppSettings.LogInformation)
+                {
+                    Log.Information(message);
+                }
+            }
+            else
+            {
+                if (EDIAppSettings.LogError)
+                {
+                    Log.Error(message);
+                }
+            }
         }
     }
 }

@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public TranslationService(
             UserManager<EDIApplicationUser> userManager,
@@ -47,6 +48,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -56,6 +58,7 @@ namespace EDI.Web.Services
             _accountRepository = accountRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
+            _sharedService = sharedService;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
         }
@@ -63,7 +66,7 @@ namespace EDI.Web.Services
         public async Task DeleteTranslationAsync(int Id)
         {
 
-            Log.Information("DeleteTranslationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteTranslationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -75,14 +78,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteTranslationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteTranslationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateTranslationAsync(TranslationItemViewModel translation)
         {
 
-            Log.Information("UpdateTranslationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateTranslationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -99,14 +102,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateTranslationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateTranslationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task CreateTranslationAsync(TranslationItemViewModel translation)
         {
 
-            Log.Information("CreateTranslationAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateTranslationAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -123,14 +126,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateTranslationAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateTranslationAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<TranslationItemViewModel> GetTranslationItem(int translationId)
         {
 
-            Log.Information("GetTranslationItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetTranslationItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -153,7 +156,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetTranslationItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetTranslationItem failed:" + ex.Message, false);
 
                 var vm = new TranslationItemViewModel();
 
@@ -164,7 +167,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string english)
         {
 
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -176,7 +179,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -184,7 +187,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string english, int id)
         {
 
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -196,7 +199,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }

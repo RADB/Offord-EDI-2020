@@ -49,6 +49,7 @@ namespace EDI.Web.Services
         private IHostEnvironment _hostingEnvironment;
         private readonly IEmailSender _emailSender;
         private UserSettings _userSettings { get; set; }
+        private readonly ISharedService _sharedService;
 
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
@@ -66,6 +67,7 @@ namespace EDI.Web.Services
             AuthenticationStateProvider authenticationStateProvider,
             ServiceContext dbContext,
             AppIdentityDbContext identityContext,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -83,11 +85,12 @@ namespace EDI.Web.Services
             _emailSender = emailSender;
             _userSettings = UserSettings;
             POAppSettings = settings.Value;
+            _sharedService = sharedService;
         }        
 
         public async Task CreateAccountAsync(AccountItemViewModel account)
         {
-            Log.Information("CreateAccountAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateAccountAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -95,7 +98,7 @@ namespace EDI.Web.Services
                 {
                     if (!ValidateExtension.IsEmailValid(account.Email))
                     {
-                        Log.Error("Email: " + account.Email + " is invalid.");
+                        _sharedService.WriteLogs("Email: " + account.Email + " is invalid.", false);
                         return;
                     }
                 }
@@ -130,15 +133,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateAccount failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateAccount failed:" + ex.Message, false);
             }
 
         }
 
         public async Task DeleteAccountAsync(string Id)
         {
-            Log.Information("DeleteAccountAsync started by:" + _userSettings.UserName);
-
+            _sharedService.WriteLogs("DeleteAccountAsync started by:" + _userSettings.UserName, true);
             try
             {
                 var account = await _accountRepository.GetByIdAsync(Id);
@@ -147,13 +149,13 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteAccountAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteAccountAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UnlockAccountAsync(string Id)
         {
-            Log.Information("UnlockAccountAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UnlockAccountAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -166,13 +168,13 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UnlockAccountAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UnlockAccountAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task LockAccountAsync(string Id)
         {
-            Log.Information("LockAccountAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("LockAccountAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -185,13 +187,13 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("LockAccountAsyncW failed:" + ex.Message);
+                _sharedService.WriteLogs("LockAccountAsyncW failed:" + ex.Message, false);
             }
         }
 
         public async Task<AccountItemViewModel> GetAccountItem(string accountId)
         {
-            Log.Information("GetAccountItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetAccountItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -239,7 +241,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetAccountItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetAccountItem failed:" + ex.Message, false);
 
                 var vm = new AccountItemViewModel();
 
@@ -250,7 +252,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetRoles()
         {
             
-            Log.Information("GetRoles started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetRoles started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -272,7 +274,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetRoles failed:" + ex.Message);
+                _sharedService.WriteLogs("GetRoles failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -283,7 +285,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetUsers()
         {
             
-            Log.Information("GetUsers started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetUsers started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -305,7 +307,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetUsers failed:" + ex.Message);
+                _sharedService.WriteLogs("GetUsers failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -316,7 +318,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetCoordinators()
         {
             
-            Log.Information("GetCoordinators started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetCoordinators started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -354,7 +356,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetCoordinators failed:" + ex.Message);
+                _sharedService.WriteLogs("GetCoordinators failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -365,7 +367,7 @@ namespace EDI.Web.Services
         public async Task<IEnumerable<SelectListItem>> GetTeachers()
         {
             
-            Log.Information("GetTeachers started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetTeachers started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -403,7 +405,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetTeachers failed:" + ex.Message);
+                _sharedService.WriteLogs("GetTeachers failed:" + ex.Message, false);
 
                 var vm = new List<SelectListItem>();
 
@@ -421,7 +423,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
 
                 return -1;
             }
@@ -437,7 +439,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetOtherDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetOtherDuplicateCount failed:" + ex.Message, false);
 
                 return -1;
             }
@@ -446,7 +448,7 @@ namespace EDI.Web.Services
         public async Task UpdateAccountAsync(AccountItemViewModel account)
         {
             
-            Log.Information("UpdateAccountAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateAccountAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -479,14 +481,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateAccountAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateAccountAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<AccountItemViewModel> GetProfile()
         {
             
-            Log.Information("GetProfile started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetProfile started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -511,7 +513,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetProfile failed:" + ex.Message);
+                _sharedService.WriteLogs("GetProfile failed:" + ex.Message, false);
 
                 var vm = new AccountItemViewModel();
 
@@ -522,7 +524,7 @@ namespace EDI.Web.Services
         public async Task DeleteRoleAsync(string Id)
         {
             
-            Log.Information("DeleteRoleAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteRoleAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -532,7 +534,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteRoleAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteRoleAsync failed:" + ex.Message, false);
             }
         }
 
@@ -546,7 +548,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateRoleCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateRoleCount failed:" + ex.Message, false);
 
                 return -1;
             }
@@ -562,7 +564,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateRoleCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateRoleCount failed:" + ex.Message, false);
 
                 return -1;
             }
@@ -570,7 +572,7 @@ namespace EDI.Web.Services
         public async Task UpdateRoleAsync(RoleItemViewModel role)
         {
             
-            Log.Information("UpdateRoleAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateRoleAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -582,13 +584,13 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateRoleAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateRoleAsync failed:" + ex.Message, false);
             }
         }
         public async Task<RoleItemViewModel> GetRoleItem(string roleid)
         {
             
-            Log.Information("GetRoleItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetRoleItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -604,7 +606,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetRoleItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetRoleItem failed:" + ex.Message, false);
 
                 var vm = new RoleItemViewModel();
 
@@ -615,7 +617,7 @@ namespace EDI.Web.Services
         public async Task CreateRoleAsync(RoleItemViewModel role)
         {
             
-            Log.Information("CreateRoleAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateRoleAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -627,14 +629,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateRoleAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateRoleAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateUserLanguageAsync(UserSettings user)
         {
 
-            Log.Information("UpdateUserLanguageAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateUserLanguageAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -646,7 +648,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateUserLanguageAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateUserLanguageAsync failed:" + ex.Message, false);
             }
         }
     }

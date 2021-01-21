@@ -38,6 +38,7 @@ namespace EDI.Web.Services
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
+        private readonly ISharedService _sharedService;
 
         public NewsFeedService(
             UserManager<EDIApplicationUser> userManager,
@@ -47,6 +48,7 @@ namespace EDI.Web.Services
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
+            ISharedService sharedService,
             UserSettings UserSettings,
             IOptions<EDIAppSettings> settings)
         {
@@ -58,12 +60,13 @@ namespace EDI.Web.Services
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
             EDIppSettings = settings.Value;
+            _sharedService = sharedService;
         }
 
         public async Task DeleteNewsFeedAsync(int Id)
         {
 
-            Log.Information("DeleteNewsFeedAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("DeleteNewsFeedAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -75,14 +78,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("DeleteNewsFeedAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("DeleteNewsFeedAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task UpdateNewsFeedAsync(NewsFeedItemViewModel newsFeed)
         {
 
-            Log.Information("UpdateNewsFeedAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("UpdateNewsFeedAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -117,14 +120,14 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("UpdateNewsFeedAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("UpdateNewsFeedAsync failed:" + ex.Message, false);
             }
         }
 
         public async Task<int> CreateNewsFeedAsync(NewsFeedItemViewModel newsFeed)
         {
 
-            Log.Information("CreateNewsFeedAsync started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("CreateNewsFeedAsync started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -161,7 +164,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("CreateNewsFeedAsync failed:" + ex.Message);
+                _sharedService.WriteLogs("CreateNewsFeedAsync failed:" + ex.Message, false);
                 return 0;
             }
         }
@@ -169,7 +172,7 @@ namespace EDI.Web.Services
         public async Task<NewsFeedItemViewModel> GetNewsFeedItem(int newsFeedId)
         {
 
-            Log.Information("GetNewsFeedItem started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetNewsFeedItem started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -210,7 +213,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetNewsFeedItem failed:" + ex.Message);
+                _sharedService.WriteLogs("GetNewsFeedItem failed:" + ex.Message, false);
 
                 var vm = new NewsFeedItemViewModel();
 
@@ -221,7 +224,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string title)
         {
 
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -233,7 +236,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
@@ -241,7 +244,7 @@ namespace EDI.Web.Services
         public async Task<int> GetDuplicateCount(string title, int id)
         {
 
-            Log.Information("GetDuplicateCount started by:" + _userSettings.UserName);
+            _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
@@ -253,7 +256,7 @@ namespace EDI.Web.Services
             }
             catch (Exception ex)
             {
-                Log.Error("GetDuplicateCount failed:" + ex.Message);
+                _sharedService.WriteLogs("GetDuplicateCount failed:" + ex.Message, false);
                 return -1;
             }
         }
