@@ -138,6 +138,9 @@
         }
         else
         {
+            var teacherstatus = dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+            teacherform1.TeacherModel.TeacherStatusId = teacherstatus.Id;
+
             await teacherService.UpdateTeacherAsync(teacherform1.TeacherModel);
 
             Message = "Teacher updated successfully.";

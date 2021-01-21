@@ -67,5 +67,12 @@ namespace EDI.Web.Data
             Complete = 3,
             Locked = 4
         }
+        public enum TeacherStatus : int
+        {
+            New = 4,
+            InProgress = 3,
+            Complete = 2,
+            Locked = 1
+        }
     }
 }

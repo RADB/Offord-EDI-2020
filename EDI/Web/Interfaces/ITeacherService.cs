@@ -23,5 +23,6 @@ namespace EDI.Web.Interfaces
         Task<int> GetDuplicateCount(string teachername, string email, int id);
         int GetCompletedQuestions(int id);
         int GetRequiredQuestions(int id);
+        Task UnlockTeacherAsync(int id);
     }
 }

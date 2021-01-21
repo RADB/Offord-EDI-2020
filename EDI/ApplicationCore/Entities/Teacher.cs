@@ -31,11 +31,13 @@ namespace EDI.ApplicationCore.Entities
         public string TeacherName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public int? TeacherStatusId { get; set; }
 
         public virtual School School { get; set; }
         public virtual Year Year { get; set; }
         
         public virtual ICollection<Child> Children { get; set; }
+        public virtual TeacherStatus TeacherStatus { get; set; }
 
         //public virtual ICollection<TeacherFeedbackForm> TeacherFeedbackForms { get; set; }
         //public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms { get; set; }

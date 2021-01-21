@@ -56,6 +56,14 @@ namespace EDI.Infrastructure.Data
                     await ServiceContext.SaveChangesAsync();
                 }
 
+                if (!ServiceContext.TeacherStatuses.Any())
+                {
+                    ServiceContext.TeacherStatuses.AddRange(
+                        GetPreconfiguredTeacherStatus());
+
+                    await ServiceContext.SaveChangesAsync();
+                }
+
                 if (!ServiceContext.Orientations.Any())
                 {
                     ServiceContext.Orientations.AddRange(
@@ -2243,6 +2251,18 @@ namespace EDI.Infrastructure.Data
                 new ChildStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new ChildStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
                 new ChildStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+
+            };
+        }
+
+        static IEnumerable<TeacherStatus> GetPreconfiguredTeacherStatus()
+        {
+            return new List<TeacherStatus>()
+            {
+                new TeacherStatus() { Code = "1", English = "New", French = "Nouveau",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new TeacherStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new TeacherStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new TeacherStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
 
             };
         }

@@ -15,6 +15,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<DateDimension> DateDimension { get; set; }
         public virtual DbSet<FileImportStatus> FileImportStatuses { get; set; }
         public virtual DbSet<ChildStatus> ChildStatuses { get; set; }
+        public virtual DbSet<TeacherStatus> TeacherStatuses { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<InputType> InputTypes { get; set; }
         public virtual DbSet<LookupSet> LookupSets { get; set; }
@@ -314,6 +315,22 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
                 entity.HasMany(d => d.Children).WithOne(p => p.ChildStatus).HasForeignKey(d => d.ChildStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_ChildStatus_Children");
+            });
+
+            modelBuilder.Entity<TeacherStatus>(entity =>
+            {
+                entity.ToTable("TeacherStatus", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+                entity.HasMany(d => d.Teachers).WithOne(p => p.TeacherStatus).HasForeignKey(d => d.TeacherStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_TeacherStatus_Children");
             });
 
             modelBuilder.Entity<Gender>(entity =>

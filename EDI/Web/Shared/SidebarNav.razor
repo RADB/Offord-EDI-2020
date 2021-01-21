@@ -90,6 +90,7 @@
         treedata.Add(new TreeData { nodeId = "04-11", nodeText = "Provinces", icon = "icon-location-pin icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-12", nodeText = "Province Types", icon = "icon-list icon", pid = "04-05" });
         // treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
+        treedata.Add(new TreeData { nodeId = "04-19", nodeText = "Teacher Status", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-14", nodeText = "Translations", icon = "icon-list icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "04-15", nodeText = "Years", icon = "icon-calendar icon", pid = "04-05" });
         treedata.Add(new TreeData { nodeId = "05", nodeText = "Accounts", icon = "icon-list icon", hasChild = true});
@@ -188,6 +189,10 @@
         else if (args.NodeData.Id == "04-18")
         {
             NavigationManager.NavigateTo("./ChildStatus/index");
+        }
+        else if (args.NodeData.Id == "04-19")
+        {
+            NavigationManager.NavigateTo("./TeacherStatus/index");
         }
         /*else if (args.NodeData.Id == "04-09")
          {

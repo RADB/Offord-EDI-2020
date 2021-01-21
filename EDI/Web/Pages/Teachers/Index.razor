@@ -1,5 +1,6 @@
 ﻿@page "/Teachers/index"
 @using EDI.Web.Shared.Modals;
+@using EDI.Web.Data;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using System.Linq.Dynamic.Core
@@ -50,10 +51,19 @@
                             <GridColumn Field=@nameof(TeacherItemViewModel.SchoolName) HeaderText="School" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(TeacherItemViewModel.Email) HeaderText="Email" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(TeacherItemViewModel.PhoneNumber) HeaderText="Phone" Width="30"></GridColumn>
-                            <GridColumn HeaderText=@Translate("Status") Width="15">
+                            <GridColumn HeaderText=@Translate("Status") Width="20">
                                 <Template>
                                     @{
-                                        <h6>@Translate("In Progress")</h6>
+                                        var comm = (context as TeacherItemViewModel);
+                                        if (UserSettings.IsAdmin && comm.TeacherStatusId == (int)Enumerations.TeacherStatus.Locked)
+                                        {
+                                            <div>@comm.TeacherStatus <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><i class="fas fa-lock-open fa-2x" style="color:darkgreen; margin-top: -8px;"></i></button></div>
+
+                                        }
+                                        else
+                                        {
+                                            <div>@comm.TeacherStatus</div>
+                                        }
                                     }
                                 </Template>
                             </GridColumn>
@@ -84,7 +94,10 @@
                                 <Template>
                                     @{
                                         var comm = (context as TeacherItemViewModel);
-                                        <button data-toggle="tooltip" data-placement="bottom" title="Profile" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">Profile</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                        if (UserSettings.IsAdmin || comm.TeacherStatusId == (int)Enumerations.TeacherStatus.New || comm.TeacherStatusId == (int)Enumerations.TeacherStatus.InProgress)
+                                        {
+                                            <button data-toggle="tooltip" data-placement="bottom" title="Profile" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">Profile</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                        }
                                     }
                                 </Template>
                             </GridColumn>
@@ -158,11 +171,15 @@
                 ateacher.SchoolName = school.SchoolName;
                 ateacher.SchoolNumber = school.SchoolNumber;
 
+                ateacher.TeacherStatusId = teacher.TeacherStatusId;
+                var teacherstatus = dbContext.TeacherStatuses.Where(p => p.Id == teacher.TeacherStatusId).FirstOrDefault();
+                ateacher.TeacherStatus = teacherstatus.English;
+
                 var totaolcompleted = teacherService.GetCompletedQuestions(teacher.Id);
                 var totalrequired = teacherService.GetRequiredQuestions(teacher.Id);
 
                 ateacher.Progress = 0;
-                
+
                 if (totalrequired > 0)
                     ateacher.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
 
@@ -254,6 +271,30 @@
         await sharedService.ResetPassord(id);
         toastService.ShowSuccess("Password reset successfully.");
 
+        StateHasChanged();
+    }
+
+    private async void Unlock(int id)
+    {
+        await teacherService.UnlockTeacherAsync(id);
+
+        toastService.ShowSuccess("Teacher unlocked successfully.");
+
+        var tmp = new List<TeacherItemViewModel>();
+        foreach (var item in teachers)
+        {
+            if (item.Id == id)
+            {
+                var teacherstatus = dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                item.TeacherStatusId = teacherstatus.Id;
+                item.TeacherStatus = "In Progress";
+            }
+            tmp.Add(item);
+        }
+        this.teachers = tmp;
+        this.rowid = 0;
+
+        this.Grid.Refresh();
         StateHasChanged();
     }
 }

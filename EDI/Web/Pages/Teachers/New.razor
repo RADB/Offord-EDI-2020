@@ -4,6 +4,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
 @inject ITeacherService TeacherService
+@inject ServiceContext dbContext;
 
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
@@ -110,6 +111,9 @@
         }
         else
         {
+            var teacherstatus = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+            teacherform1.TeacherModel.TeacherStatusId = teacherstatus.Id;
+
             int id = await TeacherService.CreateTeacherAsync(teacherform1.TeacherModel);
 
             Message = "New Teacher added successfully.";
