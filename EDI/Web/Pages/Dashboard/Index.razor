@@ -101,7 +101,7 @@
                                 <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted"/>
 
                                 <!-- Profile Questionnaires Status -->
-                                <QuestionnaireStatusBar Header="Teacher Profiles" Total="@teachers" />                                
+                                <QuestionnaireStatusBar Header="Teacher Profiles" Total="@teachers" New="@TeacherNew" Inprogress="@TeacherInprogress" Complete="@TeacherCompleted" />                                
                             </div>
                             <div class="col-lg-4 mb-4">
                                 <!--<div class="card shadow mb-4">
@@ -225,7 +225,21 @@
                 ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
 
                 var predicatecomplete = predicate + "&& ChildStatusId == " + statuscompleted.Id;
-                ChildrenCompleted = dbContext.Children.Where(predicateinprogess).Count();
+                ChildrenCompleted = dbContext.Children.Where(predicatecomplete).Count();
+
+                var statusnew1 = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+                var statusinprogress1 = dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                var statuscompleted1 = dbContext.TeacherStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+
+                var predicatenew1 = predicate + "&& TeacherStatusId == " + statusnew1.Id;
+                TeacherNew = dbContext.Teachers.Where(predicatenew1).Count();
+
+                var predicateinprogess1 = predicate + "&& TeacherStatusId == " + statusinprogress1.Id;
+                TeacherInprogress = dbContext.Teachers.Where(predicateinprogess1).Count();
+
+                var predicatecomplete1 = predicate + "&& TeacherStatusId == " + statuscompleted1.Id;
+                TeacherCompleted = dbContext.Teachers.Where(predicateinprogess1).Count();
+
             }
             else if (UserSettings.IsTeacher)
             {
