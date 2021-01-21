@@ -238,7 +238,7 @@
                 TeacherInprogress = dbContext.Teachers.Where(predicateinprogess1).Count();
 
                 var predicatecomplete1 = predicate + "&& TeacherStatusId == " + statuscompleted1.Id;
-                TeacherCompleted = dbContext.Teachers.Where(predicateinprogess1).Count();
+                TeacherCompleted = dbContext.Teachers.Where(predicatecomplete1).Count();
 
             }
             else if (UserSettings.IsTeacher)
