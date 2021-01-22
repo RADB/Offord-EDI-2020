@@ -881,6 +881,9 @@ namespace EDI.Web.Services
                                 haserror = true;
                             }
 
+                            var provinceid = 0;
+                            var provincename = string.Empty;
+
                             ///<summary>process school
                             ///</summary>
                             int schoolid = 0;
@@ -904,9 +907,10 @@ namespace EDI.Web.Services
                                             var provinceedicodestring = data.ChildEdiid.Substring(2, 2);
                                             var provinceedicode = int.Parse(provinceedicodestring);
                                             var countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().CountryID;
-                                            var provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
+                                            provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
+                                            provincename = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().English.Replace(" ", "");
 
-                                            if(provinceid == 0)
+                                            if (provinceid == 0)
                                             {
                                                 errormessages.Add("FileImports data " + data.Id + ": Province is required.");
                                                 haserror = true;
@@ -936,6 +940,8 @@ namespace EDI.Web.Services
                                     else
                                     {
                                         schoolid = school.Id;
+                                        provinceid = school.ProvinceId;
+                                        provincename = servicecontext.Provinces.Where(p => p.Id == provinceid).FirstOrDefault().English.Replace(" ", "");
                                     }
                                 }
                             }
@@ -1031,10 +1037,14 @@ namespace EDI.Web.Services
                                                 _teacherFeedbackForms.ModifiedBy = _userSettings.UserName;
 
                                                 await _feedbackRepository.AddAsync(_teacherFeedbackForms);*/
+                                                var predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
+
+                                                var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
                                                 var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
                                                 _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
                                                 _QuestionnairesDataTeacherProfile.YearId = yearid;
+                                                _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaire.Id;
                                                 _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
                                                 _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
                                                 _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
@@ -1125,10 +1135,15 @@ namespace EDI.Web.Services
                             {
                                 var _demographics = new QuestionnairesDataDemographic();
 
+                                var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
+
+                                var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
                                 _demographics.ChildId = childid;
                                 _demographics.GenderId = (int?)data.GenderId;
                                 _demographics.Dob = data.ChildDob;
                                 _demographics.PostalCode = data.ChildPostalCode;
+                                _demographics.QuestionnaireId = questionnaire.Id;
                                 _demographics.CreatedDate = DateTime.Now;
                                 _demographics.CreatedBy = _userSettings.UserName;
                                 _demographics.ModifiedDate = DateTime.Now;
@@ -1138,7 +1153,12 @@ namespace EDI.Web.Services
 
                                 var _sectionA = new QuestionnairesDataSectionA();
 
+                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
+
+                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
                                 _sectionA.ChildId = childid;
+                                _sectionA.QuestionnaireId = questionnaire.Id;
                                 _sectionA.CreatedDate = DateTime.Now;
                                 _sectionA.CreatedBy = _userSettings.UserName;
                                 _sectionA.ModifiedDate = DateTime.Now;
@@ -1148,7 +1168,12 @@ namespace EDI.Web.Services
 
                                 var _sectionB = new QuestionnairesDataSectionB();
 
+                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
+
+                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
                                 _sectionB.ChildId = childid;
+                                _sectionB.QuestionnaireId = questionnaire.Id;
                                 _sectionB.CreatedDate = DateTime.Now;
                                 _sectionB.CreatedBy = _userSettings.UserName;
                                 _sectionB.ModifiedDate = DateTime.Now;
@@ -1158,7 +1183,12 @@ namespace EDI.Web.Services
 
                                 var _sectionC = new QuestionnairesDataSectionC();
 
+                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
+
+                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
                                 _sectionC.ChildId = childid;
+                                _sectionC.QuestionnaireId = questionnaire.Id;
                                 _sectionC.CreatedDate = DateTime.Now;
                                 _sectionC.CreatedBy = _userSettings.UserName;
                                 _sectionC.ModifiedDate = DateTime.Now;
@@ -1168,7 +1198,12 @@ namespace EDI.Web.Services
 
                                 var _sectionD = new QuestionnairesDataSectionD();
 
+                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
+
+                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
                                 _sectionD.ChildId = childid;
+                                _sectionD.QuestionnaireId = questionnaire.Id;
                                 _sectionD.CreatedDate = DateTime.Now;
                                 _sectionD.CreatedBy = _userSettings.UserName;
                                 _sectionD.ModifiedDate = DateTime.Now;
@@ -1178,7 +1213,13 @@ namespace EDI.Web.Services
 
                                 var _sectionE = new QuestionnairesDataSectionE();
 
+                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
+
+                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
                                 _sectionE.ChildId = childid;
+                                _sectionE.QuestionnaireId = questionnaire.Id;
+                                _sectionE.CreatedDate = DateTime.Now;
                                 _sectionE.CreatedDate = DateTime.Now;
                                 _sectionE.CreatedBy = _userSettings.UserName;
                                 _sectionE.ModifiedDate = DateTime.Now;
