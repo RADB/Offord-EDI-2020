@@ -1037,20 +1037,25 @@ namespace EDI.Web.Services
                                                 _teacherFeedbackForms.ModifiedBy = _userSettings.UserName;
 
                                                 await _feedbackRepository.AddAsync(_teacherFeedbackForms);*/
-                                                var predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
+                                                var teacherprofile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
 
-                                                var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                                if(teacherprofile == null)
+                                                {
+                                                    var predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
 
-                                                var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
-                                                _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
-                                                _QuestionnairesDataTeacherProfile.YearId = yearid;
-                                                _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaire.Id;
-                                                _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
-                                                _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
-                                                _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
-                                                _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
+                                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                                await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
+                                                    var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
+                                                    _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
+                                                    _QuestionnairesDataTeacherProfile.YearId = yearid;
+                                                    _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaire.Id;
+                                                    _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
+                                                    _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
+                                                    _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
+                                                    _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
+
+                                                    await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
+                                                }                                                
                                             }
                                             catch (Exception ex)
                                             {
@@ -1133,99 +1138,124 @@ namespace EDI.Web.Services
 
                             if (childid > 0)
                             {
-                                var _demographics = new QuestionnairesDataDemographic();
+                                var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid).FirstOrDefault();
+                                var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid).FirstOrDefault();
 
-                                var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
+                                if(demo == null)
+                                {
+                                    var _demographics = new QuestionnairesDataDemographic();
 
-                                var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
 
-                                _demographics.ChildId = childid;
-                                _demographics.GenderId = (int?)data.GenderId;
-                                _demographics.Dob = data.ChildDob;
-                                _demographics.PostalCode = data.ChildPostalCode;
-                                _demographics.QuestionnaireId = questionnaire.Id;
-                                _demographics.CreatedDate = DateTime.Now;
-                                _demographics.CreatedBy = _userSettings.UserName;
-                                _demographics.ModifiedDate = DateTime.Now;
-                                _demographics.ModifiedBy = _userSettings.UserName;
+                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                await _questionnairesDataDemographic.AddAsync(_demographics);
+                                    _demographics.ChildId = childid;
+                                    _demographics.GenderId = (int?)data.GenderId;
+                                    _demographics.Dob = data.ChildDob;
+                                    _demographics.PostalCode = data.ChildPostalCode;
+                                    _demographics.QuestionnaireId = questionnaire.Id;
+                                    _demographics.CreatedDate = DateTime.Now;
+                                    _demographics.CreatedBy = _userSettings.UserName;
+                                    _demographics.ModifiedDate = DateTime.Now;
+                                    _demographics.ModifiedBy = _userSettings.UserName;
 
-                                var _sectionA = new QuestionnairesDataSectionA();
+                                    await _questionnairesDataDemographic.AddAsync(_demographics);
+                                }
+                                
+                                if(seca == null)
+                                {
+                                    var _sectionA = new QuestionnairesDataSectionA();
 
-                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
+                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
 
-                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                _sectionA.ChildId = childid;
-                                _sectionA.QuestionnaireId = questionnaire.Id;
-                                _sectionA.CreatedDate = DateTime.Now;
-                                _sectionA.CreatedBy = _userSettings.UserName;
-                                _sectionA.ModifiedDate = DateTime.Now;
-                                _sectionA.ModifiedBy = _userSettings.UserName;
+                                    _sectionA.ChildId = childid;
+                                    _sectionA.QuestionnaireId = questionnaire.Id;
+                                    _sectionA.CreatedDate = DateTime.Now;
+                                    _sectionA.CreatedBy = _userSettings.UserName;
+                                    _sectionA.ModifiedDate = DateTime.Now;
+                                    _sectionA.ModifiedBy = _userSettings.UserName;
 
-                                await _questionnairesDataSectionA.AddAsync(_sectionA);
+                                    await _questionnairesDataSectionA.AddAsync(_sectionA);
+                                }
+                                
+                                if(secb == null)
+                                {
+                                    var _sectionB = new QuestionnairesDataSectionB();
 
-                                var _sectionB = new QuestionnairesDataSectionB();
+                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
 
-                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
+                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                    _sectionB.ChildId = childid;
+                                    _sectionB.QuestionnaireId = questionnaire.Id;
+                                    _sectionB.CreatedDate = DateTime.Now;
+                                    _sectionB.CreatedBy = _userSettings.UserName;
+                                    _sectionB.ModifiedDate = DateTime.Now;
+                                    _sectionB.ModifiedBy = _userSettings.UserName;
 
-                                _sectionB.ChildId = childid;
-                                _sectionB.QuestionnaireId = questionnaire.Id;
-                                _sectionB.CreatedDate = DateTime.Now;
-                                _sectionB.CreatedBy = _userSettings.UserName;
-                                _sectionB.ModifiedDate = DateTime.Now;
-                                _sectionB.ModifiedBy = _userSettings.UserName;
+                                    await _questionnairesDataSectionB.AddAsync(_sectionB);
+                                }
+                                
+                                if(secc == null)
+                                {
+                                    var _sectionC = new QuestionnairesDataSectionC();
 
-                                await _questionnairesDataSectionB.AddAsync(_sectionB);
+                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
 
-                                var _sectionC = new QuestionnairesDataSectionC();
+                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
+                                    _sectionC.ChildId = childid;
+                                    _sectionC.QuestionnaireId = questionnaire.Id;
+                                    _sectionC.CreatedDate = DateTime.Now;
+                                    _sectionC.CreatedBy = _userSettings.UserName;
+                                    _sectionC.ModifiedDate = DateTime.Now;
+                                    _sectionC.ModifiedBy = _userSettings.UserName;
 
-                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                    await _questionnairesDataSectionC.AddAsync(_sectionC);
+                                }
+                                
+                                if(secd == null)
+                                {
+                                    var _sectionD = new QuestionnairesDataSectionD();
 
-                                _sectionC.ChildId = childid;
-                                _sectionC.QuestionnaireId = questionnaire.Id;
-                                _sectionC.CreatedDate = DateTime.Now;
-                                _sectionC.CreatedBy = _userSettings.UserName;
-                                _sectionC.ModifiedDate = DateTime.Now;
-                                _sectionC.ModifiedBy = _userSettings.UserName;
+                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
 
-                                await _questionnairesDataSectionC.AddAsync(_sectionC);
+                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                var _sectionD = new QuestionnairesDataSectionD();
+                                    _sectionD.ChildId = childid;
+                                    _sectionD.QuestionnaireId = questionnaire.Id;
+                                    _sectionD.CreatedDate = DateTime.Now;
+                                    _sectionD.CreatedBy = _userSettings.UserName;
+                                    _sectionD.ModifiedDate = DateTime.Now;
+                                    _sectionD.ModifiedBy = _userSettings.UserName;
 
-                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
+                                    await _questionnairesDataSectionD.AddAsync(_sectionD);
+                                }
+                                
+                                if(sece == null)
+                                {
+                                    var _sectionE = new QuestionnairesDataSectionE();
 
-                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
 
-                                _sectionD.ChildId = childid;
-                                _sectionD.QuestionnaireId = questionnaire.Id;
-                                _sectionD.CreatedDate = DateTime.Now;
-                                _sectionD.CreatedBy = _userSettings.UserName;
-                                _sectionD.ModifiedDate = DateTime.Now;
-                                _sectionD.ModifiedBy = _userSettings.UserName;
+                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                await _questionnairesDataSectionD.AddAsync(_sectionD);
+                                    _sectionE.ChildId = childid;
+                                    _sectionE.QuestionnaireId = questionnaire.Id;
+                                    _sectionE.CreatedDate = DateTime.Now;
+                                    _sectionE.CreatedDate = DateTime.Now;
+                                    _sectionE.CreatedBy = _userSettings.UserName;
+                                    _sectionE.ModifiedDate = DateTime.Now;
+                                    _sectionE.ModifiedBy = _userSettings.UserName;
 
-                                var _sectionE = new QuestionnairesDataSectionE();
-
-                                predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
-
-                                questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                _sectionE.ChildId = childid;
-                                _sectionE.QuestionnaireId = questionnaire.Id;
-                                _sectionE.CreatedDate = DateTime.Now;
-                                _sectionE.CreatedDate = DateTime.Now;
-                                _sectionE.CreatedBy = _userSettings.UserName;
-                                _sectionE.ModifiedDate = DateTime.Now;
-                                _sectionE.ModifiedBy = _userSettings.UserName;
-
-                                await _questionnairesDataSectionE.AddAsync(_sectionE);
+                                    await _questionnairesDataSectionE.AddAsync(_sectionE);
+                                }                                
                             }
                         }
 
