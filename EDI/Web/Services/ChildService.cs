@@ -113,7 +113,19 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullChild(id, _child);
 
+                var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == _child.Id).FirstOrDefault();
+                var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == _child.Id).FirstOrDefault();
+                var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == _child.Id).FirstOrDefault();
+                var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == _child.Id).FirstOrDefault();
+                var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == _child.Id).FirstOrDefault();
+                var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == _child.Id).FirstOrDefault();
+
                 var childstatus = _dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+
+                if(demo.IsComplete && seca.IsComplete && secb.IsComplete && secc.IsComplete && secd.IsComplete && sece.IsComplete)
+                {
+                    childstatus = _dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+                }
 
                 _child.ChildStatusId = childstatus.Id;
                 _child.ModifiedDate = DateTime.Now;

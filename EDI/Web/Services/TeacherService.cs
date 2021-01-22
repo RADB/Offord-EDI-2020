@@ -98,7 +98,12 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullTeacher(id, _teacher);
 
+                var teacherprofile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
+
                 var teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+
+                if(teacherprofile.IsComplete)
+                    teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "Complete").FirstOrDefault();
 
                 _teacher.TeacherStatusId = teacherstatus.Id;
                 _teacher.ModifiedDate = DateTime.Now;
