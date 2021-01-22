@@ -185,54 +185,54 @@
         }
     }
 
-    public async void Save(bool useJSON)
-    {
-        if (useJSON)
-        {
-            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-            if (teacherJson != null && teacherJson.Length > 0)
-            {
-                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+    //public async void Save(bool useJSON)
+    //{
+    //    if (useJSON)
+    //    {
+    //        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+    //        if (teacherJson != null && teacherJson.Length > 0)
+    //        {
+    //            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                await SaveDisconnectedTeacher(tempTeacher);
+    //            await SaveDisconnectedTeacher(tempTeacher);
 
-                await sessionStorage.RemoveItemAsync("Teacher");
-            }
-        }
-        else
-        {
-            if (_userSettings.TeacherData != null)
-            {
-                await SaveDisconnectedTeacher(_userSettings.TeacherData);
+    //            await sessionStorage.RemoveItemAsync("Teacher");
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (_userSettings.TeacherData != null)
+    //        {
+    //            await SaveDisconnectedTeacher(_userSettings.TeacherData);
 
-                _userSettings.TeacherData = null;
-            }
-        }
+    //            _userSettings.TeacherData = null;
+    //        }
+    //    }
 
-    }
+    //}
 
-    protected async Task SaveDisconnectedTeacher(Teacher TeacherData)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
-        {
-            // load the disconnected data into the context
-            servicecontext.Update(TeacherData);
-            try
-            {
-                await servicecontext.SaveChangesAsync();
+    //protected async Task SaveDisconnectedTeacher(Teacher TeacherData)
+    //{
+    //    var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+    //    optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+    //    using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+    //    {
+    //        // load the disconnected data into the context
+    //        servicecontext.Update(TeacherData);
+    //        try
+    //        {
+    //            await servicecontext.SaveChangesAsync();
 
-                //toastService.ShowSuccess("Data Saved Successfully!");
-                StateHasChanged();
-            }
-            catch (Exception ex)
-            {
-                toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
+    //            //toastService.ShowSuccess("Data Saved Successfully!");
+    //            StateHasChanged();
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            toastService.ShowError(string.Format("{0}:{1}", ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "Error Saving Data"));
 
-                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
-            }
-        }
-    }
+    //            sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+    //        }
+    //    }
+    //}
 }
 
