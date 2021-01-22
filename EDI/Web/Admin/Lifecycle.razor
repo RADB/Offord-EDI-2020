@@ -5,6 +5,7 @@
     <button @onclick=ButtonClicked type="button" class="btn btn-primary">Show serialized reference</button>
     <button type="button" class="btn btn-primary">Just a Button</button>
     <button @onclick=ChangeState type="button" class="btn btn-primary">Change State</button>
+    <button @onclick=ClearScreen type="button" class="btn btn-primary">Clear</button>
     <code><pre>@output</pre></code>
     Welcome to your new app.
 </div>
@@ -13,6 +14,10 @@
     object btnState;
     ElementReference MyElementReference;
 
+    protected void ClearScreen()
+    {
+        output = string.Empty;
+    }
     protected override void OnAfterRender(bool firstRender)
     {
         output += "OnAfterRender: ";

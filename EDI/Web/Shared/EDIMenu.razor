@@ -13,6 +13,7 @@
 @inject IToastService toastService;
 @inject IAccountService accountService;
 @inject IReflectionService reflectionService;
+@inject IMathService mathService;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 <div class="pl-4 navbar navbar-dark">
@@ -74,14 +75,19 @@
     // get this value from the entity field IsComplete on each
 
     private int ChildId { get; set; }
-
+    
     private bool isChildQuestionnaire;
     private List<Questionnaire> questionnaires;
     private bool collapseNavMenu = false;
     private bool expandMenu;
     private string iconCSS = "";
     private string color = "";
-
+    private string CurrentPage { get; set; }
+    private int completed { get; set; }
+    private int required { get; set; }
+    private int percentComplete { get; set; }
+    private string barColor { get; set; }
+    private string EntityName { get; set; }
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
@@ -165,11 +171,36 @@
             }
 
             GetChildId();
+            GetEntityName();
             //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
             getData();
         }
     }
 
+    private void GetEntityName()
+    {
+        switch (CurrentPage)
+        {
+            case "Demographics/":
+                EntityName = "Questionnaires.Data.Demographics";
+                break;
+            case "SectionA/":
+                EntityName = "Questionnaires.Data.SectionA";
+                break;
+            case "SectionB/":
+                EntityName = "Questionnaires.Data.SectionB";
+                break;
+            case "SectionC/":
+                EntityName = "Questionnaires.Data.SectionC";
+                break;
+            case "SectionD/":
+                EntityName = "Questionnaires.Data.SectionD";
+                break;
+            case "SectionE/":
+                EntityName = "Questionnaires.Data.SectionE";
+                break;
+        }
+    }
     private void getData()
     {
         questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
@@ -191,6 +222,7 @@
             else
             {
                 ChildId = studentId;
+                CurrentPage = uri.Segments[2].ToString();
             }
         }
 
@@ -198,45 +230,77 @@
 
     private async void Save(bool useJSON)
     {
-        if(UserSettings.IsTeacher)
+        if (useJSON)
         {
-            if (useJSON)
+            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+            if (teacherJson != null && teacherJson.Length > 0)
             {
-                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-                if (teacherJson != null && teacherJson.Length > 0)
-                {
-                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                    await SaveDisconnectedTeacher(tempTeacher);
+                await SaveDisconnectedTeacher(tempTeacher);
 
-                    await sessionStorage.RemoveItemAsync("Teacher");
-                }
-            }
-            else
-            {
-                if (UserSettings.TeacherData != null)
-                {
-                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                    UserSettings.TeacherData = null;
-                }
+                await sessionStorage.RemoveItemAsync("Teacher");
             }
         }
         else
         {
-            UserSettings.TeacherData = null;
+            if (UserSettings.TeacherData != null)
+            {
+                await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                UserSettings.TeacherData = null;
+            }
         }
     }
 
     private async Task SaveDisconnectedTeacher(Teacher TeacherData)
     {
-        // update new to In progress on save
-        var currentStatus = int.Parse(reflectionService.GetFieldValue(TeacherData, "Child", "ChildStatusId"));
-        if((Enumerations.ChildStatus)currentStatus==Enumerations.ChildStatus.New)
+        // check completeness of form
+        checkCompleteNess();
+
+        IsComplete = percentComplete == 100 ? true : false;
+
+        switch (EntityName)
         {
-            reflectionService.SetFieldValue(TeacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.InProgress).ToString());
+            case "Questionnaires.Data.Demographics":
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().CompletedQuestions = completed;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().RequiredQuestions = required;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = IsComplete;
+                break;
+            case "Questionnaires.Data.SectionA":
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().CompletedQuestions = completed;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().RequiredQuestions = required;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete = IsComplete;
+                break;
+            case "Questionnaires.Data.SectionB":
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().CompletedQuestions = completed;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().RequiredQuestions = required;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete = IsComplete;
+                break;
+            case "Questionnaires.Data.SectionC":
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().CompletedQuestions = completed;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().RequiredQuestions = required;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete = IsComplete;
+                break;
+            case "Questionnaires.Data.SectionD":
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().CompletedQuestions = completed;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().RequiredQuestions = required;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete = IsComplete;
+                break;
+            case "Questionnaires.Data.SectionE":
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().CompletedQuestions = completed;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().RequiredQuestions = required;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete = IsComplete;
+                break;
         }
-     
+
+        // update new to In progress on save
+        var currentStatus = TeacherData.Children.Single().ChildStatusId;
+        if ((Enumerations.ChildStatus)currentStatus == Enumerations.ChildStatus.New)
+        {
+            TeacherData.Children.Single().ChildStatusId = (int)Enumerations.ChildStatus.InProgress;
+        }
+
         var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
         optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
         using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
@@ -257,9 +321,40 @@
                 sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
             }
         }
-        UserSettings.QuestionsCompleted = 0;
-        UserSettings.QuestionsRequired = 0;
-        UserSettings.QuestionsTotal = 0;
+        // TESTING ANDREW
+        //UserSettings.QuestionsCompleted = 0;
+        //UserSettings.QuestionsRequired = 0;
+        //UserSettings.QuestionsTotal = 0;
+    }
+
+    private void checkCompleteNess()
+    {
+        completed = UserSettings.QuestionsCompleted;
+        required = UserSettings.QuestionsRequired;
+        percentComplete = mathService.GetPercent(completed, required);
+
+        if (percentComplete > 100)
+            percentComplete = 100;
+
+        switch (percentComplete)
+        {
+            case < 30:
+                barColor = "bg-danger";
+                break;
+            case < 50:
+                barColor = "bg-warning";
+                break;
+            case < 75:
+                barColor = "bg-secondary";
+                break;
+            case < 99:
+                barColor = "bg-info";
+                break;
+            case 100:
+                barColor = "bg-success";
+                break;
+        }
+        //StateHasChanged();
     }
 
     private async void BounceBack(Boolean UseSession)

@@ -1,13 +1,13 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.WebUtilities
+@using System.Linq.Dynamic.Core
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
 @inject LanguageSettings LanguageSettings;
 @inject AppIdentityDbContext identityContext;
 @inject ServiceContext dbContext;
-@using System.Linq.Dynamic.Core
 @inject ISharedService sharedService;
 
 <EDIHeader />
@@ -38,8 +38,8 @@
         var user = authState.User;
 
         isAuthenticated = user.Identity.IsAuthenticated;
-        
-        if(isAuthenticated && UserSettings.UserID is null)
+
+        if (isAuthenticated && UserSettings.UserID is null)
             sharedService.InitializeUserSettings(user.Identity.Name);
     }
 }
