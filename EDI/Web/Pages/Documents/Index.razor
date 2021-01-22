@@ -1,4 +1,4 @@
-﻿@page "/documents/index"
+﻿@page "/documents/index/{message}"
 @using Microsoft.AspNetCore.Http
 @using Syncfusion.Blazor.FileManager;
 @using System.Collections.Generic;
@@ -58,6 +58,8 @@
 </div>
 
 @code {
+    [Parameter]
+    public string message { get; set; } = string.Empty;
     private string[] items { get; set; }
     private bool showcontext { get; set; }
 
@@ -67,10 +69,10 @@
         {
             if (!UserSettings.IsAdmin)
             {
-                toastService.ShowError("You dont have permission to do this.");
-                NavigationManager.NavigateTo(NavigationManager.Uri, true);
+                int index = NavigationManager.Uri.LastIndexOf("/");
+                var path = NavigationManager.Uri.Substring(0, index) + @"/Nopermission";
+                NavigationManager.NavigateTo(path, true);
             }
-
         }
     }
 
@@ -85,6 +87,9 @@
             string basePath = hostingEnvironment.ContentRootPath;
 
             string newPath = string.Empty;
+
+            if (message == "Nopermission")
+                toastService.ShowError("You do not have permission to delete file");
 
             if (UserSettings.IsAdmin)
             {
