@@ -1,4 +1,4 @@
-﻿@page "/documents/index"
+﻿@page "/documents/index/{message}"
 @using Microsoft.AspNetCore.Http
 @using Syncfusion.Blazor.FileManager;
 @using System.Collections.Generic;
@@ -11,6 +11,7 @@
 @inject IHttpContextAccessor httpContextAccessor
 @inject IWebHostEnvironment hostingEnvironment
 @inject ServiceContext dbContext
+@inject IToastService toastService;
 
 
 <div class="row">
@@ -25,15 +26,31 @@
                 </div>
             </div>
             <div class="card-body">
-                <SfFileManager TValue="FileManagerDirectoryContent">
-                    <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
-                    <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
-                    <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
-                                             GetImageUrl="/api/FileManager/GetImage"
-                                             UploadUrl="/api/FileManager/Upload"
-                                             DownloadUrl="/api/FileManager/Download">
-                    </FileManagerAjaxSettings>
-                </SfFileManager>
+                @if (UserSettings.IsAdmin)
+                {
+                    <SfFileManager TValue="FileManagerDirectoryContent">
+                        <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
+                        <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
+                        <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
+                                                 GetImageUrl="/api/FileManager/GetImage"
+                                                 UploadUrl="/api/FileManager/Upload"
+                                                 DownloadUrl="/api/FileManager/Download">
+                        </FileManagerAjaxSettings>
+                    </SfFileManager>
+                }
+                else
+                {
+                    <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" @onkeydown="KeyValueChange">
+                        <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
+                        <FileManagerUploadSettings AutoUpload="false"></FileManagerUploadSettings>
+                        <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
+                        <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
+                                                 GetImageUrl="/api/FileManager/GetImage"
+                                                 DownloadUrl="/api/FileManager/Download">
+                        </FileManagerAjaxSettings>
+                    </SfFileManager>
+                }
+
             </div>
 
         </div>
@@ -41,8 +58,24 @@
 </div>
 
 @code {
+    [Parameter]
+    public string message { get; set; } = string.Empty;
     private string[] items { get; set; }
-    private bool showcontext { get; set; }    
+    private bool showcontext { get; set; }
+
+    private void KeyValueChange(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+    {
+        if (e.Code == "Delete")
+        {
+            if (!UserSettings.IsAdmin)
+            {
+                int index = NavigationManager.Uri.LastIndexOf("/");
+                var path = NavigationManager.Uri.Substring(0, index) + @"/Nopermission";
+                NavigationManager.NavigateTo(path, true);
+            }
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -54,6 +87,9 @@
             string basePath = hostingEnvironment.ContentRootPath;
 
             string newPath = string.Empty;
+
+            if (message == "Nopermission")
+                toastService.ShowError("You do not have permission to delete file");
 
             if (UserSettings.IsAdmin)
             {
@@ -150,3 +186,9 @@
         return sharedService.GetTranslate(word);
     }
 }
+
+<style>
+    #file .e-empty-inner-content {
+        display: none;
+    }
+</style>
