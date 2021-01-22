@@ -35,6 +35,8 @@ namespace EDI.ApplicationCore.Entities
         public string AssessSpecify { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }
-        
+        [JsonIgnore]
+        public virtual Questionnaire Questionnaire { get; set; }
+
     }
 }

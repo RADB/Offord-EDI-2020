@@ -484,6 +484,13 @@ namespace EDI.Infrastructure.Data
                 entity.Property(e => e.ShowProgressBar).HasComment("Answered x of y Questions");
 
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Questionnaire).HasForeignKey(e => e.QuestionnaireId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Questionnaire_QuestionnairesConfigurations");
+                entity.HasMany(e => e.QuestionnairesDataDemographics).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.Demographics");
+                entity.HasMany(e => e.QuestionnairesDataSectionAs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionAs");
+                entity.HasMany(e => e.QuestionnairesDataSectionBs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionBs");
+                entity.HasMany(e => e.QuestionnairesDataSectionCs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionCs");
+                entity.HasMany(e => e.QuestionnairesDataSectionDs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionDs");
+                entity.HasMany(e => e.QuestionnairesDataSectionEs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionEs");
+                entity.HasMany(e => e.QuestionnairesDataTeacherProfiles).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionEs");
 
             });
 

@@ -9,7 +9,7 @@ namespace EDI.ApplicationCore.Entities
     {
         public string LanguageCompleted { get; set; }
         public int? YearId { get; set; }
-
+        public int QuestionnaireId { get; set; }
         public int CompletedQuestions {get;set;}
 
         public int RequiredQuestions { get; set; }

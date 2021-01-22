@@ -75,7 +75,7 @@
     // get this value from the entity field IsComplete on each
 
     private int ChildId { get; set; }
-    
+
     private bool isChildQuestionnaire;
     private List<Questionnaire> questionnaires;
     private bool collapseNavMenu = false;
@@ -101,6 +101,22 @@
         expandMenu = !expandMenu;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        IsComplete = await sessionStorage.GetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete");
+        if (IsComplete)
+        {
+            iconCSS = "far fa-check-square fa-lg";
+            color = "greenyellow";
+        }
+        else
+        {
+            iconCSS = "far fa-square fa-lg";
+            color = "darkred";
+        }
+        //StateHasChanged();
+        //return base.OnAfterRenderAsync(firstRender);
+    }
 
     protected override async Task OnInitializedAsync()
     {

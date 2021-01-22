@@ -28,6 +28,8 @@ namespace EDI.ApplicationCore.Entities
         public string OtherSpecify { get; set; }
         public string Comments { get; set; }
         [JsonIgnore]
-        public virtual Child Child { get; set; }        
+        public virtual Child Child { get; set; }
+        [JsonIgnore]
+        public virtual Questionnaire Questionnaire { get; set; }
     }
 }

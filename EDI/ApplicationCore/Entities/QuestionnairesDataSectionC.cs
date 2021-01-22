@@ -70,5 +70,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? SucksThumb { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }
+        [JsonIgnore]
+        public virtual Questionnaire Questionnaire { get; set; }
     }
 }

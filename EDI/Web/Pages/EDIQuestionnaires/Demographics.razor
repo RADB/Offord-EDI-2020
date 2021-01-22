@@ -17,6 +17,7 @@
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 @inject IMathService mathService;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @*<QuestionnaireNavigation QuestionnaireId=@QuestionnaireId ChildId=@ChildId IsReadOnly=@IsReadOnly></QuestionnaireNavigation>*@
 
 <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="15px"></QuestionnaireHeader>
@@ -24,10 +25,17 @@
 
 @code {
 
-    protected override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete", teacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete);
+        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionA.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete);
+        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete);
+        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionC.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete);
+        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionD.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete);        
+        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionE.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete);
 
-        return base.OnAfterRenderAsync(firstRender);
+        //var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+        //return base.OnAfterRenderAsync(firstRender);
     }
 
     protected override void OnInitialized()

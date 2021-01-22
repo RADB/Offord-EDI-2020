@@ -40,6 +40,8 @@ namespace EDI.ApplicationCore.Entities
         public byte? LandAgreement { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }
+        [JsonIgnore]
+        public virtual Questionnaire Questionnaire { get; set; }
         public virtual Gender Gender { get; set; }
     }
 }
