@@ -1158,6 +1158,7 @@ namespace EDI.Web.Services
                                     _demographics.Dob = data.ChildDob;
                                     _demographics.PostalCode = data.ChildPostalCode;
                                     _demographics.QuestionnaireId = questionnaire.Id;
+                                    _demographics.YearId = yearid;
                                     _demographics.CreatedDate = DateTime.Now;
                                     _demographics.CreatedBy = _userSettings.UserName;
                                     _demographics.ModifiedDate = DateTime.Now;
@@ -1176,6 +1177,7 @@ namespace EDI.Web.Services
 
                                     _sectionA.ChildId = childid;
                                     _sectionA.QuestionnaireId = questionnaire.Id;
+                                    _sectionA.YearId = yearid;
                                     _sectionA.CreatedDate = DateTime.Now;
                                     _sectionA.CreatedBy = _userSettings.UserName;
                                     _sectionA.ModifiedDate = DateTime.Now;
@@ -1194,6 +1196,7 @@ namespace EDI.Web.Services
 
                                     _sectionB.ChildId = childid;
                                     _sectionB.QuestionnaireId = questionnaire.Id;
+                                    _sectionB.YearId = yearid;
                                     _sectionB.CreatedDate = DateTime.Now;
                                     _sectionB.CreatedBy = _userSettings.UserName;
                                     _sectionB.ModifiedDate = DateTime.Now;
@@ -1212,6 +1215,7 @@ namespace EDI.Web.Services
 
                                     _sectionC.ChildId = childid;
                                     _sectionC.QuestionnaireId = questionnaire.Id;
+                                    _sectionC.YearId = yearid;
                                     _sectionC.CreatedDate = DateTime.Now;
                                     _sectionC.CreatedBy = _userSettings.UserName;
                                     _sectionC.ModifiedDate = DateTime.Now;
@@ -1230,6 +1234,7 @@ namespace EDI.Web.Services
 
                                     _sectionD.ChildId = childid;
                                     _sectionD.QuestionnaireId = questionnaire.Id;
+                                    _sectionD.YearId = yearid;
                                     _sectionD.CreatedDate = DateTime.Now;
                                     _sectionD.CreatedBy = _userSettings.UserName;
                                     _sectionD.ModifiedDate = DateTime.Now;
@@ -1248,6 +1253,7 @@ namespace EDI.Web.Services
 
                                     _sectionE.ChildId = childid;
                                     _sectionE.QuestionnaireId = questionnaire.Id;
+                                    _sectionE.YearId = yearid;
                                     _sectionE.CreatedDate = DateTime.Now;
                                     _sectionE.CreatedDate = DateTime.Now;
                                     _sectionE.CreatedBy = _userSettings.UserName;
