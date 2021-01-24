@@ -59,6 +59,10 @@
                                             <div>@comm.ChildStatus <button data-toggle="tooltip" data-placement="bottom" title="Unlock" @onclick="@(() => Unlock(comm.Id))" style="border:none;background-color:transparent;"><i class="fas fa-lock-open fa-2x" style="color:darkgreen; margin-top: -8px;"></i></button></div>
 
                                         }
+                                        else if (comm.ChildStatusId == (int)Enumerations.ChildStatus.Locked)
+                                        {
+                                            <div>@comm.ChildStatus <i class="fas fa-lock fa-2x" style="color:darkgreen;"></i></div>
+                                        }
                                         else
                                         {
                                             <div>@comm.ChildStatus</div>
@@ -181,13 +185,15 @@
             var childstatus = dbContext.ChildStatuses.Where(p => p.Id == child.ChildStatusId).FirstOrDefault();
             achild.ChildStatus = childstatus.English;
 
-            var totaolcompleted = childService.GetCompletedQuestions(child.Id);
-            var totalrequired = childService.GetRequiredQuestions(child.Id);
+            //var totalcompleted = childService.GetCompletedQuestions(child.Id);
+            //var totalrequired = childService.GetRequiredQuestions(child.Id);
+            var percentComplete = childService.GetPercentComplete(child.Id, 6);
 
             achild.Progress = 0;
 
-            if (totalrequired > 0)
-                achild.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
+            //if (totalrequired > 0)
+            achild.Progress = percentComplete;
+            //achild.Progress = mathService.GetPercent(totalcompleted, totalrequired);
 
             sivm.Add(achild);
         }

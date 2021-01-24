@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Components.Authorization;
 using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
 using EDI.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace EDI.Web.Services
 {
@@ -41,11 +43,12 @@ namespace EDI.Web.Services
         private IHostEnvironment _hostingEnvironment;
         private UserSettings _userSettings { get; set; }
         private readonly ServiceContext _dbContext;
-
+        
         private const int TOKEN_REPLACEMENT_IN_SECONDS = 10 * 60;
         private static string AccessToken { get; set; }
         private static int expiresIn;
         private readonly ISharedService _sharedService;
+        private readonly MathService _mathService;
 
         public ChildService(
             UserManager<EDIApplicationUser> userManager,
@@ -64,8 +67,9 @@ namespace EDI.Web.Services
             AuthenticationStateProvider authenticationStateProvider,
             ISharedService sharedService,
             UserSettings UserSettings,
-            IOptions<EDIAppSettings> settings)
-        {
+            IMathService mathService,
+        IOptions<EDIAppSettings> settings)
+        { 
             _logger = loggerFactory.CreateLogger<ChildService>();
             _httpContextAccessor = httpContextAccessor;
             _childRepository = childRepository;
@@ -80,6 +84,7 @@ namespace EDI.Web.Services
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _userSettings = UserSettings;
+            _mathService = (MathService)mathService;
             EDIppSettings = settings.Value;
             _sharedService = sharedService;
         }
@@ -407,6 +412,43 @@ namespace EDI.Web.Services
                 return -1;
             }
         }
+        public int GetPercentComplete(int id, int numberOfQuestionnaires)
+        {
+
+            _sharedService.WriteLogs("GetPercentComplete started by:" + _userSettings.UserName, true);
+
+            try
+            {
+                // override this if you need to make this variable.
+                //numberOfQuestionnaires = 6;                
+
+                var child = _dbContext.Children.Where("Id ==" + id + " && YearId == " + _userSettings.YearId)
+                        .Include(c => c.QuestionnairesDataDemographics)
+                        .Include(c => c.QuestionnairesDataSectionAs)
+                        .Include(c => c.QuestionnairesDataSectionBs)
+                        .Include(c => c.QuestionnairesDataSectionCs)
+                        .Include(c => c.QuestionnairesDataSectionDs)
+                        .Include(c => c.QuestionnairesDataSectionEs)
+                        .Single();
+
+                var demographicsComplete = _mathService.GetPercentComplete(child.QuestionnairesDataDemographics.Single().CompletedQuestions,child.QuestionnairesDataDemographics.Single().RequiredQuestions,numberOfQuestionnaires);
+                var sectionAComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionAs.Single().CompletedQuestions, child.QuestionnairesDataSectionAs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionBComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionBs.Single().CompletedQuestions, child.QuestionnairesDataSectionBs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionCComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionCs.Single().CompletedQuestions, child.QuestionnairesDataSectionCs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionDComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionDs.Single().CompletedQuestions, child.QuestionnairesDataSectionDs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionEComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionEs.Single().CompletedQuestions, child.QuestionnairesDataSectionEs.Single().RequiredQuestions, numberOfQuestionnaires);
+
+                var percentComplete = Math.Min(demographicsComplete + sectionAComplete + sectionBComplete + sectionCComplete + sectionDComplete + sectionEComplete, 100);
+
+                return percentComplete;
+            }
+            catch (Exception ex)
+            {
+                _sharedService.WriteLogs("GetPercentComplete failed:" + ex.Message, false);
+                return -1;
+            }
+        }
+
         private int GetRandomNumber(int minimum, int maximum)
         {
             try

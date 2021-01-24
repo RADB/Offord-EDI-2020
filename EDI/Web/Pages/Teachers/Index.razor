@@ -175,13 +175,13 @@
                 var teacherstatus = dbContext.TeacherStatuses.Where(p => p.Id == teacher.TeacherStatusId).FirstOrDefault();
                 ateacher.TeacherStatus = teacherstatus.English;
 
-                var totaolcompleted = teacherService.GetCompletedQuestions(teacher.Id);
+                var totalcompleted = teacherService.GetCompletedQuestions(teacher.Id);
                 var totalrequired = teacherService.GetRequiredQuestions(teacher.Id);
 
                 ateacher.Progress = 0;
 
                 if (totalrequired > 0)
-                    ateacher.Progress = mathService.GetPercent(totaolcompleted, totalrequired);
+                    ateacher.Progress = mathService.GetPercent(totalcompleted, totalrequired);
 
                 sivm.Add(ateacher);
             }

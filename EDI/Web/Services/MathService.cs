@@ -53,13 +53,46 @@ namespace EDI.Web.Services
         {
             try
             {
-                int percent = (int)Math.Round(((decimal)numerator / (decimal)denominator * 100),0, MidpointRounding.AwayFromZero);
+                // use min to ensure not over 100% 
+                int percent = Math.Min((int)Math.Round(((decimal)numerator / (decimal)denominator * 100),0, MidpointRounding.AwayFromZero),100);
 
                return percent;
             }
             catch (Exception ex)
             {
                 _sharedService.WriteLogs("GetPercent failed:" + ex.Message, false);
+
+                return -1;
+            }
+        }
+
+        private int GetPercentComplete(int percentComplete, int numberOfQuestionnaires)
+        {
+            try
+            {
+                int percent = (int)Math.Round(((decimal)percentComplete / (decimal)numberOfQuestionnaires), 0, MidpointRounding.AwayFromZero);
+                return percent;
+            }
+            catch (Exception ex)
+            {
+
+                _sharedService.WriteLogs("GetPercentComplete failed:" + ex.Message, false);
+
+                return -1;
+            }
+        }
+
+        public int GetPercentComplete(int numerator, int denominator, int numberOfQuestionnaires)
+        {
+            try
+            {                
+                int percentComplete = GetPercentComplete(GetPercent(numerator, denominator), numberOfQuestionnaires);
+                return percentComplete;
+            }
+            catch (Exception ex)
+            {
+
+                _sharedService.WriteLogs("GetPercentComplete failed:" + ex.Message, false);
 
                 return -1;
             }
