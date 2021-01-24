@@ -47,11 +47,18 @@ namespace EDI.Web.Models
         public bool RequiredNaviBack { get; set; }
 
         public Teacher TeacherData { get; set; }
+        public Child ChildData { get; set; }
         public bool UseJSON { get; set; } = false;
 
         /* Questionnaire Stats*/
         public int QuestionsRequired { get; set; } = 0;
         public int QuestionsCompleted { get; set; } = 0;
         public int QuestionsTotal { get; set; } = 0;
+        public bool DemographicsComplete { get; set; }
+        public bool SectionAComplete { get; set; }
+        public bool SectionBComplete { get; set; }
+        public bool SectionCComplete { get; set; }
+        public bool SectionDComplete { get; set; }
+        public bool SectionEComplete { get; set; }
     }
 }

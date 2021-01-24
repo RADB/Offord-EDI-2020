@@ -22,7 +22,7 @@
                                     <h4>@((MarkupString)sharedService.GetConfigText(config))</h4>
                                 </div>
                             </div>
-                            <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                            <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly OnValueUpdated="@ValueUpdated"></QuestionnaireQuestions>
                         </div>
                     </div>
                 </div>
@@ -40,7 +40,7 @@ else
                         @*<div class="row">
                             <div class="col-12">*@
                                 @* pass groupname that was passed in*@
-                                <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestions>
+                                <QuestionnaireQuestions QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly OnValueUpdated="@ValueUpdated"></QuestionnaireQuestions>
                             @*</div>
                         </div>*@
                     </div>
@@ -68,6 +68,9 @@ else
     [Parameter]
     public string GroupName { get; set; }
 
+    [Parameter]
+    public EventCallback<string> OnValueUpdated { get; set; }
+
     private List<QuestionnairesConfiguration> questionHeaders;
 
     private string predicate;
@@ -91,5 +94,11 @@ else
         // get the configuration
         questionHeaders = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
         //Console.WriteLine(questions);
+    }
+
+    private async void ValueUpdated(string currentValue)
+    {
+        // callback to main form on any question change
+        await OnValueUpdated.InvokeAsync(currentValue);
     }
 }

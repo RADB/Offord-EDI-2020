@@ -83,7 +83,7 @@
     private Boolean Validation { get; set; }
     private string predicate;
     private string province;
-    private int QuestionnaireId = 1;
+    private int QuestionnaireId;
 
     protected override async Task OnInitializedAsync()
     {
@@ -173,7 +173,7 @@
         // get the data object for the teacher
         //pred = "t=>t.Id == " + TeacherId;
         teacherData = dbContext.Teachers.Where(t => t.Id == TeacherId)
-                .Include(c => c.QuestionnairesDataTeacherProfiles)
+                .Include(c => c.QuestionnairesDataTeacherProfiles).Where(p=>p.YearId == UserSettings.YearId)
                 .Include(s => s.School)
                 .ThenInclude(ts => ts.Province)
                 .Single();
@@ -194,6 +194,10 @@
             IsReadOnly = true;
             province = teacherData.School.Province.English.Replace(" ", "");
         }
+
+        var predicate = "p => p." + province + ".Value && p.YearId == " + UserSettings.YearId + " && p.QuestionnaireName == \"Teacher Feedback\"";
+
+        QuestionnaireId = dbContext.Questionnaires.Where(predicate).Select(q=>q.Id).Single();
     }
 
     private string Translate(string word)
@@ -204,6 +208,9 @@
     private async void Save()
     {
         checkCompleteNess();
+
+        teacherData.QuestionnairesDataTeacherProfiles.Single().ModifiedBy = UserSettings.UserName;
+        teacherData.QuestionnairesDataTeacherProfiles.Single().ModifiedDate = DateTime.Now;
 
         //var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Teacher", "TeacherStatusId"));
         var currentStatus = teacherData.TeacherStatusId;
@@ -228,9 +235,10 @@
 
         toastService.ShowSuccess("Data saved successfully.");
 
-        getData();
+        //getData();
 
-        StateHasChanged();
+        //StateHasChanged();
+        NavigationManager.NavigateTo("./dashboard/index");
     }
 
     private void HandleValidSubmit()

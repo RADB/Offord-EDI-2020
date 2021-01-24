@@ -27,12 +27,12 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete", teacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete);
-        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionA.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete);
-        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete);
-        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionC.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete);
-        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionD.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete);        
-        await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionE.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete);
+        //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete", teacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete);
+        //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionA.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete);
+        //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete);
+        //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionC.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete);
+        //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionD.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete);        
+        //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionE.IsComplete", teacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete);
 
         //var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
         //return base.OnAfterRenderAsync(firstRender);

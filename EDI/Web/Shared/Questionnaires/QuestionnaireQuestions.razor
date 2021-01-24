@@ -14,7 +14,7 @@
                 <div class="card-body">*@
                     <div class="row">
                         <div class="col-12">
-                            <QuestionnaireBuilder configs=@questions teacherData=@teacherData IsReadonly=@IsReadOnly></QuestionnaireBuilder>                            
+                            <QuestionnaireBuilder configs=@questions teacherData=@teacherData IsReadonly=@IsReadOnly OnValueUpdated="@ValueUpdated"></QuestionnaireBuilder>                            
                         </div>
                     </div>
                 @*</div>
@@ -27,7 +27,7 @@
     [Parameter]
     public Teacher teacherData { get; set; }
     //[Parameter]
-   // public TeacherProfileItemViewModel teacherModel { get; set; }
+    // public TeacherProfileItemViewModel teacherModel { get; set; }
 
     [Parameter]
     public bool IsReadOnly { get; set; }
@@ -41,6 +41,8 @@
     [Parameter]
     public string GroupName { get; set; }
 
+    [Parameter]
+    public EventCallback<string> OnValueUpdated { get; set; }
 
     private List<QuestionnairesConfiguration> questions;
 
@@ -70,5 +72,11 @@
         // get the configuration
         questions = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
         //Console.WriteLine(questions);
+    }
+
+    private async void ValueUpdated(string currentValue)
+    {
+        // callback to main form on any question change
+        await OnValueUpdated.InvokeAsync(currentValue);
     }
 }

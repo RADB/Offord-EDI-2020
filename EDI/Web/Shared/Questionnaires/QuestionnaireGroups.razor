@@ -38,7 +38,7 @@
                         }*@
                         <!--<div><b>QuestionnaireId - Groups </b> = @config.GroupName</div>-->
 
-                        <QuestionnaireQuestionHeader QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly></QuestionnaireQuestionHeader>
+                        <QuestionnaireQuestionHeader QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName teacherData=@teacherData IsReadOnly=@IsReadOnly OnValueUpdated="@ValueUpdated"></QuestionnaireQuestionHeader>
                     @*</ContentTemplate>
                 </AccordionItem>*@
             }
@@ -64,6 +64,9 @@
 
     [Parameter]
     public List<QuestionnairesConfiguration> groups { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnValueUpdated { get; set; }
 
     private string predicate;
 
@@ -94,5 +97,11 @@
         predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 11 AND " + ProvinceName + " == true";
         // get the configuration
         groups = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+    }
+
+    private async void ValueUpdated(string currentValue)
+    {
+        // callback to main form on any question change
+        await OnValueUpdated.InvokeAsync(currentValue);
     }
 }

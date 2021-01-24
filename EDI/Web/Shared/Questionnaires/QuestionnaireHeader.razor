@@ -19,7 +19,7 @@
     </div>
     <div class="row" style="margin-top:70px;">
         <div class="col-md-12">
-            <QuestionnaireNavigation teacherData=@teacherData></QuestionnaireNavigation>
+            <QuestionnaireNavigation teacherData=@teacherData OnQuestionnaireSave="@QuestionnaireSave" ShowLockChild="false"></QuestionnaireNavigation>
         </div>
     </div>
 }
@@ -47,7 +47,7 @@
 {
     <div class="row" style="margin-top:0px;">
         <div class="col-md-12">
-            <QuestionnaireNavigation></QuestionnaireNavigation>
+            <QuestionnaireNavigation OnQuestionnaireSave="@QuestionnaireSave" ShowLockChild="true"></QuestionnaireNavigation>
         </div>
     </div>
 }
@@ -68,46 +68,53 @@
 
         [Parameter]
         public string marginTop { get; set; } = "56px";
+        [Parameter]
+        public EventCallback<string> OnQuestionnaireSave { get; set; }
 
-private List<QuestionnairesConfiguration> headers;
-    private string _Text;
-    private string predicate;
+        private List<QuestionnairesConfiguration> headers;
+        private string _Text;
+        private string predicate;
 
-    private string Translate(string word)
-    {
-        return sharedService.GetTranslate(word);
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        if (!UserSettings.IsAuthenticated)
+        private string Translate(string word)
         {
-            NavigationManager.NavigateTo("./login");
+            return sharedService.GetTranslate(word);
         }
-        else
+
+        protected override async Task OnInitializedAsync()
         {
-            getData();
+            if (!UserSettings.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo("./login");
+            }
+            else
+            {
+                getData();
+            }
         }
-    }
 
-    private void getData()
-    {
-        if (UserSettings.IsAdmin)
+        private void getData()
         {
+            if (UserSettings.IsAdmin)
+            {
+
+            }
+            else if (UserSettings.IsTeacher)
+            {
+
+            }
+            else
+            {
+
+            }
+            // need to determine the questionnaire ID based on the year
+            predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
+            // get the configuration
+            headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
 
         }
-        else if (UserSettings.IsTeacher)
+
+        private async void QuestionnaireSave(string source)
         {
-
+            await OnQuestionnaireSave.InvokeAsync(source);
         }
-        else
-        {
-
-        }
-        // need to determine the questionnaire ID based on the year
-        predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
-        // get the configuration
-        headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
-
-    }
     }

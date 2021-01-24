@@ -51,6 +51,15 @@
             background-color: rgba(255,255,255,0.1);
             color: white;
         }
+.complete
+{
+    color:greenyellow;
+}
+
+.incomplete
+{
+    color:darkred;
+}
 
 @media (min-width: 641px) {
     .navbar-toggler {

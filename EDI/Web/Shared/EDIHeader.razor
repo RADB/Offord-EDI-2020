@@ -11,7 +11,7 @@
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
 @inject IToastService toastService;
-@inject StateContainer StateContainer;
+@*@inject StateContainer StateContainer;*@
 @inject IAccountService accountService;
 @inject IMathService mathService;  
 @inject IReflectionService reflectionService; 
@@ -47,6 +47,8 @@
 
 
 @code {
+        [Parameter]
+        public EventCallback<string> OnQuestionnaireSave { get; set; }
 
     private Boolean isFrench { get; set; }
     private int completed { get; set; }
@@ -71,7 +73,7 @@
         GetChildId();
         GetEntityName();
 
-        StateContainer.OnChange += StateHasChanged;
+        //StateContainer.OnChange += StateHasChanged;
     }
 
     private string Translate(string word)
@@ -82,32 +84,6 @@
     private void Exit()
     {
         NavigationManager.NavigateTo("./children/index");
-    }
-
-    private async Task Save(bool useJSON)
-    {
-        if (useJSON)
-        {
-            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-            if (teacherJson != null && teacherJson.Length > 0)
-            {
-                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
-
-                await SaveDisconnectedTeacher(tempTeacher);
-
-                await sessionStorage.RemoveItemAsync("Teacher");
-            }
-        }
-        else
-        {
-            if (UserSettings.TeacherData != null)
-            {
-                await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                UserSettings.TeacherData = null;
-            }
-        }
-
     }
     private void GetChildId()
     {
@@ -130,44 +106,105 @@
         }
 
     }
+    private async Task Save(bool useJSON)
+    {
+        if (UserSettings.IsTeacher)
+        {
+            if (useJSON)
+            {
+                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                if (teacherJson != null && teacherJson.Length > 0)
+                {
+                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+
+                    await SaveDisconnectedTeacher(tempTeacher);
+
+                    await sessionStorage.RemoveItemAsync("Teacher");
+                }
+            }
+            else
+            {
+                if (UserSettings.TeacherData != null)
+                {
+                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                    // save child data for subsequent status checks
+                    UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
+
+                    UserSettings.TeacherData = null;
+                }
+            }
+            await OnQuestionnaireSave.InvokeAsync("Header");
+        }
+    }
+
+
     private async Task SaveDisconnectedTeacher(Teacher TeacherData)
     {
+        GetChildId();
+        GetEntityName();
+
         // check completeness of form
         checkCompleteNess();
 
-        bool isComplete = percentComplete == 100 ? true : false;
+
+        bool IsComplete = percentComplete == 100 ? true : false;
 
         switch (EntityName)
         {
             case "Questionnaires.Data.Demographics":
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().RequiredQuestions = required;
-                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = isComplete;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.DemographicsComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionA":
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().RequiredQuestions = required;
-                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete = isComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionAComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionA.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionB":
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().RequiredQuestions = required;
-                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete = isComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionBComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionC":
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().RequiredQuestions = required;
-                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete = isComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionCComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionC.IsComplete", TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete);
                 break;
             case "Questionnaires.Data.SectionD":
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().RequiredQuestions = required;
-                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete = isComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionDComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionD.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionE":
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().RequiredQuestions = required;
-                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete = isComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionEComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionE.IsComplete", IsComplete);
                 break;
         }
 
@@ -189,7 +226,7 @@
                 await servicecontext.SaveChangesAsync();
 
                 toastService.ShowSuccess("Data Saved Successfully!");
-                StateHasChanged();
+                //StateHasChanged();
             }
             catch (Exception ex)
             {

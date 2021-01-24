@@ -20,7 +20,7 @@
             <tbody>
                 @foreach (var config in matrixbodies)
                 {
-                    <RadioMatrixBody Config="@config" data="@data" QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName></RadioMatrixBody>
+                    <RadioMatrixBody Config="@config" data="@data" QuestionnaireId=@QuestionnaireId ProvinceName=@ProvinceName GroupName=@config.GroupName OnValueUpdated="@ValueUpdated"></RadioMatrixBody>
                 }
             </tbody>
         </table>
@@ -71,6 +71,12 @@
         // get the configuration
         matrixbodies = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
         //Console.WriteLine(matrixbodies);
+    }
+
+    private async void ValueUpdated(string currentValue)
+    {
+        // callback to main form on any question change
+        await OnValueUpdated.InvokeAsync(currentValue);
     }
 
 }

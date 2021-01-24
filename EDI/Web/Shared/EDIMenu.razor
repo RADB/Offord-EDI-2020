@@ -1,12 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Buttons;
-@using EDI.Web.Data;  
+@using EDI.Web.Data;
 @using EDI.Web.Extensions;
 @using EDI.ApplicationCore.Models;
 @using Newtonsoft.Json;
 @using Serilog;
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager NavigationManager
+@using System.Linq.Dynamic.Core;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
+@inject NavigationManager NavigationManager;
 @inject UserSettings UserSettings;
 @inject ISharedService sharedService;
 @inject ServiceContext dbContext;
@@ -24,17 +25,38 @@
 </div>
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-        @foreach (var questionnaire in questionnaires)
-        {
-            string url = string.Format("EDIQuestionnaires/{0}/{1}", questionnaire.QuestionnaireName.Replace(" ", ""), ChildId);
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="@url" Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@iconCSS" style="color:@color" aria-hidden="true"></span>&nbsp; @questionnaire.QuestionnaireName
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                    <span class="@Demographics" aria-hidden="true"></span>&nbsp; @Translate("Demographics")
                 </NavLink>
             </li>
-
-        }
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionA/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                    <span class="@SectionA" aria-hidden="true"></span>&nbsp; @Translate("Section A")
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionB/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                    <span class="@SectionB" aria-hidden="true"></span>&nbsp; @Translate("Section B")
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionC/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                    <span class="@SectionC" aria-hidden="true"></span>&nbsp; @Translate("Section C")
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionD/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                    <span class="@SectionD" aria-hidden="true"></span>&nbsp; @Translate("Section D")
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionE/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                    <span class="@SectionE" aria-hidden="true"></span>&nbsp; @Translate("Section E")
+                </NavLink>
+            </li>        
     </ul>
+
 </div>
 
 <div class="d-flex flex-column p-3">
@@ -52,7 +74,7 @@
     </div>
     <div class="p-2">
         <label for="fontsize" title="Font Size">Font Size:</label>
-        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e =>OptionChange(e))">
+        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e =>FontChange(e))">
             <option value="1em">1</option>
             <option value="1.25em">1.25</option>
             <option value="1.5em">1.5</option>
@@ -63,25 +85,36 @@
 
 
 @code {
+        [Parameter]
+        public EventCallback<string> OnQuestionnaireSave { get; set; }
+
     // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
     private Boolean isFrench { get; set; }
 
     private Boolean RadioLabels { get; set; }
     private Boolean Validation { get; set; }
-
     private string LabelFonts { get; set; }
 
     private bool IsComplete { get; set; } = false;
     // get this value from the entity field IsComplete on each
 
     private int ChildId { get; set; }
+    private static string Incomplete = "far fa-square fa-lg incomplete";
+    private static string Complete = "far fa-check-square fa-lg complete";
+
+    private string SectionE = Incomplete;
+    private string SectionD =Incomplete;
+    private string SectionC =Incomplete;
+    private string SectionB =Incomplete;
+    private string SectionA =Incomplete;
+    private string Demographics = Incomplete;
 
     private bool isChildQuestionnaire;
     private List<Questionnaire> questionnaires;
+    private Child child;
     private bool collapseNavMenu = false;
     private bool expandMenu;
-    private string iconCSS = "";
-    private string color = "";
+
     private string CurrentPage { get; set; }
     private int completed { get; set; }
     private int required { get; set; }
@@ -90,6 +123,11 @@
     private string EntityName { get; set; }
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
@@ -103,19 +141,36 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        IsComplete = await sessionStorage.GetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete");
-        if (IsComplete)
+        //if (firstRender)
+        //{
+        //    GetChildId();
+        //    testColor = "blue";
+        //    StateHasChanged();
+        //}
+        //else
+        //{
+        //    testColor = "darkred";
+        //    //StateHasChanged();
+        //}
+        //DemographicsComplete = await sessionStorage.GetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete");
+
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    //public override async Task SetParametersAsync(ParameterView parameters)
+    //{
+    //    await base.SetParametersAsync(parameters);
+    //}
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (UserSettings.ChildData != null)
         {
-            iconCSS = "far fa-check-square fa-lg";
-            color = "greenyellow";
+            setQuestionnaireStatus(false);
         }
-        else
-        {
-            iconCSS = "far fa-square fa-lg";
-            color = "darkred";
-        }
-        //StateHasChanged();
-        //return base.OnAfterRenderAsync(firstRender);
+
+        await base.OnParametersSetAsync();
     }
 
     protected override async Task OnInitializedAsync()
@@ -126,17 +181,6 @@
         }
         else
         {
-            if (IsComplete)
-            {
-                iconCSS = "far fa-check-square fa-lg";
-                color = "green";
-            }
-            else
-            {
-                iconCSS = "far fa-square fa-lg";
-                color = "red";
-            }
-
             if (UserSettings.Language == "English")
                 isFrench = false;
             else
@@ -190,8 +234,61 @@
             GetEntityName();
             //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
             getData();
+            setQuestionnaireStatus(true);
         }
     }
+
+    private  void setQuestionnaireStatus(bool initialization)
+    {
+        bool status;
+        string cssClass;
+        //if(useSession)
+        //{
+        //    // can only be called in onafterasync
+        //    var sessionName = string.Format("{0}.IsComplete", questionnaire.EntityName);
+        //    status = await sessionStorage.GetItemAsync<bool>(sessionName);
+        //}
+        foreach (var questionnaire in questionnaires)
+        {
+            // pull from initialization object
+            if (initialization)
+            {
+                // clear the old child data so it doesnt overwrite the initialized values
+                UserSettings.ChildData = null;
+                status = bool.Parse(reflectionService.GetChildFieldValue(child, questionnaire.EntityName, "IsComplete"));
+            }
+            else
+            {
+                status = bool.Parse(reflectionService.GetChildFieldValue(UserSettings.ChildData, questionnaire.EntityName, "IsComplete"));
+            }
+
+            // get the css class
+            cssClass = status ? Complete : Incomplete;
+
+            switch (questionnaire.QuestionnaireName)
+            {
+                case "Demographics":
+                    Demographics = cssClass;
+                    break;
+                case "Section A":
+                    SectionA = cssClass;
+                    break;
+                case "Section B":
+                    SectionB = cssClass;
+                    break;
+                case "Section C":
+                    SectionC = cssClass;
+                    break;
+                case "Section D":
+                    SectionD = cssClass;
+                    break;
+                case "Section E":
+                    SectionE = cssClass;
+                    break;
+            }
+        }
+    }
+
 
     private void GetEntityName()
     {
@@ -219,7 +316,15 @@
     }
     private void getData()
     {
-        questionnaires = dbContext.Questionnaires.Where(c => c.IsChildQuestionnaire == true).OrderBy(c => c.Sequence).ToList();
+        var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + UserSettings.Province + "== true";
+        questionnaires = dbContext.Questionnaires.Where(predicate)
+             .Include(c => c.QuestionnairesDataDemographics)
+             .Include(c => c.QuestionnairesDataSectionAs)
+             .Include(c => c.QuestionnairesDataSectionBs)
+             .Include(c => c.QuestionnairesDataSectionCs)
+             .Include(c => c.QuestionnairesDataSectionDs)
+             .Include(c => c.QuestionnairesDataSectionEs)
+             .OrderBy(c => c.Sequence).ToList();
     }
 
     private void GetChildId()
@@ -239,42 +344,69 @@
             {
                 ChildId = studentId;
                 CurrentPage = uri.Segments[2].ToString();
+
+                if (UserSettings.ChildData != null)
+                {
+                    child = UserSettings.ChildData;
+                }
+                else
+                {
+                    child = dbContext.Children.Where("Id ==" + ChildId + " && YearId == " + UserSettings.YearId)
+                        .Include(c => c.QuestionnairesDataDemographics)
+                        .Include(c => c.QuestionnairesDataSectionAs)
+                        .Include(c => c.QuestionnairesDataSectionBs)
+                        .Include(c => c.QuestionnairesDataSectionCs)
+                        .Include(c => c.QuestionnairesDataSectionDs)
+                        .Include(c => c.QuestionnairesDataSectionEs)
+                        .Single();
+                }
             }
         }
-
     }
 
     private async void Save(bool useJSON)
     {
-        if (useJSON)
+        //only save if teacher
+        if (UserSettings.IsTeacher)
         {
-            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-            if (teacherJson != null && teacherJson.Length > 0)
+            if (useJSON)
             {
-                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                if (teacherJson != null && teacherJson.Length > 0)
+                {
+                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                await SaveDisconnectedTeacher(tempTeacher);
+                    await SaveDisconnectedTeacher(tempTeacher);
 
-                await sessionStorage.RemoveItemAsync("Teacher");
+                    await sessionStorage.RemoveItemAsync("Teacher");
+                }
             }
-        }
-        else
-        {
-            if (UserSettings.TeacherData != null)
+            else
             {
-                await SaveDisconnectedTeacher(UserSettings.TeacherData);
+                if (UserSettings.TeacherData != null)
+                {
+                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
 
-                UserSettings.TeacherData = null;
+                    // save child data for subsequent status checks
+                    UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
+
+                    UserSettings.TeacherData = null;
+                }
             }
+            await OnQuestionnaireSave.InvokeAsync("Menu");
         }
     }
 
     private async Task SaveDisconnectedTeacher(Teacher TeacherData)
     {
+        GetChildId();
+        GetEntityName();
+
         // check completeness of form
         checkCompleteNess();
 
-        IsComplete = percentComplete == 100 ? true : false;
+
+        bool IsComplete = percentComplete == 100 ? true : false;
 
         switch (EntityName)
         {
@@ -282,31 +414,55 @@
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.DemographicsComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionA":
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionAComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionA.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionB":
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionBComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionC":
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionCComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionC.IsComplete", TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete);
                 break;
             case "Questionnaires.Data.SectionD":
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionDComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionD.IsComplete", IsComplete);
                 break;
             case "Questionnaires.Data.SectionE":
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete = IsComplete;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedBy = UserSettings.UserName;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedDate = DateTime.Now;
+                //UserSettings.SectionEComplete = IsComplete;
+                //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionE.IsComplete", IsComplete);
                 break;
         }
 
@@ -327,8 +483,8 @@
             {
                 await servicecontext.SaveChangesAsync();
 
-                //toastService.ShowSuccess("Data Saved Successfully!");
-                StateHasChanged();
+                toastService.ShowSuccess("Data Saved Successfully!");
+                //StateHasChanged();
             }
             catch (Exception ex)
             {
@@ -477,7 +633,7 @@
     //    }
     //}
 
-    private async void OptionChange(ChangeEventArgs e)
+    private async void FontChange(ChangeEventArgs e)
     {
         string selectedString = e.Value.ToString();
 

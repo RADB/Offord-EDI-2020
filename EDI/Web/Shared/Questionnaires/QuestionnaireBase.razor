@@ -23,6 +23,9 @@
     [Parameter]
     public Teacher data { get; set; }
 
+    [Parameter]
+    public EventCallback<string> OnValueUpdated { get; set; }
+
     //public ModalPartViewModel ModalPartModel { get; set; }
 
     public string QuestionText { get; set; }
@@ -107,7 +110,7 @@
         NavigationManager.NavigateTo(url);
     }
 
-    public void CompletedQuestion(string previousValue, string currentValue)
+    public async void CompletedQuestion(string previousValue, string currentValue)
     {
         if (!string.IsNullOrEmpty(currentValue) && string.IsNullOrEmpty(previousValue))
         {
@@ -133,6 +136,9 @@
             }
         }
         reflectionService.SetFieldValue(data, Config.EntityName, "CompletedQuestions", _userSettings.QuestionsCompleted.ToString());
+
+        // callback to main form on any question change
+        await OnValueUpdated.InvokeAsync(currentValue);
     }
 
     public async void Validation(string currentValue)

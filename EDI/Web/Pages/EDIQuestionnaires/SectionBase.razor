@@ -24,7 +24,7 @@
 
     protected void getData()
     {
-        predicate = "t=>t.Id == " + ChildId;
+        predicate = "Id ==" + ChildId + " && YearId == " + UserSettings.YearId;
         //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
         teacherData = dbContext.Children.Where(predicate)
              .Include(c => c.QuestionnairesDataDemographics)
@@ -57,6 +57,8 @@
 
             IsReadOnly = false;
             province = UserSettings.Province;
+            UserSettings.ChildData = teacherData.Children.Single();
+
         }
         else
         {

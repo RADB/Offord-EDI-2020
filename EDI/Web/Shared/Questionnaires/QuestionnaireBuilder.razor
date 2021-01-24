@@ -67,7 +67,7 @@
                 break;
             case InputTypes.RadioMatrix:
                 GetRadioMatrixHeader(config, teacherData);
-                <RadioMatrixPart RadioMatrixHeader="@RadioMatrixHeader" Config=@config data="@teacherData"></RadioMatrixPart>
+                <RadioMatrixPart RadioMatrixHeader="@RadioMatrixHeader" Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></RadioMatrixPart>
                 break;
             default:
                 <div class="card-body border">
@@ -83,36 +83,36 @@
         switch ((InputTypes)config.InputTypeId)
         {
             case InputTypes.RadioButtons:
-                <RadioPart Config="@config" data="@teacherData"></RadioPart>
+                <RadioPart Config="@config" data="@teacherData" OnValueUpdated="@ValueUpdated"></RadioPart>
                 break;
             case InputTypes.DatePicker:
-                <DatePickerPart Config=@config data="@teacherData"></DatePickerPart>
+                <DatePickerPart Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></DatePickerPart>
                 break;
             case InputTypes.TextBox:
-                <TextPart Config=@config data=@teacherData></TextPart>
+                <TextPart Config=@config data=@teacherData OnValueUpdated="@ValueUpdated"></TextPart>
                 break;
             case InputTypes.SelectBox:
-                <SelectPart Config="@config" data="@teacherData"></SelectPart>
+                <SelectPart Config="@config" data="@teacherData" OnValueUpdated="@ValueUpdated"></SelectPart>
                 break;
             case InputTypes.RadioMatrix:
                 // skip til we figure out how to filter more appropriately in RadioMatrixHeader
                 Linebreak = false;
                 break;
             case InputTypes.NumberBox:
-                <NumberBox Config=@config data="@teacherData"></NumberBox>
+                <NumberBox Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></NumberBox>
                 break;
             case InputTypes.NumberBoxDouble:
-                <NumberBoxDouble Config=@config data="@teacherData"></NumberBoxDouble>
+                <NumberBoxDouble Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></NumberBoxDouble>
                 break;
             case InputTypes.CheckBox:
-                <CheckBoxPart Config=@config data="@teacherData"></CheckBoxPart>
+                <CheckBoxPart Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></CheckBoxPart>
                 break;
             case InputTypes.Hidden:                
                     <HiddenPart Config=@config data="@teacherData"></HiddenPart>                
                 Linebreak = false;
                 break;
             case InputTypes.TextArea:
-                <TextAreaPart Config=@config data="@teacherData"></TextAreaPart>
+                <TextAreaPart Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></TextAreaPart>
                 break;
             default:
                 <div class="card-body border">
@@ -141,6 +141,9 @@
     [Parameter]
     public bool IsReadonly { get; set; }
 
+    [Parameter]
+    public EventCallback<string> OnValueUpdated { get; set; }
+
     private string _Text;
     private string CurrentGroup = "";
 
@@ -151,6 +154,12 @@
 
     protected override async Task OnInitializedAsync()
     {
+    }
+
+    private async void ValueUpdated(string currentValue)
+    {
+        // callback to main form on any question change
+        await OnValueUpdated.InvokeAsync(currentValue);
     }
 
     protected void GetRadioMatrixHeader(QuestionnairesConfiguration config, Teacher data)

@@ -15,6 +15,7 @@ namespace EDI.Web.Interfaces
         string GetFieldValue(object obj, string fieldName);
 
         string GetFieldValue(Teacher data, string entityName, string fieldName);
+        string GetChildFieldValue(Child data, string entityName, string fieldName);
 
         //object GetEntity(Teacher data, string entityName);
 

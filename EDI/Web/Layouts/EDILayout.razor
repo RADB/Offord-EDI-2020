@@ -10,10 +10,10 @@
 @inject ServiceContext dbContext;
 @inject ISharedService sharedService;
 
-<EDIHeader />
+<EDIHeader OnQuestionnaireSave="@QuestionnaireSave" />
 <div class="page">
     <div class="EDIsidebar">
-        <EDIMenu />
+        <EDIMenu OnQuestionnaireSave="@QuestionnaireSave" />
     </div>
 
     <div class="EDImain">
@@ -41,5 +41,10 @@
 
         if (isAuthenticated && UserSettings.UserID is null)
             sharedService.InitializeUserSettings(user.Identity.Name);
+    }
+
+    private  void QuestionnaireSave(string source)
+    {
+        StateHasChanged();
     }
 }
