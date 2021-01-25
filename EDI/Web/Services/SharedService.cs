@@ -1037,7 +1037,7 @@ namespace EDI.Web.Services
                                                 _teacherFeedbackForms.ModifiedBy = _userSettings.UserName;
 
                                                 await _feedbackRepository.AddAsync(_teacherFeedbackForms);*/
-                                                var teacherprofile = _dbContext.QuestionnairesDataTeacherFeedbacks.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
+                                                var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
 
                                                 if(teacherprofile == null)
                                                 {

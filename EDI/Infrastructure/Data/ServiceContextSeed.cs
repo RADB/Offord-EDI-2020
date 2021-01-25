@@ -2614,7 +2614,7 @@ namespace EDI.Infrastructure.Data
                 case "AgeRange":
                     luso.Add(new LookupSetOption() { English = "20-29", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "20-29", Value = 2, Sequence = 10 });
                     luso.Add(new LookupSetOption() { English = "30-39", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "30-39", Value = 3, Sequence = 20 });
-                    luso.Add(new LookupSetOption() { English = "49-49", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "49-49", Value = 4, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "40-49", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "49-49", Value = 4, Sequence = 30 });
                     luso.Add(new LookupSetOption() { English = "50-59", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "50-59", Value = 5, Sequence = 40 });
                     luso.Add(new LookupSetOption() { English = "60+", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "60+", Value = 6, Sequence = 50 });
 
