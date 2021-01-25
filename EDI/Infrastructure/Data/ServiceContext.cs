@@ -52,7 +52,7 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<QuestionnairesDataSectionC> QuestionnairesDataSectionCs { get; set; }
         public virtual DbSet<QuestionnairesDataSectionD> QuestionnairesDataSectionDs { get; set; }
         public virtual DbSet<QuestionnairesDataSectionE> QuestionnairesDataSectionEs { get; set; }
-        public virtual DbSet<QuestionnairesDataTeacherProfile> QuestionnairesDataTeacherFeedbacks { get; set; }
+        public virtual DbSet<QuestionnairesDataTeacherProfile> QuestionnairesDataTeacherProfiles { get; set; }
         public virtual DbSet<School> Schools { get; set; }
         public virtual DbSet<Site> Sites { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }

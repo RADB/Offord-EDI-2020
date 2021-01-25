@@ -1,11 +1,12 @@
 ﻿@page "/Dashboard/index"
 @using Microsoft.AspNetCore.Components.Authorization
+@using EDI.Web.Data
 @using EDI.Web.Shared.BusinessIntelligence
 @using EDI.Web.Shared.Verification
 @using EDI.Web.Shared.Questionnaires
 @using EDI.Web.Pages.NewsFeeds
 @using System.Linq.Dynamic.Core
-@using Serilog; 
+@using Serilog;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject ServiceContext dbContext;
@@ -18,15 +19,15 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
-            @if (IsAdmin)
+            @if (UserSettings.IsAdmin)
             {
-            <div class="card-header">
-                <div class="row cardHeader">
-                    <strong>@Translate("Administrator Dashboard"):</strong> @UserSettings.FirstName  @UserSettings.LastName
+                <div class="card-header">
+                    <div class="row cardHeader">
+                        <strong>@Translate("Administrator Dashboard"):</strong> @UserSettings.FirstName  @UserSettings.LastName
+                    </div>
+                    <div class="pull-right">
+                    </div>
                 </div>
-                <div class="pull-right">
-                </div>
-            </div>
                 <div class="card-body">
                     <div class="container-fluid">
                         <div class="row">
@@ -36,7 +37,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Sites</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@sites</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@siteCount</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-sitemap fa-3x text-primary"></i>
@@ -53,7 +54,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Schools</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@schools</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@schoolCount</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-school fa-3x text-secondary"></i>
@@ -69,7 +70,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Teachers</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@teachers</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@teacherCount</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-chalkboard-teacher fa-3x  text-success"></i>
@@ -85,7 +86,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Children</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@children</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@childCount</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-child fa-3x  text-warning"></i>
@@ -98,10 +99,10 @@
                         <div class="row">
                             <div class="col-lg-8 mb-4">
                                 <!-- EDI Questionnaires Status -->
-                                <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted"/>
+                                <QuestionnaireStatusBar Header="EDI Questionnaires" Total="@childCount" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted" />
 
                                 <!-- Profile Questionnaires Status -->
-                                <QuestionnaireStatusBar Header="Teacher Profiles" Total="@teachers" New="@TeacherNew" Inprogress="@TeacherInprogress" Complete="@TeacherCompleted" />                                
+                                <QuestionnaireStatusBar Header="Teacher Profiles" Total="@teacherCount" New="@TeacherNew" Inprogress="@TeacherInprogress" Complete="@TeacherCompleted" />
                             </div>
                             <div class="col-lg-4 mb-4">
                                 <!--<div class="card shadow mb-4">
@@ -118,7 +119,7 @@
                     </div>
                 </div>
             }
-            else if (IsTeacher)
+            else if (UserSettings.IsTeacher)
             {
                 <div class="card-header">
                     <div class="row cardHeader">
@@ -135,7 +136,7 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">@Translate("Children")</div>
-                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@children</div>
+                                                <div class="h3 mb-0 font-weight-bold text-gray-800">@childCount</div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fa fa-child fa-3x  text-warning"></i>
@@ -149,7 +150,7 @@
                         <div class="row">
                             <div class="col-lg-8 mb-4">
                                 <!-- EDI Questionnaires Status -->
-                                <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@children" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted" />
+                                <QuestionnaireStatusBar Header=@Translate("EDI Questionnaires") Total="@childCount" New="@ChildrenNew" Inprogress="@ChildrenInprogress" Complete="@ChildrenCompleted" />
 
                                 @*<QuestionnaireChecklist IsComplete=false QuestionnaireName=@Translate("Teacher Profile") URL="@url" />*@
                                 <QuestionnaireChecklist IsComplete=@ProfileComplete QuestionnaireName=@Translate("Teacher Profile") Header="Teacher Profile Status" URL="@url" />
@@ -174,12 +175,10 @@
 </div>
 
 @code {
-
-
-    private bool IsAdmin { get; set; }
-    private bool IsTeacher { get; set; }
-    private bool IsCoordinator { get; set; }
-
+    private int siteCount { get; set; }
+    private int schoolCount { get; set; }
+    private int teacherCount { get; set; }
+    private int childCount { get; set; }
     private int sites { get; set; }
     private int schools { get; set; }
     private int teachers { get; set; }
@@ -205,70 +204,94 @@
         {
             @if (UserSettings.IsAdmin)
             {
-                IsAdmin = true;
-
-                //TODO - where year = year
                 var predicate = "yearid ==" + UserSettings.YearId;
-                sites = dbContext.Sites.Where(predicate).Count();
-                schools = dbContext.Schools.Where(predicate).Count();
-                teachers = dbContext.Teachers.Where(predicate).Count();
-                children = dbContext.Children.Where(predicate).Count();
+                var sites = dbContext.Sites.Where(predicate).ToList();
+                var schools = dbContext.Schools.Where(predicate).ToList();
+                var teachers = dbContext.Teachers.Where(predicate)
+                    .Include(ts => ts.TeacherStatus).ToList();
+                var children = dbContext.Children.Where(predicate)
+                    .Include(cs => cs.ChildStatus).ToList();
 
-                var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
-                var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
-                var statuscompleted = dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+                siteCount = sites.Count();
+                schoolCount = schools.Count();
+                teacherCount = teachers.Count();
+                childCount = children.Count();
 
-                var predicatenew = predicate + "&& ChildStatusId == " + statusnew.Id;
-                ChildrenNew = dbContext.Children.Where(predicatenew).Count();
+                // count of the children
+                ChildrenNew = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.New);
+                ChildrenInprogress = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.InProgress);
+                ChildrenCompleted = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Locked || (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Complete);
 
-                var predicateinprogess = predicate + "&& ChildStatusId == " + statusinprogress.Id;
-                ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
+                // count of the teachaers
+                TeacherNew = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.New);
+                TeacherInprogress = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.InProgress);
+                TeacherCompleted = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.Locked || (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.Complete);
 
-                var predicatecomplete = predicate + "&& ChildStatusId == " + statuscompleted.Id;
-                ChildrenCompleted = dbContext.Children.Where(predicatecomplete).Count();
+                //var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+                //var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                //var statuscompleted = dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
 
-                var statusnew1 = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
-                var statusinprogress1 = dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
-                var statuscompleted1 = dbContext.TeacherStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+                //var predicatenew = predicate + "&& ChildStatusId == " + statusnew.Id;
+                //ChildrenNew = dbContext.Children.Where(predicatenew).Count();
 
-                var predicatenew1 = predicate + "&& TeacherStatusId == " + statusnew1.Id;
-                TeacherNew = dbContext.Teachers.Where(predicatenew1).Count();
+                //var predicateinprogess = predicate + "&& ChildStatusId == " + statusinprogress.Id;
+                //ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
 
-                var predicateinprogess1 = predicate + "&& TeacherStatusId == " + statusinprogress1.Id;
-                TeacherInprogress = dbContext.Teachers.Where(predicateinprogess1).Count();
+                //var predicatecomplete = predicate + "&& ChildStatusId == " + statuscompleted.Id;
+                //ChildrenCompleted = dbContext.Children.Where(predicatecomplete).Count();
 
-                var predicatecomplete1 = predicate + "&& TeacherStatusId == " + statuscompleted1.Id;
-                TeacherCompleted = dbContext.Teachers.Where(predicatecomplete1).Count();
+                //var statusnew1 = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+                //var statusinprogress1 = dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                //var statuscompleted1 = dbContext.TeacherStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+
+                //var predicatenew1 = predicate + "&& TeacherStatusId == " + statusnew1.Id;
+                //TeacherNew = dbContext.Teachers.Where(predicatenew1).Count();
+
+                //var predicateinprogess1 = predicate + "&& TeacherStatusId == " + statusinprogress1.Id;
+                //TeacherInprogress = dbContext.Teachers.Where(predicateinprogess1).Count();
+
+                //var predicatecomplete1 = predicate + "&& TeacherStatusId == " + statuscompleted1.Id;
+                //TeacherCompleted = dbContext.Teachers.Where(predicatecomplete1).Count();
 
             }
             else if (UserSettings.IsTeacher)
             {
-                IsTeacher = true;
                 try
                 {
                     var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID && t.YearId == UserSettings.YearId)
                     .Include(c => c.Children)
+                    .ThenInclude(cs => cs.ChildStatus)
+                    .Include(p => p.QuestionnairesDataTeacherProfiles)
                     .Single();
 
                     // count of the children
-                    children = teacher.Children.Count();
+                    childCount = teacher.Children.Count();
+                    ChildrenNew = teacher.Children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.New);
+                    ChildrenInprogress = teacher.Children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.InProgress);
 
-                    var predicate2 = "TeacherId == " + teacher.Id + "&& yearid ==" + UserSettings.YearId;
-                    var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
-                    var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
-                    var statuscompleted = dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+                    // completed or locked
+                    ChildrenCompleted = teacher.Children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Locked || (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Complete);
 
-                    var predicatenew = predicate2 + "&& ChildStatusId == " + statusnew.Id;
-                    ChildrenNew = dbContext.Children.Where(predicatenew).Count();
+                    ProfileComplete = teacher.QuestionnairesDataTeacherProfiles.Single().IsComplete;
 
-                    var predicateinprogess = predicate2 + "&& ChildStatusId == " + statusinprogress.Id;
-                    ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
+                    //var predicate = "TeacherId == " + teacher.Id + "&& yearid ==" + UserSettings.YearId;
 
-                    var predicatecomplete = predicate2 + "&& ChildStatusId == " + statuscompleted.Id;
-                    ChildrenCompleted = dbContext.Children.Where(predicateinprogess).Count();
+                    //var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+                    //var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
+                    //var statuscompleted = dbContext.ChildStatuses.Where(p => p.English == "Complete").FirstOrDefault();
+
+                    //var predicatenew = predicate2 + "&& ChildStatusId == " + statusnew.Id;
+                    //ChildrenNew = dbContext.Children.Where(predicatenew).Count();
+
+                    //var predicateinprogess = predicate2 + "&& ChildStatusId == " + statusinprogress.Id;
+                    //ChildrenInprogress = dbContext.Children.Where(predicateinprogess).Count();
+
+                    //var predicatecomplete = predicate2 + "&& ChildStatusId == " + statuscompleted.Id;
+                    //ChildrenCompleted = dbContext.Children.Where(predicateinprogess).Count();
 
                     // return whether or not they have completed the profile
-                    ProfileComplete = dbContext.QuestionnairesDataTeacherFeedbacks.Where(predicate2).Select(t => t.IsComplete).Single();                }
+                    //ProfileComplete = dbContext.QuestionnairesDataTeacherProfiles.Where(predicate).Select(t => t.IsComplete).Single();                }
+                }
                 catch (Exception ex)
                 {
                     //toastService.ShowError(string.Format("{0}", ex.Message), "No Teacher Data");
@@ -281,7 +304,7 @@
             }
             else
             {
-                IsCoordinator = true;
+                // coordinator
             }
         }
     }
@@ -290,4 +313,5 @@
     {
         return sharedService.GetTranslate(word);
     }
+
 }
