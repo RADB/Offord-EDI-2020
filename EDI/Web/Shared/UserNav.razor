@@ -20,7 +20,7 @@
         {
             <div class="float-right">
                 <!--Check English or French -->
-                <SfSwitch CssClass="handle-text" OnLabel="Test Data" OffLabel="No Test Data" @bind-Checked="@hasTestData" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
+                <SfSwitch CssClass="handle-text" OnLabel="Test Data" OffLabel="No Test Data" @bind-Checked="@hasTestData" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnTestChange(e))"></SfSwitch>
             </div>
         }
     </li>
@@ -81,14 +81,14 @@
         //await InvokeAsync(StateHasChanged); or
     }
 
-    private async void OnAdminChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    private async void OnTestChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
     {
         if (e.Checked)
         {
             UserSettings.HasTestData = true;
         }
         else
-            UserSettings.HasTestData = true;
+            UserSettings.HasTestData = false;
 
         await sharedService.SaveUserSessions("HasTestData", UserSettings.HasTestData.ToString(), UserSettings.UserID);
 

@@ -159,7 +159,7 @@ namespace EDI.Web.Services
                 _child.LocalId = child.LocalId;
                 _child.ChildNumber = child.ChildNumber;
                 _child.YearId = child.YearId;
-                _child.TeacherId = child.TeacherId;
+                _child.TeacherId = child.TeacherId.Value;
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
                 _child.PostalCode = child.PostalCode;
@@ -196,7 +196,7 @@ namespace EDI.Web.Services
                 _child.LocalId = child.LocalId;
                 _child.ChildNumber = child.ChildNumber;
                 _child.YearId = child.YearId;
-                _child.TeacherId = child.TeacherId;
+                _child.TeacherId = child.TeacherId.Value;
                 _child.GenderId = child.GenderId;
                 _child.Dob = child.Dob;
                 _child.PostalCode = child.PostalCode;

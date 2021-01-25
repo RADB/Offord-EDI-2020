@@ -26,7 +26,7 @@ namespace EDI.ApplicationCore.Entities
         /// Year of the EDI implementation
         /// </summary>
         public int? YearId { get; set; }
-        public int? TeacherId { get; set; }
+        public int TeacherId { get; set; }
         public int? GenderId { get; set; }
         public int? ChildStatusId { get; set; }
         public DateTime? Dob { get; set; }

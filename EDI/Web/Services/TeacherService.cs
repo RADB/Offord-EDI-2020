@@ -129,7 +129,7 @@ namespace EDI.Web.Services
                 Guard.Against.NullTeacher(teacher.Id, _teacher);
 
                 _teacher.TeacherNumber = teacher.TeacherNumber;
-                _teacher.SchoolId = teacher.SchoolId;
+                _teacher.SchoolId = teacher.SchoolId.Value;
                 _teacher.YearId = teacher.YearId;
                 _teacher.TeacherName = teacher.TeacherName;
                 _teacher.Email = teacher.Email;
@@ -193,7 +193,7 @@ namespace EDI.Web.Services
 
                 _teacher.UserId = userid;
                 _teacher.TeacherNumber = teacher.TeacherNumber;
-                _teacher.SchoolId = teacher.SchoolId;
+                _teacher.SchoolId = teacher.SchoolId.Value;
                 _teacher.YearId = teacher.YearId;
                 _teacher.TeacherName = teacher.TeacherName;
                 _teacher.Email = teacher.Email;
@@ -344,7 +344,7 @@ namespace EDI.Web.Services
             {
                 var profile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == id).FirstOrDefault();
 
-                var totalItems = profile.CompletedQuestions;
+                var totalItems = profile != null ? profile.CompletedQuestions : 0;
 
                 return totalItems;
             }
@@ -364,7 +364,7 @@ namespace EDI.Web.Services
             {
                 var profile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == id).FirstOrDefault();
 
-                var totalItems = profile.RequiredQuestions;
+                var totalItems = profile != null ? profile.RequiredQuestions : 0;
 
                 return totalItems;
             }

@@ -129,6 +129,7 @@
         {
             var cid = dbContext.Countries.Where(p => p.English == "Canada").Select(p => p.Id).FirstOrDefault();
             countryid = cid.ToString();
+            SchoolModel.CountryId = cid;
 
             Provinces = await sharedService.GetProvinces(cid);
         }
@@ -143,6 +144,7 @@
         {
             var pid = dbContext.Provinces.Where(p => p.English == "Ontario").Select(p => p.Id).FirstOrDefault();
             provinceid = pid.ToString();
+            SchoolModel.ProvinceId = pid;
         }
 
         Years = await sharedService.GetYears();

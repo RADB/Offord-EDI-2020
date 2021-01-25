@@ -206,11 +206,26 @@
             {
                 var predicate = "yearid ==" + UserSettings.YearId;
                 var sites = dbContext.Sites.Where(predicate).ToList();
-                var schools = dbContext.Schools.Where(predicate).ToList();
-                var teachers = dbContext.Teachers.Where(predicate)
-                    .Include(ts => ts.TeacherStatus).ToList();
-                var children = dbContext.Children.Where(predicate)
-                    .Include(cs => cs.ChildStatus).ToList();
+
+                if(!UserSettings.HasTestData)
+                {
+                    var predicate2 = predicate + " && IsTestSite != true";
+                    sites = dbContext.Sites.Where(predicate2).ToList();
+                }
+                var schools = (from t in dbContext.Schools
+                               where t.YearId == UserSettings.YearId &&
+                               (from s in sites select s.Id).Contains(t.SiteId)
+                               select t).ToList();
+
+                var teachers = (from t in dbContext.Teachers
+                                where t.YearId == UserSettings.YearId &&
+                                (from s in schools select s.Id).Contains(t.SchoolId)
+                                select t).Include(ts => ts.TeacherStatus).ToList();
+
+                var children = (from t in dbContext.Children
+                                where t.YearId == UserSettings.YearId &&
+                                (from s in teachers select s.Id).Contains(t.TeacherId)
+                                select t).Include(ts => ts.ChildStatus).ToList();
 
                 siteCount = sites.Count();
                 schoolCount = schools.Count();
