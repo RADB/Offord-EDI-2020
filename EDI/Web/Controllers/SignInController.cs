@@ -164,40 +164,53 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(password))
+                    var userrole = _identityContext.UserRoles.Where(p => p.UserId == user.Id).FirstOrDefault();
+
+                    var role = _identityContext.Roles.Where(p => p.Id == userrole.RoleId).FirstOrDefault();
+
+                    if (role.Name != "Administrator")
                     {
-                        message = "Password is invalid.";
-                        return Redirect("/Accounts/ResetPassword/" + message);
-                    }
-                    else if (string.IsNullOrEmpty(confirmpassword))
-                    {
-                        message = "Confirm Password is invalid.";
-                        return Redirect("/Accounts/ResetPassword/" + message);
-                    }
-                    else if(!password.Equals(confirmpassword))
-                    {
-                        message = "The password and confirmation password do not match.";
-                        return Redirect("/Accounts/ResetPassword/" + message);
-                    }
-                    else if (!ValidateExtension.IsPasswordValid(password))
-                    {
-                        message = "Password Rules: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character.";
-                        return Redirect("/Accounts/ResetPassword/" + message);
+                        return Redirect("./LoginError/You do not have the permission.");
                     }
                     else
                     {
-                        var newPassword = _userManager.PasswordHasher.HashPassword(user, password);
-                        user.PasswordHash = newPassword;
-                        var result = await _userManager.UpdateAsync(user);
 
-                        if (result.Succeeded)
+
+                        if (string.IsNullOrEmpty(password))
                         {
-                            return Redirect("/Login");
+                            message = "Password is invalid.";
+                            return Redirect("/Accounts/ResetPassword/" + message);
+                        }
+                        else if (string.IsNullOrEmpty(confirmpassword))
+                        {
+                            message = "Confirm Password is invalid.";
+                            return Redirect("/Accounts/ResetPassword/" + message);
+                        }
+                        else if (!password.Equals(confirmpassword))
+                        {
+                            message = "The password and confirmation password do not match.";
+                            return Redirect("/Accounts/ResetPassword/" + message);
+                        }
+                        else if (!ValidateExtension.IsPasswordValid(password))
+                        {
+                            message = "Password Rules: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character.";
+                            return Redirect("/Accounts/ResetPassword/" + message);
                         }
                         else
                         {
-                            message = "Internal Error. Please contact administrator.";
-                            return Redirect("/Accounts/ResetPassword/" + message);
+                            var newPassword = _userManager.PasswordHasher.HashPassword(user, password);
+                            user.PasswordHash = newPassword;
+                            var result = await _userManager.UpdateAsync(user);
+
+                            if (result.Succeeded)
+                            {
+                                return Redirect("/Login");
+                            }
+                            else
+                            {
+                                message = "Internal Error. Please contact administrator.";
+                                return Redirect("/Accounts/ResetPassword/" + message);
+                            }
                         }
                     }
                 }
