@@ -4,6 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject UserSettings UserSettings;
 @inject IAccountService accountService;
+@inject ISharedService sharedService;
 
 @if (!string.IsNullOrEmpty(username))
 {
@@ -15,12 +16,19 @@
                 <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
             </div>
         }
+        else if (UserSettings.IsAdmin)
+        {
+            <div class="float-right">
+                <!--Check English or French -->
+                <SfSwitch CssClass="handle-text" OnLabel="Test Data" OffLabel="No Test Data" @bind-Checked="@hasTestData" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
+            </div>
+        }
     </li>
     <li class="nav-item d-md-down-none" style="padding-right:20px; font-size: 20px;">
         <div class="cf-identity-name">@username</div>
     </li>
     <li class="nav-item d-md-down-none" style="padding-top:13px;">
-        <form asp-area="" method="post" action="./signout">            
+        <form asp-area="" method="post" action="./signout">
             @*<button style="border:none;" type="submit" href="#" data-toggle="tooltip" data-placement="bottom" title="Log Out"><i class="fas fa-sign-out-alt"></i></button>*@
             <button class="btn btn-danger" type="submit" href="#" data-toggle="tooltip" data-placement="bottom" title="Log Out"><i class="fas fa-sign-out-alt"></i>Log Out</button>
         </form>
@@ -32,6 +40,8 @@
     private string username { get; set; }
 
     private Boolean isFrench { get; set; }
+
+    private Boolean hasTestData { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,6 +57,8 @@
                 isFrench = false;
             else
                 isFrench = true;
+
+            hasTestData = UserSettings.HasTestData;
         }
     }
 
@@ -66,6 +78,21 @@
 
         //StateHasChanged();
         await InvokeAsync(() => StateHasChanged());
-        //await InvokeAsync(StateHasChanged); or 
+        //await InvokeAsync(StateHasChanged); or
+    }
+
+    private async void OnAdminChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            UserSettings.HasTestData = true;
+        }
+        else
+            UserSettings.HasTestData = true;
+
+        await sharedService.SaveUserSessions("HasTestData", UserSettings.HasTestData.ToString(), UserSettings.UserID);
+
+        var url = NavigationManager.Uri;
+        NavigationManager.NavigateTo(url, true);
     }
 }

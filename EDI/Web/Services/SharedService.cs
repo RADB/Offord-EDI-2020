@@ -1848,6 +1848,9 @@ namespace EDI.Web.Services
             _userSettings.QuestionsTotal = 0;
             _userSettings.Language = user1.Language == null ? "English" : user1.Language;
 
+            var hastestdata = _dbContext.UserSessions.Where(p => p.FieldName == "HasTestData" && p.UserID == user1.Id).FirstOrDefault();
+            _userSettings.HasTestData = hastestdata != null ? bool.Parse(hastestdata.FieldValue) : false;
+
             if (role.Name == "Teacher")
             {
                 var teacher = _dbContext.Teachers.Where(s => s.UserId == _userSettings.UserID)
