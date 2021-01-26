@@ -71,11 +71,14 @@
                                 <Template>
                                     @{
                                         var comm = (context as TeacherItemViewModel);
-                                        <div id="myProgress" class="pbar">
-                                            <div id="myBar" style="width:@comm.Progress%" class="bar">
-                                                <div id="label" class="barlabel">@comm.Progress % </div>
+                                        if (comm.TeacherStatusId != (int)Enumerations.TeacherStatus.Locked)
+                                        {
+                                            <div id="myProgress" class="pbar">
+                                                <div id="myBar" style="width:@comm.Progress%" class="bar">
+                                                    <div id="label" class="barlabel">@comm.Progress % </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
                                 </Template>
                             </GridColumn>
