@@ -57,7 +57,9 @@ namespace EDI.Web.Data
         public enum ImportStatus: int
         {
             Imported = 1,
-            Processed = 2
+            Processed = 2,
+            Duplicate = 3,
+            InvalidProvince =4
         }
 
         public enum ChildStatus: int 
