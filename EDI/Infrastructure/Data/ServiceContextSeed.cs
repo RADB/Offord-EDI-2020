@@ -2282,7 +2282,9 @@ namespace EDI.Infrastructure.Data
             return new List<FileImportStatus>()
             {
                 new FileImportStatus() { Code = "1", English = "Imported", French = "Importé",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+                new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new FileImportStatus() { Code = "3", English = "Duplicate", French = "Dupliquer",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+                new FileImportStatus() { Code = "4", English = "Invalid Province", French = "Province non valide",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
             };
         }
 

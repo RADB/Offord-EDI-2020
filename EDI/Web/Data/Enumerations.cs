@@ -74,5 +74,12 @@ namespace EDI.Web.Data
             Complete = 2,
             Locked = 1
         }
+        public enum FileImportStatus : int
+        {
+            Imported = 1,
+            Processed = 2,
+            Duplicate = 3,
+            InvalidProvince = 4
+        }
     }
 }
