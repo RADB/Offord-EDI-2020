@@ -36,8 +36,11 @@ namespace EDI.Web.Controllers
 
         // Processing the File Manager operations
         [Route("FileOperations")]
-        public object FileOperations([FromBody] FileManagerDirectoryContent args)
+        public object FileOperations([FromBody] EDI.Web.Models.FileManagerDirectoryUpdatedContent args)
         {
+            var username = args.CustomData["User_name"].ToString();
+            this.operation.SetRules(GetRules(username));
+
             switch (args.Action)
             {                
                 case "read":
@@ -58,6 +61,28 @@ namespace EDI.Web.Controllers
                     return this.operation.ToCamelCase(this.operation.Rename(args.Path, args.Name, args.NewName));
             }
             return null;
+        }
+
+        public AccessDetails GetRules(string user_value)
+        {
+            AccessDetails accessDetails = new AccessDetails();
+
+            List<AccessRule> accessRules = new List<AccessRule> {   
+                // For Default User            
+                 new AccessRule { Path = "/*.*", Role = "Adminstrator", Read = Permission.Allow, Write = Permission.Deny, Copy = Permission.Deny, WriteContents = Permission.Deny, Upload = Permission.Deny, Download = Permission.Deny},
+                  new AccessRule { Path = "/*.*", Role = "Adminstrator", Read = Permission.Allow, Write = Permission.Deny, Copy = Permission.Deny, WriteContents = Permission.Deny, Upload = Permission.Deny, Download = Permission.Deny, IsFile=true},
+            };
+            accessDetails.AccessRules = accessRules;
+            if (user_value == "user1")
+            {
+                // Here, you need to set the role for FileManager component. 
+                accessDetails.Role = "Adminstrator";
+            }
+            else
+            {
+                accessDetails.Role = "Document Manager";
+            }
+            return accessDetails;
         }
 
         // Processing the Download operation

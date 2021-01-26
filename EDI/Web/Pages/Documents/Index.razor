@@ -41,6 +41,7 @@
                 else
                 {
                     <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" @onkeydown="KeyValueChange">
+                        <FileManagerEvents TValue="FileManagerDirectoryContent" OnSend="send"></FileManagerEvents>
                         <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
                         <FileManagerUploadSettings AutoUpload="false"></FileManagerUploadSettings>
                         <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
@@ -74,6 +75,13 @@
                 NavigationManager.NavigateTo(path, true);
             }
         }
+    }
+
+    public void send(Syncfusion.Blazor.FileManager.BeforeSendEventArgs args)
+    {
+        Dictionary<string, object> data = new Dictionary<string, object>();
+        data.Add("User_name", UserSettings.UserName);
+        args.CustomData = data;
     }
 
     protected override async Task OnInitializedAsync()
