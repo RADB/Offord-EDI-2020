@@ -16,13 +16,13 @@ namespace EDI.Infrastructure.Data
             int retryForAvailability = retry.Value;
             try
             {
-                if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.AddYears(0).Year).FirstOrDefault() == null)
-                {
-                    ServiceContext.Years.AddRange(
-                        GetPreconfiguredYear());
+                //if (ServiceContext.Years.Where(y => y.Ediyear == DateTime.Now.AddYears(0).Year).FirstOrDefault() == null)
+                //{
+                //    ServiceContext.Years.AddRange(
+                //        GetPreconfiguredYear());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
 
                 /*if (!ServiceContext.SpecialProblems.Any())
                 {
@@ -72,13 +72,13 @@ namespace EDI.Infrastructure.Data
                 //    await ServiceContext.SaveChangesAsync();
                 //}
 
-                if (!ServiceContext.LookupSets.Any())
-                {
-                    ServiceContext.LookupSets.AddRange(
-                        GetPreconfiguredLookupSet());
-                    ServiceContext.SaveChanges();
-                    //await ServiceContext.SaveChangesAsync();
-                }
+                //if (!ServiceContext.LookupSets.Any())
+                //{
+                //    ServiceContext.LookupSets.AddRange(
+                //        GetPreconfiguredLookupSet());
+                //    ServiceContext.SaveChanges();
+                //    //await ServiceContext.SaveChangesAsync();
+                //}
 
                 if (!ServiceContext.LookupSetOptions.Any())
                 {
@@ -99,13 +99,13 @@ namespace EDI.Infrastructure.Data
 
                 //    await ServiceContext.SaveChangesAsync();
                 //}
-                if (!ServiceContext.Questionnaires.Any())
-                {
-                    ServiceContext.Questionnaires.AddRange(
-                        GetPreconfiguredQuestionnaires());
+                //if (!ServiceContext.Questionnaires.Any())
+                //{
+                //    ServiceContext.Questionnaires.AddRange(
+                //        GetPreconfiguredQuestionnaires());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
                 //if (!ServiceContext.FileImportStatuses.Any())
                 //{
                 //    ServiceContext.FileImportStatuses.AddRange(
@@ -330,15 +330,15 @@ namespace EDI.Infrastructure.Data
             }
         }
 
-        static IEnumerable<Year> GetPreconfiguredYear()
-        {
-            return new List<Year>()
-            {
-                new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(1).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(2).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
-            };
-        }
+        //static IEnumerable<Year> GetPreconfiguredYear()
+        //{
+        //    return new List<Year>()
+        //    {
+        //        new Year() { Ediyear = Convert.ToInt16(DateTime.Now.Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(1).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        //new Year() { Ediyear = Convert.ToInt16(DateTime.Now.AddYears(2).Year), CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //    };
+        //}
 
         static IEnumerable<Country> GetPreconfiguredAllCountries()
         {
@@ -2295,36 +2295,36 @@ namespace EDI.Infrastructure.Data
         //    };
         //}
 
-        static IEnumerable<LookupSet> GetPreconfiguredLookupSet()
-        {
-            var lus = new List<LookupSet>();
+        //static IEnumerable<LookupSet> GetPreconfiguredLookupSet()
+        //{
+        //    var lus = new List<LookupSet>();
 
-            lus.Add(new LookupSet() { Id = 1, LookupName = "YesNo", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 2, LookupName = "YesNoDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 3, LookupName = "GoodAvgPoorDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 4, LookupName = "OftenSometimesNeverDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 5, LookupName = "ObservedDiagnosisBoth", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 6, LookupName = "FullPartDontknowNO", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 7, LookupName = "Status", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 8, LookupName = "ClassAssignment", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 9, LookupName = "ClassType", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 10, LookupName = "Gender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 11, LookupName = "ConsideredESL", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 12, LookupName = "EthnicStatus", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 13, LookupName = "NWTLanguages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 14, LookupName = "LandAgreements", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 15, LookupName = "Languages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 16, LookupName = "SpecialProblems", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 17, LookupName = "MainCare", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 18, LookupName = "MainCareJK", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 19, LookupName = "Participation", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 20, LookupName = "AgeRange", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 21, LookupName = "TeacherGender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 22, LookupName = "VerySomewhatNot", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
-            lus.Add(new LookupSet() { Id = 23, LookupName = "GuideUsefulness", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 1, LookupName = "YesNo", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 2, LookupName = "YesNoDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 3, LookupName = "GoodAvgPoorDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 4, LookupName = "OftenSometimesNeverDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 5, LookupName = "ObservedDiagnosisBoth", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 6, LookupName = "FullPartDontknowNO", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 7, LookupName = "Status", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 8, LookupName = "ClassAssignment", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 9, LookupName = "ClassType", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 10, LookupName = "Gender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 11, LookupName = "ConsideredESL", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 12, LookupName = "EthnicStatus", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 13, LookupName = "NWTLanguages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 14, LookupName = "LandAgreements", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 15, LookupName = "Languages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 16, LookupName = "SpecialProblems", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 17, LookupName = "MainCare", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 18, LookupName = "MainCareJK", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 19, LookupName = "Participation", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 20, LookupName = "AgeRange", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 21, LookupName = "TeacherGender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 22, LookupName = "VerySomewhatNot", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
+        //    lus.Add(new LookupSet() { Id = 23, LookupName = "GuideUsefulness", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now });
 
-            return lus;
-        }
+        //    return lus;
+        //}
 
         static IEnumerable<LookupSetOption> GetPreconfiguredLookupSetOption(int id, string lookupsetname)
         {
@@ -2666,24 +2666,24 @@ namespace EDI.Infrastructure.Data
         //    };
         //}
 
-        static IEnumerable<Questionnaire> GetPreconfiguredQuestionnaires()
-        {
-            return new List<Questionnaire>()
-            {
-                new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10, NorthwestTerritories=true},
-                new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20, NorthwestTerritories=true},
-                new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30, NorthwestTerritories=true},
-                new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40, NorthwestTerritories=true},
-                new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50, NorthwestTerritories=true},
-                new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60, NorthwestTerritories=true},
-                new Questionnaire() {English="Teacher Feedback",QuestionnaireName="Teacher Feedback",YearId=1,EntityName="Questionnaires.Data.TeacherProfile",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Teacher Feedback",DescriptionEnglish="Teacher Feedback",DescriptionFrench="Teacher Feedback",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=true,IsChildQuestionnaire=false,Sequence=10, NorthwestTerritories=true, NovaScotia=true},
-                new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10, NovaScotia=true},
-                new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20, NovaScotia=true},
-                new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30, NovaScotia=true},
-                new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40, NovaScotia=true},
-                new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50, NovaScotia=true},
-                new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60, NovaScotia=true}
-            };
-        }
+        //static IEnumerable<Questionnaire> GetPreconfiguredQuestionnaires()
+        //{
+        //    return new List<Questionnaire>()
+        //    {
+        //        new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10, NorthwestTerritories=true},
+        //        new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20, NorthwestTerritories=true},
+        //        new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30, NorthwestTerritories=true},
+        //        new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40, NorthwestTerritories=true},
+        //        new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50, NorthwestTerritories=true},
+        //        new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60, NorthwestTerritories=true},
+        //        new Questionnaire() {English="Teacher Feedback",QuestionnaireName="Teacher Feedback",YearId=1,EntityName="Questionnaires.Data.TeacherProfile",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Teacher Feedback",DescriptionEnglish="Teacher Feedback",DescriptionFrench="Teacher Feedback",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=true,IsChildQuestionnaire=false,Sequence=10, NorthwestTerritories=true, NovaScotia=true},
+        //        new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10, NovaScotia=true},
+        //        new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20, NovaScotia=true},
+        //        new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30, NovaScotia=true},
+        //        new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40, NovaScotia=true},
+        //        new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50, NovaScotia=true},
+        //        new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60, NovaScotia=true}
+        //    };
+        //}
     }
 }

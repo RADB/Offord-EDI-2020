@@ -353,7 +353,7 @@ namespace EDI.Infrastructure.Data
                 entity.HasData
                     (
                         new Gender() {Id=1, Code = "1", English = "Male", French = "Mâle", Sequence = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                        new Gender() {Id=1, Code = "2", English = "Female", French = "Femelle", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                        new Gender() {Id=2, Code = "2", English = "Female", French = "Femelle", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
                     );
             });
 
@@ -404,7 +404,7 @@ namespace EDI.Infrastructure.Data
             modelBuilder.Entity<LookupSet>(entity =>
             {
                 entity.ToTable("LookupSets", "LUData");
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
@@ -414,6 +414,32 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(d => d.LookupSetOptions).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupSetId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_LookupSet_LookupSetOptions");
                 entity.HasMany(p => p.QuestionnairesConfigurations).WithOne(p => p.LookupSet).HasForeignKey(d => d.LookupEntityId).HasConstraintName("FK_LookupSet_QuestionnaireConfiguration");
                 //entity.HasOne(d => d.Id).WithMany(p => p.QuestionnairesConfigurations).HasForeignKey(d => d.LookupEntityId).HasConstraintName("FK_Questionnaires.Configuration_LookupSets");
+                entity.HasData
+                (
+                    new LookupSet() { Id = 1, LookupName = "YesNo", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 2, LookupName = "YesNoDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 3, LookupName = "GoodAvgPoorDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 4, LookupName = "OftenSometimesNeverDontKnow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 5, LookupName = "ObservedDiagnosisBoth", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 6, LookupName = "FullPartDontknowNO", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 7, LookupName = "Status", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 8, LookupName = "ClassAssignment", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 9, LookupName = "ClassType", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 10, LookupName = "Gender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 11, LookupName = "ConsideredESL", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 12, LookupName = "EthnicStatus", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 13, LookupName = "NWTLanguages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 14, LookupName = "LandAgreements", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 15, LookupName = "Languages", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 16, LookupName = "SpecialProblems", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 17, LookupName = "MainCare", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 18, LookupName = "MainCareJK", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 19, LookupName = "Participation", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 20, LookupName = "AgeRange", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 21, LookupName = "TeacherGender", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 22, LookupName = "VerySomewhatNot", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 23, LookupName = "GuideUsefulness", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                    );
 
             });
 
@@ -517,7 +543,22 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.QuestionnairesDataSectionDs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionDs");
                 entity.HasMany(e => e.QuestionnairesDataSectionEs).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.SectionEs");
                 entity.HasMany(e => e.QuestionnairesDataTeacherProfiles).WithOne(e => e.Questionnaire).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.QuestionnaireId).HasConstraintName("FK_Questionnaires_Questionnaires.Data.TeacherProfiles");
-
+                entity.HasData
+                (
+                    new Questionnaire() { Id = 1, English = "Teacher Feedback", QuestionnaireName = "Teacher Feedback", YearId = 1, EntityName = "Questionnaires.Data.TeacherProfile", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Teacher Feedback", DescriptionEnglish = "Teacher Feedback", DescriptionFrench = "Teacher Feedback", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = true, IsChildQuestionnaire = false, Sequence = 10, NorthwestTerritories = true, NovaScotia = true },
+                    new Questionnaire() {Id=2, English = "Demographics", QuestionnaireName = "Demographics", YearId = 1, EntityName = "Questionnaires.Data.Demographics", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Demographics", DescriptionEnglish = "Demographics", DescriptionFrench = "Demographics", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 10, NorthwestTerritories = true },
+                    new Questionnaire() {Id =3, English = "Section A", QuestionnaireName = "Section A", YearId = 1, EntityName = "Questionnaires.Data.SectionA", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section A", DescriptionEnglish = "Section A", DescriptionFrench = "Section A", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 20, NorthwestTerritories = true },
+                    new Questionnaire() {Id =4, English = "Section B", QuestionnaireName = "Section B", YearId = 1, EntityName = "Questionnaires.Data.SectionB", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section B", DescriptionEnglish = "Section B", DescriptionFrench = "Section B", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 30, NorthwestTerritories = true },
+                    new Questionnaire() {Id =5, English = "Section C", QuestionnaireName = "Section C", YearId = 1, EntityName = "Questionnaires.Data.SectionC", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section C", DescriptionEnglish = "Section C", DescriptionFrench = "Section C", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 40, NorthwestTerritories = true },
+                    new Questionnaire() {Id =6, English = "Section D", QuestionnaireName = "Section D", YearId = 1, EntityName = "Questionnaires.Data.SectionD", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section D", DescriptionEnglish = "Section D", DescriptionFrench = "Section D", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 50, NorthwestTerritories = true },
+                    new Questionnaire() {Id =7, English = "Section E", QuestionnaireName = "Section E", YearId = 1, EntityName = "Questionnaires.Data.SectionE", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section E", DescriptionEnglish = "Section E", DescriptionFrench = "Section E", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 60, NorthwestTerritories = true },                    
+                    new Questionnaire() {Id =8, English = "Demographics", QuestionnaireName = "Demographics", YearId = 1, EntityName = "Questionnaires.Data.Demographics", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Demographics", DescriptionEnglish = "Demographics", DescriptionFrench = "Demographics", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 10, NovaScotia = true },
+                    new Questionnaire() {Id =9, English = "Section A", QuestionnaireName = "Section A", YearId = 1, EntityName = "Questionnaires.Data.SectionA", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section A", DescriptionEnglish = "Section A", DescriptionFrench = "Section A", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 20, NovaScotia = true },
+                    new Questionnaire() {Id =10, English = "Section B", QuestionnaireName = "Section B", YearId = 1, EntityName = "Questionnaires.Data.SectionB", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section B", DescriptionEnglish = "Section B", DescriptionFrench = "Section B", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 30, NovaScotia = true },
+                    new Questionnaire() {Id =11, English = "Section C", QuestionnaireName = "Section C", YearId = 1, EntityName = "Questionnaires.Data.SectionC", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section C", DescriptionEnglish = "Section C", DescriptionFrench = "Section C", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 40, NovaScotia = true },
+                    new Questionnaire() {Id =12, English = "Section D", QuestionnaireName = "Section D", YearId = 1, EntityName = "Questionnaires.Data.SectionD", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section D", DescriptionEnglish = "Section D", DescriptionFrench = "Section D", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 50, NovaScotia = true },
+                    new Questionnaire() {Id =13, English = "Section E", QuestionnaireName = "Section E", YearId = 1, EntityName = "Questionnaires.Data.SectionE", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Section E", DescriptionEnglish = "Section E", DescriptionFrench = "Section E", ShowProgressBar = true, ShowQuestionNumbers = true, IsTeacherQuestionnaire = false, IsChildQuestionnaire = true, Sequence = 60, NovaScotia = true }
+                );
             });
 
             modelBuilder.Entity<QuestionnairesConfiguration>(entity =>
@@ -892,6 +933,11 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.QuestionnairesDataSectionDs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionD");
                 entity.HasMany(e => e.QuestionnairesDataSectionEs).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.SectionE");
                 entity.HasMany(e => e.QuestionnairesDataTeacherProfiles).WithOne(e => e.Year).OnDelete(DeleteBehavior.NoAction).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_Questionnaires.Data.TeacherProfile");
+
+                entity.HasData
+                (
+                    new Year() {Id=1, Ediyear = 2021, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, NorthwestTerritories=true,NovaScotia=true }
+                    );
 
                 //entity.HasMany(e => e.LookupSetOptions).WithOne(e => e.Year).HasForeignKey(d => d.YearId).HasConstraintName("FK_Years_LookupSetOptions");
                 //entity.HasOne(d => d.Year).WithMany(p => p.Sites).HasForeignKey(d => d.YearId).HasConstraintName("FK_Sites_Years");
