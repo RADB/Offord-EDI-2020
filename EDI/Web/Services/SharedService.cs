@@ -35,6 +35,7 @@ using Syncfusion.XlsIO;
 using EDI.ApplicationCore.Models;
 using static EDI.Web.Data.Enumerations;
 using System.Linq.Dynamic.Core;
+using EDI.Web.Data;
 
 namespace EDI.Web.Services
 {
@@ -600,7 +601,7 @@ namespace EDI.Web.Services
                                     //statusid = servicecontext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault().Id;
 
                                     //_file.FileImportStatusId = statusid;
-                                    _file.FileImportStatusId = (int)ImportStatus.Processed;
+                                    _file.FileImportStatusId = (int)Enumerations.FileImportStatus.Imported;
 
                                     _file.ModifiedDate = DateTime.Now;
                                     _file.ModifiedBy = _userSettings.UserName;
@@ -666,8 +667,9 @@ namespace EDI.Web.Services
                 using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
                 {
                     var alldata = _fileRepository.ListImportedData();
+                    int fileimportstatusid = (int)Enumerations.FileImportStatus.Imported;
 
-                    var processstatusid = servicecontext.FileImportStatuses.Where(p => p.English == "Processed").First().Id;
+                    //var processstatusid = servicecontext.FileImportStatuses.Where(p => p.English == "Processed").First().Id;
 
                     var totalcoordinators = 0;
                     var totalsites = 0;
@@ -913,6 +915,7 @@ namespace EDI.Web.Services
                                             if (provinceid == 0)
                                             {
                                                 errormessages.Add("FileImports data " + data.Id + ": Province is required.");
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                                 haserror = true;
                                             }
                                             else
@@ -1049,6 +1052,7 @@ namespace EDI.Web.Services
                                                     {
                                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
                                                         haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                                     }
                                                     else
                                                     {
@@ -1165,6 +1169,7 @@ namespace EDI.Web.Services
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Demographics\" ");
                                         haserror = true;
+                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
                                     else
                                     {
@@ -1186,6 +1191,7 @@ namespace EDI.Web.Services
                                 {
                                     errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataDemographic table");
                                     haserror = true;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
                                 }
                                 
                                 if(seca == null)
@@ -1200,6 +1206,7 @@ namespace EDI.Web.Services
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section A\" ");
                                         haserror = true;
+                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
                                     else
                                     {
@@ -1218,6 +1225,7 @@ namespace EDI.Web.Services
                                 {
                                     errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionA table");
                                     haserror = true;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
                                 }
 
                                 if (secb == null)
@@ -1232,6 +1240,7 @@ namespace EDI.Web.Services
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section B\" ");
                                         haserror = true;
+                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
                                     else
                                     {
@@ -1250,6 +1259,7 @@ namespace EDI.Web.Services
                                 {
                                     errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionB table");
                                     haserror = true;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
                                 }
 
                                 if (secc == null)
@@ -1264,6 +1274,7 @@ namespace EDI.Web.Services
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section C\" ");
                                         haserror = true;
+                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
                                     else
                                     {
@@ -1282,6 +1293,7 @@ namespace EDI.Web.Services
                                 {
                                     errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionC table");
                                     haserror = true;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
                                 }
 
                                 if (secd == null)
@@ -1296,6 +1308,7 @@ namespace EDI.Web.Services
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section D\" ");
                                         haserror = true;
+                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
                                     else
                                     {
@@ -1314,6 +1327,7 @@ namespace EDI.Web.Services
                                 {
                                     errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionD table");
                                     haserror = true;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
                                 }
 
                                 if (sece == null)
@@ -1328,6 +1342,7 @@ namespace EDI.Web.Services
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section E\" ");
                                         haserror = true;
+                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
                                     else
                                     {
@@ -1347,18 +1362,21 @@ namespace EDI.Web.Services
                                 {
                                     errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionE table");
                                     haserror = true;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
                                 }
                             }
                         }
 
                         if (!haserror)
                         {
-                            data.FileImportStatusId = processstatusid;
-                            data.ModifiedDate = DateTime.Now;
-                            data.ModifiedBy = _userSettings.UserName;
-
-                            await _fileRepository.UpdateAsync(data);
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.Processed;
                         }
+
+                        data.FileImportStatusId = fileimportstatusid;
+                        data.ModifiedDate = DateTime.Now;
+                        data.ModifiedBy = _userSettings.UserName;
+
+                        await _fileRepository.UpdateAsync(data);
                     }
 
                     if (totalcoordinators > 0)
