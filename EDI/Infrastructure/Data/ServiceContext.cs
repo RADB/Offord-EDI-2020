@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using EDI.ApplicationCore.Entities;
+using System;
 
 namespace EDI.Infrastructure.Data
 {
@@ -201,6 +202,28 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(e => e.QuestionnairesDataSectionDs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionDs");
                 entity.HasMany(e => e.QuestionnairesDataSectionEs).WithOne(d => d.Child).OnDelete(DeleteBehavior.Cascade).HasForeignKey(d => d.ChildId).HasConstraintName("FK_Children_Questionnaires.Data.SectionEs");
 
+            });            
+            modelBuilder.Entity<ChildStatus>(entity =>
+            {
+                entity.ToTable("ChildStatus", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+                entity.HasMany(d => d.Children).WithOne(p => p.ChildStatus).HasForeignKey(d => d.ChildStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_ChildStatus_Children");
+                entity.HasData
+                (
+                    new ChildStatus() {Id = 2, Code = "1", English = "New", French = "Nouveau", Sequence = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new ChildStatus() {Id = 1, Code = "2", English = "In Progress", French = "En cours", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new ChildStatus() {Id = 3, Code = "3", English = "Complete", French = "Achevé", Sequence = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new ChildStatus() {Id = 4, Code = "4", English = "Locked", French = "Fermé à clé", Sequence = 4, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                );
             });
 
             modelBuilder.Entity<Coordinator>(entity =>
@@ -299,40 +322,14 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
                 entity.HasMany(d => d.FileImports).WithOne(p => p.FileImportStatus).HasForeignKey(d => d.FileImportStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_FileImportStatus_FileImports");
+                entity.HasData
+                (
+                    new FileImportStatus() {Id=2, Code = "1", English = "Imported", French = "Importé", Sequence = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new FileImportStatus() {Id=1, Code = "2", English = "Processed", French = "Traité", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                );
             });
 
-            modelBuilder.Entity<ChildStatus>(entity =>
-            {
-                entity.ToTable("ChildStatus", "LUData");
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.English).HasMaxLength(150);
-
-                entity.Property(e => e.French).HasMaxLength(150);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-                entity.HasMany(d => d.Children).WithOne(p => p.ChildStatus).HasForeignKey(d => d.ChildStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_ChildStatus_Children");
-            });
-
-            modelBuilder.Entity<TeacherStatus>(entity =>
-            {
-                entity.ToTable("TeacherStatus", "LUData");
-
-                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
-
-                entity.Property(e => e.CreatedBy).IsUnicode(false);
-
-                entity.Property(e => e.English).HasMaxLength(150);
-
-                entity.Property(e => e.French).HasMaxLength(150);
-
-                entity.Property(e => e.ModifiedBy).IsUnicode(false);
-                entity.HasMany(d => d.Teachers).WithOne(p => p.TeacherStatus).HasForeignKey(d => d.TeacherStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_TeacherStatus_Children");
-            });
-
+                 
             modelBuilder.Entity<Gender>(entity =>
             {
                 entity.ToTable("Genders", "LUData");
@@ -351,6 +348,11 @@ namespace EDI.Infrastructure.Data
                 entity.HasMany(d => d.QuestionnairesDataDemographics).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Gender_QuestionnaireDemographics");
                 entity.HasMany(d => d.FileImports).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_FileImports");
                 //entity.HasMany(d => d.TeacherParticipationForms).WithOne(p => p.Gender).HasForeignKey(d => d.GenderId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_Gender_TeacherParticipationForms");
+                entity.HasData
+                    (
+                        new Gender() {Id=1, Code = "1", English = "Male", French = "Mâle", Sequence = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                        new Gender() {Id=1, Code = "2", English = "Female", French = "Femelle", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                    );
             });
 
             modelBuilder.Entity<InputType>(entity =>
@@ -365,6 +367,23 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.InputType).HasForeignKey(e => e.InputTypeId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_InputType_QuestionnairesConfigurations");
+                entity.HasData
+                (
+                    new InputType() {Id=14, French = "Hidden", English = "Hidden", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=13, French = "NumberBoxDouble", English = "NumberBoxDouble", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=12, French = "Toggle", English = "Toggle", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=11, French = "GroupHeader", English = "GroupHeader", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=10, French = "QuestionHeader", English = "QuestionHeader", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=9, French = "Header", English = "Header", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=8, French = "TextBox", English = "TextBox", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=7, French = "SelectBox", English = "SelectBox", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=6, French = "CheckBox", English = "CheckBox", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=5, French = "DatePicker", English = "DatePicker", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=4, French = "NumberBox", English = "NumberBox", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=3, French = "RadioButtons", English = "RadioButtons", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=2, French = "RadioMatrix", English = "RadioMatrix", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new InputType() {Id=1, French = "TextArea", English = "TextArea", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                );
             });
 
             modelBuilder.Entity<Link>(entity =>
@@ -421,6 +440,11 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
                 entity.HasMany(e => e.QuestionnairesConfigurations).WithOne(e => e.Orientation).HasForeignKey(e => e.OrientationId).OnDelete(DeleteBehavior.NoAction).HasConstraintName("FK_Orientation_QuestionnairesConfigurations");
+                entity.HasData
+                (
+                    new Orientation() {Id=2, YearId = 1, English = "Horizontal", French = "Horizontal", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new Orientation() {Id=1, YearId = 1, English = "Vertical", French = "Vertical", CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                );
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -800,8 +824,30 @@ namespace EDI.Infrastructure.Data
 
                 //entity.HasOne(d => d.Year).WithMany(p => p.Teachers).HasForeignKey(d => d.YearId).HasConstraintName("FK_Teachers_Years");                             
             });
-                     
-       
+
+            modelBuilder.Entity<TeacherStatus>(entity =>
+            {
+                entity.ToTable("TeacherStatus", "LUData");
+
+                entity.Property(e => e.Code).IsRequired().HasMaxLength(3);
+
+                entity.Property(e => e.CreatedBy).IsUnicode(false);
+
+                entity.Property(e => e.English).HasMaxLength(150);
+
+                entity.Property(e => e.French).HasMaxLength(150);
+
+                entity.Property(e => e.ModifiedBy).IsUnicode(false);
+                entity.HasMany(d => d.Teachers).WithOne(p => p.TeacherStatus).HasForeignKey(d => d.TeacherStatusId).OnDelete(DeleteBehavior.Cascade).HasConstraintName("FK_TeacherStatus_Children");
+                entity.HasData
+                    (
+                        new TeacherStatus() { Id = 2, Code = "1", English = "New", French = "Nouveau", Sequence = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                        new TeacherStatus() { Id = 1, Code = "2", English = "In Progress", French = "En cours", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                        new TeacherStatus() { Id = 3, Code = "3", English = "Complete", French = "Achevé", Sequence = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                        new TeacherStatus() { Id = 4, Code = "4", English = "Locked", French = "Fermé à clé", Sequence = 4, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                    );
+            });
+
             modelBuilder.Entity<Translation>(entity =>
             {
                 entity.ToTable("Translations", "LUData");

@@ -40,37 +40,37 @@ namespace EDI.Infrastructure.Data
                     await ServiceContext.SaveChangesAsync();
                 }*/
 
-                if (!ServiceContext.Genders.Any())
-                {
-                    ServiceContext.Genders.AddRange(
-                        GetPreconfiguredGender());
+                //if (!ServiceContext.Genders.Any())
+                //{
+                //    ServiceContext.Genders.AddRange(
+                //        GetPreconfiguredGender());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
 
-                if (!ServiceContext.ChildStatuses.Any())
-                {
-                    ServiceContext.ChildStatuses.AddRange(
-                        GetPreconfiguredChildStatus());
+                //if (!ServiceContext.ChildStatuses.Any())
+                //{
+                //    ServiceContext.ChildStatuses.AddRange(
+                //        GetPreconfiguredChildStatus());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
 
-                if (!ServiceContext.TeacherStatuses.Any())
-                {
-                    ServiceContext.TeacherStatuses.AddRange(
-                        GetPreconfiguredTeacherStatus());
+                //if (!ServiceContext.TeacherStatuses.Any())
+                //{
+                //    ServiceContext.TeacherStatuses.AddRange(
+                //    GetPreconfiguredTeacherStatus());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
 
-                if (!ServiceContext.Orientations.Any())
-                {
-                    ServiceContext.Orientations.AddRange(
-                        GetPreconfiguredOrientation());
+                //if (!ServiceContext.Orientations.Any())
+                //{
+                //    ServiceContext.Orientations.AddRange(
+                //        GetPreconfiguredOrientation());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
 
                 if (!ServiceContext.LookupSets.Any())
                 {
@@ -92,13 +92,13 @@ namespace EDI.Infrastructure.Data
                     }
                 }
 
-                if (!ServiceContext.InputTypes.Any())
-                {
-                    ServiceContext.InputTypes.AddRange(
-                        GetPreconfiguredInputType());
+                //if (!ServiceContext.InputTypes.Any())
+                //{
+                //    ServiceContext.InputTypes.AddRange(
+                //        GetPreconfiguredInputType());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
                 if (!ServiceContext.Questionnaires.Any())
                 {
                     ServiceContext.Questionnaires.AddRange(
@@ -106,13 +106,13 @@ namespace EDI.Infrastructure.Data
 
                     await ServiceContext.SaveChangesAsync();
                 }
-                if (!ServiceContext.FileImportStatuses.Any())
-                {
-                    ServiceContext.FileImportStatuses.AddRange(
-                        GetPreconfiguredFileImportStatus());
+                //if (!ServiceContext.FileImportStatuses.Any())
+                //{
+                //    ServiceContext.FileImportStatuses.AddRange(
+                //        GetPreconfiguredFileImportStatus());
 
-                    await ServiceContext.SaveChangesAsync();
-                }
+                //    await ServiceContext.SaveChangesAsync();
+                //}
 
                 if (!ServiceContext.Countries.Any())
                 {
@@ -2243,57 +2243,57 @@ namespace EDI.Infrastructure.Data
             }.OrderBy(t => t.FieldName);
         }
 
-        static IEnumerable<ChildStatus> GetPreconfiguredChildStatus()
-        {
-            return new List<ChildStatus>()
-            {
-                new ChildStatus() { Code = "1", English = "New", French = "Nouveau",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new ChildStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new ChildStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new ChildStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //static IEnumerable<ChildStatus> GetPreconfiguredChildStatus()
+        //{
+        //    return new List<ChildStatus>()
+        //    {
+        //        new ChildStatus() { Code = "1", English = "New", French = "Nouveau",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new ChildStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new ChildStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new ChildStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
 
-            };
-        }
+        //    };
+        //}
 
-        static IEnumerable<TeacherStatus> GetPreconfiguredTeacherStatus()
-        {
-            return new List<TeacherStatus>()
-            {
-                new TeacherStatus() { Code = "1", English = "New", French = "Nouveau",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new TeacherStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new TeacherStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new TeacherStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //static IEnumerable<TeacherStatus> GetPreconfiguredTeacherStatus()
+        //{
+        //    return new List<TeacherStatus>()
+        //    {
+        //        new TeacherStatus() { Code = "1", English = "New", French = "Nouveau",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new TeacherStatus() { Code = "2", English = "In Progress", French = "En cours",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new TeacherStatus() { Code = "3", English = "Complete", French = "Achevé",  Sequence = 3, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new TeacherStatus() { Code = "4", English = "Locked", French = "Fermé à clé",  Sequence = 4, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
 
-            };
-        }
+        //    };
+        //}
 
-        static IEnumerable<Gender> GetPreconfiguredGender()
-        {
-            return new List<Gender>()
-            {
-                new Gender() { Code = "1", English = "Male", French = "Mâle",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new Gender() { Code = "2", English = "Female", French = "Femelle",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //static IEnumerable<Gender> GetPreconfiguredGender()
+        //{
+        //    return new List<Gender>()
+        //    {
+        //        new Gender() { Code = "1", English = "Male", French = "Mâle",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new Gender() { Code = "2", English = "Female", French = "Femelle",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
 
-            };
-        }
+        //    };
+        //}
 
-        static IEnumerable<FileImportStatus> GetPreconfiguredFileImportStatus()
-        {
-            return new List<FileImportStatus>()
-            {
-                new FileImportStatus() { Code = "1", English = "Imported", French = "Importé",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
-            };
-        }
+        //static IEnumerable<FileImportStatus> GetPreconfiguredFileImportStatus()
+        //{
+        //    return new List<FileImportStatus>()
+        //    {
+        //        new FileImportStatus() { Code = "1", English = "Imported", French = "Importé",  Sequence = 1, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new FileImportStatus() { Code = "2", English = "Processed", French = "Traité",  Sequence = 2, CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //    };
+        //}
 
-        static IEnumerable<Orientation> GetPreconfiguredOrientation()
-        {
-            return new List<Orientation>()
-            {
-                new Orientation() { YearId= 1, English = "Horizontal", French = "Horizontal", CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new Orientation() { YearId= 1, English = "Vertical", French = "Vertical", CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
-            };
-        }
+        //static IEnumerable<Orientation> GetPreconfiguredOrientation()
+        //{
+        //    return new List<Orientation>()
+        //    {
+        //        new Orientation() { YearId= 1, English = "Horizontal", French = "Horizontal", CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new Orientation() { YearId= 1, English = "Vertical", French = "Vertical", CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //    };
+        //}
 
         static IEnumerable<LookupSet> GetPreconfiguredLookupSet()
         {
@@ -2645,38 +2645,44 @@ namespace EDI.Infrastructure.Data
             return luso;
         }
 
-        static IEnumerable<InputType> GetPreconfiguredInputType()
-        {
-            return new List<InputType>()
-            {
-                new InputType() {French="Hidden",English="Hidden",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="NumberBoxDouble",English="NumberBoxDouble",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="Toggle",English="Toggle",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="GroupHeader",English="GroupHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="QuestionHeader",English="QuestionHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="TextBox",English="TextBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="SelectBox",English="SelectBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="CheckBox",English="CheckBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="DatePicker",English="DatePicker",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="NumberBox",English="NumberBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="RadioButtons",English="RadioButtons",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="RadioMatrix",English="RadioMatrix",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
-                new InputType() {French="TextArea",English="TextArea",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
-            };
-        }
+        //static IEnumerable<InputType> GetPreconfiguredInputType()
+        //{
+        //    return new List<InputType>()
+        //    {
+        //        new InputType() {French="Hidden",English="Hidden",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="NumberBoxDouble",English="NumberBoxDouble",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="Toggle",English="Toggle",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="GroupHeader",English="GroupHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="QuestionHeader",English="QuestionHeader",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="Header",English="Header",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="TextBox",English="TextBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="SelectBox",English="SelectBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="CheckBox",English="CheckBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="DatePicker",English="DatePicker",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="NumberBox",English="NumberBox",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="RadioButtons",English="RadioButtons",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="RadioMatrix",English="RadioMatrix",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now},
+        //        new InputType() {French="TextArea",English="TextArea",YearId=1,CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now}
+        //    };
+        //}
 
         static IEnumerable<Questionnaire> GetPreconfiguredQuestionnaires()
         {
             return new List<Questionnaire>()
             {
-                new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10},
-                new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20},
-                new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30},
-                new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40},
-                new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50},
-                new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60},
-                new Questionnaire() {English="Teacher Feedback",QuestionnaireName="Teacher Feedback",YearId=1,EntityName="Questionnaires.Data.TeacherProfile",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Teacher Feedback",DescriptionEnglish="Teacher Feedback",DescriptionFrench="Teacher Feedback",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=true,IsChildQuestionnaire=false,Sequence=10}
+                new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10, NorthwestTerritories=true},
+                new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20, NorthwestTerritories=true},
+                new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30, NorthwestTerritories=true},
+                new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40, NorthwestTerritories=true},
+                new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50, NorthwestTerritories=true},
+                new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60, NorthwestTerritories=true},
+                new Questionnaire() {English="Teacher Feedback",QuestionnaireName="Teacher Feedback",YearId=1,EntityName="Questionnaires.Data.TeacherProfile",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Teacher Feedback",DescriptionEnglish="Teacher Feedback",DescriptionFrench="Teacher Feedback",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=true,IsChildQuestionnaire=false,Sequence=10, NorthwestTerritories=true, NovaScotia=true},
+                new Questionnaire() {English="Demographics",QuestionnaireName="Demographics",YearId=1,EntityName="Questionnaires.Data.Demographics",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Demographics",DescriptionEnglish="Demographics",DescriptionFrench="Demographics",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=10, NovaScotia=true},
+                new Questionnaire() {English="Section A",QuestionnaireName="Section A",YearId=1,EntityName="Questionnaires.Data.SectionA",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section A",DescriptionEnglish="Section A",DescriptionFrench="Section A",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=20, NovaScotia=true},
+                new Questionnaire() {English="Section B",QuestionnaireName="Section B",YearId=1,EntityName="Questionnaires.Data.SectionB",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section B",DescriptionEnglish="Section B",DescriptionFrench="Section B",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=30, NovaScotia=true},
+                new Questionnaire() {English="Section C",QuestionnaireName="Section C",YearId=1,EntityName="Questionnaires.Data.SectionC",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section C",DescriptionEnglish="Section C",DescriptionFrench="Section C",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=40, NovaScotia=true},
+                new Questionnaire() {English="Section D",QuestionnaireName="Section D",YearId=1,EntityName="Questionnaires.Data.SectionD",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section D",DescriptionEnglish="Section D",DescriptionFrench="Section D",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=50, NovaScotia=true},
+                new Questionnaire() {English="Section E",QuestionnaireName="Section E",YearId=1,EntityName="Questionnaires.Data.SectionE",CreatedBy ="admin", CreatedDate= DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now,French="Section E",DescriptionEnglish="Section E",DescriptionFrench="Section E",ShowProgressBar=true,ShowQuestionNumbers=true,IsTeacherQuestionnaire=false,IsChildQuestionnaire=true,Sequence=60, NovaScotia=true}
             };
         }
     }

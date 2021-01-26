@@ -30,23 +30,23 @@ namespace EDI.Web.Data
             NumberBoxDouble = 13,
             Hidden = 14
         }
-        public enum NumericDataTypes : int
-        {
-            Int32 = 1,
-            Double = 2
-        }
+        //public enum NumericDataTypes : int
+        //{
+        //    Int32 = 1,
+        //    Double = 2
+        //}
 
        
-        public enum Questionnaires: int
-        {
-            Demographics =0,
-            SectionA = 1,
-            SectionB=2,
-            SectionC=3,
-            SectionD=4,
-            SectionE=5,
-            TeacherProfile=6
-        }
+        //public enum Questionnaires: int
+        //{
+        //    Demographics =0,
+        //    SectionA = 1,
+        //    SectionB=2,
+        //    SectionC=3,
+        //    SectionD=4,
+        //    SectionE=5,
+        //    TeacherProfile=6
+        //}
 
         public enum Genders: int
         {
