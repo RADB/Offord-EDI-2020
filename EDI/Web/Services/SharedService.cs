@@ -1045,16 +1045,24 @@ namespace EDI.Web.Services
 
                                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                                    var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
-                                                    _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
-                                                    _QuestionnairesDataTeacherProfile.YearId = yearid;
-                                                    _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaire.Id;
-                                                    _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
-                                                    _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
-                                                    _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
-                                                    _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
+                                                    if(questionnaire == null)
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
+                                                        haserror = true;
+                                                    }
+                                                    else
+                                                    {
+                                                        var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
+                                                        _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
+                                                        _QuestionnairesDataTeacherProfile.YearId = yearid;
+                                                        _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaire.Id;
+                                                        _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
+                                                        _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
+                                                        _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
+                                                        _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
 
-                                                    await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
+                                                        await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
+                                                    }                                                    
                                                 }                                                
                                             }
                                             catch (Exception ex)
@@ -1153,18 +1161,31 @@ namespace EDI.Web.Services
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                    _demographics.ChildId = childid;
-                                    _demographics.GenderId = (int?)data.GenderId;
-                                    _demographics.Dob = data.ChildDob;
-                                    _demographics.PostalCode = data.ChildPostalCode;
-                                    _demographics.QuestionnaireId = questionnaire.Id;
-                                    _demographics.YearId = yearid;
-                                    _demographics.CreatedDate = DateTime.Now;
-                                    _demographics.CreatedBy = _userSettings.UserName;
-                                    _demographics.ModifiedDate = DateTime.Now;
-                                    _demographics.ModifiedBy = _userSettings.UserName;
+                                    if (questionnaire == null)
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Demographics\" ");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        _demographics.ChildId = childid;
+                                        _demographics.GenderId = (int?)data.GenderId;
+                                        _demographics.Dob = data.ChildDob;
+                                        _demographics.PostalCode = data.ChildPostalCode;
+                                        _demographics.QuestionnaireId = questionnaire.Id;
+                                        _demographics.YearId = yearid;
+                                        _demographics.CreatedDate = DateTime.Now;
+                                        _demographics.CreatedBy = _userSettings.UserName;
+                                        _demographics.ModifiedDate = DateTime.Now;
+                                        _demographics.ModifiedBy = _userSettings.UserName;
 
-                                    await _questionnairesDataDemographic.AddAsync(_demographics);
+                                        await _questionnairesDataDemographic.AddAsync(_demographics);
+                                    }
+                                }
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataDemographic table");
+                                    haserror = true;
                                 }
                                 
                                 if(seca == null)
@@ -1175,18 +1196,31 @@ namespace EDI.Web.Services
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                    _sectionA.ChildId = childid;
-                                    _sectionA.QuestionnaireId = questionnaire.Id;
-                                    _sectionA.YearId = yearid;
-                                    _sectionA.CreatedDate = DateTime.Now;
-                                    _sectionA.CreatedBy = _userSettings.UserName;
-                                    _sectionA.ModifiedDate = DateTime.Now;
-                                    _sectionA.ModifiedBy = _userSettings.UserName;
+                                    if (questionnaire == null)
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section A\" ");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        _sectionA.ChildId = childid;
+                                        _sectionA.QuestionnaireId = questionnaire.Id;
+                                        _sectionA.YearId = yearid;
+                                        _sectionA.CreatedDate = DateTime.Now;
+                                        _sectionA.CreatedBy = _userSettings.UserName;
+                                        _sectionA.ModifiedDate = DateTime.Now;
+                                        _sectionA.ModifiedBy = _userSettings.UserName;
 
-                                    await _questionnairesDataSectionA.AddAsync(_sectionA);
+                                        await _questionnairesDataSectionA.AddAsync(_sectionA);
+                                    }
                                 }
-                                
-                                if(secb == null)
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionA table");
+                                    haserror = true;
+                                }
+
+                                if (secb == null)
                                 {
                                     var _sectionB = new QuestionnairesDataSectionB();
 
@@ -1194,18 +1228,31 @@ namespace EDI.Web.Services
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                    _sectionB.ChildId = childid;
-                                    _sectionB.QuestionnaireId = questionnaire.Id;
-                                    _sectionB.YearId = yearid;
-                                    _sectionB.CreatedDate = DateTime.Now;
-                                    _sectionB.CreatedBy = _userSettings.UserName;
-                                    _sectionB.ModifiedDate = DateTime.Now;
-                                    _sectionB.ModifiedBy = _userSettings.UserName;
+                                    if (questionnaire == null)
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section B\" ");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        _sectionB.ChildId = childid;
+                                        _sectionB.QuestionnaireId = questionnaire.Id;
+                                        _sectionB.YearId = yearid;
+                                        _sectionB.CreatedDate = DateTime.Now;
+                                        _sectionB.CreatedBy = _userSettings.UserName;
+                                        _sectionB.ModifiedDate = DateTime.Now;
+                                        _sectionB.ModifiedBy = _userSettings.UserName;
 
-                                    await _questionnairesDataSectionB.AddAsync(_sectionB);
+                                        await _questionnairesDataSectionB.AddAsync(_sectionB);
+                                    }
                                 }
-                                
-                                if(secc == null)
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionB table");
+                                    haserror = true;
+                                }
+
+                                if (secc == null)
                                 {
                                     var _sectionC = new QuestionnairesDataSectionC();
 
@@ -1213,18 +1260,31 @@ namespace EDI.Web.Services
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                    _sectionC.ChildId = childid;
-                                    _sectionC.QuestionnaireId = questionnaire.Id;
-                                    _sectionC.YearId = yearid;
-                                    _sectionC.CreatedDate = DateTime.Now;
-                                    _sectionC.CreatedBy = _userSettings.UserName;
-                                    _sectionC.ModifiedDate = DateTime.Now;
-                                    _sectionC.ModifiedBy = _userSettings.UserName;
+                                    if (questionnaire == null)
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section C\" ");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        _sectionC.ChildId = childid;
+                                        _sectionC.QuestionnaireId = questionnaire.Id;
+                                        _sectionC.YearId = yearid;
+                                        _sectionC.CreatedDate = DateTime.Now;
+                                        _sectionC.CreatedBy = _userSettings.UserName;
+                                        _sectionC.ModifiedDate = DateTime.Now;
+                                        _sectionC.ModifiedBy = _userSettings.UserName;
 
-                                    await _questionnairesDataSectionC.AddAsync(_sectionC);
+                                        await _questionnairesDataSectionC.AddAsync(_sectionC);
+                                    }
                                 }
-                                
-                                if(secd == null)
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionC table");
+                                    haserror = true;
+                                }
+
+                                if (secd == null)
                                 {
                                     var _sectionD = new QuestionnairesDataSectionD();
 
@@ -1232,18 +1292,31 @@ namespace EDI.Web.Services
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                    _sectionD.ChildId = childid;
-                                    _sectionD.QuestionnaireId = questionnaire.Id;
-                                    _sectionD.YearId = yearid;
-                                    _sectionD.CreatedDate = DateTime.Now;
-                                    _sectionD.CreatedBy = _userSettings.UserName;
-                                    _sectionD.ModifiedDate = DateTime.Now;
-                                    _sectionD.ModifiedBy = _userSettings.UserName;
+                                    if (questionnaire == null)
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section D\" ");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        _sectionD.ChildId = childid;
+                                        _sectionD.QuestionnaireId = questionnaire.Id;
+                                        _sectionD.YearId = yearid;
+                                        _sectionD.CreatedDate = DateTime.Now;
+                                        _sectionD.CreatedBy = _userSettings.UserName;
+                                        _sectionD.ModifiedDate = DateTime.Now;
+                                        _sectionD.ModifiedBy = _userSettings.UserName;
 
-                                    await _questionnairesDataSectionD.AddAsync(_sectionD);
+                                        await _questionnairesDataSectionD.AddAsync(_sectionD);
+                                    }
                                 }
-                                
-                                if(sece == null)
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionD table");
+                                    haserror = true;
+                                }
+
+                                if (sece == null)
                                 {
                                     var _sectionE = new QuestionnairesDataSectionE();
 
@@ -1251,17 +1324,30 @@ namespace EDI.Web.Services
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
 
-                                    _sectionE.ChildId = childid;
-                                    _sectionE.QuestionnaireId = questionnaire.Id;
-                                    _sectionE.YearId = yearid;
-                                    _sectionE.CreatedDate = DateTime.Now;
-                                    _sectionE.CreatedDate = DateTime.Now;
-                                    _sectionE.CreatedBy = _userSettings.UserName;
-                                    _sectionE.ModifiedDate = DateTime.Now;
-                                    _sectionE.ModifiedBy = _userSettings.UserName;
+                                    if (questionnaire == null)
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section E\" ");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        _sectionE.ChildId = childid;
+                                        _sectionE.QuestionnaireId = questionnaire.Id;
+                                        _sectionE.YearId = yearid;
+                                        _sectionE.CreatedDate = DateTime.Now;
+                                        _sectionE.CreatedDate = DateTime.Now;
+                                        _sectionE.CreatedBy = _userSettings.UserName;
+                                        _sectionE.ModifiedDate = DateTime.Now;
+                                        _sectionE.ModifiedBy = _userSettings.UserName;
 
-                                    await _questionnairesDataSectionE.AddAsync(_sectionE);
-                                }                                
+                                        await _questionnairesDataSectionE.AddAsync(_sectionE);
+                                    }
+                                }
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionE table");
+                                    haserror = true;
+                                }
                             }
                         }
 
