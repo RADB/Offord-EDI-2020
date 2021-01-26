@@ -114,6 +114,7 @@
     private Child child;
     private bool collapseNavMenu = false;
     private bool expandMenu;
+    private string province { get; set; }
 
     private string CurrentPage { get; set; }
     private int completed { get; set; }
@@ -316,7 +317,17 @@
     }
     private void getData()
     {
-        var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + UserSettings.Province + "== true";
+        if (UserSettings.IsAdmin)
+        {
+            province = child.Teacher.School.Province.English.Replace(" ", "");
+            //province = teacherData.School.Province.English.Replace(" ", "");
+        }
+        else if (UserSettings.IsTeacher)
+        {
+            province = UserSettings.Province;
+        }
+
+        var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + province + "== true";
         questionnaires = dbContext.Questionnaires.Where(predicate)
              .Include(c => c.QuestionnairesDataDemographics)
              .Include(c => c.QuestionnairesDataSectionAs)
@@ -358,6 +369,9 @@
                         .Include(c => c.QuestionnairesDataSectionCs)
                         .Include(c => c.QuestionnairesDataSectionDs)
                         .Include(c => c.QuestionnairesDataSectionEs)
+                        .Include(c => c.Teacher)
+                         .ThenInclude(t => t.School)
+                         .ThenInclude(ts => ts.Province)
                         .Single();
                 }
             }
