@@ -94,41 +94,41 @@
             return;
         }
 
-        var totalItems = await QuestionnaireService.GetDuplicateCount(QuestionnaireModel.QuestionnaireName);
+        QuestionnaireModel.French = questionnaireform1.rteFrench.BindValue;
+        QuestionnaireModel.DescriptionEnglish = questionnaireform1.rteDescriptionEnglish.BindValue;
+        QuestionnaireModel.DescriptionFrench = questionnaireform1.rteDescriptionFrench.BindValue;
+        QuestionnaireModel.ShowProgressBar = questionnaireform1.checkProgressBar.CheckModel.Value;
+        QuestionnaireModel.ShowQuestionNumbers = questionnaireform1.checkQuestionNumer.CheckModel.Value;
+        QuestionnaireModel.Alberta = questionnaireform1.provinces.ProvinceConfigModel.Alberta;
+        QuestionnaireModel.BritishColumbia = questionnaireform1.provinces.ProvinceConfigModel.BritishColumbia;
+        QuestionnaireModel.Manitoba = questionnaireform1.provinces.ProvinceConfigModel.Manitoba;
+        QuestionnaireModel.NewBrunswick = questionnaireform1.provinces.ProvinceConfigModel.NewBrunswick;
+        QuestionnaireModel.NewfoundlandandLabrador = questionnaireform1.provinces.ProvinceConfigModel.NewfoundlandandLabrador;
+        QuestionnaireModel.NovaScotia = questionnaireform1.provinces.ProvinceConfigModel.NovaScotia;
+        QuestionnaireModel.Nunavut = questionnaireform1.provinces.ProvinceConfigModel.Nunavut;
+        QuestionnaireModel.Ontario = questionnaireform1.provinces.ProvinceConfigModel.Ontario;
+        QuestionnaireModel.PrinceEdwardIsland = questionnaireform1.provinces.ProvinceConfigModel.PrinceEdwardIsland;
+        QuestionnaireModel.Quebec = questionnaireform1.provinces.ProvinceConfigModel.Quebec;
+        QuestionnaireModel.Saskatchewan = questionnaireform1.provinces.ProvinceConfigModel.Saskatchewan;
+        QuestionnaireModel.YukonTerritory = questionnaireform1.provinces.ProvinceConfigModel.YukonTerritory;
+        QuestionnaireModel.NorthwestTerritories = questionnaireform1.provinces.ProvinceConfigModel.NorthwestTerritories;
 
-        if (totalItems > 0)
-        {
-            ErrorMessage = "The same Questionnaire has already existed.";
-            toastService.ShowError(ErrorMessage);
-        }
-        else
-        {
+        int id = await QuestionnaireService.CreateQuestionnaireAsync(questionnaireform1.QuestionnaireModel);
 
-            QuestionnaireModel.French = questionnaireform1.rteFrench.BindValue;
-            QuestionnaireModel.DescriptionEnglish = questionnaireform1.rteDescriptionEnglish.BindValue;
-            QuestionnaireModel.DescriptionFrench = questionnaireform1.rteDescriptionFrench.BindValue;
-            QuestionnaireModel.ShowProgressBar = questionnaireform1.checkProgressBar.CheckModel.Value;
-            QuestionnaireModel.ShowQuestionNumbers = questionnaireform1.checkQuestionNumer.CheckModel.Value;
-            QuestionnaireModel.Alberta = questionnaireform1.provinces.ProvinceConfigModel.Alberta;
-            QuestionnaireModel.BritishColumbia = questionnaireform1.provinces.ProvinceConfigModel.BritishColumbia;
-            QuestionnaireModel.Manitoba = questionnaireform1.provinces.ProvinceConfigModel.Manitoba;
-            QuestionnaireModel.NewBrunswick = questionnaireform1.provinces.ProvinceConfigModel.NewBrunswick;
-            QuestionnaireModel.NewfoundlandandLabrador = questionnaireform1.provinces.ProvinceConfigModel.NewfoundlandandLabrador;
-            QuestionnaireModel.NovaScotia = questionnaireform1.provinces.ProvinceConfigModel.NovaScotia;
-            QuestionnaireModel.Nunavut = questionnaireform1.provinces.ProvinceConfigModel.Nunavut;
-            QuestionnaireModel.Ontario = questionnaireform1.provinces.ProvinceConfigModel.Ontario;
-            QuestionnaireModel.PrinceEdwardIsland = questionnaireform1.provinces.ProvinceConfigModel.PrinceEdwardIsland;
-            QuestionnaireModel.Quebec = questionnaireform1.provinces.ProvinceConfigModel.Quebec;
-            QuestionnaireModel.Saskatchewan = questionnaireform1.provinces.ProvinceConfigModel.Saskatchewan;
-            QuestionnaireModel.YukonTerritory = questionnaireform1.provinces.ProvinceConfigModel.YukonTerritory;
-            QuestionnaireModel.NorthwestTerritories = questionnaireform1.provinces.ProvinceConfigModel.NorthwestTerritories;
+        Message = "New Questionnaire added successfully.";
+        toastService.ShowSuccess(Message);
+        NavigationManager.NavigateTo("./Questionnaires/edit/" + id);
 
-            int id = await QuestionnaireService.CreateQuestionnaireAsync(questionnaireform1.QuestionnaireModel);
+        //var totalItems = await QuestionnaireService.GetDuplicateCount(QuestionnaireModel.QuestionnaireName);
 
-            Message = "New Questionnaire added successfully.";
-            toastService.ShowSuccess(Message);
-            NavigationManager.NavigateTo("./Questionnaires/edit/" + id);
-        }
+        //if (totalItems > 0)
+        //{
+        //    ErrorMessage = "The same Questionnaire has already existed.";
+        //    toastService.ShowError(ErrorMessage);
+        //}
+        //else
+        //{            
+        //}
     }
 
     private void Exit()

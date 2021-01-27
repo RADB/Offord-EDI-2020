@@ -40,23 +40,21 @@
                             </GridSortColumns>
                         </GridSortSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.QuestionnaireName) HeaderText="Name" Width="30"></GridColumn>
-                            <GridColumn HeaderText="English" Width="30">
-                                <Template>
-                                    @{
-                                        var comm = (context as QuestionnaireItemViewModel);
-                                        @((MarkupString)comm.English)
-                                    }
-                                </Template>
-                            </GridColumn>
-                            <GridColumn HeaderText="French" Width="30">
-                                <Template>
-                                    @{
-                                        var comm = (context as QuestionnaireItemViewModel);
-                                        @((MarkupString)comm.French)
-                                    }
-                                </Template>
-                            </GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.QuestionnaireName) HeaderText="Name" TextAlign="TextAlign.Right" Width="20" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Alberta) HeaderText="AB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.NovaScotia) HeaderText="NS" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Nunavut) HeaderText="NU" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.NorthwestTerritories) HeaderText="NT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Ontario) HeaderText="ON" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.PrinceEdwardIsland) HeaderText="PE" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Quebec) HeaderText="QC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Saskatchewan) HeaderText="SK" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.YukonTerritory) HeaderText="YT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+
                         </GridColumns>
                     </SfGrid>
                 }
@@ -114,6 +112,19 @@
                 aquestionnaire.DescriptionFrench = questionnaire.DescriptionFrench;
                 aquestionnaire.ShowProgressBar = questionnaire.ShowProgressBar;
                 aquestionnaire.ShowQuestionNumbers = questionnaire.ShowQuestionNumbers;
+                aquestionnaire.Alberta = questionnaire.Alberta.HasValue ? questionnaire.Alberta.Value : false;
+                aquestionnaire.BritishColumbia = questionnaire.BritishColumbia.HasValue ? questionnaire.BritishColumbia.Value : false;
+                aquestionnaire.Manitoba = questionnaire.Manitoba.HasValue ? questionnaire.Manitoba.Value : false;
+                aquestionnaire.NewBrunswick = questionnaire.NewBrunswick.HasValue ? questionnaire.NewBrunswick.Value : false;
+                aquestionnaire.NewfoundlandandLabrador = questionnaire.NewfoundlandandLabrador.HasValue ? questionnaire.NewfoundlandandLabrador.Value : false;
+                aquestionnaire.NovaScotia = questionnaire.NovaScotia.HasValue ? questionnaire.NovaScotia.Value : false;
+                aquestionnaire.Nunavut = questionnaire.Nunavut.HasValue ? questionnaire.Nunavut.Value : false;
+                aquestionnaire.Ontario = questionnaire.Ontario.HasValue ? questionnaire.Ontario.Value : false;
+                aquestionnaire.PrinceEdwardIsland = questionnaire.PrinceEdwardIsland.HasValue ? questionnaire.PrinceEdwardIsland.Value : false;
+                aquestionnaire.Quebec = questionnaire.Quebec.HasValue ? questionnaire.Quebec.Value : false;
+                aquestionnaire.Saskatchewan = questionnaire.Saskatchewan.HasValue ? questionnaire.Saskatchewan.Value : false;
+                aquestionnaire.YukonTerritory = questionnaire.YukonTerritory.HasValue ? questionnaire.YukonTerritory.Value : false;
+                aquestionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories.HasValue ? questionnaire.NorthwestTerritories.Value : false;
 
                 aquestionnaire.YearId = questionnaire.YearId;
                 var year = dbContext.Years.Where(p => p.Id == questionnaire.YearId).FirstOrDefault();
