@@ -835,150 +835,219 @@ namespace EDI.Web.Services
                                 haserror = true;
                             }
 
-                            ///<summary>process site
-                            ///</summary>
-                            int siteid = 0;
-                            if (!string.IsNullOrEmpty(data.SiteName))
-                            {
-                                if (coordinatorid > 0)
-                                {
-                                    string sitenumber = data.ChildEdiid.Substring(4, 3);
-
-                                    var site = servicecontext.Sites.Where(p => p.SiteNumber == sitenumber && p.SiteName == data.SiteName).FirstOrDefault();
-
-                                    if (site == null)
-                                    {
-                                        try
-                                        {
-                                            var _site = new Site();
-
-                                            _site.SiteNumber = sitenumber;
-                                            _site.SiteName = data.SiteName;
-                                            _site.CoordinatorId = coordinatorid;
-                                            _site.YearId = yearid;
-                                            _site.CreatedDate = DateTime.Now;
-                                            _site.CreatedBy = _userSettings.UserName;
-                                            _site.ModifiedDate = DateTime.Now;
-                                            _site.ModifiedBy = _userSettings.UserName;
-
-                                            await _siteRepository.AddAsync(_site);
-                                            siteid = _site.Id;
-                                            totalsites++;
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            errormessages.Add("FileImports data " + data.Id + ": Create a site error: " + ex.Message);
-                                            haserror = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        siteid = site.Id;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                errormessages.Add("FileImports data " + data.Id + ": Site Name is required.");
-                                haserror = true;
-                            }
-
                             var provinceid = 0;
                             var provincename = string.Empty;
 
-                            ///<summary>process school
-                            ///</summary>
-                            int schoolid = 0;
-                            if (!string.IsNullOrEmpty(data.SchoolName))
+                            var provinceedicodestring = data.ChildEdiid.Substring(2, 2);
+                            var provinceedicode = int.Parse(provinceedicodestring);
+                            var countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().CountryID;
+                            provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
+                            provincename = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().English.Replace(" ", "");
+
+                            var predicateTeacher = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
+
+                            var questionnaireTeacher = _dbContext.Questionnaires.Where(predicateTeacher).FirstOrDefault();
+
+                            if (questionnaireTeacher == null)
                             {
-                                if (siteid > 0)
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
+
+                            var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                            var predicateA = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
+
+                            var questionnaireA = _dbContext.Questionnaires.Where(predicateA).FirstOrDefault();
+
+                            var predicateB = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
+
+                            var questionnaireB = _dbContext.Questionnaires.Where(predicateB).FirstOrDefault();
+
+                            var predicateC = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
+
+                            var questionnaireC = _dbContext.Questionnaires.Where(predicateC).FirstOrDefault();
+
+                            var predicateD = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
+
+                            var questionnaireD = _dbContext.Questionnaires.Where(predicateD).FirstOrDefault();
+
+                            var predicateE = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
+
+                            var questionnaireE = _dbContext.Questionnaires.Where(predicateE).FirstOrDefault();
+
+                            if (questionnaire == null)
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Demographics\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            if (questionnaireA == null)
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section A\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            if (questionnaireB == null)
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section B\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            if (questionnaireC == null)
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section C\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            if (questionnaireD == null)
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section D\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            if (questionnaireE == null)
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section E\" ");
+                                haserror = true;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                            }
+
+                            if(!haserror)
+                            {
+                                ///<summary>process site
+                                ///</summary>
+                                int siteid = 0;
+                                if (!string.IsNullOrEmpty(data.SiteName))
                                 {
-                                    string schoolnumber = data.ChildEdiid.Substring(7, 3);
-
-                                    var school = servicecontext.Schools.Where(p => p.SiteId == siteid && p.SchoolNumber == schoolnumber && p.SchoolName == data.SchoolName).FirstOrDefault();
-
-                                    if (school == null)
+                                    if (coordinatorid > 0)
                                     {
-                                        try
+                                        string sitenumber = data.ChildEdiid.Substring(4, 3);
+
+                                        var site = servicecontext.Sites.Where(p => p.SiteNumber == sitenumber && p.SiteName == data.SiteName).FirstOrDefault();
+
+                                        if (site == null)
                                         {
-                                            var _school = new School();
-
-                                            _school.SchoolNumber = schoolnumber;
-                                            _school.SchoolName = data.SchoolName;
-
-                                            var provinceedicodestring = data.ChildEdiid.Substring(2, 2);
-                                            var provinceedicode = int.Parse(provinceedicodestring);
-                                            var countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().CountryID;
-                                            provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
-                                            provincename = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().English.Replace(" ", "");
-
-                                            if (provinceid == 0)
+                                            try
                                             {
-                                                errormessages.Add("FileImports data " + data.Id + ": Province is required.");
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                                var _site = new Site();
+
+                                                _site.SiteNumber = sitenumber;
+                                                _site.SiteName = data.SiteName;
+                                                _site.CoordinatorId = coordinatorid;
+                                                _site.YearId = yearid;
+                                                _site.CreatedDate = DateTime.Now;
+                                                _site.CreatedBy = _userSettings.UserName;
+                                                _site.ModifiedDate = DateTime.Now;
+                                                _site.ModifiedBy = _userSettings.UserName;
+
+                                                await _siteRepository.AddAsync(_site);
+                                                siteid = _site.Id;
+                                                totalsites++;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": Create a site error: " + ex.Message);
                                                 haserror = true;
                                             }
-                                            else
-                                            {
-                                                _school.CountryId = countryid;
-                                                _school.ProvinceId = provinceid;
-                                                _school.SiteId = siteid;
-                                                _school.YearId = yearid;
-                                                _school.CreatedDate = DateTime.Now;
-                                                _school.CreatedBy = _userSettings.UserName;
-                                                _school.ModifiedDate = DateTime.Now;
-                                                _school.ModifiedBy = _userSettings.UserName;
-
-                                                await _schoolRepository.AddAsync(_school);
-                                                schoolid = _school.Id;
-                                                totalschools++;
-                                            }                                            
                                         }
-                                        catch (Exception ex)
+                                        else
                                         {
-                                            errormessages.Add("FileImports data " + data.Id + ": Create a school error: " + ex.Message);
-                                            haserror = true;
+                                            siteid = site.Id;
                                         }
                                     }
-                                    else
-                                    {
-                                        schoolid = school.Id;
-                                        provinceid = school.ProvinceId;
-                                        provincename = servicecontext.Provinces.Where(p => p.Id == provinceid).FirstOrDefault().English.Replace(" ", "");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                errormessages.Add("FileImports data " + data.Id + ": School Name is required.");
-                                haserror = true;
-                            }
-
-                            ///<summary>process teacher
-                            ///</summary>
-                            int teacherid = 0;
-                            if (!string.IsNullOrEmpty(data.TeacherName) && !string.IsNullOrEmpty(data.TeacherEmail))
-                            {
-                                if (!ValidateExtension.IsEmailValid(data.TeacherEmail))
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": Teacher Email is invalid.");
-                                    haserror = true;
                                 }
                                 else
                                 {
-                                    if (schoolid > 0)
+                                    errormessages.Add("FileImports data " + data.Id + ": Site Name is required.");
+                                    haserror = true;
+                                }
+
+
+                                ///<summary>process school
+                                ///</summary>
+                                int schoolid = 0;
+                                if (!string.IsNullOrEmpty(data.SchoolName))
+                                {
+                                    if (siteid > 0)
                                     {
-                                        var predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
+                                        string schoolnumber = data.ChildEdiid.Substring(7, 3);
 
-                                        var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                                        var school = servicecontext.Schools.Where(p => p.SiteId == siteid && p.SchoolNumber == schoolnumber && p.SchoolName == data.SchoolName).FirstOrDefault();
 
-                                        if (questionnaire == null)
+                                        if (school == null)
                                         {
-                                            errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
-                                            haserror = true;
-                                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                            try
+                                            {
+                                                var _school = new School();
+
+                                                _school.SchoolNumber = schoolnumber;
+                                                _school.SchoolName = data.SchoolName;
+
+
+                                                if (provinceid == 0)
+                                                {
+                                                    errormessages.Add("FileImports data " + data.Id + ": Province is required.");
+                                                    fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                                    haserror = true;
+                                                }
+                                                else
+                                                {
+                                                    _school.CountryId = countryid;
+                                                    _school.ProvinceId = provinceid;
+                                                    _school.SiteId = siteid;
+                                                    _school.YearId = yearid;
+                                                    _school.CreatedDate = DateTime.Now;
+                                                    _school.CreatedBy = _userSettings.UserName;
+                                                    _school.ModifiedDate = DateTime.Now;
+                                                    _school.ModifiedBy = _userSettings.UserName;
+
+                                                    await _schoolRepository.AddAsync(_school);
+                                                    schoolid = _school.Id;
+                                                    totalschools++;
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": Create a school error: " + ex.Message);
+                                                haserror = true;
+                                            }
                                         }
                                         else
+                                        {
+                                            schoolid = school.Id;
+                                            provinceid = school.ProvinceId;
+                                            provincename = servicecontext.Provinces.Where(p => p.Id == provinceid).FirstOrDefault().English.Replace(" ", "");
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": School Name is required.");
+                                    haserror = true;
+                                }
+
+                                ///<summary>process teacher
+                                ///</summary>
+                                int teacherid = 0;
+                                if (!string.IsNullOrEmpty(data.TeacherName) && !string.IsNullOrEmpty(data.TeacherEmail))
+                                {
+                                    if (!ValidateExtension.IsEmailValid(data.TeacherEmail))
+                                    {
+                                        errormessages.Add("FileImports data " + data.Id + ": Teacher Email is invalid.");
+                                        haserror = true;
+                                    }
+                                    else
+                                    {
+                                        if (schoolid > 0)
                                         {
                                             string teachernumber = data.ChildEdiid.Substring(10, 2);
                                             var teacher = servicecontext.Teachers.Where(p => p.TeacherName == data.TeacherName && p.Email == data.TeacherEmail).FirstOrDefault();
@@ -1050,7 +1119,7 @@ namespace EDI.Web.Services
                                                         var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
                                                         _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
                                                         _QuestionnairesDataTeacherProfile.YearId = yearid;
-                                                        _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaire.Id;
+                                                        _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaireTeacher.Id;
                                                         _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
                                                         _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
                                                         _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
@@ -1069,95 +1138,26 @@ namespace EDI.Web.Services
                                             {
                                                 teacherid = teacher.Id;
                                             }
-                                        }                                        
+                                        }
                                     }
                                 }
-                            }
-                            else if (string.IsNullOrEmpty(data.TeacherName))
-                            {
-                                errormessages.Add("FileImports data " + data.Id + ": Teacher Name is required.");
-                                haserror = true;
-                            }
-                            else if (string.IsNullOrEmpty(data.TeacherEmail))
-                            {
-                                errormessages.Add("FileImports data " + data.Id + ": Teacher Email is required.");
-                                haserror = true;
-                            }
-
-                            ///<summary>process student
-                            ///</summary>
-                            int childid = 0;
-                            if (!string.IsNullOrEmpty(data.LocalId))
-                            {
-                                if (teacherid > 0)
+                                else if (string.IsNullOrEmpty(data.TeacherName))
                                 {
-                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
+                                    errormessages.Add("FileImports data " + data.Id + ": Teacher Name is required.");
+                                    haserror = true;
+                                }
+                                else if (string.IsNullOrEmpty(data.TeacherEmail))
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": Teacher Email is required.");
+                                    haserror = true;
+                                }
 
-                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                    var predicateA = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
-
-                                    var questionnaireA = _dbContext.Questionnaires.Where(predicateA).FirstOrDefault();
-
-                                    var predicateB = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
-
-                                    var questionnaireB = _dbContext.Questionnaires.Where(predicateB).FirstOrDefault();
-
-                                    var predicateC = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
-
-                                    var questionnaireC = _dbContext.Questionnaires.Where(predicateC).FirstOrDefault(); 
-                                    
-                                    var predicateD = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
-
-                                    var questionnaireD = _dbContext.Questionnaires.Where(predicateD).FirstOrDefault();
-
-                                    var predicateE = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
-
-                                    var questionnaireE = _dbContext.Questionnaires.Where(predicateE).FirstOrDefault();
-
-                                    if (questionnaire == null)
-                                    {
-                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Demographics\" ");
-                                        haserror = true;
-                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                    }
-                                    
-                                    if (questionnaireA == null)
-                                    {
-                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section A\" ");
-                                        haserror = true;
-                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                    }
-                                    
-                                    if (questionnaireB == null)
-                                    {
-                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section B\" ");
-                                        haserror = true;
-                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                    }
-                                    
-                                    if (questionnaireC == null)
-                                    {
-                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section C\" ");
-                                        haserror = true;
-                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                    }
-                                    
-                                    if (questionnaireD == null)
-                                    {
-                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section D\" ");
-                                        haserror = true;
-                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                    }
-
-                                    if (questionnaireE == null)
-                                    {
-                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section E\" ");
-                                        haserror = true;
-                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                    }
-
-                                    if(!haserror)
+                                ///<summary>process student
+                                ///</summary>
+                                int childid = 0;
+                                if (!string.IsNullOrEmpty(data.LocalId))
+                                {
+                                    if (teacherid > 0)
                                     {
                                         var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid).FirstOrDefault();
 
@@ -1340,13 +1340,12 @@ namespace EDI.Web.Services
                                             }
                                         }
                                     }
-                                    
                                 }
-                            }
-                            else
-                            {
-                                errormessages.Add("FileImports data " + data.Id + ": Local Id is required.");
-                                haserror = true;
+                                else
+                                {
+                                    errormessages.Add("FileImports data " + data.Id + ": Local Id is required.");
+                                    haserror = true;
+                                }
                             }
                         }
 

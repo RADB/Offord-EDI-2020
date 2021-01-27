@@ -187,9 +187,9 @@
         {
             ShowFileupload = false;
 
-            var status = dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault();
+            var status = dbContext.FileImportStatuses.Where(p => p.English == "Processed").FirstOrDefault();
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
             List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
@@ -260,9 +260,9 @@
             processingresult = await sharedService.ProcessFileData();
             SpinnerObj.HideSpinner("Data processing is done.");
 
-            var status = dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault();
+            var status = dbContext.FileImportStatuses.Where(p => p.English == "Processed").FirstOrDefault();
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
             List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
@@ -368,9 +368,9 @@
                 toastService.ShowError(result.errormessage);
             }
 
-            var status = dbContext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault();
+            var status = dbContext.FileImportStatuses.Where(p => p.English == "Processed").FirstOrDefault();
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
             List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
