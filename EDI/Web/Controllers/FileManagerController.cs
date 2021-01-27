@@ -38,8 +38,8 @@ namespace EDI.Web.Controllers
         [Route("FileOperations")]
         public object FileOperations([FromBody] EDI.Web.Models.FileManagerDirectoryUpdatedContent args)
         {
-            var username = args.CustomData["User_name"].ToString();
-            this.operation.SetRules(GetRules(username));
+            //var username = args.CustomData["User_name"].ToString();
+            //this.operation.SetRules(GetRules(username));
 
             switch (args.Action)
             {                
