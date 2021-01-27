@@ -37,7 +37,8 @@
             try
             {
                 checkChildId();
-                //initializeCounts();
+                getData();
+
                 if (UserSettings.IsTeacher)
                 {
                     //check if child is not it teachers class
@@ -45,8 +46,9 @@
                     if (!dbContext.Children.Where(predicate).Any())
                         NavigationManager.NavigateTo("./children/index");
                 }
-                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Section E" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
-                getData();
+
+                predicate = "p => p." + province + ".Value && p.YearId == " + UserSettings.YearId + " && p.QuestionnaireName == \"Section E\"";
+                QuestionnaireId = dbContext.Questionnaires.Where(predicate).Select(q => q.Id).Single();
             }
             catch (Exception ex)
             {
