@@ -129,8 +129,13 @@
     {
 
     }
+        protected override Task OnParametersSetAsync()
+        {
+            //getChildren();
+            return  base.OnParametersSetAsync();
+        }
 
-    protected override async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
         {
@@ -150,6 +155,11 @@
         }
 
 
+        getChildren();
+    }
+
+    private void getChildren()
+    {
         List<Child> allchildren;
         if (UserSettings.TeacherId > 0)
         {
@@ -206,6 +216,7 @@
 
         this.rowid = 0;
         children = sivm;
+
     }
 
     private string Translate(string word)

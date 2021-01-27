@@ -430,7 +430,7 @@ namespace EDI.Web.Services
                         .Include(c => c.QuestionnairesDataSectionDs)
                         .Include(c => c.QuestionnairesDataSectionEs)
                         .Single();
-
+                var test = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == id && p.YearId == 1).FirstOrDefault();
                 var demographicsComplete = _mathService.GetPercentComplete(child.QuestionnairesDataDemographics.Single().CompletedQuestions,child.QuestionnairesDataDemographics.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataDemographics.Single().RequiredQuestions, numberOfQuestionnaires);
                 var sectionAComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionAs.Single().CompletedQuestions, child.QuestionnairesDataSectionAs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionAs.Single().RequiredQuestions, numberOfQuestionnaires);
                 var sectionBComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionBs.Single().CompletedQuestions, child.QuestionnairesDataSectionBs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionBs.Single().RequiredQuestions, numberOfQuestionnaires);

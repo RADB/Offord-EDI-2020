@@ -2359,8 +2359,8 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "Both", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "tous les deux", Value = 3, Sequence = 30 });
                     break;
                 case "FullPartDontknowNO":
-                    luso.Add(new LookupSetOption() { English = "Full-Time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "à plein temps", Value = 1, Sequence = 10 });
-                    luso.Add(new LookupSetOption() { English = "Part-Time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "à temps partiel", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Full- Time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "à plein temps", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Part- Time", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "à temps partiel", Value = 2, Sequence = 20 });
                     luso.Add(new LookupSetOption() { English = "Don't Know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ne sais pas", Value = 3, Sequence = 30 });
                     luso.Add(new LookupSetOption() { English = "No", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "non", Value = 4, Sequence = 40 });
 

@@ -26,6 +26,17 @@ namespace EDI.ApplicationCore.Entities
         public byte? Religion { get; set; }
         public byte? Other { get; set; }
         public string OtherSpecify { get; set; }
+        public byte? NSECDIS { get; set; }
+        public byte? EIBI { get; set; }
+        public byte? NSHS { get; set; }
+        public byte? OtherServices { get; set; }
+        public string OtherServicesSpecify { get; set; }
+        public byte? PrePrimary { get; set; }
+        public byte? CentreBased { get; set; }
+        public string DaycareName { get; set; }
+        public byte? HomeDaycare { get; set; }
+        public string HomeDaycareName { get; set; }
+        public byte? NonParentInHome { get; set; }
         public string Comments { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

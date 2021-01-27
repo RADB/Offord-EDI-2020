@@ -83,8 +83,9 @@
 
     private void Exit()
     {
-        NavigationManager.NavigateTo("./children/index");
+        NavigationManager.NavigateTo("./children/index", true);
     }
+
     private void GetChildId()
     {
         Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
