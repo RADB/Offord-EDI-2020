@@ -16,13 +16,6 @@
                 <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>
             </div>
         }
-        else if (UserSettings.IsAdmin)
-        {
-            <div class="float-right">
-                <!--Check English or French -->
-                <SfSwitch CssClass="handle-text" OnLabel="Test Data" OffLabel="No Test Data" @bind-Checked="@hasTestData" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnTestChange(e))"></SfSwitch>
-            </div>
-        }
     </li>
     <li class="nav-item d-md-down-none" style="padding-right:20px; font-size: 20px;">
         <div class="cf-identity-name">@username</div>
@@ -41,8 +34,6 @@
 
     private Boolean isFrench { get; set; }
 
-    private Boolean hasTestData { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -57,8 +48,6 @@
                 isFrench = false;
             else
                 isFrench = true;
-
-            hasTestData = UserSettings.HasTestData;
         }
     }
 
@@ -79,20 +68,5 @@
         //StateHasChanged();
         await InvokeAsync(() => StateHasChanged());
         //await InvokeAsync(StateHasChanged); or
-    }
-
-    private async void OnTestChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
-    {
-        if (e.Checked)
-        {
-            UserSettings.HasTestData = true;
-        }
-        else
-            UserSettings.HasTestData = false;
-
-        await sharedService.SaveUserSessions("HasTestData", UserSettings.HasTestData.ToString(), UserSettings.UserID);
-
-        var url = NavigationManager.Uri;
-        NavigationManager.NavigateTo(url, true);
     }
 }

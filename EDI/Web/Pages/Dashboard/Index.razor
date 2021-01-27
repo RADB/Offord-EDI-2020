@@ -7,6 +7,7 @@
 @using EDI.Web.Pages.NewsFeeds
 @using System.Linq.Dynamic.Core
 @using Serilog;
+@using Syncfusion.Blazor.Buttons
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject ServiceContext dbContext;
@@ -26,6 +27,13 @@
                         <strong>@Translate("Administrator Dashboard"):</strong> @UserSettings.FirstName  @UserSettings.LastName
                     </div>
                     <div class="pull-right">
+                        @if (UserSettings.IsAdmin)
+                        {
+                            <div class="float-right">
+                                <!--Check English or French -->
+                                <SfSwitch CssClass="handle-text" OnLabel="Test Data" OffLabel="No Test Data" @bind-Checked="@hasTestData" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnTestChange(e))"></SfSwitch>
+                            </div>
+                        }
                     </div>
                 </div>
                 <div class="card-body">
@@ -194,6 +202,8 @@
     private int TeacherCompleted { get; set; } = 0;
     private bool ProfileComplete { get; set; }
 
+    private Boolean hasTestData { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         if (!UserSettings.IsAuthenticated)
@@ -207,7 +217,7 @@
                 var predicate = "yearid ==" + UserSettings.YearId;
                 var sites = dbContext.Sites.Where(predicate).ToList();
 
-                if(!UserSettings.HasTestData)
+                if (!UserSettings.HasTestData)
                 {
                     var predicate2 = predicate + " && IsTestSite != true";
                     sites = dbContext.Sites.Where(predicate2).ToList();
@@ -268,6 +278,8 @@
                 //var predicatecomplete1 = predicate + "&& TeacherStatusId == " + statuscompleted1.Id;
                 //TeacherCompleted = dbContext.Teachers.Where(predicatecomplete1).Count();
 
+                hasTestData = UserSettings.HasTestData;
+
             }
             else if (UserSettings.IsTeacher)
             {
@@ -327,6 +339,21 @@
     private string Translate(string word)
     {
         return sharedService.GetTranslate(word);
+    }
+
+    private async void OnTestChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
+    {
+        if (e.Checked)
+        {
+            UserSettings.HasTestData = true;
+        }
+        else
+            UserSettings.HasTestData = false;
+
+        await sharedService.SaveUserSessions("HasTestData", UserSettings.HasTestData.ToString(), UserSettings.UserID);
+
+        var url = NavigationManager.Uri;
+        NavigationManager.NavigateTo(url, true);
     }
 
 }
