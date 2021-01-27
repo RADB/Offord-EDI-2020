@@ -2378,6 +2378,10 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "Kindergarten", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Maternelle", Value = 1, Sequence = 10 });
 
                     break;
+                case "ClassAssignmentNS":
+                    luso.Add(new LookupSetOption() { English = "Primary", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Maternelle", Value = 1, Sequence = 10 });
+
+                    break;
                 case "ClassType":
                     luso.Add(new LookupSetOption() { English = "K", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M", Value = 1, Sequence = 10 });
                     luso.Add(new LookupSetOption() { English = "K-1", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-1", Value = 2, Sequence = 20 });
@@ -2386,6 +2390,12 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "K-4", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-4", Value = 5, Sequence = 50 });
                     luso.Add(new LookupSetOption() { English = "K-5", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-5", Value = 6, Sequence = 60 });
                     luso.Add(new LookupSetOption() { English = "K-6", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M-6", Value = 7, Sequence = 70 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 8, Sequence = 80 });
+
+                    break;
+                case "ClassTypeNS":
+                    luso.Add(new LookupSetOption() { English = "Primary", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Primary/1", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "M/1", Value = 2, Sequence = 20 });                    
                     luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 8, Sequence = 80 });
 
                     break;
