@@ -968,93 +968,84 @@ namespace EDI.Web.Services
                                 {
                                     if (schoolid > 0)
                                     {
-                                        string teachernumber = data.ChildEdiid.Substring(10, 2);
-                                        var teacher = servicecontext.Teachers.Where(p => p.TeacherName == data.TeacherName && p.Email == data.TeacherEmail).FirstOrDefault();
+                                        var predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
 
-                                        if (teacher == null)
+                                        var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                                        if (questionnaire == null)
                                         {
-                                            var user = _identityContext.Users.Where(p => p.UserName == data.TeacherEmail).FirstOrDefault();
-                                            string userid = string.Empty;
+                                            errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
+                                            haserror = true;
+                                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                        }
+                                        else
+                                        {
+                                            string teachernumber = data.ChildEdiid.Substring(10, 2);
+                                            var teacher = servicecontext.Teachers.Where(p => p.TeacherName == data.TeacherName && p.Email == data.TeacherEmail).FirstOrDefault();
 
-                                            if (user == null)
+                                            if (teacher == null)
                                             {
+                                                var user = _identityContext.Users.Where(p => p.UserName == data.TeacherEmail).FirstOrDefault();
+                                                string userid = string.Empty;
+
+                                                if (user == null)
+                                                {
+                                                    try
+                                                    {
+                                                        string[] names = data.TeacherName.Split(' ');
+                                                        string firstname = names[0];
+                                                        string lastname = names[1];
+
+                                                        var newuser = new EDIApplicationUser
+                                                        {
+                                                            UserName = data.TeacherEmail,
+                                                            Email = data.TeacherEmail,
+                                                            FirstName = firstname,
+                                                            LastName = lastname
+                                                        };
+                                                        var result = await _userManager.CreateAsync(newuser, password);
+
+                                                        var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+
+                                                        await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                                                        userid = newuser.Id;
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": Create a user error: " + ex.Message);
+                                                        haserror = true;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    userid = user.Id;
+                                                }
+
                                                 try
                                                 {
-                                                    string[] names = data.TeacherName.Split(' ');
-                                                    string firstname = names[0];
-                                                    string lastname = names[1];
+                                                    var teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+                                                    var _teacher = new Teacher();
 
-                                                    var newuser = new EDIApplicationUser
-                                                    {
-                                                        UserName = data.TeacherEmail,
-                                                        Email = data.TeacherEmail,
-                                                        FirstName = firstname,
-                                                        LastName = lastname
-                                                    };
-                                                    var result = await _userManager.CreateAsync(newuser, password);
+                                                    _teacher.UserId = userid;
+                                                    _teacher.TeacherNumber = teachernumber;
+                                                    _teacher.TeacherName = data.TeacherName;
+                                                    _teacher.Email = data.TeacherEmail;
+                                                    _teacher.SchoolId = schoolid;
+                                                    _teacher.YearId = yearid;
+                                                    _teacher.TeacherStatusId = teacherstatus.Id;
+                                                    _teacher.CreatedDate = DateTime.Now;
+                                                    _teacher.CreatedBy = _userSettings.UserName;
+                                                    _teacher.ModifiedDate = DateTime.Now;
+                                                    _teacher.ModifiedBy = _userSettings.UserName;
 
-                                                    var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+                                                    await _teacherRepository.AddAsync(_teacher);
+                                                    teacherid = _teacher.Id;
+                                                    totalteachers++;
 
-                                                    await _userManager.AddToRoleAsync(newuser, role.Name);
+                                                    var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
 
-                                                    userid = newuser.Id;
-                                                }
-                                                catch (Exception ex)
-                                                {
-                                                    errormessages.Add("FileImports data " + data.Id + ": Create a user error: " + ex.Message);
-                                                    haserror = true;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                userid = user.Id;
-                                            }
-
-                                            try
-                                            {
-                                                var teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
-                                                var _teacher = new Teacher();
-
-                                                _teacher.UserId = userid;
-                                                _teacher.TeacherNumber = teachernumber;
-                                                _teacher.TeacherName = data.TeacherName;
-                                                _teacher.Email = data.TeacherEmail;
-                                                _teacher.SchoolId = schoolid;
-                                                _teacher.YearId = yearid;
-                                                _teacher.TeacherStatusId = teacherstatus.Id;
-                                                _teacher.CreatedDate = DateTime.Now;
-                                                _teacher.CreatedBy = _userSettings.UserName;
-                                                _teacher.ModifiedDate = DateTime.Now;
-                                                _teacher.ModifiedBy = _userSettings.UserName;
-
-                                                await _teacherRepository.AddAsync(_teacher);
-                                                teacherid = _teacher.Id;
-                                                totalteachers++;
-
-                                                /*var _teacherFeedbackForms = new TeacherFeedbackForm();
-                                                _teacherFeedbackForms.TeacherId = teacherid;
-                                                _teacherFeedbackForms.YearId = yearid;
-                                                _teacherFeedbackForms.CreatedDate = DateTime.Now;
-                                                _teacherFeedbackForms.CreatedBy = _userSettings.UserName;
-                                                _teacherFeedbackForms.ModifiedDate = DateTime.Now;
-                                                _teacherFeedbackForms.ModifiedBy = _userSettings.UserName;
-
-                                                await _feedbackRepository.AddAsync(_teacherFeedbackForms);*/
-                                                var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
-
-                                                if(teacherprofile == null)
-                                                {
-                                                    var predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
-
-                                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                                    if(questionnaire == null)
-                                                    {
-                                                        errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
-                                                        haserror = true;
-                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
-                                                    }
-                                                    else
+                                                    if (teacherprofile == null)
                                                     {
                                                         var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
                                                         _QuestionnairesDataTeacherProfile.TeacherId = teacherid;
@@ -1066,19 +1057,19 @@ namespace EDI.Web.Services
                                                         _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
 
                                                         await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
-                                                    }                                                    
-                                                }                                                
+                                                    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    errormessages.Add("FileImports data " + data.Id + ": Create a teacher error: " + ex.Message);
+                                                    haserror = true;
+                                                }
                                             }
-                                            catch (Exception ex)
+                                            else
                                             {
-                                                errormessages.Add("FileImports data " + data.Id + ": Create a teacher error: " + ex.Message);
-                                                haserror = true;
+                                                teacherid = teacher.Id;
                                             }
-                                        }
-                                        else
-                                        {
-                                            teacherid = teacher.Id;
-                                        }
+                                        }                                        
                                     }
                                 }
                             }
@@ -1100,70 +1091,29 @@ namespace EDI.Web.Services
                             {
                                 if (teacherid > 0)
                                 {
-                                    var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid).FirstOrDefault();
-
-                                    if (child == null)
-                                    {
-                                        try
-                                        {
-                                            string childnumber = data.ChildEdiid.Substring(13, 2);
-                                            var _child = new Child();
-
-                                            var childstatus = _dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
-
-                                            _child.Ediid = data.ChildEdiid;
-                                            _child.LocalId = data.LocalId;
-                                            _child.ChildNumber = childnumber;
-                                            _child.YearId = yearid;
-                                            _child.TeacherId = teacherid;
-                                            _child.GenderId = data.GenderId;
-                                            _child.Dob = data.ChildDob;
-                                            _child.PostalCode = data.ChildPostalCode;
-                                            _child.ChildStatusId = childstatus.Id;
-                                            _child.CreatedDate = DateTime.Now;
-                                            _child.CreatedBy = _userSettings.UserName;
-                                            _child.ModifiedDate = DateTime.Now;
-                                            _child.ModifiedBy = _userSettings.UserName;
-
-                                            await _childRepository.AddAsync(_child);
-
-                                            childid = _child.Id;
-                                            totalstudents++;
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            errormessages.Add("FileImports data " + data.Id + ": Create a student error: " + ex.Message);
-                                            haserror = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        childid = child.Id;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                errormessages.Add("FileImports data " + data.Id + ": Local Id is required.");
-                                haserror = true;
-                            }
-
-                            if (childid > 0)
-                            {
-                                var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid).FirstOrDefault();
-                                var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid).FirstOrDefault();
-
-                                if(demo == null)
-                                {
-                                    var _demographics = new QuestionnairesDataDemographic();
-
                                     var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
 
                                     var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                                    var predicateA = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
+
+                                    var questionnaireA = _dbContext.Questionnaires.Where(predicateA).FirstOrDefault();
+
+                                    var predicateB = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
+
+                                    var questionnaireB = _dbContext.Questionnaires.Where(predicateB).FirstOrDefault();
+
+                                    var predicateC = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
+
+                                    var questionnaireC = _dbContext.Questionnaires.Where(predicateC).FirstOrDefault(); 
+                                    
+                                    var predicateD = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
+
+                                    var questionnaireD = _dbContext.Questionnaires.Where(predicateD).FirstOrDefault();
+
+                                    var predicateE = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
+
+                                    var questionnaireE = _dbContext.Questionnaires.Where(predicateE).FirstOrDefault();
 
                                     if (questionnaire == null)
                                     {
@@ -1171,199 +1121,232 @@ namespace EDI.Web.Services
                                         haserror = true;
                                         fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
-                                    else
-                                    {
-                                        _demographics.ChildId = childid;
-                                        _demographics.GenderId = (int?)data.GenderId;
-                                        _demographics.Dob = data.ChildDob;
-                                        _demographics.PostalCode = data.ChildPostalCode;
-                                        _demographics.QuestionnaireId = questionnaire.Id;
-                                        _demographics.YearId = yearid;
-                                        _demographics.CreatedDate = DateTime.Now;
-                                        _demographics.CreatedBy = _userSettings.UserName;
-                                        _demographics.ModifiedDate = DateTime.Now;
-                                        _demographics.ModifiedBy = _userSettings.UserName;
-
-                                        await _questionnairesDataDemographic.AddAsync(_demographics);
-                                    }
-                                }
-                                else
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataDemographic table");
-                                    haserror = true;
-                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                }
-                                
-                                if(seca == null)
-                                {
-                                    var _sectionA = new QuestionnairesDataSectionA();
-
-                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
-
-                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                    if (questionnaire == null)
+                                    
+                                    if (questionnaireA == null)
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section A\" ");
                                         haserror = true;
                                         fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
-                                    else
-                                    {
-                                        _sectionA.ChildId = childid;
-                                        _sectionA.QuestionnaireId = questionnaire.Id;
-                                        _sectionA.YearId = yearid;
-                                        _sectionA.CreatedDate = DateTime.Now;
-                                        _sectionA.CreatedBy = _userSettings.UserName;
-                                        _sectionA.ModifiedDate = DateTime.Now;
-                                        _sectionA.ModifiedBy = _userSettings.UserName;
-
-                                        await _questionnairesDataSectionA.AddAsync(_sectionA);
-                                    }
-                                }
-                                else
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionA table");
-                                    haserror = true;
-                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                }
-
-                                if (secb == null)
-                                {
-                                    var _sectionB = new QuestionnairesDataSectionB();
-
-                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
-
-                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                    if (questionnaire == null)
+                                    
+                                    if (questionnaireB == null)
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section B\" ");
                                         haserror = true;
                                         fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
-                                    else
-                                    {
-                                        _sectionB.ChildId = childid;
-                                        _sectionB.QuestionnaireId = questionnaire.Id;
-                                        _sectionB.YearId = yearid;
-                                        _sectionB.CreatedDate = DateTime.Now;
-                                        _sectionB.CreatedBy = _userSettings.UserName;
-                                        _sectionB.ModifiedDate = DateTime.Now;
-                                        _sectionB.ModifiedBy = _userSettings.UserName;
-
-                                        await _questionnairesDataSectionB.AddAsync(_sectionB);
-                                    }
-                                }
-                                else
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionB table");
-                                    haserror = true;
-                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                }
-
-                                if (secc == null)
-                                {
-                                    var _sectionC = new QuestionnairesDataSectionC();
-
-                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
-
-                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                    if (questionnaire == null)
+                                    
+                                    if (questionnaireC == null)
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section C\" ");
                                         haserror = true;
                                         fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
-                                    else
-                                    {
-                                        _sectionC.ChildId = childid;
-                                        _sectionC.QuestionnaireId = questionnaire.Id;
-                                        _sectionC.YearId = yearid;
-                                        _sectionC.CreatedDate = DateTime.Now;
-                                        _sectionC.CreatedBy = _userSettings.UserName;
-                                        _sectionC.ModifiedDate = DateTime.Now;
-                                        _sectionC.ModifiedBy = _userSettings.UserName;
-
-                                        await _questionnairesDataSectionC.AddAsync(_sectionC);
-                                    }
-                                }
-                                else
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionC table");
-                                    haserror = true;
-                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                }
-
-                                if (secd == null)
-                                {
-                                    var _sectionD = new QuestionnairesDataSectionD();
-
-                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
-
-                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                    if (questionnaire == null)
+                                    
+                                    if (questionnaireD == null)
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section D\" ");
                                         haserror = true;
                                         fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
-                                    else
-                                    {
-                                        _sectionD.ChildId = childid;
-                                        _sectionD.QuestionnaireId = questionnaire.Id;
-                                        _sectionD.YearId = yearid;
-                                        _sectionD.CreatedDate = DateTime.Now;
-                                        _sectionD.CreatedBy = _userSettings.UserName;
-                                        _sectionD.ModifiedDate = DateTime.Now;
-                                        _sectionD.ModifiedBy = _userSettings.UserName;
 
-                                        await _questionnairesDataSectionD.AddAsync(_sectionD);
-                                    }
-                                }
-                                else
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionD table");
-                                    haserror = true;
-                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                }
-
-                                if (sece == null)
-                                {
-                                    var _sectionE = new QuestionnairesDataSectionE();
-
-                                    var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
-
-                                    var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
-
-                                    if (questionnaire == null)
+                                    if (questionnaireE == null)
                                     {
                                         errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section E\" ");
                                         haserror = true;
                                         fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
                                     }
-                                    else
-                                    {
-                                        _sectionE.ChildId = childid;
-                                        _sectionE.QuestionnaireId = questionnaire.Id;
-                                        _sectionE.YearId = yearid;
-                                        _sectionE.CreatedDate = DateTime.Now;
-                                        _sectionE.CreatedDate = DateTime.Now;
-                                        _sectionE.CreatedBy = _userSettings.UserName;
-                                        _sectionE.ModifiedDate = DateTime.Now;
-                                        _sectionE.ModifiedBy = _userSettings.UserName;
 
-                                        await _questionnairesDataSectionE.AddAsync(_sectionE);
+                                    if(!haserror)
+                                    {
+                                        var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid).FirstOrDefault();
+
+                                        if (child == null)
+                                        {
+                                            try
+                                            {
+                                                string childnumber = data.ChildEdiid.Substring(13, 2);
+                                                var _child = new Child();
+
+                                                var childstatus = _dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+
+                                                _child.Ediid = data.ChildEdiid;
+                                                _child.LocalId = data.LocalId;
+                                                _child.ChildNumber = childnumber;
+                                                _child.YearId = yearid;
+                                                _child.TeacherId = teacherid;
+                                                _child.GenderId = data.GenderId;
+                                                _child.Dob = data.ChildDob;
+                                                _child.PostalCode = data.ChildPostalCode;
+                                                _child.ChildStatusId = childstatus.Id;
+                                                _child.CreatedDate = DateTime.Now;
+                                                _child.CreatedBy = _userSettings.UserName;
+                                                _child.ModifiedDate = DateTime.Now;
+                                                _child.ModifiedBy = _userSettings.UserName;
+
+                                                await _childRepository.AddAsync(_child);
+
+                                                childid = _child.Id;
+                                                totalstudents++;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": Create a student error: " + ex.Message);
+                                                haserror = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            childid = child.Id;
+                                        }
+
+                                        if (childid > 0)
+                                        {
+                                            var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid).FirstOrDefault();
+                                            var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                            var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                            var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                            var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                            var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid).FirstOrDefault();
+
+                                            if (demo == null)
+                                            {
+                                                var _demographics = new QuestionnairesDataDemographic();
+
+                                                _demographics.ChildId = childid;
+                                                _demographics.GenderId = (int?)data.GenderId;
+                                                _demographics.Dob = data.ChildDob;
+                                                _demographics.PostalCode = data.ChildPostalCode;
+                                                _demographics.QuestionnaireId = questionnaire.Id;
+                                                _demographics.YearId = yearid;
+                                                _demographics.CreatedDate = DateTime.Now;
+                                                _demographics.CreatedBy = _userSettings.UserName;
+                                                _demographics.ModifiedDate = DateTime.Now;
+                                                _demographics.ModifiedBy = _userSettings.UserName;
+
+                                                await _questionnairesDataDemographic.AddAsync(_demographics);
+                                            }
+                                            else
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataDemographic table");
+                                                haserror = true;
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            }
+
+                                            if (seca == null)
+                                            {
+                                                var _sectionA = new QuestionnairesDataSectionA();
+
+                                                _sectionA.ChildId = childid;
+                                                _sectionA.QuestionnaireId = questionnaireA.Id;
+                                                _sectionA.YearId = yearid;
+                                                _sectionA.CreatedDate = DateTime.Now;
+                                                _sectionA.CreatedBy = _userSettings.UserName;
+                                                _sectionA.ModifiedDate = DateTime.Now;
+                                                _sectionA.ModifiedBy = _userSettings.UserName;
+
+                                                await _questionnairesDataSectionA.AddAsync(_sectionA);
+                                            }
+                                            else
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionA table");
+                                                haserror = true;
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            }
+
+                                            if (secb == null)
+                                            {
+                                                var _sectionB = new QuestionnairesDataSectionB();
+
+                                                _sectionB.ChildId = childid;
+                                                _sectionB.QuestionnaireId = questionnaireB.Id;
+                                                _sectionB.YearId = yearid;
+                                                _sectionB.CreatedDate = DateTime.Now;
+                                                _sectionB.CreatedBy = _userSettings.UserName;
+                                                _sectionB.ModifiedDate = DateTime.Now;
+                                                _sectionB.ModifiedBy = _userSettings.UserName;
+
+                                                await _questionnairesDataSectionB.AddAsync(_sectionB);
+                                            }
+                                            else
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionB table");
+                                                haserror = true;
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            }
+
+                                            if (secc == null)
+                                            {
+                                                var _sectionC = new QuestionnairesDataSectionC();
+
+                                                _sectionC.ChildId = childid;
+                                                _sectionC.QuestionnaireId = questionnaireC.Id;
+                                                _sectionC.YearId = yearid;
+                                                _sectionC.CreatedDate = DateTime.Now;
+                                                _sectionC.CreatedBy = _userSettings.UserName;
+                                                _sectionC.ModifiedDate = DateTime.Now;
+                                                _sectionC.ModifiedBy = _userSettings.UserName;
+
+                                                await _questionnairesDataSectionC.AddAsync(_sectionC);
+                                            }
+                                            else
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionC table");
+                                                haserror = true;
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            }
+
+                                            if (secd == null)
+                                            {
+                                                var _sectionD = new QuestionnairesDataSectionD();
+
+                                                _sectionD.ChildId = childid;
+                                                _sectionD.QuestionnaireId = questionnaireD.Id;
+                                                _sectionD.YearId = yearid;
+                                                _sectionD.CreatedDate = DateTime.Now;
+                                                _sectionD.CreatedBy = _userSettings.UserName;
+                                                _sectionD.ModifiedDate = DateTime.Now;
+                                                _sectionD.ModifiedBy = _userSettings.UserName;
+
+                                                await _questionnairesDataSectionD.AddAsync(_sectionD);
+                                            }
+                                            else
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionD table");
+                                                haserror = true;
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            }
+
+                                            if (sece == null)
+                                            {
+                                                var _sectionE = new QuestionnairesDataSectionE();
+
+                                                _sectionE.ChildId = childid;
+                                                _sectionE.QuestionnaireId = questionnaireE.Id;
+                                                _sectionE.YearId = yearid;
+                                                _sectionE.CreatedDate = DateTime.Now;
+                                                _sectionE.CreatedDate = DateTime.Now;
+                                                _sectionE.CreatedBy = _userSettings.UserName;
+                                                _sectionE.ModifiedDate = DateTime.Now;
+                                                _sectionE.ModifiedBy = _userSettings.UserName;
+
+                                                await _questionnairesDataSectionE.AddAsync(_sectionE);
+                                            }
+                                            else
+                                            {
+                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionE table");
+                                                haserror = true;
+                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            }
+                                        }
                                     }
+                                    
                                 }
-                                else
-                                {
-                                    errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionE table");
-                                    haserror = true;
-                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                }
+                            }
+                            else
+                            {
+                                errormessages.Add("FileImports data " + data.Id + ": Local Id is required.");
+                                haserror = true;
                             }
                         }
 

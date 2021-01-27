@@ -431,12 +431,12 @@ namespace EDI.Web.Services
                         .Include(c => c.QuestionnairesDataSectionEs)
                         .Single();
 
-                var demographicsComplete = _mathService.GetPercentComplete(child.QuestionnairesDataDemographics.Single().CompletedQuestions,child.QuestionnairesDataDemographics.Single().RequiredQuestions,numberOfQuestionnaires);
-                var sectionAComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionAs.Single().CompletedQuestions, child.QuestionnairesDataSectionAs.Single().RequiredQuestions, numberOfQuestionnaires);
-                var sectionBComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionBs.Single().CompletedQuestions, child.QuestionnairesDataSectionBs.Single().RequiredQuestions, numberOfQuestionnaires);
-                var sectionCComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionCs.Single().CompletedQuestions, child.QuestionnairesDataSectionCs.Single().RequiredQuestions, numberOfQuestionnaires);
-                var sectionDComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionDs.Single().CompletedQuestions, child.QuestionnairesDataSectionDs.Single().RequiredQuestions, numberOfQuestionnaires);
-                var sectionEComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionEs.Single().CompletedQuestions, child.QuestionnairesDataSectionEs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var demographicsComplete = _mathService.GetPercentComplete(child.QuestionnairesDataDemographics.Single().CompletedQuestions,child.QuestionnairesDataDemographics.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataDemographics.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionAComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionAs.Single().CompletedQuestions, child.QuestionnairesDataSectionAs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionAs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionBComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionBs.Single().CompletedQuestions, child.QuestionnairesDataSectionBs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionBs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionCComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionCs.Single().CompletedQuestions, child.QuestionnairesDataSectionCs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionCs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionDComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionDs.Single().CompletedQuestions, child.QuestionnairesDataSectionDs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionDs.Single().RequiredQuestions, numberOfQuestionnaires);
+                var sectionEComplete = _mathService.GetPercentComplete(child.QuestionnairesDataSectionEs.Single().CompletedQuestions, child.QuestionnairesDataSectionEs.Single().RequiredQuestions == 0 ? 1 : child.QuestionnairesDataSectionEs.Single().RequiredQuestions, numberOfQuestionnaires);
 
                 var percentComplete = Math.Min(demographicsComplete + sectionAComplete + sectionBComplete + sectionCComplete + sectionDComplete + sectionEComplete, 100);
 

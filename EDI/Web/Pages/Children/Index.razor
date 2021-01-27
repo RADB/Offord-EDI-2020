@@ -187,33 +187,19 @@
             achild.YearId = child.YearId;
             achild.Ediyear = child.Year.Ediyear;
 
-            //var year = dbContext.Years.Where(p => p.Id == child.YearId).FirstOrDefault();
-            //achild.Ediyear = year.Ediyear;
-
             achild.GenderId = child.GenderId;
             achild.Gender = child.Gender.English;
-            //var gender = dbContext.Genders.Where(p => p.Id == child.GenderId).FirstOrDefault();
-            //achild.Gender = gender.English;
 
             achild.TeacherId = child.TeacherId;
-            //var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
-            //achild.TeacherName = teacher.TeacherName;
             achild.TeacherName = child.Teacher.TeacherName;
 
             achild.ChildStatusId = child.ChildStatusId;
-            //var childstatus = dbContext.ChildStatuses.Where(p => p.Id == child.ChildStatusId).FirstOrDefault();
-            //achild.ChildStatus = childstatus.English;
             achild.ChildStatus = child.ChildStatus.English;
 
-            //var totalcompleted = childService.GetCompletedQuestions(child.Id);
-            //var totalrequired = childService.GetRequiredQuestions(child.Id);
             var percentComplete = childService.GetPercentComplete(child.Id, 6);
 
             achild.Progress = 0;
-
-            //if (totalrequired > 0)
             achild.Progress = percentComplete;
-            //achild.Progress = mathService.GetPercent(totalcompleted, totalrequired);
 
             sivm.Add(achild);
         }
