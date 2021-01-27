@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using EDI.Web.Data;
+@using System.Linq.Dynamic.Core;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject IChildService childService;
@@ -118,6 +119,7 @@
 
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private string predicate { get; set; } = string.Empty;
 
     SfGrid<ChildItemViewModel> Grid;
 
@@ -152,13 +154,24 @@
         if (UserSettings.TeacherId > 0)
         {
             // SchoolId specified - get all teachers at school
-            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == UserSettings.TeacherId && p.YearId == UserSettings.YearId).OrderBy(p => p.Ediid).ToList());
+            //allchildren = await Task.FromResult(dbContext.Children.Where(p => p.TeacherId == UserSettings.TeacherId && p.YearId == UserSettings.YearId).OrderBy(p => p.Ediid).ToList());
+            predicate = "p => p.TeacherId == " + UserSettings.TeacherId + " && p.YearId == " + UserSettings.YearId;
         }
         else
         {
             // SchoolId specified - get all teachers at school
-            allchildren = await Task.FromResult(dbContext.Children.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.Ediid).ToList());
+            //allchildren = await Task.FromResult(dbContext.Children.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.Ediid).ToList());
+            predicate = "p => p.YearId ==" + UserSettings.YearId;
         }
+
+        allchildren = dbContext.Children.Where(predicate)
+                    .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                    .Include(t => t.Year)
+                    .Include(g => g.Gender)
+                    .Include(cs => cs.ChildStatus)
+                    .ToList();
 
         List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();
 
@@ -172,21 +185,25 @@
             achild.Dob = child.Dob;
             achild.PostalCode = child.PostalCode;
             achild.YearId = child.YearId;
+            achild.Ediyear = child.Year.Ediyear;
 
-            var year = dbContext.Years.Where(p => p.Id == child.YearId).FirstOrDefault();
-            achild.Ediyear = year.Ediyear;
+            //var year = dbContext.Years.Where(p => p.Id == child.YearId).FirstOrDefault();
+            //achild.Ediyear = year.Ediyear;
 
             achild.GenderId = child.GenderId;
-            var gender = dbContext.Genders.Where(p => p.Id == child.GenderId).FirstOrDefault();
-            achild.Gender = gender.English;
+            achild.Gender = child.Gender.English;
+            //var gender = dbContext.Genders.Where(p => p.Id == child.GenderId).FirstOrDefault();
+            //achild.Gender = gender.English;
 
             achild.TeacherId = child.TeacherId;
-            var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
-            achild.TeacherName = teacher.TeacherName;
+            //var teacher = dbContext.Teachers.Where(p => p.Id == child.TeacherId).FirstOrDefault();
+            //achild.TeacherName = teacher.TeacherName;
+            achild.TeacherName = child.Teacher.TeacherName;
 
             achild.ChildStatusId = child.ChildStatusId;
-            var childstatus = dbContext.ChildStatuses.Where(p => p.Id == child.ChildStatusId).FirstOrDefault();
-            achild.ChildStatus = childstatus.English;
+            //var childstatus = dbContext.ChildStatuses.Where(p => p.Id == child.ChildStatusId).FirstOrDefault();
+            //achild.ChildStatus = childstatus.English;
+            achild.ChildStatus = child.ChildStatus.English;
 
             //var totalcompleted = childService.GetCompletedQuestions(child.Id);
             //var totalrequired = childService.GetRequiredQuestions(child.Id);

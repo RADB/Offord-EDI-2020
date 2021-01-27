@@ -62,7 +62,7 @@
                 //                initializeCounts();
 
                 checkChildId();
-
+                getData();
 
                 if (UserSettings.IsTeacher)
                 {
@@ -71,8 +71,10 @@
                     if (!dbContext.Children.Where(predicate).Any())
                         NavigationManager.NavigateTo("./children/index");
                 }
-                QuestionnaireId = dbContext.Questionnaires.Where(q => q.QuestionnaireName == "Demographics" && q.YearId == UserSettings.YearId).Select(q => q.Id).Single();
-                getData();
+
+                predicate = "p => p." + province + ".Value && p.YearId == " + UserSettings.YearId + " && p.QuestionnaireName == \"Demographics\"";
+                QuestionnaireId = dbContext.Questionnaires.Where(predicate).Select(q => q.Id).Single();
+
             }
             catch (Exception ex)
             {

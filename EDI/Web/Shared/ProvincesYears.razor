@@ -1,6 +1,7 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @inject ISharedService sharedService
 @inject ServiceContext dbContext;
+@inject IReflectionService reflectionService; 
 
 <div class="form-group row">
     <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
@@ -19,7 +20,9 @@
     <label class="col-md-4 col-form-label" for="Provinces">Provinces: </label>
     @foreach (var option in Provinces)
     {
-        @if (year != null && year.GetType().GetProperty((option.English).Replace(" ", "")).GetValue(year, null).Equals(true))
+        var p = reflectionService.GetFieldValue(year, option.English.Replace(" ", ""));
+        if (!string.IsNullOrEmpty(p) &&  bool.Parse(p))
+        // @if (year != null && year.GetType().GetProperty((option.English).Replace(" ", "")).GetValue(year, null).Equals(true))
         {
             <div class="input-group col-md-2">
                 <SfCheckBox Label="@option.English" LabelPosition="LabelPosition.After" @onchange="@((ev) => CheckBoxValueChange(ev, option.English))" Checked=@ProvinceConfigModel.GetType().GetProperty((option.English).Replace(" ", "")).GetValue(ProvinceConfigModel).Equals(true) CssClass="e-info"></SfCheckBox>
