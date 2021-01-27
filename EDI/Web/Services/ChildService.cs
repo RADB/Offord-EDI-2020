@@ -208,12 +208,50 @@ namespace EDI.Web.Services
 
                 await _childRepository.AddAsync(_child);
 
+                var provinceid = 0;
+                var provincename = string.Empty;
+
+                var provinceedicodestring = child.Ediid.Substring(2, 2);
+                var provinceedicode = int.Parse(provinceedicodestring);
+                var countryid = _dbContext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().CountryID;
+                provinceid = _dbContext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
+                provincename = _dbContext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().English.Replace(" ", "");
+
+                var predicate = "p => p." + provincename + " == true && p.YearId == " + child.YearId + " && p.QuestionnaireName == \"Demographics\"";
+
+                var questionnaire = _dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                var predicateA = "p => p." + provincename + " == true && p.YearId == " + child.YearId + " && p.QuestionnaireName == \"Section A\"";
+
+                var questionnaireA = _dbContext.Questionnaires.Where(predicateA).FirstOrDefault();
+
+                var predicateB = "p => p." + provincename + " == true && p.YearId == " + child.YearId + " && p.QuestionnaireName == \"Section B\"";
+
+                var questionnaireB = _dbContext.Questionnaires.Where(predicateB).FirstOrDefault();
+
+                var predicateC = "p => p." + provincename + " == true && p.YearId == " + child.YearId + " && p.QuestionnaireName == \"Section C\"";
+
+                var questionnaireC = _dbContext.Questionnaires.Where(predicateC).FirstOrDefault();
+
+                var predicateD = "p => p." + provincename + " == true && p.YearId == " + child.YearId + " && p.QuestionnaireName == \"Section D\"";
+
+                var questionnaireD = _dbContext.Questionnaires.Where(predicateD).FirstOrDefault();
+
+                var predicateE = "p => p." + provincename + " == true && p.YearId == " + child.YearId + " && p.QuestionnaireName == \"Section E\"";
+
+                var questionnaireE = _dbContext.Questionnaires.Where(predicateE).FirstOrDefault();
+
                 if (_child.Id > 0)
                 {
                     var childid = _child.Id;
                     var _demographics = new QuestionnairesDataDemographic();
 
                     _demographics.ChildId = childid;
+                    _demographics.GenderId = child.GenderId;
+                    _demographics.Dob = child.Dob;
+                    _demographics.PostalCode = child.PostalCode;
+                    _demographics.YearId = child.YearId;
+                    _demographics.QuestionnaireId = questionnaire.Id;
                     _demographics.CreatedDate = DateTime.Now;
                     _demographics.CreatedBy = _userSettings.UserName;
                     _demographics.ModifiedDate = DateTime.Now;
@@ -224,6 +262,8 @@ namespace EDI.Web.Services
                     var _sectionA = new QuestionnairesDataSectionA();
 
                     _sectionA.ChildId = childid;
+                    _sectionA.QuestionnaireId = questionnaireA.Id;
+                    _sectionA.YearId = child.YearId;
                     _sectionA.CreatedDate = DateTime.Now;
                     _sectionA.CreatedBy = _userSettings.UserName;
                     _sectionA.ModifiedDate = DateTime.Now;
@@ -234,6 +274,8 @@ namespace EDI.Web.Services
                     var _sectionB = new QuestionnairesDataSectionB();
 
                     _sectionB.ChildId = childid;
+                    _sectionB.QuestionnaireId = questionnaireB.Id;
+                    _sectionB.YearId = child.YearId;
                     _sectionB.CreatedDate = DateTime.Now;
                     _sectionB.CreatedBy = _userSettings.UserName;
                     _sectionB.ModifiedDate = DateTime.Now;
@@ -244,6 +286,8 @@ namespace EDI.Web.Services
                     var _sectionC = new QuestionnairesDataSectionC();
 
                     _sectionC.ChildId = childid;
+                    _sectionC.QuestionnaireId = questionnaireC.Id;
+                    _sectionC.YearId = child.YearId;
                     _sectionC.CreatedDate = DateTime.Now;
                     _sectionC.CreatedBy = _userSettings.UserName;
                     _sectionC.ModifiedDate = DateTime.Now;
@@ -254,6 +298,8 @@ namespace EDI.Web.Services
                     var _sectionD = new QuestionnairesDataSectionD();
 
                     _sectionD.ChildId = childid;
+                    _sectionD.QuestionnaireId = questionnaireD.Id;
+                    _sectionD.YearId = child.YearId;
                     _sectionD.CreatedDate = DateTime.Now;
                     _sectionD.CreatedBy = _userSettings.UserName;
                     _sectionD.ModifiedDate = DateTime.Now;
@@ -264,6 +310,9 @@ namespace EDI.Web.Services
                     var _sectionE = new QuestionnairesDataSectionE();
 
                     _sectionE.ChildId = childid;
+                    _sectionE.QuestionnaireId = questionnaireE.Id;
+                    _sectionE.YearId = child.YearId;
+                    _sectionE.CreatedDate = DateTime.Now;
                     _sectionE.CreatedDate = DateTime.Now;
                     _sectionE.CreatedBy = _userSettings.UserName;
                     _sectionE.ModifiedDate = DateTime.Now;

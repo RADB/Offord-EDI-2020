@@ -102,7 +102,8 @@
             Message = "New Child added successfully.";
             toastService.ShowSuccess(Message);
             ChildModel = new ChildItemViewModel();
-            NavigationManager.NavigateTo("./Children/edit/" + id);
+            //NavigationManager.NavigateTo("./Children/edit/" + id);
+            NavigationManager.NavigateTo("./Children/index");
         }
     }
 

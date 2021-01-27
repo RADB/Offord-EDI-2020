@@ -19,6 +19,7 @@ using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
 using EDI.Infrastructure.Data;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 
 namespace EDI.Web.Services
 {
@@ -30,6 +31,7 @@ namespace EDI.Web.Services
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         private EDIAppSettings EDIppSettings { get; set; }
         private readonly IAsyncIdentityRepository _accountRepository;
+        private readonly IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
         private IHostEnvironment _hostingEnvironment;
         private readonly ServiceContext _dbContext;
         private readonly AppIdentityDbContext _identityContext;
@@ -46,6 +48,7 @@ namespace EDI.Web.Services
             ILoggerFactory loggerFactory,
             IAsyncRepository<Teacher> teacherRepository,
             IAsyncIdentityRepository accountRepository,
+            IAsyncRepository<QuestionnairesDataTeacherProfile> profileRepository,
             IHostEnvironment hostingEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AuthenticationStateProvider authenticationStateProvider,
@@ -59,6 +62,7 @@ namespace EDI.Web.Services
             _httpContextAccessor = httpContextAccessor;
             _teacherRepository = teacherRepository;
             _accountRepository = accountRepository;
+            _profileRepository = profileRepository;
             _hostingEnvironment = hostingEnvironment;
             _userManager = userManager;
             _dbContext = dbContext;
@@ -205,6 +209,28 @@ namespace EDI.Web.Services
                 _teacher.ModifiedBy = _userSettings.UserName;
 
                 await _teacherRepository.AddAsync(_teacher);
+
+                var school = _dbContext.Schools.Where(p => p.Id == teacher.SchoolId.Value).FirstOrDefault();
+                var province = _dbContext.Provinces.Where( p => p.Id == school.ProvinceId).FirstOrDefault();
+
+                var provinceid = province.Id;
+                var provincename = province.English.Replace(" ", "");
+
+                var predicateTeacher = "p => p." + provincename + ".Value && p.YearId == " + teacher.YearId + " && p.QuestionnaireName == \"Teacher Feedback\"";
+
+                var questionnaireTeacher = _dbContext.Questionnaires.Where(predicateTeacher).FirstOrDefault();
+
+                var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
+                _QuestionnairesDataTeacherProfile.TeacherId = _teacher.Id;
+                _QuestionnairesDataTeacherProfile.YearId = teacher.YearId;
+                _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaireTeacher.Id;
+                _QuestionnairesDataTeacherProfile.CreatedDate = DateTime.Now;
+                _QuestionnairesDataTeacherProfile.CreatedBy = _userSettings.UserName;
+                _QuestionnairesDataTeacherProfile.ModifiedDate = DateTime.Now;
+                _QuestionnairesDataTeacherProfile.ModifiedBy = _userSettings.UserName;
+
+                await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
+
                 return _teacher.Id;
             }
             catch (Exception ex)
