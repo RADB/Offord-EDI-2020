@@ -36,5 +36,6 @@ namespace EDI.Web.Models
         public string ChildStatus { get; set; }
         public int? Progress { get; set; }
         public bool? IsAdmin { get; set; }
+        public byte PercentComplete { get; set; }
     }
 }

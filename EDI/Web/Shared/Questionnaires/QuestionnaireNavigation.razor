@@ -279,7 +279,7 @@
 
 
         bool IsComplete = percentComplete == 100 ? true : false;
-        modifiedTime = DateTime.Now;
+        var modifiedTime = DateTime.Now;
         switch (EntityName)
         {
             case "Questionnaires.Data.Demographics":
