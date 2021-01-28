@@ -84,7 +84,6 @@
             // show modal confirming locking child (YES NO)
             try
             {
-                //var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Child", "ChildStatusId"));
                 var currentStatus = teacherData.Children.Single().ChildStatusId;
                 if ((Enumerations.ChildStatus)currentStatus != Enumerations.ChildStatus.Locked)
                 {

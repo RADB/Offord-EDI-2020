@@ -5,6 +5,7 @@
 @using EDI.Web.Shared.Modals;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
+@inject IMathService mathService;
 @inject ServiceContext dbContext;
 @inject UserSettings _userSettings;
 @inject NavigationManager NavigationManager;
@@ -82,6 +83,8 @@
 
     // option set
     private List<LookupSetOption> _LookupSetOptions;
+    [Parameter]
+    public EventCallback<string> OnQuestionnaireSave { get; set; }
 
     private string currentValue { get; set; }
 
@@ -90,6 +93,10 @@
     private string LabelFonts { get; set; }
 
     private bool? HasNotification { get; set; }
+
+    private int completed { get; set; }
+    private int required { get; set; }
+    private int percentComplete { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -145,10 +152,15 @@
             {
                 // modal confirming lock
 
-                // MESSAGE - 
+                // MESSAGE -
                 //Config.Notification or Config.NotificationFrench
-                
-                var modal = ModalService.Show<StatusLock>("Confirm Lock");
+                var parameters = new ModalParameters();
+
+                var message = _userSettings.Language == "French" ? Config.NotificationFrench : Config.Notification;
+
+                parameters.Add("Message", message);
+
+                var modal = ModalService.Show<StatusLock>("Confirm Lock", parameters);
                 var result = await modal.Result;
                 ConfirmLockModalClosed(result);
             }
@@ -166,19 +178,48 @@
             // show modal confirming locking child (YES NO)
             try
             {
-                //var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Child", "ChildStatusId"));
-                //var currentStatus = teacherData.Children.Single().ChildStatusId;
-                //if ((Enumerations.ChildStatus)currentStatus != Enumerations.ChildStatus.Locked)
-                //{
-                //    checkCompleteNess();
-                //    //reflectionService.SetFieldValue(teacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
-                //    teacherData.Children.Single().ChildStatusId = (int)Enumerations.ChildStatus.Locked;
-                //    UserSettings.TeacherData = teacherData;
-                //    await Save(false);
-                //    StateHasChanged();
+                var currentStatus = data.Children.Single().ChildStatusId;
+                if ((EDI.Web.Data.Enumerations.ChildStatus)currentStatus != EDI.Web.Data.Enumerations.ChildStatus.Locked)
+                {
+                    data.Children.Single().ChildStatusId = (int)EDI.Web.Data.Enumerations.ChildStatus.Locked;
+                    data.Children.Single().ModifiedBy = _userSettings.UserName;
+                    data.Children.Single().ModifiedDate = DateTime.Now;
+                    checkCompleteNess();
 
-                    NavigationManager.NavigateTo("./children/index", true);
-                //}
+                    bool IsComplete = percentComplete == 100 ? true : false;
+
+                    data.Children.Single().QuestionnairesDataDemographics.Single().CompletedQuestions = completed;
+                    data.Children.Single().QuestionnairesDataDemographics.Single().RequiredQuestions = required;
+                    data.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = IsComplete;
+                    data.Children.Single().QuestionnairesDataDemographics.Single().ModifiedBy = _userSettings.UserName;
+                    data.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = DateTime.Now;
+
+                    try
+                    {
+                        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+                        optionsBuilder.UseSqlServer(EDI.Web.Extensions.ConnectionStrings.ServiceConnection());
+                        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+                        {
+                            // load the disconnected data into the context
+                            servicecontext.Update(data);
+                            try
+                            {
+                                await servicecontext.SaveChangesAsync();
+
+                                NavigationManager.NavigateTo("./children/index", true);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "RadioPart", "Save");
+                    }
+                }
 
             }
             catch (Exception ex)
@@ -186,6 +227,18 @@
 
             }
         }
+    }
+
+    private void checkCompleteNess()
+    {
+        completed = _userSettings.QuestionsCompleted;
+        required = _userSettings.QuestionsRequired;
+        percentComplete = mathService.GetPercent(completed, required);
+
+        if (percentComplete > 100)
+            percentComplete = 100;
+
+        //StateHasChanged();
     }
 }
 
