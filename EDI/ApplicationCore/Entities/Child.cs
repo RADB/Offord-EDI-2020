@@ -32,7 +32,7 @@ namespace EDI.ApplicationCore.Entities
         public DateTime? Dob { get; set; }
         public string PostalCode { get; set; }
         public string ChildNumber { get; set; }
-
+        public byte PercentComplete { get; set; } 
         public virtual Gender Gender { get; set; }
         [JsonIgnore]
         public virtual Teacher Teacher { get; set; }

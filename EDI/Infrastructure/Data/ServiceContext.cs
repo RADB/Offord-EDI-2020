@@ -189,6 +189,8 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.ModifiedBy).IsUnicode(false);
 
+                entity.Property(e => e.PercentComplete).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.PostalCode).HasMaxLength(10);
 
                 entity.Property(e => e.ChildNumber).HasMaxLength(15);
