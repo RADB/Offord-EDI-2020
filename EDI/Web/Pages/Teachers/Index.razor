@@ -96,7 +96,7 @@
                                 <Template>
                                     @{
                                         var comm = (context as TeacherItemViewModel);
-                                        if (UserSettings.IsAdmin || comm.TeacherStatusId == (int)Enumerations.TeacherStatus.New || comm.TeacherStatusId == (int)Enumerations.TeacherStatus.InProgress)
+                                        if (UserSettings.IsAdmin || comm.TeacherStatusId != (int)Enumerations.TeacherStatus.Locked)
                                         {
                                             <button data-toggle="tooltip" data-placement="bottom" title="Profile" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">Profile</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
                                         }
