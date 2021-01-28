@@ -314,22 +314,19 @@
     {
         foreach (var file in args.Files)
         {
-            ErrorViewModel result = await sharedService.UploadFileData(file);
+            processingresult = await sharedService.UploadFileData(file);
 
-            if (string.IsNullOrEmpty(result.errormessage))
+            if (processingresult.errormessages.Count() == 0)
             {
-                result.message = "Data uploaded successfully.";
-
-                toastService.ShowSuccess(result.message);
+                toastService.ShowSuccess("Data uploaded successfully.");
 
                 Random random = new Random();
                 NavigationManager.NavigateTo("./DataImport/index/" + random.Next(1, 1000));
-
             }
             else
             {
-                ErrorMessage = result.errormessage;
-                toastService.ShowError(result.errormessage);
+                toastService.ShowError("Data uploaded failed.");
+                StateHasChanged();
             }
         }
     }
