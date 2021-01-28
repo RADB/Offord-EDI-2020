@@ -2,10 +2,12 @@
 @using Syncfusion.Blazor.Buttons;
 @using Newtonsoft.Json;
 @using static EDI.Web.Data.Enumerations;
+@using EDI.Web.Shared.Modals;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject ServiceContext dbContext;
-@inject UserSettings _userSettings; 
+@inject UserSettings _userSettings;
+@inject NavigationManager NavigationManager;
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 
 
@@ -14,37 +16,37 @@
 </div>
 <div class="row @ValidationCss">
     <div class="col-1">
-       @if (Valid==true)
+        @if (Valid == true)
         {
-        <i class="far fa-check-circle" style="font-size:50px;color:darkgreen"></i>
+            <i class="far fa-check-circle" style="font-size:50px;color:darkgreen"></i>
         }
-        else if (Valid==false)
+        else if (Valid == false)
         {
-        <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
+            <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
         }
     </div>
     <div class="col-9">
         @foreach (var option in _LookupSetOptions)
         {
             @*<div class="form-check">
-                @{
-                    bool ischecked = false;
+                    @{
+                        bool ischecked = false;
 
-                    @if (@currentValue == @option.Value.ToString())
-                    {
-                        ischecked = true;
+                        @if (@currentValue == @option.Value.ToString())
+                        {
+                            ischecked = true;
+                        }
+
+                        <input class="form-check-input" type="radio" disabled="@ReadonlyQuestion" name="@Config.EntityField" checked="@ischecked" value="@option.Value.ToString()" @onchange="@onChange" data-toggle="tooltip" data-placement="bottom" title="@sharedService.GetOptionText(option)">
+
                     }
-
-                    <input class="form-check-input" type="radio" disabled="@ReadonlyQuestion" name="@Config.EntityField" checked="@ischecked" value="@option.Value.ToString()" @onchange="@onChange" data-toggle="tooltip" data-placement="bottom" title="@sharedService.GetOptionText(option)">
-
-                }
-            <label class="form-check-label" style="font-size: @LabelFonts;">
-                @if (RadioLabels)
-                {
-                    @sharedService.GetOptionText(option)
-                }
-            </label>
-            </div>*@
+                <label class="form-check-label" style="font-size: @LabelFonts;">
+                    @if (RadioLabels)
+                    {
+                        @sharedService.GetOptionText(option)
+                    }
+                </label>
+                </div>*@
             <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
             if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
@@ -77,7 +79,7 @@
 
 @code
 {
-  
+
     // option set
     private List<LookupSetOption> _LookupSetOptions;
 
@@ -87,7 +89,7 @@
 
     private string LabelFonts { get; set; }
 
-
+    private bool? HasNotification { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,6 +98,7 @@
         // check to see if question is readonly
         ReadonlyQuestion = Config.IsReadOnly;
         IsRequired = Config.IsRequired;
+        HasNotification = Config.HasNotification;
         // Get the current value of the question
         currentValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
 
@@ -134,9 +137,55 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
+
+        if (HasNotification == true)
+        {
+            //var predicate = e.Value.ToString() + Config.NotificationCondition;
+            if (int.Parse(e.Value.ToString()) > 1)
+            {
+                // modal confirming lock
+
+                // MESSAGE - 
+                //Config.Notification or Config.NotificationFrench
+                
+                var modal = ModalService.Show<StatusLock>("Confirm Lock");
+                var result = await modal.Result;
+                ConfirmLockModalClosed(result);
+            }
+        }
+
         CompletedQuestion(previousValue.ToString(), e.Value.ToString());
         StateHasChanged();
 
+    }
+
+    async void ConfirmLockModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            // show modal confirming locking child (YES NO)
+            try
+            {
+                //var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Child", "ChildStatusId"));
+                //var currentStatus = teacherData.Children.Single().ChildStatusId;
+                //if ((Enumerations.ChildStatus)currentStatus != Enumerations.ChildStatus.Locked)
+                //{
+                //    checkCompleteNess();
+                //    //reflectionService.SetFieldValue(teacherData, "Child", "ChildStatusId", ((int)Enumerations.ChildStatus.Locked).ToString());
+                //    teacherData.Children.Single().ChildStatusId = (int)Enumerations.ChildStatus.Locked;
+                //    UserSettings.TeacherData = teacherData;
+                //    await Save(false);
+                //    StateHasChanged();
+
+                    NavigationManager.NavigateTo("./children/index", true);
+                //}
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }
 
