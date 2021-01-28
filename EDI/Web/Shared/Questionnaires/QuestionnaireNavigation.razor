@@ -49,7 +49,7 @@
 
     [CascadingParameter]
     public IModalService ModalService { get; set; }
-  
+
     [Parameter]
     public EventCallback<string> OnQuestionnaireSave { get; set; }
 
@@ -279,7 +279,7 @@
 
 
         bool IsComplete = percentComplete == 100 ? true : false;
-
+        modifiedTime = DateTime.Now;
         switch (EntityName)
         {
             case "Questionnaires.Data.Demographics":
@@ -287,7 +287,7 @@
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = IsComplete;
                 TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedBy = UserSettings.UserName;
-                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = DateTime.Now;
+                TeacherData.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = modifiedTime;
                 //UserSettings.DemographicsComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete", IsComplete);
                 break;
@@ -296,7 +296,7 @@
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().IsComplete = IsComplete;
                 TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedBy = UserSettings.UserName;
-                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedDate = DateTime.Now;
+                TeacherData.Children.Single().QuestionnairesDataSectionAs.Single().ModifiedDate = modifiedTime;
                 //UserSettings.SectionAComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionA.IsComplete", IsComplete);
                 break;
@@ -305,7 +305,7 @@
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().IsComplete = IsComplete;
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedBy = UserSettings.UserName;
-                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedDate = DateTime.Now;
+                TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedDate = modifiedTime;
                 //UserSettings.SectionBComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", IsComplete);
                 break;
@@ -314,7 +314,7 @@
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete = IsComplete;
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedBy = UserSettings.UserName;
-                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedDate = DateTime.Now;
+                TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().ModifiedDate = modifiedTime;
                 //UserSettings.SectionCComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionC.IsComplete", TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().IsComplete);
                 break;
@@ -323,7 +323,7 @@
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().IsComplete = IsComplete;
                 TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedBy = UserSettings.UserName;
-                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedDate = DateTime.Now;
+                TeacherData.Children.Single().QuestionnairesDataSectionDs.Single().ModifiedDate = modifiedTime;
                 //UserSettings.SectionDComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionD.IsComplete", IsComplete);
                 break;
@@ -332,7 +332,7 @@
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().RequiredQuestions = required;
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().IsComplete = IsComplete;
                 TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedBy = UserSettings.UserName;
-                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedDate = DateTime.Now;
+                TeacherData.Children.Single().QuestionnairesDataSectionEs.Single().ModifiedDate = modifiedTime;
                 //UserSettings.SectionEComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionE.IsComplete", IsComplete);
                 break;
@@ -344,6 +344,10 @@
         {
             TeacherData.Children.Single().ChildStatusId = (int)Enumerations.ChildStatus.InProgress;
         }
+
+        TeacherData.Children.Single().ModifiedBy = UserSettings.UserName;
+        TeacherData.Children.Single().ModifiedDate = modifiedTime;
+        TeacherData.Children.Single().PercentComplete = (byte)percentComplete;
 
         var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
         optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());

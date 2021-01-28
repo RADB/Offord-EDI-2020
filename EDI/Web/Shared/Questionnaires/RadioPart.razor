@@ -181,18 +181,20 @@
                 var currentStatus = data.Children.Single().ChildStatusId;
                 if ((EDI.Web.Data.Enumerations.ChildStatus)currentStatus != EDI.Web.Data.Enumerations.ChildStatus.Locked)
                 {
-                    data.Children.Single().ChildStatusId = (int)EDI.Web.Data.Enumerations.ChildStatus.Locked;
-                    data.Children.Single().ModifiedBy = _userSettings.UserName;
-                    data.Children.Single().ModifiedDate = DateTime.Now;
                     checkCompleteNess();
 
                     bool IsComplete = percentComplete == 100 ? true : false;
+                    var modifiedTime = DateTime.Now;
 
+                    data.Children.Single().ChildStatusId = (int)EDI.Web.Data.Enumerations.ChildStatus.Locked;
+                    data.Children.Single().ModifiedBy = _userSettings.UserName;
+                    data.Children.Single().ModifiedDate = modifiedTime;
+                    data.Children.Single().PercentComplete = (byte)percentComplete;
                     data.Children.Single().QuestionnairesDataDemographics.Single().CompletedQuestions = completed;
                     data.Children.Single().QuestionnairesDataDemographics.Single().RequiredQuestions = required;
                     data.Children.Single().QuestionnairesDataDemographics.Single().IsComplete = IsComplete;
                     data.Children.Single().QuestionnairesDataDemographics.Single().ModifiedBy = _userSettings.UserName;
-                    data.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = DateTime.Now;
+                    data.Children.Single().QuestionnairesDataDemographics.Single().ModifiedDate = modifiedTime;
 
                     try
                     {
