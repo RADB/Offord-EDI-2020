@@ -439,6 +439,10 @@ namespace EDI.Web.Services
 
             string errormessage = string.Empty;
             string message = string.Empty;
+            List<string> messages = new List<string>();
+            List<string> errormessages = new List<string>();
+
+            var haserror = false;
 
             try
             {
@@ -496,9 +500,8 @@ namespace EDI.Web.Services
                                 var cell = firstrow.Cells[j];
                                 if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != comlumHeadrs[j].Trim().ToLower())
                                 {
-                                    errormessage = "This Excel file is invalid";
-
-                                    error.message = message;
+                                    errormessages.Add("This Excel file is invalid");
+                                    haserror = true;
                                     error.errormessage = errormessage;
                                     return error;
                                 }
@@ -529,36 +532,24 @@ namespace EDI.Web.Services
                                     _file.SiteName = site;
                                     _file.CoordinatorName = row.Cells[1]?.CalculatedValue.Trim();
                                     _file.CoordinatorEmail = row.Cells[2]?.CalculatedValue.Trim();
-                                    _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
 
-                                    /*var province = row.Cells[4]?.CalculatedValue.Trim();
-                                    if (string.IsNullOrEmpty(province))
+                                    if (!ValidateExtension.IsEmailValid(_file.CoordinatorEmail))
                                     {
-                                        _file.SchoolProvinceId = null;
+                                        errormessages.Add("Coordinator Email: " + _file.CoordinatorEmail + " is invalid at Row: " + (i + 1));
+                                        haserror = true;
                                     }
-                                    else
-                                    {
-                                        //if (currency == "CAD")
-                                        //    currency = "CAD - Canadian dollar";
 
-                                        //var currencyid = servicecontext.Currency.Where(p => p.Name == currency).Select(p => p.Id).FirstOrDefault();
-
-                                        _file.SchoolProvinceId = int.Parse(province);
-                                    }*/
+                                    _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
                                     _file.TeacherName = row.Cells[4]?.CalculatedValue.Trim();
                                     _file.TeacherEmail = row.Cells[5]?.CalculatedValue.Trim();
-                                    _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
-                                    /*var classtime = row.Cells[8]?.CalculatedValue.Trim();
 
-                                    if (string.IsNullOrEmpty(classtime))
+                                    if (!ValidateExtension.IsEmailValid(_file.TeacherEmail))
                                     {
-                                        _file.ClassTime = null;
+                                        errormessages.Add("Teacher Email: " + _file.TeacherEmail + " is invalid at Row: " + (i + 1));
+                                        haserror = true;
                                     }
-                                    else
-                                    {
-                                        _file.ClassTime = byte.Parse(classtime);
-                                    }
-                                    */
+
+                                    _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
                                     var gender = row.Cells[7]?.CalculatedValue.Trim();
 
                                     if (string.IsNullOrEmpty(gender))
@@ -566,18 +557,7 @@ namespace EDI.Web.Services
                                         _file.GenderId = null;
                                     }
                                     else
-                                    {                                        
-                                        //int genderid = 
-                                        //int genderid = 0;
-                                        //if (genderid =="M")
-                                        //{
-                                        //    genderid = servicecontext.Genders.Where(p => p.English == "Male").FirstOrDefault().Id;                                            
-                                        //}
-                                        //else
-                                        //{
-                                        //    genderid = servicecontext.Genders.Where(p => p.English == "Female").FirstOrDefault().Id;
-                                        //}
-
+                                    {      
                                         _file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
                                     }
 
@@ -590,17 +570,20 @@ namespace EDI.Web.Services
                                     }
                                     else
                                     {
-                                        _file.ChildDob = DateTime.Parse(dob);
+                                        if (DateTime.TryParse(dob, out DateTime newvalue))
+                                        {
+                                            _file.ChildDob = newvalue;
+                                        }
+                                        else
+                                        {
+                                            errormessages.Add("Child Dob: " + dob + " is invalid at Row: " + (i+1));
+                                            haserror = true;
+                                        }
                                     }
 
                                     _file.ChildPostalCode = row.Cells[9]?.CalculatedValue.Trim();
                                     _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
 
-
-                                    //int statusid = 0;
-                                    //statusid = servicecontext.FileImportStatuses.Where(p => p.English == "Imported").FirstOrDefault().Id;
-
-                                    //_file.FileImportStatusId = statusid;
                                     _file.FileImportStatusId = (int)Enumerations.FileImportStatus.Imported;
 
                                     _file.ModifiedDate = DateTime.Now;
@@ -609,14 +592,17 @@ namespace EDI.Web.Services
                                     _file.CreatedDate = DateTime.Now;
                                     _file.CreatedBy = _userSettings.UserName;
 
-                                    await _fileRepository.AddAsync(_file);
+                                    if(!haserror)
+                                    {
+                                        await _fileRepository.AddAsync(_file);
 
-                                    error.message = "file has been imported successfully.";
+                                        error.message = "file has been imported successfully.";
+                                    }
                                 }
                             }
                         }
 
-                        if (string.IsNullOrEmpty(error.errormessage))
+                        if (!haserror)
                         {
                             if (File.Exists(fullPath))
                             {
@@ -632,9 +618,12 @@ namespace EDI.Web.Services
                 }
                 else
                 {
-                    errormessage = "The file is invalid!";
+                    errormessages.Add("The file is empty!.");
+                    haserror = true;
                 }
 
+                error.messages = messages;
+                error.errormessages = errormessages;
                 return error;
             }
             catch (Exception ex)
@@ -643,8 +632,10 @@ namespace EDI.Web.Services
 
                 errormessage = "File imports failed. Please check the log file for more information.";
 
+                errormessages.Add("ProcessFileData failed:" + ex.Message);
                 error.message = message;
                 error.errormessage = errormessage;
+                error.errormessages = errormessages;
                 return error;
             }
         }
