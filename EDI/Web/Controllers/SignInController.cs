@@ -133,7 +133,7 @@ namespace Web.Controllers
                     EmailModel emailmodel = new EmailModel();
                     emailmodel.From = EDIAppSettings.EmailFrom;
                     emailmodel.To = useremail;
-                    emailmodel.Subject = "Reset Password";
+                    emailmodel.Subject = "e-EDI Account Information";
                     emailmodel.Body = $"Please click <a href='{callbackUrl}'>here</a> to reset your password.";
                      await _emailSender.SendEmailAsync(emailmodel);
 
