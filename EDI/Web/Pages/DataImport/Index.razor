@@ -76,7 +76,7 @@
                     <a href="data/EDI Upload Template.xlsx" class="btn btn-purple"><i class="far fa-file-excel fa-lg"></i> Download Template</a>
                     <br />
                     <div id="container">
-                        <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Excel Import","Process", "ExcelExport", "CsvExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
+                        <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Excel Import","Process", "ExcelExport", "Clear", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                             <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
                             <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" TValue="FileItemViewModel"></GridEvents>
                             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -246,9 +246,14 @@
         {
             this.Grid.ExcelExport();
         }
-        if (args.Item.Id == "GridFile_csvexport")
+        if (args.Item.Id == "GridFile_Clear")
         {
-            this.Grid.CsvExport();
+            var message = "Are you sure you want to clear the queueu?";
+            parameters.Add("Message", message);
+
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete", parameters);
+            var result = await modal.Result;
+            ConfirmDeleteModalClosed(result);
         }
         if (args.Item.Id == "GridFile_Excel Import")
         {
@@ -407,5 +412,21 @@
         //*Modal.OnClose -= UploadWindowModalClosed;
 
         StateHasChanged();
+    }
+
+    async void ConfirmDeleteModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            await sharedService.ClearQueue();
+
+            var tmp = new List<FileItemViewModel>();
+
+            files = tmp;
+
+            this.Grid.Refresh();
+
+            StateHasChanged();
+        }
     }
 }

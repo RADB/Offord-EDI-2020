@@ -46,5 +46,6 @@ namespace EDI.Web.Interfaces
         void InitializeUserSettings(string username);
         Task ResetPassord(int id);
         void WriteLogs(string message, bool isinfo);
+        Task ClearQueue();
     }
 }

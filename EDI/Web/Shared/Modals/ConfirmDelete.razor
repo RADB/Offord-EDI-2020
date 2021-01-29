@@ -1,14 +1,24 @@
 ﻿<div class="simple-form" style="width:350px;">
-    <p><img src="./images/delete.png" style="width:30px;" /> Are you sure you want to delete this item?</p> <br />
+    <p><img src="./images/delete.png" style="width:30px;" /> @Message</p> <br />
     <button @onclick="@ConfirmYes" class="btn btn-primary">Yes</button>
     <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
 </div>
 
 @code {  
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter]
+    public string Message { get; set; }
 
     async Task ConfirmYes() => await ModalInstance.CloseAsync(ModalResult.Ok($"Confirmed"));
     //async Task ConfirmYes() => await ModalService.CloseAsync(ModalResult.Ok(true));
 
     async Task Cancel() => await ModalInstance.CancelAsync();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(Message))
+        {
+            Message = "Are you sure you want to delete this item?";
+        }
     }
+}

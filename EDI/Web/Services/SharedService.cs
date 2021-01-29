@@ -54,6 +54,7 @@ namespace EDI.Web.Services
         private readonly IAsyncRepository<LookupSetOption> _lookupSetOptionRepository;
         private readonly IAsyncRepository<Teacher> _teacherRepository;
         private readonly IAsyncRepository<Child> _childRepository;
+        private readonly IAsyncRepository<FileImport> _fileImportRepository;
         private readonly IAsyncRepository<QuestionnairesDataDemographic> _questionnairesDataDemographic;
         private readonly IAsyncRepository<QuestionnairesDataSectionA> _questionnairesDataSectionA;
         private readonly IAsyncRepository<QuestionnairesDataSectionB> _questionnairesDataSectionB;
@@ -96,6 +97,7 @@ namespace EDI.Web.Services
             IAsyncRepository<School> schoolRepository,
             IAsyncRepository<Teacher> teacherRepository,
             IAsyncRepository<Child> childRepository,
+            IAsyncRepository<FileImport> fileImportRepository,
             IAsyncRepository<QuestionnairesDataDemographic> questionnairesDataDemographic,
             IAsyncRepository<QuestionnairesDataSectionA> questionnairesDataSectionA,
             IAsyncRepository<QuestionnairesDataSectionB> questionnairesDataSectionB,
@@ -151,6 +153,7 @@ namespace EDI.Web.Services
             _lookupRepository = lookupRepository;
             //_feedbackRepository = feedbackRepository;
             _profileRepository = profileRepository;
+            _fileImportRepository = fileImportRepository;
             _hostingEnvironment = hostingEnvironment;
             _authenticationStateProvider = authenticationStateProvider;
             _dbContext = dbContext;
@@ -1985,6 +1988,27 @@ namespace EDI.Web.Services
                 {
                     Log.Error(message);
                 }
+            }
+        }
+        public async Task ClearQueue()
+        {
+            WriteLogs("ClearQueue started by:" + _userSettings.UserName, true);
+
+            try
+            {
+                var queues = await Task.FromResult(_dbContext.FileImports.Where(s => s.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed).ToList());
+
+                if (queues != null && queues.Count > 0)
+                {
+                    foreach (var queueu in queues)
+                    {
+                        await _fileImportRepository.DeleteAsync(queueu);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLogs("ClearQueue failed:" + ex.Message, false);
             }
         }
     }
