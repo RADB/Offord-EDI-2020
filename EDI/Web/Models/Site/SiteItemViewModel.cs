@@ -14,7 +14,7 @@ namespace EDI.Web.Models
         public string SiteName { get; set; }
 
         public string Description { get; set; }
-        public int CoordinatorId { get; set; }
+        public int? CoordinatorId { get; set; }
         public bool? IsTestSite { get; set; }
         public string CoordinatorName { get; set; }
         [Required(ErrorMessage = "Year is required.")]

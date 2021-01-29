@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Navigations;
+@using EDI.Web.Shared.Modals;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
 @inject ISiteService siteService
@@ -11,6 +12,7 @@
 
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -37,6 +39,10 @@
                 <div class="pull-right">
                     <button class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i> Reset</button>
                     <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Add</button>
+                    @if (UserSettings.IsAdmin)
+                    {
+                        <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Reset Password" @onclick="ResetPassword"><i class="fa fa-mail-bulk fa-1x whiteiconcolor"></i> Password</button>
+                    }
                     <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i> Exit</button>
                 </div>
             </div>
@@ -128,5 +134,55 @@
     private void Add()
     {
         NavigationManager.NavigateTo("./sites/new");
+    }
+
+    private async void ResetPassword()
+    {
+        var parameters = new ModalParameters();
+
+        var message = "Are you sure you want to reset password for all of teachers of this site?";
+
+        parameters.Add("Message", message);
+        var modal = ModalService.Show<ConfirmResetPassword>("Confirm Reset Password", parameters);
+        var result = await modal.Result;
+        ConfirmResetPasswordModalClosed(result);
+    }
+
+    async void ConfirmResetPasswordModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            var schools = dbContext.Schools.Where(p => p.SiteId == this.Id).ToList();
+
+            foreach (var school in schools)
+            {
+                var teachers = dbContext.Teachers.Where(p => p.SchoolId == school.Id).ToList();
+
+                foreach (var teacher in teachers)
+                {
+                    var students = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
+
+                    if (students.Count() == 0)
+                    {
+                        toastService.ShowError("Teacher - " + teacher.TeacherName + " should have at least one student.");
+                    }
+                    else
+                    {
+                        var message = await sharedService.SendTeacherPassword(teacher);
+
+                        if (!message.Contains("failed"))
+                        {
+                            toastService.ShowSuccess("Password was reset for this teacher - " + teacher.TeacherName + " successfully. An email has been sent to the teacher.");
+                        }
+                        else
+                        {
+                            toastService.ShowError("Password reset failed - " + teacher.TeacherName + ".");
+                        }
+
+                        StateHasChanged();
+                    }
+                }
+            }
+        }
     }
 }

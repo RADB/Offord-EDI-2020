@@ -47,5 +47,6 @@ namespace EDI.Web.Interfaces
         Task ResetPassord(int id);
         void WriteLogs(string message, bool isinfo);
         Task ClearQueue();
+        Task<string> SendTeacherPassword(Teacher teacher);
     }
 }

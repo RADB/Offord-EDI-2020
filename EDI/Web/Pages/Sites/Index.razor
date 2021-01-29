@@ -94,8 +94,11 @@
                 asite.SiteNumber = site.SiteNumber;
                 asite.IsTestSite = site.IsTestSite;
                 asite.Description = site.Description;
-                var coordinator = dbContext.Coordinators.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
-                asite.CoordinatorName = coordinator.CoordinatorName;
+                if(site.CoordinatorId.HasValue)
+                {
+                    var coordinator = dbContext.Coordinators.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
+                    asite.CoordinatorName = coordinator.CoordinatorName;
+                }
 
                 sivm.Add(asite);
             }

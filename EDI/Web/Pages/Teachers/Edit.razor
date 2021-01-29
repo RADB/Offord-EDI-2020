@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using Syncfusion.Blazor.Navigations;
 @using EDI.Web.Extensions;
+@using EDI.Web.Shared.Modals;
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
 @inject ITeacherService teacherService
@@ -11,6 +12,7 @@
 
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
+@inject ISharedService sharedService;
 
 @if (!string.IsNullOrEmpty(@Message))
 {
@@ -37,6 +39,10 @@
                 <div class="pull-right">
                     <button class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i> Reset</button>
                     <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Add</button>
+                    @if (UserSettings.IsAdmin)
+                    {
+                        <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Reset Password" @onclick="ResetPassword"><i class="fa fa-mail-bulk fa-1x whiteiconcolor"></i> Password</button>
+                    }
                     <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i> Exit</button>
                 </div>
             </div>
@@ -133,7 +139,7 @@
         }
         else if (totalItems2 > 0)
         {
-            ErrorMessage = "The teacher with the same teacher number has already existed.";
+            ErrorMessage = "The teacher with the same teacher number has already existed in the same school.";
             toastService.ShowError(ErrorMessage);
         }
         else
@@ -163,6 +169,43 @@
 
     private void Add()
     {
-        NavigationManager.NavigateTo("./teachers/new");
+        NavigationManager.NavigateTo("./teachers/new/" + TeacherModel.SchoolId);
+    }
+
+    private async void ResetPassword()
+    {
+        var modal = ModalService.Show<ConfirmResetPassword>("Confirm Reset Password");
+        var result = await modal.Result;
+        ConfirmResetPasswordModalClosed(result);
+    }
+
+    async void ConfirmResetPasswordModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            var teacher = dbContext.Teachers.Where(p => p.Id == this.Id).FirstOrDefault();
+
+            var students = dbContext.Children.Where(p => p.TeacherId == this.Id).ToList();
+
+            if(students.Count() == 0)
+            {
+                toastService.ShowError("Teacher should have at least one student.");
+            }
+            else
+            {
+                var message = await sharedService.SendTeacherPassword(teacher);
+
+                if (!message.Contains("failed"))
+                {
+                    toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
+                }
+                else
+                {
+                    toastService.ShowError("Password reset failed.");
+                }
+
+                StateHasChanged();
+            }
+        }
     }
 }

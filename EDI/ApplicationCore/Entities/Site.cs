@@ -21,7 +21,7 @@ namespace EDI.ApplicationCore.Entities
         /// <summary>
         /// guid from EDI.Identity.dbo.ASPNETUsers
         /// </summary>
-        public int CoordinatorId { get; set; }
+        public int? CoordinatorId { get; set; }
 
         public bool? IsTestSite { get; set; }
 

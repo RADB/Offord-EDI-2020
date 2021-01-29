@@ -1,4 +1,4 @@
-﻿@page "/Schools/New"
+﻿@page "/Schools/New/{SiteID:int}"
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IToastService toastService;
@@ -45,6 +45,8 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    [Parameter]
+    public int SiteID { get; set; } = 0;
 
     private SchoolItemViewModel SchoolModel { get; set; } = new SchoolItemViewModel();
 
@@ -59,6 +61,11 @@
         else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
+        }
+
+        if (SiteID > 0)
+        {
+            SchoolModel.SiteId = SiteID;
         }
     }
 
@@ -90,6 +97,12 @@
     private async void Reset()
     {
         SchoolModel = new SchoolItemViewModel();
+
+
+        if (SiteID > 0)
+        {
+            SchoolModel.SiteId = SiteID;
+        }
         StateHasChanged();
     }
 }

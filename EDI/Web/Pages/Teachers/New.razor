@@ -1,4 +1,4 @@
-﻿@page "/Teachers/New"
+﻿@page "/Teachers/New/{SchoolID:int}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Extensions;
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -47,6 +47,8 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    [Parameter]
+    public int SchoolID { get; set; } = 0;
 
     private TeacherItemViewModel TeacherModel { get; set; } = new TeacherItemViewModel();
 
@@ -61,6 +63,12 @@
         else if (!UserSettings.IsAdmin)
         {
             NavigationManager.NavigateTo("./dashboard/index");
+        }
+
+        if (SchoolID > 0)
+        {
+            TeacherModel.SchoolId = SchoolID;
+            TeacherModel.SiteId = dbContext.Schools.Where(p => p.Id == SchoolID).FirstOrDefault().SiteId;
         }
     }
 
@@ -131,6 +139,12 @@
     private async void Reset()
     {
         TeacherModel = new TeacherItemViewModel();
+
+
+        if (SchoolID > 0)
+        {
+            TeacherModel.SchoolId = SchoolID;
+        }
         StateHasChanged();
     }
 }

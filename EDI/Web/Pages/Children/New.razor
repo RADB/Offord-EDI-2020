@@ -1,4 +1,4 @@
-﻿@page "/Children/New"
+﻿@page "/Children/New/{TeacherID:int}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Extensions;
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -49,6 +49,8 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    [Parameter]
+    public int TeacherID { get; set; } = 0;
 
     private ChildItemViewModel ChildModel { get; set; } = new ChildItemViewModel();
 
@@ -73,6 +75,11 @@
         else
         {
             ChildModel.IsAdmin = true;
+
+            if(TeacherID > 0)
+            {
+                ChildModel.TeacherId = TeacherID;
+            }
         }
     }
 
@@ -115,6 +122,10 @@
     private async void Reset()
     {
         ChildModel = new ChildItemViewModel();
+        if (TeacherID > 0)
+        {
+            ChildModel.TeacherId = TeacherID;
+        }
         StateHasChanged();
     }
 

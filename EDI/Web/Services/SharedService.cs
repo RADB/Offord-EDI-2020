@@ -1612,11 +1612,60 @@ namespace EDI.Web.Services
             return folderName;
         }
 
+        public async Task<string> SendTeacherPassword(Teacher teacher)
+        {
+            WriteLogs("SendPassword started by:" + _userSettings.UserName, true);
+            string message = string.Empty;
+
+            try
+            {
+                var password = GeneratePassword(teacher.Id);
+
+                var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+
+                var newPassword = _userManager.PasswordHasher.HashPassword(_account, password);
+                _account.PasswordHash = newPassword;
+
+                await _userManager.UpdateAsync(_account);
+
+                EmailModel email = new EmailModel();
+
+                email.Subject = "Reset Password";
+                email.From = EDIAppSettings.EmailFrom;
+                email.To = teacher.Email;
+
+                var user = _identityContext.Users.Where(p => p.Id == teacher.UserId).FirstOrDefault();
+
+                string htmlString = string.Format(@"<html>
+                      <body>
+                      <p>Dear {0},</p>
+                      <p>This email is to confirm that the password for your account has been reset: {1}</p>", teacher.TeacherName, password);
+                string htmlString2 = @"<p>Please let us know if you have any questions or concerns.</p> 
+                      <p>Thank you!<br><br>EDI<br />webmaster@e-edi.ca</p>
+                      </body>
+                      </html>";
+                string htmlString4 = htmlString + htmlString2;
+
+                email.Body = htmlString4;
+
+                message = await SendEmail(email);
+
+                return message;
+            }
+            catch (Exception ex)
+            {
+                WriteLogs("SendPassword failed:" + ex.Message, false);
+                message = "Failed: " + ex.Message;
+                return message;
+            }
+        }
+
         public async Task<string> SendEmail(EmailModel EmailModel)
         {
             string message = string.Empty;
 
-            EmailModel.To = EDIAppSettings.EmailTo;
+            if(string.IsNullOrEmpty(EmailModel.To))
+                EmailModel.To = EDIAppSettings.EmailTo;
 
             message = await _emailSender.SendEmailAsync(EmailModel);
 
@@ -1955,15 +2004,23 @@ namespace EDI.Web.Services
             }
         }
 
+        private string GeneratePassword(int id)
+        {
+            var password = string.Empty;
+
+            var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
+
+            var child = _dbContext.Children.Where(p => p.TeacherId == teacher.Id).FirstOrDefault();
+            password = child.Ediid.Substring(4, 8);
+
+            return password;
+        }
+
         public async Task ResetPassord(int id)
         {
             var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
 
-            var password = string.Empty;
-
-            var child = _dbContext.Children.Where(p => p.TeacherId == teacher.Id).FirstOrDefault();
-
-            password = child.Ediid.Substring(4, 8);
+            var password = GeneratePassword(id);
 
             var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
 
