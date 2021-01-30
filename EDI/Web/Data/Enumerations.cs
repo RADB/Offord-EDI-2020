@@ -71,10 +71,14 @@ namespace EDI.Web.Data
         }
         public enum TeacherStatus : int
         {
-            New = 4,
-            InProgress = 3,
-            Complete = 2,
-            Locked = 1
+            //New = 4,
+            //InProgress = 3,
+            //Complete = 2,
+            //Locked = 1
+            New = 2,
+            InProgress = 1,
+            Complete = 3,
+            Locked = 4
         }
         public enum FileImportStatus : int
         {

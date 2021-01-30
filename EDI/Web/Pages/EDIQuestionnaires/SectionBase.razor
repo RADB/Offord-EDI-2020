@@ -22,63 +22,10 @@
     protected string province;
     protected int QuestionnaireId;
 
-    protected void getData(/*string entity*/)
+    protected void getData()
     {
         predicate = "Id ==" + ChildId + " && YearId == " + UserSettings.YearId;
         //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
-
-        //switch(entity)
-        //{
-        //    case "Demographics":
-        //        teacherData = dbContext.Children.Where(predicate)
-        //             .Include(c => c.QuestionnairesDataDemographics)
-        //             .Include(c => c.Teacher)
-        //             .ThenInclude(t => t.School)
-        //             .ThenInclude(ts => ts.Province)
-        //             .Single().Teacher;
-        //        break;
-        //    case "SectionA":
-        //        teacherData = dbContext.Children.Where(predicate)
-        //             .Include(c => c.QuestionnairesDataSectionAs)
-        //             .Include(c => c.Teacher)
-        //             .ThenInclude(t => t.School)
-        //             .ThenInclude(ts => ts.Province)
-        //             .Single().Teacher;
-        //        break;
-        //    case "SectionB":
-        //        teacherData = dbContext.Children.Where(predicate)
-        //             .Include(c => c.QuestionnairesDataSectionBs)
-        //             .Include(c => c.Teacher)
-        //             .ThenInclude(t => t.School)
-        //             .ThenInclude(ts => ts.Province)
-        //             .Single().Teacher;
-        //        break;
-        //    case "SectionC":
-        //        teacherData = dbContext.Children.Where(predicate)
-        //             .Include(c => c.QuestionnairesDataSectionCs)
-        //             .Include(c => c.Teacher)
-        //             .ThenInclude(t => t.School)
-        //             .ThenInclude(ts => ts.Province)
-        //             .Single().Teacher;
-        //        break;
-        //    case "SectionD":
-        //        teacherData = dbContext.Children.Where(predicate)
-        //             .Include(c => c.QuestionnairesDataSectionDs)
-        //             .Include(c => c.Teacher)
-        //             .ThenInclude(t => t.School)
-        //             .ThenInclude(ts => ts.Province)
-        //             .Single().Teacher;
-        //        break;
-        //    case "SectionE":
-        //        teacherData = dbContext.Children.Where(predicate)
-        //             .Include(c => c.QuestionnairesDataSectionEs)
-        //             .Include(c => c.Teacher)
-        //             .ThenInclude(t => t.School)
-        //             .ThenInclude(ts => ts.Province)
-        //             .Single().Teacher;
-        //        break;
-        //}
-
         teacherData = dbContext.Children.Where(predicate)
              .Include(c => c.QuestionnairesDataDemographics)
              .Include(c => c.QuestionnairesDataSectionAs)
@@ -90,6 +37,104 @@
              .ThenInclude(t => t.School)
              .ThenInclude(ts => ts.Province)
              .Single().Teacher;
+
+        if (UserSettings.IsAdmin)
+        {
+            IsReadOnly = true;
+
+            //get the teachers province
+            /*var teacher = dbContext.Teachers.Where(s => s.Id == TeacherId)
+                              .Include(s => s.School)
+                              .ThenInclude(ts => ts.Province).Single();*/
+
+            province = teacherData.School.Province.English.Replace(" ", "");
+
+
+        }
+        else if (UserSettings.IsTeacher)
+        {
+
+
+            IsReadOnly = false;
+            province = UserSettings.Province;
+            UserSettings.ChildData = teacherData.Children.Single();
+
+        }
+        else
+        {
+            IsReadOnly = true;
+            province = teacherData.School.Province.English.Replace(" ", "");
+        }
+    }
+
+    protected void getData(string entity)
+    {
+        predicate = "Id ==" + ChildId + " && YearId == " + UserSettings.YearId;
+        //data = dbContext.QuestionnairesDataDemographics.Where(pred).Single();
+
+        switch (entity)
+        {
+            case "Demographics":
+                teacherData = dbContext.Children.Where(predicate)
+                     .Include(c => c.QuestionnairesDataDemographics)
+                     .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                     .Single().Teacher;
+                break;
+            case "SectionA":
+                teacherData = dbContext.Children.Where(predicate)
+                     .Include(c => c.QuestionnairesDataSectionAs)
+                     .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                     .Single().Teacher;
+                break;
+            case "SectionB":
+                teacherData = dbContext.Children.Where(predicate)
+                     .Include(c => c.QuestionnairesDataSectionBs)
+                     .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                     .Single().Teacher;
+                break;
+            case "SectionC":
+                teacherData = dbContext.Children.Where(predicate)
+                     .Include(c => c.QuestionnairesDataSectionCs)
+                     .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                     .Single().Teacher;
+                break;
+            case "SectionD":
+                teacherData = dbContext.Children.Where(predicate)
+                     .Include(c => c.QuestionnairesDataSectionDs)
+                     .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                     .Single().Teacher;
+                break;
+            case "SectionE":
+                teacherData = dbContext.Children.Where(predicate)
+                     .Include(c => c.QuestionnairesDataSectionEs)
+                     .Include(c => c.Teacher)
+                     .ThenInclude(t => t.School)
+                     .ThenInclude(ts => ts.Province)
+                     .Single().Teacher;
+                break;
+        }
+
+        //teacherData = dbContext.Children.Where(predicate)
+        //     .Include(c => c.QuestionnairesDataDemographics)
+        //     .Include(c => c.QuestionnairesDataSectionAs)
+        //     .Include(c => c.QuestionnairesDataSectionBs)
+        //     .Include(c => c.QuestionnairesDataSectionCs)
+        //     .Include(c => c.QuestionnairesDataSectionDs)
+        //     .Include(c => c.QuestionnairesDataSectionEs)
+        //     .Include(c => c.Teacher)
+        //     .ThenInclude(t => t.School)
+        //     .ThenInclude(ts => ts.Province)
+        //     .Single().Teacher;
 
         if (UserSettings.IsAdmin)
         {

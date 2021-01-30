@@ -241,7 +241,7 @@
 
     private  void setQuestionnaireStatus(bool initialization)
     {
-        bool status;
+        bool? status = null;
         string cssClass;
         //if(useSession)
         //{
@@ -260,32 +260,44 @@
             }
             else
             {
-                status = bool.Parse(reflectionService.GetChildFieldValue(UserSettings.ChildData, questionnaire.EntityName, "IsComplete"));
+                try
+                {
+                    status = bool.Parse(reflectionService.GetChildFieldValue(UserSettings.ChildData, questionnaire.EntityName, "IsComplete"));
+                }
+                catch (Exception ex)
+                {
+                    status = null;    
+                }
+
             }
 
-            // get the css class
-            cssClass = status ? Complete : Incomplete;
-
-            switch (questionnaire.QuestionnaireName)
+            // only update the css for the Questionnaire being edited
+            if (status != null)
             {
-                case "Demographics":
-                    Demographics = cssClass;
-                    break;
-                case "Section A":
-                    SectionA = cssClass;
-                    break;
-                case "Section B":
-                    SectionB = cssClass;
-                    break;
-                case "Section C":
-                    SectionC = cssClass;
-                    break;
-                case "Section D":
-                    SectionD = cssClass;
-                    break;
-                case "Section E":
-                    SectionE = cssClass;
-                    break;
+                // get the css class
+                cssClass = (bool)status ? Complete : Incomplete;
+
+                switch (questionnaire.QuestionnaireName)
+                {
+                    case "Demographics":
+                        Demographics = cssClass;
+                        break;
+                    case "Section A":
+                        SectionA = cssClass;
+                        break;
+                    case "Section B":
+                        SectionB = cssClass;
+                        break;
+                    case "Section C":
+                        SectionC = cssClass;
+                        break;
+                    case "Section D":
+                        SectionD = cssClass;
+                        break;
+                    case "Section E":
+                        SectionE = cssClass;
+                        break;
+                }
             }
         }
     }
@@ -487,7 +499,7 @@
         {
             TeacherData.Children.Single().ChildStatusId = (int)Enumerations.ChildStatus.InProgress;
         }
-        
+
         TeacherData.Children.Single().ModifiedBy = UserSettings.UserName;
         TeacherData.Children.Single().ModifiedDate = modifiedTime;
         TeacherData.Children.Single().PercentComplete = (byte)percentComplete;
