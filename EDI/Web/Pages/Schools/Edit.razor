@@ -76,6 +76,8 @@
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
+    private List<Teacher> Teachers { get; set; }
+
     private SchoolItemViewModel SchoolModel { get; set; } = new SchoolItemViewModel();
 
     SchoolForm schoolform1 = new SchoolForm();
@@ -137,45 +139,63 @@
 
     private async void ResetPassword()
     {
-        var parameters = new ModalParameters();
+        GetTeacherList();
 
-        var message = "Are you sure you want to reset password for all of teachers of this school?";
+        if (Teachers.Count() > 0)
+        {
+            var parameters = new ModalParameters();
 
-        parameters.Add("Message", message);
-        var modal = ModalService.Show<ConfirmResetPassword>("Confirm Reset Password", parameters);
-        var result = await modal.Result;
-        ConfirmResetPasswordModalClosed(result);
+            var message = "Are you sure you want to reset password for all of teachers of this school?";
+
+            parameters.Add("Message", message);
+            var modal = ModalService.Show<ConfirmResetPassword>("Confirm Reset Password", parameters);
+            var result = await modal.Result;
+            ConfirmResetPasswordModalClosed(result);
+
+        }
+        else
+        {
+            toastService.ShowError("This school doesnot contain any valid teacher.");
+        }
+    }
+
+    private void GetTeacherList()
+    {
+        Teachers = new List<Teacher>();
+
+        var teachers = dbContext.Teachers.Where(p => p.SchoolId == this.Id).ToList();
+
+        foreach (var teacher in teachers)
+        {
+            var students = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
+
+            if (students.Count() > 0)
+            {
+                Teachers.Add(teacher);
+            }
+        }
     }
 
     async void ConfirmResetPasswordModalClosed(Blazored.Modal.Services.ModalResult modalResult)
     {
         if (!modalResult.Cancelled)
         {
-            var teachers = dbContext.Teachers.Where(p => p.SchoolId == this.Id).ToList();
+            GetTeacherList();
 
-            foreach (var teacher in teachers)
+            foreach (var teacher in Teachers)
             {
-                var students = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
+                var message = await sharedService.SendTeacherPassword(teacher);
 
-                if (students.Count() == 0)
+                if (!message.Contains("failed"))
                 {
-                    toastService.ShowError("Teacher - " + teacher.TeacherName + " should have at least one student.");
+                    toastService.ShowSuccess("Password was reset for this teacher - " + teacher.TeacherName + " successfully. An email has been sent to the teacher.");
                 }
                 else
                 {
-                    var message = await sharedService.SendTeacherPassword(teacher);
-
-                    if (!message.Contains("failed"))
-                    {
-                        toastService.ShowSuccess("Password was reset for this teacher - " + teacher.TeacherName + " successfully. An email has been sent to the teacher.");
-                    }
-                    else
-                    {
-                        toastService.ShowError("Password reset failed - " + teacher.TeacherName + ".");
-                    }
-
-                    StateHasChanged();
+                    toastService.ShowError("Password reset failed - " + teacher.TeacherName + ".");
                 }
+
+                StateHasChanged();
             }
         }
     }
