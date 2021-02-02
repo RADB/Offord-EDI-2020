@@ -79,6 +79,8 @@
 
     private SiteItemViewModel SiteModel { get; set; } = new SiteItemViewModel();
 
+    private List<Teacher> Teachers { get; set; }
+
     SiteForm siteform1 = new SiteForm();
 
     SfGrid<SchoolItemViewModel> Grid;
@@ -138,50 +140,66 @@
 
     private async void ResetPassword()
     {
-        var parameters = new ModalParameters();
+        GetTeacherList();
 
-        var message = "Are you sure you want to reset password for all of teachers of this site?";
+        if(Teachers.Count() > 0)
+        {
+            var parameters = new ModalParameters();
+            var message = "Are you sure you want to reset password for all of teachers of this site?";
 
-        parameters.Add("Message", message);
-        var modal = ModalService.Show<ConfirmResetPassword>("Confirm Reset Password", parameters);
-        var result = await modal.Result;
-        ConfirmResetPasswordModalClosed(result);
+            parameters.Add("Message", message);
+            var modal = ModalService.Show<ConfirmResetPassword>("Confirm Reset Password", parameters);
+            var result = await modal.Result;
+            ConfirmResetPasswordModalClosed(result);
+        }
+        else
+        {
+            toastService.ShowError("This site doesnot contain any valid teacher.");
+        }
+    }
+
+    private void GetTeacherList()
+    {
+        Teachers = new List<Teacher>();
+
+        var schools = dbContext.Schools.Where(p => p.SiteId == this.Id).ToList();
+
+        foreach (var school in schools)
+        {
+            var teachers = dbContext.Teachers.Where(p => p.SchoolId == school.Id).ToList();
+
+            foreach (var teacher in teachers)
+            {
+                var students = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
+
+                if (students.Count() > 0)
+                {
+                    Teachers.Add(teacher);
+                }
+            }
+        }
     }
 
     async void ConfirmResetPasswordModalClosed(Blazored.Modal.Services.ModalResult modalResult)
     {
         if (!modalResult.Cancelled)
         {
-            var schools = dbContext.Schools.Where(p => p.SiteId == this.Id).ToList();
+            GetTeacherList();
 
-            foreach (var school in schools)
+            foreach (var teacher in Teachers)
             {
-                var teachers = dbContext.Teachers.Where(p => p.SchoolId == school.Id).ToList();
+                var message = await sharedService.SendTeacherPassword(teacher);
 
-                foreach (var teacher in teachers)
+                if (!message.Contains("failed"))
                 {
-                    var students = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
-
-                    if (students.Count() == 0)
-                    {
-                        toastService.ShowError("Teacher - " + teacher.TeacherName + " should have at least one student.");
-                    }
-                    else
-                    {
-                        var message = await sharedService.SendTeacherPassword(teacher);
-
-                        if (!message.Contains("failed"))
-                        {
-                            toastService.ShowSuccess("Password was reset for this teacher - " + teacher.TeacherName + " successfully. An email has been sent to the teacher.");
-                        }
-                        else
-                        {
-                            toastService.ShowError("Password reset failed - " + teacher.TeacherName + ".");
-                        }
-
-                        StateHasChanged();
-                    }
+                    toastService.ShowSuccess("Password was reset for this teacher - " + teacher.TeacherName + " successfully. An email has been sent to the teacher.");
                 }
+                else
+                {
+                    toastService.ShowError("Password reset failed - " + teacher.TeacherName + ".");
+                }
+
+                StateHasChanged();
             }
         }
     }
