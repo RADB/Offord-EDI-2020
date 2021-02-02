@@ -2374,6 +2374,14 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "registered non-attender", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "inscrit mais non fréquentant", Value = 6, Sequence = 60 });
 
                     break;
+                case "StatusNS":
+                    luso.Add(new LookupSetOption() { English = "Child in class more than 1 month", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "dans la classe plus d'un mois", Value = 1, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Child in class less than 1 month", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "dans la classe moins d'un mois", Value = 2, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Moved out of this class", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "a quitté la classe", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Moved out of school", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "a quitté l’école", Value = 4, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "autre", Value = 9, Sequence = 50 });                    
+
+                    break;
                 case "ClassAssignment":
                     luso.Add(new LookupSetOption() { English = "Kindergarten", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Maternelle", Value = 1, Sequence = 10 });
 
