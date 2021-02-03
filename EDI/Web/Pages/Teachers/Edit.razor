@@ -221,7 +221,20 @@
     {
         if (!modalResult.Cancelled)
         {
+            var teacher = (Teacher)modalResult.Data;
+
             toastService.ShowSuccess("Current Teacher has been replaced successfully.");
+
+            var message = await sharedService.SendTeacherPassword(teacher);
+
+            if (!message.Contains("failed"))
+            {
+                toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
+            }
+            else
+            {
+                toastService.ShowError("Password reset failed.");
+            }
 
             NavigationManager.NavigateTo(NavigationManager.Uri, true);
         }

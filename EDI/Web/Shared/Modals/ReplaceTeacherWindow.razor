@@ -146,6 +146,8 @@
 
                 int id = await TeacherService.CreateTeacherAsync(TeacherModel);
 
+                var newteacher = dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
+
                 var children = dbContext.Children.Where(p => p.TeacherId == CurrentTeacherModel.Id).ToList();
 
                 foreach(var child in children)
@@ -157,7 +159,7 @@
 
                 Message = "Current Teacher has been replaced successfully.";
 
-                await ModalInstance.CloseAsync(ModalResult.Ok<TeacherItemViewModel>(CurrentTeacherModel));
+                await ModalInstance.CloseAsync(ModalResult.Ok<Teacher>(newteacher));
             }
         }
         else
@@ -201,7 +203,7 @@
 
             Message = "Current Teacher has been replaced successfully.";
 
-            await ModalInstance.CloseAsync(ModalResult.Ok<TeacherItemViewModel>(CurrentTeacherModel));
+            await ModalInstance.CloseAsync(ModalResult.Ok<Teacher>(teacher));
         }
     }
 
@@ -209,6 +211,9 @@
 
     private void EmailChange(ChangeEventArgs e)
     {
+        ErrorMessage = string.Empty;
+        Message = string.Empty;
+
         Email = e.Value.ToString().Trim();
 
         if (!ValidateExtension.IsEmailValid(Email))
