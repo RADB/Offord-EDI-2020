@@ -195,11 +195,13 @@
 
                 if (!message.Contains("failed"))
                 {
-                    toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
+                    Message = "Password was reset for this teacher successfully. An email has been sent to the teacher.";
+                    //toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
                 }
                 else
                 {
-                    toastService.ShowError("Password reset failed.");
+                    ErrorMessage = "Password reset failed:" + message;
+                    //toastService.ShowError("Password reset failed.");
                 }
 
                 StateHasChanged();
