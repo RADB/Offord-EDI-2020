@@ -514,25 +514,26 @@ namespace EDI.Web.Services
                 return -1;
             }
         }
-        public async Task<Child[]> GetChildrenAsync()
+        public async Task GetChildrenAsync()
         {
             try
             {
-                Child[] u;
+                
 
                 var id = new SqlParameter("id", 1);
 
                 var tmp = 1;
+                var tmp2 = 6;
+                var tmp3 = 0;
 
-                u = _dbContext.Children
-                    .FromSqlRaw($"EXECUTE GetChildren {tmp}")
-                    .ToArray();
+                 _dbContext.Database
+                    .ExecuteSqlRaw($"EXECUTE UpdateChildPercentComplete {tmp}, {tmp2}, {tmp3}");
 
-                return u;
+                
             }
             catch(Exception ex)
             {
-                return null;
+                
             }
             
         }

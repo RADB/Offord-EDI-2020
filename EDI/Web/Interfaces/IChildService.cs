@@ -25,6 +25,6 @@ namespace EDI.Web.Interfaces
         int GetRequiredQuestions(int id);
         int GetPercentComplete(int id, int numberOfQuestionnaires);
 
-        Task<Child[]> GetChildrenAsync();
+        Task GetChildrenAsync();
     }
 }
