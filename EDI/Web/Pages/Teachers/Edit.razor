@@ -39,10 +39,8 @@
                 <div class="pull-right">
                     <button class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i> Reset</button>
                     <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Add</button>
-                    @if (UserSettings.IsAdmin)
-                    {
-                        <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Reset Password" @onclick="ResetPassword"><i class="fa fa-mail-bulk fa-1x whiteiconcolor"></i> Password</button>
-                    }
+                    <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Reset Password" @onclick="ResetPassword"><i class="fa fa-mail-bulk fa-1x whiteiconcolor"></i> Password</button>
+                    <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Replace" @onclick="Replace"><i class="fa fa-people-carry fa-1x whiteiconcolor"></i> Replace</button>
                     <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i> Exit</button>
                 </div>
             </div>
@@ -197,15 +195,51 @@
 
                 if (!message.Contains("failed"))
                 {
-                    toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
+                    Message = "Password was reset for this teacher successfully. An email has been sent to the teacher.";
+                    //toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
                 }
                 else
                 {
-                    toastService.ShowError("Password reset failed.");
+                    ErrorMessage = "Password reset failed:" + message;
+                    //toastService.ShowError("Password reset failed.");
                 }
 
                 StateHasChanged();
             }
         }
     }
+
+    async void Replace()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("CurrentTeacherModel", TeacherModel);
+
+        var modal = ModalService.Show<ReplaceTeacherWindow>("New Teacher", parameters);
+        var result = await modal.Result;
+        ReplaceTeacherModalClosed(result);
+    }
+
+    async void ReplaceTeacherModalClosed(Blazored.Modal.Services.ModalResult modalResult)
+    {
+        if (!modalResult.Cancelled)
+        {
+            var teacher = (Teacher)modalResult.Data;
+
+            toastService.ShowSuccess("Current Teacher has been replaced successfully.");
+
+            var message = await sharedService.SendTeacherPassword(teacher);
+
+            if (!message.Contains("failed"))
+            {
+                toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
+            }
+            else
+            {
+                toastService.ShowError("Password reset failed.");
+            }
+
+            NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        }
+    }
+
 }

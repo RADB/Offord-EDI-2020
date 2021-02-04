@@ -1,0 +1,243 @@
+﻿
+@using EDI.Web.Extensions;
+@inject IConfigurationService configurationService
+@inject ServiceContext dbContext;
+@inject ITeacherService TeacherService
+
+
+<div class="simple-form" style="width:550px;">
+    @if (!string.IsNullOrEmpty(@Message))
+    {
+        <div class="text-success">@Message</div>
+    }
+
+    @if (!string.IsNullOrEmpty(@ErrorMessage))
+    {
+        <div class="text-danger">@ErrorMessage</div>
+    }
+
+    <div class="form-group row">
+        <label class="col-md-4 col-form-label" for="Email">Email<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+        <input type="text" value="@Email" class="col-md-7 form-control" placeholder="Email" @onchange="@(e =>EmailChange(e))" />
+    </div>
+
+    @if (!IsExisted)
+    {
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="TeacherNumber">Teacher Number<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="@TeacherNumber" class="col-md-7 form-control" placeholder="Teacher Number" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Name">Name<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
+            <input type="text" @bind-value="@TeacherName" class="col-md-7 form-control" placeholder="Name" />
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+            <input type="text" @bind-value="@PhoneNumber" class="col-md-7 form-control" placeholder="Phone" />
+        </div>
+    }
+    else
+    {
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="TeacherNumber">Teacher Number: </label>
+            <input type="text" @bind-value="@TeacherNumber" class="col-md-7 form-control" placeholder="Teacher Number" disabled/>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Name">Name: </label>
+            <input type="text" @bind-value="@TeacherName" class="col-md-7 form-control" placeholder="Name" disabled/>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="Phone">Phone: </label>
+            <input type="text" @bind-value="@PhoneNumber" class="col-md-7 form-control" placeholder="Phone" disabled/>
+        </div>
+    }
+
+    <button @onclick="@ReplaceTeacher" class="btn btn-primary">Submit</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    [Parameter]
+    public TeacherItemViewModel CurrentTeacherModel { get; set; }
+
+    public string Email { get; set; }
+    public string TeacherNumber { get; set; }
+    public string TeacherName { get; set; }
+    public string PhoneNumber { get; set; }
+    public bool IsExisted { get; set; } = false;
+
+    private string Message { get; set; }
+    private string ErrorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        TeacherName = string.Empty;
+        TeacherNumber = string.Empty;
+        PhoneNumber = string.Empty;
+        Email = string.Empty;
+    }
+
+    private async void ReplaceTeacher()
+    {
+        if (string.IsNullOrEmpty(Email))
+        {
+            ErrorMessage = "Email is required.";
+            return;
+        }
+
+        if (!ValidateExtension.IsEmailValid(Email))
+        {
+            ErrorMessage = "Email is invalid.";
+            return;
+        }
+
+        var teacher = dbContext.Teachers.Where(p => p.Email.ToLower().Trim() == Email.ToLower().Trim()).FirstOrDefault();
+
+        if (teacher == null)
+        {
+            if (string.IsNullOrEmpty(TeacherNumber))
+            {
+                ErrorMessage = "Teacher Number is required.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(TeacherName))
+            {
+                ErrorMessage = "Teacher Name is required.";
+                return;
+            }
+
+            var TeacherModel = new TeacherItemViewModel();
+
+            TeacherModel.Email = Email;
+            TeacherModel.TeacherName = TeacherName;
+            TeacherModel.TeacherNumber = TeacherNumber;
+            TeacherModel.PhoneNumber = PhoneNumber;
+            TeacherModel.SiteId = CurrentTeacherModel.SiteId;
+            TeacherModel.SchoolId = CurrentTeacherModel.SchoolId;
+            TeacherModel.YearId = CurrentTeacherModel.YearId;
+
+            var totalItems = await TeacherService.GetDuplicateCount(TeacherModel.TeacherName, TeacherModel.Email);
+
+            var totalItems2 = await TeacherService.GetDuplicateCount(TeacherModel.SchoolId.Value, TeacherModel.TeacherNumber);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The teacher with the same name and email has already existed.";
+                return;
+            }
+            else if (totalItems2 > 0)
+            {
+                ErrorMessage = "The teacher with the same teacher number has already existed in the same school.";
+                return;
+            }
+            else
+            {
+                var teacherstatus = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+                TeacherModel.TeacherStatusId = teacherstatus.Id;
+
+
+                int id = await TeacherService.CreateTeacherAsync(TeacherModel);
+
+                var newteacher = dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
+
+                var children = dbContext.Children.Where(p => p.TeacherId == CurrentTeacherModel.Id).ToList();
+
+                foreach(var child in children)
+                {
+                    child.TeacherId = id;
+                    dbContext.Update(child);
+                }
+                await dbContext.SaveChangesAsync();
+
+                Message = "Current Teacher has been replaced successfully.";
+
+                await ModalInstance.CloseAsync(ModalResult.Ok<Teacher>(newteacher));
+            }
+        }
+        else
+        {
+            var children = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
+
+            if (children.Count() > 0)
+            {
+                ErrorMessage = "This teacher is associated to class and not available for replacement.";
+                return;
+            }
+
+            var totalItems = await TeacherService.GetDuplicateCount(teacher.TeacherName, teacher.Email, teacher.Id);
+
+            var totalItems2 = await TeacherService.GetDuplicateCount(teacher.SchoolId, teacher.TeacherNumber, teacher.Id);
+
+            if (totalItems > 0)
+            {
+                ErrorMessage = "The teacher with the same name and email has already existed.";
+                return;
+            }
+            else if (totalItems2 > 0)
+            {
+                ErrorMessage = "The teacher with the same teacher number has already existed in the same school.";
+                return;
+            }
+
+            teacher.SchoolId = CurrentTeacherModel.SchoolId.Value;
+            teacher.YearId = CurrentTeacherModel.YearId;
+
+            dbContext.Update(teacher);
+
+            children = dbContext.Children.Where(p => p.TeacherId == CurrentTeacherModel.Id).ToList();
+
+            foreach (var child in children)
+            {
+                child.TeacherId = teacher.Id;
+                dbContext.Update(child);
+            }
+            await dbContext.SaveChangesAsync();
+
+            Message = "Current Teacher has been replaced successfully.";
+
+            await ModalInstance.CloseAsync(ModalResult.Ok<Teacher>(teacher));
+        }
+    }
+
+    async Task Cancel() => await ModalInstance.CancelAsync();
+
+    private void EmailChange(ChangeEventArgs e)
+    {
+        ErrorMessage = string.Empty;
+        Message = string.Empty;
+
+        Email = e.Value.ToString().Trim();
+
+        if (!ValidateExtension.IsEmailValid(Email))
+        {
+            ErrorMessage = "Email is invalid.";
+            return;
+        }
+
+        var teacher = dbContext.Teachers.Where(p => p.Email.ToLower().Trim() == Email.ToLower().Trim()).FirstOrDefault();
+
+        if(teacher == null)
+        {
+            IsExisted = false;
+
+        }
+        else
+        {
+            IsExisted = true;
+
+            TeacherName = teacher.TeacherName;
+            TeacherNumber = teacher.TeacherNumber;
+            PhoneNumber = teacher.PhoneNumber;
+        }
+
+        StateHasChanged();
+    }
+}
