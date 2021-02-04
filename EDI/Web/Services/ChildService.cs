@@ -22,7 +22,7 @@ using EDI.Web.Extensions;
 using EDI.Infrastructure.Identity;
 using EDI.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Data.SqlClient;
 
 namespace EDI.Web.Services
 {
@@ -513,6 +513,28 @@ namespace EDI.Web.Services
 
                 return -1;
             }
+        }
+        public async Task<Child[]> GetChildrenAsync()
+        {
+            try
+            {
+                Child[] u;
+
+                var id = new SqlParameter("id", 1);
+
+                var tmp = 1;
+
+                u = _dbContext.Children
+                    .FromSqlRaw($"EXECUTE GetChildren {tmp}")
+                    .ToArray();
+
+                return u;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            
         }
     }
 }

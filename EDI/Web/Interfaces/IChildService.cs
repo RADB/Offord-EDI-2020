@@ -1,4 +1,5 @@
-﻿using EDI.Web.Models;
+﻿using EDI.ApplicationCore.Entities;
+using EDI.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -23,5 +24,7 @@ namespace EDI.Web.Interfaces
         int GetCompletedQuestions(int id);
         int GetRequiredQuestions(int id);
         int GetPercentComplete(int id, int numberOfQuestionnaires);
+
+        Task<Child[]> GetChildrenAsync();
     }
 }
