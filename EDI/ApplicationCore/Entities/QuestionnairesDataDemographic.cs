@@ -41,7 +41,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? AfricanDescent { get; set; }
         public byte? FirstLanguage1 { get; set; }
         public byte? FirstLanguage2 { get; set; }
-        public byte? FirstLangauge3 { get; set; }
+        public byte? FirstLanguage3 { get; set; }
         public byte? LandAgreement { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

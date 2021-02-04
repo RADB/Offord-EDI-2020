@@ -48,5 +48,7 @@ namespace EDI.Web.Interfaces
         void WriteLogs(string message, bool isinfo);
         Task ClearQueue();
         Task<string> SendTeacherPassword(Teacher teacher);
+
+        Task UpdatePercentComplete(int ChildId, byte IsTest);
     }
 }

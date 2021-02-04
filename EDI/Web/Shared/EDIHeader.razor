@@ -16,6 +16,7 @@
 @inject IMathService mathService;  
 @inject IReflectionService reflectionService; 
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+ 
 
 
 <div class="container-fluid p-1 border border-secondary EDIHeader">
@@ -180,7 +181,7 @@
                 TeacherData.Children.Single().QuestionnairesDataSectionBs.Single().ModifiedDate = modifiedTime;
                 //UserSettings.SectionBComplete = IsComplete;
                 //await sessionStorage.SetItemAsync<bool>("Questionnaires.Data.SectionB.IsComplete", IsComplete);
-                    break;
+                break;
             case "Questionnaires.Data.SectionC":
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().CompletedQuestions = completed;
                 TeacherData.Children.Single().QuestionnairesDataSectionCs.Single().RequiredQuestions = required;
@@ -230,6 +231,9 @@
             try
             {
                 await servicecontext.SaveChangesAsync();
+
+                // update the total percent complete via stored Procedure
+                await sharedService.UpdatePercentComplete(ChildId, 0);
 
                 toastService.ShowSuccess("Data Saved Successfully!");
                 //StateHasChanged();

@@ -359,6 +359,9 @@
             {
                 await servicecontext.SaveChangesAsync();
 
+                // update the total percent complete via stored Procedure
+                await sharedService.UpdatePercentComplete(ChildId, 0);
+
                 toastService.ShowSuccess("Data Saved Successfully!");
                 //StateHasChanged();
             }

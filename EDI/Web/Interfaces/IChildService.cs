@@ -23,8 +23,6 @@ namespace EDI.Web.Interfaces
         Task UnlockChildAsync(int id);
         int GetCompletedQuestions(int id);
         int GetRequiredQuestions(int id);
-        int GetPercentComplete(int id, int numberOfQuestionnaires);
-
-        Task GetChildrenAsync();
+        int GetPercentComplete(int id, int numberOfQuestionnaires);                
     }
 }

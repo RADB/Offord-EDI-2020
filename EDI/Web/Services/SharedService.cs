@@ -2068,5 +2068,24 @@ namespace EDI.Web.Services
                 WriteLogs("ClearQueue failed:" + ex.Message, false);
             }
         }
+        public async Task UpdatePercentComplete(int ChildId, byte IsTest)
+        {
+            try
+            {
+                //var id = new SqlParameter("id", 1);
+
+                //var tmp = 1;
+                //var tmp2 = 6;
+                //var tmp3 = 0;
+
+                await _dbContext.Database
+                  .ExecuteSqlRawAsync($"EXECUTE UpdateChildPercentComplete {ChildId}, {IsTest}");
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
     }
 }
