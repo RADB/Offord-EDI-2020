@@ -26,32 +26,32 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
                     <span class="@Demographics" aria-hidden="true"></span>&nbsp; @Translate("Demographics")
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionA/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionA/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
                     <span class="@SectionA" aria-hidden="true"></span>&nbsp; @Translate("Section A")
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionB/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionB/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
                     <span class="@SectionB" aria-hidden="true"></span>&nbsp; @Translate("Section B")
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionC/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionC/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
                     <span class="@SectionC" aria-hidden="true"></span>&nbsp; @Translate("Section C")
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionD/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionD/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
                     <span class="@SectionD" aria-hidden="true"></span>&nbsp; @Translate("Section D")
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionE/{0}",ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionE/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
                     <span class="@SectionE" aria-hidden="true"></span>&nbsp; @Translate("Section E")
                 </NavLink>
             </li>        
@@ -64,17 +64,17 @@
         <h3>Options:</h3>
     </div>
     <div class="p-2">
-        <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnLanguageChange(e))"></SfSwitch>
+        <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLanguageChange(e))"></SfSwitch>
     </div>
     <div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
     </div>
     <div class="p-2">
-        <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch>
+        <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
     </div>
     <div class="p-2">
         <label for="fontsize" title="Font Size">Font Size:</label>
-        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e =>FontChange(e))">
+        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e => FontChange(e))">
             <option value="1em">1</option>
             <option value="1.25em">1.25</option>
             <option value="1.5em">1.5</option>
@@ -103,12 +103,13 @@
     private static string Complete = "far fa-check-square fa-lg complete";
 
     private string SectionE = Incomplete;
-    private string SectionD =Incomplete;
-    private string SectionC =Incomplete;
-    private string SectionB =Incomplete;
-    private string SectionA =Incomplete;
+    private string SectionD = Incomplete;
+    private string SectionC = Incomplete;
+    private string SectionB = Incomplete;
+    private string SectionA = Incomplete;
     private string Demographics = Incomplete;
 
+    private bool IsSaving { get; set; } = false;
     private bool isChildQuestionnaire;
     private List<Questionnaire> questionnaires;
     private Child child;
@@ -395,34 +396,43 @@
 
     private async void Save(bool useJSON)
     {
-        //only save if teacher
-        if (UserSettings.IsTeacher)
+        if (!IsSaving)
         {
-            if (useJSON)
+            IsSaving = true;
+            //only save if teacher
+            if (UserSettings.IsTeacher)
             {
-                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-                if (teacherJson != null && teacherJson.Length > 0)
+                if (useJSON)
                 {
-                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                    var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                    if (teacherJson != null && teacherJson.Length > 0)
+                    {
+                        var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                    await SaveDisconnectedTeacher(tempTeacher);
+                        await SaveDisconnectedTeacher(tempTeacher);
 
-                    await sessionStorage.RemoveItemAsync("Teacher");
+                        await sessionStorage.RemoveItemAsync("Teacher");
+                    }
                 }
-            }
-            else
-            {
-                if (UserSettings.TeacherData != null)
+                else
                 {
-                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
+                    if (UserSettings.TeacherData != null)
+                    {
+                        await SaveDisconnectedTeacher(UserSettings.TeacherData);
 
-                    // save child data for subsequent status checks
-                    UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
+                        // save child data for subsequent status checks
+                        UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
 
-                    UserSettings.TeacherData = null;
+                        UserSettings.TeacherData = null;
+                    }
                 }
+                await OnQuestionnaireSave.InvokeAsync("Menu");
             }
-            await OnQuestionnaireSave.InvokeAsync("Menu");
+            IsSaving = false;
+        }
+        else
+        {
+            toastService.ShowError(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
         }
     }
 
