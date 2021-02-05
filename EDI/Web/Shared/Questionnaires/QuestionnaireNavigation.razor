@@ -68,6 +68,7 @@
     private string barColor { get; set; }
     private string EntityName { get; set; }
     private List<Questionnaire> questionnaires;
+    private bool IsSaving { get; set; } = false;
 
     protected async void lockChild()
     {
@@ -239,33 +240,43 @@
 
     private async Task Save(bool useJSON)
     {
+        //only save if teacher
         if (UserSettings.IsTeacher)
         {
-            if (useJSON)
+            if (!IsSaving)
             {
-                var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-                if (teacherJson != null && teacherJson.Length > 0)
+                IsSaving = true;
+                if (useJSON)
                 {
-                    var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                    var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                    if (teacherJson != null && teacherJson.Length > 0)
+                    {
+                        var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                    await SaveDisconnectedTeacher(tempTeacher);
+                        await SaveDisconnectedTeacher(tempTeacher);
 
-                    await sessionStorage.RemoveItemAsync("Teacher");
+                        await sessionStorage.RemoveItemAsync("Teacher");
+                    }
                 }
+                else
+                {
+                    if (UserSettings.TeacherData != null)
+                    {
+                        await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                        // save child data for subsequent status checks
+                        UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
+
+                        UserSettings.TeacherData = null;
+                    }
+                }
+                await OnQuestionnaireSave.InvokeAsync("Navigation");
+                IsSaving = false;
             }
             else
             {
-                if (UserSettings.TeacherData != null)
-                {
-                    await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                    // save child data for subsequent status checks
-                    UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
-
-                    UserSettings.TeacherData = null;
-                }
+                toastService.ShowInfo(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
             }
-            await OnQuestionnaireSave.InvokeAsync("Navigation");
         }
     }
 
@@ -379,4 +390,4 @@
         checkCompleteNess();
         Console.WriteLine(string.Format("Value was updated to {0}", currentValue));
     }
-}
+    }

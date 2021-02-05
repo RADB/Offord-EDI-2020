@@ -394,14 +394,14 @@
         }
     }
 
-    private async void Save(bool useJSON)
+    private async Task Save(bool useJSON)
     {
-        if (!IsSaving)
+        //only save if teacher
+        if (UserSettings.IsTeacher)
         {
-            IsSaving = true;
-            //only save if teacher
-            if (UserSettings.IsTeacher)
+            if (!IsSaving)
             {
+                IsSaving = true;
                 if (useJSON)
                 {
                     var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
@@ -427,12 +427,12 @@
                     }
                 }
                 await OnQuestionnaireSave.InvokeAsync("Menu");
+                IsSaving = false;
             }
-            IsSaving = false;
-        }
-        else
-        {
-            toastService.ShowError(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
+            else
+            {
+                toastService.ShowInfo(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
+            }
         }
     }
 
