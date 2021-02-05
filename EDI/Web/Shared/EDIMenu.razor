@@ -340,14 +340,17 @@
         }
 
         var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + province + "== true";
+        var subPredicate = "ChildId == " + ChildId;
         questionnaires = dbContext.Questionnaires.Where(predicate)
-             .Include(c => c.QuestionnairesDataDemographics)
-             .Include(c => c.QuestionnairesDataSectionAs)
-             .Include(c => c.QuestionnairesDataSectionBs)
-             .Include(c => c.QuestionnairesDataSectionCs)
-             .Include(c => c.QuestionnairesDataSectionDs)
-             .Include(c => c.QuestionnairesDataSectionEs)
+             .Include(c => c.QuestionnairesDataDemographics.Where(d=>d.ChildId==ChildId))
+             .Include(c => c.QuestionnairesDataSectionAs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionBs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionCs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionDs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionEs.Where(d => d.ChildId == ChildId))
              .OrderBy(c => c.Sequence).ToList();
+
+        //.Include(c => c.Orders.Where(o => o.Name != "Foo")).ThenInclude(o => o.OrderDetails)
     }
 
     private void GetChildId()
@@ -433,7 +436,7 @@
 
         bool IsComplete = percentComplete == 100 ? true : false;
         var modifiedTime = DateTime.Now;
-        
+
         switch (EntityName)
         {
             case "Questionnaires.Data.Demographics":
