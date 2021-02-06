@@ -396,43 +396,54 @@
 
     private async Task Save(bool useJSON)
     {
-        //only save if teacher
-        if (UserSettings.IsTeacher)
+        try
         {
-            if (!IsSaving)
+
+
+            //only save if teacher
+            if (UserSettings.IsTeacher)
             {
-                IsSaving = true;
-                if (useJSON)
+                if (!IsSaving)
                 {
-                    var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-                    if (teacherJson != null && teacherJson.Length > 0)
+                    IsSaving = true;
+                    if (useJSON)
                     {
-                        var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                        if (teacherJson != null && teacherJson.Length > 0)
+                        {
+                            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                        await SaveDisconnectedTeacher(tempTeacher);
+                            await SaveDisconnectedTeacher(tempTeacher);
 
-                        await sessionStorage.RemoveItemAsync("Teacher");
+                            await sessionStorage.RemoveItemAsync("Teacher");
+                        }
                     }
+                    else
+                    {
+                        if (UserSettings.TeacherData != null)
+                        {
+                            await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                            // save child data for subsequent status checks
+                            UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
+
+                            UserSettings.TeacherData = null;
+                        }
+                    }
+                    await OnQuestionnaireSave.InvokeAsync("Menu");
+                    IsSaving = false;
                 }
                 else
                 {
-                    if (UserSettings.TeacherData != null)
-                    {
-                        await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                        // save child data for subsequent status checks
-                        UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
-
-                        UserSettings.TeacherData = null;
-                    }
+                    toastService.ShowInfo(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
+                    sharedService.WriteLogs("Click happened  before system completed Save operation.", true);
                 }
-                await OnQuestionnaireSave.InvokeAsync("Menu");
-                IsSaving = false;
             }
-            else
-            {
-                toastService.ShowInfo(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
-            }
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(string.Format("{0}:{1}", "Error Occurred: ", ex.Message));
+            sharedService.WriteLogs(ex.Message, false);
         }
     }
 
