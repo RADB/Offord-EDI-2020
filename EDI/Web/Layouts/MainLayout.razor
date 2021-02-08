@@ -12,11 +12,13 @@
 @using Serilog;
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="10"
+                IconType="IconType.FontAwesome"
+                Timeout="5"
                 SuccessClass="success-toast-override"
                 SuccessIcon="fa fa-thumbs-up"
-                IconType="IconType.FontAwesome"
-                ErrorIcon="fa fa-bug" />
+                ErrorIcon="fa fa-bug"
+                InfoIcon="fas fa-cloud-upload-alt"
+                RemoveToastsOnNavigation="true"/>
 
 @if (isAuthenticated)
 {

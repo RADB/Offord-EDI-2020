@@ -3,6 +3,7 @@
 @using Newtonsoft.Json;
 @using static EDI.Web.Data.Enumerations;
 @using EDI.Web.Shared.Modals;
+@inject IToastService toastService;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
 @inject IMathService mathService;
@@ -48,7 +49,7 @@
                     }
                 </label>
                 </div>*@
-            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion"  @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
             if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
             {
@@ -80,6 +81,12 @@
 
 @code
 {
+
+    //private  Task test(args)
+    //{
+    //    toastService.ShowInfo("Save in progress.", "Please wait");
+    //}
+
 
     // option set
     private List<LookupSetOption> _LookupSetOptions;
@@ -170,6 +177,7 @@
         StateHasChanged();
 
     }
+
 
     async void ConfirmLockModalClosed(Blazored.Modal.Services.ModalResult modalResult)
     {

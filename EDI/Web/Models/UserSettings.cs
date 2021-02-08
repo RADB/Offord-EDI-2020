@@ -61,6 +61,7 @@ namespace EDI.Web.Models
         public bool SectionDComplete { get; set; }
         public bool SectionEComplete { get; set; }
 
+        public bool EnableButton { get; set; }
         public bool HasTestData { get; set; }
     }
 }

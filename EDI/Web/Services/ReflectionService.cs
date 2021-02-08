@@ -137,18 +137,25 @@ namespace EDI.Web.Services
 
         private object GetChildEntity(Child data, string entityName)
         {
-            return entityName switch
+            try
             {
-                "Questionnaires.Data.Demographics" => data.QuestionnairesDataDemographics.Single(),
-                "Questionnaires.Data.SectionA" => data.QuestionnairesDataSectionAs.Single(),
-                "Questionnaires.Data.SectionB" => data.QuestionnairesDataSectionBs.Single(),
-                "Questionnaires.Data.SectionC" => data.QuestionnairesDataSectionCs.Single(),
-                "Questionnaires.Data.SectionD" => data.QuestionnairesDataSectionDs.Single(),
-                "Questionnaires.Data.SectionE" => data.QuestionnairesDataSectionEs.Single(),
-                //"Questionnaires.Data.TeacherProfile" => data.QuestionnairesDataTeacherProfiles.Single(),
-                //"Child" => data.Children.Single(),
-                _ => null,
-            };
+                return entityName switch
+                {
+                    "Questionnaires.Data.Demographics" => data.QuestionnairesDataDemographics.Single(),
+                    "Questionnaires.Data.SectionA" => data.QuestionnairesDataSectionAs.Single(),
+                    "Questionnaires.Data.SectionB" => data.QuestionnairesDataSectionBs.Single(),
+                    "Questionnaires.Data.SectionC" => data.QuestionnairesDataSectionCs.Single(),
+                    "Questionnaires.Data.SectionD" => data.QuestionnairesDataSectionDs.Single(),
+                    "Questionnaires.Data.SectionE" => data.QuestionnairesDataSectionEs.Single(),
+                    //"Questionnaires.Data.TeacherProfile" => data.QuestionnairesDataTeacherProfiles.Single(),
+                    //"Child" => data.Children.Single(),
+                    _ => null,
+                };
+            }
+            catch (Exception)
+            {
+                throw;
+            }            
         }
 
         public void SetFieldValue(Teacher data, string entityName, string fieldName, string value)
@@ -174,9 +181,17 @@ namespace EDI.Web.Services
 
         public string GetChildFieldValue(Child data, string entityName, string fieldName)
         {
-            var obj = GetChildEntity(data, entityName);
-            var value = GetFieldValue(obj, fieldName);
-            return value;
+            try
+            {
+                var obj = GetChildEntity(data, entityName);
+                var value = GetFieldValue(obj, fieldName);
+                return value;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
     }
 }

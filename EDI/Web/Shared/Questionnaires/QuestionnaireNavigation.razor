@@ -136,14 +136,14 @@
         }
         //StateHasChanged();
     }
-    protected void gotoURL(string Direction)
+    protected async void gotoURL(string Direction)
     {
         // get the URL
         string url = string.Format("EDIQuestionnaires/{0}/{1}", Direction == "Previous" ? PreviousPage : NextPage, ChildId);
         // save the questionnaire if teacher
         if (UserSettings.IsTeacher)
         {
-            Save(UserSettings.UseJSON);
+            await Save(UserSettings.UseJSON);
         }
         else
         {
@@ -277,7 +277,7 @@
                 }
                 else
                 {
-                    toastService.ShowInfo(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
+                    toastService.ShowInfo("Save in progress.", "Please wait");
                     sharedService.WriteLogs("Click happened  before system completed Save operation.", true);
                 }
             }
@@ -399,4 +399,7 @@
         checkCompleteNess();
         Console.WriteLine(string.Format("Value was updated to {0}", currentValue));
     }
+
+
+
     }

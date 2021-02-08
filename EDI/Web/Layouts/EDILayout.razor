@@ -24,12 +24,17 @@
 </div>
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="10"
-                SuccessClass="success-toast-override"
-                SuccessIcon="fa fa-thumbs-up"
                 IconType="IconType.FontAwesome"
-                ErrorIcon="fa fa-bug" />
+                Timeout="5"
+                SuccessClass="success-toast-override"                
+                SuccessIcon="fa fa-thumbs-up"                
+                ErrorIcon="fa fa-bug"
+                InfoIcon="fas fa-cloud-upload-alt"
+                ShowProgressBar="true" 
+                RemoveToastsOnNavigation="false"/>
 @code{
+    [Parameter]
+    public EventCallback<string> OnQuestionnaireSave { get; set; }
     private bool isAuthenticated { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -43,8 +48,8 @@
             sharedService.InitializeUserSettings(user.Identity.Name);
     }
 
-    private  void QuestionnaireSave(string source)
+    private void QuestionnaireSave(string source)
     {
-        StateHasChanged();
+         StateHasChanged();
     }
 }

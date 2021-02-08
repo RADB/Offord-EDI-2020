@@ -25,36 +25,36 @@
 </div>
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@Demographics" aria-hidden="true"></span>&nbsp; @Translate("Demographics")
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionA/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@SectionA" aria-hidden="true"></span>&nbsp; @Translate("Section A")
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionB/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@SectionB" aria-hidden="true"></span>&nbsp; @Translate("Section B")
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionC/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@SectionC" aria-hidden="true"></span>&nbsp; @Translate("Section C")
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionD/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@SectionD" aria-hidden="true"></span>&nbsp; @Translate("Section D")
-                </NavLink>
-            </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionE/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
-                    <span class="@SectionE" aria-hidden="true"></span>&nbsp; @Translate("Section E")
-                </NavLink>
-            </li>        
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <span class="@Demographics" aria-hidden="true"></span>&nbsp; @Translate("Demographics")
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionA/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <span class="@SectionA" aria-hidden="true"></span>&nbsp; @Translate("Section A")
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionB/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <span class="@SectionB" aria-hidden="true"></span>&nbsp; @Translate("Section B")
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionC/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <span class="@SectionC" aria-hidden="true"></span>&nbsp; @Translate("Section C")
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionD/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <span class="@SectionD" aria-hidden="true"></span>&nbsp; @Translate("Section D")
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@string.Format("EDIQuestionnaires/SectionE/{0}", ChildId) Match="NavLinkMatch.All" @onclick="@(() => Save(UserSettings.UseJSON))">
+                <span class="@SectionE" aria-hidden="true"></span>&nbsp; @Translate("Section E")
+            </NavLink>
+        </li>
     </ul>
 
 </div>
@@ -64,17 +64,17 @@
         <h3>Options:</h3>
     </div>
     <div class="p-2">
-        <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLanguageChange(e))"></SfSwitch>
+        <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" Disabled="@OptionsChanging" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLanguageChange(e))"></SfSwitch>
     </div>
     <div class="p-2">
-        <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
+        <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" Disabled="@OptionsChanging" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
     </div>
     <div class="p-2">
-        <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
+        <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" Disabled="@OptionsChanging" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
     </div>
     <div class="p-2">
         <label for="fontsize" title="Font Size">Font Size:</label>
-        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e => FontChange(e))">
+        <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e => FontChange(e))" disabled="@OptionsChanging">
             <option value="1em">1</option>
             <option value="1.25em">1.25</option>
             <option value="1.5em">1.5</option>
@@ -110,6 +110,10 @@
     private string Demographics = Incomplete;
 
     private bool IsSaving { get; set; } = false;
+    private bool OptionsChanging { get; set; } = false;
+    //private bool LabelsChanging { get; set; } = false;
+    //private bool LanguageChanging { get; set; } = false;
+    //private bool FontChanging { get; set; } = false;
     private bool isChildQuestionnaire;
     private List<Questionnaire> questionnaires;
     private Child child;
@@ -141,106 +145,120 @@
         expandMenu = !expandMenu;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        //if (firstRender)
-        //{
-        //    GetChildId();
-        //    testColor = "blue";
-        //    StateHasChanged();
-        //}
-        //else
-        //{
-        //    testColor = "darkred";
-        //    //StateHasChanged();
-        //}
-        //DemographicsComplete = await sessionStorage.GetItemAsync<bool>("Questionnaires.Data.Demographics.IsComplete");
-
-
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
-    //public override async Task SetParametersAsync(ParameterView parameters)
-    //{
-    //    await base.SetParametersAsync(parameters);
-    //}
 
     protected override async Task OnParametersSetAsync()
     {
         if (UserSettings.ChildData != null)
         {
-            setQuestionnaireStatus(false);
+            try
+            {
+                if (!NavigationManager.Uri.Contains("SectionX"))
+                {
+                    setQuestionnaireStatus(false);
+                    if (UserSettings.EnableButton)
+                    {
+                        //   await Task.Delay(1000);
+                        OptionsChanging = false;
+                        //LanguageChanging = false;
+                        //LabelsChanging = false;
+                        //FontChanging = false;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                toastService.ShowInfo("Loading in progress.", "Please wait:");
+            }
+
         }
+
 
         await base.OnParametersSetAsync();
     }
 
     protected override async Task OnInitializedAsync()
     {
+
         if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
         }
         else
         {
-            if (UserSettings.Language == "English")
-                isFrench = false;
-            else
-                isFrench = true;
-
-            if (UserSettings.RadioLabels.HasValue)
-                RadioLabels = UserSettings.RadioLabels.Value;
-            else
+            if (!NavigationManager.Uri.Contains("SectionX"))
             {
-                var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
-                if (!string.IsNullOrEmpty(radiolabels))
-                {
-                    RadioLabels = bool.Parse(radiolabels);
-                }
+                if (UserSettings.Language == "English")
+                    isFrench = false;
+                else
+                    isFrench = true;
+
+                if (UserSettings.RadioLabels.HasValue)
+                    RadioLabels = UserSettings.RadioLabels.Value;
                 else
                 {
-                    RadioLabels = false;
+                    var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(radiolabels))
+                    {
+                        RadioLabels = bool.Parse(radiolabels);
+                    }
+                    else
+                    {
+                        RadioLabels = false;
+                    }
+                    UserSettings.RadioLabels = RadioLabels;
                 }
-                UserSettings.RadioLabels = RadioLabels;
-            }
 
-            if (!string.IsNullOrEmpty(UserSettings.LabelFonts))
-                LabelFonts = UserSettings.LabelFonts;
-            else
-            {
-                var labelfonts = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "LabelFonts").Select(p => p.FieldValue).FirstOrDefault();
-                LabelFonts = labelfonts;
-                UserSettings.LabelFonts = labelfonts;
-            }
-
-            if (String.IsNullOrEmpty(UserSettings.LabelFonts))
-                UserSettings.LabelFonts = "1em";
-
-            if (UserSettings.Validation.HasValue)
-                Validation = UserSettings.Validation.Value;
-            else
-            {
-                var validation = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "Validation").Select(p => p.FieldValue).FirstOrDefault();
-                if (!string.IsNullOrEmpty(validation))
-                {
-                    Validation = bool.Parse(validation);
-                }
+                if (!string.IsNullOrEmpty(UserSettings.LabelFonts))
+                    LabelFonts = UserSettings.LabelFonts;
                 else
                 {
-                    Validation = false;
+                    var labelfonts = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "LabelFonts").Select(p => p.FieldValue).FirstOrDefault();
+                    LabelFonts = labelfonts;
+                    UserSettings.LabelFonts = labelfonts;
                 }
-                UserSettings.Validation = Validation;
-            }
 
-            GetChildId();
-            GetEntityName();
-            //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
-            getData();
-            setQuestionnaireStatus(true);
+                if (String.IsNullOrEmpty(UserSettings.LabelFonts))
+                    UserSettings.LabelFonts = "1em";
+
+                //GetQueryStringValues();
+                //NavigationManager.LocationChanged += HandleLocationChanged;
+                if (UserSettings.Validation.HasValue)
+                    Validation = UserSettings.Validation.Value;
+                else
+                {
+                    var validation = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "Validation").Select(p => p.FieldValue).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(validation))
+                    {
+                        Validation = bool.Parse(validation);
+                    }
+                    else
+                    {
+                        Validation = false;
+                    }
+                    UserSettings.Validation = Validation;
+                }
+
+                GetChildId();
+                GetEntityName();
+                //isChildQuestionnaire = dbContext.Questionnaires.Where(c => c.Id == QuestionnaireId).Select(c => c.IsChildQuestionnaire).Single();
+                getData();
+                setQuestionnaireStatus(true);
+            }
         }
     }
 
-    private  void setQuestionnaireStatus(bool initialization)
+    //void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    //{
+    //    GetQueryStringValues();
+    //    StateHasChanged();
+    //}
+
+    //public void Dispose()
+    //{
+    //    NavigationManager.LocationChanged -= HandleLocationChanged;
+    //}
+
+    private void setQuestionnaireStatus(bool initialization)
     {
         bool? status = null;
         string cssClass;
@@ -343,7 +361,7 @@
         var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + province + "== true";
         var subPredicate = "ChildId == " + ChildId;
         questionnaires = dbContext.Questionnaires.Where(predicate)
-             .Include(c => c.QuestionnairesDataDemographics.Where(d=>d.ChildId==ChildId))
+             .Include(c => c.QuestionnairesDataDemographics.Where(d => d.ChildId == ChildId))
              .Include(c => c.QuestionnairesDataSectionAs.Where(d => d.ChildId == ChildId))
              .Include(c => c.QuestionnairesDataSectionBs.Where(d => d.ChildId == ChildId))
              .Include(c => c.QuestionnairesDataSectionCs.Where(d => d.ChildId == ChildId))
@@ -394,49 +412,57 @@
         }
     }
 
+    #region Save Data
+
     private async Task Save(bool useJSON)
     {
         try
         {
-
-
             //only save if teacher
             if (UserSettings.IsTeacher)
             {
-                if (!IsSaving)
+                if (!NavigationManager.Uri.Contains("SectionX"))
                 {
-                    IsSaving = true;
-                    if (useJSON)
+                    if (!IsSaving)
                     {
-                        var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
-                        if (teacherJson != null && teacherJson.Length > 0)
+                        IsSaving = true;
+                        if (useJSON)
                         {
-                            var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
+                            var teacherJson = await sessionStorage.GetItemAsync<string>("Teacher");
+                            if (teacherJson != null && teacherJson.Length > 0)
+                            {
+                                var tempTeacher = JsonConvert.DeserializeObject<Teacher>(teacherJson);
 
-                            await SaveDisconnectedTeacher(tempTeacher);
+                                await SaveDisconnectedTeacher(tempTeacher);
 
-                            await sessionStorage.RemoveItemAsync("Teacher");
+                                await sessionStorage.RemoveItemAsync("Teacher");
+                            }
                         }
+                        else
+                        {
+                            if (UserSettings.TeacherData != null)
+                            {
+                                await SaveDisconnectedTeacher(UserSettings.TeacherData);
+
+                                // save child data for subsequent status checks
+                                UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
+
+                                UserSettings.TeacherData = null;
+                            }
+                        }
+                        await OnQuestionnaireSave.InvokeAsync("Menu");
+                        IsSaving = false;
                     }
                     else
                     {
-                        if (UserSettings.TeacherData != null)
-                        {
-                            await SaveDisconnectedTeacher(UserSettings.TeacherData);
-
-                            // save child data for subsequent status checks
-                            UserSettings.ChildData = UserSettings.TeacherData.Children.Single();
-
-                            UserSettings.TeacherData = null;
-                        }
+                        toastService.ShowInfo("Save in progress.", "Please wait");
+                        sharedService.WriteLogs("Click happened before system completed Save operation.", true);
                     }
-                    await OnQuestionnaireSave.InvokeAsync("Menu");
-                    IsSaving = false;
                 }
                 else
                 {
-                    toastService.ShowInfo(string.Format("{0}:{1}", "Please Wait...", "Save in Progress."));
-                    sharedService.WriteLogs("Click happened  before system completed Save operation.", true);
+                    toastService.ShowInfo("Options are changing.", "Please wait");
+                    sharedService.WriteLogs("Click happened before system completed option changes.", true);
                 }
             }
         }
@@ -555,6 +581,7 @@
         //UserSettings.QuestionsRequired = 0;
         //UserSettings.QuestionsTotal = 0;
     }
+    #endregion
 
     private void checkCompleteNess()
     {
@@ -605,101 +632,108 @@
             navigateTo = "./EDIQuestionnaires/SectionX";
         }
 
-        Save(UserSettings.UseJSON);
+        await Save(UserSettings.UseJSON);
         NavigationManager.NavigateTo(navigateTo);
-        //NavigationManager.NavigateTo(url,Force);
-        //await InvokeAsync(() => StateHasChanged());
-
     }
 
-
+    #region Options
     private async void OnLabelsChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
     {
-        if (e.Checked)
+        OptionsChanging = true;
+        UserSettings.EnableButton = false;
+        try
         {
-            RadioLabels = true;
+            if (e.Checked)
+            {
+                RadioLabels = true;
+            }
+            else
+                RadioLabels = false;
+
+            UserSettings.RadioLabels = RadioLabels;
+
+            await sharedService.SaveUserSessions("RadioLabels", RadioLabels.ToString(), UserSettings.UserID);
+            //StateHasChanged();
         }
-        else
-            RadioLabels = false;
-
-        UserSettings.RadioLabels = RadioLabels;
-
-        await sharedService.SaveUserSessions("RadioLabels", RadioLabels.ToString(), UserSettings.UserID);
-
-        StateHasChanged();
-
-        BounceBack(false);
+        finally
+        {
+            BounceBack(false);
+        }
     }
 
     private async void OnLanguageChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
     {
-        if (e.Checked)
+        OptionsChanging = true;
+        UserSettings.EnableButton = false;
+        try
         {
-            UserSettings.Language = "French";
+            if (e.Checked)
+            {
+                UserSettings.Language = "French";
+            }
+            else
+                UserSettings.Language = "English";
+
+            await accountService.UpdateUserLanguageAsync(UserSettings);
         }
-        else
-            UserSettings.Language = "English";
-
-        await accountService.UpdateUserLanguageAsync(UserSettings);
-
-        BounceBack(false);
+        finally
+        {
+            BounceBack(false);
+        }
     }
 
     private async void OnValidationChange(Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e)
     {
-        if (e.Checked)
+        OptionsChanging = true;
+        UserSettings.EnableButton = false;
+        try
         {
-            Validation = true;
+            if (e.Checked)
+            {
+                Validation = true;
+            }
+            else
+                Validation = false;
+
+            UserSettings.Validation = Validation;
+
+            await sharedService.SaveUserSessions("Validation", Validation.ToString(), UserSettings.UserID);
         }
-        else
-            Validation = false;
+        finally
+        {
+            BounceBack(false);
+        }
 
-        UserSettings.Validation = Validation;
+        //var queryString = System.Web.HttpUtility.ParseQueryString(string.Empty);
+        //var url = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
-        await sharedService.SaveUserSessions("Validation", Validation.ToString(), UserSettings.UserID);
-
-        StateHasChanged();
-
-        BounceBack(false);
+        //queryString.Add("Validation", Validation.ToString());
+        //NavigationManager.NavigateTo($"{url.LocalPath}?{queryString.ToString()}",true);
     }
-
-    //private async void CheckBoxValueChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    //{
-    //    string selectedString = e.Value.ToString();
-
-    //    RadioLabels = false;
-
-    //    if (bool.TryParse(selectedString, out bool value))
-    //    {
-    //        RadioLabels = value;
-
-    //        UserSettings.RadioLabels = RadioLabels;
-
-    //        var url = NavigationManager.Uri;
-
-    //        UserSettings.CurrentURL = url;
-    //        UserSettings.RequiredNaviBack = true;
-
-    //        //await sessionStorage.SetItemAsync<string>("CurrentURL", url);
-    //        //await sessionStorage.SetItemAsync<bool>("RequiredNaviBack", true);
-    //        //await sessionStorage.SetItemAsync<bool>("RadioLabels", RadioLabels);
-
-    //        Save();
-    //        NavigationManager.NavigateTo("./EDIQuestionnaires/SectionX");
-    //        await InvokeAsync(() => StateHasChanged());
-    //    }
-    //}
 
     private async void FontChange(ChangeEventArgs e)
     {
-        string selectedString = e.Value.ToString();
+        //FontChanging = true;
+        //UserSettings.EnableButton = false;
+        try
+        {
+            string selectedString = e.Value.ToString();
 
-        LabelFonts = selectedString;
+            LabelFonts = selectedString;
 
-        UserSettings.LabelFonts = LabelFonts;
+            UserSettings.LabelFonts = LabelFonts;
 
-        await sharedService.SaveUserSessions("LabelFonts", LabelFonts, UserSettings.UserID);
+            await sharedService.SaveUserSessions("LabelFonts", LabelFonts, UserSettings.UserID);
+        }
+        finally
+        {
+            BounceBack(false);
+        }
 
-        BounceBack(true);
+        //private void GetQueryStringValues()
+        //{
+        //    NavigationManager.TryGetQueryString<bool>("Validation", out Validation);   
+        //}
     }
+    #endregion
 }
