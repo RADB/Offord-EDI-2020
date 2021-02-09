@@ -53,6 +53,7 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private string predicate { get; set; }
 
     IEnumerable<NewsFeedItemViewModel> newsFeeds;
 
@@ -64,14 +65,23 @@
         }
         else
         {
-            var predicate = "p => p.YearId == " + UserSettings.YearId;
-            var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.Where(predicate).OrderBy(p => p.Title).ToList());
-
-            if (!UserSettings.IsAdmin)
+            DateTime currentDate = DateTime.Today;
+            if (UserSettings.IsAdmin)
             {
-                predicate = "p => p." + UserSettings.Province + ".Value && p.YearId == " + UserSettings.YearId;
-                allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.Where(predicate).OrderBy(p => p.Title).ToList());
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\"";
             }
+            else if (UserSettings.IsTeacher)
+            {
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\" AND {UserSettings.Province}.Value";
+            }
+            else if (UserSettings.IsCoordinator)
+            {
+                // modify for coordinators
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\"";
+            }
+            var allnewsFeeds = dbContext.NewsFeeds.Where(predicate)
+                        .Include(y => y.Year)
+                        .OrderBy(n => n.Title).ToList();
 
             List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
 
@@ -88,8 +98,7 @@
                 anewsFeed.ValidTo = newsFeed.ValidTo;
                 anewsFeed.YearId = newsFeed.YearId;
 
-                var year = dbContext.Years.Where(p => p.Id == newsFeed.YearId).FirstOrDefault();
-                anewsFeed.Ediyear = year != null ? year.Ediyear : null;
+                anewsFeed.Ediyear = newsFeed.Year.Ediyear;
 
                 sivm.Add(anewsFeed);
             }

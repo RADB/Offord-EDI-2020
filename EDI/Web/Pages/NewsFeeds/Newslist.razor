@@ -1,6 +1,7 @@
 ﻿@using EDI.Web.Shared.Modals;
 @using Microsoft.AspNetCore.Http;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using System.Linq.Dynamic.Core;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject INewsFeedService newsFeedService;
@@ -31,7 +32,7 @@
             <Authorized>
                 @foreach (var newsFeed in newsFeeds)
                 {
-                    <EDI.Web.Shared.News newsobj="@newsFeed" ShowActions="false" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
+                <EDI.Web.Shared.News newsobj="@newsFeed" ShowActions="false" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
                 }
             </Authorized>
             <NotAuthorized>
@@ -45,6 +46,7 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private string predicate { get; set; } = string.Empty;
 
     IEnumerable<NewsFeedItemViewModel> newsFeeds;
 
@@ -56,7 +58,23 @@
         }
         else
         {
-            var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.OrderBy(p => p.Title).ToList());
+            DateTime currentDate = DateTime.Today;
+            if (UserSettings.IsAdmin)
+            {
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\"";
+            }
+            else if (UserSettings.IsTeacher)
+            {
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\" AND {UserSettings.Province}.Value";
+            }
+            else if (UserSettings.IsCoordinator)
+            {
+                // modify for coordinators
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\"";
+            }
+            var allnewsFeeds = dbContext.NewsFeeds.Where(predicate)
+                        .Include(y=>y.Year)
+                        .OrderBy(n => n.Title).ToList();
 
             List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
 
@@ -72,9 +90,7 @@
                 anewsFeed.ValidFrom = newsFeed.ValidFrom;
                 anewsFeed.ValidTo = newsFeed.ValidTo;
                 anewsFeed.YearId = newsFeed.YearId;
-
-                var year = dbContext.Years.Where(p => p.Id == newsFeed.YearId).FirstOrDefault();
-                anewsFeed.Ediyear = year != null ? year.Ediyear : null;
+                anewsFeed.Ediyear = newsFeed.Year.Ediyear;
 
                 sivm.Add(anewsFeed);
             }

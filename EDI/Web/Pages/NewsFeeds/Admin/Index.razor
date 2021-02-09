@@ -27,7 +27,7 @@
                         <Authorized>
                             @foreach (var newsFeed in newsFeeds)
                             {
-                                <EDI.Web.Shared.News newsobj="@newsFeed" ShowActions="false" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.News>
+                                <EDI.Web.Shared.NewsDetails newsobj="@newsFeed" ShowActions="false" OnDeleteClick="(e => Delete(newsFeed.Id))" OnEditClick="(e => Edit(newsFeed.Id))"></EDI.Web.Shared.NewsDetails>
                             }
                         </Authorized>
                         <NotAuthorized>
@@ -45,6 +45,7 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private string predicate { get; set; }
 
     IEnumerable<NewsFeedItemViewModel> newsFeeds;
 
@@ -56,14 +57,23 @@
         }
         else
         {
-            var predicate = "p => p.YearId == " + UserSettings.YearId;
-            var allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.Where(predicate).OrderBy(p => p.Title).ToList());
-
-            if (!UserSettings.IsAdmin)
+            DateTime currentDate = DateTime.Today;
+            if (UserSettings.IsAdmin)
             {
-                predicate = "p => p." + UserSettings.Province + ".Value && p.YearId == " + UserSettings.YearId;
-                allnewsFeeds = await Task.FromResult(dbContext.NewsFeeds.Where(predicate).OrderBy(p => p.Title).ToList());
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\"";
             }
+            else if (UserSettings.IsTeacher)
+            {
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\" AND {UserSettings.Province}.Value";
+            }
+            else if (UserSettings.IsCoordinator)
+            {
+                // TODO modify for coordinators
+                predicate = $"YearId == {UserSettings.YearId} AND ValidFrom <= \"{currentDate}\" AND ValidTo >= \"{currentDate}\"";
+            }
+            var allnewsFeeds = dbContext.NewsFeeds.Where(predicate)
+                        .Include(y => y.Year)
+                        .OrderBy(n => n.Title).ToList();
 
             List<NewsFeedItemViewModel> sivm = new List<NewsFeedItemViewModel>();
 
@@ -80,65 +90,9 @@
                 anewsFeed.ValidTo = newsFeed.ValidTo;
                 anewsFeed.YearId = newsFeed.YearId;
                 anewsFeed.BritishColumbia = newsFeed.BritishColumbia.HasValue ? newsFeed.BritishColumbia.Value : false;
+                anewsFeed.Ediyear = newsFeed.Year.Ediyear;
 
-                var year = dbContext.Years.Where(p => p.Id == newsFeed.YearId).FirstOrDefault();
-                anewsFeed.Ediyear = year != null ? year.Ediyear : null;
-
-                if (UserSettings.IsAdmin)
-                {
-                    sivm.Add(anewsFeed);
-                }
-                else
-                {
-                    if (DateTime.Now >= anewsFeed.ValidFrom.Value && DateTime.Now <= anewsFeed.ValidTo.Value)
-                    {
-                        if (UserSettings.IsTeacher)
-                        {
-                            var teacher = dbContext.Teachers.Where(p => p.UserId == UserSettings.UserID).FirstOrDefault();
-
-                            if (teacher != null)
-                            {
-                                //var school = dbContext.Schools.Where(c => c.Id == teacher.SchoolId).FirstOrDefault();
-
-                                //var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
-
-                                //if (anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null) != null)
-                                if (anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null) != null)
-                                {
-                                    //var property = anewsFeed.GetType().GetProperty((province.English).Replace(" ", "")).GetValue(anewsFeed, null);
-
-                                    //if (property.Equals(true))
-                                    if (anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null).Equals(true))
-                                    {
-                                        sivm.Add(anewsFeed);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            var coordinator = dbContext.Coordinators.Where(p => p.UserId == UserSettings.UserID).FirstOrDefault();
-
-                            if (coordinator != null)
-                            {
-                                var site = dbContext.Sites.Where(c => c.CoordinatorId == coordinator.Id).FirstOrDefault();
-                                var school = dbContext.Schools.Where(c => c.SiteId == site.Id).FirstOrDefault();
-
-                                var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
-
-                                if (anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null) != null)
-                                {
-                                    var property = anewsFeed.GetType().GetProperty(UserSettings.Province).GetValue(anewsFeed, null);
-
-                                    if (property.Equals(true))
-                                    {
-                                        sivm.Add(anewsFeed);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                sivm.Add(anewsFeed);                
             }
 
             newsFeeds = sivm;
