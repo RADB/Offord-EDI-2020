@@ -108,7 +108,7 @@
             });
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
-        CompletedQuestion(previousValue,e.Value.ToString());
+        CompletedQuestion(previousValue,e.Value.ToString(), Config.IsRequired);
         StateHasChanged();
     }
 }

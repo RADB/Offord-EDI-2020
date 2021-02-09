@@ -27,28 +27,9 @@
             <i class="far fa-times-circle" style="font-size:50px;color:darkred"></i>
         }
     </div>
-    <div class="col-9">
+    <div class="col-9" @ondblclick="(()=>RemoveRadioSelection())">
         @foreach (var option in _LookupSetOptions)
-        {
-            @*<div class="form-check">
-                    @{
-                        bool ischecked = false;
-
-                        @if (@currentValue == @option.Value.ToString())
-                        {
-                            ischecked = true;
-                        }
-
-                        <input class="form-check-input" type="radio" disabled="@ReadonlyQuestion" name="@Config.EntityField" checked="@ischecked" value="@option.Value.ToString()" @onchange="@onChange" data-toggle="tooltip" data-placement="bottom" title="@sharedService.GetOptionText(option)">
-
-                    }
-                <label class="form-check-label" style="font-size: @LabelFonts;">
-                    @if (RadioLabels)
-                    {
-                        @sharedService.GetOptionText(option)
-                    }
-                </label>
-                </div>*@
+        {            
             <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion"  @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
 
             if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
@@ -136,6 +117,18 @@
         //CompletionCheck(reqQuestions, );
     }
 
+    public void RemoveRadioSelection()
+    {
+        var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+        currentValue = string.Empty;
+
+        //update the interface
+        CompletedQuestion(previousValue, currentValue, Config.IsRequired);
+
+        // update previous value
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
+    }
+
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         // save the data back to the object
@@ -173,7 +166,7 @@
             }
         }
 
-        CompletedQuestion(previousValue.ToString(), e.Value.ToString());
+        CompletedQuestion(previousValue.ToString(), e.Value.ToString(), Config.IsRequired);
         StateHasChanged();
 
     }

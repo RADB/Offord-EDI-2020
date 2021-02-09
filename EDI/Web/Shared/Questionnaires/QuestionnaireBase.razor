@@ -110,12 +110,13 @@
         NavigationManager.NavigateTo(url);
     }
 
-    public async void CompletedQuestion(string previousValue, string currentValue)
+    public async void CompletedQuestion(string previousValue, string currentValue, bool isRequired)
     {
         if (!string.IsNullOrEmpty(currentValue) && string.IsNullOrEmpty(previousValue))
         {
             // only count answers to required quesions
-            _userSettings.QuestionsCompleted++;
+            if(isRequired)
+                _userSettings.QuestionsCompleted++;
             //var comp = await sessionStorage.GetItemAsync<int>("QuestionsCompleted");
             //await sessionStorage.SetItemAsync<int>("QuestionsCompleted", comp++);
 
@@ -127,7 +128,9 @@
         }
         else if(!string.IsNullOrEmpty(previousValue) && string.IsNullOrEmpty(currentValue))
         {
-            _userSettings.QuestionsCompleted--;
+            if(isRequired)
+                _userSettings.QuestionsCompleted--;
+
             if (_userSettings.Validation.HasValue && _userSettings.Validation.Value)
             {
 

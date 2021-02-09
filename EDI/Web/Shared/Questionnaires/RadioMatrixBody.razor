@@ -27,7 +27,7 @@
     
     @foreach (var option in _LookupSetOptions)
     {
-        <td @ondblclick="RemoveRadioSelection">            
+        <td @ondblclick="(()=>RemoveRadioSelection())">            
             @if (_userSettings.RadioLabels.HasValue && _userSettings.RadioLabels.Value)
                 {
                     <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
@@ -95,18 +95,17 @@
         }
     }
 
-    private void RemoveRadioSelection()
+    public void RemoveRadioSelection()
     {
         var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
         currentValue = string.Empty;
-        
-        //update the interface
-        CompletedQuestion(previousValue, currentValue);
-        
-        // update previous value
-        reflectionService.SetFieldValue(data,Config.EntityName, Config.EntityField, currentValue);
-    }
 
+        //update the interface
+        CompletedQuestion(previousValue, currentValue, Config.IsRequired);
+
+        // update previous value
+        reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, currentValue);
+    }
     protected override async Task OnInitializedAsync()
     {
         // get the question and help text
@@ -143,7 +142,7 @@
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
 
-        CompletedQuestion(previousValue,e.Value.ToString());
+        CompletedQuestion(previousValue,e.Value.ToString(),Config.IsRequired);
         // StateHasChanged();
     }
 }
