@@ -221,20 +221,20 @@
                             }
                             catch (Exception ex)
                             {
-                                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "EDIHeader", "Save");
+                                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "RadioPart", "ConfirmLockModalClosed-3");
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "RadioPart", "Save");
+                        sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "RadioPart", "ConfirmLockModalClosed-2");
                     }
                 }
 
             }
             catch (Exception ex)
             {
-
+                sharedService.SendException(ex.Message, ex.InnerException == null ? string.Empty : ex.InnerException.Message, "RadioPart", "ConfirmLockModalClosed-1");
             }
         }
     }

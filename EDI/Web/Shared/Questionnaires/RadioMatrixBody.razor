@@ -27,30 +27,7 @@
     
     @foreach (var option in _LookupSetOptions)
     {
-        <td>
-            @*@radioTitle = new Dictionary<string, object>(){{ "title", @sharedService.GetOptionText(option)}};*@
-
-            @*<div class="form-check">
-                @{
-                    bool ischecked = false;
-
-                    @if (@currentValue == @option.Value.ToString())
-                    {
-                        ischecked = true;
-                    }
-
-                    <input class="form-check-input" type="radio" disabled="@ReadonlyQuestion" name="@Config.EntityField" checked="@ischecked" value="@option.Value.ToString()" @onchange="@onChange" data-toggle="tooltip" data-placement="bottom" title="@sharedService.GetOptionText(option)">
-
-                }
-                <label class="form-check-label">
-                    @if (RadioLabels)
-                    {
-                        @sharedService.GetOptionText(option)
-                    }
-                </label>
-            </div>*@
-
-
+        <td @ondblclick="RemoveRadioSelection">            
             @if (_userSettings.RadioLabels.HasValue && _userSettings.RadioLabels.Value)
                 {
                     <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
@@ -117,6 +94,19 @@
 
         }
     }
+
+    private void RemoveRadioSelection()
+    {
+        var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
+        currentValue = string.Empty;
+        
+        //update the interface
+        CompletedQuestion(previousValue, currentValue);
+        
+        // update previous value
+        reflectionService.SetFieldValue(data,Config.EntityName, Config.EntityField, currentValue);
+    }
+
     protected override async Task OnInitializedAsync()
     {
         // get the question and help text
@@ -156,26 +146,6 @@
         CompletedQuestion(previousValue,e.Value.ToString());
         // StateHasChanged();
     }
-
-    //public async void onDoubleClick(Microsoft.AspNetCore.Components.Web.MouseEventArgs e)
-    //{
-
-    //    currentValue = "0";
-    //    // save the data back to the object
-    //    reflectionService.SetFieldValue(data, Config.EntityName, Config.EntityField, string.Empty);
-    //    string teacherJson = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
-    //    {
-    //        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-    //    });
-    //    await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
-    //    Save();
-    //    StateHasChanged();
-
-    //    var url = NavigationManager.Uri;
-    //    NavigationManager.NavigateTo(url, true);
-    //}
-
-
 }
 
 
