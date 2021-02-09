@@ -36,21 +36,8 @@
     public bool? Valid { get; set; }
     public byte CompletionPercentage { get; set; }
 
-    //public int _optionCount = 0;
     public string _optionLabel;
-    //public int c;
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    c++;
-    //    System.Diagnostics.Debug.Print(string.Format("{0} - QB:OnInitializedAsync fired for variable {1} and required = {2}", c, Config.VariableName, Config.IsReadOnly));
-    //    Console.WriteLine(string.Format("{0} - QB:OnInitializedAsync fired for variable {1} and required = {2}", c, Config.VariableName, Config.IsReadOnly));
-    //    //CompletionCheck(0,0);
-    //    //if (Config.IsRequired)
-    //    //{
-    //    //    UserSettings.QuestionsRequired += 1;
-    //    //    reflectionService.SetFieldValue(data, Config.EntityName, "RequiredQuestions", UserSettings.QuestionsRequired.ToString());
-    //    //}
-    //}
+
 
     public List<LookupSetOption> GetLookupSetOptions(int LookupSetId)
     {
