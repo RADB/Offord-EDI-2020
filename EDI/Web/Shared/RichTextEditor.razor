@@ -2,7 +2,7 @@
 @inject ISharedService sharedService
 @inject NavigationManager NavigationManager
 
-<SfRichTextEditor @ref="RteObj" @bind-Value="@BindValue" Placeholder="Put content here..."  UndoRedoSteps="50" UndoRedoTimer="400">
+<SfRichTextEditor Readonly="@Readonly" @ref="RteObj" @bind-Value="@BindValue" Placeholder="Put content here..."  UndoRedoSteps="50" UndoRedoTimer="400">
     <RichTextEditorImageSettings SaveUrl="api/Image" Path=@Path></RichTextEditorImageSettings>
     <RichTextEditorEvents OnImageUploadSuccess="@onSuccess"> </RichTextEditorEvents>
     <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@Tools"></RichTextEditorToolbarSettings>
@@ -12,6 +12,9 @@
     // i couldnt get this to work - it wouldnt bind to the object
     [Parameter]
     public string BindValue { get; set; }
+
+    [Parameter]
+    public bool Readonly { get; set; } = false;
 
     public string Path { get; set; }
 

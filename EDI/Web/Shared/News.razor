@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Html
+@using EDI.Web.Shared.Modals;
 @inject NavigationManager NavigationManager;
+
 <!--<div class="card">
     <div class="card-body">-->
-<h3 class="card-title"><a href="@url1" class="card-news" title="@newsobj.Title" target="_blank">@newsobj.Title</a></h3>
+<h3 class="card-title"><a href="" class="card-news" title="@newsobj.Title" @onclick="OnClick" @onclick:preventDefault>@newsobj.Title</a></h3>
 <div class="card-text">@((MarkupString)newsobj.Summary)</div>
 <br />
 @if (ShowActions)
@@ -19,6 +21,7 @@
 </div>-->
 
 @code {
+    [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public NewsFeedItemViewModel newsobj { get; set; }
     [Parameter]
@@ -33,5 +36,15 @@
     protected override async Task OnInitializedAsync()
     {
         url1 = NavigationManager.BaseUri + "NewsFeeds/View/" + newsobj.Id;
+    }
+
+    private void OnClick()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("NewsFeedModel", newsobj);
+
+        var modal = ModalService.Show<NewsModal>("News", parameters);
+
+        //NavigationManager.NavigateTo(url1);
     }
 }

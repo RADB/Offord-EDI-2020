@@ -1,0 +1,40 @@
+﻿@inject NavigationManager NavigationManager
+@inject INewsFeedService newsFeedService
+@inject ISharedService sharedService
+@inject IAccountService accountService
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+@using Syncfusion.Blazor.RichTextEditor
+
+<div class="simple-form" style="width:1250px; overflow:scroll;">
+    <h2>@NewsFeedModel.Title</h2>
+
+    <div>
+        @((MarkupString)NewsFeedModel.Text)
+    </div>
+    <button @onclick="@Cancel" class="btn btn-secondary">OK</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    [Parameter]
+    public NewsFeedItemViewModel NewsFeedModel { get; set; }
+
+    SfRichTextEditor RteObj;
+
+    public static object[] tools = new object[]{
+        "Bold", "Italic", "Underline", "StrikeThrough",
+        "FontName", "FontSize", "FontColor", "BackgroundColor",
+        "LowerCase", "UpperCase", "|",
+        "Formats", "Alignments", "OrderedList", "UnorderedList",
+        "Outdent", "Indent", "|", "CreateTable",
+        "CreateNewsFeed", "Image", "|", "ClearFormat",
+        "SourceCode", "|", "Undo", "Redo"
+    };
+
+    public RichTextEditor rte = new RichTextEditor();
+
+    async Task Cancel() => await ModalInstance.CancelAsync();
+}
