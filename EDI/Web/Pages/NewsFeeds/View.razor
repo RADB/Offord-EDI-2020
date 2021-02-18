@@ -7,6 +7,7 @@
 @inject INewsFeedService newsFeedService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime;
+@inject UserSettings UserSettings;
 
 @inject ServiceContext dbContext;
 @inject UserSettings UserSettings;
@@ -32,12 +33,15 @@
     <div class="col-md-8">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
             <div class="card-header">
-                <strong>@NewsFeedModel.Title</strong>                
+                <strong>@NewsFeedModel.Title</strong>
+                <div class="pull-right">
+                    <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i> Exit</button>
+                </div>
             </div>
             <br />
             <div class="col-md-10" style="margin-left: 24px;">
                 <NewsForm @ref="newsFeedform1" NewsFeedModel="@NewsFeedModel" IsViewOnly="true" HandleValidSubmit="HandleValidSubmit" />
-            </div>            
+            </div>
         </div>
     </div>
 </div>
@@ -65,11 +69,20 @@
         else
         {
             NewsFeedModel = await newsFeedService.GetNewsFeedItem(Id);
+
+            UserSettings.BackURL = UserSettings.CurrentURL;
+
+            UserSettings.CurrentURL = NavigationManager.Uri;
         }
     }
 
     private async void HandleValidSubmit()
     {
 
+    }
+
+    private void Exit()
+    {
+        NavigationManager.NavigateTo(UserSettings.BackURL);
     }
 }
