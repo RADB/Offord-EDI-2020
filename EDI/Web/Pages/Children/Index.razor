@@ -35,7 +35,7 @@
                 {
                     <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                         <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
-                        <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
+                        <GridEvents ExcelQueryCellInfoEvent="ExcelQueryCellInfoHandler" OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridSortSettings>
@@ -51,7 +51,7 @@
                             <GridColumn Field=@nameof(ChildItemViewModel.Gender) HeaderText=@Translate("Gender") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.Dob) Format="yyyy-MM-dd" Type="ColumnType.Date" HeaderText=@Translate("Date of Birth") Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ChildItemViewModel.PostalCode) HeaderText=@Translate("Postal/Zip") Width="30"></GridColumn>
-                            <GridColumn HeaderText=@Translate("Status") Width="20">
+                            <GridColumn Field=@nameof(ChildItemViewModel.ChildStatus) HeaderText=@Translate("Status") Width="20">
                                 <Template>
                                     @{
                                         var comm = (context as ChildItemViewModel);
@@ -71,7 +71,7 @@
                                     }
                                 </Template>
                             </GridColumn>
-                            <GridColumn HeaderText=@Translate("% Complete") Width="25">
+                            <GridColumn Field=@nameof(ChildItemViewModel.PercentComplete) HeaderText=@Translate("% Complete") Width="25">
                                 <Template>
                                     @{
                                         var comm = (context as ChildItemViewModel);
@@ -154,7 +154,7 @@
             AllowEdit = true;
             AllowDelete = false;
         }
-        
+
         getChildren();
     }
 
@@ -240,6 +240,18 @@
         rowid = args.Data.Id;
     }
 
+    public void ExcelQueryCellInfoHandler(ExcelQueryCellInfoEventArgs<ChildItemViewModel> args)
+    {
+        if (args.Column.Field == "ChildStatus")
+        {
+            args.Cell.Value = args.Data.ChildStatus;
+        }
+        else if (args.Column.Field == "PercentComplete")
+        {
+            args.Cell.Value = args.Data.PercentComplete + "%";
+        }
+    }
+
     public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "GridChild_pdfexport")
@@ -248,7 +260,12 @@
         }
         if (args.Item.Id == "GridChild_excelexport")
         {
-            this.Grid.ExcelExport();
+            //this.Grid.ExcelExport();
+
+            ExcelExportProperties exportProperties = new ExcelExportProperties();
+            exportProperties.IncludeTemplateColumn = true;
+            await Grid.ExcelExport(exportProperties);
+
         }
         if (args.Item.Id == "GridChild_csvexport")
         {
