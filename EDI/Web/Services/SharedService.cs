@@ -1587,11 +1587,16 @@ namespace EDI.Web.Services
             {
                 if (_userSettings.Language == "French")
                 {
-                    var translate = _dbContext.Translations.Where(e => e.English == english).FirstOrDefault();
-                    if (translate == null || string.IsNullOrEmpty(translate.French))
-                        return english;
-                    else
-                        return translate.French;
+                    var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+                    optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+                    using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+                    {
+                        var translate = servicecontext.Translations.Where(e => e.English == english).FirstOrDefault();
+                        if (translate == null || string.IsNullOrEmpty(translate.French))
+                            return english;
+                        else
+                            return translate.French;
+                    }
                 }
                 else
                     return english;
