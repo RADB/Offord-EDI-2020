@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using EDI.Web.Shared.Modals;
 @inject NavigationManager NavigationManager;
+@inject UserSettings UserSettings;
 
 <!--<div class="card">
     <div class="card-body">-->
@@ -40,11 +41,13 @@
 
     private void OnClick()
     {
-        var parameters = new ModalParameters();
-        parameters.Add("NewsFeedModel", newsobj);
+        //var parameters = new ModalParameters();
+        //parameters.Add("NewsFeedModel", newsobj);
 
-        var modal = ModalService.Show<NewsModal>("News", parameters);
+        //var modal = ModalService.Show<NewsModal>("News", parameters);
 
-        //NavigationManager.NavigateTo(url1);
+        UserSettings.CurrentURL = NavigationManager.Uri;
+
+        NavigationManager.NavigateTo(url1);
     }
 }
