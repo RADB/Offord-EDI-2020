@@ -27,15 +27,15 @@
         {
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="IsAdministratorLink">Admin Link: </label>
-                <SfCheckBox Checked="@LinkModel.IsAdminLink" @onchange="IsAdminLinkChange"></SfCheckBox>
+                <SfCheckBox Checked="@isadmin" @onchange="IsAdminLinkChange"></SfCheckBox>
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="IsCoordinatorLink">Coordinator Link: </label>
-                <SfCheckBox Checked="@LinkModel.IsCoordinatorLink" @onchange="IsCoordinatorLinkChange"></SfCheckBox>
+                <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorLinkChange"></SfCheckBox>
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="IsTeacherLink">Teacher Link: </label>
-                <SfCheckBox Checked="@LinkModel.IsTeacherLink" @onchange="IsTeacherLinkChange"></SfCheckBox>
+                <SfCheckBox Checked="@isteacher" @onchange="IsTeacherLinkChange"></SfCheckBox>
             </div>
         }
         <div class="form-group row">
@@ -60,7 +60,7 @@
 
     public IEnumerable<SelectListItem> Coordinates { get; set; }
 
-    //public string coordinateid { get; set; }
+    public string coordinateid { get; set; }
 
     public bool isadmin { get; set; }
 
@@ -126,43 +126,40 @@
 
     private void IsAdminLinkChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        //string selectedString = e.Value.ToString();
+        string selectedString = e.Value.ToString();
 
-        //LinkModel.IsAdminLink = false;
+        LinkModel.IsAdminLink = false;
 
-        //if (bool.TryParse(selectedString, out bool isrequired))
-        //{
-        //    LinkModel.IsAdminLink = isrequired;
-        //}
-        if (e.Value != null)
-            LinkModel.IsAdminLink = bool.Parse(e.Value.ToString());
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            LinkModel.IsAdminLink = isrequired;
+            isadmin = isrequired;
+        }
     }
 
     private void IsCoordinatorLinkChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        //string selectedString = e.Value.ToString();
+        string selectedString = e.Value.ToString();
 
-        //LinkModel.IsCoordinatorLink = false;
+        LinkModel.IsCoordinatorLink = false;
 
-        //if (bool.TryParse(selectedString, out bool isrequired))
-        //{
-        //    LinkModel.IsCoordinatorLink = isrequired;
-        //}
-        if (e.Value != null)
-            LinkModel.IsCoordinatorLink = bool.Parse(e.Value.ToString());
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            LinkModel.IsCoordinatorLink = isrequired;
+            iscoordinator = isrequired;
+        }
     }
 
     private void IsTeacherLinkChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        //string selectedString = e.Value.ToString();
+        string selectedString = e.Value.ToString();
 
-        //LinkModel.IsTeacherLink = false;
+        LinkModel.IsTeacherLink = false;
 
-        //if (bool.TryParse(selectedString, out bool isrequired))
-        //{
-        //    LinkModel.IsTeacherLink = isrequired;
-        //}
-        if (e.Value != null)
-            LinkModel.IsTeacherLink = bool.Parse(e.Value.ToString());
+        if (bool.TryParse(selectedString, out bool isrequired))
+        {
+            LinkModel.IsTeacherLink = isrequired;
+            isteacher = isrequired;
+        }
     }
 }
