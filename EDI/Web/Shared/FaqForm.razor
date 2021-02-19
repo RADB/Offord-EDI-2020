@@ -24,15 +24,15 @@
         {
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="IsAdministratorFaq">Admin Faq: </label>
-                <SfCheckBox Checked="@isadmin" @onchange="IsAdministratorFaqChange"></SfCheckBox>
+                <SfCheckBox Checked="@FaqModel.IsAdministratorFaq" @onchange="IsAdministratorFaqChange"></SfCheckBox>
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="IsCoordinatorFaq">Coordinator Faq: </label>
-                <SfCheckBox Checked="@iscoordinator" @onchange="IsCoordinatorFaqChange"></SfCheckBox>
+                <SfCheckBox Checked="@FaqModel.IsCoordinatorFaq" @onchange="IsCoordinatorFaqChange"></SfCheckBox>
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label" for="IsTeacherFaq">Teacher Faq: </label>
-                <SfCheckBox Checked="@isteacher" @onchange="IsTeacherFaqChange"></SfCheckBox>
+                <SfCheckBox Checked="@FaqModel.IsTeacherFaq" @onchange="IsTeacherFaqChange"></SfCheckBox>
             </div>
         }
         <div class="form-group row">
@@ -76,7 +76,7 @@
 
     public IEnumerable<SelectListItem> Coordinates { get; set; }
 
-    public string coordinateid { get; set; }
+    //public string coordinateid { get; set; }
 
     public bool isadmin { get; set; }
 
@@ -124,40 +124,43 @@
 
     private void IsAdministratorFaqChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        string selectedString = e.Value.ToString();
+        //string selectedString = e.Value.ToString();
 
-        FaqModel.IsAdministratorFaq = false;
+        //FaqModel.IsAdministratorFaq = false;
 
-        if (bool.TryParse(selectedString, out bool isrequired))
-        {
-            FaqModel.IsAdministratorFaq = isrequired;
-            isadmin = isrequired;
-        }
+        //if (bool.TryParse(selectedString, out bool isrequired))
+        //{
+        //    FaqModel.IsAdministratorFaq = isrequired;
+        //}
+        if (e.Value != null)
+            FaqModel.IsAdministratorFaq = bool.Parse(e.Value.ToString());
     }
 
     private void IsCoordinatorFaqChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        string selectedString = e.Value.ToString();
+        //string selectedString = e.Value.ToString();
 
-        FaqModel.IsCoordinatorFaq = false;
+        //FaqModel.IsCoordinatorFaq = false;
 
-        if (bool.TryParse(selectedString, out bool isrequired))
-        {
-            FaqModel.IsCoordinatorFaq = isrequired;
-            iscoordinator = isrequired;
-        }
+        //if (bool.TryParse(selectedString, out bool isrequired))
+        //{
+        //    FaqModel.IsCoordinatorFaq = isrequired;
+        //}
+        if (e.Value != null)
+            FaqModel.IsCoordinatorFaq = bool.Parse(e.Value.ToString());
     }
 
     private void IsTeacherFaqChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
-        string selectedString = e.Value.ToString();
+        //string selectedString = e.Value.ToString();
 
-        FaqModel.IsTeacherFaq = false;
+        //FaqModel.IsTeacherFaq = false;
 
-        if (bool.TryParse(selectedString, out bool isrequired))
-        {
-            FaqModel.IsTeacherFaq = isrequired;
-            isteacher = isrequired;
-        }
+        //if (bool.TryParse(selectedString, out bool isrequired))
+        //{
+        //    FaqModel.IsTeacherFaq = isrequired;
+        //}
+        if (e.Value != null)
+            FaqModel.IsTeacherFaq = bool.Parse(e.Value.ToString());
     }
 }
