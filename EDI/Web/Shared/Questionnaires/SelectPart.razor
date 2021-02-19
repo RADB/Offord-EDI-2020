@@ -75,6 +75,10 @@
         {
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(Config.LookupEntityId.GetValueOrDefault(1));
+
+            _LookupSetOptions.Insert(0,new LookupSetOption());
+            //_LookupSetOptions[0].English = "Choose one..."
+            _LookupSetOptions[0].Value = 0;
         }
         Validation(currentValue.ToString());
     }

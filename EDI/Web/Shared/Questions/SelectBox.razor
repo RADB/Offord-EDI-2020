@@ -2,7 +2,7 @@
 
 <select Class="form-control" value="@OptionsModel.Value" @onchange="@(e =>OptionChange(e))">
     @if (OptionsModel.LookupSetOptions != null)
-    {
+    {        
         @foreach (var option in OptionsModel.LookupSetOptions)
         {
             _optionLabel = sharedService.GetOptionText(option);
