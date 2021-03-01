@@ -1,0 +1,53 @@
+﻿
+@page "/Reports/index"
+@using System.Linq.Dynamic.Core
+@using Syncfusion.Blazor.Grids
+@inject ServiceContext dbContext;
+@inject UserSettings UserSettings;
+
+<h3>Reports</h3>
+@*<SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">*@
+<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" Columns="@Cols" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+</SfGrid>
+@code {
+    [Parameter]
+    public int NumberOfColumns { get; set; }
+    SfGrid<LinkItemViewModel> Grid;
+    private List<Child> ReportData;
+    public List<GridColumn> Cols = new List<GridColumn>();
+    private List<string> _columnHeaders;
+
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridLink_excelexport")
+        {
+            this.Grid.ExcelExport();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var predicate = "p => p.YearId ==" + UserSettings.YearId;
+
+        ReportData = dbContext.Children.Where(predicate)
+                .Include(c => c.Teacher)
+                 .ThenInclude(t => t.School)
+                 .ThenInclude(ts => ts.Province)
+                .Include(t => t.Year)
+                .Include(g => g.Gender)
+                .Include(cs => cs.ChildStatus)
+                .ToList();
+
+
+        // _gridRows = new List<GridRow>();
+        _columnHeaders = new List<string>();
+
+        Cols.Add(new GridColumn() { Field = "Date", HeaderText = "Date" });
+        @foreach (string columnHeader in _columnHeaders)
+        {
+            Cols.Add(new GridColumn() { Field = "Values." + columnHeader, HeaderText = columnHeader });
+        }
+    }
+}
+    }
