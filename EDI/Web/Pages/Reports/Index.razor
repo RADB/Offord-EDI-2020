@@ -7,15 +7,15 @@
 
 <h3>Reports</h3>
 @*<SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">*@
-<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" Columns="@Cols" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both"  AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
     <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
 </SfGrid>
 @code {
-    [Parameter]
-    public int NumberOfColumns { get; set; }
-    SfGrid<LinkItemViewModel> Grid;
+    //[Parameter]
+    //public int NumberOfColumns { get; set; }
+    SfGrid<Child> Grid;
     private List<Child> ReportData;
-    public List<GridColumn> Cols = new List<GridColumn>();
+    //public List<GridColumn> Cols = new List<GridColumn>();
     private List<string> _columnHeaders;
 
     public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -28,7 +28,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var predicate = "p => p.YearId ==" + UserSettings.YearId;
+        var predicate = "p => p.YearId ==" + UserSettings.YearId + " && percentcomplete = 100";
 
         ReportData = dbContext.Children.Where(predicate)
                 .Include(c => c.Teacher)
@@ -38,16 +38,15 @@
                 .Include(g => g.Gender)
                 .Include(cs => cs.ChildStatus)
                 .ToList();
+        //int SiteId = 1;
 
+        //var ReportData = dbContext.Teachers.FromSqlRaw($"EXEC [Reports].[GetChildrenBySite] {SiteId}")
+        //_columnHeaders = new List<string>();
 
-        // _gridRows = new List<GridRow>();
-        _columnHeaders = new List<string>();
-
-        Cols.Add(new GridColumn() { Field = "Date", HeaderText = "Date" });
-        @foreach (string columnHeader in _columnHeaders)
-        {
-            Cols.Add(new GridColumn() { Field = "Values." + columnHeader, HeaderText = columnHeader });
-        }
+        //Cols.Add(new GridColumn() { Field = "Date", HeaderText = "Date" });
+        //foreach (string columnHeader in _columnHeaders)
+        //{
+        //    Cols.Add(new GridColumn() { Field = "Values." + columnHeader, HeaderText = columnHeader });
+        //}
     }
 }
-    }
