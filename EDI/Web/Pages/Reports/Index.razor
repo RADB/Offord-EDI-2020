@@ -16,27 +16,22 @@
     <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
 </SfGrid>
 @code {
-    //[Parameter]
-    //public int NumberOfColumns { get; set; }
-    //SfGrid<Child> Grid;
-    //private object ReportData;
-    private List<dynamic> ReportData;
-    private List<ExpandoObject> dataTable = new List<ExpandoObject>();
-    //public List<GridColumn> Cols = new List<GridColumn>();
-    //private DataTable dataTable = new DataTable();
+    private List<ExpandoObject> ReportData;
     private List<string> _columnHeaders;
 
-    //public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-    //{
-    //    if (args.Item.Id == "GridReport_excelexport")
-    //    {
-    //        this.Grid.ExcelExport();
-    //    }
-    //}
+    private dynamic SqlDataReaderToExpando(SqlDataReader reader)
+    {
+        var expandoObject = new ExpandoObject() as IDictionary<string, object>;
+
+        for (var i = 0; i < reader.FieldCount; i++)
+            expandoObject.Add(reader.GetName(i), reader[i]);
+
+        return expandoObject;
+    }
 
     protected override async Task OnParametersSetAsync()
     {
-        // create the connection to the database and open it
+        ReportData = new List<ExpandoObject>();
         SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
         conn.Open();
         {
@@ -50,54 +45,14 @@
 
             SqlDataReader reader = sqlComm.ExecuteReader();
 
-
-            //Loop 
-            ReportData = reader.ToDynamicList();
-            //var dt = new DataTable();
-            //dt.Load(reader);
-
-            //dataTable = dt;
+            while (reader.Read())
+            {
+                var obj = SqlDataReaderToExpando(reader);
+                ReportData.Add(obj);
+            }
 
             reader.Close();
             conn.Close();
         }
-
-        //    DataTable dtFlat;
-        //public List<dynamic> CustomerList = new List<dynamic>();
-        ////List<System.Dynamic.ExpandoObject>    lstObj;
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    dtFlat = OrdersDetails.GetAllRecords();
-        //    foreach (DataRow row in dtFlat.Rows)
-        //    {
-        //        System.Dynamic.ExpandoObject e = new System.Dynamic.ExpandoObject();
-        //        foreach (DataColumn col in dtFlat.Columns)
-        //            e.TryAdd(col.ColumnName, row.ItemArray[col.Ordinal]);
-        //        CustomerList.Add(e);
-        //    }
-
-        //}
-
-
-        //var predicate = "p => p.YearId ==" + UserSettings.YearId + " && percentcomplete = 100";
-
-        //ReportData = dbContext.Children.Where(predicate)
-        //        .Include(c => c.Teacher)
-        //         .ThenInclude(t => t.School)
-        //         .ThenInclude(ts => ts.Province)
-        //        .Include(t => t.Year)
-        //        .Include(g => g.Gender)
-        //        .Include(cs => cs.ChildStatus)
-        //        .ToList();
-        //int SiteId = 1;
-
-        //var ReportData = dbContext.Teachers.FromSqlRaw($"EXEC [Reports].[GetChildrenBySite] {SiteId}")
-        //_columnHeaders = new List<string>();
-
-        //Cols.Add(new GridColumn() { Field = "Date", HeaderText = "Date" });
-        //foreach (string columnHeader in _columnHeaders)
-        //{
-        //    Cols.Add(new GridColumn() { Field = "Values." + columnHeader, HeaderText = columnHeader });
-        //}
     }
 }
