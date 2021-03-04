@@ -2,42 +2,93 @@
 @page "/Reports/index"
 @using System.Linq.Dynamic.Core
 @using Syncfusion.Blazor.Grids
-@inject ServiceContext dbContext;
-@inject UserSettings UserSettings;
+@using System.Data;
+@using Microsoft.Data.SqlClient
+@using EDI.Web.Extensions
+@using System.Dynamic
+@inject ServiceContext dbContext
+@inject UserSettings UserSettings
 
 <h3>Reports</h3>
 @*<SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">*@
-<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both"  AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
-    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+<SfGrid ID="GridReport" DataSource="@ReportData" GridLines="GridLine.Both" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+    @*<GridEvents OnToolbarClick="ToolBarClick" TValue="Child"></GridEvents>*@
+    <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
 </SfGrid>
 @code {
     //[Parameter]
     //public int NumberOfColumns { get; set; }
-    SfGrid<Child> Grid;
-    private List<Child> ReportData;
+    //SfGrid<Child> Grid;
+    //private object ReportData;
+    private List<dynamic> ReportData;
+    private List<ExpandoObject> dataTable = new List<ExpandoObject>();
     //public List<GridColumn> Cols = new List<GridColumn>();
+    //private DataTable dataTable = new DataTable();
     private List<string> _columnHeaders;
 
-    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-    {
-        if (args.Item.Id == "GridLink_excelexport")
-        {
-            this.Grid.ExcelExport();
-        }
-    }
+    //public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    //{
+    //    if (args.Item.Id == "GridReport_excelexport")
+    //    {
+    //        this.Grid.ExcelExport();
+    //    }
+    //}
 
     protected override async Task OnParametersSetAsync()
     {
-        var predicate = "p => p.YearId ==" + UserSettings.YearId + " && percentcomplete = 100";
+        // create the connection to the database and open it
+        SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+        conn.Open();
+        {
+            // create the command object
+            SqlCommand sqlComm = new SqlCommand("[Reports].[GetChildrenBySite]", conn);
 
-        ReportData = dbContext.Children.Where(predicate)
-                .Include(c => c.Teacher)
-                 .ThenInclude(t => t.School)
-                 .ThenInclude(ts => ts.Province)
-                .Include(t => t.Year)
-                .Include(g => g.Gender)
-                .Include(cs => cs.ChildStatus)
-                .ToList();
+            // Add Parameters
+            sqlComm.Parameters.AddWithValue("@SiteId", 1);
+
+            sqlComm.CommandType = CommandType.StoredProcedure;
+
+            SqlDataReader reader = sqlComm.ExecuteReader();
+
+
+            //Loop 
+            ReportData = reader.ToDynamicList();
+            //var dt = new DataTable();
+            //dt.Load(reader);
+
+            //dataTable = dt;
+
+            reader.Close();
+            conn.Close();
+        }
+
+        //    DataTable dtFlat;
+        //public List<dynamic> CustomerList = new List<dynamic>();
+        ////List<System.Dynamic.ExpandoObject>    lstObj;
+        //protected override async Task OnInitializedAsync()
+        //{
+        //    dtFlat = OrdersDetails.GetAllRecords();
+        //    foreach (DataRow row in dtFlat.Rows)
+        //    {
+        //        System.Dynamic.ExpandoObject e = new System.Dynamic.ExpandoObject();
+        //        foreach (DataColumn col in dtFlat.Columns)
+        //            e.TryAdd(col.ColumnName, row.ItemArray[col.Ordinal]);
+        //        CustomerList.Add(e);
+        //    }
+
+        //}
+
+
+        //var predicate = "p => p.YearId ==" + UserSettings.YearId + " && percentcomplete = 100";
+
+        //ReportData = dbContext.Children.Where(predicate)
+        //        .Include(c => c.Teacher)
+        //         .ThenInclude(t => t.School)
+        //         .ThenInclude(ts => ts.Province)
+        //        .Include(t => t.Year)
+        //        .Include(g => g.Gender)
+        //        .Include(cs => cs.ChildStatus)
+        //        .ToList();
         //int SiteId = 1;
 
         //var ReportData = dbContext.Teachers.FromSqlRaw($"EXEC [Reports].[GetChildrenBySite] {SiteId}")
