@@ -9,8 +9,8 @@
 {
     <AuthorizeView Roles="Administrator">
         <Authorized>
-            <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="OnEditClick"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-            <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="OnDeleteClick"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+            <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="OnEditClick"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i> Edit</button>
+            <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="OnDeleteClick"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i> Delete</button>
         </Authorized>
     </AuthorizeView>
 }

@@ -27,89 +27,92 @@
         @ErrorMessage
     </div>
 }
-<br />
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:50px;">
+    <div class="col-md-7">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
                 <strong>My Profile</strong>
                 <div class="pull-right">
                     <button class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i> Reset</button>
                 </div>
             </div>
-            <br />
-            @if (!string.IsNullOrEmpty(AccountModel.Id))
-            {
-                <ProfileForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />
-            }
-
+            <div class="card-body">
+                <div class="row"></div>
+                <br />
+                @if (!string.IsNullOrEmpty(AccountModel.Id))
+                {
+                    <ProfileForm @ref="accountform1" AccountModel="@AccountModel" HandleValidSubmit="HandleValidSubmit" />
+                }
+            </div>
         </div>
     </div>
 </div>
 
-@code {
-    [CascadingParameter] public IModalService ModalService { get; set; }
-    private string Message { get; set; }
-    private string ErrorMessage { get; set; }
 
-    private AccountItemViewModel AccountModel { get; set; } = new AccountItemViewModel();
 
-    ProfileForm accountform1 = new ProfileForm();
+    @code {
+        [CascadingParameter] public IModalService ModalService { get; set; }
+        private string Message { get; set; }
+        private string ErrorMessage { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (!UserSettings.IsAuthenticated)
+        private AccountItemViewModel AccountModel { get; set; } = new AccountItemViewModel();
+
+        ProfileForm accountform1 = new ProfileForm();
+
+        protected override async Task OnInitializedAsync()
         {
-            NavigationManager.NavigateTo("./login");
+            if (!UserSettings.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo("./login");
+            }
+            else if (!UserSettings.IsAdmin)
+            {
+                NavigationManager.NavigateTo("./dashboard/index");
+            }
+            else
+            {
+                AccountModel = await accountService.GetProfile();
+            }
         }
-        else if (!UserSettings.IsAdmin)
+
+        private async void HandleValidSubmit()
         {
-            NavigationManager.NavigateTo("./dashboard/index");
+            await accountService.UpdateAccountAsync(accountform1.AccountModel);
+
+            Message = "Profile updated successfully.";
+
+            toastService.ShowSuccess(Message);
+
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
+            UserSettings.FirstName = user1.FirstName;
+            UserSettings.LastName = user1.LastName;
+            UserSettings.Email = user1.Email;
+            UserSettings.IsAdmin = false;
+            UserSettings.IsCoordinator = false;
+            UserSettings.IsTeacher = false;
+
+            @if (user.IsInRole("Administrator"))
+            {
+                UserSettings.IsAdmin = true;
+            }
+            else if (user.IsInRole("Teacher"))
+            {
+                UserSettings.IsTeacher = true;
+            }
+            else
+            {
+                UserSettings.IsCoordinator = true;
+            }
+
+            StateHasChanged();
         }
-        else
+
+        private async void Reset()
         {
             AccountModel = await accountService.GetProfile();
         }
     }
-
-    private async void HandleValidSubmit()
-    {
-        await accountService.UpdateAccountAsync(accountform1.AccountModel);
-
-        Message = "Profile updated successfully.";
-
-        toastService.ShowSuccess(Message);
-
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        var user1 = identityContext.Users.Where(p => p.UserName == user.Identity.Name).FirstOrDefault();
-        UserSettings.FirstName = user1.FirstName;
-        UserSettings.LastName = user1.LastName;
-        UserSettings.Email = user1.Email;
-        UserSettings.IsAdmin = false;
-        UserSettings.IsCoordinator = false;
-        UserSettings.IsTeacher = false;
-
-        @if (user.IsInRole("Administrator"))
-        {
-            UserSettings.IsAdmin = true;
-        }
-        else if (user.IsInRole("Teacher"))
-        {
-            UserSettings.IsTeacher = true;
-        }
-        else
-        {
-            UserSettings.IsCoordinator = true;
-        }
-
-        StateHasChanged();
-    }
-
-    private async void Reset()
-    {
-        AccountModel = await accountService.GetProfile();
-    }
-}

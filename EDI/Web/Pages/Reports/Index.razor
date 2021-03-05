@@ -2,6 +2,7 @@
 @page "/Reports/index"
 @using System.Linq.Dynamic.Core
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Buttons 
 @using System.Data;
 @using Microsoft.Data.SqlClient
 @using EDI.Web.Extensions
@@ -11,13 +12,36 @@
 
 <h3>Reports</h3>
 @*<SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">*@
-<SfGrid ID="GridReport" DataSource="@ReportData" GridLines="GridLine.Both" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
-    @*<GridEvents OnToolbarClick="ToolBarClick" TValue="Child"></GridEvents>*@
+<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+    <GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
+    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
     <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
 </SfGrid>
+@*<SfButton OnClick="ExcelExport" Content="Excel Export"></SfButton>*@
+
 @code {
     private List<ExpandoObject> ReportData;
     private List<string> _columnHeaders;
+    private SfGrid<ExpandoObject> Grid;
+
+    // you can run this without args as well -- public async Task ExcelExport()
+    public async Task ExcelExport(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "GridReport_excelexport")
+        {
+            ExcelExportProperties ExcelProperties = new ExcelExportProperties();
+            ExcelProperties.FileName = "new.xlsx";
+            await this.Grid.ExcelExport(ExcelProperties);
+        }
+    }
+
+    //public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    //{
+    //    if (args.Item.Id == "GridReport_excelexport")
+    //    {
+    //        this.Grid.ExcelExport();
+    //    }
+    //}
 
     private dynamic SqlDataReaderToExpando(SqlDataReader reader)
     {

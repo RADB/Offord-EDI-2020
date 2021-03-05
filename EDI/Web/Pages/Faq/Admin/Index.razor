@@ -50,8 +50,8 @@
                                             <br />
                                             <AuthorizeView Roles="Administrator">
                                                 <Authorized Context="EditDelete">
-                                                    <button class="editbutton" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i></button>
-                                                    <button class="deletebutton" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i></button>
+                                                    <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Edit" @onclick="(e => Edit(faq.Id))"><i class="fa fa-pencil-alt fa-1x whiteiconcolor"></i> Edit</button>
+                                                    <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Delete" @onclick="(e => Delete(faq.Id))"><i class="fa fa-trash-alt fa-1x whiteiconcolor"></i> Delete</button>                                                    
                                                 </Authorized>
                                             </AuthorizeView>
                                         </ContentTemplate>
