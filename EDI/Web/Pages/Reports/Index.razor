@@ -19,7 +19,7 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <strong>Reports</strong>
+                <strong>@Translate("Reports")</strong>
                 <div class="pull-right">
                     <select class="col-md-3" value="@reportid" @onchange="@(e =>ReportChange(e))">
                         @if (Reports != null)
@@ -39,7 +39,8 @@
                             <ContentTemplate>
                                 <div class="form-group row">
                                     <label class="col-md-4 col-form-label" for="Site">Site: </label>
-                                    <select class="col-md-3" value="@siteid" @onchange="@(e =>SiteChange(e))">>
+                                    <select class="col-md-3" value="@siteid" @onchange="@(e =>SiteChange(e))">
+                                        >
                                         @if (Sites != null)
                                         {
                                             @foreach (var option in Sites)
@@ -54,11 +55,15 @@
                         </AccordionItem>
                     </AccordionItems>
                 </SfAccordion>
+
+                @*<SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">*@
                 <SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
                     <GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
                     <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                     <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
                 </SfGrid>
+                @*<SfButton OnClick="ExcelExport" Content="Excel Export"></SfButton>*@
+
             </div>
 
         </div>
@@ -232,5 +237,9 @@
 
             StateHasChanged();
         }
+    }
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }
