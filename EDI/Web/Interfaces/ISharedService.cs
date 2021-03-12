@@ -50,5 +50,7 @@ namespace EDI.Web.Interfaces
         Task<string> SendTeacherPassword(Teacher teacher);
 
         Task UpdatePercentComplete(int ChildId, byte IsTest);
+
+        Task<IEnumerable<SelectListItem>> GetReportTypes();
     }
 }

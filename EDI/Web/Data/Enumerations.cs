@@ -87,5 +87,13 @@ namespace EDI.Web.Data
             Duplicate = 3,
             InvalidProvince = 4
         }
+
+        public enum ReportTypes : int
+        {
+            Students = 1,
+            Teachers = 2,
+            Schools = 3,
+            Sites = 4
+        }
     }
 }

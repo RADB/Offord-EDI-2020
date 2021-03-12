@@ -2092,5 +2092,36 @@ namespace EDI.Web.Services
             }
 
         }
+
+        public async Task<IEnumerable<SelectListItem>> GetReportTypes()
+        {
+
+            WriteLogs("GetReportTypes started by:" + _userSettings.UserName, true);
+
+            try
+            {
+                //var sites = _siteRepository.ListAllSites().OrderBy(t => t.SiteNumber);
+
+                var items = new List<SelectListItem>
+                {
+                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+                };
+
+                items.Add(new SelectListItem() { Value = "1", Text = "Students" });
+                items.Add(new SelectListItem() { Value = "2", Text = "Teachers" });
+                items.Add(new SelectListItem() { Value = "3", Text = "Schools" });
+                items.Add(new SelectListItem() { Value = "4", Text = "Sites" });
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                WriteLogs("GetReportTypes failed:" + ex.Message, false);
+
+                var vm = new List<SelectListItem>();
+
+                return vm;
+            }
+        }
     }
 }
