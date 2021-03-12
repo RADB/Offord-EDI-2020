@@ -2,27 +2,99 @@
 @page "/Reports/index"
 @using System.Linq.Dynamic.Core
 @using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Buttons 
+@using Syncfusion.Blazor.Buttons
 @using System.Data;
 @using Microsoft.Data.SqlClient
 @using EDI.Web.Extensions
+@using EDI.Web.Data
 @using System.Dynamic
+@using Syncfusion.Blazor.Navigations;
 @inject ServiceContext dbContext
 @inject UserSettings UserSettings
+@inject ISharedService sharedService
 
-<h3>Reports</h3>
-@*<SfGrid ID="GridLink" @ref="Grid" DataSource="@links" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">*@
-<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
-    <GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
-    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-    <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
-</SfGrid>
-@*<SfButton OnClick="ExcelExport" Content="Excel Export"></SfButton>*@
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+            <div class="card-header">
+                <strong>Reports</strong>
+                <div class="pull-right">
+                    <select class="col-md-3" value="@reportid" @onchange="@(e =>ReportChange(e))">
+                        @if (Reports != null)
+                        {
+                            @foreach (var option in Reports)
+                            {
+                                <option value="@option.Value">@option.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <SfAccordion>
+                    <AccordionItems>
+                        <AccordionItem Header="Options" Expanded="true">
+                            <ContentTemplate>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="Site">Site: </label>
+                                    <select class="col-md-3" value="@siteid" @onchange="@(e =>SiteChange(e))">>
+                                        @if (Sites != null)
+                                        {
+                                            @foreach (var option in Sites)
+                                            {
+                                                <option value="@option.Value">@option.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Report" @onclick="ShowReport"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Show</button>
+                            </ContentTemplate>
+                        </AccordionItem>
+                    </AccordionItems>
+                </SfAccordion>
+                <SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+                    <GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
+                </SfGrid>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 @code {
     private List<ExpandoObject> ReportData;
     private List<string> _columnHeaders;
     private SfGrid<ExpandoObject> Grid;
+
+    public IEnumerable<SelectListItem> Sites { get; set; }
+
+    public IEnumerable<SelectListItem> Reports { get; set; }
+
+    public string siteid { get; set; }
+    public int CurrentSite { get; set; }
+
+    public string reportid { get; set; }
+    public int CurrentReport { get; set; }
+
+    private async Task ReportChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        if (int.TryParse(selectedString, out int newid))
+        {
+            CurrentReport = newid;
+            reportid = CurrentReport.ToString();
+
+            siteid = string.Empty;
+
+            ReportData = new List<ExpandoObject>();
+            StateHasChanged();
+        }
+    }
 
     // you can run this without args as well -- public async Task ExcelExport()
     public async Task ExcelExport(Syncfusion.Blazor.Navigations.ClickEventArgs args)
@@ -34,14 +106,6 @@
             await this.Grid.ExcelExport(ExcelProperties);
         }
     }
-
-    //public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-    //{
-    //    if (args.Item.Id == "GridReport_excelexport")
-    //    {
-    //        this.Grid.ExcelExport();
-    //    }
-    //}
 
     private dynamic SqlDataReaderToExpando(SqlDataReader reader)
     {
@@ -55,6 +119,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
+        Sites = await sharedService.GetSites();
+        siteid = "1";
+
+        Reports = await sharedService.GetReportTypes();
+        CurrentReport = 1;
+        reportid = "1";
+
         ReportData = new List<ExpandoObject>();
         SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
         conn.Open();
@@ -77,6 +148,80 @@
 
             reader.Close();
             conn.Close();
+        }
+    }
+
+    private void ShowReport()
+    {
+        ReportData = new List<ExpandoObject>();
+
+        if ((Enumerations.ReportTypes)CurrentReport == Enumerations.ReportTypes.Students)
+        {
+            SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+            conn.Open();
+            {
+                // create the command object
+                SqlCommand sqlComm = new SqlCommand("[Reports].[GetChildrenBySite]", conn);
+
+                // Add Parameters
+                sqlComm.Parameters.AddWithValue("@SiteId", CurrentSite);
+
+                sqlComm.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader reader = sqlComm.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var obj = SqlDataReaderToExpando(reader);
+                    ReportData.Add(obj);
+                }
+
+                reader.Close();
+                conn.Close();
+            }
+        }
+        else if ((Enumerations.ReportTypes)CurrentReport == Enumerations.ReportTypes.Teachers)
+        {
+            SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+            conn.Open();
+            {
+                // create the command object
+                SqlCommand sqlComm = new SqlCommand("[Reports].[GetTeacherBySite]", conn);
+
+                // Add Parameters
+                sqlComm.Parameters.AddWithValue("@SiteId", CurrentSite);
+
+                sqlComm.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader reader = sqlComm.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var obj = SqlDataReaderToExpando(reader);
+                    ReportData.Add(obj);
+                }
+
+                reader.Close();
+                conn.Close();
+            }
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task SiteChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
+    {
+        string selectedString = e.Value.ToString();
+
+        CurrentSite = 0;
+        siteid = string.Empty;
+
+        if (int.TryParse(selectedString, out int ctid))
+        {
+            CurrentSite = ctid;
+            siteid = CurrentSite.ToString();
+
+            StateHasChanged();
         }
     }
 }
