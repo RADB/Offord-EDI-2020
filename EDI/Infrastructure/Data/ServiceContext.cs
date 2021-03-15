@@ -27,7 +27,8 @@ namespace EDI.Infrastructure.Data
         
         public virtual DbSet<Translation> Translations { get; set; }
         public virtual DbSet<Year> Years { get; set; }
-        
+        public virtual DbSet<ReportAccess> ReportAccess { get; set; }
+
 
         /* Staging Data*/
         public virtual DbSet<FileImport> FileImports { get; set; }
@@ -951,7 +952,15 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
             });
 
-
+            modelBuilder.Entity<ReportAccess>(entity =>
+            {
+                entity.HasNoKey();
+                entity.Property(e => e.Schema).IsUnicode(false);
+                entity.Property(e => e.ObjectName).IsUnicode(false);
+                entity.Property(e => e.ParameterDataType).IsUnicode(false);
+                entity.Property(e => e.ParameterName).IsUnicode(false);
+                entity.Property(e => e.ParameterStringValue).IsUnicode(false);
+            });
         }
     }
 }

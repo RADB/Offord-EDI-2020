@@ -1,5 +1,5 @@
 ﻿
-@page "/Reports/index"
+@page "/Reports/index/{ReportTypeId:int}"
 @using System.Linq.Dynamic.Core
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Buttons
@@ -12,6 +12,7 @@
 @inject ServiceContext dbContext
 @inject UserSettings UserSettings
 @inject ISharedService sharedService
+@inject NavigationManager NavigationManager
 
 
 <div class="row">
@@ -36,18 +37,22 @@
                     <AccordionItems>
                         <AccordionItem Header="Options" Expanded="true">
                             <ContentTemplate>
-                                <div class="form-group row">
-                                    <label class="col-md-4 col-form-label" for="Site">Site: </label>
-                                    <select class="col-md-3" value="@siteid" @onchange="@(e =>SiteChange(e))">>
-                                        @if (Sites != null)
+                                @if (reportParams != null && reportParams.Count() > 0)
+                                {
+                                    foreach (var param in reportParams)
+                                    {
+                                        <label class="col-md-2 col-form-label" for="param">@param.ParameterName.Substring(1): </label>
+                                        if (param.ParameterDataType == "int")
                                         {
-                                            @foreach (var option in Sites)
-                                            {
-                                                <option value="@option.Value">@option.Text</option>
-                                            }
+                                            <input type="number" @bind-value="param.ParameterIntValue" class="col-md-4 form-control" /><br />
                                         }
-                                    </select>
-                                </div>
+                                        else if (param.ParameterDataType == "string")
+                                        {
+                                            <input type="text" @bind-value="param.ParameterStringValue" class="col-md-4 form-control" /><br />
+                                        }
+                                    }
+                                }
+
                                 <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Report" @onclick="ShowReport"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Show</button>
                             </ContentTemplate>
                         </AccordionItem>
@@ -66,19 +71,16 @@
 
 
 @code {
+    [Parameter]
+    public int ReportTypeId { get; set; }
     private List<ExpandoObject> ReportData;
     private List<string> _columnHeaders;
     private SfGrid<ExpandoObject> Grid;
 
-    public IEnumerable<SelectListItem> Sites { get; set; }
-
     public IEnumerable<SelectListItem> Reports { get; set; }
 
-    public string siteid { get; set; }
-    public int CurrentSite { get; set; }
-
     public string reportid { get; set; }
-    public int CurrentReport { get; set; }
+    List<ReportAccess> reportParams { get; set; }
 
     private async Task ReportChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
@@ -86,12 +88,7 @@
 
         if (int.TryParse(selectedString, out int newid))
         {
-            CurrentReport = newid;
-            reportid = CurrentReport.ToString();
-
-            siteid = string.Empty;
-
-            ReportData = new List<ExpandoObject>();
+            NavigationManager.NavigateTo("./Reports/index/" + newid);
             StateHasChanged();
         }
     }
@@ -119,12 +116,19 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Sites = await sharedService.GetSites();
-        siteid = "1";
-
         Reports = await sharedService.GetReportTypes();
-        CurrentReport = 1;
-        reportid = "1";
+        reportid = ReportTypeId.ToString();
+
+        reportParams = new List<ReportAccess>();
+
+        if ((Enumerations.ReportTypes)ReportTypeId == Enumerations.ReportTypes.Students)
+        {
+            reportParams = dbContext.ReportAccess.Where(p => p.ObjectName == "GetChildrenBySite").ToList();
+        }
+        else if ((Enumerations.ReportTypes)ReportTypeId == Enumerations.ReportTypes.Teachers)
+        {
+            reportParams = dbContext.ReportAccess.Where(p => p.ObjectName == "GetTeacherBySite").ToList();
+        }
 
         ReportData = new List<ExpandoObject>();
         SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
@@ -155,7 +159,7 @@
     {
         ReportData = new List<ExpandoObject>();
 
-        if ((Enumerations.ReportTypes)CurrentReport == Enumerations.ReportTypes.Students)
+        if ((Enumerations.ReportTypes)ReportTypeId == Enumerations.ReportTypes.Students)
         {
             SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
             conn.Open();
@@ -163,8 +167,11 @@
                 // create the command object
                 SqlCommand sqlComm = new SqlCommand("[Reports].[GetChildrenBySite]", conn);
 
-                // Add Parameters
-                sqlComm.Parameters.AddWithValue("@SiteId", CurrentSite);
+                foreach (var param in reportParams)
+                {
+                    // Add Parameters
+                    sqlComm.Parameters.AddWithValue(param.ParameterName, param.ParameterDataType == "int" ? param.ParameterIntValue : param.ParameterStringValue);
+                }
 
                 sqlComm.CommandType = CommandType.StoredProcedure;
 
@@ -180,7 +187,7 @@
                 conn.Close();
             }
         }
-        else if ((Enumerations.ReportTypes)CurrentReport == Enumerations.ReportTypes.Teachers)
+        else if ((Enumerations.ReportTypes)ReportTypeId == Enumerations.ReportTypes.Teachers)
         {
             SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
             conn.Open();
@@ -188,8 +195,11 @@
                 // create the command object
                 SqlCommand sqlComm = new SqlCommand("[Reports].[GetTeacherBySite]", conn);
 
-                // Add Parameters
-                sqlComm.Parameters.AddWithValue("@SiteId", CurrentSite);
+                foreach (var param in reportParams)
+                {
+                    // Add Parameters
+                    sqlComm.Parameters.AddWithValue(param.ParameterName, param.ParameterDataType == "int" ? param.ParameterIntValue : param.ParameterStringValue);
+                }
 
                 sqlComm.CommandType = CommandType.StoredProcedure;
 
@@ -207,21 +217,5 @@
         }
 
         StateHasChanged();
-    }
-
-    private async Task SiteChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
-    {
-        string selectedString = e.Value.ToString();
-
-        CurrentSite = 0;
-        siteid = string.Empty;
-
-        if (int.TryParse(selectedString, out int ctid))
-        {
-            CurrentSite = ctid;
-            siteid = CurrentSite.ToString();
-
-            StateHasChanged();
-        }
     }
 }
