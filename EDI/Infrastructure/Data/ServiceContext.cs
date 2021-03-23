@@ -24,10 +24,10 @@ namespace EDI.Infrastructure.Data
         public virtual DbSet<Orientation> Orientations { get; set; }
         public virtual DbSet<Province> Provinces { get; set; }
         public virtual DbSet<ProvinceType> ProvinceType { get; set; }
+//        public virtual DbSet<Reports> Reports { get; set; }
         
         public virtual DbSet<Translation> Translations { get; set; }
-        public virtual DbSet<Year> Years { get; set; }
-        public virtual DbSet<ReportAccess> ReportAccess { get; set; }
+        public virtual DbSet<Year> Years { get; set; }        
 
 
         /* Staging Data*/
@@ -952,7 +952,7 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
             });
 
-            modelBuilder.Entity<ReportAccess>(entity =>
+            modelBuilder.Entity<Reports>(entity =>
             {
                 entity.HasNoKey();
                 entity.Property(e => e.Schema).IsUnicode(false);

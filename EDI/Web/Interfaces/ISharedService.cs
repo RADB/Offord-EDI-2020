@@ -51,6 +51,6 @@ namespace EDI.Web.Interfaces
 
         Task UpdatePercentComplete(int ChildId, byte IsTest);
 
-        Task<IEnumerable<SelectListItem>> GetReportTypes();
+        //Task<IEnumerable<SelectListItem>> GetReportTypes();
     }
 }

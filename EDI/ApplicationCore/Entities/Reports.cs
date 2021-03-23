@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDI.ApplicationCore.Entities
-{
-    public class ReportAccess
+{    
+    public class Reports
     {
         public string Schema { get; set; }
         public string ObjectName { get; set; }

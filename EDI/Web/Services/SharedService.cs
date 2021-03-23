@@ -36,6 +36,9 @@ using EDI.ApplicationCore.Models;
 using static EDI.Web.Data.Enumerations;
 using System.Linq.Dynamic.Core;
 using EDI.Web.Data;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Dynamic;
 
 namespace EDI.Web.Services
 {
@@ -2093,35 +2096,57 @@ namespace EDI.Web.Services
 
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetReportTypes()
-        {
+        //public async Task<IEnumerable<SelectListItem>> GetReportTypes()
+        //{
 
-            WriteLogs("GetReportTypes started by:" + _userSettings.UserName, true);
+        //    WriteLogs("GetReportTypes started by:" + _userSettings.UserName, true);
 
-            try
-            {
-                //var sites = _siteRepository.ListAllSites().OrderBy(t => t.SiteNumber);
+        //    try
+        //    {
+        //        ////var sites = _siteRepository.ListAllSites().OrderBy(t => t.SiteNumber);
 
-                var items = new List<SelectListItem>
-                {
-                    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
-                };
+        //        //var items = new List<SelectListItem>
+        //        //{
+        //        //    new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
+        //        //};
 
-                items.Add(new SelectListItem() { Value = "1", Text = "Students" });
-                items.Add(new SelectListItem() { Value = "2", Text = "Teachers" });
-                items.Add(new SelectListItem() { Value = "3", Text = "Schools" });
-                items.Add(new SelectListItem() { Value = "4", Text = "Sites" });
+        //        //items.Add(new SelectListItem() { Value = "1", Text = "Students" });
+        //        //items.Add(new SelectListItem() { Value = "2", Text = "Teachers" });
+        //        //items.Add(new SelectListItem() { Value = "3", Text = "Schools" });
+        //        //items.Add(new SelectListItem() { Value = "4", Text = "Sites" });
+        //        SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+        //        conn.Open();
+        //        {
+        //            // create the command object
+        //            SqlCommand sqlComm = new SqlCommand("[Reports].[GetChildrenBySite]", conn);
 
-                return items;
-            }
-            catch (Exception ex)
-            {
-                WriteLogs("GetReportTypes failed:" + ex.Message, false);
+        //            // Add Parameters
+        //            sqlComm.Parameters.AddWithValue("@SiteId", 1);
 
-                var vm = new List<SelectListItem>();
+        //            sqlComm.CommandType = CommandType.StoredProcedure;
 
-                return vm;
-            }
-        }
+        //            SqlDataReader reader = sqlComm.ExecuteReader();
+
+        //            while (reader.Read())
+        //            {
+        //                var obj = SqlDataReaderToExpando(reader);
+        //                ReportData.Add(obj);
+        //            }
+
+        //            reader.Close();
+        //            conn.Close();
+        //        }
+
+        //        return items;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        WriteLogs("GetReportTypes failed:" + ex.Message, false);
+
+        //        var vm = new List<SelectListItem>();
+
+        //        return vm;
+        //    }
+        //}
     }
 }
