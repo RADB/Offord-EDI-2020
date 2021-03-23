@@ -63,18 +63,25 @@
                         </AccordionItem>
                     </AccordionItems>
                 </SfAccordion>
-                <!--<SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">-->
-                <!--<GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
-        <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>-->
-                <!--<GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>-->
+
                 <!-- Report Parameters -->
                 <SfGrid DataSource="@reportParams">
                 </SfGrid>
                 <br />
                 <br />
-                <!-- Report Data -->
-                <SfGrid DataSource="@ReportData">
+
+                <SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+                    <GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
+                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
                 </SfGrid>
+
+                <SfGrid ID="GridReport" @ref="Grid2" DataSource="@ReportData" >                    
+                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>                    
+                </SfGrid>
+                <!-- Report Data -->
+                @*<SfGrid DataSource="@ReportData" TValue="ExpandoObject">
+        </SfGrid>*@
             </div>
 
         </div>
@@ -88,6 +95,7 @@
     private List<ExpandoObject> ReportData;
     //private List<string> _columnHeaders;
     private SfGrid<ExpandoObject> Grid;
+    private SfGrid<ExpandoObject> Grid2;
     private string SchemaName = "[Reports]";
     private int Counter;
 
@@ -126,6 +134,8 @@
 
             };
 
+            //ReportData = new List<ExpandoObject>();
+
             SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
             conn.Open();
             {
@@ -143,12 +153,18 @@
                     {
                         items.Add(new SelectListItem() { Value = Counter.ToString(), Text = reader[Column].ToString() });
                     }
+
+                    //var obj = SqlDataReaderToExpando(reader);
+                    //ReportData.Add(obj);
+
                     Counter++;
                 }
+
 
                 reader.Close();
                 conn.Close();
             }
+            //StateHasChanged();
             return items;
         }
         catch (Exception ex)
@@ -179,6 +195,7 @@
     public async Task GetReportParamaters()
     {
         reportParams = new List<Reports>();
+        ReportData = new List<ExpandoObject>();
         SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
         conn.Open();
         {
@@ -206,7 +223,7 @@
                 report.ParameterStringValue = string.Empty;
                 reportParams.Add(report);
             }
-           
+
             conn.Close();
             StateHasChanged();
         }
@@ -241,7 +258,10 @@
 
             reader.Close();
             conn.Close();
-        }        
+        }
+        //Grid.DataSource = ReportData;
+        Grid2.DataSource = ReportData;
+        Grid2.Refresh();
         StateHasChanged();
     }
 
