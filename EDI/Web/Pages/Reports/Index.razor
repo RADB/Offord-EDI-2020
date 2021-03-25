@@ -1,21 +1,22 @@
 ﻿
-@page "/Reports/index"
-@page "/Reports/index/{ReportId:int}"
-@using System.Linq.Dynamic.Core
-@using Syncfusion.Blazor.Grids
-@using Syncfusion.Blazor.Buttons
-@using System.Data;
+@page "/Reports/Index"
+@page "/Reports/Index/{ReportId:int}"
+
 @using Microsoft.Data.SqlClient
-@using EDI.Web.Extensions
+@using Microsoft.Extensions.Configuration
 @using EDI.Web.Data
-@using System.Dynamic
-@using Syncfusion.Blazor.Navigations;
+@using EDI.ApplicationCore.Extensions
+@using Syncfusion.Blazor.Calendars
+@using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Navigations
+@using System.Data;
+@using System.Dynamic
+@using System.Linq.Dynamic.Core
+
+@inject IConfiguration Configuration
 @inject ServiceContext dbContext
-@inject UserSettings UserSettings
-@inject ISharedService sharedService
 @inject NavigationManager NavigationManager
-@inject IToastService toastService;
 
 <div class="row">
     <div class="col-md-12">
@@ -34,54 +35,60 @@
                     </select>
                 </div>
             </div>
+
             <div class="card-body">
+                <!-- Report Parameters -->
+                <h2>Report Parameters</h2>
+                <SfGrid DataSource="@Report.Parameters">
+                </SfGrid>
+                <br />
                 <SfAccordion>
                     <AccordionItems>
-                        <AccordionItem Header="Options" Expanded="true">
+                        <AccordionItem Header="Parameters" Expanded="true">
                             <ContentTemplate>
-                                @if (reportParams != null && reportParams.Count() > 0)
+                                @if (Report.Parameters != null && Report.Parameters.Count() > 0)
                                 {
-                                    foreach (var param in reportParams)
+                                    foreach (var param in Report.Parameters)
                                     {
                                         <div>
-                                            <label for="@param.ParameterName.Substring(1)">@param.ParameterName.Substring(1):</label>
-                                            @if (param.ParameterDataType == "int")
+                                            <label for="@param.Name.Substring(1)">@param.Name.Substring(1):</label>
+                                            @if (param.DataType == "int")
                                             {
-                                                <SfNumericTextBox ID="@param.ParameterName.Substring(1)" TValue="int" @bind-value="param.ParameterIntValue" Min=0 Max=9999 Step=1 Format="n0" Width="150px"></SfNumericTextBox>
+                                                <SfNumericTextBox ID="@param.Name.Substring(1)" TValue="int" @bind-value="param.IntValue" Min=0 Max=99999 Step=1 Format="n0" Width="150px"></SfNumericTextBox>
                                             }
-                                            else if (param.ParameterDataType == "string")
+                                            else if (param.DataType == "nvarchar" || param.DataType == "nchar")
                                             {
-                                                <input id="@param.ParameterName.Substring(1)" type="text" @bind-value="param.ParameterStringValue" class="col-md-4 form-control" width="50px" />
+                                                <SfTextBox ID="@param.Name.Substring(1)" @bind-value="param.StringValue" Width="150px"> </SfTextBox>
+                                            }
+                                            else if (param.DataType == "datetime" || param.DataType == "smalldatetime")
+                                            {
+                                                <SfCalendar ID="@param.Name.Substring(1)" TValue="DateTime" @bind-value="param.DateValue"></SfCalendar>
+                                            }
+                                            else
+                                            {
+                                                <div>@($"Add a control for the datatype: {param.DataType} ")</div>
                                             }
                                         </div>
                                     }
                                 }
                                 <br />
                                 <br />
-                                <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Report" @onclick="ShowReport"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Show</button>
+                                @if (ReportId > 0)
+                                {
+                                    <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Report" @onclick="ShowReport"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Show Report Data</button>
+                                }
                             </ContentTemplate>
                         </AccordionItem>
                     </AccordionItems>
                 </SfAccordion>
 
-                <!-- Report Parameters -->
-                <SfGrid DataSource="@reportParams">
-                </SfGrid>
                 <br />
-                <br />
-
-                <SfGrid ID="GridReport" @ref="Grid" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
+                <h2>@ReportName</h2>
+                <SfGrid ID="GridReport" @ref="Grid" Columns="@GridColumns" DataSource="@ReportData" GridLines="GridLine.Both" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="false" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() {"ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="false">
                     <GridEvents OnToolbarClick="ExcelExport" TValue="ExpandoObject"></GridEvents>
                     <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
-                    <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" ShowDeleteConfirmDialog="false"></GridEditSettings>
+                    <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false"></GridEditSettings>
                 </SfGrid>
-
-                <SfGrid ID="GridReport" @ref="Grid2" DataSource="@ReportData" >                    
-                    <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>                    
-                </SfGrid>
-                <!-- Report Data -->
-                @*<SfGrid DataSource="@ReportData" TValue="ExpandoObject">
-        </SfGrid>*@
             </div>
 
         </div>
@@ -92,19 +99,18 @@
 @code {
     [Parameter]
     public int? ReportId { get; set; }
-    private List<ExpandoObject> ReportData;
-    //private List<string> _columnHeaders;
+
+    private Report Report = new Report();
+    private List<ExpandoObject> ReportData = new List<ExpandoObject>();
+    public List<GridColumn> GridColumns = new List<GridColumn>();
+
     private SfGrid<ExpandoObject> Grid;
-    private SfGrid<ExpandoObject> Grid2;
-    private string SchemaName = "[Reports]";
+
+    private string SchemaName = "Reports";
+    private string ReportName = string.Empty;
     private int Counter;
 
-    //public IEnumerable<SelectListItem> ReportList { get; set; }
     public IList<SelectListItem> ReportList { get; set; }
-
-    //public string reportid { get; set; }
-    List<Reports> reportParams { get; set; }
-
 
     protected override async Task OnInitializedAsync()
     {
@@ -116,7 +122,9 @@
     {
         if (ReportId >= 0)
         {
-            GetReportParamaters();
+            ReportName = ReportList[int.Parse(ReportId.ToString())].Text;
+
+            await GetReportParamaters();
         }
         else
         {
@@ -126,17 +134,13 @@
 
     public async Task<IList<SelectListItem>> GetReports()
     {
+        var items = new List<SelectListItem>
+{
+            new SelectListItem() { Value = null, Text = "Choose One..."}
+        };
         try
         {
-            var items = new List<SelectListItem>
-        {
-                new SelectListItem() { Value = null, Text = "Choose One..."}
-
-            };
-
-            //ReportData = new List<ExpandoObject>();
-
-            SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+            SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("ServiceConnection"));
             conn.Open();
             {
                 // create the command object
@@ -154,39 +158,35 @@
                         items.Add(new SelectListItem() { Value = Counter.ToString(), Text = reader[Column].ToString() });
                     }
 
-                    //var obj = SqlDataReaderToExpando(reader);
-                    //ReportData.Add(obj);
-
                     Counter++;
                 }
-
 
                 reader.Close();
                 conn.Close();
             }
-            //StateHasChanged();
+
             return items;
         }
         catch (Exception ex)
         {
-            toastService.ShowError(string.Format("{0}", "No Reports Found"));
-            var items = new List<SelectListItem>();
             return items;
         }
     }
+
 
     private async Task ReportChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         if (e.Value.ToString() == "Choose One...")
         {
-            NavigationManager.NavigateTo("./Reports/index");
+            NavigationManager.NavigateTo("./Reports/Index");
             StateHasChanged();
         }
         else
         {
             if (e.Value.ToString() != ReportId.ToString())
             {
-                NavigationManager.NavigateTo("./Reports/index/" + e.Value);
+                // set to true if you want to clear the results grid until they click the button
+                NavigationManager.NavigateTo("./Reports/Index/" + e.Value, true);
                 StateHasChanged();
             }
         }
@@ -194,9 +194,7 @@
 
     public async Task GetReportParamaters()
     {
-        reportParams = new List<Reports>();
-        ReportData = new List<ExpandoObject>();
-        SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+        SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("ServiceConnection"));
         conn.Open();
         {
             // create the command object -
@@ -204,52 +202,63 @@
             SqlCommand sqlComm = new SqlCommand("dbo.GetReportParameters", conn);
 
             // Add Parameters
-            sqlComm.Parameters.AddWithValue("@ReportName", ReportList[int.Parse(ReportId.ToString())].Text);
+            sqlComm.Parameters.AddWithValue("@ReportName", ReportName);
+            sqlComm.Parameters.AddWithValue("@SchemaName", SchemaName);
 
             sqlComm.CommandType = CommandType.StoredProcedure;
 
             sqlComm.ExecuteNonQuery();
 
+            Report.Schema = SchemaName;
+            Report.ObjectName = ReportName;
+
             SqlDataAdapter da = new SqlDataAdapter(sqlComm);
             da.Fill(dt);
             foreach (DataRow dr in dt.Rows)
             {
-                Reports report = new Reports();
-                report.ParameterName = Convert.ToString(dr[2]);
-                report.ParameterDataType = Convert.ToString(dr[3]);
-                report.Schema = Convert.ToString(dr[0]);
-                report.ObjectName = Convert.ToString(dr[1]);
-                report.ParameterIntValue = 0;
-                report.ParameterStringValue = string.Empty;
-                reportParams.Add(report);
+                if (dr[0].ToString() != string.Empty)
+                {
+                    var p = new Parameter();
+                    p.Name = Convert.ToString(dr[0]);
+                    p.DataType = Convert.ToString(dr[1]);
+                    p.IntValue = 0;
+                    p.StringValue = string.Empty;
+                    p.DateValue = DateTime.Now;
+
+                    Report.Parameters.Add(p);
+                }
             }
 
             conn.Close();
             StateHasChanged();
         }
-
     }
 
-    private void ShowReport()
+    private async Task ShowReport()
     {
         ReportData = new List<ExpandoObject>();
-
-        SqlConnection conn = new SqlConnection(ConnectionStrings.ServiceConnection());
+        //Configuration.GetConnectionString("ServiceConnection")
+        SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("ServiceConnection"));
         conn.Open();
         {
             // create the command object
-            SqlCommand sqlComm = new SqlCommand($"{SchemaName}.[{ReportList[int.Parse(ReportId.ToString())].Text}]", conn);
+            SqlCommand sqlComm = new SqlCommand($"{SchemaName}.[{ReportName}]", conn);
 
-            foreach (var param in reportParams)
+            foreach (var param in Report.Parameters)
             {
                 // Add Parameters
-                sqlComm.Parameters.AddWithValue(param.ParameterName, param.ParameterDataType == "int" ? param.ParameterIntValue : param.ParameterStringValue);
+                sqlComm.Parameters.AddWithValue(param.Name, param.DataType == "int" ? param.IntValue : (param.DataType == "nchar" || param.DataType == "nvarchar" ? param.StringValue : param.DateValue));
             }
 
             sqlComm.CommandType = CommandType.StoredProcedure;
 
             SqlDataReader reader = sqlComm.ExecuteReader();
 
+            // clearing the existing columns
+            var columns = new List<GridColumn>();
+            GridColumns = columns;
+
+            // load the ReportData object with data for the grid
             while (reader.Read())
             {
                 var obj = SqlDataReaderToExpando(reader);
@@ -259,20 +268,53 @@
             reader.Close();
             conn.Close();
         }
-        //Grid.DataSource = ReportData;
-        Grid2.DataSource = ReportData;
-        Grid2.Refresh();
-        StateHasChanged();
+
+        if (ReportData.Count > 0)
+        {
+            //await GetColumns();
+
+            // refresh the grid
+            //Grid.Refresh();
+
+            // render the UI changes
+            StateHasChanged();
+        }
     }
 
     private dynamic SqlDataReaderToExpando(SqlDataReader reader)
     {
         var expandoObject = new ExpandoObject() as IDictionary<string, object>;
+        bool generateColumns;
+
+        // set variable for generating columns
+        generateColumns = GridColumns.Count == 0 ? true : false;
+
 
         for (var i = 0; i < reader.FieldCount; i++)
-            expandoObject.Add(reader.GetName(i), reader[i]);
+        {
+            string fieldName = reader.GetName(i);
+            expandoObject.Add(fieldName, reader[i]);
+            if (generateColumns)
+            {
+                GridColumns.Add(GetGridColumn(fieldName));
+            }
+        }
 
         return expandoObject;
+    }
+
+    private static GridColumn GetGridColumn(string fieldName)
+    {
+        var column = new Syncfusion.Blazor.Grids.GridColumn
+        {
+            HeaderText = fieldName,
+            Field = fieldName,
+            IsPrimaryKey = false,
+            Visible = true
+            //Format = field.Format ?? "",
+            //Width = field.Width,
+        };
+        return column;
     }
 
     // you can run this without args as well -- public async Task ExcelExport()
@@ -281,7 +323,7 @@
         if (args.Item.Id == "GridReport_excelexport")
         {
             ExcelExportProperties ExcelProperties = new ExcelExportProperties();
-            ExcelProperties.FileName = "new.xlsx";
+            ExcelProperties.FileName = $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")}_ReportData.xlsx";
             await this.Grid.ExcelExport(ExcelProperties);
         }
     }

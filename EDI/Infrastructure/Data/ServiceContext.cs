@@ -952,15 +952,15 @@ namespace EDI.Infrastructure.Data
                 //entity.HasOne(d => d.Countries).WithMany(p => p.Schools).HasForeignKey(d => d.CountryId);                
             });
 
-            modelBuilder.Entity<Reports>(entity =>
-            {
-                entity.HasNoKey();
-                entity.Property(e => e.Schema).IsUnicode(false);
-                entity.Property(e => e.ObjectName).IsUnicode(false);
-                entity.Property(e => e.ParameterDataType).IsUnicode(false);
-                entity.Property(e => e.ParameterName).IsUnicode(false);
-                entity.Property(e => e.ParameterStringValue).IsUnicode(false);
-            });
+            //modelBuilder.Entity<Report>(entity =>
+            //{
+            //    entity.HasNoKey();
+            //    entity.Property(e => e.Schema).IsUnicode(false);
+            //    entity.Property(e => e.ObjectName).IsUnicode(false);
+            //    entity.Property(e => e.ParameterDataType).IsUnicode(false);
+            //    entity.Property(e => e.ParameterName).IsUnicode(false);
+            //    entity.Property(e => e.ParameterStringValue).IsUnicode(false);
+            //});
         }
     }
 }
