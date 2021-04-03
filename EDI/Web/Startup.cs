@@ -169,7 +169,10 @@ namespace EDI.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {                    
             //18.4.0.30 License
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzY5MjI0QDMxMzgyZTM0MmUzMEVzM1hPUDZQWmV1ZnJZaTNweWh5Rit3NkxqQ2Nnd0RPbTRKb2FLbmg3MTA9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzY5MjI0QDMxMzgyZTM0MmUzMEVzM1hPUDZQWmV1ZnJZaTNweWh5Rit3NkxqQ2Nnd0RPbTRKb2FLbmg3MTA9");
+
+            //19 License
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDIyOTIxQDMxMzkyZTMxMmUzMExFWjlKaXdLekh3ekdGSmRkNjlhMjFtT2lvTTdZSnpVOVpqZy9Rcm5udEU9");
 
             // Verified
             if (env.IsDevelopment())
