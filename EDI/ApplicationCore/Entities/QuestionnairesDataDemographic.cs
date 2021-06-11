@@ -20,7 +20,12 @@ namespace EDI.ApplicationCore.Entities
         public string PostalCode { get; set; }
         public byte? ClassType { get; set; }
         public byte? SpecialNeeds { get; set; }
-        public byte? ConsideredEsl { get; set; }
+        public byte? ConsideredEsl { get; set; }             
+        public bool? IPRC { get; set; }
+        public bool? IEP { get; set; }
+        public bool? SpecialEducation { get; set; }
+        public bool? Gifted { get; set; }
+        public byte? EFSL { get; set; }
         public byte? FrenchImmersion { get; set; }
         public byte? OtherImmersion { get; set; }
         public byte? EthnicStatus { get; set; }

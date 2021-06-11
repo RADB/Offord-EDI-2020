@@ -2418,6 +2418,13 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "FSL", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "FLS", Value = 2, Sequence = 30 });
 
                     break;
+                case "EFSL":
+                    luso.Add(new LookupSetOption() { English = "ELL", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ELL", Value = 0, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "ALF", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ALF", Value = 1, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "PANA", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "PANA", Value = 2, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "NO", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "NON", Value = 3, Sequence = 40 });
+
+                    break;
                 case "EthnicStatus":
                     luso.Add(new LookupSetOption() { English = "Dene(D)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Déné", Value = 1, Sequence = 10 });
                     luso.Add(new LookupSetOption() { English = "Inuit/Inuvialuit (I)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuit/Inuvialuit", Value = 2, Sequence = 20 });

@@ -43,12 +43,12 @@ namespace EDI.Infrastructure.Data.Migrations
                 nullable: true);
 
             migrationBuilder.UpdateData(
-                schema: "EDI",
-                table: "Questionnaires",
-                keyColumn: "Id",
-                keyValue: 1,
-                columns: new[] { "CreatedDate", "ModifiedDate" },
-                values: new object[] { new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(3601), new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(3632) });
+             schema: "EDI",
+             table: "Questionnaires",
+             keyColumn: "Id",
+             keyValue: 1,
+             columns: new[] { "CreatedDate", "ModifiedDate", "Ontario" },
+             values: new object[] { new DateTime(2021, 6, 11, 1, 3, 38, 683, DateTimeKind.Local).AddTicks(1474), new DateTime(2021, 6, 11, 1, 3, 38, 683, DateTimeKind.Local).AddTicks(1511), true });
 
             migrationBuilder.UpdateData(
                 schema: "EDI",
