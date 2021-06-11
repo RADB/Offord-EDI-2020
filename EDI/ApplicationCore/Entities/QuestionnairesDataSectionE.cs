@@ -37,6 +37,27 @@ namespace EDI.ApplicationCore.Entities
         public byte? HomeDaycare { get; set; }
         public string HomeDaycareName { get; set; }
         public byte? NonParentInHome { get; set; }
+
+        public byte? InterventionProgram { get; set; }
+        public string InterventionProgramSpecify { get; set; }
+        public byte? NonParentalCare { get; set; }
+        public bool? CentreBasedSchool { get; set; }
+        public bool? CentreBasedCommunity { get; set; }
+        public bool? HomeBased { get; set; }
+        public bool? ChildHomeNonRelative { get; set; }
+        public bool? ChildHomeRelative { get; set; }
+        public bool? PreSchool { get; set; }
+        public bool? OtherCare { get; set; }
+        public byte? PriorArrangement { get; set; }
+        public byte? CommunityLearning { get; set; }    
+        public string CommunityLearningSpecify { get; set; }
+        public byte? Year1JK { get; set; }
+        public byte? NonParentCareBefore{ get; set; }
+        public byte? NonParentCareAfter { get; set; }
+        public byte? CareArrangementBefore { get; set; }
+        public byte? CareArrangementAfter { get; set; }
+        public byte? DroppedOff { get; set; }
+        public byte? PickedUp { get; set; }
         public string Comments { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

@@ -119,8 +119,8 @@ namespace EDI.Infrastructure.Data.Migrations
                 table: "Questionnaires",
                 keyColumn: "Id",
                 keyValue: 10,
-                columns: new[] { "CreatedDate", "ModifiedDate" },
-                values: new object[] { new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7335), new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7337) });
+                columns: new[] { "CreatedDate", "ModifiedDate", "Ontario" },
+                values: new object[] { new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7335), new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7337), true });
 
             migrationBuilder.InsertData(
                 schema: "EDI",
@@ -128,9 +128,8 @@ namespace EDI.Infrastructure.Data.Migrations
                 columns: new[] { "Id", "Alberta", "BritishColumbia", "CreatedBy", "CreatedDate", "DescriptionEnglish", "DescriptionFrench", "English", "EntityName", "French", "IsChildQuestionnaire", "IsTeacherQuestionnaire", "Manitoba", "ModifiedBy", "ModifiedDate", "NewBrunswick", "NewfoundlandandLabrador", "NorthwestTerritories", "NovaScotia", "Nunavut", "Ontario", "PrinceEdwardIsland", "Quebec", "QuestionnaireName", "QuestionsRequired", "Saskatchewan", "Sequence", "ShowProgressBar", "ShowQuestionNumbers", "YearId", "YukonTerritory" },
                 values: new object[,]
                 {
-                    { 13, null, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7353), "Section E", "Section E", "Section E", "Questionnaires.Data.SectionE", "Section E", true, false, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7355), null, null, null, null, null, true, null, null, "Section E", 0, null, 60, true, true, 1, null },
-                    { 11, null, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7342), "Demographics", "Demographics", "Demographics", "Questionnaires.Data.Demographics", "Demographics", true, false, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7344), null, null, null, null, null, true, null, null, "Demographics", 0, null, 10, true, true, 1, null },
-                    { 12, null, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7347), "Section D", "Section D", "Section D", "Questionnaires.Data.SectionD", "Section D", true, false, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7349), null, null, null, null, null, true, null, null, "Section D", 0, null, 50, true, true, 1, null }
+                    { 12, null, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7353), "Section E", "Section E", "Section E", "Questionnaires.Data.SectionE", "Section E", true, false, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7355), null, null, null, null, null, true, null, null, "Section E", 0, null, 60, true, true, 1, null },
+                    { 11, null, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7342), "Demographics", "Demographics", "Demographics", "Questionnaires.Data.Demographics", "Demographics", true, false, null, "admin", new DateTime(2021, 6, 10, 21, 9, 40, 570, DateTimeKind.Local).AddTicks(7344), null, null, null, null, null, true, null, null, "Demographics", 0, null, 10, true, true, 1, null },                    
                 });
 
             migrationBuilder.UpdateData(
@@ -608,13 +607,7 @@ namespace EDI.Infrastructure.Data.Migrations
                 schema: "EDI",
                 table: "Questionnaires",
                 keyColumn: "Id",
-                keyValue: 12);
-
-            migrationBuilder.DeleteData(
-                schema: "EDI",
-                table: "Questionnaires",
-                keyColumn: "Id",
-                keyValue: 13);
+                keyValue: 12); 
 
             migrationBuilder.DeleteData(
                 schema: "LUData",
@@ -652,8 +645,8 @@ namespace EDI.Infrastructure.Data.Migrations
                 table: "Questionnaires",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedDate", "ModifiedDate" },
-                values: new object[] { new DateTime(2021, 2, 2, 11, 20, 41, 724, DateTimeKind.Local).AddTicks(6954), new DateTime(2021, 2, 2, 11, 20, 41, 724, DateTimeKind.Local).AddTicks(6992) });
+                columns: new[] { "CreatedDate", "ModifiedDate", "Ontario" },
+                values: new object[] { new DateTime(2021, 2, 2, 11, 20, 41, 724, DateTimeKind.Local).AddTicks(6954), new DateTime(2021, 2, 2, 11, 20, 41, 724, DateTimeKind.Local).AddTicks(6992), true });
 
             migrationBuilder.UpdateData(
                 schema: "EDI",
@@ -724,8 +717,8 @@ namespace EDI.Infrastructure.Data.Migrations
                 table: "Questionnaires",
                 keyColumn: "Id",
                 keyValue: 10,
-                columns: new[] { "CreatedDate", "ModifiedDate" },
-                values: new object[] { new DateTime(2021, 2, 2, 11, 20, 41, 725, DateTimeKind.Local).AddTicks(431), new DateTime(2021, 2, 2, 11, 20, 41, 725, DateTimeKind.Local).AddTicks(434) });
+                columns: new[] { "CreatedDate", "ModifiedDate", "Ontario" },
+                values: new object[] { new DateTime(2021, 2, 2, 11, 20, 41, 725, DateTimeKind.Local).AddTicks(431), new DateTime(2021, 2, 2, 11, 20, 41, 725, DateTimeKind.Local).AddTicks(434), true });
 
             migrationBuilder.UpdateData(
                 schema: "LUData",

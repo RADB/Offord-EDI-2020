@@ -2425,6 +2425,23 @@ namespace EDI.Infrastructure.Data
                     luso.Add(new LookupSetOption() { English = "NO", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "NON", Value = 3, Sequence = 40 });
 
                     break;
+                case "Transportation":
+                    luso.Add(new LookupSetOption() { English = "By school bus", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Par autobus scolaire", Value = 0, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "By parent/guardian", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Par un parent/tuteur", Value = 1, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "From school based child-care", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Par des services de garde à l'école", Value = 2, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 3, Sequence = 40 });
+
+                    break;
+                case "CareArrangement":
+                    luso.Add(new LookupSetOption() { English = "Centre-based, within our school building", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde d'enfants agréé en milieu Scolaire", Value = 0, Sequence = 10 });
+                    luso.Add(new LookupSetOption() { English = "Centre-based, in the community", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde d'enfants agréé en milieu Communautaire", Value = 1, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Home-based child care", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Service de garde d'enfants en milieu familial", Value = 2, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Child's home, non-relative", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Enfant gardé à domicile, non membre de la Famille", Value = 3, Sequence = 40 });
+                    luso.Add(new LookupSetOption() { English = "Child's home, relative", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Enfant gardé à domicile, membre de la Famille", Value = 1, Sequence = 20 });
+                    luso.Add(new LookupSetOption() { English = "Pre-school / Nursery School", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "École préscolaire", Value = 2, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Other/don't know", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre/ne sais pas", Value = 3, Sequence = 40 });
+
+                    break;
                 case "EthnicStatus":
                     luso.Add(new LookupSetOption() { English = "Dene(D)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Déné", Value = 1, Sequence = 10 });
                     luso.Add(new LookupSetOption() { English = "Inuit/Inuvialuit (I)", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Inuit/Inuvialuit", Value = 2, Sequence = 20 });
