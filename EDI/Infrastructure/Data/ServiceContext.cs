@@ -447,7 +447,10 @@ namespace EDI.Infrastructure.Data
                     new LookupSet() { Id = 26, LookupName = "StatusNS", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new LookupSet() { Id = 27, LookupName = "EFSL", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new LookupSet() { Id = 28, LookupName = "CareArrangement", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                    new LookupSet() { Id = 29, LookupName = "Transportation", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                    new LookupSet() { Id = 29, LookupName = "Transportation", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 30, LookupName = "ClassAssignmentON", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 31, LookupName = "ClassTypeON", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 32, LookupName = "FullPartDontknow", YearId = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
                     );
 
             });

@@ -3054,9 +3054,19 @@ tbody.collapse.show {
     margin-left: 0; }
 
 .card-body, .card-block {
-  -ms-flex: 1 1 auto;
-      flex: 1 1 auto;
-  padding: 1.25rem; }
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem!important;
+}
+
+.card-bodynopadding, .card-blocknopadding {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+}
 
 .card-title {
   margin-bottom: 0.75rem; }

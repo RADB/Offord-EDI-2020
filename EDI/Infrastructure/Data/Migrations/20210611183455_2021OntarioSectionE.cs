@@ -658,7 +658,10 @@ namespace EDI.Infrastructure.Data.Migrations
                 values: new object[,]
                 {
                     { 28, "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3137), "CareArrangement", "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3139), 1 },
-                    { 29, "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3142), "Transportation", "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3143), 1 }
+                    { 29, "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3142), "Transportation", "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3143), 1 },
+                    { 30, "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3147), "ClassAssignmentON", "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3147), 1 },
+                    { 31, "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3152), "ClassTypeON", "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3151), 1 },
+                    { 32, "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3157), "FullPartDontknow", "admin", new DateTime(2021, 6, 11, 14, 34, 54, 868, DateTimeKind.Local).AddTicks(3155), 1 }
                 });
 
             migrationBuilder.UpdateData(
@@ -714,8 +717,8 @@ namespace EDI.Infrastructure.Data.Migrations
                 table: "Years",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedDate", "ModifiedDate" },
-                values: new object[] { new DateTime(2021, 6, 11, 14, 34, 54, 911, DateTimeKind.Local).AddTicks(2222), new DateTime(2021, 6, 11, 14, 34, 54, 911, DateTimeKind.Local).AddTicks(2263) });
+                columns: new[] { "CreatedDate", "ModifiedDate", "Ontario" },
+                values: new object[] { new DateTime(2021, 6, 11, 14, 34, 54, 911, DateTimeKind.Local).AddTicks(2222), new DateTime(2021, 6, 11, 14, 34, 54, 911, DateTimeKind.Local).AddTicks(2263), true });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -731,6 +734,24 @@ namespace EDI.Infrastructure.Data.Migrations
                 table: "LookupSets",
                 keyColumn: "Id",
                 keyValue: 29);
+
+            migrationBuilder.DeleteData(
+                schema: "LUData",
+                table: "LookupSets",
+                keyColumn: "Id",
+                keyValue: 30);
+
+            migrationBuilder.DeleteData(
+                schema: "LUData",
+                table: "LookupSets",
+                keyColumn: "Id",
+                keyValue: 31);
+
+            migrationBuilder.DeleteData(
+                schema: "LUData",
+                table: "LookupSets",
+                keyColumn: "Id",
+                keyValue: 32);
 
             migrationBuilder.DropColumn(
                 name: "CareArrangementAfter",
@@ -1389,8 +1410,8 @@ namespace EDI.Infrastructure.Data.Migrations
                 table: "Years",
                 keyColumn: "Id",
                 keyValue: 1,
-                columns: new[] { "CreatedDate", "ModifiedDate" },
-                values: new object[] { new DateTime(2021, 6, 11, 1, 3, 38, 714, DateTimeKind.Local).AddTicks(3270), new DateTime(2021, 6, 11, 1, 3, 38, 714, DateTimeKind.Local).AddTicks(3305) });
+                columns: new[] { "CreatedDate", "ModifiedDate", "Ontario" },
+                values: new object[] { new DateTime(2021, 6, 11, 1, 3, 38, 714, DateTimeKind.Local).AddTicks(3270), new DateTime(2021, 6, 11, 1, 3, 38, 714, DateTimeKind.Local).AddTicks(3305), true });
         }
     }
 }

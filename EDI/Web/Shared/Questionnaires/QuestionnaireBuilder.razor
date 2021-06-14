@@ -172,7 +172,8 @@
             // get the lookupset options
             _LookupSetOptions = GetLookupSetOptions(config.LookupEntityId.GetValueOrDefault(1));
         }
-        RadioMatrixHeader = string.Format("<tr><th style={0}></th><th></th>","width:8.3%");
+
+        RadioMatrixHeader = config.IsHeader ? string.Format("<tr><th colspan=\"2\">{0}</th>", sharedService.GetConfigText(config)): string.Format("<tr><th style={0}></th><th></th>", "width:8.3%");
         foreach (var option in _LookupSetOptions)
         {
             RadioMatrixHeader += string.Format("{0}{1}{2}", "<th>", sharedService.GetOptionText(option), "</th>");

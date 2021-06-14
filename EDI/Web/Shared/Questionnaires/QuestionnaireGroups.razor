@@ -21,15 +21,18 @@
                 var aName = sharedService.GetConfigText(config).Length > 0 ? sharedService.GetConfigText(config) : config.ShowGroupName ? config.GroupName : "";
                 @*<AccordionItem Expanded="true" CssClass="border border-primary">
                     <HeaderTemplate>*@
+                    if (config.ShowGroupName)
+                    {
                         <div class="container-fluid">
-                            @if (aName.Length != 0)
-                            { 
+                            if (aName.Length != 0)
+                            {
                                 <div class="row">
                                     <!--<div class="col-6 border border-info"><h4>@sharedService.GetConfigText(config)</h4></div><div class="col-6 text-right border border-warning"><h4>Complete Status</h4></div>-->
                                     <div class="col-6"><h4>@aName</h4></div>
                                 </div>
-                             }
+                            }
                         </div>
+                    }
                     @*</HeaderTemplate>
                     <ContentTemplate>*@
                         @*@if (aName.Length != 0)
