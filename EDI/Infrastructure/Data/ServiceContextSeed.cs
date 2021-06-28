@@ -2685,7 +2685,7 @@ namespace EDI.Infrastructure.Data
                 case "TeacherGender":
                     luso.Add(new LookupSetOption() { English = "Female", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Masculin", Value = 2, Sequence = 20 });
                     luso.Add(new LookupSetOption() { English = "Male", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Feminin", Value = 1, Sequence = 10 });
-                    luso.Add(new LookupSetOption() { English = "Non-Binary", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non Binaire", Value = 3, Sequence = 30 });
+                    luso.Add(new LookupSetOption() { English = "Other", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 3, Sequence = 30 });
                     break;
                 case "VerySomewhatNot":
                     luso.Add(new LookupSetOption() { English = "Very", LookupSetId = id, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Very", Value = 1, Sequence = 10 });

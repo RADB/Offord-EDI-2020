@@ -29,8 +29,9 @@
     </div>
     <div class="col-9" @ondblclick="(()=>RemoveRadioSelection())">
         @foreach (var option in _LookupSetOptions)
-        {            
-            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion"  @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
+        {
+            labelText = _userSettings.IsAdmin == true ? string.Format("{0} - ({1})", sharedService.GetOptionText(option), option.Value.ToString()) : sharedService.GetOptionText(option);
+            <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion"  @onchange="@onChange" Name="@Config.EntityField" Label=@labelText Value="@option.Value.ToString()"></SfRadioButton>
 
             if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
             {

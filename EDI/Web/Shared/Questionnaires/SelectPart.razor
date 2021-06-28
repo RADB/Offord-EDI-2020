@@ -28,6 +28,11 @@
         <SfDropDownList TValue="string" Readonly="@ReadonlyQuestion" Placeholder="@Config.Label" TItem="LookupSetOption" @bind-Value="@currentValue" DataSource="@_LookupSetOptions" PopupWidth="auto" Width="50%">
             <DropDownListFieldSettings Value="Value" Text="@_userSettings.Language"></DropDownListFieldSettings>
             <DropDownListEvents TValue="string" TItem="LookupSetOption" ValueChange="OnChange"></DropDownListEvents>
+            <DropDownListTemplates TItem="LookupSetOption">
+                <ItemTemplate>
+                    <span class='name'>@string.Format("{0}", _userSettings.IsAdmin==true ? (context as LookupSetOption).DataDictionary : _userSettings.Language == "English"?(context as LookupSetOption).English: (context as LookupSetOption).French)</span>
+                </ItemTemplate>
+            </DropDownListTemplates>
         </SfDropDownList>
     </div>
 

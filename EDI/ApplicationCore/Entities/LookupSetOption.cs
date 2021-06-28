@@ -15,6 +15,9 @@ namespace EDI.ApplicationCore.Entities
         public short Value { get; set; }
         public short Sequence { get; set; }
 
+        [NotMapped]
+        public string DataDictionary { get { return string.Format("{0} - ({1})", English, Value); } }
+
         public virtual LookupSet LookupSet { get; set; }
     }
 }

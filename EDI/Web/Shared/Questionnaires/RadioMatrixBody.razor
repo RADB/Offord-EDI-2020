@@ -29,13 +29,15 @@
     {
         <td @ondblclick="(()=>RemoveRadioSelection())">            
             @if (_userSettings.RadioLabels.HasValue && _userSettings.RadioLabels.Value)
-                {
-                    <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@sharedService.GetOptionText(option) Value="@option.Value.ToString()"></SfRadioButton>
-                }
-                else
-                {
-                    <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Value="@option.Value.ToString()"></SfRadioButton>
-                }
+            {
+                labelText = _userSettings.IsAdmin == true ? string.Format("{0} - ({1})", sharedService.GetOptionText(option),option.Value.ToString()) : sharedService.GetOptionText(option);
+                //sharedService.GetOptionText(option) 
+                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@labelText Value="@option.Value.ToString()"></SfRadioButton>
+            }
+            else
+            {
+                <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Value="@option.Value.ToString()"></SfRadioButton>
+            }
         </td>
     }
     <AuthorizeView Roles="Administrator">
@@ -75,6 +77,8 @@
 
     // option set
     private List<LookupSetOption> _LookupSetOptions;
+
+    //private string labelText { get;set; }
 
     private string currentValue { get; set; }
 
