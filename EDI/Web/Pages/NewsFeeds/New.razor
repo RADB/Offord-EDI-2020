@@ -116,6 +116,7 @@
             NewsFeedModel.Saskatchewan = newsform1.provinces.ProvinceConfigModel.Saskatchewan;
             NewsFeedModel.YukonTerritory = newsform1.provinces.ProvinceConfigModel.YukonTerritory;
             NewsFeedModel.NorthwestTerritories = newsform1.provinces.ProvinceConfigModel.NorthwestTerritories;
+            NewsFeedModel.NewYork = newsform1.provinces.ProvinceConfigModel.NewYork;
             int id = await NewsFeedService.CreateNewsFeedAsync(NewsFeedModel);
 
             Message = "New NewsFeed added successfully.";

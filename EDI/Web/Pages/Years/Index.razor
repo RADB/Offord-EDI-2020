@@ -44,6 +44,7 @@
                             <GridColumn Field=@nameof(YearItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.NewYork) HeaderText="NY" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NovaScotia) HeaderText="NS" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Nunavut) HeaderText="NU" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NorthwestTerritories) HeaderText="NT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
@@ -52,6 +53,7 @@
                             <GridColumn Field=@nameof(YearItemViewModel.Quebec) HeaderText="QC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Saskatchewan) HeaderText="SK" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.YukonTerritory) HeaderText="YT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+
 
                         </GridColumns>
                     </SfGrid>
@@ -101,6 +103,7 @@
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
+                ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;
                 ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
                 ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
                 ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
@@ -148,7 +151,7 @@
             YearModel = new YearItemViewModel();
             parameters.Add("YearModel", YearModel);
 
-            var modal = ModalService.Show<YearWindow>("New EDI Year", parameters);            
+            var modal = ModalService.Show<YearWindow>("New EDI Year", parameters);
             var result = await modal.Result;
             NewWindowModalClosed(result);
             //Modal.OnClose += NewWindowModalClosed;
@@ -167,6 +170,7 @@
                 YearModel.Manitoba = rowdata.Manitoba;
                 YearModel.NewBrunswick = rowdata.NewBrunswick;
                 YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
+                YearModel.NewYork = rowdata.NewYork;
                 YearModel.NovaScotia = rowdata.NovaScotia;
                 YearModel.Nunavut = rowdata.Nunavut;
                 YearModel.Ontario = rowdata.Ontario;
@@ -214,6 +218,7 @@
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
+                ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;
                 ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
                 ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
                 ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
@@ -254,6 +259,7 @@
                     item.Manitoba = YearModel.Manitoba;
                     item.NewBrunswick = YearModel.NewBrunswick;
                     item.NewfoundlandandLabrador = YearModel.NewfoundlandandLabrador;
+                    item.NewYork = YearModel.NewYork;
                     item.NovaScotia = YearModel.NovaScotia;
                     item.Nunavut = YearModel.Nunavut;
                     item.Ontario = YearModel.Ontario;
@@ -322,6 +328,7 @@
             YearModel.Manitoba = rowdata.Manitoba;
             YearModel.NewBrunswick = rowdata.NewBrunswick;
             YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
+            YearModel.NewYork = rowdata.NewYork;
             YearModel.NovaScotia = rowdata.NovaScotia;
             YearModel.Nunavut = rowdata.Nunavut;
             YearModel.Ontario = rowdata.Ontario;

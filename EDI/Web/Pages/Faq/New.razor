@@ -94,6 +94,7 @@
             FaqModel.Saskatchewan = faqform1.provinces.ProvinceConfigModel.Saskatchewan;
             FaqModel.YukonTerritory = faqform1.provinces.ProvinceConfigModel.YukonTerritory;
             FaqModel.NorthwestTerritories = faqform1.provinces.ProvinceConfigModel.NorthwestTerritories;
+            FaqModel.NewYork = faqform1.provinces.ProvinceConfigModel.NewYork;
             int id = await FaqService.CreateFaqAsync(faqform1.FaqModel);
 
             Message = "New Faq added successfully.";

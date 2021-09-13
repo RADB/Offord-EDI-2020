@@ -18,6 +18,7 @@ namespace EDI.Web.Models
         public bool Saskatchewan { get; set; }
         public bool YukonTerritory { get; set; }
         public bool NorthwestTerritories { get; set; }
+        public bool NewYork { get; set; }
 
         public int YearID { get; set; }
     }

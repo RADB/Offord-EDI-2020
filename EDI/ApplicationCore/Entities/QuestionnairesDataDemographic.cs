@@ -47,6 +47,11 @@ namespace EDI.ApplicationCore.Entities
         public int? FirstLanguage1 { get; set; }
         public int? FirstLanguage2 { get; set; }
         public int? FirstLanguage3 { get; set; }
+        public int? Ethnicity { get; set; }
+        public byte? SpecialNeedsReferral { get; set; }
+        public byte? ClassTime { get; set; }
+        public byte? ELL { get; set; }
+        public string ClassTimeSpecify { get; set; }
         public byte? LandAgreement { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

@@ -41,11 +41,11 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Fluxor.Blazor.Web" Version="4.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.7" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.9">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
@@ -54,15 +54,15 @@
     <PackageReference Include="NToastNotify" Version="7.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.2-dev-10260" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.1-dev-00209" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.2-dev-00824" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.2.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
-    <PackageReference Include="Syncfusion.Blazor" Version="19.1.0.69" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.1.0.69" />
-    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="19.1.0.69" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
+    <PackageReference Include="Syncfusion.Blazor" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="19.2.0.60" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.10" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.12" />
     <PackageReference Include="TextCopy" Version="4.3.1" />
   </ItemGroup>
 

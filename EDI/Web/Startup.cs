@@ -167,12 +167,13 @@ namespace EDI.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         //public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LinkGenerator linkGenerator)
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {                    
+        {
             //18.4.0.30 License
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzY5MjI0QDMxMzgyZTM0MmUzMEVzM1hPUDZQWmV1ZnJZaTNweWh5Rit3NkxqQ2Nnd0RPbTRKb2FLbmg3MTA9");
 
-            //19 License
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDIyOTIxQDMxMzkyZTMxMmUzMExFWjlKaXdLekh3ekdGSmRkNjlhMjFtT2lvTTdZSnpVOVpqZy9Rcm5udEU9");
+            //19 License Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDIyOTIxQDMxMzkyZTMxMmUzMExFWjlKaXdLekh3ekdGSmRkNjlhMjFtT2lvTTdZSnpVOVpqZy9Rcm5udEU9");
+            //19.2.0.60
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDk4MTQxQDMxMzkyZTMyMmUzMFdKN3FHb3NYY1kvU2dSN0N5b2ZBSjRraE00VlZHNThreUxoeldsU3Vud0k9");
 
             // Verified
             if (env.IsDevelopment())

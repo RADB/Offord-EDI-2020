@@ -58,6 +58,17 @@ namespace EDI.ApplicationCore.Entities
         public byte? CareArrangementAfter { get; set; }
         public byte? DroppedOff { get; set; }
         public byte? PickedUp { get; set; }
+        public bool? US_CentreBased { get; set; }
+        public bool? US_ChildHome { get; set; }
+        public bool? US_OtherHomeBased { get; set; }
+        public bool? US_Other { get; set; }
+        public string US_OtherSpecify { get; set; }
+        public bool? US_DontKnow{ get; set; }
+        public byte? Volunteered { get; set; }
+        public string VolunteeredSpecify { get; set; }
+        public byte? ParentTeacherConference { get; set; }
+        public byte? OneOnOneConference { get; set; }
+        public byte? HomeworkAssistance { get; set; }
         public string Comments { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

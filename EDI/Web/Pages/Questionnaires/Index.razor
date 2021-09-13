@@ -46,6 +46,7 @@
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewYork) HeaderText="NY" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NovaScotia) HeaderText="NS" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.Nunavut) HeaderText="NU" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NorthwestTerritories) HeaderText="NT" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
@@ -125,6 +126,7 @@
                 aquestionnaire.Saskatchewan = questionnaire.Saskatchewan.HasValue ? questionnaire.Saskatchewan.Value : false;
                 aquestionnaire.YukonTerritory = questionnaire.YukonTerritory.HasValue ? questionnaire.YukonTerritory.Value : false;
                 aquestionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories.HasValue ? questionnaire.NorthwestTerritories.Value : false;
+                aquestionnaire.NewYork = questionnaire.NewYork.HasValue ? questionnaire.NewYork.Value : false;
 
                 aquestionnaire.YearId = questionnaire.YearId;
                 var year = dbContext.Years.Where(p => p.Id == questionnaire.YearId).FirstOrDefault();
