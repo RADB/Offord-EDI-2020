@@ -261,9 +261,11 @@
         }
         if (args.Item.Id == "GridFile_Process")
         {
-            SpinnerObj.ShowSpinner("Start to process data");
+            //SpinnerObj.ShowSpinner("Start to process data");
+            await SpinnerObj.ShowAsync();
             processingresult = await sharedService.ProcessFileData();
-            SpinnerObj.HideSpinner("Data processing is done.");
+            await SpinnerObj.HideAsync();
+            //SpinnerObj.HideSpinner("Data processing is done.");
 
             var status = dbContext.FileImportStatuses.Where(p => p.English == "Processed").FirstOrDefault();
 
