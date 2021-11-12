@@ -28,7 +28,7 @@
             <div class="card-body">
                 @if (UserSettings.IsAdmin)
                 {
-                    <SfFileManager TValue="FileManagerDirectoryContent">
+                    <SfFileManager TValue="FileManagerDirectoryContent" View="ViewType.Details">
                         <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
                         <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
                         <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
@@ -40,7 +40,7 @@
                 }
                 else
                 {
-                    <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" @onkeydown="KeyValueChange">
+                    <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" @onkeydown="KeyValueChange" View="ViewType.Details">
                         <FileManagerEvents TValue="FileManagerDirectoryContent" OnSend="send"></FileManagerEvents>
                         <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
                         <FileManagerUploadSettings AutoUpload="false"></FileManagerUploadSettings>

@@ -66,13 +66,13 @@
     <div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" Disabled="@OptionsChanging" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLanguageChange(e))"></SfSwitch>
     </div>
-    <div class="p-2">
+    @*<div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" Disabled="@OptionsChanging" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
-    </div>
+    </div>*@
     <div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" Disabled="@OptionsChanging" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
     </div>
-    <div class="p-2">
+    @*<div class="p-2">
         <label for="fontsize" title="Font Size">Font Size:</label>
         <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e => FontChange(e))" disabled="@OptionsChanging">
             <option value="1em">1</option>
@@ -80,7 +80,7 @@
             <option value="1.5em">1.5</option>
             <option value="1.75em">1.75</option>
         </select>
-    </div>
+    </div>*@
 </div>
 
 
@@ -91,7 +91,7 @@
     // old icon <span class="oi oi-list-rich" aria-hidden="true"></span>
     private Boolean isFrench { get; set; }
 
-    private Boolean RadioLabels { get; set; }
+    private Boolean RadioLabels { get; set; } = true;
     private Boolean Validation { get; set; }
     private string LabelFonts { get; set; }
 
