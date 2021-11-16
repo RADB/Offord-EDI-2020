@@ -80,11 +80,22 @@
                                         var comm = (context as ChildItemViewModel);
                                         if (comm.ChildStatusId != (int)Enumerations.ChildStatus.Locked)
                                         {
-                                            <div id="myProgress" class="pbar">
-                                                <div id="myBar" style="width:@comm.PercentComplete%" class="bar">
+                                            if (comm.PercentComplete < 100)  // red bar
+                                            {
+                                                <div id="myProgress" class="pbar">
+                                                    <div id="myBar" style="width:@comm.PercentComplete%" class="bar">
+                                                        <div id="label" class="barlabel">@comm.PercentComplete % </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else // green bar
+                                            {
+                                            <div id="myProgressGreen" class="pbar">
+                                                <div id="myBar" style="width:@comm.PercentComplete%" class="barGreen">
                                                     <div id="label" class="barlabel">@comm.PercentComplete % </div>
                                                 </div>
                                             </div>
+                                            }
                                         }
                                     }
                                 </Template>

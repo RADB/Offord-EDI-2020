@@ -834,15 +834,25 @@ td.e-rowcell .statustxt.e-activecolor {
     left: 10px;
     line-height: 18px;
     font-size: 10px;
-    color: #c15183;
+    /*color: #c15183;*/
+    color:white;
 }
 
+/* Update this to green and red*/
 #myProgress {
     position: relative;
     height: 18px;
     width: 10em;
     text-align: left;
-    background-color: white;
+    background-color: rgba(255,0,0,0.2);    
+}
+
+#myProgressGreen { /* progress bar shell */
+    position: relative;
+    height: 18px;
+    width: 10em;
+    text-align: left;
+    background-color: rgba(191,217,191,0.2); /* https://www.colorhexa.com/bfd9bf*/
 }
 
 .pbar {
@@ -854,16 +864,17 @@ td.e-rowcell .statustxt.e-activecolor {
     font-size: 14px;
     line-height: 0;
     white-space: nowrap;
-    color: #212529;
+    /*color: #212529;*/
+    color: #00b300;
     box-sizing: border-box;
     position: relative;
     height: 18px;
     width: 10em;
     text-align: left;
-    background-color: white;
+    background-color: #00b300;    
 }
 
-.bar {
+.barGreen {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     font-weight: normal;
     font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif, "-apple-system", "BlinkMacSystemFont";
@@ -872,13 +883,32 @@ td.e-rowcell .statustxt.e-activecolor {
     font-size: 14px;
     line-height: 0;
     white-space: nowrap;
-    color: #212529;
+    color: white;
     text-align: left;
     box-sizing: border-box;
     position: absolute;
     height: 100%;
-    background-color: #f1ebc3f2;
-    width: 62%;
+    /*background-color: #f1ebc3f2;*/
+    background-color: darkgreen;
+    width: 62%;    
+}
+.bar { /* Coloured in area of the progress bar */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    font-weight: normal;
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif, "-apple-system", "BlinkMacSystemFont";
+    border-spacing: 0;
+    border-collapse: separate;
+    font-size: 14px;
+    line-height: 0;
+    white-space: nowrap;
+    color: white;
+    text-align: left;
+    box-sizing: border-box;
+    position: absolute;
+    height: 100%;
+    /*background-color: #f1ebc3f2;*/
+    background-color: darkred;
+    width: 62%;    
 }
 
 .barlabel {
@@ -895,6 +925,7 @@ td.e-rowcell .statustxt.e-activecolor {
     line-height: 18px;
     font-size: 10px;
     color: white;
+    opacity:1.0;
 }
 
 .logincontainer {
