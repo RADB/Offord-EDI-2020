@@ -131,8 +131,8 @@
             {
                 <div class="card-header">
                     <div class="row cardHeader">
-                        <strong>@Translate("Teacher Dashboard"): &nbsp;</strong> @UserSettings.FirstName  @UserSettings.LastName
-
+                       @* <strong>@Translate("Teacher Dashboard"): &nbsp;</strong> @UserSettings.FirstName  @UserSettings.LastName*@
+                       @((MarkupString)string.Format("<div class=\"col\"><strong>{0}</strong></div><div class=\"col-5 text-right\">{1} {2}</div>", Translate("Teacher Dashboard"), UserSettings.FirstName, UserSettings.LastName))
                     </div>
                 </div>
                 <div class="card-body">

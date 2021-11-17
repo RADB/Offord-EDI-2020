@@ -28,33 +28,38 @@
     @*<div class="card-body">*@
     <DataAnnotationsValidator />
     <div class="text-danger"><ValidationSummary /></div>
-
-    <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="95px"></QuestionnaireHeader>
-
-    @*</div>*@
-    <AuthorizeView Roles="Teacher">
-        <Authorized Context="AuthContext">
-            <div class="card-footer">
-                <div class="row d-flex align-items-center">
-                    <div class="col-1"><button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button></div>
-                    <div class="col-1"><SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch></div>
-                    <div class="col-2"><button class="btn btn-warning" @onclick="@checkCompleteNess" type="button"><i class="fas fa-search"></i> Check Completeness</button></div>
-                    <div class="col-4">
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated @barColor" style="width:@percentComplete%">@percentComplete%</div>
-                        </div>
-                    </div>
-                    <div class="col-2" hidden="@true">
-                        Completed= @completed
-                        <br />
-                        Required= @required
-                        <br />
-                        %Done= @percentComplete
-                    </div>
-                </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
+                <QuestionnaireHeader teacherData=@teacherData IsReadOnly=@IsReadOnly ProvinceName=@province QuestionnaireId=@QuestionnaireId marginTop="0px"></QuestionnaireHeader>
             </div>
-        </Authorized>
-    </AuthorizeView>
+        </div>
+    </div>
+
+                @*</div>*@
+                <AuthorizeView Roles="Teacher">
+                    <Authorized Context="AuthContext">
+                        <div class="card-footer">
+                            <div class="row d-flex align-items-center">
+                                <div class="col-1"><button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button></div>
+                                <div class="col-1"><SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch></div>
+                                <div class="col-2"><button class="btn btn-warning" @onclick="@checkCompleteNess" type="button"><i class="fas fa-search"></i> Check Completeness</button></div>
+                                <div class="col-4">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated @barColor" style="width:@percentComplete%">@percentComplete%</div>
+                                    </div>
+                                </div>
+                                <div class="col-2" hidden="@true">
+                                    Completed= @completed
+                                    <br />
+                                    Required= @required
+                                    <br />
+                                    %Done= @percentComplete
+                                </div>
+                            </div>
+                        </div>
+                    </Authorized>
+                </AuthorizeView>
 </EditForm>
 @*</div>
 

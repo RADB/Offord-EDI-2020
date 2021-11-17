@@ -52,7 +52,7 @@
                     //_label = string.Format("{0} - {1:yyyy-MM-dd} - ({2})", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob, _gender);
                     _label = string.Format("{0} - {1:yyyy-MM-dd}", teacherData.Children.Single().Ediid.ToString(), teacherData.Children.Single().Dob);
                 }
-                @((MarkupString)string.Format("<div class=\"col\">{0}</div><div class=\"col-5 text-right\">{1}</div>", _Text, _label));
+                @((MarkupString)string.Format("<div class=\"col\"><strong>{0}</strong></div><div class=\"col-5 text-right\">{1}</div>", _Text, _label));
                 break;
             case InputTypes.GroupHeader:
                 @*<div class="card-body border">
