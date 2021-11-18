@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-EDIWeb-FAC9C86D-30E4-4ED2-AEA3-B1C264D08058</UserSecretsId>
   </PropertyGroup>
 
