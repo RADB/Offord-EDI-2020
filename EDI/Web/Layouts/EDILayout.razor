@@ -25,13 +25,14 @@
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
                 IconType="IconType.FontAwesome"
-                Timeout="5"
+                Timeout="2"
+                MaxToastCount="2"
                 SuccessClass="success-toast-override"                
                 SuccessIcon="fa fa-thumbs-up"                
                 ErrorIcon="fa fa-bug"
                 InfoIcon="fas fa-cloud-upload-alt"
                 ShowProgressBar="true" 
-                RemoveToastsOnNavigation="false"/>
+                RemoveToastsOnNavigation="true"/>
 @code{
     [Parameter]
     public EventCallback<string> OnQuestionnaireSave { get; set; }
