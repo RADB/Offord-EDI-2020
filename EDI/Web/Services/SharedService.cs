@@ -847,9 +847,9 @@ namespace EDI.Web.Services
 
                             if (questionnaireTeacher == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Teacher Feedback\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Teacher Feedback\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             var predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
@@ -878,44 +878,44 @@ namespace EDI.Web.Services
 
                             if (questionnaire == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Demographics\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Demographics\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             if (questionnaireA == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section A\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Section A\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             if (questionnaireB == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section B\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Section B\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             if (questionnaireC == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section C\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Section C\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             if (questionnaireD == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section D\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Section D\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             if (questionnaireE == null)
                             {
-                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is not associated to the province - " + provincename + " with Questionnaire Name == \"Section E\" ");
+                                errormessages.Add("FileImports data " + data.Id + ": Questionnaire is invalid not associated to the year - " + ediyear + " with Questionnaire Name == \"Section E\" ");
                                 haserror = true;
-                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
                             }
 
                             if(!haserror)

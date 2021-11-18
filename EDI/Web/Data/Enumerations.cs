@@ -59,7 +59,8 @@ namespace EDI.Web.Data
             Imported = 1,
             Processed = 2,
             Duplicate = 3,
-            InvalidProvince =4
+            InvalidProvince =4,
+            InvalidQuestionnaire = 5
         }
 
         public enum ChildStatus: int 
@@ -85,7 +86,8 @@ namespace EDI.Web.Data
             Imported = 1,
             Processed = 2,
             Duplicate = 3,
-            InvalidProvince = 4
+            InvalidProvince = 4,
+            InvalidQuestionnaire = 5
         }
 
         public enum ReportTypes : int

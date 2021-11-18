@@ -330,7 +330,8 @@ namespace EDI.Infrastructure.Data
                     new FileImportStatus() {Id=1, Code = "1", English = "Imported", French = "Importé", Sequence = 1, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new FileImportStatus() {Id=2, Code = "2", English = "Processed", French = "Traité", Sequence = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new FileImportStatus() {Id=3, Code = "3", English = "Duplicate", French = "Dupliquer", Sequence = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                    new FileImportStatus() {Id=4, Code = "4", English = "Invalid Province", French = "Province non valide", Sequence = 4, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
+                    new FileImportStatus() {Id=4, Code = "4", English = "Invalid Province", French = "Province non valide", Sequence = 4, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new FileImportStatus() { Id = 5, Code = "5", English = "Invalid Questionnaire", French = "Questionnaire non valide", Sequence = 5, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
                 );
             });
 

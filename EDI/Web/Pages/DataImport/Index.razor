@@ -1,10 +1,11 @@
 ﻿@page "/DataImport/index/{ChangeNumber:int}"
-@using EDI.Web.Shared.Modals; 
+@using EDI.Web.Shared.Modals;
 @using Microsoft.EntityFrameworkCore;
 @using Microsoft.AspNetCore.Components.Authorization;
 @using EDI.Web.Extensions;
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Spinner
+@using EDI.Web.Data;
 @inject AuthenticationStateProvider AuthenticationStateProvider;
 @inject IToastService toastService;
 @inject ISharedService sharedService;
@@ -216,6 +217,7 @@
                 afile.ChildDob = file.ChildDob;
                 afile.ChildPostalCode = file.ChildPostalCode;
                 afile.ChildEdiid = file.ChildEdiid;
+                afile.FileImportStatus = dbContext.FileImportStatuses.Where(p => p.Id == file.FileImportStatusId).FirstOrDefault().English;
 
                 sivm.Add(afile);
             }
@@ -262,51 +264,62 @@
         if (args.Item.Id == "GridFile_Process")
         {
             //SpinnerObj.ShowSpinner("Start to process data");
-            await SpinnerObj.ShowAsync();
-            processingresult = await sharedService.ProcessFileData();
-            await SpinnerObj.HideAsync();
-            //SpinnerObj.HideSpinner("Data processing is done.");
 
-            var status = dbContext.FileImportStatuses.Where(p => p.English == "Processed").FirstOrDefault();
+            var allimportedfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == (int)Enumerations.FileImportStatus.Imported).OrderBy(p => p.FileName).ToList());
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
-
-            List<FileItemViewModel> sivm = new List<FileItemViewModel>();
-
-            foreach (var nfile in allfiles)
+            if(allimportedfiles == null || allimportedfiles.Count() == 0)
             {
-                var afile = new FileItemViewModel();
-
-                afile.Id = nfile.Id;
-                afile.FileName = nfile.FileName;
-                afile.SiteName = nfile.SiteName;
-                afile.CoordinatorName = nfile.CoordinatorName;
-                afile.CoordinatorEmail = nfile.CoordinatorEmail;
-                afile.SchoolName = nfile.SchoolName;
-                //afile.SchoolProvinceId = nfile.SchoolProvinceId;
-                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                //afile.Province = province != null ? province.English : string.Empty;
-                afile.TeacherName = nfile.TeacherName;
-                afile.TeacherEmail = nfile.TeacherEmail;
-                afile.LocalId = nfile.LocalId;
-                //afile.ClassTime = nfile.ClassTime;
-                afile.GenderId = nfile.GenderId;
-                var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
-                afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
-                afile.ChildDob = nfile.ChildDob;
-                afile.ChildPostalCode = nfile.ChildPostalCode;
-                afile.ChildEdiid = nfile.ChildEdiid;
-
-                sivm.Add(afile);
+                toastService.ShowWarning("All imported data were processed.");
             }
+            else
+            {
+                await SpinnerObj.ShowAsync();
+                processingresult = await sharedService.ProcessFileData();
+                await SpinnerObj.HideAsync();
+                //SpinnerObj.HideSpinner("Data processing is done.");
 
-            this.rowid = 0;
+                var status = dbContext.FileImportStatuses.Where(p => p.English == "Processed").FirstOrDefault();
 
-            files = sivm;
+                var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != status.Id).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
-            this.Grid.Refresh();
+                List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
-            StateHasChanged();
+                foreach (var nfile in allfiles)
+                {
+                    var afile = new FileItemViewModel();
+
+                    afile.Id = nfile.Id;
+                    afile.FileName = nfile.FileName;
+                    afile.SiteName = nfile.SiteName;
+                    afile.CoordinatorName = nfile.CoordinatorName;
+                    afile.CoordinatorEmail = nfile.CoordinatorEmail;
+                    afile.SchoolName = nfile.SchoolName;
+                    //afile.SchoolProvinceId = nfile.SchoolProvinceId;
+                    //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                    //afile.Province = province != null ? province.English : string.Empty;
+                    afile.TeacherName = nfile.TeacherName;
+                    afile.TeacherEmail = nfile.TeacherEmail;
+                    afile.LocalId = nfile.LocalId;
+                    //afile.ClassTime = nfile.ClassTime;
+                    afile.GenderId = nfile.GenderId;
+                    var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
+                    afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
+                    afile.ChildDob = nfile.ChildDob;
+                    afile.ChildPostalCode = nfile.ChildPostalCode;
+                    afile.ChildEdiid = nfile.ChildEdiid;
+                    afile.FileImportStatus = dbContext.FileImportStatuses.Where(p => p.Id == nfile.FileImportStatusId).FirstOrDefault().English;
+
+                    sivm.Add(afile);
+                }
+
+                this.rowid = 0;
+
+                files = sivm;
+
+                this.Grid.Refresh();
+
+                StateHasChanged();
+            }
         }
     }
 
@@ -401,6 +414,7 @@
                 afile.ChildDob = file.ChildDob;
                 afile.ChildPostalCode = file.ChildPostalCode;
                 afile.ChildEdiid = file.ChildEdiid;
+                afile.FileImportStatus = dbContext.FileImportStatuses.Where(p => p.Id == file.FileImportStatusId).FirstOrDefault().English;
 
                 sivm.Add(afile);
             }
