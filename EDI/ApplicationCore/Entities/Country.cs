@@ -18,6 +18,8 @@ namespace EDI.ApplicationCore.Entities
         /// </summary>
         public int Code { get; set; }
 
+        public int? YearId { get; set; }
+
         [Required]
         [StringLength(100)]
         public string English { get; set; }
@@ -34,5 +36,6 @@ namespace EDI.ApplicationCore.Entities
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Province> Provinces { get; set; }
         public virtual ICollection<School> Schools { get; set; }
+        public virtual Year Year { get; set; }
     }
 }

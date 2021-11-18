@@ -16,7 +16,7 @@ namespace EDI.ApplicationCore.Entities
             QuestionnairesDataDemographics = new HashSet<QuestionnairesDataDemographic>();
             // TeacherParticipationForms = new HashSet<TeacherParticipationForm>();
         }
-        
+        public int? YearId { get; set; }
         public string Code { get; set; }
         public string English { get; set; }
         public string French { get; set; }
@@ -25,6 +25,8 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<Child> Children { get; set; }
         public virtual ICollection<FileImport> FileImports { get; set; }
         public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
+
+        public virtual Year Year { get; set; }
         //public virtual ICollection<TeacherParticipationForm> TeacherParticipationForms{ get; set; }
     }
 }

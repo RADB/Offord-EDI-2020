@@ -13,12 +13,16 @@ namespace EDI.ApplicationCore.Entities
         {
             Children = new HashSet<Child>();
             Coordinators = new HashSet<Coordinator>();
+            Countries = new HashSet<Country>();
             Faqs = new HashSet<Faq>();
+            Genders = new HashSet<Gender>();
             InputTypes = new HashSet<InputType>();
-            Links = new HashSet<Link>();
+            Links = new HashSet<Link>();            
             LookupSets = new HashSet<LookupSet>();
+            LookupSetOptions = new HashSet<LookupSetOption>();
             NewsFeeds = new HashSet<NewsFeed>();
             Orientations = new HashSet<Orientation>();
+            Provinces = new HashSet<Province>();
             Questionnaires = new HashSet<Questionnaire>();
             QuestionnairesConfigurations = new HashSet<QuestionnairesConfiguration>();
             QuestionnairesDataDemographics = new HashSet<QuestionnairesDataDemographic>();
@@ -31,17 +35,22 @@ namespace EDI.ApplicationCore.Entities
             Schools = new HashSet<School>();
             Sites = new HashSet<Site>();
             Teachers = new HashSet<Teacher>();
+            Translations = new HashSet<Translation>();
         }
         public short? Ediyear { get; set; }
 
         public virtual ICollection<Child> Children { get; set; }
         public virtual ICollection<Coordinator> Coordinators { get; set; }
+        public virtual ICollection<Country> Countries { get; set; }
         public virtual ICollection<Faq> Faqs { get; set; }
+        public virtual ICollection<Gender> Genders { get; set; }
         public virtual ICollection<InputType> InputTypes { get; set; }
         public virtual ICollection<Link> Links { get; set; }
         public virtual ICollection<LookupSet> LookupSets { get; set; }
+        public virtual ICollection<LookupSetOption> LookupSetOptions { get; set; }
         public virtual ICollection<NewsFeed> NewsFeeds { get; set; }
         public virtual ICollection<Orientation> Orientations { get; set; }
+        public virtual ICollection<Province> Provinces { get; set; }
         public virtual ICollection<Questionnaire> Questionnaires { get; set; }
         public virtual ICollection<QuestionnairesConfiguration> QuestionnairesConfigurations { get; set; }
         public virtual ICollection<QuestionnairesDataDemographic> QuestionnairesDataDemographics { get; set; }
@@ -54,5 +63,7 @@ namespace EDI.ApplicationCore.Entities
         public virtual ICollection<School> Schools { get; set; }
         public virtual ICollection<Site> Sites { get; set; }
         public virtual ICollection<Teacher> Teachers { get; set; }
+        public virtual ICollection<Translation> Translations { get; set; }
+
     }
 }

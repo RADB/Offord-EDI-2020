@@ -8,7 +8,7 @@ namespace EDI.ApplicationCore.Entities
     [Table("LookupSetOptions", Schema = "LUData")]
     public partial class LookupSetOption:BaseEntity
     {       
-        //public int YearId { get; set; }
+        public int? YearId { get; set; }
         public int LookupSetId { get; set; }
         public string English { get; set; }
         public string French { get; set; }
@@ -19,5 +19,6 @@ namespace EDI.ApplicationCore.Entities
         public string DataDictionary { get { return string.Format("{0} - ({1})", English, Value); } }
 
         public virtual LookupSet LookupSet { get; set; }
+        public virtual Year Year { get; set; }
     }
 }

@@ -293,7 +293,8 @@ END";
                 schema: "LUData",
                 table: "Countries");
 
-            
+            migrationBuilder.Sql("DROP Procedure [dbo].[InitializeNewYear]");
+            migrationBuilder.Sql("UPDATE [dbo].[SystemConfigurations] SET FieldValue = 2021 WHERE FieldName = 'Year'");            
         }
     }
 }

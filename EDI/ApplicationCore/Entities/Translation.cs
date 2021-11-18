@@ -9,7 +9,9 @@ namespace EDI.ApplicationCore.Entities
     [Table("Translations", Schema = "LUData")]
     public partial class Translation:BaseEntity
     {
+        public int? YearId { get; set; }
         public string English { get; set; }
         public string French { get; set; }
+        public virtual Year Year { get; set; }
     }
 }

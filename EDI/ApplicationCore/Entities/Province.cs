@@ -18,6 +18,8 @@ namespace EDI.ApplicationCore.Entities
         public string English { get; set; }
         public string French { get; set; }
 
+        public int? YearId { get; set; }
+
         [Required]
         [StringLength(50)]
         public string Code { get; set; }
@@ -33,5 +35,6 @@ namespace EDI.ApplicationCore.Entities
         [JsonIgnore]
         public virtual ICollection<School> Schools { get; set; }
         //public virtual ICollection<FileImport> FileImports { get; set; }
+        public virtual Year Year { get; set; }
     }
 }
