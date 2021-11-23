@@ -61,7 +61,7 @@ namespace Web.Controllers
 
                 if (!result.Succeeded)
                 {
-                    return Redirect("/");
+                    return Redirect("/LoginError/Invalid Credentials.");
                 }
                 else
                 {
