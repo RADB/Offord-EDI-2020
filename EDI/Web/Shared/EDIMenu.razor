@@ -68,11 +68,11 @@
     </div>
     @*<div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" Disabled="@OptionsChanging" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
-    </div>*@
+    </div>
     <div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" Disabled="@OptionsChanging" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
     </div>
-    @*<div class="p-2">
+    <div class="p-2">
         <label for="fontsize" title="Font Size">Font Size:</label>
         <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e => FontChange(e))" disabled="@OptionsChanging">
             <option value="1em">1</option>
@@ -196,14 +196,17 @@
                     RadioLabels = UserSettings.RadioLabels.Value;
                 else
                 {
-                    var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
-                    if (!string.IsNullOrEmpty(radiolabels))
+                    if (!RadioLabels)
                     {
-                        RadioLabels = bool.Parse(radiolabels);
-                    }
-                    else
-                    {
-                        RadioLabels = false;
+                        var radiolabels = dbContext.UserSessions.Where(p => p.UserID == UserSettings.UserID && p.FieldName == "RadioLabels").Select(p => p.FieldValue).FirstOrDefault();
+                        if (!string.IsNullOrEmpty(radiolabels))
+                        {
+                            RadioLabels = bool.Parse(radiolabels);
+                        }
+                        else
+                        {
+                            RadioLabels = false;
+                        }
                     }
                     UserSettings.RadioLabels = RadioLabels;
                 }
@@ -222,6 +225,8 @@
 
                 //GetQueryStringValues();
                 //NavigationManager.LocationChanged += HandleLocationChanged;
+
+                /* 2022 - set validation to false
                 if (UserSettings.Validation.HasValue)
                     Validation = UserSettings.Validation.Value;
                 else
@@ -236,7 +241,8 @@
                         Validation = false;
                     }
                     UserSettings.Validation = Validation;
-                }
+                }*/
+                UserSettings.Validation = false;
 
                 GetChildId();
                 GetEntityName();

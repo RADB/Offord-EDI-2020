@@ -42,13 +42,13 @@
                         <div class="card-footer">
                             <div class="row d-flex align-items-center">
                                 <div class="col-1"><button type="submit" class="btn btn-success"><i class="fa fa-save bg whiteiconcolor"></i> Save</button></div>
-                                <div class="col-1"><SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch></div>
+                                @*<div class="col-1"><SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnValidationChange(e))"></SfSwitch></div>
                                 <div class="col-2"><button class="btn btn-warning" @onclick="@checkCompleteNess" type="button"><i class="fas fa-search"></i> Check Completeness</button></div>
-                                <div class="col-4">
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated @barColor" style="width:@percentComplete%">@percentComplete%</div>
-                                    </div>
-                                </div>
+        <div class="col-4">
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated @barColor" style="width:@percentComplete%">@percentComplete%</div>
+            </div>
+        </div>*@
                                 <div class="col-2" hidden="@true">
                                     Completed= @completed
                                     <br />
@@ -112,6 +112,7 @@
             // get the data if use that has access
             InitializeCounts();
 
+            /* 2022 turn validation off
             if (UserSettings.Validation.HasValue)
                 Validation = UserSettings.Validation.Value;
             else
@@ -127,6 +128,8 @@
                 }
                 UserSettings.Validation = Validation;
             }
+            */
+            UserSettings.Validation = false;
 
             getData();
             StateContainer.OnChange += StateHasChanged;
@@ -218,10 +221,16 @@
         teacherData.QuestionnairesDataTeacherProfiles.Single().ModifiedDate = DateTime.Now;
 
         //var currentStatus = int.Parse(reflectionService.GetFieldValue(teacherData, "Teacher", "TeacherStatusId"));
-        var currentStatus = teacherData.TeacherStatusId;
-        if ((Enumerations.TeacherStatus)currentStatus != Enumerations.TeacherStatus.Complete)
+        /*2022 
+        //var currentStatus = teacherData.TeacherStatusId;
+        //if ((Enumerations.TeacherStatus)currentStatus != Enumerations.TeacherStatus.Complete)
         {
-            if(percentComplete == 100)
+        */
+            // 2022 - updated questions
+            teacherData.QuestionnairesDataTeacherProfiles.Single().RequiredQuestions = UserSettings.QuestionsRequired;
+            teacherData.QuestionnairesDataTeacherProfiles.Single().CompletedQuestions = UserSettings.QuestionsCompleted;
+
+            if (percentComplete == 100)
             {
                 //reflectionService.SetFieldValue(teacherData, "Teacher", "TeacherStatusId", ((int)Enumerations.TeacherStatus.Complete).ToString());
                 teacherData.TeacherStatusId = (int)Enumerations.TeacherStatus.Complete;
@@ -233,7 +242,9 @@
                 teacherData.TeacherStatusId = (int)Enumerations.TeacherStatus.InProgress;
                 teacherData.QuestionnairesDataTeacherProfiles.Single().IsComplete = false;
             }
+        /*2022
         }
+        */
         //StateContainer.SetTeacher(teacherData);
         //dbContext.Teachers.Update(StateContainer.TeacherData);
         await dbContext.SaveChangesAsync();

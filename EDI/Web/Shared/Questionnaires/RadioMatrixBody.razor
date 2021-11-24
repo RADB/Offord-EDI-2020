@@ -24,14 +24,14 @@
     <td style="font-size: @_userSettings.LabelFonts;">
         @((MarkupString)QuestionText)
     </td>
-    
+
     @foreach (var option in _LookupSetOptions)
     {
-        <td @ondblclick="(()=>RemoveRadioSelection())">            
+        <td style="text-align:center" @ondblclick="(()=>RemoveRadioSelection())">
             @if (_userSettings.RadioLabels.HasValue && _userSettings.RadioLabels.Value)
             {
-                labelText = _userSettings.IsAdmin == true ? string.Format("{0} - ({1})", sharedService.GetOptionText(option),option.Value.ToString()) : sharedService.GetOptionText(option);
-                //sharedService.GetOptionText(option) 
+                labelText = _userSettings.IsAdmin == true ? string.Format("{0} - ({1})", sharedService.GetOptionText(option), option.Value.ToString()) : sharedService.GetOptionText(option);
+                //sharedService.GetOptionText(option)
                 <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion" @onchange="@onChange" Name="@Config.EntityField" Label=@labelText Value="@option.Value.ToString()"></SfRadioButton>
             }
             else
@@ -130,6 +130,16 @@
         //RadioLabels = UserSettings.RadioLabels;
         //LabelFonts = UserSettings.LabelFonts;
 
+        // 2022 turn labels on permanently
+        if (NavigationManager.Uri.Contains("TeacherProfile"))
+        {
+            // labels off for teacher profile
+            _userSettings.RadioLabels = false;
+        }
+        else
+        {
+            _userSettings.RadioLabels = true;
+        }
     }
 
     public async void onChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
@@ -146,7 +156,7 @@
             await sessionStorage.SetItemAsync<string>("Teacher", teacherJson);
         }
 
-        CompletedQuestion(previousValue,e.Value.ToString(),Config.IsRequired);
+        CompletedQuestion(previousValue, e.Value.ToString(), Config.IsRequired);
         // StateHasChanged();
     }
 }

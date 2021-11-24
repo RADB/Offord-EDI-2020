@@ -176,7 +176,7 @@
         RadioMatrixHeader = config.IsHeader ? string.Format("<tr><th colspan=\"2\">{0}</th>", sharedService.GetConfigText(config)): string.Format("<tr><th style={0}></th><th></th>", "width:8.3%");
         foreach (var option in _LookupSetOptions)
         {
-            RadioMatrixHeader += string.Format("{0}{1}{2}", "<th>", sharedService.GetOptionText(option), "</th>");
+            RadioMatrixHeader += string.Format("{0}{1}{2}", "<th style=\"text-align:center\">", sharedService.GetOptionText(option), "</th>");
         }
         RadioMatrixHeader += "</tr>";
     }

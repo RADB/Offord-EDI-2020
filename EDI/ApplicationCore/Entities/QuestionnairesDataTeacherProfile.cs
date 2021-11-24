@@ -39,8 +39,18 @@ namespace EDI.ApplicationCore.Entities
         public byte? EducationMastersDegree { get; set; }
         public byte? EducationPhdcourses { get; set; }
         public byte? EducationPhd { get; set; }
-        public byte? EducationOther { get; set; }
+        public byte? EducationOther { get; set; }        
         public string EducationOtherComment { get; set; }
+        // 2022
+        public byte? EducationLevel { get; set; }
+        public byte? WellBeing { get; set; }
+        public byte? ImpactedWellBeing { get; set; }
+        public byte? SkillsOverall { get; set; }
+        public byte? SkillsAcademic { get; set; }
+        public byte? SkillsPhysical { get; set; }
+        public byte? SkillsSocioEmotional{ get; set; }
+        // 2022
+
         [JsonIgnore]
         public virtual Teacher Teacher{ get; set; }
         [JsonIgnore]
