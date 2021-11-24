@@ -10,6 +10,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Content Remove="efpt.config.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Ardalis.GuardClauses" Version="3.3.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="System.Security.Claims" Version="4.3.0" />
@@ -26,6 +30,12 @@
 
 	<ItemGroup>
 	  <Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="efpt.config.json">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>
