@@ -1,7 +1,8 @@
 ﻿@using Syncfusion.Blazor.Buttons
 @inject ISharedService sharedService
 @inject ServiceContext dbContext;
-@inject IReflectionService reflectionService; 
+@inject IReflectionService reflectionService;
+@inject UserSettings UserSettings;
 
 <div class="form-group row">
     <label class="col-md-4 col-form-label" for="Year">Year<i class="fa fa-asterisk fa-1x text-danger" data-toggle="tooltip" data-placement="right" title="Required field."></i>: </label>
@@ -21,7 +22,7 @@
     @foreach (var option in Provinces)
     {
         var p = reflectionService.GetFieldValue(year, option.English.Replace(" ", ""));
-        if (!string.IsNullOrEmpty(p) &&  bool.Parse(p))
+        if (!string.IsNullOrEmpty(p) && bool.Parse(p))
         // @if (year != null && year.GetType().GetProperty((option.English).Replace(" ", "")).GetValue(year, null).Equals(true))
         {
             <div class="input-group col-md-2">
@@ -45,10 +46,10 @@
     protected override async Task OnInitializedAsync()
     {
         Years = await sharedService.GetYears();
-        var countryidusa = 0;// dbContext.Countries.Where(p => p.English == "United States").FirstOrDefault().Id;
-        var countryidcad = dbContext.Countries.Where(p => p.English == "Canada").FirstOrDefault().Id;
+        var countryidusa = dbContext.Countries.Where(p => p.English == "United States" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+        var countryidcad = dbContext.Countries.Where(p => p.English == "Canada" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
         var countryidbarb = 0;// dbContext.Countries.Where(p => p.English == "Barbados").FirstOrDefault().Id;
-        var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+        var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.YearId == UserSettings.YearId && p.EDICode != null && (p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb)).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
 
         List<ProvinceItemViewModel> sivm = new List<ProvinceItemViewModel>();
 
@@ -63,7 +64,7 @@
             aprovince.French = province.French;
             aprovince.CountryID = province.CountryID;
 
-            var country = dbContext.Countries.Where(p => p.Id == province.CountryID).FirstOrDefault();
+            var country = dbContext.Countries.Where(p => p.Id == province.CountryID && p.YearId == UserSettings.YearId).FirstOrDefault();
             aprovince.Country = country.English;
 
             sivm.Add(aprovince);
@@ -71,14 +72,16 @@
 
         Provinces = sivm;
 
-        if (ProvinceConfigModel.YearID == 0 && Years.Count() == 2)
-        {
-            ProvinceConfigModel.YearID = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
-        }
+        //if (ProvinceConfigModel.YearID == 0 && Years.Count() == 2)
+        //{
+        //    ProvinceConfigModel.YearID = int.Parse(Years.Where(t => !string.IsNullOrEmpty(t.Value)).First().Value);
+        //}
 
-        yearid = ProvinceConfigModel.YearID.ToString();
+        //yearid = ProvinceConfigModel.YearID.ToString();
 
-        year = dbContext.Years.Where(p => p.Id == ProvinceConfigModel.YearID).FirstOrDefault();
+        //year = dbContext.Years.Where(p => p.Id == ProvinceConfigModel.YearID).FirstOrDefault();
+
+        year = dbContext.Years.Where(p => p.Id == UserSettings.YearId).FirstOrDefault();
     }
 
     private void YearChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)

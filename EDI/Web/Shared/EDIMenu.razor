@@ -68,10 +68,12 @@
     </div>
     @*<div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Labels-On" OffLabel="Labels-Off" Disabled="@OptionsChanging" @bind-Checked="@RadioLabels" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnLabelsChange(e))"></SfSwitch>
-    </div>
+    </div>*@
+
     <div class="p-2">
         <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" Disabled="@OptionsChanging" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
     </div>
+    @*
     <div class="p-2">
         <label for="fontsize" title="Font Size">Font Size:</label>
         <select name="fontsize" id="fontsize" value="@LabelFonts" @onchange="@(e => FontChange(e))" disabled="@OptionsChanging">
@@ -226,7 +228,7 @@
                 //GetQueryStringValues();
                 //NavigationManager.LocationChanged += HandleLocationChanged;
 
-                /* 2022 - set validation to false
+                 /*2022 set validation false - reversed*/
                 if (UserSettings.Validation.HasValue)
                     Validation = UserSettings.Validation.Value;
                 else
@@ -241,8 +243,10 @@
                         Validation = false;
                     }
                     UserSettings.Validation = Validation;
-                }*/
+                }
+                /* reversed
                 UserSettings.Validation = false;
+                */
 
                 GetChildId();
                 GetEntityName();

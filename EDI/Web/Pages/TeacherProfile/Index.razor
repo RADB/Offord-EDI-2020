@@ -112,7 +112,7 @@
             // get the data if use that has access
             InitializeCounts();
 
-            /* 2022 turn validation off
+            /*2022 turn validation off*/
             if (UserSettings.Validation.HasValue)
                 Validation = UserSettings.Validation.Value;
             else
@@ -128,8 +128,9 @@
                 }
                 UserSettings.Validation = Validation;
             }
-            */
+            /* reversed
             UserSettings.Validation = false;
+            */
 
             getData();
             StateContainer.OnChange += StateHasChanged;
