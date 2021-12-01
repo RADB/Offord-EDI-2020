@@ -1886,8 +1886,54 @@ namespace EDI.Web.Services
 
             try
             {
-                var fields = await Task.FromResult(_dbContext.QuestionnairesConfigurations.Where(t => t.EntityName == entityname && !string.IsNullOrEmpty(t.EntityField)).OrderBy(p => p.EntityField).ToList());
-               
+                var fields = await Task.FromResult(_dbContext.QuestionnairesConfigurations.Where(t => t.YearId == _userSettings.YearId && t.EntityName == entityname && !string.IsNullOrEmpty(t.EntityField)).OrderBy(p => p.EntityField).ToList());
+
+                switch (_userSettings.Province)
+                {
+                    case "Alberta":
+                        fields = fields.Where(p => p.Alberta == true).ToList();
+                        break;
+                    case "BritishColumbia":
+                        fields = fields.Where(p => p.BritishColumbia == true).ToList();
+                        break;
+                    case "Manitoba":
+                        fields = fields.Where(p => p.Manitoba == true).ToList();
+                        break;
+                    case "NewBrunswick":
+                        fields = fields.Where(p => p.NewBrunswick == true).ToList();
+                        break;
+                    case "NewfoundlandandLabrador":
+                        fields = fields.Where(p => p.NewfoundlandandLabrador == true).ToList();
+                        break;
+                    case "NovaScotia":
+                        fields = fields.Where(p => p.NovaScotia == true).ToList();
+                        break;
+                    case "Nunavut":
+                        fields = fields.Where(p => p.Nunavut == true).ToList();
+                        break;
+                    case "Ontario":
+                        fields = fields.Where(p => p.Ontario == true).ToList();
+                        break;
+                    case "PrinceEdwardIsland":
+                        fields = fields.Where(p => p.PrinceEdwardIsland == true).ToList();
+                        break;
+                    case "Quebec":
+                        fields = fields.Where(p => p.Quebec == true).ToList();
+                        break;
+                    case "Saskatchewan":
+                        fields = fields.Where(p => p.Saskatchewan == true).ToList();
+                        break;
+                    case "YukonTerritory":
+                        fields = fields.Where(p => p.YukonTerritory == true).ToList();
+                        break;
+                    case "NorthwestTerritories":
+                        fields = fields.Where(p => p.NorthwestTerritories == true).ToList();
+                        break;
+                    case "NewYork":
+                        fields = fields.Where(p => p.NewYork == true).ToList();
+                        break;
+                }
+
                 var items = new List<SelectListItem>
                 {
                     new SelectListItem() { Value = null, Text = "Choose One...", Selected = true }
@@ -1895,8 +1941,7 @@ namespace EDI.Web.Services
 
                 foreach (var field in fields)
                 {
-                    if (field.YearId == _userSettings.YearId)
-                        items.Add(new SelectListItem() { Value = field.Id.ToString(), Text = field.EntityField });
+                    items.Add(new SelectListItem() { Value = field.Id.ToString(), Text = field.EntityField });
                 }
 
                 return items;
@@ -1976,6 +2021,9 @@ namespace EDI.Web.Services
             var predicate = "FieldName==\"Year\"";
             var year = _dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
             predicate = "EDIYear == " + year;
+
+            var province = _dbContext.Provinces.Where(p => p.Id == user1.ProvinceID).FirstOrDefault();
+
             _userSettings.YearId = _dbContext.Years.Where(predicate).Single().Id;
             _userSettings.UserName = user1.UserName;
             _userSettings.IsAuthenticated = true;
@@ -1988,6 +2036,7 @@ namespace EDI.Web.Services
             _userSettings.QuestionsCompleted = 0;
             _userSettings.QuestionsRequired = 0;
             _userSettings.QuestionsTotal = 0;
+            _userSettings.Province = province.English;
             _userSettings.Language = user1.Language == null ? "English" : user1.Language;
 
             var hastestdata = _dbContext.UserSessions.Where(p => p.FieldName == "HasTestData" && p.UserID == user1.Id).FirstOrDefault();
