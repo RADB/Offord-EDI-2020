@@ -72,7 +72,7 @@
         }
         else
         {
-            var allinputTypes = await Task.FromResult(dbContext.InputTypes.OrderBy(p => p.English).ToList());
+            var allinputTypes = await Task.FromResult(dbContext.InputTypes.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.English).ToList());
 
             List<InputTypeItemViewModel> sivm = new List<InputTypeItemViewModel>();
 

@@ -1770,8 +1770,10 @@ namespace EDI.Web.Services
 
                 foreach (var inputtype in inputtypes)
                 {
-                    items.Add(new SelectListItem() { Value = inputtype.Id.ToString(), Text = inputtype.English});
+                    if (inputtype.YearId == _userSettings.YearId)
+                        items.Add(new SelectListItem() { Value = inputtype.Id.ToString(), Text = inputtype.English });
                 }
+
 
                 return items;
             }
@@ -1800,7 +1802,8 @@ namespace EDI.Web.Services
 
                 foreach (var orientation in orientations)
                 {
-                    items.Add(new SelectListItem() { Value = orientation.Id.ToString(), Text = orientation.English });
+                    if (orientation.YearId == _userSettings.YearId)
+                        items.Add(new SelectListItem() { Value = orientation.Id.ToString(), Text = orientation.English });
                 }
 
                 return items;
@@ -1830,7 +1833,8 @@ namespace EDI.Web.Services
 
                 foreach (var lookup in lookups)
                 {
-                    items.Add(new SelectListItem() { Value = lookup.Id.ToString(), Text = lookup.LookupName });
+                    if (lookup.YearId == _userSettings.YearId)
+                        items.Add(new SelectListItem() { Value = lookup.Id.ToString(), Text = lookup.LookupName });
                 }
 
                 return items;
@@ -1891,7 +1895,8 @@ namespace EDI.Web.Services
 
                 foreach (var field in fields)
                 {
-                    items.Add(new SelectListItem() { Value = field.Id.ToString(), Text = field.EntityField });
+                    if (field.YearId == _userSettings.YearId)
+                        items.Add(new SelectListItem() { Value = field.Id.ToString(), Text = field.EntityField });
                 }
 
                 return items;

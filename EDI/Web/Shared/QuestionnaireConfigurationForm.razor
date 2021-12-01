@@ -438,7 +438,7 @@
 
         if (!string.IsNullOrEmpty(QuestionnaireConfigurationModel.EntityField))
         {
-            var fieldid = dbContext.QuestionnairesConfigurations.Where(t => t.EntityName == QuestionnaireConfigurationModel.EntityName && t.EntityField == QuestionnaireConfigurationModel.EntityField).Select(t => t.Id).FirstOrDefault();
+            var fieldid = dbContext.QuestionnairesConfigurations.Where(t => t.YearId == UserSettings.YearId && t.EntityName == QuestionnaireConfigurationModel.EntityName && t.EntityField == QuestionnaireConfigurationModel.EntityField).Select(t => t.Id).FirstOrDefault();
             selectModelForField.ID = fieldid;
             selectModelForField.Value = fieldid.ToString();
         }

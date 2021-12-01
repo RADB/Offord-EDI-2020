@@ -46,7 +46,7 @@
                         <GridColumns>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.Country) HeaderText="Country" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.Code) HeaderText="Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
-                            <GridColumn Field=@nameof(ProvinceItemViewModel.EDICode) HeaderText="EDI Code" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="10"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceItemViewModel.Ediyear) Type="ColumnType.Number" HeaderText="Year" Width="15"></GridColumn>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.English) HeaderText="English" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             <GridColumn Field=@nameof(ProvinceItemViewModel.French) HeaderText="French" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                         </GridColumns>
@@ -85,7 +85,7 @@
             var countryidusa = dbContext.Countries.Where(p => p.English == "United States").FirstOrDefault().Id;
             var countryidcad = dbContext.Countries.Where(p => p.English == "Canada").FirstOrDefault().Id;
             var countryidbarb = dbContext.Countries.Where(p => p.English == "Barbados").FirstOrDefault().Id;
-            var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+            var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.YearId == UserSettings.YearId && (p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb)).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
 
             List<ProvinceItemViewModel> sivm = new List<ProvinceItemViewModel>();
 
@@ -96,6 +96,8 @@
                 aprovince.Id = province.Id;
                 aprovince.Code = province.Code;
                 aprovince.EDICode = province.EDICode;
+                var year = dbContext.Years.Where(p => p.Id == province.YearId).FirstOrDefault();
+                aprovince.Ediyear = year.Ediyear;
                 aprovince.English = province.English;
                 aprovince.French = province.French;
                 aprovince.CountryID = province.CountryID;

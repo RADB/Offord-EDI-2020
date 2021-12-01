@@ -19,5 +19,7 @@ namespace EDI.Web.Models
         public string Country { get; set; }
 
         public int? ProvinceTypeId { get; set; }
+        public int YearId { get; set; }
+        public short? Ediyear { get; set; }
     }
 }
