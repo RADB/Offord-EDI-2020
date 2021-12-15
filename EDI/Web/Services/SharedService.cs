@@ -2045,8 +2045,7 @@ namespace EDI.Web.Services
             _userSettings.IsTeacher = false;
             _userSettings.QuestionsCompleted = 0;
             _userSettings.QuestionsRequired = 0;
-            _userSettings.QuestionsTotal = 0;
-            _userSettings.Province = province.English;
+            _userSettings.QuestionsTotal = 0;            
             _userSettings.Language = user1.Language == null ? "English" : user1.Language;
 
             var hastestdata = _dbContext.UserSessions.Where(p => p.FieldName == "HasTestData" && p.UserID == user1.Id).FirstOrDefault();
@@ -2070,6 +2069,7 @@ namespace EDI.Web.Services
                 if (role.Name == "Administrator")
                 {
                     _userSettings.IsAdmin = true;
+                    _userSettings.Province = province.English.Replace(" ", "");
                 }
                 else
                     _userSettings.IsCoordinator = true;

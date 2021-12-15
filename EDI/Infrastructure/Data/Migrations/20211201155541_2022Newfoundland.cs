@@ -21,7 +21,7 @@ namespace EDI.Infrastructure.Data.Migrations
             migrationBuilder.Sql("UPDATE[EDI.Service].[LUData].[Provinces] SET CountryID = CountryID + 240 where yearid = 2 AND countryId <= 240");
             migrationBuilder.Sql("UPDATE[EDI.Service].[LUData].[Countries] SET French = 'United States' WHERE code = 840");
             migrationBuilder.Sql("UPDATE[EDI.Service].[LUData].[Countries] SET French = 'Tanzania, United Republic of ' WHERE code = 834");
-            migrationBuilder.Sql("UPDATE[EDI.Service].[LUData].[Years] SET [NewfoundlandandLabrador]=1 WHERE EDIYear=2022");
+            migrationBuilder.Sql("UPDATE[EDI.Service].[LUData].[Years] SET [NewfoundlandandLabrador]=1, PrinceEdwardIsland=1 WHERE EDIYear=2022");
             migrationBuilder.Sql("UPDATE[EDI].[Questionnaires.Configuration] SET [LookupEntityId] = [LookupEntityId] + 34 WHERE YearId = 2 AND [LookupEntityId] < 35 ");
             migrationBuilder.Sql("UPDATE[EDI].[Questionnaires.Configuration] SET OrientationId = OrientationID + 2 WHERE YearId = 2 AND [OrientationID] < 3 ");
             migrationBuilder.Sql("UPDATE[EDI].[Questionnaires.Configuration] SET InputTypeId = InputTypeId + 14 WHERE YearId = 2 AND [InputTypeId] < 15 ");
@@ -29,8 +29,12 @@ namespace EDI.Infrastructure.Data.Migrations
             // adding newfoundland and labrador
             migrationBuilder.Sql("UPDATE [LUData].[Provinces] SET EDICode = 07 WHERE YearId = 2 AND English Like 'Newfoundland%'");
 
-			// add questionnaires for newfoundland and labrador (Teacher Feedback, Section A, B, C, D)
-			migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires] SET [NewfoundlandandLabrador] = 1 WHERE YearId = 2 AND ID IN (15, 17,18,19,24)");
+            // adding PEI
+            migrationBuilder.Sql("UPDATE [LUData].[Provinces] SET EDICode = 11 WHERE YearId = 2 AND English Like 'Prince%'");
+
+
+            // add questionnaires for newfoundland and labrador (Teacher Feedback, Section A, B, C, D) and PEI
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires] SET [NewfoundlandandLabrador] = 1, [PrinceEdwardIsland] = 1 WHERE YearId = 2 AND ID IN (15, 17,18,19,24)");
 			migrationBuilder.InsertData(
 			schema: "EDI",
 			table: "Questionnaires",
@@ -39,7 +43,9 @@ namespace EDI.Infrastructure.Data.Migrations
 			{
 					{ 29, null, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1986), "Demographics", "Demographics", "Demographics", "Questionnaires.Data.Demographics", "Demographics", true, false, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1987), null, null, true, null, null, null, null, null, null, "Demographics", 0, null, 10, true, true, 2, null },
 					{ 30, null, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1990), "Section E", "Section E", "Section E", "Questionnaires.Data.SectionE", "Section E", true, false, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1992), null, null, true, null, null, null, null, null, null, "Section E", 0, null, 60, true, true, 2, null }
-			});
+                    { 31, null, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1986), "Demographics", "Demographics", "Demographics", "Questionnaires.Data.Demographics", "Demographics", true, false, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1987), null, null, null, null, null, null, null, true, null, "Demographics", 0, null, 10, true, true, 2, null },
+                    { 32, null, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1990), "Section E", "Section E", "Section E", "Questionnaires.Data.SectionE", "Section E", true, false, null, "admin", new DateTime(2021, 12, 1, 11, 46, 46, 18, DateTimeKind.Local).AddTicks(1992), null, null, null, null, null, null, null, true, null, "Section E", 0, null, 60, true, true, 2, null }
+            });
 
             migrationBuilder.InsertData(
             schema: "LUData",
@@ -278,7 +284,7 @@ END";
             migrationBuilder.Sql("UPDATE[EDI].[Questionnaires.Configuration] SET [LookupEntityId] = [LookupEntityId] - 34 WHERE YearId = 2 AND [LookupEntityId] > 35 AND [LookupEntityId] < 69");
 
             // remove questionnaires for newfoundland and labrador (Teacher Feedback, Section A, B, C, D)
-            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires] SET [NewfoundlandandLabrador] = 0 WHERE YearId = 2 AND ID IN (15, 17,18,19,24)");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires] SET [NewfoundlandandLabrador] = 0, PrinceEdwardIsland = 0 WHERE YearId = 2 AND ID IN (15, 17,18,19,24)");
 
             // Remove Section E NS Additions
             migrationBuilder.Sql("DELETE FROM [EDI].[Questionnaires.Configuration] WHERE YearID =2 AND QuestionnairesID = 22 AND Sequence >=230 AND Sequence <=260");
@@ -297,6 +303,18 @@ END";
                keyValue: 30);
 
             migrationBuilder.DeleteData(
+           schema: "EDI",
+           table: "Questionnaires.Configuration",
+           keyColumn: "QuestionnaireID",
+           keyValue: 31);
+
+            migrationBuilder.DeleteData(
+               schema: "EDI",
+               table: "Questionnaires.Configuration",
+               keyColumn: "QuestionnaireID",
+               keyValue: 32);
+
+            migrationBuilder.DeleteData(
 			   schema: "EDI",
 			   table: "Questionnaires",
 			   keyColumn: "Id",
@@ -307,6 +325,16 @@ END";
 				table: "Questionnaires",
 				keyColumn: "Id",
 				keyValue: 30);
+            migrationBuilder.DeleteData(
+                schema: "EDI",
+                table: "Questionnaires",
+                keyColumn: "Id",
+                keyValue: 31);
+            migrationBuilder.DeleteData(
+                schema: "EDI",
+                table: "Questionnaires",
+                keyColumn: "Id",
+                keyValue: 32);
 
             migrationBuilder.DeleteData(
                 schema: "LUData",
