@@ -564,7 +564,17 @@ namespace EDI.Web.Services
                                     }
                                     else
                                     {      
-                                        _file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
+                                        //_file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
+                                        //_file.GenderId = (gender == "M" ? dbContext.Gen.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault() : (int)Genders.Female);                                        
+                                        //TODO - double check that this is correct
+                                        if (gender=="M")
+                                        {
+                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Male").FirstOrDefault().Id;
+                                        }
+                                        else
+                                        {
+                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Female").FirstOrDefault().Id;
+                                        }
                                     }
 
 

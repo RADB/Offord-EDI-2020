@@ -30,11 +30,13 @@
     {
         // get the header text
         _Text = sharedService.GetConfigText(config);
-
+        
         // process the header type
-        switch ((InputTypes)config.InputTypeId)
+        //switch ((InputTypes)config.InputTypeId)
+        switch (config.InputType.English)
         {
-            case InputTypes.Header:
+            //case InputTypes.Header:
+            case "Header":
                 var _label = "";
                 //NavigationManager.Uri.Contains
                 if (config.EntityName.Contains("TeacherProfile"))
@@ -54,7 +56,8 @@
                 }
                 @((MarkupString)string.Format("<div class=\"col\"><strong>{0}</strong></div><div class=\"col-5 text-right\">{1}</div>", _Text, _label));
                 break;
-            case InputTypes.GroupHeader:
+            //case InputTypes.GroupHeader:
+            case "GroupHeader":
                 @*<div class="card-body border">
                         <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) craft the Group Header<br />_Text</p>
                     </div>
@@ -62,16 +65,19 @@
                 *@
                 Linebreak = false;
                 break;
-            case InputTypes.QuestionHeader:
+            //case InputTypes.QuestionHeader:
+            case "QuestionHeader":
                 <QuestionnaireQuestionHeader Config=@config data="@teacherData"></QuestionnaireQuestionHeader>
                 break;
-            case InputTypes.RadioMatrix:
+            //case InputTypes.RadioMatrix:
+            case "RadioMatrix":
                 GetRadioMatrixHeader(config, teacherData);
                 <RadioMatrixPart RadioMatrixHeader="@RadioMatrixHeader" Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></RadioMatrixPart>
                 break;
             default:
                 <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>
+                    @*<p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) is not a header</p>*@
+                    <p>@config.InputType.English is not a header</p>
                 </div>
                 break;
         }
@@ -80,43 +86,55 @@
     {
         // bind to value from demographic_data
 
-        switch ((InputTypes)config.InputTypeId)
+        //switch ((InputTypes)config.InputTypeId)
+        switch (config.InputType.English)
         {
-            case InputTypes.RadioButtons:
+            //case InputTypes.RadioButtons:
+            case "RadioButtons":
                 <RadioPart Config="@config" data="@teacherData" OnValueUpdated="@ValueUpdated"></RadioPart>
                 break;
-            case InputTypes.DatePicker:
+            //case InputTypes.DatePicker:
+            case "DatePicker":
                 <DatePickerPart Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></DatePickerPart>
                 break;
-            case InputTypes.TextBox:
+            //case InputTypes.TextBox:
+            case "TextBox":
                 <TextPart Config=@config data=@teacherData OnValueUpdated="@ValueUpdated"></TextPart>
                 break;
-            case InputTypes.SelectBox:
+            //case InputTypes.SelectBox:
+            case "SelectBox":
                 <SelectPart Config="@config" data="@teacherData" OnValueUpdated="@ValueUpdated"></SelectPart>
                 break;
-            case InputTypes.RadioMatrix:
+            //case InputTypes.RadioMatrix:
+            case "RadioMatrix":
                 // skip til we figure out how to filter more appropriately in RadioMatrixHeader
                 Linebreak = false;
                 break;
-            case InputTypes.NumberBox:
+            //case InputTypes.NumberBox:
+            case "NumberBox":
                 <NumberBox Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></NumberBox>
                 break;
-            case InputTypes.NumberBoxDouble:
+            //case InputTypes.NumberBoxDouble:
+            case "NumberBoxDouble":
                 <NumberBoxDouble Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></NumberBoxDouble>
                 break;
-            case InputTypes.CheckBox:
+            //case InputTypes.CheckBox:
+            case "CheckBox":
                 <CheckBoxPart Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></CheckBoxPart>
                 break;
-            case InputTypes.Hidden:                
+            //case InputTypes.Hidden:                
+            case "Hidden":
                     <HiddenPart Config=@config data="@teacherData"></HiddenPart>                
                 Linebreak = false;
                 break;
-            case InputTypes.TextArea:
+            //case InputTypes.TextArea:
+            case "TextArea":
                 <TextAreaPart Config=@config data="@teacherData" OnValueUpdated="@ValueUpdated"></TextAreaPart>
                 break;
             default:
                 <div class="card-body border">
-                    <p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>
+                    @*<p>@Enum.GetName(typeof(InputTypes), config.InputTypeId) needs to be crafted<br />@sharedService.GetConfigText(config)</p>*@
+                    <p>@config.InputType.English needs to be crafted<br />@sharedService.GetConfigText(config)</p>
                 </div>
                 break;
         }

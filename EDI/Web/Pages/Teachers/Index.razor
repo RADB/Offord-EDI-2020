@@ -255,12 +255,14 @@
 
     private void RecordDoubleClickHandler(RecordDoubleClickEventArgs<TeacherItemViewModel> args)
     {
-        NavigationManager.NavigateTo("./teachers/edit/" + this.rowid);
+        // need to forceload 2021-12-14    
+        NavigationManager.NavigateTo("./teachers/edit/" + this.rowid, true);
     }
 
     private void GotoQuestionnaire(int id)
     {
-        NavigationManager.NavigateTo("./TeacherProfile/Index/" + id);
+        // need to forceload 2021-12-14    
+        NavigationManager.NavigateTo("./TeacherProfile/Index/" + id, true);
     }
 
     private string Translate(string word)

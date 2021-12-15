@@ -65,8 +65,9 @@
 
     private void getData()
     {
+        int InputTypeId = dbContext.InputTypes.Where(p => p.English == "RadioMatrix" && p.YearId == _userSettings.YearId).FirstOrDefault().Id;
         // need to filter by yearid as well
-        predicate = "GroupName =\"" + GroupName + "\" AND QuestionnaireId = " + QuestionnaireId + " AND " + ProvinceName + " = true AND InputTypeId =2 AND IsHeader =false AND columns =" + Config.Columns;
+        predicate = "GroupName =\"" + GroupName + "\" AND QuestionnaireId = " + QuestionnaireId + " AND " + ProvinceName + " = true AND InputTypeId =" + InputTypeId + " AND IsHeader =false AND columns =" + Config.Columns;
 
         // get the configuration
         matrixbodies = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();

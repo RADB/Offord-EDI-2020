@@ -150,11 +150,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 2,
                             Code = "1",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7381),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(880),
                             English = "New",
                             French = "Nouveau",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7411),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(908),
                             Sequence = 1
                         },
                         new
@@ -162,11 +162,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 1,
                             Code = "2",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7414),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(911),
                             English = "In Progress",
                             French = "En cours",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7415),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(912),
                             Sequence = 2
                         },
                         new
@@ -174,11 +174,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 3,
                             Code = "3",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7417),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(914),
                             English = "Complete",
                             French = "Achevé",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7419),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(915),
                             Sequence = 3
                         },
                         new
@@ -186,11 +186,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 4,
                             Code = "4",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7420),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(917),
                             English = "Locked",
                             French = "Fermé à clé",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 680, DateTimeKind.Local).AddTicks(7422),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(918),
                             Sequence = 4
                         });
                 });
@@ -649,11 +649,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 1,
                             Code = "1",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3584),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7048),
                             English = "Imported",
                             French = "Importé",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3593),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7057),
                             Sequence = 1
                         },
                         new
@@ -661,11 +661,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 2,
                             Code = "2",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3596),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7059),
                             English = "Processed",
                             French = "Traité",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3597),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7060),
                             Sequence = 2
                         },
                         new
@@ -673,11 +673,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 3,
                             Code = "3",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3599),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7062),
                             English = "Duplicate",
                             French = "Dupliquer",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3600),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7063),
                             Sequence = 3
                         },
                         new
@@ -685,11 +685,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 4,
                             Code = "4",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3602),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7065),
                             English = "Invalid Province",
                             French = "Province non valide",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3603),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7066),
                             Sequence = 4
                         },
                         new
@@ -697,11 +697,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 5,
                             Code = "5",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3605),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7068),
                             English = "Invalid Questionnaire",
                             French = "Questionnaire non valide",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(3606),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 925, DateTimeKind.Local).AddTicks(7069),
                             Sequence = 5
                         });
                 });
@@ -814,11 +814,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 1,
                             Code = "1",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(6798),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(232),
                             English = "Male",
                             French = "Mâle",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(6807),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(240),
                             Sequence = 1
                         },
                         new
@@ -826,11 +826,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 2,
                             Code = "2",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(6810),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(242),
                             English = "Female",
                             French = "Femelle",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(6811),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(244),
                             Sequence = 2
                         });
                 });
@@ -883,154 +883,154 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 14,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8579),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1958),
                             English = "Hidden",
                             French = "Hidden",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8588),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1966),
                             YearId = 1
                         },
                         new
                         {
                             Id = 13,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8591),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1968),
                             English = "NumberBoxDouble",
                             French = "NumberBoxDouble",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8592),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1969),
                             YearId = 1
                         },
                         new
                         {
                             Id = 12,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8594),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1971),
                             English = "Toggle",
                             French = "Toggle",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8595),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1972),
                             YearId = 1
                         },
                         new
                         {
                             Id = 11,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8597),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1974),
                             English = "GroupHeader",
                             French = "GroupHeader",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8598),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1975),
                             YearId = 1
                         },
                         new
                         {
                             Id = 10,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8600),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1977),
                             English = "QuestionHeader",
                             French = "QuestionHeader",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8601),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1978),
                             YearId = 1
                         },
                         new
                         {
                             Id = 9,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8603),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1980),
                             English = "Header",
                             French = "Header",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8604),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1981),
                             YearId = 1
                         },
                         new
                         {
                             Id = 8,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8605),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1983),
                             English = "TextBox",
                             French = "TextBox",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8607),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1984),
                             YearId = 1
                         },
                         new
                         {
                             Id = 7,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8608),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1985),
                             English = "SelectBox",
                             French = "SelectBox",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8610),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1987),
                             YearId = 1
                         },
                         new
                         {
                             Id = 6,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8611),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1988),
                             English = "CheckBox",
                             French = "CheckBox",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8612),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1989),
                             YearId = 1
                         },
                         new
                         {
                             Id = 5,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8614),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1991),
                             English = "DatePicker",
                             French = "DatePicker",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8615),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1992),
                             YearId = 1
                         },
                         new
                         {
                             Id = 4,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8617),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1994),
                             English = "NumberBox",
                             French = "NumberBox",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8618),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1995),
                             YearId = 1
                         },
                         new
                         {
                             Id = 3,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8620),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1997),
                             English = "RadioButtons",
                             French = "RadioButtons",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8621),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(1998),
                             YearId = 1
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8623),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(2000),
                             English = "RadioMatrix",
                             French = "RadioMatrix",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8624),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(2001),
                             YearId = 1
                         },
                         new
                         {
                             Id = 1,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8626),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(2003),
                             English = "TextArea",
                             French = "TextArea",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 681, DateTimeKind.Local).AddTicks(8627),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(2004),
                             YearId = 1
                         });
                 });
@@ -1181,380 +1181,410 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2891),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6247),
                             LookupName = "YesNo",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2899),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6256),
                             YearId = 1
                         },
                         new
                         {
                             Id = 2,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2902),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6258),
                             LookupName = "YesNoDontKnow",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2903),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6259),
                             YearId = 1
                         },
                         new
                         {
                             Id = 3,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2905),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6261),
                             LookupName = "GoodAvgPoorDontKnow",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2906),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6262),
                             YearId = 1
                         },
                         new
                         {
                             Id = 4,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2908),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6264),
                             LookupName = "OftenSometimesNeverDontKnow",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2909),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6265),
                             YearId = 1
                         },
                         new
                         {
                             Id = 5,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2911),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6268),
                             LookupName = "ObservedDiagnosisBoth",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2912),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6269),
                             YearId = 1
                         },
                         new
                         {
                             Id = 6,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2914),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6270),
                             LookupName = "FullPartDontknowNO",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2915),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6272),
                             YearId = 1
                         },
                         new
                         {
                             Id = 7,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2917),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6273),
                             LookupName = "Status",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2918),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6275),
                             YearId = 1
                         },
                         new
                         {
                             Id = 8,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2920),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6276),
                             LookupName = "ClassAssignment",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2921),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6277),
                             YearId = 1
                         },
                         new
                         {
                             Id = 9,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2923),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6285),
                             LookupName = "ClassType",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2924),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6286),
                             YearId = 1
                         },
                         new
                         {
                             Id = 10,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2926),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6288),
                             LookupName = "Gender",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2927),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6289),
                             YearId = 1
                         },
                         new
                         {
                             Id = 11,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2928),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6290),
                             LookupName = "ConsideredESL",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2930),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6292),
                             YearId = 1
                         },
                         new
                         {
                             Id = 12,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2937),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6293),
                             LookupName = "EthnicStatus",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2938),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6294),
                             YearId = 1
                         },
                         new
                         {
                             Id = 13,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2940),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6296),
                             LookupName = "NWTLanguages",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2941),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6297),
                             YearId = 1
                         },
                         new
                         {
                             Id = 14,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2943),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6299),
                             LookupName = "LandAgreements",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2944),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6300),
                             YearId = 1
                         },
                         new
                         {
                             Id = 15,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2946),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6302),
                             LookupName = "Languages",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2947),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6303),
                             YearId = 1
                         },
                         new
                         {
                             Id = 16,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2949),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6305),
                             LookupName = "SpecialProblems",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2950),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6306),
                             YearId = 1
                         },
                         new
                         {
                             Id = 17,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2952),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6307),
                             LookupName = "MainCare",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2953),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6309),
                             YearId = 1
                         },
                         new
                         {
                             Id = 18,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2955),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6310),
                             LookupName = "MainCareJK",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2957),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6311),
                             YearId = 1
                         },
                         new
                         {
                             Id = 19,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2958),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6313),
                             LookupName = "Participation",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2960),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6314),
                             YearId = 1
                         },
                         new
                         {
                             Id = 20,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2961),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6316),
                             LookupName = "AgeRange",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2962),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6318),
                             YearId = 1
                         },
                         new
                         {
                             Id = 21,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2964),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6320),
                             LookupName = "TeacherGender",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2965),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6321),
                             YearId = 1
                         },
                         new
                         {
                             Id = 22,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2967),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6323),
                             LookupName = "VerySomewhatNot",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2968),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6324),
                             YearId = 1
                         },
                         new
                         {
                             Id = 23,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2970),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6325),
                             LookupName = "GuideUsefulness",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2971),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6327),
                             YearId = 1
                         },
                         new
                         {
                             Id = 24,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2972),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6328),
                             LookupName = "ClassAssignmentNS",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2974),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6329),
                             YearId = 1
                         },
                         new
                         {
                             Id = 25,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2975),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6331),
                             LookupName = "ClassTypeNS",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2977),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6332),
                             YearId = 1
                         },
                         new
                         {
                             Id = 26,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2978),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6334),
                             LookupName = "StatusNS",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2980),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6335),
                             YearId = 1
                         },
                         new
                         {
                             Id = 27,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2981),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6337),
                             LookupName = "EFSL",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2982),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6338),
                             YearId = 1
                         },
                         new
                         {
                             Id = 28,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2984),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6340),
                             LookupName = "CareArrangement",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2985),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6341),
                             YearId = 1
                         },
                         new
                         {
                             Id = 29,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2987),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6343),
                             LookupName = "Transportation",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2988),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6344),
                             YearId = 1
                         },
                         new
                         {
                             Id = 30,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2990),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6345),
                             LookupName = "ClassAssignmentON",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2991),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6347),
                             YearId = 1
                         },
                         new
                         {
                             Id = 31,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2993),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6348),
                             LookupName = "ClassTypeON",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2994),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6350),
                             YearId = 1
                         },
                         new
                         {
                             Id = 32,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2996),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6351),
                             LookupName = "FullPartDontknow",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2997),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6352),
                             YearId = 1
                         },
                         new
                         {
                             Id = 33,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(2999),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6354),
                             LookupName = "RaceEthnicity",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3000),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6355),
                             YearId = 1
                         },
                         new
                         {
                             Id = 34,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3002),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6357),
                             LookupName = "ClassTime",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3003),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6358),
                             YearId = 1
                         },
                         new
                         {
                             Id = 69,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3005),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6360),
                             LookupName = "Education",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3006),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6361),
                             YearId = 2
                         },
                         new
                         {
                             Id = 70,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3008),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6363),
                             LookupName = "YesNoWellBeing",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3009),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6365),
                             YearId = 2
                         },
                         new
                         {
                             Id = 71,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3011),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6366),
                             LookupName = "NegativePositive",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3012),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6367),
                             YearId = 2
                         },
                         new
                         {
                             Id = 72,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3014),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6369),
                             LookupName = "BetterWorse",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3015),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6370),
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 73,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6372),
+                            LookupName = "InstructionFormat",
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6373),
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 74,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6375),
+                            LookupName = "OnlineChallenges",
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6376),
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 75,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6378),
+                            LookupName = "ELL",
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(6379),
                             YearId = 2
                         });
                 });
@@ -1619,12 +1649,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 281,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3469),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7240),
                             English = "Multiracial",
                             French = "Multiracial",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3474),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7250),
                             Sequence = (short)10,
                             Value = (short)1
                         },
@@ -1632,12 +1662,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 282,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3476),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7256),
                             English = "American Indian/Alaskan Native",
                             French = "American Indian/Alaskan Native",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3477),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7257),
                             Sequence = (short)20,
                             Value = (short)2
                         },
@@ -1645,12 +1675,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 283,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3479),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7260),
                             English = "African American/Black",
                             French = "African American/Black",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3481),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7263),
                             Sequence = (short)30,
                             Value = (short)3
                         },
@@ -1658,12 +1688,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 284,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3482),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7266),
                             English = "Asian",
                             French = "Asian",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3484),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7268),
                             Sequence = (short)40,
                             Value = (short)4
                         },
@@ -1671,12 +1701,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 285,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3485),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7270),
                             English = "Native Hawaiian or other Pacific Islander",
                             French = "Native Hawaiian or other Pacific Islander",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3486),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7272),
                             Sequence = (short)50,
                             Value = (short)5
                         },
@@ -1684,12 +1714,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 286,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3489),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7275),
                             English = "Hispanic, Latino/a",
                             French = "Hispanic, Latino/a",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3490),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7277),
                             Sequence = (short)60,
                             Value = (short)6
                         },
@@ -1697,12 +1727,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 287,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3492),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7279),
                             English = "White",
                             French = "White",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3493),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7281),
                             Sequence = (short)70,
                             Value = (short)7
                         },
@@ -1710,12 +1740,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 288,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3495),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7283),
                             English = "Other",
                             French = "Other",
                             LookupSetId = 33,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3496),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7285),
                             Sequence = (short)80,
                             Value = (short)8
                         },
@@ -1723,12 +1753,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 289,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3498),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7288),
                             English = "AM",
                             French = "AM",
                             LookupSetId = 34,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3499),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7290),
                             Sequence = (short)10,
                             Value = (short)1
                         },
@@ -1736,12 +1766,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 290,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3502),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7292),
                             English = "PM",
                             French = "PM",
                             LookupSetId = 34,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3503),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7294),
                             Sequence = (short)20,
                             Value = (short)2
                         },
@@ -1749,12 +1779,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 291,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3505),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7296),
                             English = "All Day",
                             French = "All Day",
                             LookupSetId = 34,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3506),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7298),
                             Sequence = (short)30,
                             Value = (short)3
                         },
@@ -1762,12 +1792,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 292,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3508),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7300),
                             English = "Other",
                             French = "Other",
                             LookupSetId = 34,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3509),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7302),
                             Sequence = (short)40,
                             Value = (short)4
                         },
@@ -1775,12 +1805,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 585,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3511),
-                            English = "Some coursework towards a Bachelor's degree?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7306),
+                            English = "Some coursework towards a Bachelor's degree",
                             French = "Quelques cours en vue de l'obtention d'un baccalauréat",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3513),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7308),
                             Sequence = (short)10,
                             Value = (short)1,
                             YearId = 2
@@ -1789,12 +1819,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 586,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3514),
-                            English = "A teaching certificate, diploma, or license?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7311),
+                            English = "Teaching certificate, diploma, or license",
                             French = "Un certi􀁼cat, un diplômeu une license d'enseignement",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3516),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7313),
                             Sequence = (short)20,
                             Value = (short)2,
                             YearId = 2
@@ -1803,12 +1833,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 587,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3517),
-                            English = "A Bachelor's degree?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7315),
+                            English = "Bachelor's degree",
                             French = "Un baccalauréat",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3518),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7317),
                             Sequence = (short)30,
                             Value = (short)3,
                             YearId = 2
@@ -1817,12 +1847,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 588,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3520),
-                            English = "A Bachelor of Education degree?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7320),
+                            English = "Bachelor of Education degree",
                             French = "Un baccalauréat en éducation",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3521),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7322),
                             Sequence = (short)40,
                             Value = (short)4,
                             YearId = 2
@@ -1831,12 +1861,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 589,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3524),
-                            English = "Some post-baccalaureate coursework?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7325),
+                            English = "Some post-baccalaureate coursework",
                             French = "Quelques cours après le baccalauréat",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3526),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7327),
                             Sequence = (short)50,
                             Value = (short)5,
                             YearId = 2
@@ -1845,12 +1875,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 590,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3527),
-                            English = "A post-baccalaureate diploma or certificate?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7329),
+                            English = "Post-baccalaureate diploma or certificate",
                             French = "Un diplômeu un certi􀁼cat supérieur au baccalauréat",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3529),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7331),
                             Sequence = (short)60,
                             Value = (short)6,
                             YearId = 2
@@ -1859,12 +1889,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 591,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3530),
-                            English = "Some coursework towards a Master's degree?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7333),
+                            English = "Some coursework towards a Master's degree",
                             French = "Quelques cours en vue de l'obtention d'une maîtrise",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3531),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7335),
                             Sequence = (short)70,
                             Value = (short)7,
                             YearId = 2
@@ -1873,12 +1903,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 592,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3534),
-                            English = "A Master's degree?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7338),
+                            English = "Master's degree",
                             French = "Une maîtrise",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3535),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7340),
                             Sequence = (short)80,
                             Value = (short)8,
                             YearId = 2
@@ -1887,12 +1917,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 593,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3537),
-                            English = "Some coursework towards a Doctorate?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7352),
+                            English = "Some coursework towards a Doctorate",
                             French = "Quelques cours en vue de l'obtention d'un doctorat",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3538),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7354),
                             Sequence = (short)90,
                             Value = (short)9,
                             YearId = 2
@@ -1901,12 +1931,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 594,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3541),
-                            English = "A Doctorate?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7357),
+                            English = "Doctorate",
                             French = "Un doctorat",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3542),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7359),
                             Sequence = (short)100,
                             Value = (short)10,
                             YearId = 2
@@ -1915,12 +1945,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 595,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3544),
-                            English = "Other?",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7361),
+                            English = "Other",
                             French = "Autre",
                             LookupSetId = 69,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3545),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7363),
                             Sequence = (short)110,
                             Value = (short)11,
                             YearId = 2
@@ -1929,12 +1959,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 596,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3547),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7365),
                             English = "Yes",
                             French = "Oui",
                             LookupSetId = 70,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3548),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7367),
                             Sequence = (short)10,
                             Value = (short)1,
                             YearId = 2
@@ -1943,12 +1973,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 597,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3549),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7373),
                             English = "No - my overall well-being was about the same",
                             French = "Non, mon bien-être général fut à peu près pareil",
                             LookupSetId = 70,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3551),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7375),
                             Sequence = (short)20,
                             Value = (short)2,
                             YearId = 2
@@ -1957,12 +1987,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 598,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3553),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7377),
                             English = "Negatively",
                             French = "Négativement",
                             LookupSetId = 71,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3554),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7379),
                             Sequence = (short)10,
                             Value = (short)1,
                             YearId = 2
@@ -1971,12 +2001,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 599,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3557),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7381),
                             English = "Somewhat negatively",
                             French = "Un peu négativement",
                             LookupSetId = 71,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3559),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7383),
                             Sequence = (short)20,
                             Value = (short)2,
                             YearId = 2
@@ -1985,12 +2015,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 600,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3561),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7386),
                             English = "Both negatively and positively",
                             French = "Négativement et positivement",
                             LookupSetId = 71,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3562),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7388),
                             Sequence = (short)30,
                             Value = (short)3,
                             YearId = 2
@@ -1999,12 +2029,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 601,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3564),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7390),
                             English = "Somewhat positively",
                             French = "Un peu positivement",
                             LookupSetId = 71,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3565),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7392),
                             Sequence = (short)40,
                             Value = (short)4,
                             YearId = 2
@@ -2013,12 +2043,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 602,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3567),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7394),
                             English = "Positively",
                             French = "Positivement",
                             LookupSetId = 71,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3568),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7396),
                             Sequence = (short)50,
                             Value = (short)5,
                             YearId = 2
@@ -2027,12 +2057,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 603,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3569),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7399),
                             English = "Much better than earlier cohorts",
                             French = "Beaucoup meilleures que les cohortes précédentes",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3571),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7401),
                             Sequence = (short)10,
                             Value = (short)1,
                             YearId = 2
@@ -2041,12 +2071,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 604,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3572),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7403),
                             English = "Better than earlier cohorts",
                             French = "Meilleures que les cohortes précédentes",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3574),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7405),
                             Sequence = (short)20,
                             Value = (short)2,
                             YearId = 2
@@ -2055,12 +2085,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 605,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3575),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7409),
                             English = "About the same",
                             French = "À peu près pareilles",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3577),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7410),
                             Sequence = (short)30,
                             Value = (short)3,
                             YearId = 2
@@ -2069,12 +2099,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 606,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3578),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7413),
                             English = "Lower than earlier cohorts",
                             French = "Moins bonnes que les cohortes précédentes",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3579),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7414),
                             Sequence = (short)40,
                             Value = (short)4,
                             YearId = 2
@@ -2083,12 +2113,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 607,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3586),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7416),
                             English = "Much lower than earlier cohorts",
                             French = "Beaucoup moins bonnes que les cohortes précédentes",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3587),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7418),
                             Sequence = (short)50,
                             Value = (short)5,
                             YearId = 2
@@ -2097,12 +2127,12 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 608,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3589),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7421),
                             English = "Don't know ",
                             French = "Je ne le sais [as",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3590),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7422),
                             Sequence = (short)60,
                             Value = (short)6,
                             YearId = 2
@@ -2111,14 +2141,238 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 609,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3592),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7425),
                             English = "Not applicable",
                             French = "Not applicable",
                             LookupSetId = 72,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(3593),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7427),
                             Sequence = (short)70,
                             Value = (short)7,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 610,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7429),
+                            English = "All in person, normal school hours",
+                            French = "En présentiel avec un nombre d'heures de classe normal",
+                            LookupSetId = 73,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7431),
+                            Sequence = (short)10,
+                            Value = (short)1,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 611,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7433),
+                            English = "Hybrid instruction, some in person, some online instruction",
+                            French = "Format hybride avec un certain montant d'enseignement en présentiel et d'autre en virtuel",
+                            LookupSetId = 73,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7434),
+                            Sequence = (short)20,
+                            Value = (short)2,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 612,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7436),
+                            English = "All online instruction, regular online meetings with students (daily or weekly)",
+                            French = "Enseignement virtuel avec des rencontres quotidiennes ou hebdomadaires en ligne avec les élèves",
+                            LookupSetId = 73,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7438),
+                            Sequence = (short)30,
+                            Value = (short)3,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 613,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7440),
+                            English = "All online, independent study student/family paced, no regular virtual meetings",
+                            French = "Enseignement virtuel asynchrone, au rythme de l'élève/la famille, aucune rencontre en ligne sur une base régulière",
+                            LookupSetId = 73,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7442),
+                            Sequence = (short)40,
+                            Value = (short)4,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 614,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7444),
+                            English = "Other",
+                            French = "Autre",
+                            LookupSetId = 73,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7446),
+                            Sequence = (short)50,
+                            Value = (short)5,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 615,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7448),
+                            English = "Not applicable (no online learning took place or child opted out all together)",
+                            French = "Not applicable (no online learning took place or child opted out all together)",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7449),
+                            Sequence = (short)10,
+                            Value = (short)1,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 616,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7452),
+                            English = "Limited or no internet access",
+                            French = "Limited or no internet access",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7453),
+                            Sequence = (short)20,
+                            Value = (short)2,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 617,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7455),
+                            English = "Limited technology availability (computer/laptop/other devices not owned or being used by parent/siblings)",
+                            French = "Limited technology availability (computer/laptop/other devices not owned or being used by parent/siblings)",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7457),
+                            Sequence = (short)30,
+                            Value = (short)3,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 618,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7459),
+                            English = "No adult available to support the child during instruction time",
+                            French = "No adult available to support the child during instruction time",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7461),
+                            Sequence = (short)40,
+                            Value = (short)4,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 619,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7463),
+                            English = "Child uninterested in participating/short attention span",
+                            French = "Child uninterested in participating/short attention span",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7465),
+                            Sequence = (short)50,
+                            Value = (short)5,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 620,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7467),
+                            English = "Child did not have setting/space appropriate for learning",
+                            French = "Child did not have setting/space appropriate for learning",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7468),
+                            Sequence = (short)60,
+                            Value = (short)6,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 621,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7471),
+                            English = "Child did not have access to needed school supplies (other than technology) to fully participate in activities",
+                            French = "Child did not have access to needed school supplies (other than technology) to fully participate in activities",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7472),
+                            Sequence = (short)70,
+                            Value = (short)7,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 622,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7474),
+                            English = "Other",
+                            French = "Autre",
+                            LookupSetId = 74,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7476),
+                            Sequence = (short)80,
+                            Value = (short)8,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 623,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7478),
+                            English = "ELL",
+                            French = "ELL",
+                            LookupSetId = 75,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7480),
+                            Sequence = (short)10,
+                            Value = (short)1,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 624,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7482),
+                            English = "FLL",
+                            French = "FLL",
+                            LookupSetId = 75,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7484),
+                            Sequence = (short)20,
+                            Value = (short)2,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 625,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7486),
+                            English = "No",
+                            French = "No",
+                            LookupSetId = 75,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(7487),
+                            Sequence = (short)30,
+                            Value = (short)3,
                             YearId = 2
                         });
                 });
@@ -2339,22 +2593,22 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 2,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(5201),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(9940),
                             English = "Horizontal",
                             French = "Horizontal",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(5209),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(9949),
                             YearId = 1
                         },
                         new
                         {
                             Id = 1,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(5211),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(9951),
                             English = "Vertical",
                             French = "Vertical",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 682, DateTimeKind.Local).AddTicks(5213),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 926, DateTimeKind.Local).AddTicks(9952),
                             YearId = 1
                         });
                 });
@@ -2577,7 +2831,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6715),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1553),
                             DescriptionEnglish = "Teacher Feedback",
                             DescriptionFrench = "Teacher Feedback",
                             English = "Teacher Feedback",
@@ -2586,7 +2840,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = false,
                             IsTeacherQuestionnaire = true,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6724),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1562),
                             NewYork = true,
                             NorthwestTerritories = true,
                             NovaScotia = true,
@@ -2602,7 +2856,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 2,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6730),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1569),
                             DescriptionEnglish = "Demographics",
                             DescriptionFrench = "Demographics",
                             English = "Demographics",
@@ -2611,7 +2865,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6732),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1570),
                             NorthwestTerritories = true,
                             QuestionnaireName = "Demographics",
                             QuestionsRequired = 0,
@@ -2624,7 +2878,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 3,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6735),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1579),
                             DescriptionEnglish = "Section A",
                             DescriptionFrench = "Section A",
                             English = "Section A",
@@ -2633,7 +2887,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6737),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1580),
                             NewYork = true,
                             NorthwestTerritories = true,
                             NovaScotia = true,
@@ -2649,7 +2903,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 4,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6740),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1584),
                             DescriptionEnglish = "Section B",
                             DescriptionFrench = "Section B",
                             English = "Section B",
@@ -2658,7 +2912,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6741),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1585),
                             NewYork = true,
                             NorthwestTerritories = true,
                             NovaScotia = true,
@@ -2674,7 +2928,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 5,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6745),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1588),
                             DescriptionEnglish = "Section C",
                             DescriptionFrench = "Section C",
                             English = "Section C",
@@ -2683,7 +2937,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6746),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1589),
                             NewYork = true,
                             NorthwestTerritories = true,
                             NovaScotia = true,
@@ -2699,7 +2953,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 6,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6754),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1593),
                             DescriptionEnglish = "Section D",
                             DescriptionFrench = "Section D",
                             English = "Section D",
@@ -2708,7 +2962,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6755),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1594),
                             NorthwestTerritories = true,
                             QuestionnaireName = "Section D",
                             QuestionsRequired = 0,
@@ -2721,7 +2975,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 7,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6758),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1597),
                             DescriptionEnglish = "Section E",
                             DescriptionFrench = "Section E",
                             English = "Section E",
@@ -2730,7 +2984,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6759),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1598),
                             NorthwestTerritories = true,
                             QuestionnaireName = "Section E",
                             QuestionsRequired = 0,
@@ -2743,7 +2997,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 8,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6762),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1601),
                             DescriptionEnglish = "Demographics",
                             DescriptionFrench = "Demographics",
                             English = "Demographics",
@@ -2752,7 +3006,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6764),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1602),
                             NovaScotia = true,
                             QuestionnaireName = "Demographics",
                             QuestionsRequired = 0,
@@ -2765,7 +3019,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 9,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6767),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1605),
                             DescriptionEnglish = "Section E",
                             DescriptionFrench = "Section E",
                             English = "Section E",
@@ -2774,7 +3028,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6768),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1606),
                             NovaScotia = true,
                             QuestionnaireName = "Section E",
                             QuestionsRequired = 0,
@@ -2787,7 +3041,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 10,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6771),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1610),
                             DescriptionEnglish = "Section D",
                             DescriptionFrench = "Section D",
                             English = "Section D",
@@ -2796,7 +3050,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6772),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1611),
                             NewYork = true,
                             NovaScotia = true,
                             Ontario = true,
@@ -2811,7 +3065,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 11,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6775),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1614),
                             DescriptionEnglish = "Demographics",
                             DescriptionFrench = "Demographics",
                             English = "Demographics",
@@ -2820,7 +3074,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6776),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1615),
                             Ontario = true,
                             QuestionnaireName = "Demographics",
                             QuestionsRequired = 0,
@@ -2833,7 +3087,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 12,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6779),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1618),
                             DescriptionEnglish = "Section E",
                             DescriptionFrench = "Section E",
                             English = "Section E",
@@ -2842,7 +3096,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6780),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1619),
                             Ontario = true,
                             QuestionnaireName = "Section E",
                             QuestionsRequired = 0,
@@ -2855,7 +3109,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 13,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6783),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1627),
                             DescriptionEnglish = "Demographics",
                             DescriptionFrench = "Demographics",
                             English = "Demographics",
@@ -2864,7 +3118,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6785),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1629),
                             NewYork = true,
                             QuestionnaireName = "Demographics",
                             QuestionsRequired = 0,
@@ -2877,7 +3131,7 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 14,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6787),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1632),
                             DescriptionEnglish = "Section E",
                             DescriptionFrench = "Section E",
                             English = "Section E",
@@ -2886,7 +3140,7 @@ namespace EDI.Infrastructure.Data.Migrations
                             IsChildQuestionnaire = true,
                             IsTeacherQuestionnaire = false,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 683, DateTimeKind.Local).AddTicks(6789),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1633),
                             NewYork = true,
                             QuestionnaireName = "Section E",
                             QuestionsRequired = 0,
@@ -2894,6 +3148,50 @@ namespace EDI.Infrastructure.Data.Migrations
                             ShowProgressBar = true,
                             ShowQuestionNumbers = true,
                             YearId = 1
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1636),
+                            DescriptionEnglish = "Demographics",
+                            DescriptionFrench = "Demographics",
+                            English = "Demographics",
+                            EntityName = "Questionnaires.Data.Demographics",
+                            French = "Demographics",
+                            IsChildQuestionnaire = true,
+                            IsTeacherQuestionnaire = false,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1637),
+                            NewfoundlandandLabrador = true,
+                            QuestionnaireName = "Demographics",
+                            QuestionsRequired = 0,
+                            Sequence = 10,
+                            ShowProgressBar = true,
+                            ShowQuestionNumbers = true,
+                            YearId = 2
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedBy = "admin",
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1640),
+                            DescriptionEnglish = "Section E",
+                            DescriptionFrench = "Section E",
+                            English = "Section E",
+                            EntityName = "Questionnaires.Data.SectionE",
+                            French = "Section E",
+                            IsChildQuestionnaire = true,
+                            IsTeacherQuestionnaire = false,
+                            ModifiedBy = "admin",
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 928, DateTimeKind.Local).AddTicks(1641),
+                            NewfoundlandandLabrador = true,
+                            QuestionnaireName = "Section E",
+                            QuestionsRequired = 0,
+                            Sequence = 60,
+                            ShowProgressBar = true,
+                            ShowQuestionNumbers = true,
+                            YearId = 2
                         });
                 });
 
@@ -3262,6 +3560,12 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("IndigenousAncestry")
                         .HasColumnType("tinyint");
 
+                    b.Property<byte?>("InstructionFormat")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("InstructionFormatSpecify")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("Inuinnaqtun")
                         .HasColumnType("bit");
 
@@ -3301,6 +3605,12 @@ namespace EDI.Infrastructure.Data.Migrations
 
                     b.Property<bool?>("NorthSlavey")
                         .HasColumnType("bit");
+
+                    b.Property<byte?>("OnlineChallenges")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("OnlineChallengesSpecify")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte?>("OtherImmersion")
                         .HasColumnType("tinyint");
@@ -4196,6 +4506,9 @@ namespace EDI.Infrastructure.Data.Migrations
                     b.Property<byte?>("OneOnOneConference")
                         .HasColumnType("tinyint");
 
+                    b.Property<byte?>("OrganizedPreSchool")
+                        .HasColumnType("tinyint");
+
                     b.Property<byte?>("Other")
                         .HasColumnType("tinyint");
 
@@ -4737,11 +5050,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 2,
                             Code = "1",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(120),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2020),
                             English = "New",
                             French = "Nouveau",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(129),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2029),
                             Sequence = 1
                         },
                         new
@@ -4749,11 +5062,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 1,
                             Code = "2",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(132),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2031),
                             English = "In Progress",
                             French = "En cours",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(133),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2033),
                             Sequence = 2
                         },
                         new
@@ -4761,11 +5074,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 3,
                             Code = "3",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(135),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2034),
                             English = "Complete",
                             French = "Achevé",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(136),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2036),
                             Sequence = 3
                         },
                         new
@@ -4773,11 +5086,11 @@ namespace EDI.Infrastructure.Data.Migrations
                             Id = 4,
                             Code = "4",
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(138),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2037),
                             English = "Locked",
                             French = "Fermé à clé",
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 686, DateTimeKind.Local).AddTicks(139),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 930, DateTimeKind.Local).AddTicks(2039),
                             Sequence = 4
                         });
                 });
@@ -4955,10 +5268,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 1,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 687, DateTimeKind.Local).AddTicks(7898),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 931, DateTimeKind.Local).AddTicks(9343),
                             Ediyear = (short)2021,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 687, DateTimeKind.Local).AddTicks(7907),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 931, DateTimeKind.Local).AddTicks(9351),
                             NewYork = true,
                             NorthwestTerritories = true,
                             NovaScotia = true,
@@ -4968,10 +5281,10 @@ namespace EDI.Infrastructure.Data.Migrations
                         {
                             Id = 2,
                             CreatedBy = "admin",
-                            CreatedDate = new DateTime(2021, 11, 23, 12, 48, 27, 687, DateTimeKind.Local).AddTicks(7913),
+                            CreatedDate = new DateTime(2021, 12, 13, 23, 36, 20, 931, DateTimeKind.Local).AddTicks(9363),
                             Ediyear = (short)2022,
                             ModifiedBy = "admin",
-                            ModifiedDate = new DateTime(2021, 11, 23, 12, 48, 27, 687, DateTimeKind.Local).AddTicks(7915),
+                            ModifiedDate = new DateTime(2021, 12, 13, 23, 36, 20, 931, DateTimeKind.Local).AddTicks(9364),
                             NewYork = true,
                             NorthwestTerritories = true,
                             NovaScotia = true,

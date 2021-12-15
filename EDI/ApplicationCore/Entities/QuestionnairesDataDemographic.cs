@@ -53,6 +53,13 @@ namespace EDI.ApplicationCore.Entities
         public byte? ELL { get; set; }
         public string ClassTimeSpecify { get; set; }
         public byte? LandAgreement { get; set; }
+        /* 2022 Demographics*/        
+        public byte? InstructionFormat { get; set; }
+        public string InstructionFormatSpecify { get; set; }
+        public byte? OnlineChallenges { get; set; }
+        public string OnlineChallengesSpecify { get; set; }
+        /* End 2022 Demographics*/
+
         [JsonIgnore]
         public virtual Child Child { get; set; }
         [JsonIgnore]

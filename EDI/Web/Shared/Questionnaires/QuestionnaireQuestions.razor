@@ -67,10 +67,18 @@
 
     private void getData()
     {
+        int InputTypeId1 = dbContext.InputTypes.Where(p => p.English == "Header" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+        int InputTypeId2 = dbContext.InputTypes.Where(p => p.English == "QuestionHeader" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+        int InputTypeId3 = dbContext.InputTypes.Where(p => p.English == "GroupHeader" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+
         // need to filter by yearid as well
-        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=9 AND InputTypeId !=10 AND InputTypeId !=11";
+        //predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=9 AND InputTypeId !=10 AND InputTypeId !=11";
+        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId !=" + InputTypeId1 + " AND InputTypeId !=" + InputTypeId2 + " AND InputTypeId !=" + InputTypeId3;
         // get the configuration
-        questions = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
+        questions = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence)
+            .Include(c => c.InputType)
+            .Include(c => c.Orientation)
+            .ToList();
         //Console.WriteLine(questions);
     }
 

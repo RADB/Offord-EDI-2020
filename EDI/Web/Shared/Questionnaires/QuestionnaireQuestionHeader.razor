@@ -89,8 +89,10 @@ else
 
     private void getData()
     {
-        // need to filter by yearid as well
-        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId ==10";
+        int InputTypeId = dbContext.InputTypes.Where(p => p.English == "QuestionHeader" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+
+        //predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId ==10";
+        predicate = "GroupName ==\"" + GroupName + "\" AND QuestionnaireId == " + QuestionnaireId + " AND " + ProvinceName + " == true AND InputTypeId ==" + InputTypeId;
         // get the configuration
         questionHeaders = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
         //Console.WriteLine(questions);

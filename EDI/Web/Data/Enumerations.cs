@@ -28,7 +28,7 @@ namespace EDI.Web.Data
             GroupHeader = 11,
             Toggle = 12,
             NumberBoxDouble = 13,
-            Hidden = 14
+            Hidden = 14            
         }
         //public enum NumericDataTypes : int
         //{
@@ -48,10 +48,13 @@ namespace EDI.Web.Data
         //    TeacherProfile=6
         //}
 
+        // TODO remove the 2022 gender enums - remove references to the enum in other areas
         public enum Genders: int
         {
             Male=1,
-            Female=2
+            Female=2,
+            Male2022=3,
+            Female2022=4
         }
 
         public enum ImportStatus: int

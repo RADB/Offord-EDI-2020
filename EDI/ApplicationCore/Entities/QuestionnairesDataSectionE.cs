@@ -69,6 +69,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? ParentTeacherConference { get; set; }
         public byte? OneOnOneConference { get; set; }
         public byte? HomeworkAssistance { get; set; }
+        public byte? OrganizedPreSchool { get; set; }
         public string Comments { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

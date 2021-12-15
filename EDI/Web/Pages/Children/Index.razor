@@ -365,7 +365,8 @@
 
         private void GotoQuestionnaire(int id)
         {
-            NavigationManager.NavigateTo("./EDIQuestionnaires/Demographics/" + id);
+            // need to forceload 2021-12-14
+            NavigationManager.NavigateTo("./EDIQuestionnaires/Demographics/" + id, true);
         }
 
         private async void Unlock(int id)

@@ -107,7 +107,9 @@
 
             }
             // need to determine the questionnaire ID based on the year
-            predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
+            int InputTypeId = dbContext.InputTypes.Where(p => p.English == "Header" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+            //predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == 9 AND " + ProvinceName + " == true";
+            predicate = "QuestionnaireId == " + QuestionnaireId + " AND InputTypeId == " + InputTypeId + " AND " + ProvinceName + " == true";
             // get the configuration
             headers = dbContext.QuestionnairesConfigurations.Where(predicate).OrderBy(q => q.Sequence).ToList();
 

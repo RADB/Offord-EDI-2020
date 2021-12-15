@@ -33,7 +33,8 @@
             labelText = _userSettings.IsAdmin == true ? string.Format("{0} - ({1})", sharedService.GetOptionText(option), option.Value.ToString()) : sharedService.GetOptionText(option);
             <SfRadioButton @bind-Checked="currentValue" Disabled="@ReadonlyQuestion"  @onchange="@onChange" Name="@Config.EntityField" Label=@labelText Value="@option.Value.ToString()"></SfRadioButton>
 
-            if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
+            //if ((Orientations)Config.OrientationId == Orientations.Vertical && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
+            if (Config.Orientation.English == "Vertical" && _LookupSetOptions.IndexOf(option) != _LookupSetOptions.Count - 1)
             {
                 <br />
             }

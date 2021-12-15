@@ -62,7 +62,7 @@
             aprovince.EDICode = province.EDICode;
             aprovince.English = province.English;
             aprovince.French = province.French;
-            aprovince.CountryID = province.CountryID;
+            aprovince.CountryID = province.CountryID;            
 
             var country = dbContext.Countries.Where(p => p.Id == province.CountryID && p.YearId == UserSettings.YearId).FirstOrDefault();
             aprovince.Country = country.English;
