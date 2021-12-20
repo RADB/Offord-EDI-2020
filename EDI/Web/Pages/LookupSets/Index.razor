@@ -85,7 +85,7 @@
         }
         else
         {
-            var alllookupSets = await Task.FromResult(dbContext.LookupSets.OrderBy(p => p.LookupName).ToList());
+            var alllookupSets = await Task.FromResult(dbContext.LookupSets.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.LookupName).ToList());
 
             List<LookupSetItemViewModel> sivm = new List<LookupSetItemViewModel>();
 

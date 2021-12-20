@@ -78,7 +78,7 @@
         }
         else
         {
-            var allfiles = await Task.FromResult(dbContext.Genders.OrderBy(p => p.English).ToList());
+            var allfiles = await Task.FromResult(dbContext.Genders.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.English).ToList());
 
             List<Gender> sivm = new List<Gender>();
 
