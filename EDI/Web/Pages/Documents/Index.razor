@@ -40,16 +40,18 @@
                 }
                 else
                 {
-                    <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" @onkeydown="KeyValueChange" View="ViewType.Details">
-                        <FileManagerEvents TValue="FileManagerDirectoryContent" OnSend="send"></FileManagerEvents>
-                        <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
-                        <FileManagerUploadSettings AutoUpload="false"></FileManagerUploadSettings>
-                        <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
-                        <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
-                                                 GetImageUrl="/api/FileManager/GetImage"
-                                                 DownloadUrl="/api/FileManager/Download">
-                        </FileManagerAjaxSettings>
-                    </SfFileManager>
+                    <div @onkeydown="@KeyValueChange"> 
+                        <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" View="ViewType.Details">
+                            <FileManagerEvents TValue="FileManagerDirectoryContent" OnSend="send"></FileManagerEvents>
+                            <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
+                            <FileManagerUploadSettings AutoUpload="false"></FileManagerUploadSettings>
+                            <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
+                            <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
+                                                     GetImageUrl="/api/FileManager/GetImage"
+                                                     DownloadUrl="/api/FileManager/Download">
+                            </FileManagerAjaxSettings>
+                        </SfFileManager>
+                    </div>
                 }
 
             </div>
@@ -63,8 +65,8 @@
     public string message { get; set; } = string.Empty;
     private string[] items { get; set; }
     private bool showcontext { get; set; }
-
-    private void KeyValueChange(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+    //Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e
+    private void KeyValueChange(KeyboardEventArgs e)
     {
         if (e.Code == "Delete")
         {
