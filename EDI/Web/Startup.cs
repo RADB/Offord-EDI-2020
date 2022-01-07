@@ -175,7 +175,9 @@ namespace EDI.Web
             //19.2.0.60
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDk4MTQxQDMxMzkyZTMyMmUzMFdKN3FHb3NYY1kvU2dSN0N5b2ZBSjRraE00VlZHNThreUxoeldsU3Vud0k9");
             //19.3.0.43
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTMzNTE3QDMxMzkyZTMzMmUzMFRsd25OVDJaKzEyZk1PRDlVNVRoVGZCbFhiU3JqNmVqOGdvdnFiNDZ5WGc9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTMzNTE3QDMxMzkyZTMzMmUzMFRsd25OVDJaKzEyZk1PRDlVNVRoVGZCbFhiU3JqNmVqOGdvdnFiNDZ5WGc9");
+            //19.4.0.41
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTYwNDgyQDMxMzkyZTM0MmUzMFJMRkJVNkxzeTdjeEM4S3BTTG50NFI0QkdlZzJwUWZLcEJURlpNbDk4OTg9");
 
             // Verified
             if (env.IsDevelopment())
