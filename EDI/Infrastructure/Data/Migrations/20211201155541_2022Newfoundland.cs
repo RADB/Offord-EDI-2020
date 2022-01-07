@@ -35,7 +35,8 @@ namespace EDI.Infrastructure.Data.Migrations
 
             // add questionnaires for newfoundland and labrador (Teacher Feedback, Section A, B, C, D) and PEI
             migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires] SET [NewfoundlandandLabrador] = 1, [PrinceEdwardIsland] = 1 WHERE YearId = 2 AND ID IN (15, 17,18,19,24)");
-			migrationBuilder.InsertData(
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET [NewfoundlandandLabrador] = 1, [PrinceEdwardIsland] = 1 WHERE YearId = 2 AND QuestionnaireId IN (15, 17,18,19,24)");
+            migrationBuilder.InsertData(
 			schema: "EDI",
 			table: "Questionnaires",
 			columns: new[] { "Id", "Alberta", "BritishColumbia", "CreatedBy", "CreatedDate", "DescriptionEnglish", "DescriptionFrench", "English", "EntityName", "French", "IsChildQuestionnaire", "IsTeacherQuestionnaire", "Manitoba", "ModifiedBy", "ModifiedDate", "NewBrunswick", "NewYork", "NewfoundlandandLabrador", "NorthwestTerritories", "NovaScotia", "Nunavut", "Ontario", "PrinceEdwardIsland", "Quebec", "QuestionnaireName", "QuestionsRequired", "Saskatchewan", "Sequence", "ShowProgressBar", "ShowQuestionNumbers", "YearId", "YukonTerritory" },
