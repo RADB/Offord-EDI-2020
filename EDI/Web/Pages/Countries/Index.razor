@@ -76,7 +76,7 @@
         }
         else
         {
-            var allcountrys = await Task.FromResult(dbContext.Countries.OrderBy(p => p.Code).ToList());
+            var allcountrys = await Task.FromResult(dbContext.Countries.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.Code).ToList());
 
             List<CountryItemViewModel> sivm = new List<CountryItemViewModel>();
 

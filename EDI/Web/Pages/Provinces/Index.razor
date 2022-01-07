@@ -82,10 +82,16 @@
         }
         else
         {
-            var countryidusa = dbContext.Countries.Where(p => p.English == "United States").FirstOrDefault().Id;
-            var countryidcad = dbContext.Countries.Where(p => p.English == "Canada").FirstOrDefault().Id;
-            var countryidbarb = dbContext.Countries.Where(p => p.English == "Barbados").FirstOrDefault().Id;
+            var countryidusa = dbContext.Countries.Where(p => p.English == "United States" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+            var countryidcad = dbContext.Countries.Where(p => p.English == "Canada" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
+            var countryidbarb = dbContext.Countries.Where(p => p.English == "Barbados" && p.YearId == UserSettings.YearId).FirstOrDefault().Id;
             var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.YearId == UserSettings.YearId && (p.CountryID == countryidusa || p.CountryID == countryidcad || p.CountryID == countryidbarb)).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+            //var allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+
+            if(allprovinces == null || allprovinces.Count() == 0)
+            {
+                allprovinces = await Task.FromResult(dbContext.Provinces.Where(p => p.YearId == UserSettings.YearId).OrderBy(p => p.CountryID).OrderBy(p => p.English).ToList());
+            }
 
             List<ProvinceItemViewModel> sivm = new List<ProvinceItemViewModel>();
 
