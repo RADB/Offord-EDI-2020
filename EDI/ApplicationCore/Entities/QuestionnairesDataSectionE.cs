@@ -37,7 +37,6 @@ namespace EDI.ApplicationCore.Entities
         public byte? HomeDaycare { get; set; }
         public string HomeDaycareName { get; set; }
         public byte? NonParentInHome { get; set; }
-
         public byte? InterventionProgram { get; set; }
         public string InterventionProgramSpecify { get; set; }
         public byte? NonParentalCare { get; set; }
@@ -70,6 +69,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? OneOnOneConference { get; set; }
         public byte? HomeworkAssistance { get; set; }
         public byte? OrganizedPreSchool { get; set; }
+        public bool? CentreBasedCare { get; set; }
         public string Comments { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }

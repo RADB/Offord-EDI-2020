@@ -35,7 +35,7 @@
             <button class="btn btn-info" disabled=@NextDisable  hidden=@EHidden @onclick="@(() => gotoURL("Next"))">
                 @NextPage <i class="fas fa-chevron-right"></i>
             </button>
-            <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => lockChild())">
+            <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => SaveLockChild())">
                 <i class="fas fa-lock"></i> @LockText
             </button>
         </div>    
@@ -77,6 +77,14 @@
         ConfirmLockModalClosed(result);
 
     }
+
+    protected async void SaveLockChild()
+    {
+        await Save(false);
+
+        lockChild();
+    }
+
 
     async void ConfirmLockModalClosed(Blazored.Modal.Services.ModalResult modalResult)
     {

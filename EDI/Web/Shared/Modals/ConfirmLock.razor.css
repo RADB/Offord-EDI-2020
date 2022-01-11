@@ -1,0 +1,36 @@
+﻿.nav-item {
+    font-size: 0.9rem;    
+}
+    .nav-item:last-of-type {
+        padding-bottom: 1rem;
+    }
+    .nav-item ::deep a {
+        color: black;        
+        height: 1.75rem;
+        display: flex;
+        align-items: center;       
+        padding-left: 40px;
+    }
+
+        .nav-item ::deep a.active {
+            /*background-color: rgba(255,255,255,0.25);
+            color: white;*/
+        }
+
+    .nav-item ::deep a:hover {
+        /*  background-color: rgba(255,255,255,0.1);*/
+        /*color: white;*/
+        /*color: blue;*/
+        
+        font-weight:bold;
+    }
+
+.complete {
+    color: green;    
+}
+
+.incomplete {
+    color: darkred;
+}
+
+

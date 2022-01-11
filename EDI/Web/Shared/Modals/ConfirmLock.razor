@@ -1,5 +1,50 @@
-﻿<div class="simple-form" style="width:350px;">
-    <p><img src="./images/auth-lock.png" style="width:30px;" /> Are you sure you want to lock this student?</p> <br />
+﻿@inject NavigationManager NavigationManager
+@inject UserSettings UserSettings;
+@inject ISharedService sharedService;
+@inject ServiceContext dbContext;
+@inject IReflectionService reflectionService;
+
+<div class="simple-form" style="width:550px;">
+    <p><img src="./images/auth-lock.png" style="width:30px;" /> Are you sure you want to lock this student?</p>
+
+    @*<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">@onclick="@(() => Save(UserSettings.UseJSON))"*@
+    
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <a class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}", UserSettings.ChildData.Id)>
+                <span class="@Demographics">&nbsp;</span> @Translate("Demographics")
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href=@string.Format("EDIQuestionnaires/SectionA/{0}", UserSettings.ChildData.Id)>
+                <span class="@SectionA">&nbsp;</span> @Translate("Section A")
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href=@string.Format("EDIQuestionnaires/SectionB/{0}", UserSettings.ChildData.Id) >
+                <span class="@SectionB">&nbsp;</span> @Translate("Section B")
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href=@string.Format("EDIQuestionnaires/SectionC/{0}", UserSettings.ChildData.Id) >
+                <span class="@SectionC">&nbsp;</span> @Translate("Section C")
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href=@string.Format("EDIQuestionnaires/SectionD/{0}", UserSettings.ChildData.Id) >
+                <span class="@SectionD">&nbsp;</span> @Translate("Section D")
+            </a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href=@string.Format("EDIQuestionnaires/SectionE/{0}", UserSettings.ChildData.Id) >
+                <span class="@SectionE">&nbsp;</span> @Translate("Section E")
+            </a>
+        </li>
+    </ul>
+
+
+
+
     <button @onclick="@ConfirmYes" class="btn btn-primary">Yes</button>
     <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
 </div>
@@ -7,8 +52,89 @@
 @code {
     [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; }
 
+    private static string Incomplete = "far fa-square fa-lg incomplete";
+    private static string Complete = "far fa-check-square fa-lg complete";
+    private List<Questionnaire> questionnaires;
+    private string SectionE = Incomplete;
+    private string SectionD = Incomplete;
+    private string SectionC = Incomplete;
+    private string SectionB = Incomplete;
+    private string SectionA = Incomplete;
+    private string Demographics = Incomplete;
+
     async Task ConfirmYes() => await ModalInstance.CloseAsync(ModalResult.Ok($"Confirmed"));
     //async Task ConfirmYes() => await ModalService.CloseAsync(ModalResult.Ok(true));
 
     async Task Cancel() => await ModalInstance.CancelAsync();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // set the status of each questionnaire
+        setQuestionnaireStatus();
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
+
+    private void setQuestionnaireStatus()
+    {
+        bool? status = null;
+        string cssClass;
+        int ChildId = UserSettings.ChildData.Id;
+
+        var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + UserSettings.Province + "== true";
+
+        questionnaires = dbContext.Questionnaires.Where(predicate)
+             .Include(c => c.QuestionnairesDataDemographics.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionAs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionBs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionCs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionDs.Where(d => d.ChildId == ChildId))
+             .Include(c => c.QuestionnairesDataSectionEs.Where(d => d.ChildId == ChildId))
+             .OrderBy(c => c.Sequence).ToList();
+        //if(useSession)
+        //{
+        //    // can only be called in onafterasync
+        //    var sessionName = string.Format("{0}.IsComplete", questionnaire.EntityName);
+        //    status = await sessionStorage.GetItemAsync<bool>(sessionName);
+        //}
+        foreach (var questionnaire in questionnaires)
+        {            
+            switch (questionnaire.QuestionnaireName)
+            {
+                case "Demographics":
+                    status = bool.Parse(reflectionService.GetFieldValue(questionnaire.QuestionnairesDataDemographics.First(), "IsComplete"));
+                    cssClass = (bool)status ? Complete : Incomplete;
+                    Demographics = cssClass;
+                    break;
+                case "Section A":
+                    status = bool.Parse(reflectionService.GetFieldValue(questionnaire.QuestionnairesDataSectionAs.First(), "IsComplete"));
+                    cssClass = (bool)status ? Complete : Incomplete;
+                    SectionA = cssClass;
+                    break;
+                case "Section B":
+                    status = bool.Parse(reflectionService.GetFieldValue(questionnaire.QuestionnairesDataSectionBs.First(), "IsComplete"));
+                    cssClass = (bool)status ? Complete : Incomplete;
+                    SectionB = cssClass;
+                    break;
+                case "Section C":
+                    status = bool.Parse(reflectionService.GetFieldValue(questionnaire.QuestionnairesDataSectionCs.First(), "IsComplete"));
+                    cssClass = (bool)status ? Complete : Incomplete;
+                    SectionC = cssClass;
+                    break;
+                case "Section D":
+                    status = bool.Parse(reflectionService.GetFieldValue(questionnaire.QuestionnairesDataSectionDs.First(), "IsComplete"));
+                    cssClass = (bool)status ? Complete : Incomplete;
+                    SectionD = cssClass;
+                    break;
+                case "Section E":
+                    status = bool.Parse(reflectionService.GetFieldValue(questionnaire.QuestionnairesDataSectionEs.First(), "IsComplete"));
+                    cssClass = (bool)status ? Complete : Incomplete;
+                    SectionE = cssClass;
+                    break;                
+                }
+        }
+    }
 }
