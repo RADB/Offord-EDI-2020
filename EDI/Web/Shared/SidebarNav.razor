@@ -8,7 +8,7 @@
                 <SfTreeView CssClass="main-treeview" @ref="TreeView" ExpandOn="@Expand" TValue="TreeData" >
                     <TreeViewFieldsSettings Id="nodeId" Text="nodeText" DataSource="treedata" HasChildren="hasChild" ParentID="pid">
                     </TreeViewFieldsSettings>
-                    <TreeViewEvents TValue="TreeData" NodeSelected="onSelect" NodeClicked="onClick"></TreeViewEvents>
+                    <TreeViewEvents TValue="TreeData" NodeSelected="onSelect"></TreeViewEvents>
                     <TreeViewTemplates TValue="TreeData">
                         <NodeTemplate>
                             @{
@@ -254,12 +254,5 @@
         {
             NavigationManager.NavigateTo("./contact");
         }
-
-    }
-
-    private async void onClick(NodeClickEventArgs args)
-    {
-        //List<TreeData> NodeDetails = await this.treeView.GetTreeData(args.Node);
-        //var Element = new[] { args.Node };
     }
 }

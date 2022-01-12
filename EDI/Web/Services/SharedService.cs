@@ -2033,6 +2033,7 @@ namespace EDI.Web.Services
             predicate = "EDIYear == " + year;
 
             var province = _dbContext.Provinces.Where(p => p.Id == user1.ProvinceID).FirstOrDefault();
+            //TODO check to see if ProvinceID is null - causes app to crash if null
 
             _userSettings.YearId = _dbContext.Years.Where(predicate).Single().Id;
             _userSettings.UserName = user1.UserName;
