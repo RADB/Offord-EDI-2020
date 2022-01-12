@@ -63,12 +63,12 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.41" />
-    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.4.0.41" />
-    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="19.4.0.41" />
+    <PackageReference Include="Syncfusion.Blazor" Version="19.4.0.42" />
+    <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="19.4.0.42" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="19.4.0.42" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.15" />
-    <PackageReference Include="TextCopy" Version="4.3.1" />
+    <PackageReference Include="TextCopy" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
