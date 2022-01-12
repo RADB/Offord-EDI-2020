@@ -82,7 +82,22 @@
     {
         bool? status = null;
         string cssClass;
-        int ChildId = UserSettings.ChildData.Id;
+        int ChildId = 0;
+
+        if (UserSettings.IsAdmin)
+        {
+            Uri uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);  
+            Int32.TryParse(uri.Segments[3], out ChildId);            
+        }
+        else if (UserSettings.IsTeacher)
+        {
+             ChildId = UserSettings.ChildData.Id;
+        }
+        else if (UserSettings.IsCoordinator)
+        {
+            ChildId  = UserSettings.ChildData.Id;
+        }
+        
 
         var predicate = "IsChildQuestionnaire == true && YearId == " + UserSettings.YearId + " && " + UserSettings.Province + "== true";
 

@@ -170,6 +170,11 @@
         }
         else
         {
+            if (UserSettings.IsAdmin)
+            {
+                ShowLockChild = false;
+            }
+
             GetChildId();
 
             SetPreviousNext();
