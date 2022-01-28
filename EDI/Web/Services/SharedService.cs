@@ -760,7 +760,7 @@ namespace EDI.Web.Services
                                 }
                                 else
                                 {
-                                    var coordinator = servicecontext.Coordinators.Where(p => p.CoordinatorName == data.CoordinatorName && p.Email == data.CoordinatorEmail).FirstOrDefault();
+                                    var coordinator = servicecontext.Coordinators.Where(p => p.CoordinatorName == data.CoordinatorName && p.Email == data.CoordinatorEmail && p.YearId == yearid).FirstOrDefault();
 
                                     if (coordinator == null)
                                     {
@@ -847,9 +847,9 @@ namespace EDI.Web.Services
 
                             var provinceedicodestring = data.ChildEdiid.Substring(2, 2);
                             var provinceedicode = int.Parse(provinceedicodestring);
-                            var countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().CountryID;
-                            provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().Id;
-                            provincename = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode).FirstOrDefault().English.Replace(" ", "");
+                            var countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode && p.YearId == yearid).FirstOrDefault().CountryID;
+                            provinceid = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode && p.YearId == yearid).FirstOrDefault().Id;
+                            provincename = servicecontext.Provinces.Where(p => p.EDICode == provinceedicode && p.YearId == yearid).FirstOrDefault().English.Replace(" ", "");
 
                             var predicateTeacher = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
 
@@ -939,7 +939,7 @@ namespace EDI.Web.Services
                                     {
                                         string sitenumber = data.ChildEdiid.Substring(4, 3);
 
-                                        var site = servicecontext.Sites.Where(p => p.SiteNumber == sitenumber && p.SiteName == data.SiteName).FirstOrDefault();
+                                        var site = servicecontext.Sites.Where(p => p.SiteNumber == sitenumber && p.SiteName == data.SiteName && p.YearId == yearid).FirstOrDefault();
 
                                         if (site == null)
                                         {
@@ -988,7 +988,7 @@ namespace EDI.Web.Services
                                     {
                                         string schoolnumber = data.ChildEdiid.Substring(7, 3);
 
-                                        var school = servicecontext.Schools.Where(p => p.SiteId == siteid && p.SchoolNumber == schoolnumber && p.SchoolName == data.SchoolName).FirstOrDefault();
+                                        var school = servicecontext.Schools.Where(p => p.SiteId == siteid && p.SchoolNumber == schoolnumber && p.SchoolName == data.SchoolName && p.YearId == yearid).FirstOrDefault();
 
                                         if (school == null)
                                         {
@@ -1057,7 +1057,7 @@ namespace EDI.Web.Services
                                         if (schoolid > 0)
                                         {
                                             string teachernumber = data.ChildEdiid.Substring(10, 2);
-                                            var teacher = servicecontext.Teachers.Where(p => p.TeacherName == data.TeacherName && p.Email == data.TeacherEmail).FirstOrDefault();
+                                            var teacher = servicecontext.Teachers.Where(p => p.TeacherName == data.TeacherName && p.Email == data.TeacherEmail && p.YearId == yearid).FirstOrDefault();
 
                                             if (teacher == null)
                                             {
@@ -1119,7 +1119,7 @@ namespace EDI.Web.Services
                                                     teacherid = _teacher.Id;
                                                     totalteachers++;
 
-                                                    var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
+                                                    var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id && p.YearId == yearid).FirstOrDefault();
 
                                                     if (teacherprofile == null)
                                                     {
@@ -1166,7 +1166,7 @@ namespace EDI.Web.Services
                                 {
                                     if (teacherid > 0)
                                     {
-                                        var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid).FirstOrDefault();
+                                        var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid && p.YearId == yearid).FirstOrDefault();
 
                                         if (child == null)
                                         {
@@ -1209,12 +1209,12 @@ namespace EDI.Web.Services
 
                                         if (childid > 0)
                                         {
-                                            var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid).FirstOrDefault();
-                                            var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                            var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                            var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                            var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid).FirstOrDefault();
-                                            var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid).FirstOrDefault();
+                                            var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
 
                                             if (demo == null)
                                             {
