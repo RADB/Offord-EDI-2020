@@ -2054,7 +2054,7 @@ namespace EDI.Web.Services
 
             if (role.Name == "Teacher")
             {
-                var teacher = _dbContext.Teachers.Where(s => s.UserId == _userSettings.UserID)
+                var teacher = _dbContext.Teachers.Where(s => s.UserId == _userSettings.UserID && s.YearId == _userSettings.YearId)
                             .Include(s => s.School)
                             .ThenInclude(ts => ts.Province).FirstOrDefault();
 
