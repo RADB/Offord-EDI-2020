@@ -5,10 +5,10 @@
 @inject IReflectionService reflectionService;
 
 <div class="simple-form" style="width:550px;">
-    <p><img src="./images/auth-lock.png" style="width:30px;" /> Are you sure you want to lock this student?</p>
+    <p><i class="fas fa-lock question"></i>&nbsp;Are you sure you want to lock this student?</p>
+    <p>Please make sure each section is <i class="@Complete"></i> Complete.</p>
+    <p>If not complete, click on the <i class="@Incomplete"></i> Incomplete section below and complete the missing items.</p>
 
-    @*<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">@onclick="@(() => Save(UserSettings.UseJSON))"*@
-    
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <a class="nav-link" href=@string.Format("EDIQuestionnaires/Demographics/{0}", UserSettings.ChildData.Id)>
