@@ -5,9 +5,10 @@
 @inject IReflectionService reflectionService;
 
 <div class="simple-form" style="width:550px;">
-    <p><i class="fas fa-lock question"></i>&nbsp;Are you sure you want to lock this student?</p>
-    <p>Please make sure each section is <i class="@Complete"></i> Complete.</p>
-    <p>If not complete, click on the <i class="@Incomplete"></i> Incomplete section below and complete the missing items.</p>
+    <p><i class="fas fa-lock question"></i>&nbsp;@Translate("Are you sure you want to lock this student")?</p>
+    <p>@Translate("Please make sure each section is") <i class="@Complete"></i> @Translate("Complete").</p>
+    <p>@Translate("If not complete, click on the") <i class="@Incomplete"></i> @Translate("Incomplete section below and complete the missing items").</p>    
+    
 
     <ul class="nav flex-column">
         <li class="nav-item px-3">
