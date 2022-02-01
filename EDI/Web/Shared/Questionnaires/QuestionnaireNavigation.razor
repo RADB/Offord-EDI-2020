@@ -72,7 +72,7 @@
 
     protected async void lockChild()
     {
-        var modal = ModalService.Show<ConfirmLock>("Confirm Lock");
+        var modal = ModalService.Show<ConfirmLock>(Translate("Confirm Lock"));
         var result = await modal.Result;
         ConfirmLockModalClosed(result);
 

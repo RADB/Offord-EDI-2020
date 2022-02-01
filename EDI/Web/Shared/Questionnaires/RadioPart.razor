@@ -162,7 +162,7 @@
 
                 parameters.Add("Message", message);
 
-                var modal = ModalService.Show<StatusLock>("Confirm Lock", parameters);
+                var modal = ModalService.Show<StatusLock>(Translate("Confirm Lock"), parameters);
                 var result = await modal.Result;
                 ConfirmLockModalClosed(result);
             }
