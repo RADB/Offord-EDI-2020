@@ -34,7 +34,7 @@
             @*<SfSwitch CssClass="handle-text" OnLabel="French" OffLabel="English" @bind-Checked="@isFrench" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) =>OnEnglishChange(e))"></SfSwitch>*@
             <AuthorizeView Roles="Teacher">
                 <Authorized>                    
-                    <button class="btn btn-success" @onclick="@(() => Save(UserSettings.UseJSON))"><i class="fa fa-save bg whiteiconcolor"></i> Save</button>
+                    <button class="btn btn-success" @onclick="@(() => Save(UserSettings.UseJSON))"><i class="fa fa-save bg whiteiconcolor"></i> @Translate("Save")</button>
                 </Authorized>
             </AuthorizeView>
             <button class="btn btn-danger" @onclick="Exit"><i class="fas fa-sign-out-alt"></i> @Translate("Class List")</button>

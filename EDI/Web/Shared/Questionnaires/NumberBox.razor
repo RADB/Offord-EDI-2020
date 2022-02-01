@@ -24,7 +24,7 @@
     <div class="col-9">
         @*<p>DropDownList value is:<strong>@currentValue</strong></p>*@
 
-        <SfNumericTextBox TValue="int?" Readonly="@ReadonlyQuestion" Min=@Config.Min Max=@Config.Max Step=@step Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Config.Label" @onchange="@onChange" Width="50%">
+        <SfNumericTextBox TValue="int?" Readonly="@ReadonlyQuestion" Min=@Config.Min Max=@Config.Max Step=@step Format=@Config.NumberFormat @bind-Value="@currentValue" Placeholder="@Translate(@Config.Label)" @onchange="@onChange" Width="50%">
             @*  <NumericTextBoxEvents TValue="int?" ValueChange="OnChange"></NumericTextBoxEvents>*@
         </SfNumericTextBox>
     </div>
@@ -130,6 +130,11 @@
             CompletedQuestion(previousValue, e.Value.ToString(), Config.IsRequired);
             StateHasChanged();
         }
+    }
+    
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }
 

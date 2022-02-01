@@ -36,7 +36,7 @@
                 @NextPage <i class="fas fa-chevron-right"></i>
             </button>
             <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => SaveLockChild())">
-                <i class="fas fa-lock"></i> @LockText
+                <i class="fas fa-lock"></i> @Translate(@LockText)
             </button>
         </div>    
 </div>
@@ -85,6 +85,10 @@
         lockChild();
     }
 
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
 
     async void ConfirmLockModalClosed(Blazored.Modal.Services.ModalResult modalResult)
     {
