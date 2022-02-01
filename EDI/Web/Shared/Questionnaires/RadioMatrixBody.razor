@@ -57,7 +57,7 @@
             @if (Config.HasHelp)
             {
                 <td>
-                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> Help</button>
+                    <button type="button" class="btn btn-primary" @onclick="@(() => ShowModal("e-EDI Help",HelpTextEnglish))"><i class="icon-question"></i> @Translate("Help")</button>
                 </td>
             }
         </Authorized>
