@@ -378,7 +378,7 @@ namespace EDI.Web.Services
 
                 if (siteid > 0)
                 {
-                    var filterSpecification = new SchoolFilterSpecification(siteid);
+                    var filterSpecification = new SchoolFilterSpecification(siteid, _userSettings.YearId);
                     var school = await _schoolRepository.ListAsync(filterSpecification);
 
                     var ordered = school.OrderBy(t => t.SchoolName);
@@ -415,7 +415,7 @@ namespace EDI.Web.Services
                 
                 if (schoolid > 0)
                 {
-                    var filterSpecification = new TeacherFilterSpecification(schoolid);
+                    var filterSpecification = new TeacherFilterSpecification(schoolid, _userSettings.YearId);
                     var teachers = await _teacherRepository.ListAsync(filterSpecification);
 
                     var ordered = teachers.OrderBy(t => t.TeacherName);

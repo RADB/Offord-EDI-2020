@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<LinkItemViewModel> GetLinkItem(int linkId);
 
-        Task<int> GetDuplicateCount(string url);
-        Task<int> GetDuplicateCount(string url, int id);
+        Task<int> GetDuplicateCount(string url, int yearid);
+        Task<int> GetDuplicateCount(string url, int id, int yearid);
     }
 }

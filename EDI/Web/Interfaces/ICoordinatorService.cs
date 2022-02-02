@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<CoordinatorItemViewModel> GetCoordinatorItem(int coordinatorId);
 
-        Task<int> GetDuplicateCount(string name, string email);
-        Task<int> GetDuplicateCount(string name, string email, int id);
+        Task<int> GetDuplicateCount(string name, string email, int yearid);
+        Task<int> GetDuplicateCount(string name, string email, int yearid, int id);
     }
 }

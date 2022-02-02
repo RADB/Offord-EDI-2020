@@ -182,14 +182,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(int siteid, string schoolnumber)
+        public async Task<int> GetDuplicateCount(int siteid, string schoolnumber, int yearid)
         {
             
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new SchoolFilterSpecification(siteid, schoolnumber);
+                var filterSpecification = new SchoolFilterSpecification(siteid, yearid, schoolnumber);
 
                 var totalItems = await _schoolRepository.CountAsync(filterSpecification);
 
@@ -202,14 +202,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(int siteid, string schoolnumber, int id)
+        public async Task<int> GetDuplicateCount(int siteid, string schoolnumber, int id, int yearid)
         {
             
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new SchoolFilterSpecification(siteid, schoolnumber, id);
+                var filterSpecification = new SchoolFilterSpecification(siteid, yearid, schoolnumber, id);
 
                 var totalItems = await _schoolRepository.CountAsync(filterSpecification);
 

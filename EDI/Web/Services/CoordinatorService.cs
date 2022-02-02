@@ -223,14 +223,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string name, string email)
+        public async Task<int> GetDuplicateCount(string name, string email, int yearid)
         {
             
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new CoordinatorFilterSpecification(name, email);
+                var filterSpecification = new CoordinatorFilterSpecification(name, email, yearid);
 
                 var totalItems = await _coordinatorRepository.CountAsync(filterSpecification);
 
@@ -243,14 +243,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string name, string email, int id)
+        public async Task<int> GetDuplicateCount(string name, string email, int yearid, int id)
         {
             
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new CoordinatorFilterSpecification(name, email, id);
+                var filterSpecification = new CoordinatorFilterSpecification(name, email, yearid, id);
 
                 var totalItems = await _coordinatorRepository.CountAsync(filterSpecification);
 

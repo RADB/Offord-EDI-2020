@@ -370,14 +370,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string ediid)
+        public async Task<int> GetDuplicateCount(string ediid, int yearid)
         {
             
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new ChildFilterSpecification(ediid);
+                var filterSpecification = new ChildFilterSpecification(ediid, yearid);
 
                 var totalItems = await _childRepository.CountAsync(filterSpecification);
 
@@ -390,14 +390,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string ediid, int id)
+        public async Task<int> GetDuplicateCount(string ediid, int id, int yearid)
         {
             
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new ChildFilterSpecification(ediid, id);
+                var filterSpecification = new ChildFilterSpecification(ediid, yearid, id);
 
                 var totalItems = await _childRepository.CountAsync(filterSpecification);
 

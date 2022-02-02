@@ -221,14 +221,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string title)
+        public async Task<int> GetDuplicateCount(string title, int yearid)
         {
 
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new NewsFeedFilterSpecification(title);
+                var filterSpecification = new NewsFeedFilterSpecification(title, yearid);
 
                 var totalItems = await _newsFeedRepository.CountAsync(filterSpecification);
 
@@ -241,14 +241,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string title, int id)
+        public async Task<int> GetDuplicateCount(string title, int id, int yearid)
         {
 
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new NewsFeedFilterSpecification(title, id);
+                var filterSpecification = new NewsFeedFilterSpecification(title, yearid, id);
 
                 var totalItems = await _newsFeedRepository.CountAsync(filterSpecification);
 

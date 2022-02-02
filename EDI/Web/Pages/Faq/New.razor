@@ -63,7 +63,7 @@
     private async void HandleValidSubmit()
     {
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await FaqService.GetDuplicateCount(FaqModel.Question);
+        var totalItems = await FaqService.GetDuplicateCount(FaqModel.Question, UserSettings.YearId);
 
         if (totalItems > 0)
         {

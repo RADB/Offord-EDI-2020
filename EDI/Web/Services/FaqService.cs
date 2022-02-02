@@ -220,14 +220,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string question)
+        public async Task<int> GetDuplicateCount(string question, int yearid)
         {
 
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new FaqFilterSpecification(question);
+                var filterSpecification = new FaqFilterSpecification(question, yearid);
 
                 var totalItems = await _faqRepository.CountAsync(filterSpecification);
 
@@ -240,14 +240,14 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<int> GetDuplicateCount(string question, int id)
+        public async Task<int> GetDuplicateCount(string question, int id, int yearid)
         {
 
             _sharedService.WriteLogs("GetDuplicateCount started by:" + _userSettings.UserName, true);
 
             try
             {
-                var filterSpecification = new FaqFilterSpecification(question, id);
+                var filterSpecification = new FaqFilterSpecification(question, yearid, id);
 
                 var totalItems = await _faqRepository.CountAsync(filterSpecification);
 

@@ -99,7 +99,7 @@
             return;
         }
 
-        var totalItems = await childService.GetDuplicateCount(childform1.ChildModel.Ediid, childform1.ChildModel.Id);
+        var totalItems = await childService.GetDuplicateCount(childform1.ChildModel.Ediid, childform1.ChildModel.Id, UserSettings.YearId);
 
         if (totalItems > 0)
         {

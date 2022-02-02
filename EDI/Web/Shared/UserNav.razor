@@ -69,4 +69,9 @@
         await InvokeAsync(() => StateHasChanged());
         //await InvokeAsync(StateHasChanged); or
     }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
 }

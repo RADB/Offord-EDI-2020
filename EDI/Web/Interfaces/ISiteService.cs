@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<SiteItemViewModel> GetSiteItem(int siteId);
 
-        Task<int> GetDuplicateCount(string sitenumber);
-        Task<int> GetDuplicateCount(string sitenumber, int id);
+        Task<int> GetDuplicateCount(string sitenumber, int yearid);
+        Task<int> GetDuplicateCount(string sitenumber, int id, int yearid);
     }
 }

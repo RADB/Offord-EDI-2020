@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<FaqItemViewModel> GetFaqItem(int faqId);
 
-        Task<int> GetDuplicateCount(string question);
-        Task<int> GetDuplicateCount(string question, int id);
+        Task<int> GetDuplicateCount(string question, int yearid);
+        Task<int> GetDuplicateCount(string question, int id, int yearid);
     }
 }

@@ -87,7 +87,7 @@
     private async void HandleValidSubmit()
     {
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await newsFeedService.GetDuplicateCount(NewsFeedModel.Title, newsFeedform1.NewsFeedModel.Id);
+        var totalItems = await newsFeedService.GetDuplicateCount(NewsFeedModel.Title, newsFeedform1.NewsFeedModel.Id, UserSettings.YearId);
 
         if (totalItems > 0)
         {

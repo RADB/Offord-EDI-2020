@@ -87,7 +87,7 @@
         }
 
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await CoordinatorService.GetDuplicateCount(CoordinatorModel.CoordinatorName, CoordinatorModel.Email);
+        var totalItems = await CoordinatorService.GetDuplicateCount(CoordinatorModel.CoordinatorName, CoordinatorModel.Email, UserSettings.YearId);
 
         if (totalItems > 0)
         {

@@ -88,7 +88,7 @@
     private async void HandleValidSubmit()
     {
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await linkService.GetDuplicateCount(LinkModel.Url, linkform1.LinkModel.Id);
+        var totalItems = await linkService.GetDuplicateCount(LinkModel.Url, linkform1.LinkModel.Id, UserSettings.YearId);
 
         if (totalItems > 0)
         {

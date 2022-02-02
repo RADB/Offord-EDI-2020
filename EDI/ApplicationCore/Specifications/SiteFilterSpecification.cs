@@ -8,13 +8,13 @@ namespace EDI.ApplicationCore.Specifications
 {
     public class SiteFilterSpecification : BaseSpecification<Site>
     {
-        public SiteFilterSpecification(string sitenumbder)
-            : base(i => i.SiteNumber.ToLower().Trim() == sitenumbder.ToLower().Trim())
+        public SiteFilterSpecification(string sitenumbder, int yearid)
+            : base(i => i.SiteNumber.ToLower().Trim() == sitenumbder.ToLower().Trim() && i.YearId == yearid)
         {
         }
 
-        public SiteFilterSpecification(string sitenumbder, int id)
-            : base(i => i.SiteNumber.ToLower().Trim() == sitenumbder.ToLower().Trim() && i.Id != id)
+        public SiteFilterSpecification(string sitenumbder, int yearid, int id)
+            : base(i => i.SiteNumber.ToLower().Trim() == sitenumbder.ToLower().Trim() && i.YearId == yearid && i.Id != id)
         {
         }
     }

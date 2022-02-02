@@ -119,7 +119,7 @@
         }
 
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await coordinatorService.GetDuplicateCount(coordinatorform1.CoordinatorModel.CoordinatorName, coordinatorform1.CoordinatorModel.Email, coordinatorform1.CoordinatorModel.Id);
+        var totalItems = await coordinatorService.GetDuplicateCount(coordinatorform1.CoordinatorModel.CoordinatorName, coordinatorform1.CoordinatorModel.Email, UserSettings.YearId, coordinatorform1.CoordinatorModel.Id);
 
         if (totalItems > 0)
         {

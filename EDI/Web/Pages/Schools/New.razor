@@ -72,7 +72,7 @@
     private async void HandleValidSubmit()
     {
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await SchoolService.GetDuplicateCount(SchoolModel.SiteId, SchoolModel.SchoolNumber);
+        var totalItems = await SchoolService.GetDuplicateCount(SchoolModel.SiteId, SchoolModel.SchoolNumber, UserSettings.YearId);
 
         if (totalItems > 0)
         {

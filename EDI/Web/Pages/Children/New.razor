@@ -92,7 +92,7 @@
             return;
         }
 
-        var totalItems = await ChildService.GetDuplicateCount(ChildModel.Ediid);
+        var totalItems = await ChildService.GetDuplicateCount(ChildModel.Ediid, UserSettings.YearId);
 
         if (totalItems > 0)
         {

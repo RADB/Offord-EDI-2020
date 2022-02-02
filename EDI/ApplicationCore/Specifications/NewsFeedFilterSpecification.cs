@@ -8,13 +8,13 @@ namespace EDI.ApplicationCore.Specifications
 {
     public class NewsFeedFilterSpecification : BaseSpecification<NewsFeed>
     {
-        public NewsFeedFilterSpecification(string title)
-            : base(i => i.Title.ToLower().Trim() == title.ToLower().Trim())
+        public NewsFeedFilterSpecification(string title, int yearid)
+            : base(i => i.Title.ToLower().Trim() == title.ToLower().Trim() && i.YearId == yearid)
         {
         }
 
-        public NewsFeedFilterSpecification(string title, int id)
-            : base(i => i.Title.ToLower().Trim() == title.ToLower().Trim() && i.Id != id)
+        public NewsFeedFilterSpecification(string title, int yearid, int id)
+            : base(i => i.Title.ToLower().Trim() == title.ToLower().Trim() && i.YearId == yearid && i.Id != id)
         {
         }
     }

@@ -16,11 +16,11 @@ namespace EDI.Web.Interfaces
         Task<int> CreateTeacherAsync(TeacherItemViewModel teacher);
 
         Task<TeacherItemViewModel> GetTeacherItem(int teacherId);
-        Task<int> GetDuplicateCount(int schoolid, string teachernumber);
-        Task<int> GetDuplicateCount(int schoolid, string teachernumber, int id);
+        Task<int> GetDuplicateCount(int schoolid, string teachernumber, int yearid);
+        Task<int> GetDuplicateCount(int schoolid, string teachernumber, int id, int yearid);
 
-        Task<int> GetDuplicateCount(string teachername, string email);
-        Task<int> GetDuplicateCount(string teachername, string email, int id);
+        Task<int> GetDuplicateCount(string teachername, string email, int yearid);
+        Task<int> GetDuplicateCount(string teachername, string email, int id, int yearid);
         int GetCompletedQuestions(int id);
         int GetRequiredQuestions(int id);
         Task UnlockTeacherAsync(int id);

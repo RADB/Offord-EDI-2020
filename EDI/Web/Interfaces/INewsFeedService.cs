@@ -17,7 +17,7 @@ namespace EDI.Web.Interfaces
 
         Task<NewsFeedItemViewModel> GetNewsFeedItem(int newsFeedId);
 
-        Task<int> GetDuplicateCount(string title);
-        Task<int> GetDuplicateCount(string title, int id);
+        Task<int> GetDuplicateCount(string title, int yearid);
+        Task<int> GetDuplicateCount(string title, int id, int yearid);
     }
 }

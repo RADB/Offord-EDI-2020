@@ -18,8 +18,8 @@ namespace EDI.Web.Interfaces
 
         Task<ChildItemViewModel> GetChildItem(int childId);
 
-        Task<int> GetDuplicateCount(string ediid);
-        Task<int> GetDuplicateCount(string ediid, int id);
+        Task<int> GetDuplicateCount(string ediid, int yearid);
+        Task<int> GetDuplicateCount(string ediid, int id, int yearid);
         Task UnlockChildAsync(int id);
         int GetCompletedQuestions(int id);
         int GetRequiredQuestions(int id);

@@ -126,9 +126,9 @@
         }
 
         //Console.WriteLine("OnValidSubmit");
-        var totalItems = await teacherService.GetDuplicateCount(teacherform1.TeacherModel.TeacherName, teacherform1.TeacherModel.Email, teacherform1.TeacherModel.Id);
+        var totalItems = await teacherService.GetDuplicateCount(teacherform1.TeacherModel.TeacherName, teacherform1.TeacherModel.Email, teacherform1.TeacherModel.Id, UserSettings.YearId);
 
-        var totalItems2 = await teacherService.GetDuplicateCount(TeacherModel.SchoolId.Value, TeacherModel.TeacherNumber, teacherform1.TeacherModel.Id);
+        var totalItems2 = await teacherService.GetDuplicateCount(TeacherModel.SchoolId.Value, TeacherModel.TeacherNumber, teacherform1.TeacherModel.Id, UserSettings.YearId);
 
         if (totalItems > 0)
         {
