@@ -71,7 +71,7 @@
     </div>*@
 
     <div class="p-2">
-        <SfSwitch CssClass="handle-text" OnLabel="Validation-On" OffLabel="Validation-Off" Disabled="@OptionsChanging" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
+        <SfSwitch CssClass="handle-text" OnLabel=@Translate("Validation-On") OffLabel=@Translate("Validation-Off") Disabled="@OptionsChanging" @bind-Checked="@Validation" ValueChange="@((Syncfusion.Blazor.Buttons.ChangeEventArgs<bool> e) => OnValidationChange(e))"></SfSwitch>
     </div>
     @*
     <div class="p-2">
