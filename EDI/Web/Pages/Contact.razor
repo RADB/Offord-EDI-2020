@@ -14,7 +14,7 @@
     <div class="col-md-12">
         <div class="card" style="box-shadow: 0 8px 32px rgba(77,101,117,0.35);border-radius: 12px;border-color: transparent;margin-top: 95px;margin-left:30px;">
             <div class="card-header">
-                <strong>Contact Us</strong>
+                <strong>@Translate("Contact Us")</strong>
             </div>
             <div class="card-body">
                 <article id="post-24" class="post-24 page type-page status-publish hentry">
@@ -128,5 +128,10 @@
         //*Modal.OnClose -= EmailWindowModalClosed;
 
         StateHasChanged();
+    }
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

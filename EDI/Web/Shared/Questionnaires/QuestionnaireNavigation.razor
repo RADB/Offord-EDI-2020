@@ -15,7 +15,7 @@
 <div class="d-flex justify-content-between align-items-center">    
         <div class="col-2">
             <button class="btn btn-info" disabled=@PreviousDisable @onclick="@(() => gotoURL("Previous"))">
-                <i class="fas fa-chevron-left"></i> @PreviousPage
+                <i class="fas fa-chevron-left"></i> @Translate(@PreviousPage)
             </button>
         </div>
         <div class="col-8 text-center d-inline">
@@ -33,7 +33,7 @@
         </div>
         <div class="col-2 text-right">
             <button class="btn btn-info" disabled=@NextDisable  hidden=@EHidden @onclick="@(() => gotoURL("Next"))">
-                @NextPage <i class="fas fa-chevron-right"></i>
+                @Translate(@NextPage) <i class="fas fa-chevron-right"></i>
             </button>
             <button class="btn btn-primary" hidden=@LockHidden @onclick="@(() => SaveLockChild())">
                 <i class="fas fa-lock"></i> @Translate(@LockText)
