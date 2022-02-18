@@ -471,9 +471,9 @@ namespace EDI.Infrastructure.Data
 
                 entity.Property(e => e.CreatedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
 
-                entity.Property(e => e.English).IsRequired().HasMaxLength(150);
+                entity.Property(e => e.English).IsRequired().HasMaxLength(200);
 
-                entity.Property(e => e.French).HasMaxLength(150);                
+                entity.Property(e => e.French).HasMaxLength(200);                
 
                 entity.Property(e => e.ModifiedBy).IsRequired().HasMaxLength(256).IsUnicode(false);
                 entity.HasData

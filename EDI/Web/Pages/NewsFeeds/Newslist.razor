@@ -16,7 +16,7 @@
 <div class="card shadow mb-4">
     <div class="card-header">
         <div class="row cardHeader">
-            <strong>News Feed</strong>
+            <strong>@Translate("News Feed")</strong>
             @*<AuthorizeView Roles="Administrator">
                     <Authorized>
                         <div>
@@ -138,5 +138,10 @@
         }
 
         //*Modal.OnClose -= ConfirmDeleteModalClosed;
+    }
+        
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
     }
 }

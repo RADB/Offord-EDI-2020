@@ -58,6 +58,15 @@ namespace EDI.ApplicationCore.Entities
         public string InstructionFormatSpecify { get; set; }
         public byte? OnlineChallenges { get; set; }
         public string OnlineChallengesSpecify { get; set; }
+        public bool? OnlineChallengesNA { get; set; }
+        public bool? OnlineChallengesNoInternet { get; set; }
+        public bool? OnlineChallengesLimitedTech { get; set; }
+        public bool? OnlineChallengesNoAdultSupport { get; set; }
+        public bool? OnlineChallengesUninterested { get; set; }
+        public bool? OnlineChallengesNoLearningSpace { get; set; }
+        public bool? OnlineChallengesNoSupplies { get; set; }
+        public bool? OnlineChallengesOther { get; set; }
+
         /* End 2022 Demographics*/
 
         [JsonIgnore]
