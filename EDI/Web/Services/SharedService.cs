@@ -447,7 +447,7 @@ namespace EDI.Web.Services
             string message = string.Empty;
             List<string> messages = new List<string>();
             List<string> errormessages = new List<string>();
-
+            
             var haserror = false;
 
             try
@@ -557,23 +557,36 @@ namespace EDI.Web.Services
 
                                     _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
                                     var gender = row.Cells[7]?.CalculatedValue.Trim();
+                                    // get the lookupset for this year
+                                   // var tempGenders = _dbContext.LookupSets.Where(p => p.YearId == _userSettings.YearId && p.LookupName == "ChildGender").Include(c => c.LookupSetOptions).FirstOrDefault();
 
                                     if (string.IsNullOrEmpty(gender))
                                     {
-                                        _file.GenderId = null;
+                                        //_file.GenderId = null;
+                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Value;
+                                        _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Id;
                                     }
                                     else
-                                    {      
+                                    {
                                         //_file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
                                         //_file.GenderId = (gender == "M" ? dbContext.Gen.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault() : (int)Genders.Female);                                        
-                                        //TODO - double check that this is correct
-                                        if (gender=="M")
+                                        // Use the code to ensure the values are consistent year over year
+                                        
+
+                                        if (gender == "M")
                                         {
-                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Male").FirstOrDefault().Id;
+                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Male").FirstOrDefault().Id;                                            
+                                            //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Male").FirstOrDefault().Value;
+                                        }
+                                        else if (gender == "F")
+                                        {
+                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Female").FirstOrDefault().Id;
+                                            //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Female").FirstOrDefault().Value;
                                         }
                                         else
                                         {
-                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Female").FirstOrDefault().Id;
+                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                                            //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                         }
                                     }
 
@@ -1167,6 +1180,7 @@ namespace EDI.Web.Services
                                     if (teacherid > 0)
                                     {
                                         var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid && p.YearId == yearid).FirstOrDefault();
+                                        //var tempGenderId = servicecontext.Genders.Where(g => g.YearId == yearid && g.Code == data.GenderId.ToString()).FirstOrDefault().Id;
 
                                         if (child == null)
                                         {
@@ -1221,7 +1235,7 @@ namespace EDI.Web.Services
                                                 var _demographics = new QuestionnairesDataDemographic();
 
                                                 _demographics.ChildId = childid;
-                                                _demographics.GenderId = (int?)data.GenderId;
+                                                _demographics.GenderId = data.GenderId;
                                                 _demographics.Dob = data.ChildDob;
                                                 _demographics.PostalCode = data.ChildPostalCode;
                                                 _demographics.QuestionnaireId = questionnaire.Id;

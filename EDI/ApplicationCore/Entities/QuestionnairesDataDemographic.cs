@@ -41,7 +41,7 @@ namespace EDI.ApplicationCore.Entities
         public bool? NorthSlavey { get; set; }
         public bool? SouthSlavey { get; set; }
         public bool? Tlicho { get; set; }
-        public byte? OtherLanguage { get; set; }
+        public int? OtherLanguage { get; set; }
         public byte? IndigenousAncestry { get; set; }
         public byte? AfricanDescent { get; set; }
         public int? FirstLanguage1 { get; set; }

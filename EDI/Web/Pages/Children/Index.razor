@@ -112,7 +112,7 @@
                                             var comm = (context as ChildItemViewModel);
                                             if (UserSettings.IsAdmin || comm.ChildStatusId != (int)Enumerations.ChildStatus.Locked)
                                             {
-                                                <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">EDI</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
+                                                <button data-toggle="tooltip" data-placement="bottom" title="Questionnaire" @onclick="@(() => GotoQuestionnaire(comm.Id))" style="border:none;background-color:transparent;"><img src="./images/arrow-right-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"><b style="font-size:18px;">@Translate("EDI")</b><img src="./images/arrow-left-chrome.gif" style="width: 30px; height: 30px; margin-top: -8px;"></button>
 
                                             }
                                         }
