@@ -247,7 +247,7 @@ namespace EDI.Web.Services
 
             try
             {
-                var sites = _siteRepository.ListAllSites().OrderBy(t => t.SiteNumber);
+                var sites = _siteRepository.ListAllSites().Where(t=>t.YearId == _userSettings.YearId).OrderBy(t => t.SiteNumber);
 
                 var items = new List<SelectListItem>
                 {
