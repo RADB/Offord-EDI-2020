@@ -13,7 +13,7 @@ using Microsoft.Net.Http.Headers;
 
 namespace EDI.Web.Models
 {
-    public class PhysicalFileProvider : PhysicalFileProviderBase
+    public class PhysicalFileProvider : IPhysicalFileProviderBase
     {
         protected string contentRootPath;
         protected string[] allowedExtension = new string[] { "*" };
@@ -1967,7 +1967,7 @@ namespace EDI.Web.Models
             });
         }
 
-        FileStreamResult FileProviderBase.Download(string path, string[] names, params FileManagerDirectoryContent[] data)
+        FileStreamResult IFileProviderBase.Download(string path, string[] names, params FileManagerDirectoryContent[] data)
         {
             throw new NotImplementedException();
         }
