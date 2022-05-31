@@ -55,56 +55,58 @@
         public string icon { get; set; }
         public bool hasChild { get; set; }
         public string pid { get; set; }
+        public bool expanded { get; set; }
     }
+
     private List<TreeData> treedata = new List<TreeData>();
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph icon" });
-        treedata.Add(new TreeData { nodeId = "02", nodeText = "Administration", icon = "icon-globe icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "02-01", nodeText = "Sites", icon = "icon-map icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-02", nodeText = "Schools", icon = "icon-home icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-03", nodeText = "Teachers", icon = "icon-graduation icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-04", nodeText = "Class List", icon = "icon-people icon", pid = "02" });
-        //treedata.Add(new TreeData { nodeId = "02-05", nodeText = "Coordinator-Sites", icon = "icon-organization icon", pid = "02" });
-        //treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" });
-        //treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-09", nodeText = "News", icon = "icon-globe icon", pid = "02" });
-        treedata.Add(new TreeData { nodeId = "02-08", nodeText = "Questionnaires", icon = "icon-link icon", pid = "02" });
-        //treedata.Add(new TreeData { nodeId = "03", nodeText = "Screens", icon = "icon-docs icon" });
-        treedata.Add(new TreeData { nodeId = "04", nodeText = "Maintenance", icon = "icon-briefcase icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Configuration", icon = "icon-settings icon", pid = "04" });
-        treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Data Import", icon = "icon-cloud-upload icon", pid = "04" });
-        treedata.Add(new TreeData { nodeId = "04-05", nodeText = "Lookup Data", icon = "icon-list icon", pid = "04", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "04-18", nodeText = "Child Status", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-06", nodeText = "Countries", icon = "icon-flag icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-07", nodeText = "File Import Status", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-08", nodeText = "Genders", icon = "icon-symbol-female icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-16", nodeText = "Input Types", icon = "icon-list icon", pid = "04-05" });
-        //treedata.Add(new TreeData { nodeId = "04-09", nodeText = "Languages", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-10", nodeText = "Lookup Sets", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-17", nodeText = "Orientation", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-11", nodeText = "Provinces", icon = "icon-location-pin icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-12", nodeText = "Province Types", icon = "icon-list icon", pid = "04-05" });
-        // treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-19", nodeText = "Teacher Status", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-14", nodeText = "Translations", icon = "icon-list icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "04-15", nodeText = "Years", icon = "icon-calendar icon", pid = "04-05" });
-        treedata.Add(new TreeData { nodeId = "05", nodeText = "Accounts", icon = "icon-list icon", hasChild = true});
-        treedata.Add(new TreeData { nodeId = "05-01", nodeText = "Users", icon = "icon-people icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Roles", icon = "icon-organization icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "05-03", nodeText = "My Profile", icon = "icon-user icon", pid = "05" });
-        treedata.Add(new TreeData { nodeId = "06", nodeText = "Resources", icon = "icon-book-open icon", hasChild = true });
-        treedata.Add(new TreeData { nodeId = "06-01", nodeText = "Guide", icon = "icon-notebook icon", pid = "06" });
-        treedata.Add(new TreeData { nodeId = "06-03", nodeText = "Reports", icon = "icon-chart icon", pid = "06" });
-        treedata.Add(new TreeData { nodeId = "06-04", nodeText = "Documents", icon = "icon-folder-alt icon", pid = "06" });
-        //treedata.Add(new TreeData { nodeId = "06-05", nodeText = "FAQ", icon = "question_answer icon", pid = "06" });
-        //treedata.Add(new TreeData { nodeId = "06-06", nodeText = "Links", icon = "icon-link icon", pid = "06" });
-        treedata.Add(new TreeData { nodeId = "07", nodeText = "Contact", icon = "icon-envelope-open icon", hasChild = false });
-        //treedata.Add(new TreeData { nodeId = "08", nodeText = "Questions", icon = "icon-list icon" });
+        treedata.Add(new TreeData { nodeId = "01", nodeText = "Dashboard", icon = "icon-graph icon" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02", nodeText = "Administration", icon = "icon-globe icon", hasChild = true ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-01", nodeText = "Sites", icon = "icon-map icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-02", nodeText = "Schools", icon = "icon-home icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-03", nodeText = "Teachers", icon = "icon-graduation icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-04", nodeText = "Class List", icon = "icon-people icon", pid = "02" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "02-05", nodeText = "Coordinator-Sites", icon = "icon-organization icon", pid = "02" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-06", nodeText = "FAQ", icon = "question_answer icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-07", nodeText = "Links", icon = "icon-link icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-09", nodeText = "News", icon = "icon-globe icon", pid = "02" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "02-08", nodeText = "Questionnaires", icon = "icon-link icon", pid = "02" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "03", nodeText = "Screens", icon = "icon-docs icon" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04", nodeText = "Maintenance", icon = "icon-briefcase icon", hasChild = true ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-01", nodeText = "Configuration", icon = "icon-settings icon", pid = "04" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-02", nodeText = "Data Import", icon = "icon-cloud-upload icon", pid = "04" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-05", nodeText = "Lookup Data", icon = "icon-list icon", pid = "04", hasChild = true ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-18", nodeText = "Child Status", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-06", nodeText = "Countries", icon = "icon-flag icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-07", nodeText = "File Import Status", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-08", nodeText = "Genders", icon = "icon-symbol-female icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-16", nodeText = "Input Types", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "04-09", nodeText = "Languages", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-10", nodeText = "Lookup Sets", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-17", nodeText = "Orientation", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-11", nodeText = "Provinces", icon = "icon-location-pin icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-12", nodeText = "Province Types", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        // treedata.Add(new TreeData { nodeId = "04-13", nodeText = "Special Problems", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-19", nodeText = "Teacher Status", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-14", nodeText = "Translations", icon = "icon-list icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "04-15", nodeText = "Years", icon = "icon-calendar icon", pid = "04-05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "05", nodeText = "Accounts", icon = "icon-list icon", hasChild = true,expanded=false});
+        treedata.Add(new TreeData { nodeId = "05-01", nodeText = "Users", icon = "icon-people icon", pid = "05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "05-02", nodeText = "Roles", icon = "icon-organization icon", pid = "05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "05-03", nodeText = "My Profile", icon = "icon-user icon", pid = "05" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "06", nodeText = "Resources", icon = "icon-book-open icon", hasChild = true ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "06-01", nodeText = "Guide", icon = "icon-notebook icon", pid = "06" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "06-03", nodeText = "Reports", icon = "icon-chart icon", pid = "06" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "06-04", nodeText = "Documents", icon = "icon-folder-alt icon", pid = "06" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "06-05", nodeText = "FAQ", icon = "question_answer icon", pid = "06" ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "06-06", nodeText = "Links", icon = "icon-link icon", pid = "06" ,expanded=false});
+        treedata.Add(new TreeData { nodeId = "07", nodeText = "Contact", icon = "icon-envelope-open icon", hasChild = false ,expanded=false});
+        //treedata.Add(new TreeData { nodeId = "08", nodeText = "Questions", icon = "icon-list icon" ,expanded=false});
 
     }
 

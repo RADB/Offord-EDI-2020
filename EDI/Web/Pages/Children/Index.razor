@@ -40,9 +40,19 @@
                         <p><em>Loading...</em></p>
                     }
                     else
-                    {
+                    {                        
+ @*                       var Tool = (new List<string>() { "Search" });
+
+<SfGrid DataSource="@Orders" Toolbar=@Tool>
+    <GridColumns>
+        <GridColumn Field=@nameof(Order.OrderID) HeaderText="Order ID" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+        <GridColumn Field=@nameof(Order.CustomerID) HeaderText="Customer Name" Width="150"></GridColumn>
+        <GridColumn Field=@nameof(Order.OrderDate) HeaderText=" Order Date" Format="d" Type="ColumnType.Date" TextAlign="TextAlign.Right" Width="130"></GridColumn>
+        <GridColumn Field=@nameof(Order.Freight) HeaderText="Freight" Format="C2" TextAlign="TextAlign.Right" Width="120"></GridColumn>
+    </GridColumns>
+</SfGrid>*@
                         //<SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { @Translate("Add"), @Translate("Edit"), @Translate("Delete"), "ExcelExport", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
-                        <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="false" AllowResizing="true" ShowColumnMenu="true" Toolbar="@Toolbaritems" AllowExcelExport="true" AllowPdfExport="true" EnableAltRow="true">
+                        <SfGrid ID="GridChild" @ref="Grid" DataSource="@children" AllowPaging="true" AllowSorting="true"  AllowFiltering="true" AllowGrouping="false" AllowResizing="true" ShowColumnMenu="true" Toolbar="@Toolbaritems" AllowExcelExport="true" AllowPdfExport="true" EnableAltRow="true">
                             <GridEditSettings AllowAdding="true" AllowEditing="@AllowEdit" AllowDeleting="@AllowDelete" ShowDeleteConfirmDialog="false"></GridEditSettings>
                             <GridEvents ExcelQueryCellInfoEvent="ExcelQueryCellInfoHandler" OnToolbarClick="ToolbarClick" RowSelected="RowSelect" OnRecordDoubleClick="RecordDoubleClickHandler" TValue="ChildItemViewModel"></GridEvents>
                             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
@@ -127,6 +137,17 @@
     </div>
 
 @code {
+    
+    // public List<Order> Orders { get; set; }
+
+
+
+    //public class Order {
+    //    public int? OrderID { get; set; }
+    //    public string CustomerID { get; set; }
+    //    public DateTime? OrderDate { get; set; }
+    //    public double? Freight { get; set; }
+    //}
     [CascadingParameter] public IModalService ModalService { get; set; }
     [Parameter]
     public int TeacherID { get; set; } = 0;
@@ -185,6 +206,14 @@
                 //Toolbaritems.Add(new ItemModel() { Text = Translate("Delete"), TooltipText = Translate("Delete"), Id = "Delete" });
                 //Toolbaritems.Add(new ItemModel() { Text = Translate("ExcelExport"), TooltipText = Translate("ExcelExport"), Id = "ExcelExport" });
                 //Toolbaritems.Add(new ItemModel() { Text = Translate("Search"), TooltipText = Translate("Search"), Id = "Search" });
+
+                //     Orders = Enumerable.Range(1, 75).Select(x => new Order()
+                //    {   
+                //    OrderID = 1000 + x,
+                //    CustomerID = (new string[] { "ALFKI", "ANANTR", "ANTON", "BLONP", "BOLID" })[new Random().Next(5)],
+                //    Freight = 2.1 * x,
+                //    OrderDate = DateTime.Now.AddDays(-x),
+                //}).ToList();
             }
             else if (UserSettings.IsTeacher)
             {
