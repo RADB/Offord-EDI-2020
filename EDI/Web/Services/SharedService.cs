@@ -1085,18 +1085,23 @@ namespace EDI.Web.Services
                                                         string firstname = names[0];
                                                         string lastname = names[1];
 
-                                                        var newuser = new EDIApplicationUser
-                                                        {
-                                                            UserName = data.TeacherEmail,
-                                                            Email = data.TeacherEmail,
-                                                            FirstName = firstname,
-                                                            LastName = lastname
-                                                        };
+                                                        var newuser = new EDIApplicationUser();
+                                                        newuser.UserName = Guid.NewGuid().ToString();
                                                         var result = await _userManager.CreateAsync(newuser, password);
 
                                                         var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
 
                                                         await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                                                        var oneuser = _identityContext.Users.Where(p => p.Id == newuser.Id).FirstOrDefault();
+                                                        oneuser.UserName = data.TeacherEmail;
+                                                        oneuser.Email = data.TeacherEmail;
+                                                        oneuser.FirstName = firstname;
+                                                        oneuser.LastName = lastname;
+                                                        oneuser.NormalizedUserName = data.TeacherEmail.ToUpper();
+                                                        oneuser.NormalizedEmail = data.TeacherEmail.ToUpper();
+
+                                                        await _userManager.UpdateAsync(oneuser);
 
                                                         userid = newuser.Id;
                                                     }
@@ -1157,6 +1162,15 @@ namespace EDI.Web.Services
                                             else
                                             {
                                                 teacherid = teacher.Id;
+
+                                                var onepassword = GeneratePassword(teacherid);
+
+                                                var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+
+                                                var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
+                                                _account.PasswordHash = newPassword;
+
+                                                await _userManager.UpdateAsync(_account);
                                             }
                                         }
                                     }
@@ -1653,12 +1667,15 @@ namespace EDI.Web.Services
             {
                 var password = GeneratePassword(teacher.Id);
 
-                var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+                var _account = _identityContext.Users.Where(p => p.Id == teacher.UserId).FirstOrDefault();
 
                 var newPassword = _userManager.PasswordHasher.HashPassword(_account, password);
                 _account.PasswordHash = newPassword;
+                _account.SecurityStamp = Guid.NewGuid().ToString();
+                _account.NormalizedEmail = _account.Email.ToUpper();
+                _account.NormalizedUserName = _account.UserName.ToUpper();
 
-                await _userManager.UpdateAsync(_account);
+                await _identityContext.SaveChangesAsync();
 
                 EmailModel email = new EmailModel();
 
