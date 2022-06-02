@@ -272,7 +272,7 @@
 
     private async void ResetPassword(int id)
     {
-        await sharedService.ResetPassord(id);
+        await sharedService.ResetPassword(id);
         toastService.ShowSuccess("Password reset successfully.");
 
         StateHasChanged();

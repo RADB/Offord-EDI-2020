@@ -2120,7 +2120,7 @@ namespace EDI.Web.Services
             return password;
         }
 
-        public async Task ResetPassord(int id)
+        public async Task ResetPassword(int id)
         {
             var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
 
