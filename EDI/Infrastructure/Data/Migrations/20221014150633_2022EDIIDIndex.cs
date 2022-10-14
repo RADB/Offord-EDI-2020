@@ -86,7 +86,7 @@ BEGIN
 		INSERT INTO [EDI.Service].[LUData].[LookupSetOptions] ([LookupSetId],[English],[French],[Value],[Sequence],[CreatedDate],[CreatedBy],[ModifiedDate],[ModifiedBy],[YearId]) 
 		SELECT [LookupSetId]+@LookupSets,[English],[French],[Value],[Sequence],[CreatedDate],[CreatedBy],[ModifiedDate],[ModifiedBy],@NewYearId FROM [EDI.Service].[LUData].[LookupSetOptions] WHERE YeariD = @OldYearId
 
-        UPDATE [dbo].[SystemConfigurations] SET FieldValue = @NewYearId WHERE FieldName = 'Year'
+        UPDATE [dbo].[SystemConfigurations] SET FieldValue = @NewYear WHERE FieldName = 'Year'
     END
 END";
 			// create the stored procedure for migration
