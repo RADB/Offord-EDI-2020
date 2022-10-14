@@ -92,8 +92,8 @@ END";
 			// create the stored procedure for migration
 			migrationBuilder.Sql(sp);
 
-			// initialize 2022
-			migrationBuilder.Sql("EXEC [dbo].[InitializeNewYear] 2022, 2023");
+			// initialize 2023 - done within DB
+			//migrationBuilder.Sql("EXEC [dbo].[InitializeNewYear] 2022, 2023");
 		}
 
         protected override void Down(MigrationBuilder migrationBuilder)

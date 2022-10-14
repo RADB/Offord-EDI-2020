@@ -1193,7 +1193,8 @@ namespace EDI.Web.Services
                                 {
                                     if (teacherid > 0)
                                     {
-                                        var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid && p.YearId == yearid).FirstOrDefault();
+                                        //var child = servicecontext.Children.Where(p => p.LocalId == data.LocalId && p.Ediid == data.ChildEdiid && p.YearId == yearid).FirstOrDefault();
+                                        var child = servicecontext.Children.Where(p => p.Ediid == data.ChildEdiid && p.YearId == yearid).FirstOrDefault();
                                         //var tempGenderId = servicecontext.Genders.Where(g => g.YearId == yearid && g.Code == data.GenderId.ToString()).FirstOrDefault().Id;
 
                                         if (child == null)
@@ -1223,157 +1224,162 @@ namespace EDI.Web.Services
 
                                                 childid = _child.Id;
                                                 totalstudents++;
+
+                                                // be sure child has been created and has an id - then create questionnaires
+                                                if (childid > 0)
+                                                {
+                                                    var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                                    var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                                    var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                                    var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                                    var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                                    var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+
+                                                    if (demo == null)
+                                                    {
+                                                        var _demographics = new QuestionnairesDataDemographic();
+
+                                                        _demographics.ChildId = childid;
+                                                        _demographics.GenderId = data.GenderId;
+                                                        _demographics.Dob = data.ChildDob;
+                                                        _demographics.PostalCode = data.ChildPostalCode;
+                                                        _demographics.QuestionnaireId = questionnaire.Id;
+                                                        _demographics.YearId = yearid;
+                                                        _demographics.CreatedDate = DateTime.Now;
+                                                        _demographics.CreatedBy = _userSettings.UserName;
+                                                        _demographics.ModifiedDate = DateTime.Now;
+                                                        _demographics.ModifiedBy = _userSettings.UserName;
+
+                                                        await _questionnairesDataDemographic.AddAsync(_demographics);
+                                                    }
+                                                    else
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataDemographic table");
+                                                        haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                                    }
+
+                                                    if (seca == null)
+                                                    {
+                                                        var _sectionA = new QuestionnairesDataSectionA();
+
+                                                        _sectionA.ChildId = childid;
+                                                        _sectionA.QuestionnaireId = questionnaireA.Id;
+                                                        _sectionA.YearId = yearid;
+                                                        _sectionA.CreatedDate = DateTime.Now;
+                                                        _sectionA.CreatedBy = _userSettings.UserName;
+                                                        _sectionA.ModifiedDate = DateTime.Now;
+                                                        _sectionA.ModifiedBy = _userSettings.UserName;
+
+                                                        await _questionnairesDataSectionA.AddAsync(_sectionA);
+                                                    }
+                                                    else
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionA table");
+                                                        haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                                    }
+
+                                                    if (secb == null)
+                                                    {
+                                                        var _sectionB = new QuestionnairesDataSectionB();
+
+                                                        _sectionB.ChildId = childid;
+                                                        _sectionB.QuestionnaireId = questionnaireB.Id;
+                                                        _sectionB.YearId = yearid;
+                                                        _sectionB.CreatedDate = DateTime.Now;
+                                                        _sectionB.CreatedBy = _userSettings.UserName;
+                                                        _sectionB.ModifiedDate = DateTime.Now;
+                                                        _sectionB.ModifiedBy = _userSettings.UserName;
+
+                                                        await _questionnairesDataSectionB.AddAsync(_sectionB);
+                                                    }
+                                                    else
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionB table");
+                                                        haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                                    }
+
+                                                    if (secc == null)
+                                                    {
+                                                        var _sectionC = new QuestionnairesDataSectionC();
+
+                                                        _sectionC.ChildId = childid;
+                                                        _sectionC.QuestionnaireId = questionnaireC.Id;
+                                                        _sectionC.YearId = yearid;
+                                                        _sectionC.CreatedDate = DateTime.Now;
+                                                        _sectionC.CreatedBy = _userSettings.UserName;
+                                                        _sectionC.ModifiedDate = DateTime.Now;
+                                                        _sectionC.ModifiedBy = _userSettings.UserName;
+
+                                                        await _questionnairesDataSectionC.AddAsync(_sectionC);
+                                                    }
+                                                    else
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionC table");
+                                                        haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                                    }
+
+                                                    if (secd == null)
+                                                    {
+                                                        var _sectionD = new QuestionnairesDataSectionD();
+
+                                                        _sectionD.ChildId = childid;
+                                                        _sectionD.QuestionnaireId = questionnaireD.Id;
+                                                        _sectionD.YearId = yearid;
+                                                        _sectionD.CreatedDate = DateTime.Now;
+                                                        _sectionD.CreatedBy = _userSettings.UserName;
+                                                        _sectionD.ModifiedDate = DateTime.Now;
+                                                        _sectionD.ModifiedBy = _userSettings.UserName;
+
+                                                        await _questionnairesDataSectionD.AddAsync(_sectionD);
+                                                    }
+                                                    else
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionD table");
+                                                        haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                                    }
+
+                                                    if (sece == null)
+                                                    {
+                                                        var _sectionE = new QuestionnairesDataSectionE();
+
+                                                        _sectionE.ChildId = childid;
+                                                        _sectionE.QuestionnaireId = questionnaireE.Id;
+                                                        _sectionE.YearId = yearid;
+                                                        _sectionE.CreatedDate = DateTime.Now;
+                                                        _sectionE.CreatedDate = DateTime.Now;
+                                                        _sectionE.CreatedBy = _userSettings.UserName;
+                                                        _sectionE.ModifiedDate = DateTime.Now;
+                                                        _sectionE.ModifiedBy = _userSettings.UserName;
+
+                                                        await _questionnairesDataSectionE.AddAsync(_sectionE);
+                                                    }
+                                                    else
+                                                    {
+                                                        errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionE table");
+                                                        haserror = true;
+                                                        fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                                    }
+                                                }
                                             }
                                             catch (Exception ex)
                                             {
                                                 errormessages.Add("FileImports data " + data.Id + ": Create a student error: " + ex.Message);
                                                 haserror = true;
-                                            }
+                                            }                                           
                                         }
                                         else
                                         {
+                                            // get the existing child ID - nothing needs to be done beyond this as the record already exists
                                             childid = child.Id;
-                                        }
-
-                                        if (childid > 0)
-                                        {
-                                            var demo = _dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
-                                            var seca = _dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
-                                            var secb = _dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
-                                            var secc = _dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
-                                            var secd = _dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
-                                            var sece = _dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
-
-                                            if (demo == null)
-                                            {
-                                                var _demographics = new QuestionnairesDataDemographic();
-
-                                                _demographics.ChildId = childid;
-                                                _demographics.GenderId = data.GenderId;
-                                                _demographics.Dob = data.ChildDob;
-                                                _demographics.PostalCode = data.ChildPostalCode;
-                                                _demographics.QuestionnaireId = questionnaire.Id;
-                                                _demographics.YearId = yearid;
-                                                _demographics.CreatedDate = DateTime.Now;
-                                                _demographics.CreatedBy = _userSettings.UserName;
-                                                _demographics.ModifiedDate = DateTime.Now;
-                                                _demographics.ModifiedBy = _userSettings.UserName;
-
-                                                await _questionnairesDataDemographic.AddAsync(_demographics);
-                                            }
-                                            else
-                                            {
-                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataDemographic table");
-                                                haserror = true;
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                            }
-
-                                            if (seca == null)
-                                            {
-                                                var _sectionA = new QuestionnairesDataSectionA();
-
-                                                _sectionA.ChildId = childid;
-                                                _sectionA.QuestionnaireId = questionnaireA.Id;
-                                                _sectionA.YearId = yearid;
-                                                _sectionA.CreatedDate = DateTime.Now;
-                                                _sectionA.CreatedBy = _userSettings.UserName;
-                                                _sectionA.ModifiedDate = DateTime.Now;
-                                                _sectionA.ModifiedBy = _userSettings.UserName;
-
-                                                await _questionnairesDataSectionA.AddAsync(_sectionA);
-                                            }
-                                            else
-                                            {
-                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionA table");
-                                                haserror = true;
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                            }
-
-                                            if (secb == null)
-                                            {
-                                                var _sectionB = new QuestionnairesDataSectionB();
-
-                                                _sectionB.ChildId = childid;
-                                                _sectionB.QuestionnaireId = questionnaireB.Id;
-                                                _sectionB.YearId = yearid;
-                                                _sectionB.CreatedDate = DateTime.Now;
-                                                _sectionB.CreatedBy = _userSettings.UserName;
-                                                _sectionB.ModifiedDate = DateTime.Now;
-                                                _sectionB.ModifiedBy = _userSettings.UserName;
-
-                                                await _questionnairesDataSectionB.AddAsync(_sectionB);
-                                            }
-                                            else
-                                            {
-                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionB table");
-                                                haserror = true;
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                            }
-
-                                            if (secc == null)
-                                            {
-                                                var _sectionC = new QuestionnairesDataSectionC();
-
-                                                _sectionC.ChildId = childid;
-                                                _sectionC.QuestionnaireId = questionnaireC.Id;
-                                                _sectionC.YearId = yearid;
-                                                _sectionC.CreatedDate = DateTime.Now;
-                                                _sectionC.CreatedBy = _userSettings.UserName;
-                                                _sectionC.ModifiedDate = DateTime.Now;
-                                                _sectionC.ModifiedBy = _userSettings.UserName;
-
-                                                await _questionnairesDataSectionC.AddAsync(_sectionC);
-                                            }
-                                            else
-                                            {
-                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionC table");
-                                                haserror = true;
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                            }
-
-                                            if (secd == null)
-                                            {
-                                                var _sectionD = new QuestionnairesDataSectionD();
-
-                                                _sectionD.ChildId = childid;
-                                                _sectionD.QuestionnaireId = questionnaireD.Id;
-                                                _sectionD.YearId = yearid;
-                                                _sectionD.CreatedDate = DateTime.Now;
-                                                _sectionD.CreatedBy = _userSettings.UserName;
-                                                _sectionD.ModifiedDate = DateTime.Now;
-                                                _sectionD.ModifiedBy = _userSettings.UserName;
-
-                                                await _questionnairesDataSectionD.AddAsync(_sectionD);
-                                            }
-                                            else
-                                            {
-                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionD table");
-                                                haserror = true;
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                            }
-
-                                            if (sece == null)
-                                            {
-                                                var _sectionE = new QuestionnairesDataSectionE();
-
-                                                _sectionE.ChildId = childid;
-                                                _sectionE.QuestionnaireId = questionnaireE.Id;
-                                                _sectionE.YearId = yearid;
-                                                _sectionE.CreatedDate = DateTime.Now;
-                                                _sectionE.CreatedDate = DateTime.Now;
-                                                _sectionE.CreatedBy = _userSettings.UserName;
-                                                _sectionE.ModifiedDate = DateTime.Now;
-                                                _sectionE.ModifiedBy = _userSettings.UserName;
-
-                                                await _questionnairesDataSectionE.AddAsync(_sectionE);
-                                            }
-                                            else
-                                            {
-                                                errormessages.Add("FileImports data " + data.Id + ": has a duplicate Child with child id: " + childid + " inside QuestionnairesDataSectionE table");
-                                                haserror = true;
-                                                fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
-                                            }
-                                        }
+                                            fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                            errormessages.Add(data.ChildEdiid + " Already Exists");
+                                            haserror = true;
+                                        }                                        
                                     }
                                 }
                                 else
