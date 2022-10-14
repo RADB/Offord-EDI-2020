@@ -179,7 +179,9 @@ namespace EDI.Web
             //19.4.0.41
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTYwNDgyQDMxMzkyZTM0MmUzMFJMRkJVNkxzeTdjeEM4S3BTTG50NFI0QkdlZzJwUWZLcEJURlpNbDk4OTg9");
             //20.1.0.50
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIyMzAzQDMyMzAyZTMxMmUzMEdoeDhNZTZ5Vm1zNGIwRWJZRTFLSzFlZFdYQm1LelpXMG4xY3hOd3FmRkU9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjIyMzAzQDMyMzAyZTMxMmUzMEdoeDhNZTZ5Vm1zNGIwRWJZRTFLSzFlZFdYQm1LelpXMG4xY3hOd3FmRkU9");
+            //20.3.0.49 - check JS reference in _host file in Pages directory
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzM5NDUwQDMyMzAyZTMzMmUzME4zZkJYSENEVUd4WnZ6Zzk5MDhaNnh2dmFNaTY0TGVWcDBpSHUxZGI2Nkk9");
             // Verified
             if (env.IsDevelopment())
             {
