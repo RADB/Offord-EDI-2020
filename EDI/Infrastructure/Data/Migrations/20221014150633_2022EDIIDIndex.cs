@@ -85,6 +85,10 @@ BEGIN
 		-- insert the lookupsetoptions - adds the count of oldyear to the id
 		INSERT INTO [EDI.Service].[LUData].[LookupSetOptions] ([LookupSetId],[English],[French],[Value],[Sequence],[CreatedDate],[CreatedBy],[ModifiedDate],[ModifiedBy],[YearId]) 
 		SELECT [LookupSetId]+@LookupSets,[English],[French],[Value],[Sequence],[CreatedDate],[CreatedBy],[ModifiedDate],[ModifiedBy],@NewYearId FROM [EDI.Service].[LUData].[LookupSetOptions] WHERE YeariD = @OldYearId
+		
+		-- migrate the FAQ to next year
+		INSERT INTO [EDI].[FAQ] ([YearId],[Question],[Answer],[IsTeacherFaq],[IsAdministratorFaq],[IsCoordinatorFaq],[Sequence],[CreatedDate],[CreatedBy],[ModifiedDate],[ModifiedBy],[Alberta],[BritishColumbia],[Manitoba],[NewBrunswick],[NewfoundlandandLabrador],[NovaScotia],[Nunavut],[Ontario],[PrinceEdwardIsland],[Quebec],[Saskatchewan],[YukonTerritory],[NorthwestTerritories],[NewYork])
+		SELECT @NewYearID,[Question],[Answer],[IsTeacherFaq],[IsAdministratorFaq],[IsCoordinatorFaq],[Sequence],[CreatedDate],[CreatedBy],[ModifiedDate],[ModifiedBy],[Alberta],[BritishColumbia],[Manitoba],[NewBrunswick],[NewfoundlandandLabrador],[NovaScotia],[Nunavut],[Ontario],[PrinceEdwardIsland],[Quebec],[Saskatchewan],[YukonTerritory],[NorthwestTerritories],[NewYork] FROM [EDI].[FAQ] WHERE Yearid = @OldYearId
 
         UPDATE [dbo].[SystemConfigurations] SET FieldValue = @NewYear WHERE FieldName = 'Year'
     END
