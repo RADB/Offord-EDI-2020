@@ -51,6 +51,11 @@ namespace EDI.ApplicationCore.Entities
         public byte? SkillsSocioEmotional{ get; set; }
         // 2022
 
+        // 2023
+        public byte? VideoUsefulness { get; set; }
+        public string TrainingOther { get; set; }
+        // 2023
+
         [JsonIgnore]
         public virtual Teacher Teacher{ get; set; }
         [JsonIgnore]

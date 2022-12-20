@@ -1,5 +1,6 @@
 ﻿@inherits QuestionnaireBase;
 @using Syncfusion.Blazor.RichTextEditor;
+@using Syncfusion.Blazor.Inputs;
 @using static EDI.Web.Data.Enumerations;
 @inject ISharedService sharedService;
 @inject IReflectionService reflectionService;
@@ -8,6 +9,7 @@
 @inject NavigationManager NavigationManager
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
 @using Newtonsoft.Json;
+
 
 
 <div class="row @ValidationCss">
@@ -26,11 +28,13 @@
     </div>
     <div class="col-9">
         @*@onchange="@onChange"*@
-                <SfRichTextEditor @ref="RteObj" @bind-Value="@currentValue" Placeholder="Put content here..." UndoRedoSteps="50" UndoRedoTimer="400">
+               <SfRichTextEditor @ref="RteObj" @bind-Value="@currentValue" Placeholder="Put content here..." UndoRedoSteps="50" UndoRedoTimer="400">
                     <RichTextEditorImageSettings SaveUrl="api/Image" Path=@Path></RichTextEditorImageSettings>
                     <RichTextEditorEvents OnImageUploadSuccess="@onSuccess" ValueChange="@OnChange"> </RichTextEditorEvents>
                     <RichTextEditorToolbarSettings Type="ToolbarType.Expand" Items="@Tools"></RichTextEditorToolbarSettings>
                 </SfRichTextEditor>
+                @*<SfTextBox @ref="TAObj" multiline=true @bind-Value="@currentValue" Width="75%">
+                </SfTextBox>*@
             </div>
 
             <div class="col-2">
@@ -55,53 +59,54 @@
         </div>
 
         @code
-        {
+{
 
-            // option set
-            private List<LookupSetOption> _LookupSetOptions;
+    // option set
+    private List<LookupSetOption> _LookupSetOptions;
 
-            private string currentValue { get; set; }
+    private string currentValue { get; set; }
 
-            public string Path { get; set; }
+    public string Path { get; set; }
 
-            SfRichTextEditor RteObj;
+    SfRichTextEditor RteObj;
+    SfTextBox TAObj;
 
             public string[] header { get; set; }
 
             private List<ToolbarItemModel> Tools = new List<ToolbarItemModel>()
         {
-                new ToolbarItemModel() { Command = ToolbarCommand.Bold },
-                new ToolbarItemModel() { Command = ToolbarCommand.Italic },
-                new ToolbarItemModel() { Command = ToolbarCommand.Underline },
-                new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
-                new ToolbarItemModel() { Command = ToolbarCommand.FontName },
-                new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
-                new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                new ToolbarItemModel() { Command = ToolbarCommand.Formats },
-                new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
-                new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
-                new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
-                new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
-                new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
-                new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
-                new ToolbarItemModel() { Command = ToolbarCommand.Indent },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
-                new ToolbarItemModel() { Command = ToolbarCommand.Image },
-                new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
-                new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
-                new ToolbarItemModel() { Command = ToolbarCommand.Print },
-                new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
-                new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
-                new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Bold },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Italic },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Underline },
+                //new ToolbarItemModel() { Command = ToolbarCommand.StrikeThrough },
+                //new ToolbarItemModel() { Command = ToolbarCommand.FontName },
+                //new ToolbarItemModel() { Command = ToolbarCommand.FontSize },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.FontColor },
+                //new ToolbarItemModel() { Command = ToolbarCommand.BackgroundColor },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Formats },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Alignments },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.LowerCase },
+                //new ToolbarItemModel() { Command = ToolbarCommand.UpperCase },
+                //new ToolbarItemModel() { Command = ToolbarCommand.SuperScript },
+                //new ToolbarItemModel() { Command = ToolbarCommand.SubScript },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.OrderedList },
+                //new ToolbarItemModel() { Command = ToolbarCommand.UnorderedList },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Outdent },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Indent },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.CreateLink },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Image },
+                //new ToolbarItemModel() { Command = ToolbarCommand.CreateTable },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
+                //new ToolbarItemModel() { Command = ToolbarCommand.ClearFormat },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Print },
+                //new ToolbarItemModel() { Command = ToolbarCommand.SourceCode },
+                //new ToolbarItemModel() { Command = ToolbarCommand.FullScreen },
+                //new ToolbarItemModel() { Command = ToolbarCommand.Separator },
                 new ToolbarItemModel() { Command = ToolbarCommand.Undo },
                 new ToolbarItemModel() { Command = ToolbarCommand.Redo }
                 };

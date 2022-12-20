@@ -460,7 +460,9 @@ namespace EDI.Infrastructure.Data
                     new LookupSet() { Id = 72, LookupName = "BetterWorse", YearId = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new LookupSet() { Id = 73, LookupName = "InstructionFormat", YearId = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new LookupSet() { Id = 74, LookupName = "OnlineChallenges", YearId = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                    new LookupSet() { Id = 75, LookupName = "ELL", YearId = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }                   
+                    new LookupSet() { Id = 75, LookupName = "ELL", YearId = 2, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 119, LookupName = "TimesCompleted", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 120, LookupName = "YesNoDidntUse", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
                     );
 
             });
@@ -533,8 +535,14 @@ namespace EDI.Infrastructure.Data
                     new LookupSetOption() { Id = 622, YearId = 2, English = "Other", LookupSetId = 74, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Autre", Value = 8, Sequence = 80 },
                     new LookupSetOption() { Id = 623, YearId = 2, English = "ELL", LookupSetId = 75, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "ELL", Value = 1, Sequence = 10 },
                     new LookupSetOption() { Id = 624, YearId = 2, English = "FLL", LookupSetId = 75, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "FLL", Value = 2, Sequence = 20 },
-                    new LookupSetOption() { Id = 625, YearId = 2, English = "No", LookupSetId = 75, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No", Value = 3, Sequence = 30 }
-                    
+                    new LookupSetOption() { Id = 625, YearId = 2, English = "No", LookupSetId = 75, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "No", Value = 3, Sequence = 30 },
+                    // 2023 Data Additions - Teacher Profile
+                    new LookupSetOption() { Id = 965, YearId = 3, English = "No previous experience", LookupSetId = 119, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = " No previous experience", Value = 1, Sequence = 10 },
+                    new LookupSetOption() { Id = 966, YearId = 3, English = "1-2 times", LookupSetId = 119, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "1-2 times", Value = 2, Sequence = 20 },
+                    new LookupSetOption() { Id = 967, YearId = 3, English = "3 or more times", LookupSetId = 119, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "3 or more times", Value = 3, Sequence = 30 },
+                    new LookupSetOption() { Id = 968, YearId = 3, English = "Yes", LookupSetId = 120, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Oui", Value = 1, Sequence = 10 },
+                    new LookupSetOption() { Id = 969, YearId = 3, English = "No", LookupSetId = 120, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non", Value = 2, Sequence = 20 },
+                    new LookupSetOption() { Id = 970, YearId = 3, English = "Didn't Use", LookupSetId = 120, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Didn't Use", Value = 3, Sequence = 30 }
                 );
             });
 
