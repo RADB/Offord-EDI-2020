@@ -114,7 +114,7 @@ namespace EDI.Infrastructure.Data.Migrations
             //Pandemic  
             migrationBuilder.Sql("Update[EDI.Service].[EDI].[Questionnaires.Configuration]  SET sequence = 200, GroupName = 'Pandemic', English = 'Impact of COVID-19 pandemic'  WHERE ID = 1714 and questionnaireid = 33");
             migrationBuilder.Sql("Update[EDI.Service].[EDI].[Questionnaires.Configuration]  SET sequence = 210, GroupName = 'Pandemic' WHERE ID = 1712 and questionnaireid = 33");
-            migrationBuilder.Sql("UPDATE[EDI.Service].[EDI].[Questionnaires.Configuration]  SET inputtypeid = 31, sequence = 220, GroupName = 'Pandemic', isrequired = 0 WHERE id = 1713 and questionnaireid = 33");
+            migrationBuilder.Sql("UPDATE[EDI.Service].[EDI].[Questionnaires.Configuration]  SET hashelp= 0, helptextEnglish=null, helptextFrench = null, inputtypeid = 31, sequence = 220, GroupName = 'Pandemic', isrequired = 0 WHERE id = 1713 and questionnaireid = 33");
 
             // since 2020
             migrationBuilder.Sql("Update[EDI.Service].[EDI].[Questionnaires.Configuration]  SET sequence = 300, GroupName = 'Since2020', English = 'GeneralDevelopment', isrequired = 0  WHERE ID = 1601 and questionnaireid = 33");

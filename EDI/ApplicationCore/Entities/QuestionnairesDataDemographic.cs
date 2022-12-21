@@ -69,6 +69,13 @@ namespace EDI.ApplicationCore.Entities
 
         /* End 2022 Demographics*/
 
+        /*2023 Demographics */
+        public byte? LanguageImmersion { get; set; }
+        public byte? AboriginalStatus { get; set; }
+        public byte? Immigrated { get; set; }
+
+        /*2023 End Demographics */
+
         [JsonIgnore]
         public virtual Child Child { get; set; }
         [JsonIgnore]

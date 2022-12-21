@@ -71,6 +71,14 @@ namespace EDI.ApplicationCore.Entities
         public byte? OrganizedPreSchool { get; set; }
         public bool? CentreBasedCare { get; set; }
         public string Comments { get; set; }
+
+        /* 2023 SectionE*/
+        /* NL */
+        public byte? AttendedNature { get; set; }
+
+        /* 2023 End SectionE*/
+
+
         [JsonIgnore]
         public virtual Child Child { get; set; }
         [JsonIgnore]
