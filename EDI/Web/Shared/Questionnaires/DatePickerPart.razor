@@ -24,8 +24,7 @@
     </div>
     <div class="col-9">
         <div id="datepicker-control" class="datepicker">
-            <SfDatePicker @bind-Value="currentValue" Readonly="@ReadonlyQuestion" TValue="DateTime?" Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
-                <DatePickerEvents TValue="DateTime?" ValueChange="@OnChange"></DatePickerEvents>
+            <SfDatePicker TValue="DateTime?" Value="@currentValue" @onchange="@OnChange" Readonly="@ReadonlyQuestion"  Placeholder="@Config.Label" Format="yyyy-MM-dd" Max="@DateTime.Now.AddYears(-2)" Min="@DateTime.Now.AddYears(-10)">
             </SfDatePicker>
         </div>
     </div>
@@ -95,7 +94,7 @@
     //    StateHasChanged();
     //}
 
-    private async void OnChange(Syncfusion.Blazor.Calendars.ChangedEventArgs<DateTime?> e)
+    private async void OnChange(Microsoft.AspNetCore.Components.ChangeEventArgs e)
     {
         var previousValue = reflectionService.GetFieldValue(data, Config.EntityName, Config.EntityField);
         // save the data back to the object
