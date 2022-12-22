@@ -75,7 +75,15 @@ namespace EDI.ApplicationCore.Entities
         /* 2023 SectionE*/
         /* NL */
         public byte? AttendedNature { get; set; }
-
+        /* MB */
+        public bool? CentreBasedLicensedNonProfit { get; set; }
+        public bool? CentreBasedLicensedProfit { get; set; }
+        public bool? OtherHomeLicensed { get; set; }
+        public bool? OtherHomeUnlicensedNonRelative { get; set; }
+        public bool? OtherHomeUnlicensedRelative { get; set; }
+        public bool? CentreBasedLicensed { get; set; }
+        public bool? HomeUnlicensedNonRelative { get; set; }
+        public bool? Relative { get; set; }
         /* 2023 End SectionE*/
 
 

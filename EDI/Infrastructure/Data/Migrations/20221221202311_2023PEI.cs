@@ -36,19 +36,57 @@ namespace EDI.Infrastructure.Data.Migrations
                     { 982, "admin", new DateTime(2022, 12, 21, 23, 47, 16, 944, DateTimeKind.Local).AddTicks(7442), "Other", "Other", 123, "admin", new DateTime(2022, 12, 21, 23, 47, 16, 944, DateTimeKind.Local).AddTicks(7443), (short)60, (short)6, 3 }
                 });
 
-            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET LookupEntityId=86 WHERE id=1886 AND QuestionnaireID=49 AND YearID=3");
-            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Exceptional / Special Needs', French='Exceptional / Special Needs' WHERE id=1890 AND QuestionnaireID=49 AND YearID=3");
-            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Child considered EAL/FAL', French='Child considered EAL/FAL', lookupentityid=77 WHERE id=1892 AND QuestionnaireID=49 AND YearID=3");
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET LookupEntityId=86 WHERE id=1887 AND QuestionnaireID=49 AND YearID=3");
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET LookupEntityId=123 WHERE id=1890 AND QuestionnaireID=49 AND YearID=3");
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Exceptional / Special Needs', French='Exceptional / Special Needs' WHERE id=1891 AND QuestionnaireID=49 AND YearID=3");
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Child considered EAL/FAL', French='Child considered EAL/FAL', lookupentityid=77 WHERE id=1893 AND QuestionnaireID=49 AND YearID=3");
 
-            /* Github #159 */ 
-            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Has this child been in non - parental care on a regular basis prior to kindergarten entry?<br/>Note: ''Regular'' refers to consistent basis, full or part time, for greater than 6 months.', French='Has this child been in non - parental care on a regular basis prior to kindergarten entry?<br/>Note: ''Regular'' refers to consistent basis, full or part time, for greater than 6 months.' WHERE id=1823 AND QuestionnaireID=50 AND YearID=3");
-                                    
-            
+            /* Github #159 */
+            migrationBuilder.AddColumn<bool>(
+               name: "CentreBasedLicensed",
+               schema: "EDI",
+               table: "Questionnaires.Data.SectionE",
+               type: "bit",
+               nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+               name: "HomeUnlicensedNonRelative",
+               schema: "EDI",
+               table: "Questionnaires.Data.SectionE",
+               type: "bit",
+               nullable: true);
+
+            migrationBuilder.AddColumn<bool>(
+               name: "Relative",
+               schema: "EDI",
+               table: "Questionnaires.Data.SectionE",
+               type: "bit",
+               nullable: true);
+ 
+        migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Has this child been in non - parental care on a regular basis prior to kindergarten entry?<br/>Note: ''Regular'' refers to consistent basis, full or part time, for greater than 6 months.', French='Has this child been in non - parental care on a regular basis prior to kindergarten entry?<br/>Note: ''Regular'' refers to consistent basis, full or part time, for greater than 6 months.' WHERE id=1823 AND QuestionnaireID=50 AND YearID=3");
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET Manitoba=0 WHERE questionnaireid = 50 and yearid=3 and id in(1826,1827,1828)");
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET sequence = sequence +10 WHERE Sequence >100 AND Yearid=3 AND QuestionnaireID=50");
+            migrationBuilder.Sql("INSERT INTO [EDI].[Questionnaires.Configuration]([QuestionnaireID],[InputTypeId],[OrientationID] ,[IsHeader] ,[ShowGroupName] ,[GroupName],[IsCollapsible],[min],[max],[numberstep],[Label],[English],[French],[VariableName],[HasLookupEntity],[LookupEntity],[LookupEntityID],[Sequence],[Columns],[ColumnSpan],[QuestionNumber],HasHelp,HelpTextEnglish,HelpTextFrench,IsRequired,HasNotification,NotificationCondition,[Notification],NotificationFrench,EntityName,EntityField,YearId,Manitoba) VALUES(50,34,5,0,0,'NonParental2',0,Null,Null,Null,'Null','Centre-based, licensed','Centre-based, licensed','CentreBasedLicensed',0,'Null',Null,110,1,1,'Null' ,0,'','',1,0,'Null','','','Questionnaires.Data.SectionE','CentreBasedLicensed' ,3,1)");
+            migrationBuilder.Sql("INSERT INTO [EDI].[Questionnaires.Configuration]([QuestionnaireID],[InputTypeId],[OrientationID] ,[IsHeader] ,[ShowGroupName] ,[GroupName],[IsCollapsible],[min],[max],[numberstep],[Label],[English],[French],[VariableName],[HasLookupEntity],[LookupEntity],[LookupEntityID],[Sequence],[Columns],[ColumnSpan],[QuestionNumber],HasHelp,HelpTextEnglish,HelpTextFrench,IsRequired,HasNotification,NotificationCondition,[Notification],NotificationFrench,EntityName,EntityField,YearId,Manitoba) VALUES(50,34,5,0,0,'NonParental2',0,Null,Null,Null,'Null','Other Home-based, licensed','Other Home-based, licensed','OtherHomeLicensed',0,'Null',Null,120,1,1,'Null' ,0,'','',1,0,'Null','','','Questionnaires.Data.SectionE','OtherHomeLicensed' ,3,1)");
+            migrationBuilder.Sql("INSERT INTO [EDI].[Questionnaires.Configuration]([QuestionnaireID],[InputTypeId],[OrientationID] ,[IsHeader] ,[ShowGroupName] ,[GroupName],[IsCollapsible],[min],[max],[numberstep],[Label],[English],[French],[VariableName],[HasLookupEntity],[LookupEntity],[LookupEntityID],[Sequence],[Columns],[ColumnSpan],[QuestionNumber],HasHelp,HelpTextEnglish,HelpTextFrench,IsRequired,HasNotification,NotificationCondition,[Notification],NotificationFrench,EntityName,EntityField,YearId,Manitoba) VALUES(50,34,5,0,0,'NonParental2',0,Null,Null,Null,'Null','Home-based, unlicensed, non-relative','Home-based, unlicensed, non-relative','HomeLicensedNonRelative',0,'Null',Null,130,1,1,'Null' ,0,'','',1,0,'Null','','','Questionnaires.Data.SectionE','HomeLicensedNonRelative' ,3,1)");
+            migrationBuilder.Sql("INSERT INTO [EDI].[Questionnaires.Configuration]([QuestionnaireID],[InputTypeId],[OrientationID] ,[IsHeader] ,[ShowGroupName] ,[GroupName],[IsCollapsible],[min],[max],[numberstep],[Label],[English],[French],[VariableName],[HasLookupEntity],[LookupEntity],[LookupEntityID],[Sequence],[Columns],[ColumnSpan],[QuestionNumber],HasHelp,HelpTextEnglish,HelpTextFrench,IsRequired,HasNotification,NotificationCondition,[Notification],NotificationFrench,EntityName,EntityField,YearId,Manitoba) VALUES(50,34,5,0,0,'NonParental2',0,Null,Null,Null,'Null','Relative','Relative','Relative',0,'Null',Null,140,1,1,'Null' ,0,'','',1,0,'Null','','','Questionnaires.Data.SectionE','Relative' ,3,1)");
+
         }
-        
+
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.DropColumn(
+              name: "CentreBasedLicensed",
+              schema: "EDI",
+              table: "Questionnaires.Data.SectionE");
+            migrationBuilder.DropColumn(
+              name: "HomeUnlicensedNonRelative",
+              schema: "EDI",
+              table: "Questionnaires.Data.SectionE");
+            migrationBuilder.DropColumn(
+              name: "Relative",
+              schema: "EDI",
+              table: "Questionnaires.Data.SectionE");
         }
     }
 }
