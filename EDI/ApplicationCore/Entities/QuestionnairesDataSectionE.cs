@@ -84,6 +84,12 @@ namespace EDI.ApplicationCore.Entities
         public bool? CentreBasedLicensed { get; set; }
         public bool? HomeUnlicensedNonRelative { get; set; }
         public bool? Relative { get; set; }
+
+        /*PEI*/
+        public byte? IBIPrior { get; set; }
+        public byte? IBIDuring { get; set; }
+        public byte? IBIBoth { get; set; }
+        public byte? OrganizedSocial { get; set; }
         /* 2023 End SectionE*/
 
 
