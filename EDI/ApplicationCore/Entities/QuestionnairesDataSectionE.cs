@@ -90,6 +90,12 @@ namespace EDI.ApplicationCore.Entities
         public byte? IBIDuring { get; set; }
         public byte? IBIBoth { get; set; }
         public byte? OrganizedSocial { get; set; }
+
+        public byte? FirstNations { get; set; }
+        public byte? Inuit { get; set; }
+        public byte? Metis { get; set; }
+        public byte? OtherIndigenous { get; set; }
+
         /* 2023 End SectionE*/
 
 
