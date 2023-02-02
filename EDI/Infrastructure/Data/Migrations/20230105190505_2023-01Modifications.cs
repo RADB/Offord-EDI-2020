@@ -99,6 +99,13 @@ namespace EDI.Infrastructure.Data.Migrations
             migrationBuilder.Sql("UPDATE [EDI.Service].[LUData].[LookupSetOptions] SET Value = 6 WHERE yearid = 3 and id in(665, 862, 963)");
             migrationBuilder.Sql("UPDATE [EDI.Service].[LUData].[LookupSetOptions] SET Value = 7 WHERE yearid = 3 and id in(664, 863, 964)");
             migrationBuilder.Sql("UPDATE [EDI.Service].[LUData].[LookupSetOptions] SET Value = 8 WHERE yearid = 3 and id in(861, 962)");
+
+            /* github 181 Immigatrated */
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence = sequence + 10  WHERE QuestionnaireId = 34 and Yearid = 3 and sequence > 180 and sequence<500");
+            migrationBuilder.Sql("INSERT INTO [EDI.Service].[EDI].[Questionnaires.Configuration]([QuestionnaireID],[InputTypeId],[OrientationID],[IsHeader],[ShowGroupName],[GroupName],[IsCollapsible],[min],[max],[numberstep],[Label],[English],[French],[VariableName],[HasLookupEntity],[LookupEntity],[LookupEntityID],[Sequence],[Columns],[ColumnSpan],[QuestionNumber], HasHelp, HelpTextEnglish, HelpTextFrench, IsRequired, HasNotification, NotificationCondition,[Notification], NotificationFrench, Yearid, EntityName, EntityField, NorthwestTerritories)VALUES(34, 31, 5, 0, 0, 'Demographics', 0, Null, Null, Null, Null, 'Child has immigrated to Canada within the last 2 years:', 'Child has immigrated to Canada within the last 2 years:', 'Immigrated', 1, 'LookupSets', 78, 190, 5, 1, Null, 0, '', '', 1, 0, Null, '', '', 3, 'Questionnaires.Data.Demographics', 'Immigrated', 1)");
+
+            /* github 197 Ethnic Status */
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET isrequired = 1 WHERE QuestionnaireId = 34 and Yearid = 3 and English = 'Ethnic Status'");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
