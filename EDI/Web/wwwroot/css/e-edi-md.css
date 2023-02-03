@@ -21,15 +21,12 @@ html, body {
     align-items: center;
 }
 
-
-
 .e-treeview .e-list-item.e-active > .e-fullrow, .e-treeview .e-list-item.e-active.e-hover > .e-fullrow {
     background-color: #e9ecef;
     border-bottom: #c3ced6;
     border-top: #c3ced6;
     border-right: none;
     border-left: none;
-
 }
 
 .main .p-2 {
@@ -199,34 +196,35 @@ h4{
     margin-left: 28px
 }
 
-.card-body .col-2 button {
-    /*     display: none; */
-
+.EDImain .card-body .col-2 button {
+    position: relative;
+    top: -37px;
 }
 
-.card-body .col-2 {
+.EDImain .card-body .col-2 {
     position: absolute;
-    top: 0px;
+    top: unset!important;
     width: 50px;
-    overflow: hidden;
+    overflow: visible;
     left: -20px;
 }
 
-
-
-.card-bodynopadding:nth-child(4) .card-body .col-2 {
-    top: -38px;
-    left: -20px;
+.EDImain .card-bodynopadding:nth-child(4) .EDImain .card-body .col-2 {
+    top: unset;
 }
 
-.card-body .col-2 button, .card-body .col-10 button {
+.EDImain .card-bodynopadding:nth-child(4) .EDImain .card-body .InValid .col-2, .EDImain .card-bodynopadding:nth-child(4) .EDImain .card-body  .Valid .col-2 {
+    left: 20px;
+}
+
+.EDImain .card-body .col-2 button, .EDImain .card-body .col-10 button {
     background: #fff0;
     border: none;
     color: #fff0;
     font-size: 0px;
 }
 
-.card-body .col-2 button .icon-question, .card-body .col-10 button .icon-question {
+.EDImain .card-body .col-2 button .icon-question, .EDImain .card-body .col-10 button .icon-question {
     position: relative;
     color: #1c326f;
     left: 6px;
@@ -242,9 +240,13 @@ h4{
     content: "\e05d";
 }
 
-.card-body .Valid .col-2, .card-body .InValid .col-2 {
+.EDImain .card-body .Valid .col-2, .EDImain .card-body .InValid .col-2 {
+    top: 13px;
     left: 20px;
-    top: 13px
+}
+
+.EDImain .card-body .Valid .col-2 button, .EDImain .card-body .InValid .col-2 button {
+    top: -49px;
 }
 
 .e-radio-wrapper {
@@ -284,7 +286,7 @@ div.Valid {
 }
 
 
-.col-12 > .row.Valid:nth-child(3n+2), .card-bodynopadding:nth-child(4) .card-body .row.Valid:nth-child(10) {
+.col-12 > .row.Valid:nth-child(3n+2), .EDImain  .card-bodynopadding:nth-child(4) .EDImain .card-body .row.Valid:nth-child(10) {
     border-radius:0em 0em 2em 2em;
     background-color:#dce6df63!important;
     padding-top: 0em;
@@ -301,7 +303,6 @@ div.InValid {
     /*border-color: #00640036;*/
 
 }
-
 
 .modal-dialog {
     position: relative!important;
@@ -325,8 +326,7 @@ div.InValid {
     background-color:#f8f1ba!important;
 }
 
-
-.col-12 > .row.InValid:nth-child(3n+2),  .card-bodynopadding:nth-child(4) .card-body .row.InValid:nth-child(10) {
+.col-12 > .row.InValid:nth-child(3n+2), .EDImain  .card-bodynopadding:nth-child(4) .EDImain .card-body .row.InValid:nth-child(10) {
     border-radius:0em 0em 2em 2em!important;
     background-color:#f8f1ba!important;
     padding-top: 0em;
@@ -364,7 +364,6 @@ tr.InValid{
     color:#e4b201;
 }
 
-
 .btn-info:disabled {
     background-color:#ddd;
     border-color:#bdbdbd;
@@ -385,7 +384,6 @@ tr.InValid{
 /* .text-right .btn-info {
    // color: #ddd;
 } */
-
 
 .e-radio+label::before, .e-checkbox-wrapper .e-frame {
     width: 35px;
@@ -466,9 +464,6 @@ a span.far.incomplete {
     font-size: 1.25em!important;
 }
 
-
-
-
 /* Class List */
 #GridChild_edit, #GridChild_excelexport, #GridChild_search, .e-sortfilterdiv,  .e-columnmenu, #GridChild_Éditer{
     display: none;
@@ -482,12 +477,6 @@ a span.far.incomplete {
 #GridChild_toolbarItems .e-toolbar-items .e-toolbar-item .e-tbar-btn-text {
     color: #fff;
 }
-
-
-/*     .main .card:first-of-type {
-        margin-top: 190px!important;
-    } */
-
 
 .main>.container-fluid>.row>.col-md-12>.card:first-child, .main>.container-fluid>.row>.col-md-6>.card:first-child, .main>.container-fluid>.form-horizontal>.row>.col-md-12>.card:first-child{
     margin-top:190px!important;
@@ -520,9 +509,6 @@ a span.far.incomplete {
     border: none;
 }
 
-
-
-
 .e-grid .e-headercell[aria-colindex='3'] .e-headertext, .e-grid .e-headercell[aria-colindex='3'], .e-grid .e-headercell[aria-colindex='3'] .e-headercelldiv, .e-grid .e-rowcell[aria-colindex='3']{
     width:0px!important;
     font-size:0px!important;
@@ -531,7 +517,6 @@ a span.far.incomplete {
     margin:0px!important;
     line-height: 0px!important;
     max-width: 0px!important;
-    /*      display: none; */
 }
 
 #GridChild_content_table  #GridChildcontentcolGroup col:nth-child(3){
