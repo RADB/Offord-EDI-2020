@@ -67,7 +67,7 @@
     <PackageReference Include="Syncfusion.EJ2.AspNet.Core" Version="20.4.0.48" />
     <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.4.0.48" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.24" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.25" />
     <PackageReference Include="TextCopy" Version="6.2.1" />
   </ItemGroup>
 

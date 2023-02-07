@@ -340,7 +340,7 @@ namespace EDI.Web.Services
 
             try
             {
-                var genders = _genderRepository.ListAllGenders().OrderBy(t => t.English);
+                var genders = _genderRepository.ListAllGenders().Where(t => t.YearId == _userSettings.YearId).OrderBy(t => t.English);
 
                 var items = new List<SelectListItem>
                 {
