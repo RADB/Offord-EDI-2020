@@ -110,6 +110,44 @@ namespace EDI.Infrastructure.Data.Migrations
             //Update Text
             migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Child''s home, relative' WHERE id=1943 AND Yearid=3 AND QuestionnaireID=52");
             migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Child''s home, non-relative' WHERE id=1959 AND Yearid=3 AND QuestionnaireID=52");
+
+            /* Github #185 */
+            //remove indigenous question
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET Manitoba = 0 WHERE id=1928 AND Yearid=3 AND QuestionnaireID=51");
+
+            /* Github #192 */
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET English = dbo.[StripHTML](English), French = dbo.[StripHTML](French) WHERE questionnaireid = 52 and yearid = 3 and id in (1968, 1969, 1970, 1971, 1948, 1949, 1972, 1976, 1950, 1966)");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET VariableName = 'OtherCare', EntityField = 'OtherCare' WHERE questionnaireid = 52 and yearid = 3 and id in (1976)");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET VariableName = 'OtherHomeUnlicensedRelative', EntityField = 'OtherHomeUnlicensedRelative' WHERE questionnaireid = 52 and yearid = 3 and id in (1948)");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET VariableName = 'ChildHomeRelative', EntityField = 'ChildHomeRelative' WHERE questionnaireid = 52 and yearid = 3 and id in (1972)");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET VariableName = 'ChildHomeNonRelative', EntityField = 'ChildHomeNonRelative' WHERE questionnaireid = 52 and yearid = 3 and id in (1949)");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET English = '' WHERE questionnaireid = 52 and yearid = 3 and id in (1943)");
+
+            // update to sequence numbers
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=150 WHERE questionnaireid = 52 and yearid =3 AND ID =1948");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=160 WHERE questionnaireid = 52 and yearid =3 AND ID =1949");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=170 WHERE questionnaireid = 52 and yearid =3 AND ID =1972");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=180 WHERE questionnaireid = 52 and yearid =3 AND ID =1976");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=210 WHERE questionnaireid = 52 and yearid =3 AND ID =1952");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=220 WHERE questionnaireid = 52 and yearid =3 AND ID =1953");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=230 WHERE questionnaireid = 52 and yearid =3 AND ID =1954");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=240 WHERE questionnaireid = 52 and yearid =3 AND ID =1955");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=250 WHERE questionnaireid = 52 and yearid =3 AND ID =1956");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=260 WHERE questionnaireid = 52 and yearid =3 AND ID =1957");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=280 WHERE questionnaireid = 52 and yearid =3 AND ID =1977");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=400 WHERE questionnaireid = 52 and yearid =3 AND ID =1958");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=410 WHERE questionnaireid = 52 and yearid =3 AND ID =1959");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=290 WHERE questionnaireid = 52 and yearid =3 AND ID =1978");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=300 WHERE questionnaireid = 52 and yearid =3 AND ID =1979");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=420 WHERE questionnaireid = 52 and yearid =3 AND ID =1960");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=310 WHERE questionnaireid = 52 and yearid =3 AND ID =1980");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=320 WHERE questionnaireid = 52 and yearid =3 AND ID =1981");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=330 WHERE questionnaireid = 52 and yearid =3 AND ID =1982");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=430 WHERE questionnaireid = 52 and yearid =3 AND ID =1961");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=440 WHERE questionnaireid = 52 and yearid =3 AND ID =1962");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=450 WHERE questionnaireid = 52 and yearid =3 AND ID =1963");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=460 WHERE questionnaireid = 52 and yearid =3 AND ID =1964");
+            migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=470 WHERE questionnaireid = 52 and yearid =3 AND ID =1965");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
