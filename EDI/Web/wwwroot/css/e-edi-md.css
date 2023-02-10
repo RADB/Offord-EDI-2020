@@ -464,6 +464,42 @@ a span.far.incomplete {
     font-size: 1.25em!important;
 }
 
+
+
+
+/* Province Specific Changes */
+.EDImain .card-bodynopadding.NorthwestTerritories:nth-child(2) .card-body .row:nth-child(2)  .row.Valid:nth-child(26)  {
+    padding-top: 1em!important;
+    border-radius:2em 2em 0 0!important;
+    background-color:#dce6df63!important;
+}
+
+.EDImain .card-bodynopadding.NorthwestTerritories:nth-child(2) .card-body .row:nth-child(2)  .row.Valid:nth-child(27) {
+    padding-top: 1em!important;
+    border-radius: 0 0 2em 2em!important;
+    background-color:#dce6df63!important;
+}
+
+.EDImain .card-bodynopadding.NorthwestTerritories:nth-child(2) .card-body .row:nth-child(2)  .row.InValid:nth-child(26)  {
+    padding-top: 1em!important;
+    border-radius:2em 2em 0 0!important;
+    background-color:#f8f1ba!important;
+}
+
+.EDImain .card-bodynopadding.NorthwestTerritories:nth-child(2) .card-body .row:nth-child(2)  .row.InValid:nth-child(27) {
+    padding-top: 1em!important;
+    border-radius: 0 0 2em 2em!important;
+    background-color:#f8f1ba!important;
+}
+
+.EDImain .card-bodynopadding.NorthwestTerritories:nth-child(2) .card-body .row:nth-child(2)  .row.Valid:nth-child(27) .col-2 button,  .EDImain .card-bodynopadding.NorthwestTerritories:nth-child(2) .card-body .row:nth-child(2)  .row.InValid:nth-child(27)  .col-2 button {
+    top: -62px;
+}
+
+
+
+
+
 /* Class List */
 #GridChild_edit, #GridChild_excelexport, #GridChild_search, .e-sortfilterdiv,  .e-columnmenu, #GridChild_Éditer{
     display: none;
@@ -491,7 +527,7 @@ a span.far.incomplete {
     padding-top: 1em;
 }
 
-.e-toolbar .e-toolbar-items {
+#GridChild .e-toolbar .e-toolbar-items {
     background: #fff;
 }
 
@@ -502,14 +538,14 @@ a span.far.incomplete {
     padding: 6px 40px!important;
 }
 
-.e-grid .e-add::before {
+#GridChild .e-grid .e-add::before {
     color: #fff;
 }
-.e-grid {
+#GridChild .e-grid {
     border: none;
 }
 
-.e-grid .e-headercell[aria-colindex='3'] .e-headertext, .e-grid .e-headercell[aria-colindex='3'], .e-grid .e-headercell[aria-colindex='3'] .e-headercelldiv, .e-grid .e-rowcell[aria-colindex='3']{
+#GridChild .e-grid .e-headercell[aria-colindex='3'] .e-headertext, #GridChild .e-grid .e-headercell[aria-colindex='3'], #GridChild .e-grid .e-headercell[aria-colindex='3'] .e-headercelldiv, #GridChild .e-grid .e-rowcell[aria-colindex='3']{
     width:0px!important;
     font-size:0px!important;
     color: #0000!important;
@@ -519,55 +555,55 @@ a span.far.incomplete {
     max-width: 0px!important;
 }
 
-#GridChild_content_table  #GridChildcontentcolGroup col:nth-child(3){
+#GridChild #GridChild_content_table  #GridChildcontentcolGroup col:nth-child(3){
     width:0px!important;
 }
 
-#GridChildheadercolGroup col:nth-child(3){
+#GridChild #GridChildheadercolGroup col:nth-child(3){
     width:0px!important;
 }
 
-.e-headertext .e-headercelldiv {
+#GridChild .e-headertext .e-headercelldiv {
     text-overflow: unset!important;
 }
 
-.e-grid .e-altrow {
+#GridChild .e-grid .e-altrow {
     background-color: #f9f9f9;
 }
 
-.e-grid .e-gridheader tr th .e-headercelldiv {
+#GridChild .e-grid .e-gridheader tr th .e-headercelldiv {
     font-size: 1.10em!important;
     text-align: left!important;
 }
 
-.e-grid:not(.e-row-responsive) .e-gridcontent tr.e-row .e-rowcell {
+#GridChild .e-grid:not(.e-row-responsive) .e-gridcontent tr.e-row .e-rowcell {
     text-align: left!important;
 }
 
-.fa-lock {
+#GridChild .fa-lock {
     font-size: 1.10em;
 }
 
-.e-gridheader {
+#GridChild .e-gridheader {
     border: 1px solid #e5e5e5!important;
     border-radius: 10px;
     background-color: #0000!important;
 
 }
 
-.e-gridheader .e-table th {
+#GridChild .e-gridheader .e-table th {
     background-color:#e5e5e5!important;
 }
 
-.e-grid .e-rowcell {
+#GridChild .e-grid .e-rowcell {
     font-size: 1em!important;
 }
 
-.e-gridcontent button img{
+#GridChild .e-gridcontent button img{
     display: none;
 }
 
-.e-gridcontent button {
+#GridChild .e-gridcontent button {
     width: 100px;
     background-color: #2a4980!important;
     border-radius: 4px;
@@ -577,7 +613,7 @@ a span.far.incomplete {
     padding-bottom: 4px;
 }
 
-.e-gridcontent button b:after {
+#GridChild .e-gridcontent button b:after {
     position: relative;
     color: #fff;
     left: 8px;
@@ -593,15 +629,15 @@ a span.far.incomplete {
     content: "\f15c";
 }
 
-.bar {
+#GridChild .bar {
     background-color: #e5b100;
 }
 
-#myProgress {
+#GridChild #myProgress {
     background-color: #f7e6ae;
 }
 
-#myProgress #label {
+#GridChild #myProgress #label {
     color: #000;
 }
 
