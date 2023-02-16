@@ -148,6 +148,9 @@ namespace EDI.Infrastructure.Data.Migrations
             migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=450 WHERE questionnaireid = 52 and yearid =3 AND ID =1963");
             migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=460 WHERE questionnaireid = 52 and yearid =3 AND ID =1964");
             migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET Sequence=470 WHERE questionnaireid = 52 and yearid =3 AND ID =1965");
+
+            /* GitHub #207 */
+            migrationBuilder.Sql("UPDATE[EDI.Service].[EDI].[Questionnaires.Configuration] SET Manitoba = 0 WHERE questionnaireid = 52 and yearid = 3 AND groupname = 'nonparental4'");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

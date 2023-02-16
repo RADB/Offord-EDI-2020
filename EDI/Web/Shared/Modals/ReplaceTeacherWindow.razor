@@ -76,6 +76,7 @@
 
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
+    private string predicate { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,8 +99,8 @@
             ErrorMessage = "Email is invalid.";
             return;
         }
-
-        var teacher = dbContext.Teachers.Where(p => p.Email.ToLower().Trim() == Email.ToLower().Trim()).FirstOrDefault();
+        predicate = $"p => p.Email.ToLower().Trim() == \"{Email.ToLower().Trim()}\" && p.YearId == {UserSettings.YearId}";
+        var teacher = dbContext.Teachers.Where(predicate).FirstOrDefault();
 
         if (teacher == null)
         {
@@ -131,12 +132,12 @@
 
             if (totalItems > 0)
             {
-                ErrorMessage = "The teacher with the same name and email has already existed.";
+                ErrorMessage = "The teacher with the same name and email already exists.";
                 return;
             }
             else if (totalItems2 > 0)
             {
-                ErrorMessage = "The teacher with the same teacher number has already existed in the same school.";
+                ErrorMessage = "The teacher with the same teacher number already exists in the same school.";
                 return;
             }
             else
@@ -149,7 +150,8 @@
 
                 var newteacher = dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
 
-                var children = dbContext.Children.Where(p => p.TeacherId == CurrentTeacherModel.Id).ToList();
+                predicate = "p => p.TeacherId ==" + CurrentTeacherModel.Id + " && p.YearId == " + UserSettings.YearId;
+                var children = dbContext.Children.Where(predicate).ToList();
 
                 foreach (var child in children)
                 {
@@ -165,36 +167,38 @@
         }
         else
         {
-            var children = dbContext.Children.Where(p => p.TeacherId == teacher.Id).ToList();
+            //predicate = "p => p.TeacherId ==" + CurrentTeacherModel.Id + " && p.YearId == " + UserSettings.YearId;
+            //var children = dbContext.Children.Where(predicate).ToList();
+            // need to be able to move kids to an existing teacher
+            //if (children.Count() > 0)
+            //{
+            //    ErrorMessage = "This teacher is associated to another class and not available for replacement.";
+            //    return;
+            //}
 
-            if (children.Count() > 0)
-            {
-                ErrorMessage = "This teacher is associated to class and not available for replacement.";
-                return;
-            }
+            //var totalItems = await TeacherService.GetDuplicateCount(teacher.TeacherName, teacher.Email, UserSettings.YearId);
 
-            var totalItems = await TeacherService.GetDuplicateCount(teacher.TeacherName, teacher.Email, teacher.Id);
+            //var totalItems2 = await TeacherService.GetDuplicateCount(teacher.SchoolId, teacher.TeacherNumber, UserSettings.YearId);
 
-            var totalItems2 = await TeacherService.GetDuplicateCount(teacher.SchoolId, teacher.TeacherNumber, teacher.Id);
+            //if (totalItems > 0)
+            //{
+            //    ErrorMessage = "The teacher with the same name and email already exists.";
+            //    return;
+            //}
+            //else if (totalItems2 > 0)
+            //{
+            //    ErrorMessage = "The teacher with the same teacher number already exists in the same school.";
+            //    return;
+            //}
 
-            if (totalItems > 0)
-            {
-                ErrorMessage = "The teacher with the same name and email has already existed.";
-                return;
-            }
-            else if (totalItems2 > 0)
-            {
-                ErrorMessage = "The teacher with the same teacher number has already existed in the same school.";
-                return;
-            }
+            //teacher.SchoolId = CurrentTeacherModel.SchoolId.Value;
+            //teacher.YearId = CurrentTeacherModel.YearId;
 
-            teacher.SchoolId = CurrentTeacherModel.SchoolId.Value;
-            teacher.YearId = CurrentTeacherModel.YearId;
+            //dbContext.Update(teacher);
 
-            dbContext.Update(teacher);
-
-            children = dbContext.Children.Where(p => p.TeacherId == CurrentTeacherModel.Id).ToList();
-
+            //children = dbContext.Children.Where(p => p.TeacherId == CurrentTeacherModel.Id).ToList();
+            predicate = "p => p.TeacherId ==" + CurrentTeacherModel.Id + " && p.YearId == " + UserSettings.YearId;
+            var children = dbContext.Children.Where(predicate).ToList();
             foreach (var child in children)
             {
                 child.TeacherId = teacher.Id;
@@ -222,8 +226,8 @@
             ErrorMessage = "Email is invalid.";
             return;
         }
-
-        var teacher = dbContext.Teachers.Where(p => p.Email.ToLower().Trim() == Email.ToLower().Trim()).FirstOrDefault();
+        predicate = $"p => p.Email.ToLower().Trim() == \"{Email.ToLower().Trim()}\" && p.YearId == {UserSettings.YearId}";
+        var teacher = dbContext.Teachers.Where(predicate).FirstOrDefault();
 
         if (teacher == null)
         {

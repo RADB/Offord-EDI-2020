@@ -40,7 +40,7 @@
                     <button class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Reset" @onclick="Reset"><i class="fa fa-undo fa-1x whiteiconcolor"></i> Reset</button>
                     <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Add" @onclick="Add"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Add</button>
                     <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Reset Password" @onclick="ResetPassword"><i class="fa fa-mail-bulk fa-1x whiteiconcolor"></i> Password</button>
-                    <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Replace" @onclick="Replace"><i class="fa fa-people-carry fa-1x whiteiconcolor"></i> Replace</button>
+                    <button class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="Move children to another teacher" @onclick="Replace"><i class="fa fa-people-carry fa-1x whiteiconcolor"></i> Replace</button>
                     <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Back" @onclick="Exit"><i class="fa fa-sign-out-alt fa-1x whiteiconcolor"></i> Exit</button>
                 </div>
             </div>
@@ -132,12 +132,12 @@
 
         if (totalItems > 0)
         {
-            ErrorMessage = "The teacher with the same name and email has already existed.";
+            ErrorMessage = "The teacher with the same name and email already exists.";
             toastService.ShowError(ErrorMessage);
         }
         else if (totalItems2 > 0)
         {
-            ErrorMessage = "The teacher with the same teacher number has already existed in the same school.";
+            ErrorMessage = "The teacher with the same teacher number already exists in the same school.";
             toastService.ShowError(ErrorMessage);
         }
         else
@@ -231,11 +231,11 @@
 
             if (!message.Contains("failed"))
             {
-                toastService.ShowSuccess("Password was reset for this teacher successfully. An email has been sent to the teacher.");
+                toastService.ShowSuccess("All children have been moved to the other teacher.");
             }
             else
             {
-                toastService.ShowError("Password reset failed.");
+                toastService.ShowError("Replace Teacher has failed.");
             }
 
             NavigationManager.NavigateTo(NavigationManager.Uri, true);

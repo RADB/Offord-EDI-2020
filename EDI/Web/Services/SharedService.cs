@@ -2116,6 +2116,7 @@ namespace EDI.Web.Services
 
         private string GeneratePassword(int id)
         {
+            //TODO - with students moving the reset pwd needs to be smarter - could be the wrong ID
             var password = string.Empty;
 
             var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
