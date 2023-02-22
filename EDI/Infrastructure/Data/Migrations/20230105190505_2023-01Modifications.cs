@@ -106,6 +106,138 @@ namespace EDI.Infrastructure.Data.Migrations
 
             /* github 197 Ethnic Status */
             migrationBuilder.Sql("UPDATE [EDI.Service].[EDI].[Questionnaires.Configuration] SET isrequired = 1 WHERE QuestionnaireId = 34 and Yearid = 3 and English = 'Ethnic Status'");
+
+            /* github 212 ChildrenBySite Report - adding Manitoba*/
+            var sp = @"USE [EDI.Service]
+GO
+/****** Object:  StoredProcedure [Reports].[GetChildrenDataByProvince]    Script Date: 2/22/2023 2:30:07 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+ALTER PROCEDURE [Reports].[GetChildrenDataByProvince] 
+	-- Add the parameters for the stored procedure here
+	@ProvinceId int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    DECLARE @Columns NVARCHAR(MAX) 
+	DECLARE @SQL NVARCHAR(MAX) 
+	DECLARE @Province nvarchar(100)
+	DECLARE @Questionnaires nvarchar(max)
+	DECLARE @YearId INT
+	DECLARE @Year NVARCHAR(4)
+
+	SELECT @Year = fieldvalue FROM [dbo].[SystemConfigurations] WHERE FieldName = 'Year'
+
+	SELECT @YearId = ID FROM [LUData].[Years] WHERE EDIYear = @Year
+
+	-- get the province of the site 
+	SELECT @Province = replace(p.English,' ','')
+	FROM LUData.Provinces p 
+	WHERE p.EDICode = @ProvinceId AND p.YearId = @YearId
+	--Print @Province		
+	
+	-- get the columnnames from the config table
+		SET @Columns = 
+		Case @Province
+			WHEN 'NorthwestTerritories' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE [NorthwestTerritories] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))		 
+			WHEN 'NovaScotia' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE [NovaScotia] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))
+			WHEN 'Ontario' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE [Ontario] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))
+			WHEN 'NewYork' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE [NewYork] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))			
+			WHEN 'NewfoundlandandLabrador' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE NewfoundlandandLabrador =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))
+			WHEN 'PrinceEdwardIsland' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE PrinceEdwardIsland =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))
+			WHEN 'Manitoba' THEN 
+				(SELECT ',[EDI].[' + [Config].[EntityName] + '].[' +  [EntityField] + '] as ' + [Config].[VariableName]   --AS [data()] 
+				FROM [EDI].[Questionnaires.Configuration] config
+				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
+				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.QuestionnaireID in (SELECT ID 	
+						FROM [EDI].[Questionnaires]
+						WHERE Manitoba =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
+				FOR XML PATH(''))
+			END 
+	--PRINT @Columns 
+
+		SET @SQL = 'SELECT child.Ediid as edi_id,left(child.Ediid,2) as Year,left(child.Ediid,4) as ProvinceId,p.English as Province,left(child.Ediid,7) as SiteID,left(child.Ediid,10) as SchoolId,sc.SchoolName,left(child.Ediid,13) as ClassTimeId,left(child.Ediid,15) as StudentId,child.LocalId,cs.English as StudentStatus,child.CreatedBy,child.ModifiedDate, [EDI].[Questionnaires.Data.Demographics].[LanguageCompleted] LanguageCompleted_Demographics
+	,[EDI].[Questionnaires.Data.SectionA].[LanguageCompleted] LanguageCompleted_A,[EDI].[Questionnaires.Data.SectionB].[LanguageCompleted] LanguageCompleted_B ,[EDI].[Questionnaires.Data.SectionC].[LanguageCompleted] LanguageCompleted_C,[EDI].[Questionnaires.Data.SectionD].[LanguageCompleted] LanguageCompleted_D,[EDI].[Questionnaires.Data.SectionE].[LanguageCompleted] LanguageCompleted_E ' + @Columns + '	
+	FROM [EDI].[Children] child 
+	LEFT JOIN [EDI].[Questionnaires.Data.Demographics] ON [EDI].[Questionnaires.Data.Demographics].ChildId = child.id 
+	LEFT JOIN [EDI].[Questionnaires.Data.SectionA] ON [EDI].[Questionnaires.Data.SectionA].childID= child.id 
+	LEFT JOIN [EDI].[Questionnaires.Data.SectionB] ON [EDI].[Questionnaires.Data.SectionB].childID = child.id 
+	LEFT JOIN [EDI].[Questionnaires.Data.SectionC] ON [EDI].[Questionnaires.Data.SectionC].childID = child.id 
+	LEFT JOIN [EDI].[Questionnaires.Data.SectionD] ON [EDI].[Questionnaires.Data.SectionD].childID = child.id  
+	LEFT JOIN [EDI].[Questionnaires.Data.SectionE] ON [EDI].[Questionnaires.Data.SectionE].childID = child.id  	
+	LEFT JOIN [LUData].[Years] y ON child.YearId = y.[Id]
+	LEFT JOIN [EDI].[Teachers] t ON child.TeacherId = t.Id
+	LEFT JOIN [EDI].[Schools] sc ON t.SchoolId = sc.Id
+	LEFT JOIN [EDI].[Sites] s ON sc.SiteId = s.Id
+	LEFT JOIN LUData.Provinces p ON p.Id = sc.ProvinceId
+	LEFT JOIN [LUData].[ChildStatus] cs ON child.ChildStatusId = cs.Id
+	WHERE p.EDICode =' + CAST(@ProvinceId as varchar(2)) + ' AND child.YearId = ' + CAST(@YearId as varchar)
+	
+	EXEC sp_executesql @sql;
+END
+";
+
+            //	Update the teacher data SP
+            migrationBuilder.Sql(sp);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
