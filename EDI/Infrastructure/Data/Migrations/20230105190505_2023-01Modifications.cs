@@ -110,7 +110,7 @@ namespace EDI.Infrastructure.Data.Migrations
             /* github 212 ChildrenBySite Report - adding Manitoba*/
             var sp = @"USE [EDI.Service]
 GO
-/****** Object:  StoredProcedure [Reports].[GetChildrenDataByProvince]    Script Date: 2/22/2023 2:30:07 PM ******/
+/****** Object:  StoredProcedure [Reports].[GetChildrenDataByProvince]    Script Date: 2/22/2023 3:05:05 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -154,6 +154,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.NorthwestTerritories =1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE [NorthwestTerritories] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -163,6 +164,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.NovaScotia =1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE [NovaScotia] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -172,6 +174,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.Ontario =1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE [Ontario] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -181,6 +184,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.NewYork =1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE [NewYork] =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -190,6 +194,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.NewfoundlandandLabrador =1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE NewfoundlandandLabrador =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -199,6 +204,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.PrinceEdwardIsland =1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE PrinceEdwardIsland =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -208,6 +214,7 @@ BEGIN
 				FROM [EDI].[Questionnaires.Configuration] config
 				LEFT JOIN [EDI].[Questionnaires] q ON q.Id = config.QuestionnaireId
 				WHERE config.EntityField is not null AND len(trim(config.EntityField)) > 0 AND Config.EntityField NOT IN ('CompletedQuestions', 'requiredQuestions','isComplete','QuestionnaireID','LanguageCompleted') 
+				AND config.Manitoba = 1
 				AND config.QuestionnaireID in (SELECT ID 	
 						FROM [EDI].[Questionnaires]
 						WHERE Manitoba =1 AND IsChildQuestionnaire=1 AND YearId = @YearId)
@@ -233,8 +240,7 @@ BEGIN
 	WHERE p.EDICode =' + CAST(@ProvinceId as varchar(2)) + ' AND child.YearId = ' + CAST(@YearId as varchar)
 	
 	EXEC sp_executesql @sql;
-END
-";
+END";
 
             //	Update the teacher data SP
             migrationBuilder.Sql(sp);
