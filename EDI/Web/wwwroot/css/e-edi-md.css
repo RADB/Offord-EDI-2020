@@ -501,7 +501,7 @@ a span.far.incomplete {
 
 
 /* Class List */
-#GridChild_edit, #GridChild_excelexport, #GridChild_search, .e-sortfilterdiv,  .e-columnmenu, #GridChild_Éditer{
+#GridChild_edit, #GridChild_excelexport, #GridChild_search, .e-sortfilterdiv,  .e-columnmenu, #GridChild_éditer{
     display: none;
 }
 
@@ -514,13 +514,12 @@ a span.far.incomplete {
     color: #fff;
 }
 
-.main>.container-fluid>.row>.col-md-12>.card:first-child, .main>.container-fluid>.row>.col-md-6>.card:first-child, .main>.container-fluid>.form-horizontal>.row>.col-md-12>.card:first-child{
+.main>.container-fluid>.row>.col-md-12>.card:first-child, .main>.container-fluid>.row>.col-md-5>.card:first-child, .main>.container-fluid>.row>.col-md-6>.card:first-child, .main>.container-fluid>.row>.col-md-9>.card:first-child, .main>.container-fluid>.row>.col-md-7>.card:first-child, .main>.container-fluid>.row>.col-md-10>.card:first-child, .main>.container-fluid>.row>.col-md-8>.card:first-child, .main>.container-fluid>.form-horizontal>.row>.col-md-12>.card:first-child{
     margin-top:190px!important;
 }
 
 .main .card .card-header strong{
     font-size: 1.25em;
-
 }
 
 .main .card .card-header .pull-right {
@@ -545,6 +544,29 @@ a span.far.incomplete {
     border: none;
 }
 
+
+
+.admin #GridChild .e-grid .e-headercell[aria-colindex='3'] .e-headertext, .admin #GridChild .e-grid .e-headercell[aria-colindex='3'], .admin #GridChild .e-grid .e-headercell[aria-colindex='3'] .e-headercelldiv, .admin #GridChild .e-grid .e-rowcell[aria-colindex='3']{
+    width:auto!important;
+    font-size:14px!important;
+    color: #212529!important;
+    padding:6px 8px!important;
+    margin:auto!important;
+    line-height: 22px!important;
+    max-width: none!important;
+}
+
+.admin #GridChild #GridChild_content_table  #GridChildcontentcolGroup col:nth-child(3){
+    width:50px!important;
+}
+
+.admin #GridChild #GridChildheadercolGroup col:nth-child(3){
+    width:50px!important;
+}
+
+
+
+
 #GridChild .e-grid .e-headercell[aria-colindex='3'] .e-headertext, #GridChild .e-grid .e-headercell[aria-colindex='3'], #GridChild .e-grid .e-headercell[aria-colindex='3'] .e-headercelldiv, #GridChild .e-grid .e-rowcell[aria-colindex='3']{
     width:0px!important;
     font-size:0px!important;
@@ -562,6 +584,9 @@ a span.far.incomplete {
 #GridChild #GridChildheadercolGroup col:nth-child(3){
     width:0px!important;
 }
+
+
+
 
 #GridChild .e-headertext .e-headercelldiv {
     text-overflow: unset!important;
@@ -605,6 +630,7 @@ a span.far.incomplete {
 
 #GridChild .e-gridcontent button {
     width: 100px;
+    max-width: 100%;
     background-color: #2a4980!important;
     border-radius: 4px;
     color: #fff;
@@ -614,6 +640,37 @@ a span.far.incomplete {
 }
 
 #GridChild .e-gridcontent button b:after {
+    position: relative;
+    color: #fff;
+    left: 8px;
+    font-family: "Font Awesome 5 Free";
+    speak: none;
+    font-size: 0.9375em;
+    font-style: normal;
+    font-weight: 600;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f15c";
+}
+
+.admin .e-gridcontent button[title="Profile"] img{
+    display: none;
+}
+
+.admin .e-gridcontent button[title="Profile"] {
+    width: 100px;
+    max-width: 100%;
+    background-color: #2a4980!important;
+    border-radius: 4px;
+    color: #fff;
+    margin-left: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.admin .e-gridcontent button[title="Profile"] b:after {
     position: relative;
     color: #fff;
     left: 8px;
@@ -639,6 +696,49 @@ a span.far.incomplete {
 
 #GridChild #myProgress #label {
     color: #000;
+}
+
+/* Admin Exclusive Changes */
+.admin .icon-settings {
+    font-size: 18px;
+    color: #212529;
+}
+
+/* .EDImain .card-body .col-2 {
+    width: 50px;
+    padding-left: 20px;
+    padding-top: 5px;
+    text-align: center;
+} */
+
+.admin .EDImain .card-body .col-2 button:nth-child(1) {
+    top: 10px;
+    padding-left: 8px;
+}
+
+.admin .EDImain .card-body .Valid .col-2, .EDImain .card-body .InValid .col-2 {
+    top: 13px;
+    left: 20px;
+}
+
+.admin .EDImain .card-body .Valid .col-2 button, .EDImain .card-body .InValid .col-2 button {
+    top: -49px!important;
+}
+
+.admin .cardHeader strong {
+    padding-bottom: 1em;
+}
+
+.admin .e-groupdroparea {
+    color: #fff;
+}
+
+.admin .EDImain .card-body .col-2 button .icon-question, .admin .EDImain .card-body .col-10 button .icon-question {
+    left:0px;
+}
+
+.admin .EDImain .card-body .col-2 button {
+    top: -56px;
 }
 
 /* 
