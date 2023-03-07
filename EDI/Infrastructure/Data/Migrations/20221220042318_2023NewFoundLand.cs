@@ -82,6 +82,9 @@ namespace EDI.Infrastructure.Data.Migrations
             migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET NorthwestTerritories=0 WHERE questionnaireid = 34 and yearid=3 and id in(1782,1783,1784,1854,1855,1856,1857,1858,1859,1860,1861,1862,1863,1785)");
             migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET Ontario=0 WHERE questionnaireid = 43 and yearid=3 and id in(1786,1787,1788,1844,1845,1846,1847,1848,1849,1850,1851,1852,1853,1789)");
 
+
+            /* github 196 */
+            migrationBuilder.Sql("INSERT INTO [EDI].[Questionnaires.Configuration]([QuestionnaireID],[InputTypeId],[OrientationID] ,[IsHeader] ,[ShowGroupName] ,[GroupName],[IsCollapsible],[min],[max],[numberstep],[Label],[English],[French],[VariableName],[HasLookupEntity],[LookupEntity],[LookupEntityID],[Sequence],[Columns],[ColumnSpan],[QuestionNumber],HasHelp,HelpTextEnglish,HelpTextFrench,IsRequired,HasNotification,NotificationCondition,[Notification],NotificationFrench,EntityName,EntityField,YearId,[NewfoundlandandLabrador]) VALUES(48,34,5,0,0,'NonParental3',0,Null,Null,Null,Null,'Other/don''t know','Autre/ne sais pas','OtherCare',0,Null,Null,180,1,1,Null ,0,'','',0,0,Null,'','','Questionnaires.Data.SectionE','OtherCare' ,3,1)");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
