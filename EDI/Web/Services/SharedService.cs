@@ -669,7 +669,7 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<ErrorViewModel> ProcessFileData()
+        public async Task<ErrorViewModel> ProcessFileData(string sitename)
         {
             
             WriteLogs("UploadFileData started by:" + _userSettings.UserName, true);
@@ -686,7 +686,7 @@ namespace EDI.Web.Services
                 optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
                 using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
                 {
-                    var alldata = _fileRepository.ListImportedData();
+                    var alldata = _fileRepository.ListImportedData().Where(p=> p.SiteName == sitename);
                     int fileimportstatusid = (int)Enumerations.FileImportStatus.Imported;
 
                     //var processstatusid = servicecontext.FileImportStatuses.Where(p => p.English == "Processed").First().Id;
@@ -1163,14 +1163,46 @@ namespace EDI.Web.Services
                                             {
                                                 teacherid = teacher.Id;
 
-                                                var onepassword = GeneratePassword(teacherid);
+                                                var child = _dbContext.Children.Where(p => p.TeacherId == teacher.Id).FirstOrDefault();
 
-                                                var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+                                                if (child != null)
+                                                {
+                                                    var onepassword = GeneratePassword(teacherid);
 
-                                                var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
-                                                _account.PasswordHash = newPassword;
+                                                    var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+                                                    var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
 
-                                                await _userManager.UpdateAsync(_account);
+                                                    if (_account != null)
+                                                    {
+                                                        _account.PasswordHash = newPassword;
+
+                                                        await _userManager.UpdateAsync(_account);
+                                                    }
+                                                    else
+                                                    {
+                                                        string[] names = teacher.TeacherName.Split(' ');
+                                                        string firstname = names[0];
+                                                        string lastname = names[1];
+
+                                                        var newuser = new EDIApplicationUser();
+                                                        newuser.UserName = Guid.NewGuid().ToString();
+                                                        var result = await _userManager.CreateAsync(newuser, newPassword);
+
+                                                        var role = _identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+
+                                                        await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                                                        var oneuser = _identityContext.Users.Where(p => p.Id == newuser.Id).FirstOrDefault();
+                                                        oneuser.UserName = teacher.Email;
+                                                        oneuser.Email = teacher.Email;
+                                                        oneuser.FirstName = firstname;
+                                                        oneuser.LastName = lastname;
+                                                        oneuser.NormalizedUserName = teacher.Email.ToUpper();
+                                                        oneuser.NormalizedEmail = teacher.Email.ToUpper();
+
+                                                        await _userManager.UpdateAsync(oneuser);
+                                                    }
+                                                }
                                             }
                                         }
                                     }
