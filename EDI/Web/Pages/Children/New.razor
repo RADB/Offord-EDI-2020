@@ -67,8 +67,8 @@
             NavigationManager.NavigateTo("./dashboard/index");
         }
         else if (UserSettings.IsTeacher)
-        {
-            var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID).FirstOrDefault();
+        {            
+            var teacher = dbContext.Teachers.Where(t => t.UserId == UserSettings.UserID && t.YearId == UserSettings.YearId).FirstOrDefault();
             ChildModel.TeacherId = teacher.Id;
             ChildModel.IsAdmin = false;
         }
@@ -88,6 +88,14 @@
         if (string.IsNullOrEmpty(ChildModel.Ediid))
         {
             ErrorMessage = "Edi ID is required.";
+            toastService.ShowError(ErrorMessage);
+            return;
+        }
+
+        /* Github 134 Require Local ID for NovaScotia*/
+        if (string.IsNullOrEmpty(ChildModel.LocalId) && UserSettings.Province =="NovaScotia") 
+        {
+            ErrorMessage = "Local ID is required.";
             toastService.ShowError(ErrorMessage);
             return;
         }
