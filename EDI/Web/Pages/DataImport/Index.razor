@@ -367,6 +367,7 @@
     {
         foreach (var file in args.Files)
         {
+            await SpinnerObj.ShowAsync();
             processingresult = await sharedService.UploadFileData(file);
 
             if (processingresult.errormessages.Count() == 0)
@@ -378,6 +379,7 @@
             }
             else
             {
+                await SpinnerObj.HideAsync();
                 toastService.ShowError("Data uploaded failed.");
                 StateHasChanged();
             }
