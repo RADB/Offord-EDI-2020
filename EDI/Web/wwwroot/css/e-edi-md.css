@@ -746,3 +746,10 @@ a span.far.incomplete {
      content: "\e805";
        color: #fff;
 } */
+
+.admin #GridChild_search {
+    display: block;
+}
+.blazored-modal .simple-form {
+    width: auto!important;
+}
