@@ -1,4 +1,4 @@
-﻿@using Syncfusion.Blazor.Inputs
+﻿@*@using Syncfusion.Blazor.Inputs
 @inject ISharedService sharedService
 
 
@@ -30,6 +30,7 @@
     private string ErrorMessage { get; set; }
 
     private string DataName { get; set; }
+    public int progress{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,3 +68,4 @@
 
     async Task Cancel() => await ModalInstance.CancelAsync();
 }
+*@

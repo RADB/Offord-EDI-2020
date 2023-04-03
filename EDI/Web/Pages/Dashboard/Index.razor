@@ -289,7 +289,7 @@
                     .Include(c => c.Children)
                     .ThenInclude(cs => cs.ChildStatus)
                     .Include(p => p.QuestionnairesDataTeacherProfiles)
-                    .Single();
+                    .FirstOrDefault();
 
                     // count of the children
                     childCount = teacher.Children.Count();

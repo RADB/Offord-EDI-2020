@@ -171,6 +171,20 @@ namespace EDI.Web.Services
             return _lookupSetOptionRepository.GetByIdAsync(LookupSetId)
         }*/
 
+        public string GetContentRootFolder()
+        {
+            string folderName = "Upload";
+            string webRootPath = _hostingEnvironment.ContentRootPath + @"\wwwroot";
+            string newPath = Path.Combine(webRootPath, folderName);
+
+            if (!Directory.Exists(newPath))
+            {
+                Directory.CreateDirectory(newPath);
+            }
+            
+            return newPath;
+        }
+            
         public async Task<IEnumerable<SelectListItem>> GetCountries()
         {
             
@@ -437,242 +451,12 @@ namespace EDI.Web.Services
             }
         }
 
-        public async Task<ErrorViewModel> UploadFileData(Syncfusion.Blazor.Inputs.UploadFiles file)
-        {
-            
-            WriteLogs("UploadFileData started by:" + _userSettings.UserName, true);
-            ErrorViewModel error = new ErrorViewModel();
-
-            string errormessage = string.Empty;
-            string message = string.Empty;
-            List<string> messages = new List<string>();
-            List<string> errormessages = new List<string>();
-            
-            var haserror = false;
-
-            try
-            {
-                if (file.FileInfo.Size > 0)
-                {
-                    string folderName = "Upload";
-                    string webRootPath = _hostingEnvironment.ContentRootPath + @"\wwwroot";
-                    string newPath = Path.Combine(webRootPath, folderName);
-
-                    if (!Directory.Exists(newPath))
-                    {
-                        Directory.CreateDirectory(newPath);
-                    }
-                    string fileName = string.Format("Sites{0}.xlsx",DateTime.Now.ToString("yyyyMMdd_HHmmss"));
-                    string fullPath = Path.Combine(newPath, fileName);
-
-                    var comlumHeadrs = new string[]
-                    {
-                        "Site",
-                        "Coordinator",
-                        "Coordinator Email",
-                        "School Name",
-//                        "School Province",
-                        "Teacher Name",
-                        "Teacher Email",
-                        "Child's Local ID",
-//                        "Class_tm",
-                        "Gender",
-                        "DOB",
-                        "Postal Code",
-                        "EDI_ID"
-                    };
-
-                    using (Stream fileStream = file.Stream)
-                    {
-                        using (ExcelEngine excelEngine = new ExcelEngine())
-                        {
-                            // set the stream position to zero
-                            fileStream.Position = 0;
-
-                            Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream, ExcelOpenType.Automatic, ExcelParseOptions.Default); ;
-
-                            //Get the first worksheet in the workbook into IWorksheet
-                            IWorksheet worksheet = workbook.Worksheets[0];
-
-                            IRange firstrow = worksheet.Rows[0];
-
-                            int cellCount = firstrow.LastColumn;
-
-                            for (int j = 0; j < cellCount; j++)
-                            {
-                                if (j > 10)
-                                    break;
-
-                                var cell = firstrow.Cells[j];
-                                if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != comlumHeadrs[j].Trim().ToLower())
-                                {
-                                    errormessages.Add("This Excel file is invalid");
-                                    haserror = true;
-                                    error.errormessage = errormessage;
-                                    return error;
-                                }
-                            }
-
-                            //await _fileRepository.DeleteAllFileImports();
-                            //await _fileRepository.ReseedFileImports();
-
-                            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-                            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-                            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
-                            {
-                                int firstRow = worksheet.UsedRange.Row;
-                                int lastRow = worksheet.UsedRange.LastRow;
-
-                                for (int i = firstRow; i < lastRow; i++) //Read Excel File
-                                {
-                                    IRange row = worksheet.Rows[i];
-                                    if (row == null) continue;
-                                    if (row.IsBlank) continue;
-
-
-                                    var site = row.Cells[0]?.CalculatedValue.Trim();
-
-                                    var _file = new FileImport();
-
-                                    _file.FileName = file.FileInfo.Name;
-                                    _file.SiteName = site;
-                                    _file.CoordinatorName = row.Cells[1]?.CalculatedValue.Trim();
-                                    _file.CoordinatorEmail = row.Cells[2]?.CalculatedValue.Trim();
-
-                                    if (!ValidateExtension.IsEmailValid(_file.CoordinatorEmail))
-                                    {
-                                        errormessages.Add("Coordinator Email: " + _file.CoordinatorEmail + " is invalid at Row: " + (i + 1));
-                                        haserror = true;
-                                    }
-
-                                    _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
-                                    _file.TeacherName = row.Cells[4]?.CalculatedValue.Trim();
-                                    _file.TeacherEmail = row.Cells[5]?.CalculatedValue.Trim();
-
-                                    if (!ValidateExtension.IsEmailValid(_file.TeacherEmail))
-                                    {
-                                        errormessages.Add("Teacher Email: " + _file.TeacherEmail + " is invalid at Row: " + (i + 1));
-                                        haserror = true;
-                                    }
-
-                                    _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
-                                    var gender = row.Cells[7]?.CalculatedValue.Trim();
-                                    // get the lookupset for this year
-                                   // var tempGenders = _dbContext.LookupSets.Where(p => p.YearId == _userSettings.YearId && p.LookupName == "ChildGender").Include(c => c.LookupSetOptions).FirstOrDefault();
-
-                                    if (string.IsNullOrEmpty(gender))
-                                    {
-                                        //_file.GenderId = null;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Value;
-                                        _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Id;
-                                    }
-                                    else
-                                    {
-                                        //_file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
-                                        //_file.GenderId = (gender == "M" ? dbContext.Gen.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault() : (int)Genders.Female);                                        
-                                        // Use the code to ensure the values are consistent year over year
-                                        
-
-                                        if (gender == "M")
-                                        {
-                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Male").FirstOrDefault().Id;                                            
-                                            //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Male").FirstOrDefault().Value;
-                                        }
-                                        else if (gender == "F")
-                                        {
-                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Female").FirstOrDefault().Id;
-                                            //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Female").FirstOrDefault().Value;
-                                        }
-                                        else
-                                        {
-                                            _file.GenderId = _dbContext.Genders.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Id;
-                                            //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _userSettings.YearId && p.English == "Other").FirstOrDefault().Value;
-                                        }
-                                    }
-
-
-                                    var dob = row.Cells[8]?.CalculatedValue.Trim();
-
-                                    if (string.IsNullOrEmpty(dob))
-                                    {
-                                        _file.ChildDob = null;
-                                    }
-                                    else
-                                    {
-                                        if (DateTime.TryParse(dob, out DateTime newvalue))
-                                        {
-                                            _file.ChildDob = newvalue;
-                                        }
-                                        else
-                                        {
-                                            errormessages.Add("Child Dob: " + dob + " is invalid at Row: " + (i+1));
-                                            haserror = true;
-                                        }
-                                    }
-
-                                    _file.ChildPostalCode = row.Cells[9]?.CalculatedValue.Trim();
-                                    _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
-
-                                    _file.FileImportStatusId = (int)Enumerations.FileImportStatus.Imported;
-
-                                    _file.ModifiedDate = DateTime.Now;
-                                    _file.ModifiedBy = _userSettings.UserName;
-
-                                    _file.CreatedDate = DateTime.Now;
-                                    _file.CreatedBy = _userSettings.UserName;
-
-                                    if(!haserror)
-                                    {
-                                        await _fileRepository.AddAsync(_file);
-
-                                        error.message = "file has been imported successfully.";
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!haserror)
-                        {
-                            if (File.Exists(fullPath))
-                            {
-                                File.Delete(fullPath);
-                            }
-
-                            FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                            file.Stream.WriteTo(filestream);
-                            filestream.Close();
-                            file.Stream.Close();
-                        }
-                    }
-                }
-                else
-                {
-                    errormessages.Add("The file is empty!.");
-                    haserror = true;
-                }
-
-                error.messages = messages;
-                error.errormessages = errormessages;
-                return error;
-            }
-            catch (Exception ex)
-            {
-                WriteLogs("UploadFileData failed:" + ex.Message, false);
-
-                errormessage = "File imports failed. Please check the log file for more information.";
-
-                errormessages.Add("ProcessFileData failed:" + ex.Message);
-                error.message = message;
-                error.errormessage = errormessage;
-                error.errormessages = errormessages;
-                return error;
-            }
-        }
+     
 
         public async Task<ErrorViewModel> ProcessFileData(string sitename)
         {
             
-            WriteLogs("UploadFileData started by:" + _userSettings.UserName, true);
+            WriteLogs("ProcessFileData started by:" + _userSettings.UserName, true);
             ErrorViewModel error = new ErrorViewModel();
 
             string errormessage = string.Empty;
@@ -1535,7 +1319,7 @@ namespace EDI.Web.Services
                     string fileName = string.Format("Translations{0}.xlsx", DateTime.Now.ToString("yyyyMMdd_HHmmss"));
                     string fullPath = Path.Combine(newPath, fileName);
 
-                    var comlumHeadrs = new string[]
+                    var columnHeaders = new string[]
                     {
                         "English",
                         "French"
@@ -1563,7 +1347,7 @@ namespace EDI.Web.Services
                                     break;
 
                                 var cell = firstrow.Cells[j];
-                                if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != comlumHeadrs[j].Trim().ToLower())
+                                if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != columnHeaders[j].Trim().ToLower())
                                 {
                                     errormessage = "This Excel file is invalid";
 
