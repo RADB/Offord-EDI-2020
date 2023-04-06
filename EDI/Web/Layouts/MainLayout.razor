@@ -83,15 +83,20 @@ else
     {
         if (UserSettings.IsAdmin)
         {
-            this.SidebarObject.Sidebar.Toggle();
+            //this.SidebarObject.Sidebar.Toggle();
+            this.SidebarObject.SidebarToggle = !SidebarObject.SidebarToggle;
         }
         else if (UserSettings.IsTeacher)
         {
-            this.TeacherSidebarObject.Sidebar.Toggle();
+            //this.TeacherSidebarObject.Sidebar.Toggle();
+
+            //TODO 2023-04-06 - fix sidebar toggle
+            TeacherSidebarObject.SidebarToggle = !TeacherSidebarObject.SidebarToggle;            
         }
         else if (UserSettings.IsCoordinator)
         {
-            this.CoordinatorSidebarObject.Sidebar.Toggle();
-        }
-    }
+            //this.CoordinatorSidebarObject.Sidebar.Toggle();
+            this.CoordinatorSidebarObject.SidebarToggle = !CoordinatorSidebarObject.SidebarToggle;
+        }        
+    }    
 }

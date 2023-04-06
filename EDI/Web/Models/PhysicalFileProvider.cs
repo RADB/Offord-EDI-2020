@@ -2087,5 +2087,10 @@ namespace EDI.Web.Models
             int index = path.LastIndexOf("/");
             return path.Substring(index + 1);
         }
+
+        FileManagerResponse IFileProviderBase.Rename(string path, string name, string newName, bool replace, bool showFileExtension, params FileManagerDirectoryContent[] data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

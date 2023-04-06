@@ -183,7 +183,9 @@ namespace EDI.Web
             //20.3.0.49 - check JS reference in _host file in Pages directory - update bootstrap5 and JS source to version of syncfusion controls 
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzM5NDUwQDMyMzAyZTMzMmUzME4zZkJYSENEVUd4WnZ6Zzk5MDhaNnh2dmFNaTY0TGVWcDBpSHUxZGI2Nkk9");
             //20.4.0.38
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Nzk0NTE0QDMyMzAyZTM0MmUzMEdtY0crUlB3a3ZDWTBsejl6dEhTLzVFZEtoc2hBZXpQNy83QVNIM1JXSDA9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Nzk0NTE0QDMyMzAyZTM0MmUzMEdtY0crUlB3a3ZDWTBsejl6dEhTLzVFZEtoc2hBZXpQNy83QVNIM1JXSDA9");
+            //21.1.0.35
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTYzNDY4OUAzMjMxMmUzMTJlMzMzNVpYYURySGQ2ZFJMb0ZyamJidlVkU2dnNEJOcDgzaVhoNkc4MzFCamEzdjQ9");
             // Verified
             if (env.IsDevelopment())
             {

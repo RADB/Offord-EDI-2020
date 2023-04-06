@@ -596,7 +596,7 @@
 
         try
         {
-            if (file.FileInfo.Size > 0)
+            if (file.File.Size > 0)
             {                    
                 // create the directory and get the path back from shared service
                 string newPath = sharedService.GetContentRootFolder();
@@ -620,13 +620,18 @@
                         "Postal Code",
                         "EDI_ID"
                     };
-
-                using (Stream fileStream = file.Stream)
+                // breaking change https://blazor.syncfusion.com/documentation/release-notes/21.1.35?type=all#breaking-changes-7
+                //https://www.syncfusion.com/forums/181370/file-upload-stream-write-error?reply=SFpz23 - not working
+                //using (Stream fileStream = file.Stream)
+                FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                
+                // set the stream position to zero
+                fileStream.Position = 0;   
+                await file.File.OpenReadStream(long.MaxValue).CopyToAsync(fileStream);
                 {
                     using (ExcelEngine excelEngine = new ExcelEngine())
                     {
-                        // set the stream position to zero
-                        fileStream.Position = 0;
+                                             
 
                         Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream, ExcelOpenType.Automatic, ExcelParseOptions.Default); ;
 
@@ -799,16 +804,17 @@
                             File.Delete(fullPath);
                         }
 
-                        FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                        file.Stream.WriteTo(filestream);
-                        filestream.Close();
-                        file.Stream.Close();
+                        //FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);                        
+                        //file.Stream.WriteTo(filestream);
+                        //filestream.Close();
+                        //file.Stream.Close();
                     }
 
                     // reset progress bar
                     progress = 0;
                     StateHasChanged();
                 }
+                fileStream.Close();
             }
             else
             {

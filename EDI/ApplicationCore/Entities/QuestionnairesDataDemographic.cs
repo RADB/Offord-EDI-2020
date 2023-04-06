@@ -81,5 +81,7 @@ namespace EDI.ApplicationCore.Entities
         [JsonIgnore]
         public virtual Questionnaire Questionnaire { get; set; }
         public virtual Gender Gender { get; set; }
+        public byte? BandMembership { get; set; }
+        public string BandOtherSpecify { get; set; }
     }
 }

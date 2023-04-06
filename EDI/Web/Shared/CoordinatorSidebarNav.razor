@@ -4,7 +4,7 @@
 @inject ISharedService sharedService;
 
 
-<SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)">
+<SfSidebar HtmlAttributes="@HtmlAttribute" Width="290px" Target=".main-content" @ref="Sidebar" MediaQuery="(min-width:600px)" @bind-IsOpen="SidebarToggle">
     <ChildContent>
         <div class="main-menu">
             <div>                
@@ -36,6 +36,7 @@
 @code {
     SfTreeView<TreeData> TreeView;
     public SfSidebar Sidebar;
+    public bool SidebarToggle = true;
     public ExpandAction Expand = ExpandAction.Click;
     Dictionary<string, object> HtmlAttribute = new Dictionary<string, object>()
 {
