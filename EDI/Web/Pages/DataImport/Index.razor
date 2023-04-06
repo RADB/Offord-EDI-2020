@@ -623,198 +623,191 @@
                 // breaking change https://blazor.syncfusion.com/documentation/release-notes/21.1.35?type=all#breaking-changes-7
                 //https://www.syncfusion.com/forums/181370/file-upload-stream-write-error?reply=SFpz23 - not working
                 //using (Stream fileStream = file.Stream)
-                FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                
-                // set the stream position to zero
-                fileStream.Position = 0;   
-                await file.File.OpenReadStream(long.MaxValue).CopyToAsync(fileStream);
+                if (File.Exists(fullPath))
                 {
-                    using (ExcelEngine excelEngine = new ExcelEngine())
+                    File.Delete(fullPath);
+                }
+                FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+
+                await file.File.OpenReadStream(long.MaxValue).CopyToAsync(fileStream);
+                fileStream.Close();
+
+
+                using (ExcelEngine excelEngine = new ExcelEngine())
+                {
+
+                    FileStream inputStream = new FileStream(fullPath, FileMode.Open);
+
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Open(inputStream);
+
+                    inputStream.Position = 0;
+
+                    //Get the first worksheet in the workbook into IWorksheet
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    IRange firstrow = worksheet.Rows[0];
+
+                    // get number of columns
+                    int cellCount = firstrow.LastColumn;
+
+                    for (int j = 0; j < cellCount; j++)
                     {
-                                             
+                        if (j > 10)
+                            break;
 
-                        Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream, ExcelOpenType.Automatic, ExcelParseOptions.Default); ;
-
-                        //Get the first worksheet in the workbook into IWorksheet
-                        IWorksheet worksheet = workbook.Worksheets[0];
-
-                        IRange firstrow = worksheet.Rows[0];
-
-                        // get number of columns
-                        int cellCount = firstrow.LastColumn;
-
-                        for (int j = 0; j < cellCount; j++)
+                        var cell = firstrow.Cells[j];
+                        if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != columnHeaders[j].Trim().ToLower())
                         {
-                            if (j > 10)
-                                break;
-
-                            var cell = firstrow.Cells[j];
-                            if ((cell == null || string.IsNullOrWhiteSpace(cell.CalculatedValue)) || cell.CalculatedValue.ToLower() != columnHeaders[j].Trim().ToLower())
-                            {
-                                errormessages.Add("This Excel file is invalid");
-                                haserror = true;
-                                error.errormessage = errormessage;
-                                return error;
-                            }
+                            errormessages.Add("This Excel file is invalid");
+                            haserror = true;
+                            error.errormessage = errormessage;
+                            return error;
                         }
+                    }
 
-                        //await _fileRepository.DeleteAllFileImports();
-                        //await _fileRepository.ReseedFileImports();
+                    //await _fileRepository.DeleteAllFileImports();
+                    //await _fileRepository.ReseedFileImports();
 
-                        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-                        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-                        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+                    var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+                    optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+                    using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+                    {
+                        int firstRow = worksheet.UsedRange.Row;
+                        // get the number of records
+                        int lastRow = worksheet.UsedRange.LastRow;
+
+
+                        for (int i = firstRow; i < lastRow; i++) //Read Excel File
                         {
-                            int firstRow = worksheet.UsedRange.Row;
-                            // get the number of records
-                            int lastRow = worksheet.UsedRange.LastRow;
+                            IRange row = worksheet.Rows[i];
+                            if (row == null) continue;
+                            if (row.IsBlank) continue;
 
 
-                            for (int i = firstRow; i < lastRow; i++) //Read Excel File
+                            var site = row.Cells[0]?.CalculatedValue.Trim();
+
+                            var _file = new FileImport();
+
+                            _file.FileName = file.FileInfo.Name;
+                            _file.SiteName = site;
+                            _file.CoordinatorName = row.Cells[1]?.CalculatedValue.Trim();
+                            _file.CoordinatorEmail = row.Cells[2]?.CalculatedValue.Trim();
+
+                            if (!ValidateExtension.IsEmailValid(_file.CoordinatorEmail))
                             {
-                                IRange row = worksheet.Rows[i];
-                                if (row == null) continue;
-                                if (row.IsBlank) continue;
+                                errormessages.Add("Coordinator Email: " + _file.CoordinatorEmail + " is invalid at Row: " + (i + 1));
+                                haserror = true;
+                            }
+
+                            _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
+                            _file.TeacherName = row.Cells[4]?.CalculatedValue.Trim();
+                            _file.TeacherEmail = row.Cells[5]?.CalculatedValue.Trim();
+
+                            if (!ValidateExtension.IsEmailValid(_file.TeacherEmail))
+                            {
+                                errormessages.Add("Teacher Email: " + _file.TeacherEmail + " is invalid at Row: " + (i + 1));
+                                haserror = true;
+                            }
+
+                            _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
+                            var gender = row.Cells[7]?.CalculatedValue.Trim();
+                            // get the lookupset for this year
+                            // var tempGenders = dbContext.LookupSets.Where(p => p.YearId == UserSettings.YearId && p.LookupName == "ChildGender").Include(c => c.LookupSetOptions).FirstOrDefault();
+
+                            if (string.IsNullOrEmpty(gender))
+                            {
+                                //_file.GenderId = null;
+                                //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
+                                _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                            }
+                            else
+                            {
+                                //_file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
+                                //_file.GenderId = (gender == "M" ? dbContext.Gen.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault() : (int)Genders.Female);
+                                // Use the code to ensure the values are consistent year over year
 
 
-                                var site = row.Cells[0]?.CalculatedValue.Trim();
-
-                                var _file = new FileImport();
-
-                                _file.FileName = file.FileInfo.Name;
-                                _file.SiteName = site;
-                                _file.CoordinatorName = row.Cells[1]?.CalculatedValue.Trim();
-                                _file.CoordinatorEmail = row.Cells[2]?.CalculatedValue.Trim();
-
-                                if (!ValidateExtension.IsEmailValid(_file.CoordinatorEmail))
+                                if (gender == "M")
                                 {
-                                    errormessages.Add("Coordinator Email: " + _file.CoordinatorEmail + " is invalid at Row: " + (i + 1));
-                                    haserror = true;
+                                    _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Id;
+                                    //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Value;
                                 }
-
-                                _file.SchoolName = row.Cells[3]?.CalculatedValue.Trim();
-                                _file.TeacherName = row.Cells[4]?.CalculatedValue.Trim();
-                                _file.TeacherEmail = row.Cells[5]?.CalculatedValue.Trim();
-
-                                if (!ValidateExtension.IsEmailValid(_file.TeacherEmail))
+                                else if (gender == "F")
                                 {
-                                    errormessages.Add("Teacher Email: " + _file.TeacherEmail + " is invalid at Row: " + (i + 1));
-                                    haserror = true;
+                                    _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
+                                    //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Value;
                                 }
-
-                                _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
-                                var gender = row.Cells[7]?.CalculatedValue.Trim();
-                                // get the lookupset for this year
-                                // var tempGenders = dbContext.LookupSets.Where(p => p.YearId == UserSettings.YearId && p.LookupName == "ChildGender").Include(c => c.LookupSetOptions).FirstOrDefault();
-
-                                if (string.IsNullOrEmpty(gender))
+                                else
                                 {
-                                    //_file.GenderId = null;
-                                    //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                     _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                                    //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                 }
-                                else
+                            }
+
+
+                            var dob = row.Cells[8]?.CalculatedValue.Trim();
+
+                            if (string.IsNullOrEmpty(dob))
+                            {
+                                _file.ChildDob = null;
+                            }
+                            else
+                            {
+                                // add check for valid date range 1900-01-01 to 2079-06-06
+                                if (DateTime.TryParse(dob, out DateTime newvalue))
                                 {
-                                    //_file.GenderId = (gender == "M" ? (int)Genders.Male : (int)Genders.Female);
-                                    //_file.GenderId = (gender == "M" ? dbContext.Gen.Where(p => p.Id == ppl.CountryID.Value).FirstOrDefault() : (int)Genders.Female);                                        
-                                    // Use the code to ensure the values are consistent year over year
-
-
-                                    if (gender == "M")
-                                    {
-                                        _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Id;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Value;
-                                    }
-                                    else if (gender == "F")
-                                    {
-                                        _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Value;
-                                    }
+                                    if (newvalue <= DateTime.Parse("2079-06-06") && newvalue >= DateTime.Parse("1900-01-01"))
+                                        _file.ChildDob = newvalue;
                                     else
                                     {
-                                        _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
-                                    }
-                                }
-
-
-                                var dob = row.Cells[8]?.CalculatedValue.Trim();
-
-                                if (string.IsNullOrEmpty(dob))
-                                {
-                                    _file.ChildDob = null;
-                                }
-                                else
-                                {
-                                    // add check for valid date range 1900-01-01 to 2079-06-06
-                                    if (DateTime.TryParse(dob, out DateTime newvalue))
-                                    {
-                                        if (newvalue <= DateTime.Parse("2079-06-06") && newvalue >= DateTime.Parse("1900-01-01"))
-                                            _file.ChildDob = newvalue;
-                                        else
-                                        {
-                                            errormessages.Add(dob + " is outside of the acceptable range 1900-01-01 to 2079-06-06 at Row: " + (i + 1));
-                                            haserror = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        errormessages.Add("Child Dob: " + dob + " is invalid at Row: " + (i + 1));
+                                        errormessages.Add(dob + " is outside of the acceptable range 1900-01-01 to 2079-06-06 at Row: " + (i + 1));
                                         haserror = true;
                                     }
                                 }
-
-                                _file.ChildPostalCode = row.Cells[9]?.CalculatedValue.Trim();
-                                _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
-
-                                _file.FileImportStatusId = (int)Enumerations.FileImportStatus.Imported;
-
-                                _file.ModifiedDate = DateTime.Now;
-                                _file.ModifiedBy = UserSettings.UserName;
-
-                                _file.CreatedDate = DateTime.Now;
-                                _file.CreatedBy = UserSettings.UserName;
-
-                                if (!haserror)
-                                {
-                                    await _fileRepository.AddAsync(_file);
-
-                                    error.message = "file has been imported successfully.";
-                                }
-
-                                // set the progress
-                                progress = (double)((i / (double)lastRow) * 100);
-
-                                // update the progress bar every 5 records
-                                if (lastRow > 100)
-                                {
-                                    if (i % 5 == 0)
-                                        StateHasChanged();
-                                }
                                 else
+                                {
+                                    errormessages.Add("Child Dob: " + dob + " is invalid at Row: " + (i + 1));
+                                    haserror = true;
+                                }
+                            }
+
+                            _file.ChildPostalCode = row.Cells[9]?.CalculatedValue.Trim();
+                            _file.ChildEdiid = row.Cells[10]?.CalculatedValue.Trim();
+
+                            _file.FileImportStatusId = (int)Enumerations.FileImportStatus.Imported;
+
+                            _file.ModifiedDate = DateTime.Now;
+                            _file.ModifiedBy = UserSettings.UserName;
+
+                            _file.CreatedDate = DateTime.Now;
+                            _file.CreatedBy = UserSettings.UserName;
+
+                            if (!haserror)
+                            {
+                                await _fileRepository.AddAsync(_file);
+
+                                error.message = "file has been imported successfully.";
+                            }
+
+                            // set the progress
+                            progress = (double)((i / (double)lastRow) * 100);
+
+                            // update the progress bar every 5 records
+                            if (lastRow > 100)
+                            {
+                                if (i % 5 == 0)
                                     StateHasChanged();
                             }
+                            else
+                                StateHasChanged();
                         }
                     }
-
-                    if (!haserror)
-                    {
-                        if (File.Exists(fullPath))
-                        {
-                            File.Delete(fullPath);
-                        }
-
-                        //FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);                        
-                        //file.Stream.WriteTo(filestream);
-                        //filestream.Close();
-                        //file.Stream.Close();
-                    }
-
-                    // reset progress bar
-                    progress = 0;
-                    StateHasChanged();
                 }
-                fileStream.Close();
+
+                // reset progress bar
+                progress = 0;
+                StateHasChanged();
+                //fileStream.Close();
             }
             else
             {
