@@ -1,9 +1,11 @@
 ﻿@page "/DataImport/index/{ChangeNumber:int}"
 @using EDI.Web.Shared.Modals;
 @using EDI.ApplicationCore.Interfaces;
+@using EDI.Infrastructure.Interfaces;
 @using Microsoft.EntityFrameworkCore;
 @using Microsoft.Extensions.Logging;
 @using Microsoft.AspNetCore.Components.Authorization;
+@using Microsoft.AspNetCore.Identity;
 @using EDI.Web.Extensions;
 @using EDI.Web.Data;
 @using Syncfusion.Blazor.Inputs;
@@ -22,9 +24,21 @@
 @inject ServiceContext dbContext;
 @inject AppIdentityDbContext identityContext;
 @inject IAsyncRepository<FileImport> _fileRepository;
-
-
-
+@inject IAsyncRepository<Year> _yearRepository;
+@inject IAsyncIdentityRepository _accountRepository;
+@inject IAsyncRepository<Child> _childRepository;
+@inject IAsyncRepository<Site> _siteRepository;
+@inject IAsyncRepository<Teacher> _teacherRepository;
+@inject IAsyncRepository<School> _schoolRepository;
+@inject IAsyncRepository<Coordinator> _coordinatorRepository;
+@inject IAsyncRepository<QuestionnairesDataTeacherProfile> _profileRepository;
+@inject UserManager<EDIApplicationUser> _userManager;
+@inject IAsyncRepository<QuestionnairesDataDemographic> _questionnairesDataDemographic;
+@inject IAsyncRepository<QuestionnairesDataSectionA> _questionnairesDataSectionA;
+@inject IAsyncRepository<QuestionnairesDataSectionB> _questionnairesDataSectionB;
+@inject IAsyncRepository<QuestionnairesDataSectionC> _questionnairesDataSectionC;
+@inject IAsyncRepository<QuestionnairesDataSectionD> _questionnairesDataSectionD;
+@inject IAsyncRepository<QuestionnairesDataSectionE> _questionnairesDataSectionE;
 @inject UserSettings UserSettings;
 
 <div class="row">
@@ -97,6 +111,17 @@
                     </SfDropDownList>
                     <br />
                     <div id="container">
+                        <div>                              
+                            @siteMessage
+                            <br />
+                            @schoolMessage
+                            <br />
+                            @teacherMessage
+                            <br />
+                            @childMessage
+                        </div>
+                        <SfProgressBar Type="ProgressType.Linear" Value="@fileProgress" Height="60" Minimum="0" Maximum="100" @ref="ProgressBarFileObj" ShowProgressValue="true" IsStriped="true">
+                        </SfProgressBar>
                         <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Excel Import","Process","ProcessAll", "ExcelExport", "Clear", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                             <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
                             <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" TValue="FileItemViewModel"></GridEvents>
@@ -117,7 +142,9 @@
                                 <GridColumn Field=@nameof(FileItemViewModel.FileImportStatus) HeaderText="Status" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
                             </GridColumns>
                         </SfGrid>
+
                     </div>
+                    
                     <SfSpinner @ref="SpinnerObj">
                     </SfSpinner>
                 }
@@ -132,13 +159,17 @@
     [CascadingParameter] public IModalService ModalService { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
-
+    private string childMessage { get; set; }
+    private string schoolMessage { get; set; }
+    private string siteMessage { get; set; }
+    private string teacherMessage { get; set; }
 
     [Parameter]
     public int? ChangeNumber { get; set; }
 
     SfSpinner SpinnerObj;
     SfProgressBar ProgressBarObj;
+    SfProgressBar ProgressBarFileObj;
     ErrorViewModel processingresult { get; set; }
 
     SfGrid<FileItemViewModel> Grid;
@@ -151,8 +182,8 @@
     public IEnumerable<SelectListItem> Sites { get; set; }
     public string sitename{ get; set; }
 
-    public double progress {get; set;}
-    //Syncfusion.Blazor.ProgressBar pb ;
+    public double progress {get; set;}    
+    public double fileProgress {get; set;}     
 
     protected override async Task OnParametersSetAsync()
     {
@@ -311,18 +342,18 @@
         }
         if (args.Item.Id == "GridFile_Process")
         {
-            ProcessData(sitename);
+            await ProcessData(sitename);
         }
         if (args.Item.Id == "GridFile_ProcessAll")
         {
             foreach (var site in Sites)
             {
-                ProcessData(site.Value);
+                await ProcessData(site.Value);
             }
         }
     }
 
-    async void ProcessData(string sitename)
+    async Task ProcessData(string sitename)
     {
         var allimportedfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == (int)Enumerations.FileImportStatus.Imported && p.SiteName == sitename).OrderBy(p => p.FileName).ToList());
 
@@ -333,7 +364,7 @@
         else
         {
             await SpinnerObj.ShowAsync();
-            processingresult = await sharedService.ProcessFileData(sitename);
+            processingresult = await ProcessFileData(sitename);
             await SpinnerObj.HideAsync();
             //SpinnerObj.HideSpinner("Data processing is done.");
 
@@ -482,7 +513,7 @@
 
             files = sivm;
 
-            this.Grid.Refresh();
+            await this.Grid.Refresh();
         }
         //*Modal.OnClose -= UploadWindowModalClosed;
 
@@ -669,12 +700,12 @@
                                 _file.LocalId = row.Cells[6]?.CalculatedValue.Trim();
                                 var gender = row.Cells[7]?.CalculatedValue.Trim();
                                 // get the lookupset for this year
-                                // var tempGenders = _dbContext.LookupSets.Where(p => p.YearId == _UserSettings.YearId && p.LookupName == "ChildGender").Include(c => c.LookupSetOptions).FirstOrDefault();
+                                // var tempGenders = dbContext.LookupSets.Where(p => p.YearId == UserSettings.YearId && p.LookupName == "ChildGender").Include(c => c.LookupSetOptions).FirstOrDefault();
 
                                 if (string.IsNullOrEmpty(gender))
                                 {
                                     //_file.GenderId = null;
-                                    //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
+                                    //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                     _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
                                 }
                                 else
@@ -687,17 +718,17 @@
                                     if (gender == "M")
                                     {
                                         _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Id;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _UserSettings.YearId && p.English == "Male").FirstOrDefault().Value;
+                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Value;
                                     }
                                     else if (gender == "F")
                                     {
                                         _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _UserSettings.YearId && p.English == "Female").FirstOrDefault().Value;
+                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Value;
                                     }
                                     else
                                     {
                                         _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
-                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == _UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
+                                        //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                     }
                                 }
 
@@ -758,48 +789,860 @@
                                 else
                                     StateHasChanged();
                             }
-                            }
                         }
-
-                        if (!haserror)
-                        {
-                            if (File.Exists(fullPath))
-                            {
-                                File.Delete(fullPath);
-                            }
-
-                            FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                            file.Stream.WriteTo(filestream);
-                            filestream.Close();
-                            file.Stream.Close();
-                        }
-
-                        // reset progress bar
-                        progress = 0;
-                        StateHasChanged();
                     }
-                }
-                else
-                {
-                    errormessages.Add("The file is empty!.");
-                    haserror = true;
-                }
 
-                error.messages = messages;
-                error.errormessages = errormessages;
-                return error;
+                    if (!haserror)
+                    {
+                        if (File.Exists(fullPath))
+                        {
+                            File.Delete(fullPath);
+                        }
+
+                        FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                        file.Stream.WriteTo(filestream);
+                        filestream.Close();
+                        file.Stream.Close();
+                    }
+
+                    // reset progress bar
+                    progress = 0;
+                    StateHasChanged();
+                }
             }
-            catch (Exception ex)
+            else
             {
-                sharedService.WriteLogs("UploadFileData failed:" + ex.Message, false);
-
-                errormessage = "File imports failed. Please check the log file for more information.";
-
-                errormessages.Add("ProcessFileData failed:" + ex.Message);
-                error.message = message;
-                error.errormessage = errormessage;
-                error.errormessages = errormessages;
-                return error;
+                errormessages.Add("The file is empty!.");
+                haserror = true;
             }
+
+            error.messages = messages;
+            error.errormessages = errormessages;
+            return error;
         }
+        catch (Exception ex)
+        {
+            sharedService.WriteLogs("UploadFileData failed:" + ex.Message, false);
+
+            errormessage = "File imports failed. Please check the log file for more information.";
+
+            errormessages.Add("ProcessFileData failed:" + ex.Message);
+            error.message = message;
+            error.errormessage = errormessage;
+            error.errormessages = errormessages;
+            return error;
+        }
+    }
+
+
+    public async Task<ErrorViewModel> ProcessFileData(string sitename)
+    {
+
+        sharedService.WriteLogs("ProcessFileData started by:" + UserSettings.UserName, true);
+        ErrorViewModel error = new ErrorViewModel();
+
+        string errormessage = string.Empty;
+        string message = string.Empty;
+        List<string> messages = new List<string>();
+        List<string> errormessages = new List<string>();
+
+        try
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+            optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            {
+                var alldata = _fileRepository.ListImportedData().Where(p=> p.SiteName == sitename);
+                int fileimportstatusid = (int)Enumerations.FileImportStatus.Imported;
+
+                //var processstatusid = servicecontext.FileImportStatuses.Where(p => p.English == "Processed").First().Id;
+
+                var totalcoordinators = 0;
+                var totalsites = 0;
+                var totalschools = 0;
+                var totalteachers = 0;
+                var totalstudents = 0;
+
+                var password = string.Empty;
+                int yearid = 0;
+                string subyear;                
+                bool haserror;
+                short EDIYear = -1;
+                short previousEDIYear = 0;
+                int coordinatorid = -1;
+                string previousCoordinatorName = string.Empty;
+                string previousCoordinatorEmail = string.Empty;
+                int provinceId = -1;                
+                string provincename = string.Empty;
+                string provinceedicodestring;
+                int provinceEDICode = -1;
+                int previousProvinceEDICode = -1;
+                int countryid=0;
+                string predicate = string.Empty;
+                Questionnaire questionnaireTeacher = null;
+                Questionnaire questionnaireDemographics = null;
+                Questionnaire questionnaireA = null;
+                Questionnaire questionnaireB = null;
+                Questionnaire questionnaireC = null;
+                Questionnaire questionnaireD = null;
+                Questionnaire questionnaireE = null;
+                int siteId = -1;
+                string previousSiteNumber = "0";
+                int schoolId = -1;
+                string previousSchoolNumber = "0";
+                int teacherId = -1;
+                string previousTeacherName = string.Empty;
+                string previousTeacherEmail = string.Empty;
+                int childCount = 0;
+                int totalChildren = alldata.Count();
+                string username = UserSettings.UserName;
+                DateTime timestamp;
+                var childstatus = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+
+                foreach (var data in alldata)
+                {
+                    childCount++;
+                    timestamp = DateTime.Now;
+                    // default variables
+                    haserror = false;
+
+                    if (string.IsNullOrEmpty(data.ChildEdiid))
+                    {
+                        errormessages.Add(data.Id + ": Child Ediid is required.");
+                        haserror = true;
+                    }
+                    if (data.ChildEdiid.Length != 15)
+                    {
+                        errormessages.Add(data.Id + ": Child Ediid != 15 digits.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.CoordinatorName))
+                    {
+                        errormessages.Add(data.Id + ": Coordinator Name is required.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.CoordinatorEmail))
+                    {
+                        errormessages.Add(data.Id + ": Coordinator Email is required.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.SiteName))
+                    {
+                        errormessages.Add(data.Id + ": Site Name is required.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.SchoolName))
+                    {
+                        errormessages.Add(data.Id + ": School Name is required.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.TeacherName))
+                    {
+                        errormessages.Add(data.Id + ": Teacher Name is required.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.TeacherEmail))
+                    {
+                        errormessages.Add(data.Id + ": Teacher Email is required.");
+                        haserror = true;
+                    }
+                    if (!ValidateExtension.IsEmailValid(data.TeacherEmail))
+                    {
+                        errormessages.Add(data.Id + ": Teacher Email is invalid.");
+                        haserror = true;
+                    }
+                    if (!ValidateExtension.IsEmailValid(data.CoordinatorEmail))
+                    {
+                        errormessages.Add(data.Id + ": Coordinator Email is invalid.");
+                        haserror = true;
+                    }
+                    if (string.IsNullOrEmpty(data.LocalId))
+                    {
+                        errormessages.Add(data.Id + ": Local Id is required.");
+                        haserror = true;
+                    }
+
+                    subyear = data.ChildEdiid.Substring(0, 2);                    
+                    EDIYear = short.Parse("20" + subyear);
+
+                    // if year is the same as previous record no further action required for year variable
+                    if (EDIYear != previousEDIYear)
+                    {
+                        previousEDIYear = EDIYear;
+
+                        // check to see if year is in the database
+                        var years = servicecontext.Years.Where(p => p.Ediyear == EDIYear);
+
+                        // if the year is not in the database then add it
+                        if (years == null || years.Count() == 0)
+                        {
+                            try
+                            {
+                                var _year = new Year();
+
+                                _year.Ediyear = EDIYear;
+                                _year.CreatedDate = timestamp;
+                                _year.CreatedBy = username;
+                                _year.ModifiedDate = timestamp;
+                                _year.ModifiedBy = username;
+
+                                await _yearRepository.AddAsync(_year);
+
+                                yearid = _year.Id;
+                            }
+                            catch (Exception ex)
+                            {
+                                errormessages.Add(data.Id + ": Create year error: " + ex.Message);
+                                haserror = true;
+                            }
+                        }
+                        else
+                        {
+                            yearid = years.First().Id;
+                        }
+                    }
+
+                    provinceedicodestring = data.ChildEdiid.Substring(2, 2);
+                    provinceEDICode = int.Parse(provinceedicodestring);
+
+                    // lookup province data if not the same
+                    if(provinceEDICode != previousProvinceEDICode)
+                    {
+                        previousProvinceEDICode = provinceEDICode;
+                        countryid = servicecontext.Provinces.Where(p => p.EDICode == provinceEDICode && p.YearId == yearid).FirstOrDefault().CountryID;
+                        provinceId = servicecontext.Provinces.Where(p => p.EDICode == provinceEDICode && p.YearId == yearid).FirstOrDefault().Id;                            
+                        provincename = servicecontext.Provinces.Where(p => p.EDICode == provinceEDICode && p.YearId == yearid).FirstOrDefault().English.Replace(" ", "");
+
+                        predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
+
+                        questionnaireTeacher = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        if (questionnaireTeacher == null)
+                        {
+                            errormessages.Add(data.Id + ": Teacher Feedback Questionnaire is invalid and not associated to the year - " + EDIYear);
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+
+                        predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
+
+                        questionnaireDemographics = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
+
+                        questionnaireA = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
+
+                        questionnaireB = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
+
+                        questionnaireC = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
+
+                        questionnaireD = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
+
+                        questionnaireE = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+
+                        if (questionnaireDemographics == null)
+                        {
+                            errormessages.Add(data.Id + ": Demographics Questionnaire is invalid and not associated to the year - " + EDIYear);
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+
+                        if (questionnaireA == null)
+                        {
+                            errormessages.Add(data.Id + ": Section A Questionnaire is invalid and not associated to the year - " + EDIYear);
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+
+                        if (questionnaireB == null)
+                        {
+                            errormessages.Add(data.Id + ": Section B Questionnaire is invalid and not associated to the year - " + EDIYear);
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+
+                        if (questionnaireC == null)
+                        {
+                            errormessages.Add( data.Id + ": Section C Questionnaire is invalid and not associated to the year - " + EDIYear);
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+
+                        if (questionnaireD == null)
+                        {
+                            errormessages.Add(data.Id + ": Section D Questionnaire is invalid and not associated to the year - " + EDIYear );
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+
+                        if (questionnaireE == null)
+                        {
+                            errormessages.Add(data.Id + ": Section E Questionnaire is invalid and not associated to the year - " + EDIYear );
+                            haserror = true;
+                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidQuestionnaire;
+                        }
+                    }
+
+
+
+                    if (!haserror)
+                    {
+                        password = data.ChildEdiid.Substring(4, 8);
+
+                        ///<summary>process coordinator
+                        ///</summary>          
+                        // check to see if same coordinator
+                        if (data.CoordinatorName != previousCoordinatorName || data.CoordinatorEmail != previousCoordinatorEmail)
+                        {                                
+                            previousCoordinatorName = data.CoordinatorName;
+                            previousCoordinatorEmail = data.CoordinatorEmail;
+
+                            // lookup the coordinator
+                            var coordinator = servicecontext.Coordinators.Where(p => p.CoordinatorName == data.CoordinatorName && p.Email == data.CoordinatorEmail && p.YearId == yearid).FirstOrDefault();
+
+                            // if coordinator not in database it needs to be created
+                            if (coordinator == null)
+                            {
+                                // check to see if user in database - if not create it
+                                var user = identityContext.Users.Where(p => p.UserName == data.CoordinatorEmail).FirstOrDefault();
+                                string userid = string.Empty;
+
+                                if (user == null)
+                                {
+                                    try
+                                    {
+                                        string[] names = data.CoordinatorName.Split(' ');
+                                        string firstname = names[0];
+                                        string lastname = names[1];
+
+                                        var newuser = new EDIApplicationUser
+                                            {
+                                                UserName = data.CoordinatorEmail,
+                                                Email = data.CoordinatorEmail,
+                                                FirstName = firstname,
+                                                LastName = lastname
+                                            };
+                                        var result = await _userManager.CreateAsync(newuser, "EDI&" + lastname + "26");
+
+                                        var role = identityContext.Roles.Where(p => p.Name == "Coordinator").FirstOrDefault();
+
+                                        await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                                        userid = newuser.Id;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        errormessages.Add(data.Id + ": Create user error: " + ex.Message);
+                                        haserror = true;
+                                    }
+                                }
+                                else
+                                {
+                                    userid = user.Id;
+                                }
+
+                                try
+                                {
+                                    var _coordinator = new Coordinator();
+
+                                    _coordinator.UserId = userid;
+                                    _coordinator.CoordinatorName = data.CoordinatorName;
+                                    _coordinator.Email = data.CoordinatorEmail;
+                                    _coordinator.YearId = yearid;
+                                    _coordinator.CreatedDate = timestamp;
+                                    _coordinator.CreatedBy = username;
+                                    _coordinator.ModifiedDate = timestamp;
+                                    _coordinator.ModifiedBy = username;
+
+                                    await _coordinatorRepository.AddAsync(_coordinator);
+                                    coordinatorid = _coordinator.Id;
+                                    totalcoordinators++;
+                                }
+                                catch (Exception ex)
+                                {
+                                    errormessages.Add(data.Id + ": Create coordinator error: " + ex.Message);
+                                    haserror = true;
+                                }
+                            }
+                            else
+                            {
+                                coordinatorid = coordinator.Id;
+                            }
+
+                        }
+
+                        ///<summary>process site
+                        ///</summary>
+                        if (coordinatorid > 0)
+                        {
+                            string siteNumber = data.ChildEdiid.Substring(4, 3);                                                        
+
+                            if (siteNumber != previousSiteNumber)
+                            {     
+                                previousSiteNumber = siteNumber;
+                                siteMessage = "Processing Site " + siteNumber;   
+                                var site = servicecontext.Sites.Where(p => p.SiteNumber == siteNumber && p.SiteName == data.SiteName && p.YearId == yearid).FirstOrDefault();
+
+                                if (site == null)
+                                {
+                                    try
+                                    {
+                                        var _site = new Site();
+
+                                        _site.SiteNumber = siteNumber;
+                                        _site.SiteName = data.SiteName;
+                                        _site.CoordinatorId = coordinatorid;
+                                        _site.YearId = yearid;
+                                        _site.CreatedDate = timestamp;
+                                        _site.CreatedBy = username;
+                                        _site.ModifiedDate = timestamp;
+                                        _site.ModifiedBy = username;
+
+                                        await _siteRepository.AddAsync(_site);
+                                        siteId = _site.Id;
+                                        totalsites++;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        errormessages.Add(data.Id + ": Create site error: " + ex.Message);
+                                        haserror = true;
+                                    }
+                                }
+                                else
+                                {
+                                    siteId = site.Id;                                    
+                                }                                
+                            }
+                        }
+
+                        ///<summary>process school
+                        ///</summary>
+                        if (siteId > 0)
+                        {
+                            string schoolNumber = data.ChildEdiid.Substring(7, 3);                                                        
+
+                            if (schoolNumber != previousSchoolNumber)
+                            {
+                                previousSchoolNumber = schoolNumber;
+                                schoolMessage = "Processing School " + data.SchoolName;                                     
+                                var school = servicecontext.Schools.Where(p => p.SiteId == siteId && p.SchoolNumber == schoolNumber && p.SchoolName == data.SchoolName && p.YearId == yearid).FirstOrDefault();
+
+                                if (school == null)
+                                {
+                                    try
+                                    {
+                                        var _school = new School();
+
+                                        _school.SchoolNumber = schoolNumber;
+                                        _school.SchoolName = data.SchoolName;
+
+
+                                        if (provinceId == 0)
+                                        {
+                                            errormessages.Add("FileImports data " + data.Id + ": Province is required.");
+                                            fileimportstatusid = (int)Enumerations.FileImportStatus.InvalidProvince;
+                                            haserror = true;
+                                        }
+                                        else
+                                        {
+                                            _school.CountryId = countryid;
+                                            _school.ProvinceId = provinceId;
+                                            _school.SiteId = siteId;
+                                            _school.YearId = yearid;
+                                            _school.CreatedDate = timestamp;
+                                            _school.CreatedBy = username;
+                                            _school.ModifiedDate = timestamp;
+                                            _school.ModifiedBy = username;
+
+                                            await _schoolRepository.AddAsync(_school);
+                                            schoolId = _school.Id;
+                                            totalschools++;
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        errormessages.Add(data.Id + ": Create school error: " + ex.Message);
+                                        haserror = true;
+                                    }
+                                }
+                                else
+                                {
+                                    schoolId = school.Id;                                    
+                                }                                
+                            }
+                            ///<summary>process teacher
+                            ///</summary>       
+
+                            if (data.TeacherName != previousTeacherName || data.TeacherEmail != previousTeacherEmail)
+                            {
+                                previousTeacherName = data.TeacherName;
+                                previousTeacherEmail = data.TeacherEmail;
+                                teacherMessage = "Processing Teacher " + previousTeacherName;   
+                                if (schoolId > 0)
+                                {
+                                    string teachernumber = data.ChildEdiid.Substring(10, 2);
+                                    var teacher = servicecontext.Teachers.Where(p => p.TeacherName == data.TeacherName && p.Email == data.TeacherEmail && p.YearId == yearid).FirstOrDefault();
+
+                                    // create the teacher if null -- also creates teacher profile
+                                    if (teacher == null)
+                                    {
+                                        var user = identityContext.Users.Where(p => p.UserName == data.TeacherEmail).FirstOrDefault();
+                                        string userid = string.Empty;
+
+                                        if (user == null)
+                                        {
+                                            try
+                                            {
+                                                string[] names = data.TeacherName.Split(' ');
+                                                string firstname = names[0];
+                                                string lastname = names[1];
+
+                                                var newuser = new EDIApplicationUser();
+                                                newuser.UserName = Guid.NewGuid().ToString();
+                                                var result = await _userManager.CreateAsync(newuser, password);
+
+                                                var role = identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+
+                                                await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                                                var oneuser = identityContext.Users.Where(p => p.Id == newuser.Id).FirstOrDefault();
+                                                oneuser.UserName = data.TeacherEmail;
+                                                oneuser.Email = data.TeacherEmail;
+                                                oneuser.FirstName = firstname;
+                                                oneuser.LastName = lastname;
+                                                oneuser.NormalizedUserName = data.TeacherEmail.ToUpper();
+                                                oneuser.NormalizedEmail = data.TeacherEmail.ToUpper();
+
+                                                await _userManager.UpdateAsync(oneuser);
+
+                                                userid = newuser.Id;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                errormessages.Add(data.Id + ": Create user error: " + ex.Message);
+                                                haserror = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            userid = user.Id;
+                                        }
+
+                                        try
+                                        {
+                                            var teacherstatus = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+                                            var _teacher = new Teacher();
+
+                                            _teacher.UserId = userid;
+                                            _teacher.TeacherNumber = teachernumber;
+                                            _teacher.TeacherName = data.TeacherName;
+                                            _teacher.Email = data.TeacherEmail;
+                                            _teacher.SchoolId = schoolId;
+                                            _teacher.YearId = yearid;
+                                            _teacher.TeacherStatusId = teacherstatus.Id;
+                                            _teacher.CreatedDate = timestamp;
+                                            _teacher.CreatedBy = username;
+                                            _teacher.ModifiedDate = timestamp;
+                                            _teacher.ModifiedBy = username;
+
+                                            await _teacherRepository.AddAsync(_teacher);
+                                            teacherId = _teacher.Id;
+                                            totalteachers++;
+
+                                            var teacherprofile = dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id && p.YearId == yearid).FirstOrDefault();
+
+                                            if (teacherprofile == null)
+                                            {
+                                                var _QuestionnairesDataTeacherProfile = new QuestionnairesDataTeacherProfile();
+                                                _QuestionnairesDataTeacherProfile.TeacherId = teacherId;
+                                                _QuestionnairesDataTeacherProfile.YearId = yearid;
+                                                _QuestionnairesDataTeacherProfile.QuestionnaireId = questionnaireTeacher.Id;
+                                                _QuestionnairesDataTeacherProfile.CreatedDate = timestamp;
+                                                _QuestionnairesDataTeacherProfile.CreatedBy = username;
+                                                _QuestionnairesDataTeacherProfile.ModifiedDate = timestamp;
+                                                _QuestionnairesDataTeacherProfile.ModifiedBy = username;
+
+                                                await _profileRepository.AddAsync(_QuestionnairesDataTeacherProfile);
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            errormessages.Add(data.Id + ": Create teacher and profile error: " + ex.Message);
+                                            haserror = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        teacherId = teacher.Id;
+
+                                        // this section is not needed
+                                        /*var child = dbContext.Children.Where(p => p.TeacherId == teacher.Id && p.YearId == yearid).FirstOrDefault();
+
+                                        if (child != null)
+                                        {
+                                            var onepassword = sharedService.GeneratePassword(teacherId);
+
+                                            var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+                                            var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
+
+                                            if (_account != null)
+                                            {
+                                                _account.PasswordHash = newPassword;
+
+                                                await _userManager.UpdateAsync(_account);
+                                            }
+                                            else
+                                            {
+                                                string[] names = teacher.TeacherName.Split(' ');
+                                                string firstname = names[0];
+                                                string lastname = names[1];
+
+                                                var newuser = new EDIApplicationUser();
+                                                newuser.UserName = Guid.NewGuid().ToString();
+                                                var result = await _userManager.CreateAsync(newuser, newPassword);
+
+                                                var role = identityContext.Roles.Where(p => p.Name == "Teacher").FirstOrDefault();
+
+                                                await _userManager.AddToRoleAsync(newuser, role.Name);
+
+                                                var oneuser = identityContext.Users.Where(p => p.Id == newuser.Id).FirstOrDefault();
+                                                oneuser.UserName = teacher.Email;
+                                                oneuser.Email = teacher.Email;
+                                                oneuser.FirstName = firstname;
+                                                oneuser.LastName = lastname;
+                                                oneuser.NormalizedUserName = teacher.Email.ToUpper();
+                                                oneuser.NormalizedEmail = teacher.Email.ToUpper();
+
+                                                await _userManager.UpdateAsync(oneuser);
+                                            }
+                                        }*/
+                                    }
+                                }
+
+                            }
+
+                            ///<summary>process student
+                            ///</summary>
+                            int childid = 0;
+                            
+                            if (teacherId > 0)
+                            {
+                                childMessage = "Processing Child " + data.ChildEdiid + ": record " + childCount + " of " + totalChildren;   
+                                // check to see if EDI ID exists
+                                var child = servicecontext.Children.Where(p => p.Ediid == data.ChildEdiid && p.YearId == yearid).FirstOrDefault();
+                                //var tempGenderId = servicecontext.Genders.Where(g => g.YearId == yearid && g.Code == data.GenderId.ToString()).FirstOrDefault().Id;
+
+                                if (child == null)
+                                {
+                                    try
+                                    {
+                                        string childnumber = data.ChildEdiid.Substring(13, 2);
+                                        var _child = new Child();                                        
+
+                                        _child.Ediid = data.ChildEdiid;
+                                        _child.LocalId = data.LocalId;
+                                        _child.ChildNumber = childnumber;
+                                        _child.YearId = yearid;
+                                        _child.TeacherId = teacherId;
+                                        _child.GenderId = data.GenderId;
+                                        _child.Dob = data.ChildDob;
+                                        _child.PostalCode = data.ChildPostalCode;
+                                        _child.ChildStatusId = childstatus.Id;
+                                        _child.CreatedDate = timestamp;
+                                        _child.CreatedBy = username;
+                                        _child.ModifiedDate = timestamp;
+                                        _child.ModifiedBy = username;
+
+                                        await _childRepository.AddAsync(_child);
+
+                                        childid = _child.Id;
+                                        totalstudents++;
+
+                                        // be sure child has been created and has an id - then create questionnaires
+                                        if (childid > 0)
+                                        {
+                                            // no need to check here as the child was just created
+                                            // var demo = dbContext.QuestionnairesDataDemographics.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            // var seca = dbContext.QuestionnairesDataSectionAs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            // var secb = dbContext.QuestionnairesDataSectionBs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            // var secc = dbContext.QuestionnairesDataSectionCs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            // var secd = dbContext.QuestionnairesDataSectionDs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+                                            // var sece = dbContext.QuestionnairesDataSectionEs.Where(p => p.ChildId == childid && p.YearId == yearid).FirstOrDefault();
+
+                                            var _demographics = new QuestionnairesDataDemographic();
+
+                                            _demographics.ChildId = childid;
+                                            _demographics.GenderId = data.GenderId;
+                                            _demographics.Dob = data.ChildDob;
+                                            _demographics.PostalCode = data.ChildPostalCode;
+                                            _demographics.QuestionnaireId = questionnaireDemographics.Id;
+                                            _demographics.YearId = yearid;
+                                            _demographics.CreatedDate = timestamp;
+                                            _demographics.CreatedBy = username;
+                                            _demographics.ModifiedDate = timestamp;
+                                            _demographics.ModifiedBy = username;
+
+                                            await _questionnairesDataDemographic.AddAsync(_demographics);
+
+                                            var _sectionA = new QuestionnairesDataSectionA();
+
+                                            _sectionA.ChildId = childid;
+                                            _sectionA.QuestionnaireId = questionnaireA.Id;
+                                            _sectionA.YearId = yearid;
+                                            _sectionA.CreatedDate = timestamp;
+                                            _sectionA.CreatedBy = username;
+                                            _sectionA.ModifiedDate = timestamp;
+                                            _sectionA.ModifiedBy = username;
+
+                                            await _questionnairesDataSectionA.AddAsync(_sectionA);
+
+                                            var _sectionB = new QuestionnairesDataSectionB();
+
+                                            _sectionB.ChildId = childid;
+                                            _sectionB.QuestionnaireId = questionnaireB.Id;
+                                            _sectionB.YearId = yearid;
+                                            _sectionB.CreatedDate = timestamp;
+                                            _sectionB.CreatedBy = username;
+                                            _sectionB.ModifiedDate = timestamp;
+                                            _sectionB.ModifiedBy = username;
+
+                                            await _questionnairesDataSectionB.AddAsync(_sectionB);
+
+                                            var _sectionC = new QuestionnairesDataSectionC();
+
+                                            _sectionC.ChildId = childid;
+                                            _sectionC.QuestionnaireId = questionnaireC.Id;
+                                            _sectionC.YearId = yearid;
+                                            _sectionC.CreatedDate = timestamp;
+                                            _sectionC.CreatedBy = username;
+                                            _sectionC.ModifiedDate = timestamp;
+                                            _sectionC.ModifiedBy = username;
+
+                                            var _sectionD = new QuestionnairesDataSectionD();
+
+                                            _sectionD.ChildId = childid;
+                                            _sectionD.QuestionnaireId = questionnaireD.Id;
+                                            _sectionD.YearId = yearid;
+                                            _sectionD.CreatedDate = timestamp;
+                                            _sectionD.CreatedBy = username;
+                                            _sectionD.ModifiedDate = timestamp;
+                                            _sectionD.ModifiedBy = username;
+
+                                            await _questionnairesDataSectionD.AddAsync(_sectionD);
+
+
+
+                                            var _sectionE = new QuestionnairesDataSectionE();
+
+                                            _sectionE.ChildId = childid;
+                                            _sectionE.QuestionnaireId = questionnaireE.Id;
+                                            _sectionE.YearId = yearid;
+                                            _sectionE.CreatedDate = timestamp;
+                                            _sectionE.CreatedDate = timestamp;
+                                            _sectionE.CreatedBy = username;
+                                            _sectionE.ModifiedDate = timestamp;
+                                            _sectionE.ModifiedBy = username;
+
+                                            await _questionnairesDataSectionE.AddAsync(_sectionE);
+
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        errormessages.Add(data.Id + ": Create student error: " + ex.Message);
+                                        haserror = true;
+                                    }
+                                }
+                                else
+                                {
+                                    // get the existing child ID - nothing needs to be done beyond this as the record already exists
+                                    childid = child.Id;
+                                    fileimportstatusid = (int)Enumerations.FileImportStatus.Duplicate;
+                                    errormessages.Add(data.ChildEdiid + " Already Exists");
+                                    haserror = true;
+                                }
+                            }
+                            
+                        }
+                    }
+
+                    if (!haserror)
+                    {
+                        fileimportstatusid = (int)Enumerations.FileImportStatus.Processed;
+                        error.message = "Site has been successfully processed.";
+                    }
+
+                    data.FileImportStatusId = fileimportstatusid;
+                    data.ModifiedDate = timestamp;
+                    data.ModifiedBy = username;
+
+                    await _fileRepository.UpdateAsync(data);                    
+
+                    // set the progress
+                    fileProgress = (double)((childCount / (double)totalChildren) * 100);
+
+                    // update the progress bar every 5 records
+                    if (totalChildren > 100)
+                    {
+                        if (childCount % 5 == 0)
+                            StateHasChanged();
+                    }
+                    else
+                        StateHasChanged();
+                }
+
+                if (totalcoordinators > 0)
+                {
+                    messages.Add(totalcoordinators + " new coordinator(s) were inserted.");
+                }
+
+                if (totalsites > 0)
+                {                        
+                    messages.Add(totalsites + " new site(s) inserted.");                     
+                }
+
+                if (totalschools > 0)
+                {
+                    messages.Add(totalschools + " new school(s) inserted.");                    
+                }
+
+                if (totalteachers > 0)
+                {
+                    messages.Add(totalteachers + " new teacher(s) were inserted.");
+                }
+
+                if (totalstudents > 0)
+                {
+                    messages.Add(totalstudents + " new student(s) were inserted.");
+                }
+
+                // reset progress bar
+                fileProgress = 0;
+                StateHasChanged();
+            }
+            error.messages = messages;
+            error.errormessages = errormessages;
+
+            return error;
+        }
+        catch (Exception ex)
+        {
+            sharedService.WriteLogs("ProcessFileData failed:" + ex.Message, false);
+
+            errormessage = "Processing data failed. Please check the log file for more information.";
+            errormessages.Add("ProcessFileData failed:" + ex.Message);
+            error.message = message;
+            error.errormessage = errormessage;
+            error.errormessages = errormessages;
+            return error;
+        }
+    }
 }

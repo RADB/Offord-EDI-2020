@@ -166,8 +166,20 @@
             {
                 if (!string.IsNullOrEmpty(currentValue))
                 {
-                    ValidationCss = "Valid";
-                    Valid = true;
+                    if (Config.InputType.English == "SelectBox")
+                    {
+                        // select box has a default option with value 0
+                        if(currentValue=="0")
+                        {
+                            ValidationCss = "InValid";
+                            Valid = false;
+                        }
+                    }
+                    else
+                    {
+                        ValidationCss = "Valid";
+                        Valid = true;
+                    }
                 }
                 else
                 {

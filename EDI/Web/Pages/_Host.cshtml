@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+ <!-- Not the questionnaire Section-->
 @if (!Request.Path.Value.Contains("/EDIQuestionnaires"))
 {
 <head>
@@ -73,7 +74,7 @@
     <!-- Main styles for this application -->
     <!-- Styles required by this view -->
 </head>
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden admin">
     @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
 
     <script src="_framework/blazor.server.js"></script>
@@ -154,7 +155,7 @@ else
     <link rel="stylesheet" href="~/css/app.css" />
     <link href="EDI.Web.styles.css" rel="stylesheet" />-->
 </head>
-<body class="admin">
+<body>
     <component type="typeof(App)" render-mode="ServerPrerendered" />
 
     @*<div id="blazor-error-ui">

@@ -501,7 +501,7 @@ a span.far.incomplete {
 
 
 /* Class List */
-#GridChild_edit, #GridChild_excelexport, #GridChild_search, .e-sortfilterdiv,  .e-columnmenu, #GridChild_éditer{
+#GridChild_edit, #GridChild_Éditer, #GridChild_excelexport, #GridChild_search, .e-sortfilterdiv, .e-columnmenu, #GridChild_éditer {
     display: none;
 }
 

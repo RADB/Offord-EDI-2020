@@ -14,7 +14,8 @@ namespace EDI.Infrastructure.Data.Migrations
 
             migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET Ontario=0 WHERE questionnaireid = 43 and yearid=3 and id = 1454");
 
-            
+            /* Github #222 */
+            migrationBuilder.Sql("UPDATE [EDI].[Questionnaires.Configuration] SET English='Gender' WHERE questionnaireid = 43 and yearid=3 and id = 1457");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

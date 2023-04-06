@@ -137,7 +137,7 @@
     </div>
 
 @code {
-    
+
     // public List<Order> Orders { get; set; }
 
 
@@ -290,17 +290,12 @@
 
             achild.ChildStatusId = child.ChildStatusId;
 
-            if (UserSettings.Language == "French")
-            {
-                achild.Gender = child.Gender.French;
-                achild.ChildStatus = child.ChildStatus.French;
-            }
-            else
-            {
-                achild.Gender = child.Gender.English;
-                achild.ChildStatus = child.ChildStatus.English;
-            }
+            //if (string.IsNullOrEmpty(child.Gender.English))
+            //    achild.Gender = string.Empty;
 
+                achild.Gender = (child.Gender != null) ? (UserSettings.Language == "French") ? child.Gender.French : achild.Gender = child.Gender.English : string.Empty;
+               
+                achild.ChildStatus = (UserSettings.Language == "French") ? child.ChildStatus.French : achild.ChildStatus = child.ChildStatus.English;
                 achild.PercentComplete = child.PercentComplete;
 
                 //achild.Progress = 0;
