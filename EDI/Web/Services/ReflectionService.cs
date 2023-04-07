@@ -28,6 +28,7 @@ namespace EDI.Web.Services
             }   
             else
             {
+                // if null error - be sure to add to entity
                 // nullable types must be discovered via Generictype - non nullable through propertytype
                 if (obj.GetType().GetProperty(fieldName).PropertyType.FullName == "System.String")
                 {
