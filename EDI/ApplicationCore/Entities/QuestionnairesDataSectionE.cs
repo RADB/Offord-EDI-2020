@@ -96,6 +96,10 @@ namespace EDI.ApplicationCore.Entities
         public byte? Metis { get; set; }
         public byte? OtherIndigenous { get; set; }
 
+        /* AB */
+        public byte? HeadStart { get; set; }
+        public byte? CreeSpeaker { get; set; }
+
         /* 2023 End SectionE*/
 
 

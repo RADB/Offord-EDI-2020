@@ -623,10 +623,10 @@
                 // breaking change https://blazor.syncfusion.com/documentation/release-notes/21.1.35?type=all#breaking-changes-7
                 //https://www.syncfusion.com/forums/181370/file-upload-stream-write-error?reply=SFpz23 - not working
                 //using (Stream fileStream = file.Stream)
-                if (File.Exists(fullPath))
+                /*if (File.Exists(fullPath))
                 {
                     File.Delete(fullPath);
-                }
+                }*/
                 FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
 
                 await file.File.OpenReadStream(long.MaxValue).CopyToAsync(fileStream);
@@ -1524,6 +1524,8 @@
                                             _sectionC.CreatedBy = username;
                                             _sectionC.ModifiedDate = timestamp;
                                             _sectionC.ModifiedBy = username;
+
+                                            await _questionnairesDataSectionC.AddAsync(_sectionC);
 
                                             var _sectionD = new QuestionnairesDataSectionD();
 
