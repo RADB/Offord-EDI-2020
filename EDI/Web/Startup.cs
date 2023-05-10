@@ -156,7 +156,7 @@ namespace EDI.Web
             services.AddBlazoredSessionStorage();
             services.AddBlazoredToast();
             services.AddBlazoredModal();
-            services.AddSyncfusionBlazor();
+            services.AddSyncfusionBlazor();            
             services.AddControllers().AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;                                
@@ -185,7 +185,9 @@ namespace EDI.Web
             //20.4.0.38
             //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Nzk0NTE0QDMyMzAyZTM0MmUzMEdtY0crUlB3a3ZDWTBsejl6dEhTLzVFZEtoc2hBZXpQNy83QVNIM1JXSDA9");
             //21.1.0.35
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTYzNDY4OUAzMjMxMmUzMTJlMzMzNVpYYURySGQ2ZFJMb0ZyamJidlVkU2dnNEJOcDgzaVhoNkc4MzFCamEzdjQ9");
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTYzNDY4OUAzMjMxMmUzMTJlMzMzNVpYYURySGQ2ZFJMb0ZyamJidlVkU2dnNEJOcDgzaVhoNkc4MzFCamEzdjQ9");
+            //21.2.4
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo + DSMBaFt + QHJqUU1hXk5Hd0BLVGpAblJ3T2ZQdVt5ZDU7a15RRnVfR1xjSHxSckBkUX9bcQ ==; Mgo + DSMBPh8sVXJ1S0R + WFpFdEBBXHxAd1p / VWJYdVt5flBPcDwsT3RfQF5jTH9Td0diXXpZeHVcRw ==; ORg4AjUWIQA / Gnt2VFhiQlVPd11dXmJWd1p / THNYflR1fV9DaUwxOX1dQl9gSXtSdkRhWHtbd3xWR2E =; MTk5ODUxMEAzMjMxMmUzMjJlMzRLSXpNTVJrbGtWelhRK1FZUTJMbG5lUDBlazErdy96QzlyRzA4cDhzbVo4PQ ==; MTk5ODUxMUAzMjMxMmUzMjJlMzRLU2tzY1pZajBFNlJFU01ndWVLL0lmUkNvMTkycEtFeGx4WllsZXNUZVNrPQ ==; NRAiBiAaIQQuGjN / V0d + Xk9AfV5AQmBIYVp / TGpJfl96cVxMZVVBJAtUQF1hSn5Wd0ViW35adXNcR2Nd; MTk5ODUxM0AzMjMxMmUzMjJlMzRVdXpKd2Vkcnl2ZFNjeEI4R0w3L2l5T0dxeGtsRkJleVJvKzIwcGxDWWJ3PQ ==; MTk5ODUxNEAzMjMxMmUzMjJlMzRkejBNVElINEN0NVJoL1l4WXZBTVlrcWc0QW9tdGUrR3JRZUJkUmJWZ0Y4PQ ==; Mgo + DSMBMAY9C3t2VFhiQlVPd11dXmJWd1p / THNYflR1fV9DaUwxOX1dQl9gSXtSdkRhWHtbd31dTmE =; MTk5ODUxNkAzMjMxMmUzMjJlMzRWNlRlWUMwaEFMVGMvTFpOdmF4MnpVRmY2ckl6eWN6MlpOck1LbGxWMmFzPQ ==; MTk5ODUxN0AzMjMxMmUzMjJlMzRva1JMWnhDYkVocVpMajBhVUxEdm5IZEcweGhGVzdRTDJzRGZrTnZVQXFRPQ ==; MTk5ODUxOEAzMjMxMmUzMjJlMzRVdXpKd2Vkcnl2ZFNjeEI4R0w3L2l5T0dxeGtsRkJleVJvKzIwcGxDWWJ3PQ ==");
             // Verified
             if (env.IsDevelopment())
             {

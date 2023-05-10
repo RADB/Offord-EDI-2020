@@ -1,16 +1,20 @@
 ﻿@page "/Dashboard/index"
 @using Microsoft.AspNetCore.Components.Authorization
 @using EDI.Web.Data
+@using System.Data;
 @using EDI.Web.Shared.BusinessIntelligence
 @using EDI.Web.Shared.Verification
 @using EDI.Web.Shared.Questionnaires
 @using EDI.Web.Pages.NewsFeeds
 @using System.Linq.Dynamic.Core
+@using Microsoft.Data.SqlClient
+@using Microsoft.Extensions.Configuration
 @using Serilog;
 @using Syncfusion.Blazor.Buttons
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager;
 @inject ServiceContext dbContext;
+@inject IConfiguration Configuration
 @inject AppIdentityDbContext identityContext;
 @inject IMathService MathService;
 @inject UserSettings UserSettings;
@@ -214,43 +218,105 @@
         {
             @if (UserSettings.IsAdmin)
             {
-                var predicate = "yearid ==" + UserSettings.YearId;
-                var sites = dbContext.Sites.Where(predicate).ToList();
-
-                if (!UserSettings.HasTestData)
+                SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("ServiceConnection"));
+                conn.Open();
                 {
-                    var predicate2 = predicate + " && IsTestSite != true";
-                    sites = dbContext.Sites.Where(predicate2).ToList();
+                    // create the command object -
+                    // DataTable dt = new DataTable();
+                    SqlCommand sqlComm = new SqlCommand("[Reports].[DashboardData]", conn);
+
+                    // Add Parameters
+                    sqlComm.Parameters.AddWithValue("@IncludeTestData", UserSettings.HasTestData);                    
+
+                    sqlComm.CommandType = CommandType.StoredProcedure;
+                    
+                    SqlDataReader reader = sqlComm.ExecuteReader();
+
+                    // sqlComm.ExecuteNonQuery();
+
+                    //SqlDataAdapter da = new SqlDataAdapter(sqlComm);
+                    //da.Fill(dt);
+                    //foreach (DataRow dr in dt.Rows)
+                    //{
+                    //    if (dr[0].ToString() != string.Empty)
+                    //    {
+                    //        var p = new Parameter();
+                    //        p.Name = Convert.ToString(dr[0]);
+                    //        p.DataType = Convert.ToString(dr[1]);
+                    //        p.IntValue = 0;
+                    //        p.StringValue = string.Empty;
+                    //        p.DateValue = DateTime.Now;
+
+                    //        Report.Parameters.Add(p);
+                    //    }
+                    //}
+
+                    while (reader.Read())
+                    {
+                        siteCount = (int)reader["Sites"];
+                        schoolCount = (int)reader["Schools"];
+                        teacherCount = (int)reader["Teachers"];
+                        childCount = (int)reader["Children"];
+
+                        ChildrenNew = (int)reader["ChildrenNew"];
+                        ChildrenInprogress = (int)reader["ChildrenIP"];
+                        ChildrenCompleted = (int)reader["ChildrenComplete"];
+    
+                        TeacherNew = (int)reader["TeachersNew"];
+                        TeacherInprogress = (int)reader["TeachersIP"];
+                        TeacherCompleted = (int)reader["TeachersComplete"];
+                    }
+                    if (reader != null)
+				        reader.Close();				                    
                 }
-                var schools = (from t in dbContext.Schools
-                               where t.YearId == UserSettings.YearId &&
-                               (from s in sites select s.Id).Contains(t.SiteId)
-                               select t).ToList();
+                if (conn != null)
+                    conn.Close();
 
-                var teachers = (from t in dbContext.Teachers
-                                where t.YearId == UserSettings.YearId &&
-                                (from s in schools select s.Id).Contains(t.SchoolId)
-                                select t).Include(ts => ts.TeacherStatus).ToList();
+                //var predicate = "yearid ==" + UserSettings.YearId;
+                
+                //if (!UserSettings.HasTestData)
+                //{
+                //    predicate = predicate + " && IsTestSite != true";
+                //    //sites = dbContext.Sites.Where(predicate2).ToList();
+                //}
+                //var sites = dbContext.Sites.Where(predicate)
+                //            .Include(s => s.Schools)
+                //            .ToList();
+                    
 
-                var children = (from t in dbContext.Children
-                                where t.YearId == UserSettings.YearId &&
-                                (from s in teachers select s.Id).Contains(t.TeacherId)
-                                select t).Include(ts => ts.ChildStatus).ToList();
+                //var schools = (from t in dbContext.Schools
+                //               where t.YearId == UserSettings.YearId &&
+                //               (from s in sites select s.Id).Contains(t.SiteId)
+                //               select t).ToList();
 
-                siteCount = sites.Count();
-                schoolCount = schools.Count();
-                teacherCount = teachers.Count();
-                childCount = children.Count();
+                //var teachers = (from t in dbContext.Teachers
+                //                where t.YearId == UserSettings.YearId &&
+                //                (from s in schools select s.Id).Contains(t.SchoolId)
+                //                select t).Include(ts => ts.TeacherStatus).ToList();
+
+                //var children = (from t in dbContext.Children
+                //                where t.YearId == UserSettings.YearId &&
+                //                (from s in teachers select s.Id).Contains(t.TeacherId)
+                //                select t).Include(ts => ts.ChildStatus).ToList();
+                //foreach (var site in sites)
+                //{
+                //    site.Schools.Count();                    
+                //}
+                
+                //siteCount = sites.Count();
+                //schoolCount = schools.Count();
+                //teacherCount = teachers.Count();
+                //childCount = children.Count();
 
                 // count of the children
-                ChildrenNew = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.New);
-                ChildrenInprogress = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.InProgress);
-                ChildrenCompleted = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Locked || (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Complete);
+                //ChildrenNew = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.New);
+                //ChildrenInprogress = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.InProgress);
+                //ChildrenCompleted = children.Count(c => (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Locked || (Enumerations.ChildStatus)c.ChildStatusId == Enumerations.ChildStatus.Complete);
 
                 // count of the teachaers
-                TeacherNew = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.New);
-                TeacherInprogress = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.InProgress);
-                TeacherCompleted = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.Locked || (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.Complete);
+                //TeacherNew = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.New);
+                //TeacherInprogress = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.InProgress);
+                //TeacherCompleted = teachers.Count(c => (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.Locked || (Enumerations.TeacherStatus)c.TeacherStatusId == Enumerations.TeacherStatus.Complete);
 
                 //var statusnew = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
                 //var statusinprogress = dbContext.ChildStatuses.Where(p => p.English == "In Progress").FirstOrDefault();

@@ -132,7 +132,7 @@
     IEnumerable<TeacherItemViewModel> teachers;
 
     protected override async Task OnInitializedAsync()
-    {
+    {       
         if (!UserSettings.IsAuthenticated)
         {
             NavigationManager.NavigateTo("./login");
@@ -143,13 +143,31 @@
         }
         else
         {
-            var predicate = "p => p.YearId == " + UserSettings.YearId;
-            var allteachers = await Task.FromResult(dbContext.Teachers.Where(predicate).OrderBy(p => p.TeacherNumber).ToList());
+            List<Teacher> allteachers;
+            string predicate; 
 
-            if (SchoolID > 0)
-            {
-                allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == SchoolID && p.YearId == UserSettings.YearId).OrderBy(p => p.TeacherNumber).ToList());
-            }
+            if (SchoolID > 0)            
+                predicate = "p => p.SchoolId == SchoolID && p.YearId ==" +  UserSettings.YearId;
+            //allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == SchoolID && p.YearId == UserSettings.YearId).OrderBy(p => p.TeacherNumber).ToList());            
+            else
+                predicate = "p => p.YearId == " + UserSettings.YearId;
+
+            allteachers = dbContext.Teachers.Where(predicate)
+                            .Include(t => t.School)
+                            .Include(c => c.Children)
+                            .Include(t => t.Year)
+                            .Include(ts => ts.TeacherStatus)
+                            .OrderBy(p => p.TeacherNumber).ToList();
+
+            //allchildren = dbContext.Children.Where(predicate)
+            //        .Include(c => c.Teacher)
+            //         .ThenInclude(t => t.School)
+            //         .ThenInclude(ts => ts.Province)
+            //        .Include(t => t.Year)
+            //        .Include(g => g.Gender)
+            //        .Include(cs => cs.ChildStatus)
+            //        .ToList();
+                //allteachers = await Task.FromResult(dbContext.Teachers.Where(predicate).OrderBy(p => p.TeacherNumber).ToList());
 
             List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
 
@@ -163,19 +181,23 @@
                 ateacher.Email = teacher.Email;
                 ateacher.PhoneNumber = teacher.PhoneNumber;
                 ateacher.YearId = teacher.YearId;
-                ateacher.Children = dbContext.Children.Where(p => p.TeacherId == teacher.Id).Count();
-
-                var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
-                ateacher.Ediyear = year.Ediyear;
+                //ateacher.Children = dbContext.Children.Where(p => p.TeacherId == teacher.Id).Count();
+                ateacher.Children = teacher.Children.Count();
+                //var year = dbContext.Years.Where(p => p.Id == teacher.YearId).FirstOrDefault();
+                //ateacher.Ediyear = year.Ediyear;
+                ateacher.Ediyear = teacher.Year.Ediyear;
 
                 ateacher.SchoolId = teacher.SchoolId;
-                var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
-                ateacher.SchoolName = school.SchoolName;
-                ateacher.SchoolNumber = school.SchoolNumber;
+                //var school = dbContext.Schools.Where(p => p.Id == teacher.SchoolId).FirstOrDefault();
+                //ateacher.SchoolName = school.SchoolName;
+                ateacher.SchoolName = teacher.School.SchoolName;
+                //ateacher.SchoolNumber = school.SchoolNumber;
+                ateacher.SchoolNumber = teacher.School.SchoolNumber;
 
                 ateacher.TeacherStatusId = teacher.TeacherStatusId;
-                var teacherstatus = dbContext.TeacherStatuses.Where(p => p.Id == teacher.TeacherStatusId).FirstOrDefault();
-                ateacher.TeacherStatus = teacherstatus.English;
+                //var teacherstatus = dbContext.TeacherStatuses.Where(p => p.Id == teacher.TeacherStatusId).FirstOrDefault();
+                //ateacher.TeacherStatus = teacherstatus.English;
+                ateacher.TeacherStatus = teacher.TeacherStatus.English;
 
                 var totalcompleted = teacherService.GetCompletedQuestions(teacher.Id);
                 var totalrequired = teacherService.GetRequiredQuestions(teacher.Id);

@@ -231,10 +231,10 @@
             }
 
         }
-        getChildren();
+        await getChildren();
     }
 
-    private void getChildren()
+    protected async Task getChildren()
     {
         List<Child> allchildren;
 
@@ -259,14 +259,14 @@
         }
 
 
-        allchildren = dbContext.Children.Where(predicate)
+        allchildren = await Task.FromResult(dbContext.Children.Where(predicate)
                     .Include(c => c.Teacher)
                      .ThenInclude(t => t.School)
                      .ThenInclude(ts => ts.Province)
                     .Include(t => t.Year)
                     .Include(g => g.Gender)
                     .Include(cs => cs.ChildStatus)
-                    .ToList();
+                    .ToList());
 
         List<ChildItemViewModel> sivm = new List<ChildItemViewModel>();
 

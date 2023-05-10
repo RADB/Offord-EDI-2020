@@ -89,14 +89,25 @@
         }
         else
         {
-            var predicate = "p => p.YearId == " + UserSettings.YearId;
-            var allschools = await Task.FromResult(dbContext.Schools.Where(predicate).OrderBy(p => p.SchoolNumber).ToList());
-
+            List<School> allschools;
+            string predicate;
 
             if (SiteID > 0)
-            {
-                allschools = await Task.FromResult(dbContext.Schools.Where(p => p.SiteId == SiteID && p.YearId == UserSettings.YearId).OrderBy(p => p.SchoolNumber).ToList());
-            }
+                predicate = "p => p.SiteId == SiteID && p.YearId ==" + UserSettings.YearId;
+            else
+                predicate = "p => p.YearId == " + UserSettings.YearId;
+
+            allschools = await Task.FromResult(dbContext.Schools.Where(predicate)
+                                .Include(t => t.Teachers)                                    
+                                .Include(c => c.Country)
+                                .Include(ts => ts.Province)
+                                .Include(t => t.Year)
+                                .Include(s => s.Site)                                
+                                .OrderBy(p => p.SchoolNumber).ToList());
+            //allschools = await Task.FromResult(dbContext.Schools.Where(p => p.SiteId == SiteID && p.YearId == UserSettings.YearId).OrderBy(p => p.SchoolNumber).ToList());
+
+
+            //allschools = await Task.FromResult(dbContext.Schools.Where().OrderBy(p => p.SchoolNumber).ToList());
 
             List<SchoolItemViewModel> sivm = new List<SchoolItemViewModel>();
 
@@ -107,26 +118,31 @@
                 aschool.Id = school.Id;
                 aschool.SchoolName = school.SchoolName;
                 aschool.SchoolNumber = school.SchoolNumber;
-                aschool.Teachers = dbContext.Teachers.Where(p => p.SchoolId == school.Id).Count();
+                //aschool.Teachers = dbContext.Teachers.Where(p => p.SchoolId == school.Id).Count();
+                aschool.Teachers = school.Teachers.Count();
                 aschool.Description = school.Description;
 
-                var site = dbContext.Sites.Where(p => p.Id == school.SiteId).FirstOrDefault();
-                aschool.SiteNumber = site.SiteNumber;
+                //var site = dbContext.Sites.Where(p => p.Id == school.SiteId).FirstOrDefault();
+                //aschool.SiteNumber = site.SiteNumber;
+                aschool.SiteNumber = school.Site.SiteNumber;
 
                 aschool.CountryId = school.CountryId;
-                var country = dbContext.Countries.Where(p => p.Id == school.CountryId).FirstOrDefault();
-                aschool.Country = country.English;
+                //var country = dbContext.Countries.Where(p => p.Id == school.CountryId).FirstOrDefault();
+                //aschool.Country = country.English;
+                aschool.Country = school.Country.English;
 
                 aschool.ProvinceId = school.ProvinceId;
-                var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
-                aschool.Province = province.English;
+                //var province = dbContext.Provinces.Where(p => p.Id == school.ProvinceId).FirstOrDefault();
+                //aschool.Province = province.English;
+                aschool.Province = school.Province.English;
 
                 aschool.City = school.City;
 
                 aschool.YearId = school.YearId;
-                var year = dbContext.Years.Where(p => p.Id == school.YearId).FirstOrDefault();
+                /*var year = dbContext.Years.Where(p => p.Id == school.YearId).FirstOrDefault();
                 if (year != null && year.Ediyear.HasValue)
-                    aschool.Ediyear = year.Ediyear.Value;
+                    aschool.Ediyear = year.Ediyear.Value;*/
+                aschool.Ediyear = school.Year.Ediyear.Value;
 
                 sivm.Add(aschool);
             }

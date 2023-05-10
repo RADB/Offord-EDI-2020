@@ -13,6 +13,7 @@
 @using System.Dynamic
 @using System.Linq.Dynamic.Core
 @using Syncfusion.XlsIO;
+@using Syncfusion.Blazor.ProgressBar;
 @using System.Collections.Generic;
 @using System.IO;
 @using Syncfusion.Drawing;
@@ -81,6 +82,10 @@
                                 @if (ReportId > 0)
                                 {
                                     <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Report" @onclick="ShowReport"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Show Report Data</button>
+                                    <SfProgressBar @ref="PBObj1" Type="ProgressType.Linear" value="@excelProgress" Height="60" Minimum="0" Maximum="100" IsStriped="true">
+                                        <ProgressBarAnimation Enable="true"></ProgressBarAnimation>
+                                       @*<ProgressBarEvents ValueChanged="@ValueHandler"></ProgressBarEvents>*@
+                                    </SfProgressBar>
                                 }
                             </ContentTemplate>
                         </AccordionItem>
@@ -108,7 +113,7 @@
 @code {
     [Parameter]
     public int? ReportId { get; set; }
-
+    public SfProgressBar PBObj1;
     private Report Report = new Report();
     private List<ExpandoObject> ReportData = new List<ExpandoObject>();
     private List<ExpandoObject> GridReportData = new List<ExpandoObject>();
@@ -122,6 +127,7 @@
     private string filePath = string.Empty;
     private int Counter;
     private int fieldCount;
+    public double excelProgress {get; set;}  
 
     public IList<SelectListItem> ReportList { get; set; }
 
@@ -143,6 +149,13 @@
         {
             ReportId = null;
         }
+    }
+
+    public void ValueHandler(ProgressValueEventArgs args)
+    {
+        // update the progress bar visual
+        //toastService.ShowWarning(progress + " % Complete");
+        StateHasChanged();
     }
 
     public async Task<IList<SelectListItem>> GetReports()
@@ -247,7 +260,7 @@
         }
     }
 
-    private async Task ShowReport()
+    public async Task ShowReport()
     {
         ReportData = new List<ExpandoObject>();
         GridReportData = new List<ExpandoObject>();
@@ -271,15 +284,30 @@
             // clearing the existing columns
             var columns = new List<GridColumn>();
             GridColumns = columns;
+            int counter = 0;
 
+            StatusMessage = "Processing data...";
+            StateHasChanged();
+
+           
             // load the ReportData object with data for the grid
             while (reader.Read())
             {
-                var obj = SqlDataReaderToExpando(reader);
+                counter++;
+                var obj = SqlDataReaderToExpando(reader);               
 
                 ReportData.Add(obj);
-            }
 
+                // set the progress                
+                excelProgress = (double)(counter % 100);
+                if (excelProgress % 5 ==0)
+                {
+                    //StateHasChanged();
+                    await PBObj1.RefreshAsync();
+                }                
+            }
+            // hide the progress bar
+            
             reader.Close();
             conn.Close();
         }
@@ -305,6 +333,9 @@
             // refresh the grid
             Grid.Refresh();
 
+            // hide the progressbar
+            PBObj1.Visible = false;
+            
             // render the UI changes
             StateHasChanged();
         }
@@ -369,6 +400,7 @@
 
     public async Task ExportExcelFile(string fileName, bool downloadInBrowser)
     {
+        int rowsImported;
         ExcelEngine excelEngine = new ExcelEngine();
         {
             IApplication application = excelEngine.Excel;
@@ -376,9 +408,15 @@
             IWorkbook workbook = application.Workbooks.Create(1);
             IWorksheet worksheet = workbook.Worksheets[0];
 
+            StatusMessage = "Creating Excel File...";
+            StateHasChanged();
             //Import the data to worksheet
-            worksheet.ImportData(ReportData, 1, 1, true);
-
+            rowsImported = worksheet.ImportData(ReportData, 1, 1, true);
+            
+            //string interpolation
+            StatusMessage = $"Rows Imported: {rowsImported}" ;
+            
+            StateHasChanged();
             if (!downloadInBrowser)
             {
                 string webRootPath = _hostingEnvironment.ContentRootPath + @"\wwwroot";

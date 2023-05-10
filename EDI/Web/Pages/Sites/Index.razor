@@ -80,7 +80,7 @@
         else
         {
             var predicate = "p => p.YearId == " + UserSettings.YearId;
-            var allsites = await Task.FromResult(dbContext.Sites.Where(predicate).OrderBy(p => p.SiteNumber).ToList());
+            var allsites = await Task.FromResult(dbContext.Sites.Where(predicate).Include(s => s.Schools).Include(c => c.Coordinator).OrderBy(p => p.SiteNumber).ToList());
 
             List<SiteItemViewModel> sivm = new List<SiteItemViewModel>();
 
@@ -90,14 +90,16 @@
 
                 asite.Id = site.Id;
                 asite.SiteName = site.SiteName;
-                asite.Schools = dbContext.Schools.Where(p => p.SiteId == site.Id).Count();
+                //asite.Schools = dbContext.Schools.Where(p => p.SiteId == site.Id).Count();
+                asite.Schools = site.Schools.Count();
                 asite.SiteNumber = site.SiteNumber;
                 asite.IsTestSite = site.IsTestSite;
                 asite.Description = site.Description;
                 if(site.CoordinatorId.HasValue)
                 {
-                    var coordinator = dbContext.Coordinators.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
-                    asite.CoordinatorName = coordinator.CoordinatorName;
+                    //var coordinator = dbContext.Coordinators.Where(p => p.Id == site.CoordinatorId).FirstOrDefault();
+                    //asite.CoordinatorName = coordinator.CoordinatorName;
+                    asite.CoordinatorName = site.Coordinator.CoordinatorName;
                 }
 
                 sivm.Add(asite);

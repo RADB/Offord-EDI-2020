@@ -1316,7 +1316,7 @@
                                                 oneuser.UserName = data.TeacherEmail;
                                                 oneuser.Email = data.TeacherEmail;
                                                 oneuser.FirstName = firstname;
-                                                oneuser.LastName = lastname;
+                                                oneuser.LastName = lastname;                                              
                                                 oneuser.NormalizedUserName = data.TeacherEmail.ToUpper();
                                                 oneuser.NormalizedEmail = data.TeacherEmail.ToUpper();
 
@@ -1382,9 +1382,19 @@
                                     {
                                         teacherId = teacher.Id;
 
+                                        // TODO - update password to this years password - should reset pwd appropriately - 2023-04-17
+                                        /*var onepassword = sharedService.GeneratePassword(teacherId);
+                                         
+                                        var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
+                                        var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
+
+                                        _account.PasswordHash = newPassword;
+
+                                        await _userManager.UpdateAsync(_account);*/
+
                                         // this section is not needed
                                         /*var child = dbContext.Children.Where(p => p.TeacherId == teacher.Id && p.YearId == yearid).FirstOrDefault();
-
+                                         * 
                                         if (child != null)
                                         {
                                             var onepassword = sharedService.GeneratePassword(teacherId);

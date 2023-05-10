@@ -1090,7 +1090,7 @@ namespace EDI.Web.Services
             //TODO - with students moving the reset pwd needs to be smarter - could be the wrong ID
             var password = string.Empty;
 
-            var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
+            var teacher = _dbContext.Teachers.Where(p => p.Id == id && p.YearId == _userSettings.YearId).FirstOrDefault();
 
             var child = _dbContext.Children.Where(p => p.TeacherId == teacher.Id).FirstOrDefault();
             password = child.Ediid.Substring(4, 8);
@@ -1100,7 +1100,7 @@ namespace EDI.Web.Services
 
         public async Task ResetPassword(int id)
         {
-            var teacher = _dbContext.Teachers.Where(p => p.Id == id).FirstOrDefault();
+            var teacher = _dbContext.Teachers.Where(p => p.Id == id && p.YearId == _userSettings.YearId).FirstOrDefault();
 
             var password = GeneratePassword(id);
 
