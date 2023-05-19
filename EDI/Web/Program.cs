@@ -68,6 +68,7 @@ namespace EDI.Web
             //https://github.com/serilog/serilog/wiki/Configuration-Basics
             Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
+            // TODO 2023-05-19 if this has issues try hourly logs
             .WriteTo.File(@".\\logs\\logs.txt", Serilog.Events.LogEventLevel.Information, rollingInterval: RollingInterval.Day)
             //.WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Warning, outputTemplate: "{Timestamp:HH:mm} [{Level}] ({ThreadId}) {Message}{NewLine}{Exception}")
             .CreateLogger();

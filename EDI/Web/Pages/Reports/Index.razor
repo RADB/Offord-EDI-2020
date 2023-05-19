@@ -82,7 +82,7 @@
                                 @if (ReportId > 0)
                                 {
                                     <button class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Report" @onclick="ShowReport"><i class="fa fa-plus fa-1x whiteiconcolor"></i> Show Report Data</button>
-                                    <SfProgressBar @ref="PBObj1" Type="ProgressType.Linear" value="@excelProgress" Height="60" Minimum="0" Maximum="100" IsStriped="true">
+                                    <SfProgressBar @ref="PBObj1" Type="ProgressType.Linear" Value="@excelProgress" Height="60" Minimum="0" Maximum="100" IsStriped="true">
                                         <ProgressBarAnimation Enable="true"></ProgressBarAnimation>
                                        @*<ProgressBarEvents ValueChanged="@ValueHandler"></ProgressBarEvents>*@
                                     </SfProgressBar>
@@ -260,7 +260,7 @@
         }
     }
 
-    public async Task ShowReport()
+    public void ShowReport()
     {
         ReportData = new List<ExpandoObject>();
         GridReportData = new List<ExpandoObject>();
@@ -299,11 +299,11 @@
                 ReportData.Add(obj);
 
                 // set the progress                
-                excelProgress = (double)(counter % 100);
+                excelProgress = counter % 100;
                 if (excelProgress % 5 ==0)
                 {
                     //StateHasChanged();
-                    await PBObj1.RefreshAsync();
+                    PBObj1.RefreshAsync();
                 }                
             }
             // hide the progress bar
@@ -397,12 +397,11 @@
             await this.Grid.ExcelExport(ExcelProperties);
         }
     }
-
-    public async Task ExportExcelFile(string fileName, bool downloadInBrowser)
+    // changed from async to sync
+    public void ExportExcelFile(string fileName, bool downloadInBrowser)
     {
         int rowsImported;
-        ExcelEngine excelEngine = new ExcelEngine();
-        {
+        ExcelEngine excelEngine = new ExcelEngine();  
             IApplication application = excelEngine.Excel;
             application.DefaultVersion = ExcelVersion.Excel2016;
             IWorkbook workbook = application.Workbooks.Create(1);
@@ -441,19 +440,19 @@
             }
             else
             {
-                // this is not working - not sure why... 
+                // this is not working - not sure why... removed await
                 using (MemoryStream stream = new MemoryStream())
                 {
                     stream.Position = 0;
                     //Save the created Excel document to MemoryStream
                     workbook.SaveAs(stream);
-                    await JS.SaveAs("Sample.xlsx", stream.ToArray());
+                    // await JS.SaveAs("Sample.xlsx", stream.ToArray());
+                    JS.SaveAs("Sample.xlsx", stream.ToArray());
                 }
             }
 
             workbook.Close();
             excelEngine.Dispose();
-        }
     }
 
     public MemoryStream CreateExcelInvoiceSample()

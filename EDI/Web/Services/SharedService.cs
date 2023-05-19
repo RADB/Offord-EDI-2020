@@ -1118,7 +1118,8 @@ namespace EDI.Web.Services
             {
                 if (EDIAppSettings.LogInformation)
                 {
-                    Log.Information(message);
+                    // don't log info messages
+                    //Log.Information(message);
                 }
             }
             else
