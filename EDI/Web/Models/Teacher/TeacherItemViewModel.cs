@@ -29,5 +29,6 @@ namespace EDI.Web.Models
         public string TeacherStatus { get; set; }
         public int? Progress { get; set; }
         public int Children { get; set; }
+        public byte PercentComplete { get; set; }
     }
 }

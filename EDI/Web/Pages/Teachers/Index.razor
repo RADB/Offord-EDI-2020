@@ -167,7 +167,7 @@
             //        .Include(g => g.Gender)
             //        .Include(cs => cs.ChildStatus)
             //        .ToList();
-                //allteachers = await Task.FromResult(dbContext.Teachers.Where(predicate).OrderBy(p => p.TeacherNumber).ToList());
+            //allteachers = await Task.FromResult(dbContext.Teachers.Where(predicate).OrderBy(p => p.TeacherNumber).ToList());
 
             List<TeacherItemViewModel> sivm = new List<TeacherItemViewModel>();
 
@@ -199,13 +199,14 @@
                 //ateacher.TeacherStatus = teacherstatus.English;
                 ateacher.TeacherStatus = teacher.TeacherStatus.English;
 
-                var totalcompleted = teacherService.GetCompletedQuestions(teacher.Id);
-                var totalrequired = teacherService.GetRequiredQuestions(teacher.Id);
+                ateacher.Progress = teacher.PercentComplete;
+                //var totalcompleted = teacherService.GetCompletedQuestions(teacher.Id);
+                //var totalrequired = teacherService.GetRequiredQuestions(teacher.Id);
 
-                ateacher.Progress = 0;
+                //ateacher.Progress = 0;
 
-                if (totalrequired > 0)
-                    ateacher.Progress = mathService.GetPercent(totalcompleted, totalrequired);
+                //if (totalrequired > 0)
+                //    ateacher.Progress = mathService.GetPercent(totalcompleted, totalrequired);
 
                 sivm.Add(ateacher);
             }

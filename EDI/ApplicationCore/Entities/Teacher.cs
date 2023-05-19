@@ -32,7 +32,7 @@ namespace EDI.ApplicationCore.Entities
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public int? TeacherStatusId { get; set; }
-
+        public byte PercentComplete { get; set; }
         public virtual School School { get; set; }
         public virtual Year Year { get; set; }
         

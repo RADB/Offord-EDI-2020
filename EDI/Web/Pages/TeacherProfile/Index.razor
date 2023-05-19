@@ -201,7 +201,7 @@
         else
         {
             IsReadOnly = true;
-            province = teacherData.School.Province.English.Replace(" ", "");
+            province = teacherData.School.Province.English.Replace(" ", "");            
         }
 
         var predicate = "p => p." + province + ".Value && p.YearId == " + UserSettings.YearId + " && p.QuestionnaireName == \"Teacher Feedback\"";
@@ -230,6 +230,8 @@
             // 2022 - updated questions
             teacherData.QuestionnairesDataTeacherProfiles.Single().RequiredQuestions = UserSettings.QuestionsRequired;
             teacherData.QuestionnairesDataTeacherProfiles.Single().CompletedQuestions = UserSettings.QuestionsCompleted;
+            //2023 - including percentcomplete in teacher record.
+            teacherData.PercentComplete = (byte)percentComplete;
 
             if (percentComplete == 100)
             {

@@ -102,7 +102,7 @@ namespace EDI.Web.Services
 
                 Guard.Against.NullTeacher(id, _teacher);
 
-                var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id).FirstOrDefault();
+                var teacherprofile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id && p.YearId == _userSettings.YearId).FirstOrDefault();
 
                 var teacherstatus = _dbContext.TeacherStatuses.Where(p => p.English == "In Progress").FirstOrDefault();
 
@@ -368,7 +368,7 @@ namespace EDI.Web.Services
 
             try
             {
-                var profile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == id).FirstOrDefault();
+                var profile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == id && p.YearId == _userSettings.YearId).FirstOrDefault();
 
                 var totalItems = profile != null ? profile.CompletedQuestions : 0;
 
@@ -388,7 +388,7 @@ namespace EDI.Web.Services
 
             try
             {
-                var profile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == id).FirstOrDefault();
+                var profile = _dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == id && p.YearId == _userSettings.YearId).FirstOrDefault();
 
                 var totalItems = profile != null ? profile.RequiredQuestions : 0;
 
