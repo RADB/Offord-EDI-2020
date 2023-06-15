@@ -95,7 +95,7 @@
             foreach (var year in allyears)
             {
                 var ayear = new YearItemViewModel();
-
+                
                 ayear.Id = year.Id;
                 ayear.Ediyear = year.Ediyear;
                 ayear.Alberta = year.Alberta.HasValue ? year.Alberta.Value : false;
@@ -104,6 +104,7 @@
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
                 ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;
+                ayear.FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false;
                 ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
                 ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
                 ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;
@@ -167,6 +168,7 @@
                 YearModel.Id = rowdata.Id;
                 YearModel.Alberta = rowdata.Alberta;
                 YearModel.BritishColumbia = rowdata.BritishColumbia;
+                YearModel.FirstNations = rowdata.FirstNations;
                 YearModel.Manitoba = rowdata.Manitoba;
                 YearModel.NewBrunswick = rowdata.NewBrunswick;
                 YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
@@ -215,6 +217,7 @@
                 ayear.Ediyear = year.Ediyear;
                 ayear.Alberta = year.Alberta.HasValue ? year.Alberta.Value : false;
                 ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
+                ayear.FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false;
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
@@ -256,6 +259,7 @@
                     item.Ediyear = YearModel.Ediyear;
                     item.Alberta = YearModel.Alberta;
                     item.BritishColumbia = YearModel.BritishColumbia;
+                    item.FirstNations = YearModel.FirstNations;
                     item.Manitoba = YearModel.Manitoba;
                     item.NewBrunswick = YearModel.NewBrunswick;
                     item.NewfoundlandandLabrador = YearModel.NewfoundlandandLabrador;
@@ -325,6 +329,7 @@
             YearModel.Id = rowdata.Id;
             YearModel.Alberta = rowdata.Alberta;
             YearModel.BritishColumbia = rowdata.BritishColumbia;
+            YearModel.FirstNations = rowdata.FirstNations;
             YearModel.Manitoba = rowdata.Manitoba;
             YearModel.NewBrunswick = rowdata.NewBrunswick;
             YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;

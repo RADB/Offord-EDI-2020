@@ -147,7 +147,7 @@
             string predicate; 
 
             if (SchoolID > 0)            
-                predicate = "p => p.SchoolId == SchoolID && p.YearId ==" +  UserSettings.YearId;
+                predicate = "p => p.SchoolId == " + SchoolID +" && p.YearId ==" +  UserSettings.YearId;
             //allteachers = await Task.FromResult(dbContext.Teachers.Where(p => p.SchoolId == SchoolID && p.YearId == UserSettings.YearId).OrderBy(p => p.TeacherNumber).ToList());            
             else
                 predicate = "p => p.YearId == " + UserSettings.YearId;

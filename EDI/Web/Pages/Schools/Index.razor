@@ -93,7 +93,7 @@
             string predicate;
 
             if (SiteID > 0)
-                predicate = "p => p.SiteId == SiteID && p.YearId ==" + UserSettings.YearId;
+                predicate = "p => p.SiteId == " + SiteID + " && p.YearId ==" + UserSettings.YearId;
             else
                 predicate = "p => p.YearId == " + UserSettings.YearId;
 

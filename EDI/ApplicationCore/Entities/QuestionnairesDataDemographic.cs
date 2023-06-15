@@ -66,6 +66,7 @@ namespace EDI.ApplicationCore.Entities
         public bool? OnlineChallengesNoLearningSpace { get; set; }
         public bool? OnlineChallengesNoSupplies { get; set; }
         public bool? OnlineChallengesOther { get; set; }
+        public byte? IndigenousLanguage { get; set; }
 
         /* End 2022 Demographics*/
 
