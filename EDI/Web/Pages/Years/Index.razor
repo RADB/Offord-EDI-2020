@@ -41,6 +41,7 @@
                             <GridColumn Field=@nameof(YearItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="20" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Alberta) HeaderText="AB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.FirstNations) HeaderText="FN" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
@@ -100,11 +101,11 @@
                 ayear.Ediyear = year.Ediyear;
                 ayear.Alberta = year.Alberta.HasValue ? year.Alberta.Value : false;
                 ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
+                ayear.FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false;
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
-                ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;
-                ayear.FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false;
+                ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;                
                 ayear.NovaScotia = year.NovaScotia.HasValue ? year.NovaScotia.Value : false;
                 ayear.Nunavut = year.Nunavut.HasValue ? year.Nunavut.Value : false;
                 ayear.Ontario = year.Ontario.HasValue ? year.Ontario.Value : false;

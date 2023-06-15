@@ -42,7 +42,8 @@
                         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.Menu"></GridFilterSettings>
                         <GridPageSettings PageSize="20" PageSizes="true"></GridPageSettings>
                         <GridColumns>
-                            <GridColumn Field=@nameof(ProvinceType.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceType.Id) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="30"></GridColumn>
+                            <GridColumn Field=@nameof(ProvinceType.Name) HeaderText="Name" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Left" Width="30"></GridColumn>
                         </GridColumns>
                     </SfGrid>
                 }

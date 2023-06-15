@@ -43,6 +43,7 @@
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.QuestionnaireName) HeaderText="Name" TextAlign="TextAlign.Right" Width="20" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.Alberta) HeaderText="AB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.FirstNations) HeaderText="FN" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
@@ -115,6 +116,7 @@
                 aquestionnaire.ShowQuestionNumbers = questionnaire.ShowQuestionNumbers;
                 aquestionnaire.Alberta = questionnaire.Alberta.HasValue ? questionnaire.Alberta.Value : false;
                 aquestionnaire.BritishColumbia = questionnaire.BritishColumbia.HasValue ? questionnaire.BritishColumbia.Value : false;
+                aquestionnaire.FirstNations = questionnaire.FirstNations.HasValue ? questionnaire.FirstNations.Value : false;
                 aquestionnaire.Manitoba = questionnaire.Manitoba.HasValue ? questionnaire.Manitoba.Value : false;
                 aquestionnaire.NewBrunswick = questionnaire.NewBrunswick.HasValue ? questionnaire.NewBrunswick.Value : false;
                 aquestionnaire.NewfoundlandandLabrador = questionnaire.NewfoundlandandLabrador.HasValue ? questionnaire.NewfoundlandandLabrador.Value : false;
