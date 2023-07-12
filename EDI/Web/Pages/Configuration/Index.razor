@@ -101,22 +101,26 @@
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridConfiguration_pdfexport")
         {
-            this.Grid.PdfExport();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridConfiguration_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
         if (args.Item.Id == "GridConfiguration_csvexport")
         {
-            this.Grid.CsvExport();
+            await this.Grid.ExportToCsvAsync();
         }
         if (args.Item.Id == "GridConfiguration_add")
         {
             ConfigurationModel = new ConfigurationItemViewModel();
             parameters.Add("ConfigurationModel", ConfigurationModel);
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
 
-            var modal = ModalService.Show<ConfigurationWindow>("New Configuration", parameters);
+                };
+            var modal = ModalService.Show<ConfigurationWindow>("New Configuration", parameters,options);
             var result = await modal.Result;
             NewWindowModalClosed(result);
             //*Modal.OnClose += NewWindowModalClosed;
@@ -132,8 +136,12 @@
                 ConfigurationModel.FieldValue = rowdata.FieldValue;
                 ConfigurationModel.Id = rowdata.Id;
                 parameters.Add("ConfigurationModel", ConfigurationModel);
+                var options = new ModalOptions()
+                    {
+                        Position = ModalPosition.Middle
 
-                var modal = ModalService.Show<ConfigurationWindow>("Edit Configuration", parameters);
+                    };
+                var modal = ModalService.Show<ConfigurationWindow>("Edit Configuration", parameters,options);
                 var result = await modal.Result;
                 ExistWindowModalClosed(result);
                 //*Modal.OnClose += ExistWindowModalClosed;
@@ -141,7 +149,12 @@
         }
         if (args.Item.Id == "GridConfiguration_delete")
         {
-            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
+
+                };
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete",options);
             var result = await modal.Result;
 
             ConfirmDeleteModalClosed(result);
@@ -241,8 +254,12 @@
             ConfigurationModel.FieldValue = rowdata.FieldValue;
             ConfigurationModel.Id = rowdata.Id;
             parameters.Add("ConfigurationModel", ConfigurationModel);
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
 
-            var modal = ModalService.Show<ConfigurationWindow>("Edit Configuration", parameters);
+                };
+            var modal = ModalService.Show<ConfigurationWindow>("Edit Configuration", parameters,options);
             var result = await modal.Result;
             ExistWindowModalClosed(result);
             //*Modal.OnClose += ExistWindowModalClosed;

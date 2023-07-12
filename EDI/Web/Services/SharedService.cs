@@ -461,7 +461,7 @@ namespace EDI.Web.Services
 
             try
             {
-                if (file.FileInfo.Size > 0)
+                if (file.File.Size > 0)
                 {
                     string folderName = "Upload";
                     string webRootPath = _hostingEnvironment.ContentRootPath + @"\wwwroot";
@@ -480,14 +480,32 @@ namespace EDI.Web.Services
                         "French"
                     };
 
-                    using (Stream fileStream = file.Stream)
-                    {
+
+                    // breaking change https://blazor.syncfusion.com/documentation/release-notes/21.1.35?type=all#breaking-changes-7
+                    //https://www.syncfusion.com/forums/181370/file-upload-stream-write-error?reply=SFpz23 - not working
+                    //using (Stream fileStream = file.Stream)
+                    /*if (File.Exists(fullPath))
+                        {
+                        File.Delete(fullPath);
+                    }*/
+
+                    // writes the file first
+                    FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+
+                    await file.File.OpenReadStream(long.MaxValue).CopyToAsync(fileStream);
+                    fileStream.Close();
+
+                    //using (Stream fileStream = file.Stream)                    
+                    //{
                         using (ExcelEngine excelEngine = new ExcelEngine())
                         {
-                            // set the stream position to zero
-                            fileStream.Position = 0;
+                            FileStream inputStream = new FileStream(fullPath, FileMode.Open);
 
-                            Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream, ExcelOpenType.Automatic, ExcelParseOptions.Default); ;
+                            Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(inputStream, ExcelOpenType.Automatic, ExcelParseOptions.Default);
+                            // set the stream position to zero
+                            inputStream.Position = 0;
+
+                            //Syncfusion.XlsIO.IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream, ExcelOpenType.Automatic, ExcelParseOptions.Default); ;
 
                             //Get the first worksheet in the workbook into IWorksheet
                             IWorksheet worksheet = workbook.Worksheets[0];
@@ -528,8 +546,8 @@ namespace EDI.Web.Services
                                     var english = row.Cells[0]?.CalculatedValue.Trim();
 
                                     var translate = servicecontext.Translations.Where(p => p.English == english).FirstOrDefault();
-                                    
-                                    if(translate == null)
+
+                                    if (translate == null)
                                     {
                                         var _translate = new Translation();
                                         _translate.English = english;
@@ -564,19 +582,19 @@ namespace EDI.Web.Services
                             }
                         }
 
-                        if (string.IsNullOrEmpty(error.errormessage))
-                        {
-                            if (File.Exists(fullPath))
-                            {
-                                File.Delete(fullPath);
-                            }
+                        //if (string.IsNullOrEmpty(error.errormessage))
+                        //{
+                        //    if (File.Exists(fullPath))
+                        //    {
+                        //        File.Delete(fullPath);
+                        //    }
 
-                            FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-                            file.Stream.WriteTo(filestream);
-                            filestream.Close();
-                            file.Stream.Close();
-                        }
-                    }
+                        //    FileStream filestream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
+                        //    file.Stream.WriteTo(filestream);
+                        //    filestream.Close();
+                        //    file.Stream.Close();
+                        //}
+                    //} using filestream
                 }
                 else
                 {

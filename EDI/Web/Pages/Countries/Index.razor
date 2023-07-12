@@ -58,8 +58,7 @@
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
 
-    SfGrid<CountryItemViewModel> Grid;
-
+    SfGrid<CountryItemViewModel> Grid;    
     IEnumerable<CountryItemViewModel> countrys;
 
     private List<Object> Toolbaritems = new List<Object>() { new ItemModel() { Text = "Add", TooltipText = "Add New", PrefixIcon = "e-add", Id = "Add" }, new ItemModel() { Text = "Edit", TooltipText = "Edit", PrefixIcon = "e-edit", Id = "Edit" }, "Delete", "ExcelExport", "Search" };
@@ -114,22 +113,26 @@
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridCountry_pdfexport")
         {
-            this.Grid.PdfExport();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridCountry_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
         if (args.Item.Id == "GridCountry_csvexport")
         {
-            this.Grid.CsvExport();
+            await this.Grid.ExportToCsvAsync();
         }
         if (args.Item.Id == "Add")
         {
             CountryModel = new CountryItemViewModel();
             parameters.Add("CountryModel", CountryModel);
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
 
-            var modal = ModalService.Show<CountryWindow>("New EDI Country", parameters);
+                };
+            var modal = ModalService.Show<CountryWindow>("New EDI Country", parameters,options);
             var result = await modal.Result;
 
             NewWindowModalClosed(result);
@@ -150,8 +153,12 @@
                 CountryModel.ISO3CountryCode = rowdata.ISO3CountryCode;
                 CountryModel.Id = rowdata.Id;
                 parameters.Add("CountryModel", CountryModel);
+                var options = new ModalOptions()
+                    {
+                        Position = ModalPosition.Middle
 
-                var modal = ModalService.Show<CountryWindow>("Edit Country", parameters);
+                    };
+                var modal = ModalService.Show<CountryWindow>("Edit Country", parameters,options);
                 var result = await modal.Result;
 
                 ExistWindowModalClosed(result);
@@ -160,7 +167,12 @@
         }
         if (args.Item.Id == "GridCountry_delete")
         {
-            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
+
+                };
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete",options);
             var result = await modal.Result;
 
             ConfirmDeleteModalClosed(result);
@@ -195,7 +207,7 @@
             countrys = sivm;
         }
         ////*Modal.OnClose -= NewWindowModalClosed;
-        this.Grid.Refresh();
+        await this.Grid.Refresh();
 
         StateHasChanged();
         this.rowid = 0;
@@ -269,10 +281,14 @@
             CountryModel.ISO3CountryCode = rowdata.ISO3CountryCode;
             CountryModel.Id = rowdata.Id;
             parameters.Add("CountryModel", CountryModel);
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
 
-            ModalService.Show<CountryWindow>("Edit Country", parameters);
+                };
+            //ModalService.Show<CountryWindow>("Edit Country", parameters,options);
 
-            var modal = ModalService.Show<CountryWindow>("Edit Country");
+            var modal = ModalService.Show<CountryWindow>("Edit Country",options);
             var result = await modal.Result;
 
             ExistWindowModalClosed(result);

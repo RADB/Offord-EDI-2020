@@ -175,11 +175,11 @@
     {
         if (args.Item.Id == "GridQuestionnaireConfiguration_pdfexport")
         {
-            this.Grid.PdfExport();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridQuestionnaireConfiguration_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
         if (args.Item.Id == "GridQuestionnaireConfiguration_add")
         {

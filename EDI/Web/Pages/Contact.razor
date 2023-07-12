@@ -92,8 +92,12 @@
         EmailModel.Body = string.Empty;
 
         parameters.Add("EmailModel", EmailModel);
+        var options = new ModalOptions()
+            {
+                Position = ModalPosition.Middle
 
-        var modal = ModalService.Show<SendEmailWindow>("Contact EDI", parameters);
+            };
+        var modal = ModalService.Show<SendEmailWindow>("Contact EDI", parameters,options);
         var result = await modal.Result;
         EmailWindowModalClosed(result);
         //*Modal.OnClose += EmailWindowModalClosed;

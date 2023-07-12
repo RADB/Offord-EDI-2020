@@ -143,7 +143,7 @@
         {
             ReportName = ReportList[int.Parse(ReportId.ToString())].Text;
 
-            await GetReportParamaters();
+            GetReportParamaters();
         }
         else
         {
@@ -218,7 +218,7 @@
         }
     }
 
-    public async Task GetReportParamaters()
+    public void GetReportParamaters()
     {
         SqlConnection conn = new SqlConnection(Configuration.GetConnectionString("ServiceConnection"));
         conn.Open();
@@ -394,7 +394,7 @@
         {
             ExcelExportProperties ExcelProperties = new ExcelExportProperties();
             ExcelProperties.FileName = $"{DateTime.Now.ToString("yyyyMMdd_HHmmss")}_ReportData.xlsx";
-            await this.Grid.ExcelExport(ExcelProperties);
+            await this.Grid.ExportToExcelAsync(ExcelProperties);
         }
     }
     // changed from async to sync

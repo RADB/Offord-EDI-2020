@@ -168,10 +168,6 @@
 
     IEnumerable<ChildItemViewModel> children;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-
-    }
 
     protected override Task OnParametersSetAsync()
     {
@@ -337,20 +333,20 @@
         {
             if (args.Item.Id == "GridChild_pdfexport")
             {
-                this.Grid.PdfExport();
+                await this.Grid.ExportToPdfAsync();
             }
             if (args.Item.Id == "GridChild_excelexport")
             {
-                //this.Grid.ExcelExport();
+                //await this.Grid.ExportToExcelAsync();
 
                 ExcelExportProperties exportProperties = new ExcelExportProperties();
                 exportProperties.IncludeTemplateColumn = true;
-                await Grid.ExcelExport(exportProperties);
+                await Grid.ExportToExcelAsync(exportProperties);
 
             }
             if (args.Item.Id == "GridChild_csvexport")
             {
-                this.Grid.CsvExport();
+                await this.Grid.ExportToCsvAsync();
             }
             if (args.Item.Id == "GridChild_add" || args.Item.Id == "GridChild_Ajouter")
             {
@@ -363,7 +359,12 @@
             }
             if (args.Item.Id == "GridChild_delete" || args.Item.Id == "GridChild_Supprimer")
             {
-                var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
+
+                };
+                var modal = ModalService.Show<ConfirmDelete>("Confirm Delete",options);
                 var result = await modal.Result;
 
                 ConfirmDeleteModalClosed(result);

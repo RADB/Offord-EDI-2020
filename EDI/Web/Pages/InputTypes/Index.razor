@@ -105,16 +105,16 @@
 
     InputTypeItemViewModel InputTypeModel { get; set; }
 
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    public async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridInputType_pdfexport")
         {
-            this.Grid.PdfExport();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridInputType_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
     }
 }

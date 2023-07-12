@@ -136,15 +136,15 @@
     {
         if (args.Item.Id == "GridLink_pdfexport")
         {
-            this.Grid.PdfExport();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridLink_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
         if (args.Item.Id == "GridLink_csvexport")
         {
-            this.Grid.CsvExport();
+            await this.Grid.ExportToCsvAsync();
         }
         if (args.Item.Id == "GridLink_add")
         {

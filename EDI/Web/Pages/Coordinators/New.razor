@@ -51,7 +51,7 @@
 
     CoordinatorForm coordinatorform1 = new CoordinatorForm();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         if (!UserSettings.IsAuthenticated)
         {
@@ -110,7 +110,7 @@
         NavigationManager.NavigateTo("./Coordinators/index");
     }
 
-    private async void Reset()
+    private void Reset()
     {
         CoordinatorModel = new CoordinatorItemViewModel();
         StateHasChanged();

@@ -111,15 +111,15 @@
     {
         if (args.Item.Id == "GridRole_pdfexport")
         {
-            this.Grid.PdfExport();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridRole_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
         if (args.Item.Id == "GridRole_csvexport")
         {
-            this.Grid.CsvExport();
+            await this.Grid.ExportToCsvAsync();
         }
         if (args.Item.Id == "GridRole_add")
         {
@@ -131,7 +131,12 @@
         }
         if (args.Item.Id == "GridRole_delete")
         {
-            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete");
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
+
+                };
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete",options);
             var result = await modal.Result;
 
             ConfirmDeleteModalClosed(result);

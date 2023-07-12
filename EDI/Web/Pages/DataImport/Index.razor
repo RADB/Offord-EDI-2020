@@ -193,53 +193,53 @@
         //optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
         //using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
         //{
-            var sites = dbContext.FileImports.Where(p => p.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed).OrderBy(p => p.SiteName).Select(p => p.SiteName).Distinct().ToList();
+        var sites = dbContext.FileImports.Where(p => p.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed).OrderBy(p => p.SiteName).Select(p => p.SiteName).Distinct().ToList();
 
-            var items = new List<SelectListItem>();
+        var items = new List<SelectListItem>();
 
-            foreach (var site in sites)
-            {
-                items.Add(new SelectListItem() { Value = site, Text = site });
-            }
+        foreach (var site in sites)
+        {
+            items.Add(new SelectListItem() { Value = site, Text = site });
+        }
 
-            Sites = items;
-            sitename = sites != null && sites.Count() > 0 ? sites.First() : string.Empty;
+        Sites = items;
+        sitename = sites != null && sites.Count() > 0 ? sites.First() : string.Empty;
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed && p.SiteName == sitename).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
+        var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed && p.SiteName == sitename).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
-            List<FileItemViewModel> sivm = new List<FileItemViewModel>();
+        List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
-            foreach (var file in allfiles)
-            {
-                var afile = new FileItemViewModel();
+        foreach (var file in allfiles)
+        {
+            var afile = new FileItemViewModel();
 
-                afile.Id = file.Id;
-                afile.FileName = file.FileName;
-                afile.SiteName = file.SiteName;
-                afile.CoordinatorName = file.CoordinatorName;
-                afile.CoordinatorEmail = file.CoordinatorEmail;
-                afile.SchoolName = file.SchoolName;
-                //afile.SchoolProvinceId = file.SchoolProvinceId;
-                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                //afile.Province = province != null ? province.English : string.Empty;
-                afile.TeacherName = file.TeacherName;
-                afile.TeacherEmail = file.TeacherEmail;
-                afile.LocalId = file.LocalId;
-                //afile.ClassTime = file.ClassTime;
-                afile.GenderId = file.GenderId;
-                var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
-                afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
-                afile.ChildDob = file.ChildDob;
-                afile.ChildPostalCode = file.ChildPostalCode;
-                afile.ChildEdiid = file.ChildEdiid;
-                afile.FileImportStatus = dbContext.FileImportStatuses.Where(p => p.Id == file.FileImportStatusId).FirstOrDefault().English;
+            afile.Id = file.Id;
+            afile.FileName = file.FileName;
+            afile.SiteName = file.SiteName;
+            afile.CoordinatorName = file.CoordinatorName;
+            afile.CoordinatorEmail = file.CoordinatorEmail;
+            afile.SchoolName = file.SchoolName;
+            //afile.SchoolProvinceId = file.SchoolProvinceId;
+            //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+            //afile.Province = province != null ? province.English : string.Empty;
+            afile.TeacherName = file.TeacherName;
+            afile.TeacherEmail = file.TeacherEmail;
+            afile.LocalId = file.LocalId;
+            //afile.ClassTime = file.ClassTime;
+            afile.GenderId = file.GenderId;
+            var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
+            afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
+            afile.ChildDob = file.ChildDob;
+            afile.ChildPostalCode = file.ChildPostalCode;
+            afile.ChildEdiid = file.ChildEdiid;
+            afile.FileImportStatus = dbContext.FileImportStatuses.Where(p => p.Id == file.FileImportStatusId).FirstOrDefault().English;
 
-                sivm.Add(afile);
-            }
+            sivm.Add(afile);
+        }
 
-            this.rowid = 0;
+        this.rowid = 0;
 
-            files = sivm;
+        files = sivm;
         //}
     }
 
@@ -318,23 +318,32 @@
 
     async void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
+        //var parameters = new ModalParameters();
+        // changed to blazored parameters
         var parameters = new ModalParameters();
         if (args.Item.Id == "GridFile_pdfexport")
         {
-            this.Grid.PdfExport();
+            //await this.Grid.ExportToPdfAsync();
+            await this.Grid.ExportToPdfAsync();
         }
         if (args.Item.Id == "GridFile_excelexport")
         {
-            this.Grid.ExcelExport();
+            await this.Grid.ExportToExcelAsync();
         }
         if (args.Item.Id == "GridFile_Clear")
         {
             var message = "Are you sure you want to clear the queue?";
-            parameters.Add("Message", message);
+            parameters.Add(nameof(DisplayMessage.Message), message);                               
 
-            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete", parameters);
+            var options = new ModalOptions()
+                {
+                    Position = ModalPosition.Middle
+                    
+                };
+            var modal = ModalService.Show<ConfirmDelete>("Confirm Delete", parameters,options);
+
             var result = await modal.Result;
-            ConfirmDeleteModalClosed(result);
+            await ConfirmDeleteModalClosed(result);
         }
         if (args.Item.Id == "GridFile_Excel Import")
         {
@@ -627,6 +636,8 @@
                     {
                     File.Delete(fullPath);
                 }*/
+
+                // writes the file first
                 FileStream fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
 
                 await file.File.OpenReadStream(long.MaxValue).CopyToAsync(fileStream);

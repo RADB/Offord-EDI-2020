@@ -56,7 +56,7 @@
 
     ChildForm childform1 = new ChildForm();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         if (!UserSettings.IsAuthenticated)
         {
@@ -127,7 +127,7 @@
         NavigationManager.NavigateTo("./Children/index");
     }
 
-    private async void Reset()
+    private void Reset()
     {
         ChildModel = new ChildItemViewModel();
         if (TeacherID > 0)
