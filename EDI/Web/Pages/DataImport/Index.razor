@@ -8,6 +8,8 @@
 @using Microsoft.AspNetCore.Identity;
 @using EDI.Web.Extensions;
 @using EDI.Web.Data;
+@using Radzen
+@using Radzen.Blazor
 @using Syncfusion.Blazor.Inputs;
 @using Syncfusion.Blazor.Spinner;
 @using Syncfusion.Blazor.Popups;
@@ -95,6 +97,7 @@
                         <ProgressBarEvents ValueChanged="@ValueHandler"></ProgressBarEvents>
                     </SfProgressBar>
 
+                    <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Primary" @bind-Value="@progress" />
                 }
                 <div class="row"></div>
                 <br />
@@ -122,6 +125,8 @@
                         </div>
                         <SfProgressBar Type="ProgressType.Linear" Value="@fileProgress" Height="60" Minimum="0" Maximum="100" @ref="ProgressBarFileObj" ShowProgressValue="true" IsStriped="true">
                         </SfProgressBar>
+                        <RadzenProgressBar ProgressBarStyle="ProgressBarStyle.Primary" @bind-Value="@fileProgress" />
+
                         <SfGrid ID="GridFile" @ref="Grid" DataSource="@files" AllowPaging="true" AllowSorting="true" AllowFiltering="true" AllowGrouping="true" AllowResizing="true" ShowColumnMenu="true" Toolbar="@(new List<string>() { "Excel Import","Process","ProcessAll", "ExcelExport", "Clear", "Search" })" AllowExcelExport="true" AllowPdfExport="true">
                             <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" ShowDeleteConfirmDialog="false"></GridEditSettings>
                             <GridEvents OnToolbarClick="ToolbarClick" RowSelected="RowSelect" TValue="FileItemViewModel"></GridEvents>
@@ -338,7 +343,7 @@
             var options = new ModalOptions()
                 {
                     Position = ModalPosition.Middle
-                    
+
                 };
             var modal = ModalService.Show<ConfirmDelete>("Confirm Delete", parameters,options);
 
@@ -364,56 +369,65 @@
 
     async Task ProcessData(string sitename)
     {
-        var allimportedfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId == (int)Enumerations.FileImportStatus.Imported && p.SiteName == sitename).OrderBy(p => p.FileName).ToList());
-
-        if (allimportedfiles == null || allimportedfiles.Count() == 0)
+        int counter; 
+        var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+        optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+        using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
         {
-            toastService.ShowWarning("All imported data with the site - " + sitename + " were processed.");
-        }
-        else
-        {
-            await SpinnerObj.ShowAsync();
-            processingresult = await ProcessFileData(sitename);
-            await SpinnerObj.HideAsync();
-            //SpinnerObj.HideSpinner("Data processing is done.");
+            var allimportedfiles = await Task.FromResult(servicecontext.FileImports.Where(p => p.FileImportStatusId == (int)Enumerations.FileImportStatus.Imported && p.SiteName == sitename).OrderBy(p => p.FileName).ToList());
 
-            var allfiles = await Task.FromResult(dbContext.FileImports.Where(p => p.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed && p.SiteName == sitename).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
-
-            List<FileItemViewModel> sivm = new List<FileItemViewModel>();
-
-            foreach (var nfile in allfiles)
+            if (allimportedfiles == null || allimportedfiles.Count() == 0)
             {
-                var afile = new FileItemViewModel();
-
-                afile.Id = nfile.Id;
-                afile.FileName = nfile.FileName;
-                afile.SiteName = nfile.SiteName;
-                afile.CoordinatorName = nfile.CoordinatorName;
-                afile.CoordinatorEmail = nfile.CoordinatorEmail;
-                afile.SchoolName = nfile.SchoolName;
-                //afile.SchoolProvinceId = nfile.SchoolProvinceId;
-                //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
-                //afile.Province = province != null ? province.English : string.Empty;
-                afile.TeacherName = nfile.TeacherName;
-                afile.TeacherEmail = nfile.TeacherEmail;
-                afile.LocalId = nfile.LocalId;
-                //afile.ClassTime = nfile.ClassTime;
-                afile.GenderId = nfile.GenderId;
-                var gender = dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
-                afile.Gender = gender != null ? dbContext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault().English : string.Empty;
-                afile.ChildDob = nfile.ChildDob;
-                afile.ChildPostalCode = nfile.ChildPostalCode;
-                afile.ChildEdiid = nfile.ChildEdiid;
-                afile.FileImportStatus = dbContext.FileImportStatuses.Where(p => p.Id == nfile.FileImportStatusId).FirstOrDefault().English;
-
-                sivm.Add(afile);
+                toastService.ShowWarning("All imported data with the site - " + sitename + " were processed.");
             }
+            else
+            {
+                await SpinnerObj.ShowAsync();
+                processingresult = await ProcessFileData(sitename);
+                await SpinnerObj.HideAsync();
+                //SpinnerObj.HideSpinner("Data processing is done.");
 
-            this.rowid = 0;
+                var allfiles = await Task.FromResult(servicecontext.FileImports.Where(p => p.FileImportStatusId != (int)Enumerations.FileImportStatus.Processed && p.SiteName == sitename).OrderBy(p => p.FileName).OrderBy(p => p.SiteName).OrderBy(p => p.CoordinatorName).ToList());
 
-            files = sivm;
+                List<FileItemViewModel> sivm = new List<FileItemViewModel>();
 
-            StateHasChanged();
+                counter = 0;
+                foreach (var nfile in allfiles)
+                {
+                    var afile = new FileItemViewModel();
+
+                    afile.Id = nfile.Id;
+                    afile.FileName = nfile.FileName;
+                    afile.SiteName = nfile.SiteName;
+                    afile.CoordinatorName = nfile.CoordinatorName;
+                    afile.CoordinatorEmail = nfile.CoordinatorEmail;
+                    afile.SchoolName = nfile.SchoolName;
+                    //afile.SchoolProvinceId = nfile.SchoolProvinceId;
+                    //var province = dbContext.Provinces.Where(p => p.EDICode == afile.SchoolProvinceId).FirstOrDefault();
+                    //afile.Province = province != null ? province.English : string.Empty;
+                    afile.TeacherName = nfile.TeacherName;
+                    afile.TeacherEmail = nfile.TeacherEmail;
+                    afile.LocalId = nfile.LocalId;
+                    //afile.ClassTime = nfile.ClassTime;
+                    afile.GenderId = nfile.GenderId;
+                    var gender = servicecontext.Genders.Where(p => p.Id == afile.GenderId).FirstOrDefault();
+                    afile.Gender = gender != null ? gender.English : string.Empty;
+                    afile.ChildDob = nfile.ChildDob;
+                    afile.ChildPostalCode = nfile.ChildPostalCode;
+                    afile.ChildEdiid = nfile.ChildEdiid;
+                    afile.FileImportStatus = servicecontext.FileImportStatuses.Where(p => p.Id == nfile.FileImportStatusId).FirstOrDefault().English;
+                    
+                    counter++;
+
+                    sivm.Add(afile);
+                }
+
+                this.rowid = 0;
+
+                files = sivm;
+
+                StateHasChanged();
+            }
         }
     }
 
@@ -431,7 +445,7 @@
         StateHasChanged();
     }
 
-    private async Task OnChange(UploadChangeEventArgs args)
+    private async Task OnChange(Syncfusion.Blazor.Inputs.UploadChangeEventArgs args)
     {        
         foreach (var file in args.Files)
         {
@@ -679,10 +693,10 @@
                     //await _fileRepository.DeleteAllFileImports();
                     //await _fileRepository.ReseedFileImports();
 
-                    //var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
-                    //optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-                    //using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
-                    //{
+                    var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
+                    optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
+                    using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+                    {
                         int firstRow = worksheet.UsedRange.Row;
                         // get the number of records
                         int lastRow = worksheet.UsedRange.LastRow;
@@ -729,7 +743,7 @@
                             {
                                 //_file.GenderId = null;
                                 //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
-                                _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                                    _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
                             }
                             else
                             {
@@ -740,17 +754,17 @@
 
                                 if (gender == "M")
                                 {
-                                    _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Id;
+                                    _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Id;
                                     //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Male").FirstOrDefault().Value;
                                 }
                                 else if (gender == "F")
                                 {
-                                    _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
+                                        _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
                                     //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Value;
                                 }
                                 else
                                 {
-                                _file.GenderId = dbContext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                                        _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
                                     //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                 }
                             }
@@ -794,7 +808,7 @@
                             _file.CreatedBy = UserSettings.UserName;
 
                             if (!haserror)
-                            {
+                            {                                
                                 await _fileRepository.AddAsync(_file);
 
                                 error.message = "file has been imported successfully.";
@@ -803,16 +817,16 @@
                             // set the progress
                             progress = (double)((i / (double)lastRow) * 100);
 
-                            // update the progress bar every 5 records
-                            if (lastRow > 100)
-                            {
-                                if (i % 5 == 0)
-                                    StateHasChanged();
-                            }
-                            else
-                                StateHasChanged();
+                            // // update the progress bar every 5 records
+                            // if (lastRow > 100)
+                            // {
+                            //     if (i % 5 == 0)
+                            //         StateHasChanged();
+                            // }
+                            // else
+                            //     StateHasChanged();
                         }
-                    //}
+                    }
                 }
 
                 // reset progress bar
@@ -860,7 +874,7 @@
         {
             var optionsBuilder = new DbContextOptionsBuilder<ServiceContext>();
             optionsBuilder.UseSqlServer(ConnectionStrings.ServiceConnection());
-            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))
+            using (ServiceContext servicecontext = new ServiceContext(optionsBuilder.Options))                
             {
                 var alldata = _fileRepository.ListImportedData().Where(p=> p.SiteName == sitename);
                 int fileimportstatusid = (int)Enumerations.FileImportStatus.Imported;
@@ -907,7 +921,7 @@
                 int totalChildren = alldata.Count();
                 string username = UserSettings.UserName;
                 DateTime timestamp;
-                var childstatus = dbContext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+                var childstatus = servicecontext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
 
                 foreach (var data in alldata)
                 {
@@ -1025,7 +1039,7 @@
 
                         predicate = "p => p." + provincename + ".Value && p.YearId == " + yearid + " && p.QuestionnaireName == \"Teacher Feedback\"";
 
-                        questionnaireTeacher = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireTeacher = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         if (questionnaireTeacher == null)
                         {
@@ -1036,27 +1050,27 @@
 
                         predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Demographics\"";
 
-                        questionnaireDemographics = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireDemographics = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section A\"";
 
-                        questionnaireA = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireA = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section B\"";
 
-                        questionnaireB = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireB = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section C\"";
 
-                        questionnaireC = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireC = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section D\"";
 
-                        questionnaireD = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireD = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         predicate = "p => p." + provincename + " == true && p.YearId == " + yearid + " && p.QuestionnaireName == \"Section E\"";
 
-                        questionnaireE = dbContext.Questionnaires.Where(predicate).FirstOrDefault();
+                        questionnaireE = servicecontext.Questionnaires.Where(predicate).FirstOrDefault();
 
                         if (questionnaireDemographics == null)
                         {
@@ -1211,6 +1225,7 @@
                                         _site.SiteName = data.SiteName;
                                         _site.CoordinatorId = coordinatorid;
                                         _site.YearId = yearid;
+                                        _site.IsTestSite = false;
                                         _site.CreatedDate = timestamp;
                                         _site.CreatedBy = username;
                                         _site.ModifiedDate = timestamp;
@@ -1357,7 +1372,7 @@
                                         {
                                         try
                                         {
-                                            var teacherstatus = dbContext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
+                                            var teacherstatus = servicecontext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
                                             var _teacher = new Teacher();
 
                                             _teacher.UserId = userid;
@@ -1376,7 +1391,7 @@
                                             teacherId = _teacher.Id;
                                             totalteachers++;
 
-                                            var teacherprofile = dbContext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id && p.YearId == yearid).FirstOrDefault();
+                                            var teacherprofile = servicecontext.QuestionnairesDataTeacherProfiles.Where(p => p.TeacherId == _teacher.Id && p.YearId == yearid).FirstOrDefault();
 
                                             if (teacherprofile == null)
                                             {
@@ -1621,13 +1636,13 @@
                     fileProgress = (double)((childCount / (double)totalChildren) * 100);
 
                     // update the progress bar every 5 records
-                    if (totalChildren > 100)
-                    {
-                        if (childCount % 5 == 0)
-                            StateHasChanged();
-                    }
-                    else
-                        StateHasChanged();
+                    // if (totalChildren > 100)
+                    // {
+                    //     if (childCount % 5 == 0)
+                    //         StateHasChanged();
+                    // }
+                    // else
+                    //     StateHasChanged();
                 }
 
                 if (totalcoordinators > 0)

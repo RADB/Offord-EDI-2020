@@ -35,6 +35,8 @@ using Microsoft.Extensions.Hosting;
 
 using Newtonsoft.Json.Serialization;
 
+using Radzen;
+
 using Syncfusion.Blazor;
 
 using Serilog; 
@@ -48,8 +50,6 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 
-
-
 namespace EDI.Web
 {
     public class Startup
@@ -59,10 +59,7 @@ namespace EDI.Web
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
-        
         private void ConfigureDBContextServices(IServiceCollection services)
         {
             // use in-memory database
@@ -156,6 +153,7 @@ namespace EDI.Web
             services.AddBlazoredSessionStorage();
             services.AddBlazoredToast();
             services.AddBlazoredModal();
+            services.AddRadzenComponents();
             services.AddSyncfusionBlazor();            
             services.AddControllers().AddNewtonsoftJson(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -228,8 +226,6 @@ namespace EDI.Web
             });
 
         }
-
-
         private static void ConfigureApplicationServices(IServiceCollection services)
         {
             services.AddScoped<IAccountService, AccountService>();
@@ -270,7 +266,6 @@ namespace EDI.Web
                 options.Cookie.IsEssential = true;
             });
         }
-
         private static void ConfigureCookieSettings(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>

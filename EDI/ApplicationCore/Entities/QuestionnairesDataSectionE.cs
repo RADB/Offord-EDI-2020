@@ -102,6 +102,8 @@ namespace EDI.ApplicationCore.Entities
 
         /* 2023 End SectionE*/
 
+        /* 2025 PEI */
+        public byte? ParentalEngagement { get; set; }
 
         [JsonIgnore]
         public virtual Child Child { get; set; }

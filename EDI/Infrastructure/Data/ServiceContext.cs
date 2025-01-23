@@ -467,7 +467,8 @@ namespace EDI.Infrastructure.Data
                     new LookupSet() { Id = 122, LookupName = "LanguageImmersion", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new LookupSet() { Id = 123, LookupName = "PEIClassType", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
                     new LookupSet() { Id = 124, LookupName = "MBClassType", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
-                    new LookupSet() { Id = 125, LookupName = "MBAdditionalLanguage", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }                    
+                    new LookupSet() { Id = 125, LookupName = "MBAdditionalLanguage", YearId = 3, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now },
+                    new LookupSet() { Id = 243, LookupName = "ParentalEngagement", YearId = 5, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now }
                     );
 
             });
@@ -565,7 +566,11 @@ namespace EDI.Infrastructure.Data
                     new LookupSetOption() { Id = 985, YearId = 3, English = "Other", LookupSetId = 124, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Other", Value = 3, Sequence = 30 },
                     new LookupSetOption() { Id = 986, YearId = 3, English = "EAL", LookupSetId = 125, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "EAL", Value = 1, Sequence = 10 },
                     new LookupSetOption() { Id = 987, YearId = 3, English = "FAL", LookupSetId = 125, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "FAL", Value = 2, Sequence = 20 },
-                    new LookupSetOption() { Id = 988, YearId = 3, English = "No", LookupSetId = 125, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non", Value = 3, Sequence = 30 }
+                    new LookupSetOption() { Id = 988, YearId = 3, English = "No", LookupSetId = 125, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Non", Value = 3, Sequence = 30 },
+                    // 2025 Data Additions - PEI Section E
+                    new LookupSetOption() { Id = 1966, YearId = 5, English = "Too Low", LookupSetId = 243, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Trop bas", Value = 1, Sequence = 10 },
+                    new LookupSetOption() { Id = 1967, YearId = 5, English = "Adequate", LookupSetId = 243, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Adéquat", Value = 2, Sequence = 20 },
+                    new LookupSetOption() { Id = 1968, YearId = 5, English = "Too High", LookupSetId = 243, CreatedBy = "admin", CreatedDate = DateTime.Now, ModifiedBy = "admin", ModifiedDate = DateTime.Now, French = "Trop haut", Value = 3, Sequence = 30 }
                 );
             });
 
