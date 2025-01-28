@@ -113,6 +113,8 @@ namespace EDI.Web.Services
                 _faq.Saskatchewan = faq.Saskatchewan;
                 _faq.YukonTerritory = faq.YukonTerritory;
                 _faq.NorthwestTerritories = faq.NorthwestTerritories;
+                _faq.NewYork = faq.NewYork;
+                _faq.FirstNations = faq.FirstNations;
                 _faq.ModifiedDate = DateTime.Now;
                 _faq.ModifiedBy = _userSettings.UserName;
 
@@ -142,6 +144,7 @@ namespace EDI.Web.Services
                 _faq.YearId = faq.YearId;
                 _faq.Alberta = faq.Alberta;
                 _faq.BritishColumbia = faq.BritishColumbia;
+                _faq.FirstNations = faq.FirstNations;
                 _faq.Manitoba = faq.Manitoba;
                 _faq.NewBrunswick = faq.NewBrunswick;
                 _faq.NewfoundlandandLabrador = faq.NewfoundlandandLabrador;
@@ -153,6 +156,7 @@ namespace EDI.Web.Services
                 _faq.Saskatchewan = faq.Saskatchewan;
                 _faq.YukonTerritory = faq.YukonTerritory;
                 _faq.NorthwestTerritories = faq.NorthwestTerritories;
+                _faq.NewYork = faq.NewYork;
                 _faq.CreatedDate = DateTime.Now;
                 _faq.CreatedBy = _userSettings.UserName;
                 _faq.ModifiedDate = DateTime.Now;
@@ -191,6 +195,7 @@ namespace EDI.Web.Services
                     YearId = faq.YearId,
                     Alberta = faq.Alberta.HasValue ? faq.Alberta.Value : false,
                     BritishColumbia = faq.BritishColumbia.HasValue ? faq.BritishColumbia.Value : false,
+                    FirstNations = faq.FirstNations.HasValue ? faq.FirstNations.Value : false,
                     Manitoba = faq.Manitoba.HasValue ? faq.Manitoba.Value : false,
                     NewBrunswick = faq.NewBrunswick.HasValue ? faq.NewBrunswick.Value : false,
                     NewfoundlandandLabrador = faq.NewfoundlandandLabrador.HasValue ? faq.NewfoundlandandLabrador.Value : false,
@@ -202,6 +207,7 @@ namespace EDI.Web.Services
                     Saskatchewan = faq.Saskatchewan.HasValue ? faq.Saskatchewan.Value : false,
                     YukonTerritory = faq.YukonTerritory.HasValue ? faq.YukonTerritory.Value : false,
                     NorthwestTerritories = faq.NorthwestTerritories.HasValue ? faq.NorthwestTerritories.Value : false,
+                    NewYork = faq.NewYork.HasValue ? faq.NewYork.Value : false,
                     CreatedDate = faq.CreatedDate,
                     CreatedBy = faq.CreatedBy,
                     ModifiedDate = faq.ModifiedDate,

@@ -140,21 +140,22 @@
                 var year = dbContext.Years.Where(p => p.Id == questionnaireConfiguration.YearId).FirstOrDefault();
                 if (year != null && year.Ediyear.HasValue)
                     aquestionnaireConfiguration.Ediyear = year.Ediyear.Value;
-
+                
                 aquestionnaireConfiguration.Alberta = questionnaireConfiguration.Alberta.HasValue ? questionnaireConfiguration.Alberta.Value : false;
                 aquestionnaireConfiguration.BritishColumbia = questionnaireConfiguration.BritishColumbia.HasValue ? questionnaireConfiguration.BritishColumbia.Value : false;
+                aquestionnaireConfiguration.FirstNations = questionnaireConfiguration.FirstNations.HasValue ? questionnaireConfiguration.FirstNations.Value : false;
                 aquestionnaireConfiguration.Manitoba = questionnaireConfiguration.Manitoba.HasValue ? questionnaireConfiguration.Manitoba.Value : false;
                 aquestionnaireConfiguration.NewBrunswick = questionnaireConfiguration.NewBrunswick.HasValue ? questionnaireConfiguration.NewBrunswick.Value : false;
                 aquestionnaireConfiguration.NewfoundlandandLabrador = questionnaireConfiguration.NewfoundlandandLabrador.HasValue ? questionnaireConfiguration.NewfoundlandandLabrador.Value : false;
+                aquestionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork.HasValue ? questionnaireConfiguration.NewYork.Value : false;
+                aquestionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories.HasValue ? questionnaireConfiguration.NorthwestTerritories.Value : false;
                 aquestionnaireConfiguration.NovaScotia = questionnaireConfiguration.NovaScotia.HasValue ? questionnaireConfiguration.NovaScotia.Value : false;
                 aquestionnaireConfiguration.Nunavut = questionnaireConfiguration.Nunavut.HasValue ? questionnaireConfiguration.Nunavut.Value : false;
                 aquestionnaireConfiguration.Ontario = questionnaireConfiguration.Ontario.HasValue ? questionnaireConfiguration.Ontario.Value : false;
                 aquestionnaireConfiguration.PrinceEdwardIsland = questionnaireConfiguration.PrinceEdwardIsland.HasValue ? questionnaireConfiguration.PrinceEdwardIsland.Value : false;
                 aquestionnaireConfiguration.Quebec = questionnaireConfiguration.Quebec.HasValue ? questionnaireConfiguration.Quebec.Value : false;
-                aquestionnaireConfiguration.Saskatchewan = questionnaireConfiguration.Saskatchewan.HasValue ? questionnaireConfiguration.Saskatchewan.Value : false;
+                aquestionnaireConfiguration.Saskatchewan = questionnaireConfiguration.Saskatchewan.HasValue ? questionnaireConfiguration.Saskatchewan.Value : false;                
                 aquestionnaireConfiguration.YukonTerritory = questionnaireConfiguration.YukonTerritory.HasValue ? questionnaireConfiguration.YukonTerritory.Value : false;
-                aquestionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories.HasValue ? questionnaireConfiguration.NorthwestTerritories.Value : false;
-                aquestionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork.HasValue ? questionnaireConfiguration.NewYork.Value : false;
 
                 sivm.Add(aquestionnaireConfiguration);
             }

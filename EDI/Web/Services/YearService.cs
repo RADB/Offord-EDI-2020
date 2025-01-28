@@ -107,6 +107,8 @@ namespace EDI.Web.Services
                 _year.Saskatchewan = year.Saskatchewan;
                 _year.YukonTerritory = year.YukonTerritory;
                 _year.NorthwestTerritories = year.NorthwestTerritories;
+                _year.NewYork = year.NewYork;
+                _year.FirstNations = year.FirstNations;
                 _year.ModifiedDate = DateTime.Now;
                 _year.ModifiedBy = _userSettings.UserName;
 
@@ -141,6 +143,8 @@ namespace EDI.Web.Services
                 _year.Saskatchewan = year.Saskatchewan;
                 _year.YukonTerritory = year.YukonTerritory;
                 _year.NorthwestTerritories = year.NorthwestTerritories;
+                _year.NewYork = year.NewYork;
+                _year.FirstNations = year.FirstNations;
                 _year.CreatedDate = DateTime.Now;
                 _year.CreatedBy = _userSettings.UserName;
                 _year.ModifiedDate = DateTime.Now;
@@ -182,6 +186,8 @@ namespace EDI.Web.Services
                     Saskatchewan = year.Saskatchewan.HasValue ? year.Saskatchewan.Value : false,
                     YukonTerritory = year.YukonTerritory.HasValue ? year.YukonTerritory.Value : false,
                     NorthwestTerritories = year.NorthwestTerritories.HasValue ? year.NorthwestTerritories.Value : false,
+                    NewYork = year.NewYork.HasValue ? year.NewYork.Value : false,
+                    FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false,
                     CreatedDate = year.CreatedDate,
                     CreatedBy = year.CreatedBy,
                     ModifiedDate = year.ModifiedDate,

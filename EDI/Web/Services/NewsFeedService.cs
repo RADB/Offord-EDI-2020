@@ -113,6 +113,8 @@ namespace EDI.Web.Services
                 _newsFeed.Saskatchewan = newsFeed.Saskatchewan;
                 _newsFeed.YukonTerritory = newsFeed.YukonTerritory;
                 _newsFeed.NorthwestTerritories = newsFeed.NorthwestTerritories;
+                _newsFeed.NewYork = newsFeed.NewYork;
+                _newsFeed.FirstNations = newsFeed.FirstNations;
                 _newsFeed.ModifiedDate = DateTime.Now;
                 _newsFeed.ModifiedBy = _userSettings.UserName;
 
@@ -153,6 +155,8 @@ namespace EDI.Web.Services
                     Saskatchewan = newsFeed.Saskatchewan,
                     YukonTerritory = newsFeed.YukonTerritory,
                     NorthwestTerritories = newsFeed.NorthwestTerritories,
+                    NewYork = newsFeed.NewYork,
+                    FirstNations = newsFeed.FirstNations,
                     CreatedDate = DateTime.Now,
                     CreatedBy = _userSettings.UserName,
                     ModifiedDate = DateTime.Now,
@@ -192,6 +196,7 @@ namespace EDI.Web.Services
                     ValidTo = newsFeed.ValidTo,
                     Alberta = newsFeed.Alberta.HasValue ? newsFeed.Alberta.Value : false,
                     BritishColumbia = newsFeed.BritishColumbia.HasValue ? newsFeed.BritishColumbia.Value : false,
+                    FirstNations = newsFeed.FirstNations.HasValue ? newsFeed.FirstNations.Value : false,
                     Manitoba = newsFeed.Manitoba.HasValue ? newsFeed.Manitoba.Value : false,
                     NewBrunswick = newsFeed.NewBrunswick.HasValue ? newsFeed.NewBrunswick.Value : false,
                     NewfoundlandandLabrador = newsFeed.NewfoundlandandLabrador.HasValue ? newsFeed.NewfoundlandandLabrador.Value : false,
@@ -203,6 +208,7 @@ namespace EDI.Web.Services
                     Saskatchewan = newsFeed.Saskatchewan.HasValue ? newsFeed.Saskatchewan.Value : false,
                     YukonTerritory = newsFeed.YukonTerritory.HasValue ? newsFeed.YukonTerritory.Value : false,
                     NorthwestTerritories = newsFeed.NorthwestTerritories.HasValue ? newsFeed.NorthwestTerritories.Value : false,
+                    NewYork = newsFeed.NewYork.HasValue ? newsFeed.NewYork.Value : false,
                     CreatedDate = newsFeed.CreatedDate,
                     CreatedBy = newsFeed.CreatedBy,
                     ModifiedDate = newsFeed.ModifiedDate,

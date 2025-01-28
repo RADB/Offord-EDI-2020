@@ -137,6 +137,8 @@ namespace EDI.Web.Services
                 _questionnaire.Saskatchewan = questionnaire.Saskatchewan;
                 _questionnaire.YukonTerritory = questionnaire.YukonTerritory;
                 _questionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories;
+                _questionnaire.NewYork = questionnaire.NewYork;
+                _questionnaire.FirstNations = questionnaire.FirstNations;
                 _questionnaire.ModifiedDate = DateTime.Now;
                 _questionnaire.ModifiedBy = _userSettings.UserName;
 
@@ -201,6 +203,8 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.Saskatchewan = questionnaireConfiguration.Saskatchewan;
                 _questionnaireConfiguration.YukonTerritory = questionnaireConfiguration.YukonTerritory;
                 _questionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories;
+                _questionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork;
+                _questionnaireConfiguration.FirstNations = questionnaireConfiguration.FirstNations;
                 _questionnaireConfiguration.ModifiedDate = DateTime.Now;
                 _questionnaireConfiguration.ModifiedBy = _userSettings.UserName;
 
@@ -242,6 +246,8 @@ namespace EDI.Web.Services
                 _questionnaire.Saskatchewan = questionnaire.Saskatchewan;
                 _questionnaire.YukonTerritory = questionnaire.YukonTerritory;
                 _questionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories;
+                _questionnaire.NewYork = questionnaire.NewYork;
+                _questionnaire.FirstNations = questionnaire.FirstNations;
                 _questionnaire.CreatedDate = DateTime.Now;
                 _questionnaire.CreatedBy = _userSettings.UserName;
                 _questionnaire.ModifiedDate = DateTime.Now;
@@ -308,6 +314,8 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.Saskatchewan = questionnaireConfiguration.Saskatchewan;
                 _questionnaireConfiguration.YukonTerritory = questionnaireConfiguration.YukonTerritory;
                 _questionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories;
+                _questionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork;
+                _questionnaireConfiguration.FirstNations = questionnaireConfiguration.FirstNations;
                 _questionnaireConfiguration.ModifiedDate = DateTime.Now;
                 _questionnaireConfiguration.ModifiedBy = _userSettings.UserName;
                 _questionnaireConfiguration.CreatedDate = DateTime.Now;
@@ -358,6 +366,8 @@ namespace EDI.Web.Services
                     Saskatchewan = questionnaire.Saskatchewan.HasValue ? questionnaire.Saskatchewan.Value : false,
                     YukonTerritory = questionnaire.YukonTerritory.HasValue ? questionnaire.YukonTerritory.Value : false,
                     NorthwestTerritories = questionnaire.NorthwestTerritories.HasValue ? questionnaire.NorthwestTerritories.Value : false,
+                    NewYork = questionnaire.NewYork.HasValue ? questionnaire.NewYork.Value : false,
+                    FirstNations = questionnaire.FirstNations.HasValue ? questionnaire.FirstNations.Value : false,
                     CreatedDate = questionnaire.CreatedDate,
                     CreatedBy = questionnaire.CreatedBy,
                     ModifiedDate = questionnaire.ModifiedDate,
@@ -431,6 +441,8 @@ namespace EDI.Web.Services
                     Saskatchewan = questionnaireConfiguration.Saskatchewan.HasValue ? questionnaireConfiguration.Saskatchewan.Value : false,
                     YukonTerritory = questionnaireConfiguration.YukonTerritory.HasValue ? questionnaireConfiguration.YukonTerritory.Value : false,
                     NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories.HasValue ? questionnaireConfiguration.NorthwestTerritories.Value : false,
+                    NewYork = questionnaireConfiguration.NewYork.HasValue ? questionnaireConfiguration.NewYork.Value : false,
+                    FirstNations = questionnaireConfiguration.FirstNations.HasValue ? questionnaireConfiguration.FirstNations.Value : false,
                     CreatedDate = questionnaireConfiguration.CreatedDate,
                     CreatedBy = questionnaireConfiguration.CreatedBy,
                     ModifiedDate = questionnaireConfiguration.ModifiedDate,

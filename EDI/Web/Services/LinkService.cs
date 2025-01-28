@@ -103,8 +103,10 @@ namespace EDI.Web.Services
                 _link.YearId = link.YearId;
                 _link.Alberta = link.Alberta;
                 _link.BritishColumbia = link.BritishColumbia;
+                _link.FirstNations = link.FirstNations;
                 _link.Manitoba = link.Manitoba;
                 _link.NewBrunswick = link.NewBrunswick;
+                _link.NewYork = link.NewYork;
                 _link.NewfoundlandandLabrador = link.NewfoundlandandLabrador;
                 _link.NovaScotia = link.NovaScotia;
                 _link.Nunavut = link.Nunavut;
@@ -144,8 +146,10 @@ namespace EDI.Web.Services
                 _link.YearId = link.YearId;
                 _link.Alberta = link.Alberta;
                 _link.BritishColumbia = link.BritishColumbia;
+                _link.FirstNations = link.FirstNations;
                 _link.Manitoba = link.Manitoba;
                 _link.NewBrunswick = link.NewBrunswick;
+                _link.NewYork = link.NewYork;
                 _link.NewfoundlandandLabrador = link.NewfoundlandandLabrador;
                 _link.NovaScotia = link.NovaScotia;
                 _link.Nunavut = link.Nunavut;
@@ -194,6 +198,7 @@ namespace EDI.Web.Services
                     YearId = link.YearId,
                     Alberta = link.Alberta.HasValue ? link.Alberta.Value : false,
                     BritishColumbia = link.BritishColumbia.HasValue ? link.BritishColumbia.Value : false,
+                    FirstNations = link.FirstNations.HasValue ? link.FirstNations.Value : false,
                     Manitoba = link.Manitoba.HasValue ? link.Manitoba.Value : false,
                     NewBrunswick = link.NewBrunswick.HasValue ? link.NewBrunswick.Value : false,
                     NewfoundlandandLabrador = link.NewfoundlandandLabrador.HasValue ? link.NewfoundlandandLabrador.Value : false,
@@ -205,6 +210,7 @@ namespace EDI.Web.Services
                     Saskatchewan = link.Saskatchewan.HasValue ? link.Saskatchewan.Value : false,
                     YukonTerritory = link.YukonTerritory.HasValue ? link.YukonTerritory.Value : false,
                     NorthwestTerritories = link.NorthwestTerritories.HasValue ? link.NorthwestTerritories.Value : false,
+                    NewYork = link.NewYork.HasValue ? link.NewYork.Value : false,
                     CreatedDate = link.CreatedDate,
                     CreatedBy = link.CreatedBy,
                     ModifiedDate = link.ModifiedDate,
