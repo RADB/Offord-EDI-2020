@@ -759,35 +759,10 @@ a span.far.incomplete {
 }
 
 /* 2025-01-28 Added to show configure buttons */
-.EDImain .card-body .col-2 .buttonConfigure {
-    /*background-color: #1c326f;*/
-    border: none;
-    color: #1c326f;
-    padding: 6px 6px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    font-weight: 600;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-
-.EDImain .card-body .col-10 .buttonConfigure {
-    /*background-color: #1c326f;*/
-    border: none;
-    color: #1c326f;
-    padding: 6px 6px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    font-weight: 600;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-
 .icon-settings {
+    color: #1c326f;
     font-weight: 600 !important;
+    font-size: 18px;
+    padding: 6px 6px;
 }
 /* 2025-01-28 End addition */
