@@ -760,7 +760,7 @@ a span.far.incomplete {
 
 /* 2025-01-28 Added to show configure buttons */
 .EDImain .card-body .col-2 .buttonConfigure {
-    background-color: none;
+    /*background-color: #1c326f;*/
     border: none;
     color: #1c326f;
     padding: 6px 6px;
@@ -774,7 +774,7 @@ a span.far.incomplete {
 }
 
 .EDImain .card-body .col-10 .buttonConfigure {
-    background-color: none;
+    /*background-color: #1c326f;*/
     border: none;
     color: #1c326f;
     padding: 6px 6px;
@@ -785,5 +785,9 @@ a span.far.incomplete {
     font-weight: 600;
     margin: 4px 2px;
     cursor: pointer;
+}
+
+.icon-settings {
+    font-weight: 600 !important;
 }
 /* 2025-01-28 End addition */
