@@ -224,6 +224,8 @@ h4{
     font-size: 0px;
 }
 
+
+
 .EDImain .card-body .col-2 button .icon-question, .EDImain .card-body .col-10 button .icon-question {
     position: relative;
     color: #1c326f;
@@ -239,6 +241,8 @@ h4{
     -webkit-font-smoothing: antialiased;
     content: "\e05d";
 }
+
+
 
 .EDImain .card-body .Valid .col-2, .EDImain .card-body .InValid .col-2 {
     top: 13px;
@@ -753,3 +757,31 @@ a span.far.incomplete {
 .blazored-modal .simple-form {
     width: auto!important;
 }
+
+/* 2025-01-28 Added to show configure buttons */
+.EDImain .card-body .col-2 .buttonConfigure {
+    background-color: #1c326f;
+    border: none;
+    color: white;
+    padding: 6px 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.EDImain .card-body .col-10 .buttonConfigure {
+    background-color: #1c326f;
+    border: none;
+    color: white;
+    padding: 6px 6px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+/* 2025-01-28 End addition */

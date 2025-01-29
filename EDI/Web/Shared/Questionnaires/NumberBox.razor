@@ -32,7 +32,8 @@
     <div class="col-2">
         <AuthorizeView Roles="Administrator">
             <Authorized>
-                <button type="button" class="btn btn-primary btn-sm" @onclick="@gotoURL"><i class="icon-settings"></i> Configure</button>
+                <!--Configure-->
+                <button type="button" class="btn btn-primary btn-sm buttonConfigure" @onclick="@gotoURL"><i class="icon-settings"></i></button>
                 @if (Config.HasHelp)
                 {
                     <button type="button" class="btn btn-primary btn-sm" @onclick="@(() => ShowModal("e-EDI Help", HelpTextEnglish))"><i class="icon-question"></i> Help</button>
