@@ -416,7 +416,7 @@
                     afile.ChildPostalCode = nfile.ChildPostalCode;
                     afile.ChildEdiid = nfile.ChildEdiid;
                     afile.FileImportStatus = servicecontext.FileImportStatuses.Where(p => p.Id == nfile.FileImportStatusId).FirstOrDefault().English;
-                    
+
                     counter++;
 
                     sivm.Add(afile);
@@ -743,7 +743,7 @@
                             {
                                 //_file.GenderId = null;
                                 //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
-                                    _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                                _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
                             }
                             else
                             {
@@ -759,12 +759,12 @@
                                 }
                                 else if (gender == "F")
                                 {
-                                        _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
+                                    _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Id;
                                     //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Female").FirstOrDefault().Value;
                                 }
                                 else
                                 {
-                                        _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
+                                    _file.GenderId = servicecontext.Genders.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Id;
                                     //_file.GenderId = tempGenders.LookupSetOptions.Where(p => p.YearId == UserSettings.YearId && p.English == "Other").FirstOrDefault().Value;
                                 }
                             }
@@ -922,6 +922,7 @@
                 string username = UserSettings.UserName;
                 DateTime timestamp;
                 var childstatus = servicecontext.ChildStatuses.Where(p => p.English == "New").FirstOrDefault();
+                bool teacherExists;
 
                 foreach (var data in alldata)
                 {
@@ -929,6 +930,7 @@
                     timestamp = DateTime.Now;
                     // default variables
                     haserror = false;
+                    teacherExists = false;
 
                     if (string.IsNullOrEmpty(data.ChildEdiid))
                     {
@@ -1369,7 +1371,10 @@
                                         userid = user.Id;
                                     }
                                     if (teacher == null)
-                                        {
+                                    {
+                                        // new teacher
+                                        teacherExists = false;
+
                                         try
                                         {
                                             var teacherstatus = servicecontext.TeacherStatuses.Where(p => p.English == "New").FirstOrDefault();
@@ -1415,11 +1420,14 @@
                                     }
                                     else
                                     {
+                                        // teacher already exists store id and boolean
                                         teacherId = teacher.Id;
+                                        teacherExists = true;
+
 
                                         // TODO - update password to this years password - should reset pwd appropriately - 2023-04-17
                                         /*var onepassword = sharedService.GeneratePassword(teacherId);
-                                         
+
                                         var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
                                         var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
 
@@ -1428,23 +1436,23 @@
                                         await _userManager.UpdateAsync(_account);*/
 
                                         // this section is not needed
-                                        /*var child = dbContext.Children.Where(p => p.TeacherId == teacher.Id && p.YearId == yearid).FirstOrDefault();
-                                         * 
-                                        if (child != null)
-                                        {
+                                         /*var child = dbContext.Children.Where(p => p.TeacherId == teacher.Id && p.YearId == yearid).FirstOrDefault();
+                                            * 
+                                            if (child != null)
+                                            {
                                             var onepassword = sharedService.GeneratePassword(teacherId);
 
                                             var _account = await _accountRepository.GetByIdAsync(teacher.UserId);
                                             var newPassword = _userManager.PasswordHasher.HashPassword(_account, onepassword);
 
-                                            if (_account != null)
-                                            {
+                                                if (_account != null)
+                                                {
                                                 _account.PasswordHash = newPassword;
 
-                                                await _userManager.UpdateAsync(_account);
+                                            await _userManager.UpdateAsync(_account);
                                             }
-                                            else
-                                            {
+                                                else
+                                                {
                                                 string[] names = teacher.TeacherName.Split(' ');
                                                 string firstname = names[0];
                                                 string lastname = names[1];
@@ -1466,7 +1474,7 @@
                                                 oneuser.NormalizedEmail = teacher.Email.ToUpper();
 
                                                 await _userManager.UpdateAsync(oneuser);
-                                            }
+                                        }
                                         }*/
                                     }
                                 }
@@ -1476,7 +1484,7 @@
                             ///<summary>process student
                             ///</summary>
                             int childid = 0;
-                            
+
                             if (teacherId > 0)
                             {
                                 childMessage = "Processing Child " + data.ChildEdiid + ": record " + childCount + " of " + totalChildren;   
@@ -1616,8 +1624,14 @@
                                     haserror = true;
                                 }
                             }
-                            
+
                         }
+                    }
+
+                    if (teacherExists)
+                    {
+                        // if the teacher exists reset the password to this year
+                        await sharedService.ResetPassword(teacherId);
                     }
 
                     if (!haserror)

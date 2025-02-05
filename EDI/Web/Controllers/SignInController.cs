@@ -15,6 +15,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Components.Authorization;
 using EDI.Web.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Linq.Dynamic.Core;
 
 namespace Web.Controllers
 {
@@ -54,7 +55,7 @@ namespace Web.Controllers
 
         [HttpPost("/signin")]
         public async Task<IActionResult> Login([FromForm] string username, [FromForm] string password)
-        {
+        {          
             try
             {
                 var result = await _signInManager.PasswordSignInAsync(username, password, false, false);
@@ -70,10 +71,15 @@ namespace Web.Controllers
 
                     var role = _identityContext.Roles.Where(p => p.Id == userrole.RoleId).FirstOrDefault();
 
+                    // get the yearid   added 2025-02-05                 
+                    var predicate = "FieldName==\"Year\"";
+                    var year = _dbContext.SystemConfigurations.Where(predicate).Single().FieldValue;
+                    predicate = "EDIYear == " + year;
+                    var yearID = _dbContext.Years.Where(predicate).Single().Id;
 
                     if (role.Name == "Teacher")
                     {
-                        var teacher = await Task.FromResult(_dbContext.Teachers.Where(s => s.UserId == user1.Id).FirstOrDefault());
+                        var teacher = await Task.FromResult(_dbContext.Teachers.Where(s => s.UserId == user1.Id && s.YearId == yearID ).FirstOrDefault());
 
                         if (teacher == null)
                         {
