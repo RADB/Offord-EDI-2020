@@ -31,7 +31,7 @@
                     <SfFileManager TValue="FileManagerDirectoryContent" View="ViewType.Details">
                         <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
                         <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
-                        <FileManagerUploadSettings ChunkSize="5242880" MaxFileSize="73728000"></FileManagerUploadSettings>
+                        <FileManagerUploadSettings MaxFileSize="73728000"></FileManagerUploadSettings>
                         <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
                                                  GetImageUrl="/api/FileManager/GetImage"
                                                  UploadUrl="/api/FileManager/Upload"
@@ -45,7 +45,7 @@
                         <SfFileManager TValue="FileManagerDirectoryContent" AllowDragAndDrop="false" View="ViewType.Details">
                             <FileManagerEvents TValue="FileManagerDirectoryContent" OnSend="send"></FileManagerEvents>
                             <FileManagerToolbarSettings Items="@items"></FileManagerToolbarSettings>
-                            <FileManagerUploadSettings AutoUpload="false" ChunkSize="5242880" MaxFileSize="73728000"></FileManagerUploadSettings>
+                            <FileManagerUploadSettings AutoUpload="false" MaxFileSize="73728000"></FileManagerUploadSettings>
                             <FileManagerContextMenuSettings Visible="@showcontext"></FileManagerContextMenuSettings>
                             <FileManagerAjaxSettings Url="/api/FileManager/FileOperations"
                                                      GetImageUrl="/api/FileManager/GetImage"
