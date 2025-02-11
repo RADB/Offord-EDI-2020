@@ -1,7 +1,9 @@
-﻿<div class="simple-form" style="width:350px;">
-    <p><img src="./images/auth-lock.png" style="width:30px;" />@Message</p> <br />
-    <button @onclick="@ConfirmYes" class="btn btn-primary">Yes</button>
-    <button @onclick="@Cancel" class="btn btn-secondary">Cancel</button>
+﻿@inject ISharedService sharedService;
+
+<div class="simple-form" style="width:350px;">
+    <p><img src="./images/auth-lock.png" style="width:30px;" />@((MarkupString)@Message)</p> <br />
+    <button @onclick="@ConfirmYes" class="btn btn-primary">@Translate("Lock")</button>
+    <button @onclick="@Cancel" class="btn btn-secondary">@Translate("Cancel")</button>
 </div>
 
 @code {
@@ -13,4 +15,9 @@
     //async Task ConfirmYes() => await ModalService.CloseAsync(ModalResult.Ok(true));
 
     async Task Cancel() => await ModalInstance.CancelAsync();
+
+    private string Translate(string word)
+    {
+        return sharedService.GetTranslate(word);
+    }
 }
