@@ -23,6 +23,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? ClimbingStairs { get; set; }
         public byte? Energy { get; set; }
         public byte? PhysicalDevelopment { get; set; }
+        public byte? EarlyTransitions { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }
         [JsonIgnore]

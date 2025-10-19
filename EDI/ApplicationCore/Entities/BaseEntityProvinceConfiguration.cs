@@ -8,7 +8,8 @@ namespace EDI.ApplicationCore.Entities
         public bool ? Alberta { get; set; }
         public bool ? BritishColumbia { get; set; }
         public bool? FirstNations { get; set; }
-        public bool ? Manitoba { get; set; }      
+        public bool ? Manitoba { get; set; }
+        public bool? MCFN { get; set; }
         public bool ? NewBrunswick { get; set; }
         public bool ? NewfoundlandandLabrador { get; set; }
         public bool? NewYork { get; set; }

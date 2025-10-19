@@ -105,6 +105,27 @@ namespace EDI.ApplicationCore.Entities
         /* 2025 PEI */
         public byte? ParentalEngagement { get; set; }
 
+        /* 2025 MCFN */
+        public byte? MCFNCare { get; set; }
+        public byte? MCFNStewardship { get; set; }
+        public byte? MCFNCreate { get; set; }
+        public byte? MCFNSpeaking { get; set; }
+        public byte? MCFNCommunicates { get; set; }
+        public byte? MCFNReplaces { get; set; }
+        public byte? MCFNInitiative { get; set; }
+        public byte? MCFNQuestions { get; set; }
+        public byte? MCFNImprove { get; set; }
+        public byte? MCFNRespond { get; set; }
+        public byte? MCFNIdentify { get; set; }
+        public byte? MCFNLearning { get; set; }
+        public byte? MCFNDrumming { get; set; }
+        public byte? MCFNActivities { get; set; }
+        public byte? MCFNWears { get; set; }
+        public byte? MCFNImaginative { get; set; }
+        public byte? MCFNSeeksInfo { get; set; }
+        public byte? MCFNInterest { get; set; }
+
+
         [JsonIgnore]
         public virtual Child Child { get; set; }
         [JsonIgnore]

@@ -68,6 +68,7 @@ namespace EDI.ApplicationCore.Entities
         public byte? NoDecisions { get; set; }
         public byte? Shy { get; set; }
         public byte? SucksThumb { get; set; }
+        public byte? ResistsTransitions { get; set; }
         [JsonIgnore]
         public virtual Child Child { get; set; }
         [JsonIgnore]
