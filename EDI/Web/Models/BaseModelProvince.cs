@@ -20,6 +20,7 @@ namespace EDI.Web.Models
         public bool NorthwestTerritories { get; set; }
         public bool NewYork { get; set; }
         public bool FirstNations { get; set; }
+        public bool MCFN { get; set; }
 
         public int YearID { get; set; }
     }

@@ -54,7 +54,9 @@
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Ediyear) HeaderText="Year" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Width="15"></GridColumn>
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Alberta) HeaderText="AB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.BritishColumbia) HeaderText="BC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.FirstNations) HeaderText="FN" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.Manitoba) HeaderText="MB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
+                        <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.MCFN) HeaderText="MC" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewBrunswick) HeaderText="NB" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewfoundlandandLabrador) HeaderText="NL" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
                         <GridColumn Field=@nameof(QuestionnaireConfigurationItemViewModel.NewYork) HeaderText="NY" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15"></GridColumn>
@@ -145,6 +147,7 @@
                 aquestionnaireConfiguration.BritishColumbia = questionnaireConfiguration.BritishColumbia.HasValue ? questionnaireConfiguration.BritishColumbia.Value : false;
                 aquestionnaireConfiguration.FirstNations = questionnaireConfiguration.FirstNations.HasValue ? questionnaireConfiguration.FirstNations.Value : false;
                 aquestionnaireConfiguration.Manitoba = questionnaireConfiguration.Manitoba.HasValue ? questionnaireConfiguration.Manitoba.Value : false;
+                aquestionnaireConfiguration.MCFN = questionnaireConfiguration.MCFN.HasValue ? questionnaireConfiguration.MCFN.Value : false;
                 aquestionnaireConfiguration.NewBrunswick = questionnaireConfiguration.NewBrunswick.HasValue ? questionnaireConfiguration.NewBrunswick.Value : false;
                 aquestionnaireConfiguration.NewfoundlandandLabrador = questionnaireConfiguration.NewfoundlandandLabrador.HasValue ? questionnaireConfiguration.NewfoundlandandLabrador.Value : false;
                 aquestionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork.HasValue ? questionnaireConfiguration.NewYork.Value : false;

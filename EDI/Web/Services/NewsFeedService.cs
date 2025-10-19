@@ -103,6 +103,7 @@ namespace EDI.Web.Services
                 _newsFeed.Alberta = newsFeed.Alberta;
                 _newsFeed.BritishColumbia = newsFeed.BritishColumbia;
                 _newsFeed.Manitoba = newsFeed.Manitoba;
+                _newsFeed.MCFN = newsFeed.MCFN;
                 _newsFeed.NewBrunswick = newsFeed.NewBrunswick;
                 _newsFeed.NewfoundlandandLabrador = newsFeed.NewfoundlandandLabrador;
                 _newsFeed.NovaScotia = newsFeed.NovaScotia;
@@ -145,6 +146,7 @@ namespace EDI.Web.Services
                     Alberta = newsFeed.Alberta,
                     BritishColumbia = newsFeed.BritishColumbia,
                     Manitoba = newsFeed.Manitoba,
+                    MCFN = newsFeed.MCFN,
                     NewBrunswick = newsFeed.NewBrunswick,
                     NewfoundlandandLabrador = newsFeed.NewfoundlandandLabrador,
                     NovaScotia = newsFeed.NovaScotia,
@@ -198,6 +200,7 @@ namespace EDI.Web.Services
                     BritishColumbia = newsFeed.BritishColumbia.HasValue ? newsFeed.BritishColumbia.Value : false,
                     FirstNations = newsFeed.FirstNations.HasValue ? newsFeed.FirstNations.Value : false,
                     Manitoba = newsFeed.Manitoba.HasValue ? newsFeed.Manitoba.Value : false,
+                    MCFN = newsFeed.MCFN.HasValue ? newsFeed.MCFN.Value : false,
                     NewBrunswick = newsFeed.NewBrunswick.HasValue ? newsFeed.NewBrunswick.Value : false,
                     NewfoundlandandLabrador = newsFeed.NewfoundlandandLabrador.HasValue ? newsFeed.NewfoundlandandLabrador.Value : false,
                     NovaScotia = newsFeed.NovaScotia.HasValue ? newsFeed.NovaScotia.Value : false,

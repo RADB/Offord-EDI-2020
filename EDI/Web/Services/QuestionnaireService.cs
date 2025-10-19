@@ -139,6 +139,7 @@ namespace EDI.Web.Services
                 _questionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories;
                 _questionnaire.NewYork = questionnaire.NewYork;
                 _questionnaire.FirstNations = questionnaire.FirstNations;
+                _questionnaire.MCFN = questionnaire.MCFN;
                 _questionnaire.ModifiedDate = DateTime.Now;
                 _questionnaire.ModifiedBy = _userSettings.UserName;
 
@@ -205,6 +206,7 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories;
                 _questionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork;
                 _questionnaireConfiguration.FirstNations = questionnaireConfiguration.FirstNations;
+                _questionnaireConfiguration.MCFN = questionnaireConfiguration.MCFN;
                 _questionnaireConfiguration.ModifiedDate = DateTime.Now;
                 _questionnaireConfiguration.ModifiedBy = _userSettings.UserName;
 
@@ -248,6 +250,7 @@ namespace EDI.Web.Services
                 _questionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories;
                 _questionnaire.NewYork = questionnaire.NewYork;
                 _questionnaire.FirstNations = questionnaire.FirstNations;
+                _questionnaire.MCFN = questionnaire.MCFN;
                 _questionnaire.CreatedDate = DateTime.Now;
                 _questionnaire.CreatedBy = _userSettings.UserName;
                 _questionnaire.ModifiedDate = DateTime.Now;
@@ -316,6 +319,7 @@ namespace EDI.Web.Services
                 _questionnaireConfiguration.NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories;
                 _questionnaireConfiguration.NewYork = questionnaireConfiguration.NewYork;
                 _questionnaireConfiguration.FirstNations = questionnaireConfiguration.FirstNations;
+                _questionnaireConfiguration.MCFN = questionnaireConfiguration.MCFN;
                 _questionnaireConfiguration.ModifiedDate = DateTime.Now;
                 _questionnaireConfiguration.ModifiedBy = _userSettings.UserName;
                 _questionnaireConfiguration.CreatedDate = DateTime.Now;
@@ -368,6 +372,7 @@ namespace EDI.Web.Services
                     NorthwestTerritories = questionnaire.NorthwestTerritories.HasValue ? questionnaire.NorthwestTerritories.Value : false,
                     NewYork = questionnaire.NewYork.HasValue ? questionnaire.NewYork.Value : false,
                     FirstNations = questionnaire.FirstNations.HasValue ? questionnaire.FirstNations.Value : false,
+                    MCFN = questionnaire.MCFN.HasValue ? questionnaire.MCFN.Value : false,
                     CreatedDate = questionnaire.CreatedDate,
                     CreatedBy = questionnaire.CreatedBy,
                     ModifiedDate = questionnaire.ModifiedDate,
@@ -443,6 +448,7 @@ namespace EDI.Web.Services
                     NorthwestTerritories = questionnaireConfiguration.NorthwestTerritories.HasValue ? questionnaireConfiguration.NorthwestTerritories.Value : false,
                     NewYork = questionnaireConfiguration.NewYork.HasValue ? questionnaireConfiguration.NewYork.Value : false,
                     FirstNations = questionnaireConfiguration.FirstNations.HasValue ? questionnaireConfiguration.FirstNations.Value : false,
+                    MCFN = questionnaireConfiguration.MCFN.HasValue ? questionnaireConfiguration.MCFN.Value : false,
                     CreatedDate = questionnaireConfiguration.CreatedDate,
                     CreatedBy = questionnaireConfiguration.CreatedBy,
                     ModifiedDate = questionnaireConfiguration.ModifiedDate,

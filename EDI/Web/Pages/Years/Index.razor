@@ -43,6 +43,7 @@
                             <GridColumn Field=@nameof(YearItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.FirstNations) HeaderText="FN" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(YearItemViewModel.MCFN) HeaderText="MC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(YearItemViewModel.NewYork) HeaderText="NY" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
@@ -103,6 +104,7 @@
                 ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
                 ayear.FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false;
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
+                ayear.MCFN = year.MCFN.HasValue ? year.MCFN.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
                 ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;                
@@ -171,6 +173,7 @@
                 YearModel.BritishColumbia = rowdata.BritishColumbia;
                 YearModel.FirstNations = rowdata.FirstNations;
                 YearModel.Manitoba = rowdata.Manitoba;
+                YearModel.MCFN = rowdata.MCFN;
                 YearModel.NewBrunswick = rowdata.NewBrunswick;
                 YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
                 YearModel.NewYork = rowdata.NewYork;
@@ -220,6 +223,7 @@
                 ayear.BritishColumbia = year.BritishColumbia.HasValue ? year.BritishColumbia.Value : false;
                 ayear.FirstNations = year.FirstNations.HasValue ? year.FirstNations.Value : false;
                 ayear.Manitoba = year.Manitoba.HasValue ? year.Manitoba.Value : false;
+                ayear.MCFN = year.MCFN.HasValue ? year.MCFN.Value : false;
                 ayear.NewBrunswick = year.NewBrunswick.HasValue ? year.NewBrunswick.Value : false;
                 ayear.NewfoundlandandLabrador = year.NewfoundlandandLabrador.HasValue ? year.NewfoundlandandLabrador.Value : false;
                 ayear.NewYork = year.NewYork.HasValue ? year.NewYork.Value : false;
@@ -262,6 +266,7 @@
                     item.BritishColumbia = YearModel.BritishColumbia;
                     item.FirstNations = YearModel.FirstNations;
                     item.Manitoba = YearModel.Manitoba;
+                    item.MCFN = YearModel.MCFN;
                     item.NewBrunswick = YearModel.NewBrunswick;
                     item.NewfoundlandandLabrador = YearModel.NewfoundlandandLabrador;
                     item.NewYork = YearModel.NewYork;
@@ -332,6 +337,7 @@
             YearModel.BritishColumbia = rowdata.BritishColumbia;
             YearModel.FirstNations = rowdata.FirstNations;
             YearModel.Manitoba = rowdata.Manitoba;
+            YearModel.MCFN = rowdata.MCFN;
             YearModel.NewBrunswick = rowdata.NewBrunswick;
             YearModel.NewfoundlandandLabrador = rowdata.NewfoundlandandLabrador;
             YearModel.NewYork = rowdata.NewYork;

@@ -40,11 +40,13 @@
                             </GridSortColumns>
                         </GridSortSettings>
                         <GridColumns>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.Id) HeaderText="ID" TextAlign="TextAlign.Right" Width="20" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.QuestionnaireName) HeaderText="Name" TextAlign="TextAlign.Right" Width="20" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.Alberta) HeaderText="AB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.BritishColumbia) HeaderText="BC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.FirstNations) HeaderText="FN" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.Manitoba) HeaderText="MB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
+                            <GridColumn Field=@nameof(QuestionnaireItemViewModel.MCFN) HeaderText="MC" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewBrunswick) HeaderText="NB" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewfoundlandandLabrador) HeaderText="NL" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
                             <GridColumn Field=@nameof(QuestionnaireItemViewModel.NewYork) HeaderText="NY" TextAlign="TextAlign.Right" IsPrimaryKey="false" DisplayAsCheckBox="true" Type="ColumnType.Boolean" Width="15" AutoFit="true"></GridColumn>
@@ -129,6 +131,7 @@
                 aquestionnaire.YukonTerritory = questionnaire.YukonTerritory.HasValue ? questionnaire.YukonTerritory.Value : false;
                 aquestionnaire.NorthwestTerritories = questionnaire.NorthwestTerritories.HasValue ? questionnaire.NorthwestTerritories.Value : false;
                 aquestionnaire.NewYork = questionnaire.NewYork.HasValue ? questionnaire.NewYork.Value : false;
+                aquestionnaire.MCFN = questionnaire.MCFN.HasValue ? questionnaire.MCFN.Value : false;
 
                 aquestionnaire.YearId = questionnaire.YearId;
                 var year = dbContext.Years.Where(p => p.Id == questionnaire.YearId).FirstOrDefault();

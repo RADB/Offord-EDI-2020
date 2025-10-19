@@ -115,6 +115,7 @@ namespace EDI.Web.Services
                 _faq.NorthwestTerritories = faq.NorthwestTerritories;
                 _faq.NewYork = faq.NewYork;
                 _faq.FirstNations = faq.FirstNations;
+                _faq.MCFN = faq.MCFN;
                 _faq.ModifiedDate = DateTime.Now;
                 _faq.ModifiedBy = _userSettings.UserName;
 
@@ -146,6 +147,7 @@ namespace EDI.Web.Services
                 _faq.BritishColumbia = faq.BritishColumbia;
                 _faq.FirstNations = faq.FirstNations;
                 _faq.Manitoba = faq.Manitoba;
+                _faq.MCFN = faq.MCFN;
                 _faq.NewBrunswick = faq.NewBrunswick;
                 _faq.NewfoundlandandLabrador = faq.NewfoundlandandLabrador;
                 _faq.NovaScotia = faq.NovaScotia;
@@ -197,6 +199,7 @@ namespace EDI.Web.Services
                     BritishColumbia = faq.BritishColumbia.HasValue ? faq.BritishColumbia.Value : false,
                     FirstNations = faq.FirstNations.HasValue ? faq.FirstNations.Value : false,
                     Manitoba = faq.Manitoba.HasValue ? faq.Manitoba.Value : false,
+                    MCFN = faq.MCFN.HasValue ? faq.MCFN.Value : false,
                     NewBrunswick = faq.NewBrunswick.HasValue ? faq.NewBrunswick.Value : false,
                     NewfoundlandandLabrador = faq.NewfoundlandandLabrador.HasValue ? faq.NewfoundlandandLabrador.Value : false,
                     NovaScotia = faq.NovaScotia.HasValue ? faq.NovaScotia.Value : false,

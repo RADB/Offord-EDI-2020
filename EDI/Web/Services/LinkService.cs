@@ -105,6 +105,7 @@ namespace EDI.Web.Services
                 _link.BritishColumbia = link.BritishColumbia;
                 _link.FirstNations = link.FirstNations;
                 _link.Manitoba = link.Manitoba;
+                _link.MCFN = link.MCFN;
                 _link.NewBrunswick = link.NewBrunswick;
                 _link.NewYork = link.NewYork;
                 _link.NewfoundlandandLabrador = link.NewfoundlandandLabrador;
@@ -148,6 +149,7 @@ namespace EDI.Web.Services
                 _link.BritishColumbia = link.BritishColumbia;
                 _link.FirstNations = link.FirstNations;
                 _link.Manitoba = link.Manitoba;
+                _link.MCFN = link.MCFN;
                 _link.NewBrunswick = link.NewBrunswick;
                 _link.NewYork = link.NewYork;
                 _link.NewfoundlandandLabrador = link.NewfoundlandandLabrador;
@@ -200,6 +202,7 @@ namespace EDI.Web.Services
                     BritishColumbia = link.BritishColumbia.HasValue ? link.BritishColumbia.Value : false,
                     FirstNations = link.FirstNations.HasValue ? link.FirstNations.Value : false,
                     Manitoba = link.Manitoba.HasValue ? link.Manitoba.Value : false,
+                    MCFN = link.MCFN.HasValue ? link.MCFN.Value : false,
                     NewBrunswick = link.NewBrunswick.HasValue ? link.NewBrunswick.Value : false,
                     NewfoundlandandLabrador = link.NewfoundlandandLabrador.HasValue ? link.NewfoundlandandLabrador.Value : false,
                     NovaScotia = link.NovaScotia.HasValue ? link.NovaScotia.Value : false,
