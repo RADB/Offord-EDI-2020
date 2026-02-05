@@ -5,7 +5,8 @@
     <AssemblyName>EDI.Web</AssemblyName>
     <RootNamespace>EDI.Web</RootNamespace>
     <UserSecretsId>0e1b7b36-41ee-4e8e-a5cf-2960c1be9ce8</UserSecretsId>
-	  <UseRazorSourceGenerator>false</UseRazorSourceGenerator>
+	<UseRazorSourceGenerator>false</UseRazorSourceGenerator>
+	  <ServerGarbageCollection>false</ServerGarbageCollection>
   </PropertyGroup>
 
   <ItemGroup>

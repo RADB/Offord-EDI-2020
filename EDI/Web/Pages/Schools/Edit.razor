@@ -103,8 +103,8 @@
     private string ErrorMessage { get; set; }
 
     private List<Teacher> Teachers { get; set; }
-    private List<string> Messages { get; set; }
-    private List<string> ErrorMessages { get; set; }
+    private List<string> Messages { get; set; } = new();
+    private List<string> ErrorMessages { get; set; } = new();
 
     private SchoolItemViewModel SchoolModel { get; set; } = new SchoolItemViewModel();
 

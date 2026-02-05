@@ -102,8 +102,10 @@
     public int Id { get; set; }
     private string Message { get; set; }
     private string ErrorMessage { get; set; }
-    private List<string> Messages { get; set; }
-    private List<string> ErrorMessages { get; set; }
+    
+    private List<string> Messages { get; set; } = new();
+    private List<string> ErrorMessages { get; set; } = new();
+
 
     private SiteItemViewModel SiteModel { get; set; } = new SiteItemViewModel();
 
@@ -167,9 +169,9 @@
     }
 
     private async void ResetPassword()
-    {
-        Messages.Clear();
-        ErrorMessages.Clear();
+    {                       
+        Messages?.Clear();
+        ErrorMessages?.Clear();
         GetTeacherList();
 
         if (Teachers.Count() > 0)

@@ -676,7 +676,8 @@ namespace EDI.Web.Services
 
                 email.Subject = "Reset Password";
                 email.From = EDIAppSettings.EmailFrom;
-                email.To = teacher.Email;
+                //email.To = teacher.Email;
+                email.To = "andrew@renner.ca";
 
                 var user = _identityContext.Users.Where(p => p.Id == teacher.UserId).FirstOrDefault();
 

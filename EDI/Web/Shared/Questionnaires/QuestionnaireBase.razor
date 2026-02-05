@@ -71,7 +71,7 @@
 
         var parameters = new ModalParameters();
         parameters.Add(nameof(CustomBootstrapModal.ModalBody), ModalBody);
-        parameters.Add(nameof(CustomBootstrapModal.ModalTitle), ModalTitle);
+        parameters.Add(nameof(CustomBootstrapModal.ModalTitle), Translate(ModalTitle));
         var modal = ModalService.Show<CustomBootstrapModal>(ModalTitle, parameters, options);
         var result = await modal.Result;
     }

@@ -448,6 +448,15 @@ a span.far.incomplete {
     color: #ddd!important;
 }
 
+/*Added to change box on check screen to grey*/
+p span.far.incomplete {
+    color: #ddd !important;
+}
+
+p i.far.incomplete {
+    color: #ddd !important;
+}
+/**/
 .table>tbody>tr.Valid>td:first-child, .table>tbody>tr.InValid>td:first-child {
     border: inherit!important;
     border-spacing: inherit!important;
